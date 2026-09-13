@@ -463,7 +463,7 @@ resemble them.
 
 ### The attribute tables
 
-`server/src/data/attributes/*.json`, around 950 entries across 47 categories, seeded into
+`server/src/data/attributes/*.json`, around 1050 entries across 47 categories, seeded into
 SQLite on boot. The field that matters most is `prompt_hint` — the text that actually
 reaches the model. Without it the Actor gets a bare label and reinvents its meaning every
 time.
@@ -487,7 +487,10 @@ zero contradictions.
 The seeder tracks a content hash. New rows are always inserted; existing rows are only
 rewritten when the shipped tables actually change, so an upgrade that adds a field or
 rewrites a hint reaches installs that already have a database instead of silently applying
-to new ones only.
+to new ones only. On the same content-changed check it also removes rows that are no longer
+shipped, so a renamed or deleted attribute (the fetish table's `dirty_talk` splitting into
+`dirty_talk_receiving` / `dirty_talk_giving`, for one) does not leave the old id behind as a
+permanent orphan still being rolled into new characters alongside its replacement.
 
 `GET /api/attributes/testroll` rolls ten characters with no LLM calls, for checking
 weights by eye.

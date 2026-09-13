@@ -105,8 +105,20 @@ export function seedAttributes(): number {
     for (const row of rows) touched += statement.run(row).changes;
   });
 
+  // Every id the shipped tables currently define, per category - used below to remove
+  // rows for anything that was renamed or deleted, e.g. "dirty_talk" splitting into
+  // "dirty_talk_receiving" / "dirty_talk_giving". Without this an upgrade only ever adds
+  // rows: a renamed attribute leaves its old id behind as a permanent orphan that keeps
+  // getting rolled into new characters alongside its replacement.
+  const liveIdsByCategory = new Map<string, Set<string>>();
+
   for (const payload of payloads) {
     const entries = JSON.parse(payload) as Attribute[];
+    for (const a of entries) {
+      const set = liveIdsByCategory.get(a.category) ?? new Set<string>();
+      set.add(a.id);
+      liveIdsByCategory.set(a.category, set);
+    }
     run(
       entries.map((a) => ({
         id: a.id,
@@ -125,7 +137,17 @@ export function seedAttributes(): number {
     );
   }
 
+  let removed = 0;
   if (changed) {
+    const deleteStale = db.prepare('DELETE FROM attribute_db WHERE category = ? AND id NOT IN (SELECT value FROM json_each(?))');
+    const pruneRun = db.transaction(() => {
+      for (const [category, ids] of liveIdsByCategory) {
+        removed += deleteStale.run(category, JSON.stringify([...ids])).changes;
+      }
+    });
+    pruneRun();
+    if (removed) console.log(`[db] removed ${removed} attribute row(s) no longer shipped`);
+
     db.prepare(
       "INSERT INTO settings (key, value) VALUES ('attribute_content_hash', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
     ).run(contentHash);
