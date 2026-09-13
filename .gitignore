@@ -1,5 +1,6 @@
 node_modules/
 dist/
+*.tsbuildinfo
 # Runtime state: database, uploads, generated images.
 /data/
 **/data/
