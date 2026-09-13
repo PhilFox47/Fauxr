@@ -576,21 +576,22 @@ under fourteen words is rejected and re-requested once. What still stays out is 
 identifying — her real name, her employer, her street — and any self-summary
 ("I'm sarcastic and a bit shy"): the substance belongs, the adjectives do not.
 
-Two things keep the stack from converging on one joke. Each character is assigned a
-structural shape — three plain facts about her, what her week looks like, what people
-assume versus what is true, conditions for swiping right with reasons attached, 23 shapes
-in total — and the *wording* is always written fresh by the model; nothing here is spliced
-from fixed text. But a shape is still a shape, and drawing one independently at random each
-time, only avoiding the last six, let the same one turn up three times in twenty characters
-by pure chance — recognisable the moment anyone actually swiped through a real stack, which
-is what "these all feel built from the same pieces" was picking up on. Shapes are now drawn
-from a shuffled bag instead: every shape gets used once before any of them repeats, skipping
-only the ones out of character for her archetype. Verified directly (`pickBioFormat()` run
-100 times): no shape repeats within a full pass through all of them, only occasionally
-sooner right at the seam between one shuffle and the next, which is normal for a shuffle bag
-and still far better than independent random draws. And because generation runs strictly one
-at a time, each bio is written with the bios already in the stack in front of it, under
-instructions not to resemble them.
+There used to be a fixed pool of fifteen, later twenty-three, structural shapes handed to
+the model at random ("three plain facts about her", "what she's bored of vs what she wants",
+and so on) so the stack would not converge on one joke. That turned out to be its own
+problem: however fresh the wording, the underlying shape was still drawn from a small fixed
+enum, which is exactly a "built from the same pieces" feeling with extra steps - it was just
+happening one level up from the words. Removed entirely. The model now works out its own
+structure from who she actually is: a chaotic character might ramble and trail off, a blunt
+one might just state her terms, a dry one might build to a sting in the last line. The
+prompt is explicit that there is no template and the first structure that comes to mind is
+usually the wrong one to reach for.
+
+The remaining defence against the stack converging on its own is the same one that always
+handled word-for-word repeats: generation runs strictly one at a time, and each bio is
+written with the last dozen bios already in the stack in front of it, under instructions not
+to resemble any of them "in structure, opening words, or joke" - now doing double duty as
+the only thing keeping shapes varied too.
 
 Separately, there is a small fixed pool of twelve fully hardcoded bios (`FALLBACK_BIOS`) —
 not AI-written at all — used only when the API call fails outright after its retry. If a

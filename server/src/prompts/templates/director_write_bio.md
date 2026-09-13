@@ -15,9 +15,6 @@ that box, knowing exactly what it is for.
 handle: {{username}}
 {{seed_block}}
 
-# THE SHAPE FOR THIS ONE
-{{format_hint}}
-
 # THE THING THAT MAKES HER HER
 {{signature_hint}}
 
@@ -25,7 +22,14 @@ This is the most interesting thing about her, so the bio should be shaped by it 
 necessarily stated outright, but visible in what she chooses to mention and how. A bio that
 could belong to anyone has failed. If in doubt, let this be the thing she is oblique about.
 
-Use that shape. It exists so that the people in this app do not all sound the same.
+# FIND HER SHAPE, NOT A SHAPE
+There is no template for this. Do not reach for the first structure that comes to mind -
+three facts in a row, a list of terms, a bored-of-this/want-that pair - unless it is
+actually how this specific woman would lay it out. Work it out from who she is: a chaotic
+one might ramble and trail off mid-thought; a blunt one might just state her terms; a dry
+one might structure it as a joke with a sting in the last line; a guarded one might give
+almost nothing and let the little she does say do all the work. The shape should look like
+a decision she made, not a slot that got filled in.
 
 # HOW TO WRITE IT
 

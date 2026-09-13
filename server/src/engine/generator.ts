@@ -7,7 +7,7 @@ import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
 import { insertCharacter, createRelationship } from '../repo.js';
 import type { Character, CharacterSeed, OnlineWindow, Thresholds } from '../types.js';
-import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, shuffle, type DiceContext } from './dice.js';
+import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 
 /** Fields the Director may swap during the coherence pass. */
 const SWAPPABLE: Record<string, string> = {
@@ -546,66 +546,6 @@ export async function generateCharacter(): Promise<Character> {
   return character;
 }
 
-/**
- * Structural shapes for the bio. Picked per character so the swipe stack does not read
- * like twelve variations of one joke - a cheap model left to its own devices will happily
- * write the same bio twelve times.
- */
-interface BioFormat {
-  hint: string;
-  /** Archetypes this shape would be out of character for. */
-  notFor?: string[];
-}
-
-const BIO_FORMATS: BioFormat[] = [
-  { hint: 'Three things about her, listed plainly: one about how her days actually go, one preference held far too strongly, and one about what she wants in bed. No framing around them.' },
-  { hint: 'What she is after and what she is definitely not after, both stated plainly, plus the detail that explains why.' },
-  { hint: 'An opening line with some bite, then two more that make it obvious what she is here for.' },
-  { hint: 'What she is bored of on apps like this, and then what she actually wants instead. Specific on both counts.' },
-  { hint: 'A self-aware line about being back on here again, then exactly what she is hoping happens this time.' },
-  { hint: 'Her terms, laid out. What is on offer, what is not, and one reason that reveals something about her.' },
-  { hint: 'What people assume about her, and then what is actually true. Both concrete, and the true one is filthier.' },
-  { hint: 'A small scene from her week, then an abrupt shift into what she is actually on here for.' },
-  { hint: 'Something she is into, described with more enthusiasm than is strictly cool, then something entirely mundane.' },
-  { hint: 'A confession about what she wants, the context that makes it make sense, and a question aimed at whoever is reading.' },
-  { hint: 'What her ideal night looks like, described concretely enough to picture, start to finish.' },
-  { hint: 'Two things she is good at and one she is visibly bad at. At least one of them is not safe for work.' },
-  { hint: 'One or two conditions for whoever swipes right, each with a reason attached that gives something away.', notFor: ['shy', 'earnest', 'dreamy'] },
-  { hint: 'Blunt to the point of being funny about what she wants. No hedging, no softening, no apology.', notFor: ['shy', 'overthinker', 'still_water'] },
-  { hint: 'Where her head is at right now, in a few plain lines. Not a joke, not a pitch, and honest about wanting someone.', notFor: ['sarcastic', 'guarded', 'cynic'] },
-  { hint: 'A short list of rules for whoever matches with her, framed as a warning, ending on the one that actually matters.' },
-  { hint: 'Her verdict on dating apps so far, one or two dry lines, then the specific exception she would make.' },
-  { hint: 'What a normal day for her looks like, then the one thing that would break the routine in exactly the way she wants.' },
-  { hint: 'What her friends think this app is for versus what she is actually doing here, stated back to back.' },
-  { hint: 'One thing she will do for the right person and one thing she absolutely will not, no transition between them.' },
-  { hint: 'Three short lines building to a point, the last one landing hardest and doing most of the work.' },
-  { hint: 'What she is celebrating or getting over right now, and how that is shaping what she wants tonight specifically.', notFor: ['guarded', 'still_water'] },
-  { hint: 'A direct comparison between the last person she dated and what she actually wants this time.' },
-];
-
-/**
- * A shuffled draw order rather than an independent random pick each time. A plain random
- * choice with only a short "avoid the last few" window still lets the same shape turn up
- * three times in twenty characters by chance - visible the moment anyone actually swipes
- * through a real stack, which is exactly the "these all feel built from the same pieces"
- * complaint this replaced. Drawing without replacement until every shape has had a turn,
- * then reshuffling, guarantees the same shape cannot repeat until all the others have.
- */
-let formatBag: string[] = [];
-
-function pickBioFormat(archetype: string): string {
-  const pool = BIO_FORMATS.filter((f) => !f.notFor?.includes(archetype)).map((f) => f.hint);
-  const usable = pool.length ? pool : BIO_FORMATS.map((f) => f.hint);
-
-  // Refill and reshuffle once the bag is empty, or once it no longer contains anything
-  // usable for this archetype (it may have been drawn down while generating others).
-  if (!formatBag.some((h) => usable.includes(h))) {
-    formatBag = shuffle(usable);
-  }
-  const idx = formatBag.findIndex((h) => usable.includes(h));
-  return formatBag.splice(idx, 1)[0];
-}
-
 /** Only used when no model is reachable, so the stack is still browsable offline. */
 const FALLBACK_BIOS = [
   'night shifts so my body clock is a joke\nhere for something easy and filthy, not here to be ur girlfriend\ndont overthink the first message',
@@ -645,7 +585,6 @@ async function writeBio(character: Character): Promise<string> {
   const prompt = render('director_write_bio', {
     username: character.username,
     seed_block: describeSeed(character.seed),
-    format_hint: pickBioFormat(character.seed.archetype),
     avoid_bios: existing.length ? existing.map((b) => `- ${b}`).join('\n') : '(none yet)',
   });
 
