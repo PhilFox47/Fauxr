@@ -1,0 +1,14 @@
+{
+  "name": "fauxr",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Fauxr - gamified dating simulator, self-hosted",
+  "workspaces": ["server", "web"],
+  "scripts": {
+    "dev": "npm run dev --workspace=server & npm run dev --workspace=web",
+    "build": "npm run build --workspace=web && npm run build --workspace=server",
+    "start": "npm run start --workspace=server",
+    "typecheck": "npm run typecheck --workspace=server && npm run typecheck --workspace=web"
+  },
+  "engines": { "node": ">=22" }
+}

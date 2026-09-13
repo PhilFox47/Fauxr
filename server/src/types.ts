@@ -1,0 +1,222 @@
+export type CharacterState =
+  | 'pool'
+  | 'swiped_left'
+  | 'matched'
+  | 'blocked_by_char'
+  | 'blocked_by_user';
+
+export interface Tattoo { motif: string; position: string }
+export interface Piercing { type: string; position: string }
+export interface OnlineWindow { weekday: number; from: string; to: string }
+
+export interface Thresholds {
+  real_name: number;
+  profile_picture: number;
+  personal_photos: number;
+  sexual_topics: number;
+  spicy_photos: number;
+  allow_date: number;
+}
+
+export interface CharacterSeed {
+  // appearance
+  age: number;
+  ethnicity: string;
+  skin_tone: string;
+  height: string;
+  body_type: string;
+  hair_color: string;
+  hair_style: string;
+  eye_color: string;
+  clothing_style: string;
+  grooming: string;
+  makeup_style: string;
+  distinctive_feature: string;
+  tattoos: Tattoo[];
+  piercings: Piercing[];
+  accessories: string[];
+
+  // personality
+  archetype: string;
+  attachment_style: string;
+  humor_type: string;
+  conflict_style: string;
+  openness_curve: string;
+  insecurity: string;
+  quirks: string[];
+
+  // communication
+  typing_style: string;
+  typo_rate: number;
+  emoji_usage: string;
+  favorite_emojis: string[];
+  message_length: string;
+  response_speed: string;
+  voice_msg_tendency: string;
+  slang_register: string;
+
+  // life
+  occupation: string;
+  living_situation: string;
+  relationship_history: string;
+  dating_experience: string;
+  social_energy: string;
+  interests: string[];
+  hobbies: string[];
+  languages: string[];
+  online_times: OnlineWindow[];
+
+  // gameplay
+  search_motive: string;
+  touchstone: string;
+  turn_ons: string[];
+  turn_offs: string[];
+  green_flags: string[];
+  dealbreaker: string;
+
+  // sexual
+  libido: number;
+  sexual_confidence: number;
+  dom_sub_leaning: number;
+  sexting_readiness: number;
+  fetishes: string[];
+  hard_limits: string[];
+
+  thresholds: Thresholds;
+
+  /** Human-readable hints keyed by seed field, assembled from the attribute DB. */
+  hints: Record<string, string>;
+  /** Image-model phrasing for appearance tags, in render order. */
+  appearance_prompt: string;
+  /** Stable image seed for this character. */
+  image_seed: number;
+}
+
+export interface StateFlags {
+  real_name_known?: boolean;
+  profile_picture_sent?: boolean;
+  personal_photos_allowed?: boolean;
+  sexual_topics_allowed?: boolean;
+  spicy_photos_allowed?: boolean;
+  allows_date_requests?: boolean;
+  has_had_first_date?: boolean;
+}
+
+export interface EventFlags {
+  first_compliment_accepted?: string;
+  first_personal_story_told?: string;
+  first_conflict_resolved?: string;
+  first_time_she_initiated?: string;
+  first_rejection_survived?: string;
+  first_voice_message?: string;
+}
+
+/** Negative flags carry an expiry timestamp; the catch-up job clears expired ones. */
+export type NegativeFlags = Record<string, string>;
+
+export interface Flags {
+  state: StateFlags;
+  events: EventFlags;
+  negative: NegativeFlags;
+}
+
+export interface OpenThread {
+  id: string;
+  text: string;
+  expires_when: string;
+  created_at: string;
+}
+
+export interface DirectorNotes {
+  /** Long-term, vague, derived from the seed. Rarely changes. */
+  intent: string;
+  /** Short-term, concrete, always has an expiry condition. */
+  plans: { text: string; expires_when: string }[];
+}
+
+export interface Ledger {
+  facts: { about_user: string[]; about_her: string[] };
+  events: string[];
+  open_threads: OpenThread[];
+  director_notes: DirectorNotes;
+}
+
+export interface Direction {
+  valid_for: number;
+  expires_on: string[];
+  mood: string;
+  energy: string;
+  goal: string;
+  stance: string;
+  forbidden: string[];
+  bring_up: string | null;
+  unlock: string | null;
+  offline_in_minutes: number | null;
+  length: string;
+  /** Which optional prompt blocks the actor needs next turn. */
+  context_blocks?: string[];
+}
+
+export interface ActorMessage {
+  text: string;
+  delay: number;
+  kind?: 'text' | 'voice';
+  duration_seconds?: number;
+}
+
+export interface ActorHidden {
+  thoughts: string;
+  mood: string;
+  goal_fulfilled: boolean;
+  boundary_touched: boolean;
+  new_fact: string | null;
+  open_thread: string | null;
+  going_offline_in: number | null;
+  director_needed: boolean;
+}
+
+export interface ActorOutput {
+  messages: ActorMessage[];
+  hidden: ActorHidden;
+}
+
+export interface Relationship {
+  character_id: string;
+  trust: number;
+  spark: number;
+  investment: number;
+  reciprocity: number;
+  pressure: number;
+  mood: Record<string, unknown>;
+  her_tension: number;
+  user_tension: number;
+  last_contact_at: string | null;
+  last_decay_at: string | null;
+  flags: Flags;
+  ledger: Ledger;
+  active_direction: Direction | null;
+  direction_set_at: string | null;
+  ghosted_at: string | null;
+}
+
+export interface Character {
+  id: string;
+  username: string;
+  real_name: string;
+  bio: string;
+  created_at: string;
+  state: CharacterState;
+  seed: CharacterSeed;
+  reappear_at: string | null;
+  rejection_count: number;
+  matched_at: string | null;
+}
+
+export interface UserProfile {
+  display_name: string;
+  age: number;
+  bio: string;
+  photos: string[];
+  gender: string;
+  seeking: string;
+}

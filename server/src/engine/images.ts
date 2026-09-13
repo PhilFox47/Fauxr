@@ -1,0 +1,222 @@
+import { randomUUID } from 'node:crypto';
+import { writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { getSettings } from '../config.js';
+import { db, nowIso, DATA_DIR } from '../db/index.js';
+import { bus } from '../events.js';
+import { completeJson, generateImage } from '../llm/client.js';
+import { logger } from '../log.js';
+import { addMessage, getCharacter, getRelationship } from '../repo.js';
+import { render } from '../prompts/render.js';
+import { find } from '../db/attributes.js';
+import type { Character } from '../types.js';
+
+const STYLE_SUFFIX =
+  'shot on a phone camera, natural light, candid, slight grain, realistic skin texture, 4k';
+
+export interface ImageJob {
+  id: string;
+  character_id: string | null;
+  kind: string;
+  prompt: string;
+  seed: number | null;
+  ref_image: string | null;
+  status: 'queued' | 'running' | 'done' | 'failed';
+  path: string | null;
+  error: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export function listImageJobs(limit = 50): ImageJob[] {
+  return db.prepare('SELECT * FROM images ORDER BY rowid DESC LIMIT ?').all(limit) as ImageJob[];
+}
+
+export function getImageJob(id: string): ImageJob | null {
+  return (db.prepare('SELECT * FROM images WHERE id = ?').get(id) as ImageJob) ?? null;
+}
+
+function setStatus(id: string, status: ImageJob['status'], fields: Partial<ImageJob> = {}): void {
+  db.prepare(
+    `UPDATE images SET status = @status, path = COALESCE(@path, path), error = @error, updated_at = @updated_at WHERE id = @id`,
+  ).run({
+    id,
+    status,
+    path: fields.path ?? null,
+    error: fields.error ?? null,
+    updated_at: nowIso(),
+  });
+}
+
+/** What is actually visible on her in this kind of shot. */
+function visibleMarks(character: Character, kind: string): string {
+  const showLater = kind !== 'profile';
+  const showPrivate = kind === 'spicy';
+  const vis = (position: string, category: string) => {
+    const v = find(category, position)?.extra?.visibility ?? 'profile';
+    if (v === 'profile') return true;
+    if (v === 'later') return showLater;
+    return showPrivate;
+  };
+  const parts: string[] = [];
+  for (const t of character.seed.tattoos) {
+    if (vis(t.position, 'tattoo_position')) {
+      parts.push(`${find('tattoo_motif', t.motif)?.image_prompt ?? t.motif} ${find('tattoo_position', t.position)?.image_prompt ?? ''}`.trim());
+    }
+  }
+  for (const p of character.seed.piercings) {
+    if (vis(p.position, 'piercing_position')) {
+      parts.push(`${find('piercing_type', p.type)?.image_prompt ?? p.type} ${find('piercing_position', p.position)?.image_prompt ?? ''}`.trim());
+    }
+  }
+  return parts.join(', ');
+}
+
+/** The character's profile picture doubles as the reference image for everything after it. */
+function referenceImage(characterId: string): string | null {
+  const row = db
+    .prepare("SELECT path FROM images WHERE character_id = ? AND kind = 'profile' AND status = 'done' ORDER BY rowid ASC LIMIT 1")
+    .get(characterId) as { path: string } | undefined;
+  if (!row?.path) return null;
+  const abs = join(DATA_DIR, row.path);
+  if (!existsSync(abs)) return null;
+  return readFileSync(abs, 'base64');
+}
+
+export function enqueueImage(opts: {
+  characterId: string;
+  kind: 'profile' | 'chat' | 'spicy';
+  situation: string;
+  postToChat?: boolean;
+}): ImageJob {
+  const id = randomUUID();
+  db.prepare(
+    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, created_at, updated_at)
+     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?)`,
+  ).run(id, opts.characterId, opts.kind, nowIso(), nowIso());
+  const job = getImageJob(id)!;
+  void runImageJob(id, opts.situation, opts.postToChat !== false);
+  return job;
+}
+
+export async function runImageJob(id: string, situation: string, postToChat = true): Promise<void> {
+  const job = getImageJob(id);
+  if (!job) return;
+  const settings = getSettings();
+  if (!settings.images_enabled) {
+    setStatus(id, 'failed', { error: 'image generation is disabled in settings' });
+    return;
+  }
+  const character = job.character_id ? getCharacter(job.character_id) : null;
+  if (!character) {
+    setStatus(id, 'failed', { error: 'character not found' });
+    return;
+  }
+
+  setStatus(id, 'running');
+  try {
+    const assembled = await completeJson<{ prompt: string; negative_prompt?: string }>({
+      scope: 'image',
+      label: `assemble:${character.username}`,
+      config: settings.models.director,
+      messages: [
+        {
+          role: 'user',
+          content: render('image_prompt_assembler', {
+            appearance_prompt: character.seed.appearance_prompt,
+            image_kind: job.kind,
+            situation,
+            visible_marks: visibleMarks(character, job.kind),
+          }),
+        },
+      ],
+    });
+
+    const prompt = `${assembled.prompt}, ${STYLE_SUFFIX}`;
+    const ref = job.kind === 'profile' ? null : referenceImage(character.id);
+    const b64 = await generateImage({ prompt, seed: character.seed.image_seed, refImage: ref ?? undefined });
+
+    const relPath = join('images', `${id}.png`);
+    writeFileSync(join(DATA_DIR, relPath), Buffer.from(b64, 'base64'));
+    db.prepare('UPDATE images SET prompt = ?, seed = ?, ref_image = ? WHERE id = ?').run(
+      prompt,
+      character.seed.image_seed,
+      ref ? 'profile' : null,
+      id,
+    );
+    setStatus(id, 'done', { path: relPath });
+
+    if (postToChat) {
+      const stored = addMessage({
+        character_id: character.id,
+        sender: 'character',
+        text: '',
+        kind: 'image',
+        meta: { image_id: id, path: relPath },
+        read_at: null,
+      });
+      bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
+    }
+    if (job.kind === 'profile') {
+      const rel = getRelationship(character.id);
+      if (rel) {
+        rel.flags.state.profile_picture_sent = true;
+        db.prepare('UPDATE relationships SET flags = ? WHERE character_id = ?').run(
+          JSON.stringify(rel.flags),
+          character.id,
+        );
+      }
+    }
+  } catch (err) {
+    logger.error('image', `image job ${id} failed`, { error: String(err) });
+    setStatus(id, 'failed', { error: String(err) });
+  }
+}
+
+export async function retryImageJob(id: string): Promise<void> {
+  const job = getImageJob(id);
+  if (!job) throw new Error('image job not found');
+  setStatus(id, 'queued', { error: null });
+  await runImageJob(id, job.prompt || 'same as before', true);
+}
+
+/** The Director has vision: it judges what the user sent and what that does to her. */
+export async function evaluateUserImage(
+  characterId: string,
+  base64: string,
+  mimeType: string,
+): Promise<any> {
+  const character = getCharacter(characterId);
+  const rel = getRelationship(characterId);
+  if (!character || !rel) throw new Error('character not found');
+  const settings = getSettings();
+  const { flagsBlock, historyBlock, seedBlock, touchstoneHint } = await import('./blocks.js');
+  const { recentMessages, getUserProfile } = await import('../repo.js');
+
+  const text = render('director_evaluate_image', {
+    char_real_name: character.real_name,
+    seed_block: seedBlock(character),
+    trust: rel.trust,
+    spark: rel.spark,
+    investment: rel.investment,
+    pressure: rel.pressure.toFixed(2),
+    flags_block: flagsBlock(rel.flags),
+    history_block: historyBlock(recentMessages(characterId, 12), character, getUserProfile()),
+    touchstone_hint: touchstoneHint(character.seed),
+  });
+
+  return completeJson({
+    scope: 'director',
+    label: `evaluate_image:${character.username}`,
+    config: settings.models.director,
+    messages: [
+      {
+        role: 'user',
+        content: [
+          { type: 'text', text },
+          { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64}` } },
+        ],
+      },
+    ],
+  });
+}
