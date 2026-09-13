@@ -293,8 +293,12 @@ Valid "set_flags" / "clear_flags": real_name_known, profile_picture_sent,
 personal_photos_allowed, sexual_topics_allowed, spicy_photos_allowed,
 allows_date_requests, has_had_first_date.
 Only set a flag for something that ACTUALLY HAPPENED in the conversation above. A flag is
-not a threshold being crossed - it is her having said her name, having sent the picture,
-having agreed. If it did not happen yet, leave it and use "unlock" instead.
+not a threshold being crossed - it is her having said her name, having agreed, the
+conversation having actually turned sexual. If it did not happen yet, leave it and use
+"unlock" instead.
+Never set or clear "profile_picture_sent" yourself. Sending a photo now needs his consent,
+so whether one was actually sent is not something you can see from the conversation text -
+the system sets this the moment a photo he accepted is actually generated and delivered.
 
 Valid "event_flags": first_compliment_accepted, first_personal_story_told,
 first_conflict_resolved, first_time_she_initiated, first_rejection_survived,

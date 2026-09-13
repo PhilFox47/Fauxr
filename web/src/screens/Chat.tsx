@@ -46,6 +46,46 @@ function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
   );
 }
 
+/**
+ * The consent card for a photo she has offered. Generation never runs off her own decision
+ * alone - see ActorHidden.photo_offer server-side - so this is the one place that actually
+ * starts it, and the only place that can turn it down.
+ */
+function PhotoOfferCard({
+  text,
+  status,
+  busy,
+  disabled,
+  onRespond,
+}: {
+  text: string;
+  status: string;
+  busy: boolean;
+  disabled: boolean;
+  onRespond: (accept: boolean) => void;
+}) {
+  return (
+    <div className="photo-offer">
+      <span className="photo-offer-ico"><Icon name="camera" size={17} /></span>
+      <span className="grow">{text}</span>
+      {status === 'pending' ? (
+        <div className="photo-offer-actions">
+          <button className="btn ghost" disabled={busy || disabled} onClick={() => onRespond(false)}>
+            Not now
+          </button>
+          <button className="btn" disabled={busy || disabled} onClick={() => onRespond(true)}>
+            Accept
+          </button>
+        </div>
+      ) : (
+        <span className="tiny muted photo-offer-resolved">
+          {status === 'accepted' ? 'Accepted — sending' : 'You said not now'}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export default function Chat({
   characterId,
   typing,
@@ -66,6 +106,7 @@ export default function Chat({
   const [profile, setProfile] = useState<CharacterProfile | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
+  const [respondingOfferId, setRespondingOfferId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [confirmBlock, setConfirmBlock] = useState(false);
   /** False while the user has scrolled up to read history - see the autoscroll effect. */
@@ -191,6 +232,19 @@ export default function Chat({
     }
   };
 
+  const respondPhotoOffer = async (offerId: string, accept: boolean) => {
+    if (respondingOfferId) return;
+    setRespondingOfferId(offerId);
+    try {
+      await api.respondToPhotoOffer(characterId, offerId, accept);
+      await load();
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+    } finally {
+      setRespondingOfferId(null);
+    }
+  };
+
   const attach = async (file: File | undefined) => {
     if (!file) return;
     try {
@@ -304,6 +358,21 @@ export default function Chat({
           // A run of messages from one person is one turn, so only its ends get the full
           // corner radius - the middle of the run stays squared off against the run.
           const mid = !showDay && prev?.sender === m.sender && !showStamp;
+
+          if (m.sender === 'system' && m.meta?.type === 'photo_offer') {
+            return (
+              <div key={m.id} style={{ display: 'contents' }}>
+                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                <PhotoOfferCard
+                  text={m.text}
+                  status={m.meta.status ?? 'pending'}
+                  busy={respondingOfferId === m.meta.offer_id}
+                  disabled={blocked}
+                  onRespond={(accept) => void respondPhotoOffer(m.meta.offer_id, accept)}
+                />
+              </div>
+            );
+          }
 
           return (
             <div key={m.id} style={{ display: 'contents' }}>

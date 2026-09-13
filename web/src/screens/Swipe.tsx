@@ -99,6 +99,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
         {loading && (
           <div className="swipe-deck" aria-hidden="true">
             <div className="swipe-card">
+              <div className="skeleton" style={{ height: 40, width: 40, borderRadius: '50%' }} />
               <div className="skeleton" style={{ height: 24, width: '45%' }} />
               <div className="col" style={{ gap: 10, flex: 1 }}>
                 <div className="skeleton" style={{ height: 15, width: '92%' }} />
@@ -140,6 +141,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
                   Nope
                 </div>
 
+                <div className="swipe-emoji" aria-hidden="true">{current.avatar_emoji}</div>
                 <div className="handle">{current.username}</div>
                 <div className="bio">{current.bio}</div>
                 <div className="hint">That is all you get</div>

@@ -24,7 +24,8 @@ export type IconName =
   | 'eye'
   | 'play'
   | 'alert'
-  | 'check';
+  | 'check'
+  | 'camera';
 
 /** 24x24 grid, 1.75 stroke, round caps - one consistent drawing style for all of them. */
 const PATHS: Record<IconName, ReactNode> = {
@@ -76,6 +77,12 @@ const PATHS: Record<IconName, ReactNode> = {
     </>
   ),
   check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
+  camera: (
+    <>
+      <path d="M4 8.5h3.2l1.4-2h6.8l1.4 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z" />
+      <circle cx="12" cy="13.3" r="3.3" />
+    </>
+  ),
 };
 
 /** Icons that read better filled than stroked. */

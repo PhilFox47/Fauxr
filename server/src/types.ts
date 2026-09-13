@@ -192,11 +192,33 @@ export interface ActorHidden {
   open_thread: string | null;
   going_offline_in: number | null;
   director_needed: boolean;
+  /**
+   * Set when, in these very messages, she decided to actually send him a photo - not just
+   * talk about maybe sending one later. Generation never runs off this alone: it only
+   * raises a consent card in the chat, and the image is not made until he accepts it.
+   */
+  photo_offer: 'profile' | 'chat' | 'spicy' | null;
+  /** A short concrete description of what the offered photo would show, for continuity. */
+  photo_situation: string | null;
 }
 
 export interface ActorOutput {
   messages: ActorMessage[];
   hidden: ActorHidden;
+}
+
+/**
+ * An offer to send a photo, awaiting his accept/decline. Lives on `Relationship.mood`
+ * (a loosely-typed blob already used for session-only state like `leaves_at`) rather than
+ * its own column - it is exactly the same shape of thing, and did not need a migration.
+ */
+export interface PendingPhoto {
+  offer_id: string;
+  kind: 'profile' | 'chat' | 'spicy';
+  situation: string;
+  /** The system message carrying the offer card, so the response can resolve it. */
+  message_id: number;
+  offered_at: string;
 }
 
 export interface Relationship {

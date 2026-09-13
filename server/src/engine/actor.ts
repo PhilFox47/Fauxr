@@ -58,9 +58,13 @@ function fallbackOutput(): ActorOutput {
       open_thread: null,
       going_offline_in: null,
       director_needed: true,
+      photo_offer: null,
+      photo_situation: null,
     },
   };
 }
+
+const PHOTO_OFFER_KINDS = new Set(['profile', 'chat', 'spicy']);
 
 function normalizeHidden(raw: any): ActorHidden {
   return {
@@ -76,6 +80,8 @@ function normalizeHidden(raw: any): ActorHidden {
         ? Math.min(600, Math.round(raw.going_offline_in))
         : null,
     director_needed: !!raw?.director_needed,
+    photo_offer: PHOTO_OFFER_KINDS.has(raw?.photo_offer) ? raw.photo_offer : null,
+    photo_situation: raw?.photo_situation ? String(raw.photo_situation).slice(0, 300) : null,
   };
 }
 
@@ -136,6 +142,7 @@ function buildPrompt(
   const seed = character.seed;
   const wanted = new Set(direction?.context_blocks ?? []);
   const flags = relationship.flags;
+  const photoPending = !!(relationship.mood as any)?.pending_photo;
 
   const messages = recentMessages(character.id, settings.chat.context_messages);
 
@@ -155,7 +162,7 @@ function buildPrompt(
     spice_block: spiceBlock(seed, relationship.arousal, flags),
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     ledger_block: ledgerBlock(relationship.ledger),
-    direction_block: directionBlock(direction, somethingLive),
+    direction_block: directionBlock(direction, somethingLive, photoPending),
     mood_block: moodBlock(relationship.arousal, currentStage(character, relationship).label),
     moment_block: describeHerMoment(character),
     turn_nudge: nudge,
@@ -163,7 +170,25 @@ function buildPrompt(
     max_messages: settings.chat.max_messages_per_turn,
     voice_target:
       seed.message_length === 'paragraphs' ? '40 to 90 seconds of speech' : '12 to 40 seconds of speech',
+    text_target: textTarget(seed.message_length),
   });
+}
+
+/**
+ * A concrete target, the same job voice_target does for voice notes. Without one, "obey
+ * your message length setting" only ever names the one_liner floor, and a model with no
+ * other anchor defaults to the shortest thing that technically satisfies every rule -
+ * which reads as terse even for characters whose setting allows much more.
+ */
+function textTarget(messageLength: string): string {
+  switch (messageLength) {
+    case 'one_liner':
+      return 'One short line, rarely more than a handful of words. That is the whole reply, not a first message with more to follow.';
+    case 'paragraphs':
+      return 'Real substance when there is something to say - two to four sentences, often split across two or three messages rather than one block. Still allowed to send just "same" when that is genuinely the whole reply.';
+    default:
+      return 'A sentence or two of actual content, not just a reaction word. Split it across a second message rather than cramming everything into one.';
+  }
 }
 
 /** A character who really does write in full sentences, so the register check exempts her. */

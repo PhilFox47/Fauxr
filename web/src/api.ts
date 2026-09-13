@@ -20,6 +20,8 @@ export interface SwipeProfile {
   id: string;
   username: string;
   bio: string;
+  /** Not a photo - just the emoji she picked for herself, so cards are tellable apart. */
+  avatar_emoji: string;
 }
 
 /** Which parts of the install a reset should take out. Anything false survives. */
@@ -138,6 +140,11 @@ export const api = {
     fd.append('file', file);
     return request<Message>(`/api/chats/${id}/image`, { method: 'POST', body: fd });
   },
+  respondToPhotoOffer: (id: string, offerId: string, accept: boolean) =>
+    request<{ ok: true; enqueued: boolean }>(`/api/chats/${id}/photo-offer/${offerId}`, {
+      method: 'POST',
+      body: JSON.stringify({ accept }),
+    }),
   settings: () => request<{ settings: any; usage: any }>('/api/settings'),
   saveSettings: (patch: unknown) => request<any>('/api/settings', { method: 'PUT', body: JSON.stringify(patch) }),
   logs: (params: Record<string, string>) =>
@@ -159,6 +166,7 @@ export const api = {
 
 export type ServerEvent =
   | { type: 'message'; character_id: string; message: Message }
+  | { type: 'message_updated'; character_id: string; message: Message }
   | { type: 'typing'; character_id: string; on: boolean }
   | { type: 'read'; character_id: string; at: string }
   | { type: 'match'; character_id: string }

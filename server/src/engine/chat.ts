@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { getSettings } from '../config.js';
 import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
@@ -6,7 +7,7 @@ import {
   addMessage, clearWakeup, deleteMessages, getCharacter, getRelationship, getWakeup,
   markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, type StoredMessage,
 } from '../repo.js';
-import type { Character, Relationship } from '../types.js';
+import type { Character, PendingPhoto, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
 import { detectEvents, directionExpired, runDirector } from './director.js';
 import { computePressure, computeReciprocity } from './modifiers.js';
@@ -180,6 +181,25 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   await runActorPhase(character, rel, { startedIn, decrementValidFor: true });
 }
 
+/** Which unlock permits offering each photo tier - the same mapping images.ts's kind uses. */
+const PHOTO_UNLOCK_FOR: Record<'profile' | 'chat' | 'spicy', string> = {
+  profile: 'profile_picture',
+  chat: 'personal_photos',
+  spicy: 'spicy_photos',
+};
+
+/** What she'd be offering, in plain terms, for the consent card the user actually sees. */
+function photoOfferText(name: string, kind: 'profile' | 'chat' | 'spicy'): string {
+  switch (kind) {
+    case 'profile':
+      return `${name} wants to send you her profile picture.`;
+    case 'spicy':
+      return `${name} wants to send you a photo. It might be explicit.`;
+    default:
+      return `${name} wants to send you a photo.`;
+  }
+}
+
 /**
  * The Actor call, delivery and post-turn bookkeeping, shared between a normal turn and a
  * regenerate. `decrementValidFor` is false for a regenerate: the original turn already
@@ -266,12 +286,55 @@ async function runActorPhase(
   // A thread she was told to raise is now spent, whether or not he engaged with it.
   if (result.raisedThreadId) markThreadRaised(rel, result.raisedThreadId);
 
+  /**
+   * She decided to send a photo - but deciding is not sending. This only raises the
+   * consent card; generation does not start until he accepts it (see images.ts).
+   * Re-verified here rather than trusted from the model: the direction's unlock has to
+   * actually match the tier she is offering, one is not already pending, images have to be
+   * turned on, and a profile picture cannot be offered twice.
+   */
+  let pendingPhoto: PendingPhoto | null = (rel.mood as any)?.pending_photo ?? null;
+  const offerKind = result.hidden.photo_offer;
+  if (offerKind && !pendingPhoto) {
+    const eligible =
+      getSettings().images_enabled &&
+      rel.active_direction?.unlock === PHOTO_UNLOCK_FOR[offerKind] &&
+      !(offerKind === 'profile' && rel.flags.state.profile_picture_sent);
+    if (eligible) {
+      const offerId = randomUUID();
+      const offerMsg = addMessage({
+        character_id: character.id,
+        sender: 'system',
+        text: photoOfferText(character.real_name, offerKind),
+        kind: 'text',
+        meta: { type: 'photo_offer', offer_id: offerId, photo_kind: offerKind, status: 'pending' },
+        read_at: null,
+      });
+      bus.emitEvent({ type: 'message', character_id: character.id, message: offerMsg });
+      pendingPhoto = {
+        offer_id: offerId,
+        kind: offerKind,
+        situation: result.hidden.photo_situation ?? '',
+        message_id: offerMsg.id,
+        offered_at: nowIso(),
+      };
+      logger.debug('actor', `${character.username} offered a ${offerKind} photo`, { offer_id: offerId });
+    } else {
+      logger.debug('actor', `${character.username}'s photo offer was not honoured`, {
+        offerKind,
+        imagesEnabled: getSettings().images_enabled,
+        unlock: rel.active_direction?.unlock,
+      });
+    }
+  }
+
   rel.mood = {
     ...rel.mood,
     actor_mood: result.hidden.mood,
     thoughts: result.hidden.thoughts,
     // Carried to the next turn so nothing opens a second topic on top of a live one.
     unresolved: result.hidden.unresolved,
+    pending_photo: pendingPhoto,
   };
   refreshModifiers(rel, recentMessages(character.id, 40), result.hidden.boundary_touched);
   saveRelationship(rel);

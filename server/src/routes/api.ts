@@ -14,7 +14,7 @@ import {
 import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateLastTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
-import { enqueueImage, evaluateUserImage, listImageJobs, retryImageJob } from '../engine/images.js';
+import { evaluateUserImage, listImageJobs, respondToPhotoOffer, retryImageJob } from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor } from '../engine/generator.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
@@ -80,8 +80,12 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     void ensureStack();
     return {
       generating: generatingCount(),
-      // Only the handle and the bio. No picture, no age, no interests.
-      profiles: stack().map((c) => ({ id: c.id, username: c.username, bio: c.bio })),
+      // Handle, bio and the emoji she picked for herself - no real photo, no age, no
+      // interests. The emoji is not a photo: it exists so the stack is not a run of
+      // identical cards, not to give away anything about what she actually looks like.
+      profiles: stack().map((c) => ({
+        id: c.id, username: c.username, bio: c.bio, avatar_emoji: avatarEmojiFor(c),
+      })),
     };
   });
 
@@ -210,17 +214,17 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     }
   });
 
-  app.post<{ Params: { id: string }; Body: { kind?: string; situation?: string } }>(
-    '/api/chats/:id/request-image',
+  // Generation only ever starts from an accepted consent card, never on request - see
+  // respondToPhotoOffer(). This used to be a direct-trigger endpoint with no caller; kept
+  // that way would have been an unguarded bypass of the consent it now exists to enforce.
+  app.post<{ Params: { id: string; offerId: string }; Body: { accept?: boolean } }>(
+    '/api/chats/:id/photo-offer/:offerId',
     async (req, reply) => {
-      const character = getCharacter(req.params.id);
-      if (!character) return reply.code(404).send({ error: 'not found' });
-      const kind = (req.body?.kind ?? 'profile') as 'profile' | 'chat' | 'spicy';
-      return enqueueImage({
-        characterId: character.id,
-        kind,
-        situation: req.body?.situation ?? 'a plain selfie she would put on a dating profile',
-      });
+      try {
+        return await respondToPhotoOffer(req.params.id, req.params.offerId, !!req.body?.accept);
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
     },
   );
 

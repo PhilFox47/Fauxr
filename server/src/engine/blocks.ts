@@ -232,7 +232,14 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags): 
   return lines.join('\n');
 }
 
-export function directionBlock(d: Direction | null, somethingLive = false): string {
+const PHOTO_UNLOCKS = new Set(['profile_picture', 'personal_photos', 'spicy_photos']);
+
+/**
+ * `photoPending` is true while an offer she already made is still waiting on his
+ * accept/decline. Sending a photo now takes his consent, so a fresh unlock permission
+ * arriving mid-wait must not read as license to offer a second one on top of the first.
+ */
+export function directionBlock(d: Direction | null, somethingLive = false, photoPending = false): string {
   if (!d) {
     return [
       'Mood: good - genuinely curious about this new match, nothing has soured it.',
@@ -257,7 +264,11 @@ export function directionBlock(d: Direction | null, somethingLive = false): stri
     somethingLive
       ? 'Something is still unfinished between you. Stay on it. Do not start a new subject this turn.'
       : '',
-    d.unlock ? unlockInstruction(d.unlock) : '',
+    d.unlock
+      ? photoPending && PHOTO_UNLOCKS.has(d.unlock)
+        ? 'You already offered to send him a photo and are waiting to hear back. Do not offer another one on top of it - let him answer the first.'
+        : unlockInstruction(d.unlock)
+      : '',
     d.offline_in_minutes ? `You have about ${d.offline_in_minutes} minutes before you have to go.` : '',
     `Length: ${d.length}`,
   ].filter(Boolean).join('\n');
@@ -268,13 +279,13 @@ function unlockInstruction(unlock: string): string {
     case 'real_name':
       return 'You are allowed to tell him your real name this turn, IF the conversation gives you a reason to. Do it your way. If the moment does not come, do not force it.';
     case 'profile_picture':
-      return 'You are allowed to send him a picture of yourself this turn if it comes up naturally.';
+      return 'You are allowed to offer him a picture of yourself this turn if it comes up naturally - say you are sending one, or ask if he wants one. Offering is the whole move; whether it actually reaches him is his call, not yours to narrate.';
     case 'personal_photos':
-      return 'You are allowed to send a more personal photo if the moment calls for it.';
+      return 'You are allowed to offer a more personal photo if the moment calls for it. Offer it, do not describe having already sent it.';
     case 'sexual_topics':
       return 'You are allowed to let the conversation get sexual if he takes it there, or take it there yourself.';
     case 'spicy_photos':
-      return 'You are allowed to send something explicit if you want to. Unprompted is stronger than asked for.';
+      return 'You are allowed to offer something explicit if you want to. Unprompted is stronger than asked for. Offer it, do not describe having already sent it.';
     case 'allow_date':
       return 'You are allowed to agree to meet him, or to suggest it yourself.';
     default:

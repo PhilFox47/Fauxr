@@ -447,6 +447,24 @@ irony markers" produces whatever the model imagines that is; the table now lists
 words. Properly-punctuated and formal registers are demoted to uncommon, so writing in full
 sentences is a deliberate trait rather than the default.
 
+### Terse by default was a real gap, not just seed variance
+
+`message_length` is a seed trait (one-liner / medium / paragraphs) and is meant to produce
+real variety - some characters really are one-word texters. But nothing anchored the other
+two tiers to anything past their own floor: "obey your setting" only ever spelled out what
+a one-liner has to stay under, and the surrounding advice ("boring is allowed", "silence is
+a move", "most messages are ordinary") gave a model with no other anchor every excuse to
+reach for the shortest reply that technically satisfied every rule - which reads as terse
+even from a character whose setting allows far more.
+
+Fixed the way `voice_target` already fixes the equivalent gap for voice notes: a concrete
+`text_target` computed from `message_length` and handed to the Actor alongside the existing
+rules, plus a direct line that being one-word or going quiet is a real, deliberate choice
+for a specific moment, not the resting state of every message. The "boring is allowed"
+guidance stays - a one-liner still stays one line, and "yeah" still earns its place when
+that is genuinely the whole reply - the fix is only that reaching for it by default, on a
+character whose setting allows real content, is no longer treated as the safe option.
+
 ### Giving her something to say
 
 Detectors only remove bad output. The reason a character defaults to commenting on the
@@ -539,6 +557,46 @@ configured right:
   repeated `GET /api/chats/:id` — `typing` flips true for the duration of the turn and the
   reply lands in the polled message list, exactly like the WebSocket path, just a few
   seconds later.
+
+### Photos need his consent, not just her decision
+
+Image generation existed as complete infrastructure - a prompt assembler, a job queue, a
+retry button in Settings - with nothing in the app actually calling it. The Actor could be
+told a photo unlock was available, and the seed's real-name/personal/spicy tiers all had the
+machinery to describe what to show, but no code path ever turned "she decided to send one"
+into a real image, and the one direct-trigger endpoint had no caller anywhere in the UI.
+
+Wiring it up raised an obvious question: if she can decide to send a photo, should the app
+just generate and deliver it? The answer here is no. **Deciding to offer and actually
+sending are two different things now, and only he can bridge them.** The Actor's hidden
+output can set `photo_offer` (`profile` / `chat` / `spicy`) when, in that turn's messages,
+she genuinely offered - "want me to send u one?", not "here's a pic" as if it already
+arrived, which is explicitly forbidden in the prompt. That raises a **consent card** in the
+chat - "Mira wants to send you her profile picture", Accept / Not now - and generation does
+not start until he accepts it. Declining just closes the card; accepting is the one and only
+thing that calls `enqueueImage()`.
+
+A few things keep this honest rather than just decorative:
+- The offer is re-verified server-side, not trusted from the model: the direction's
+  `unlock` has to actually match the tier being offered, images have to be turned on in
+  Settings, a profile picture can't be offered twice, and - the one that matters most for
+  not being annoying - **she cannot raise a second card while one is already pending**. The
+  direction block tells her so explicitly once one is out, so a still-permitted unlock does
+  not read as license to ask again on top of an unanswered ask.
+- The card resolves in place rather than vanishing, so scrolling back through history after
+  the fact still makes sense - "You said not now" or "Accepted — sending" replace the
+  buttons once he answers, both live (a new `message_updated` WebSocket/poll event) and on
+  reload.
+- `profile_picture_sent` is no longer something the Director scores from the conversation
+  text - it could always tell what *seemed* to happen, never whether a real file actually
+  got made and delivered, and now those can genuinely diverge. The system sets that flag
+  itself, only once a photo he accepted has actually finished generating.
+
+Verified end-to-end against a running server: offering while one is already pending is
+suppressed; declining resolves the card and lets a fresh offer through on a later turn;
+responding twice to the same offer is rejected; accepting actually runs the image job,
+posts a real photo message, and flips `profile_picture_sent` - all checked over plain HTTP,
+then again by driving the built app in a real browser.
 
 ### Voice messages
 ---
@@ -647,6 +705,11 @@ are not unique at the point the seed is written (the final one is settled during
 so keying off the handle gave every character the same face whenever a model repeated a
 username. Because that fallback resolves at read time, characters generated before any of
 this existed get a distinct face too, with no migration.
+
+It shows during swiping too, not only once matched — `/api/stack` was deliberately the one
+endpoint that sent nothing but a handle and a bio ("no photos, no age, no filters"), and the
+emoji does not break that: it is not a photo, it gives away nothing real about her, it only
+makes the stack a run of distinguishable cards instead of identical ones.
 
 ### The attribute tables
 

@@ -6,10 +6,10 @@ import { db, nowIso, DATA_DIR } from '../db/index.js';
 import { bus } from '../events.js';
 import { completeJson, generateImage } from '../llm/client.js';
 import { logger } from '../log.js';
-import { addMessage, getCharacter, getRelationship } from '../repo.js';
+import { addMessage, getCharacter, getRelationship, saveRelationship, updateMessageMeta } from '../repo.js';
 import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
-import type { Character } from '../types.js';
+import type { Character, PendingPhoto } from '../types.js';
 
 const STYLE_SUFFIX =
   'shot on a phone camera, natural light, candid, slight grain, realistic skin texture, 4k';
@@ -178,6 +178,50 @@ export async function retryImageJob(id: string): Promise<void> {
   if (!job) throw new Error('image job not found');
   setStatus(id, 'queued', { error: null });
   await runImageJob(id, job.prompt || 'same as before', true);
+}
+
+/** Used only when the Actor left no concrete detail to work from. */
+const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy', string> = {
+  profile: 'a plain, friendly selfie for her profile',
+  chat: 'a casual photo of whatever she is doing right now',
+  spicy: 'an explicit photo, framed the way she is comfortable sharing',
+};
+
+/**
+ * His answer to a pending photo offer, from the consent card in the chat. Accepting is the
+ * only thing that ever starts real generation - offering one, on the Actor's side, only
+ * ever raises the card. See ActorHidden.photo_offer for why the two are kept apart.
+ */
+export async function respondToPhotoOffer(
+  characterId: string,
+  offerId: string,
+  accept: boolean,
+): Promise<{ ok: true; enqueued: boolean }> {
+  const rel = getRelationship(characterId);
+  if (!rel) throw new Error('character not found');
+  const pending = (rel.mood as any)?.pending_photo as PendingPhoto | undefined;
+  if (!pending || pending.offer_id !== offerId) {
+    throw new Error('that offer is no longer open');
+  }
+
+  rel.mood = { ...rel.mood, pending_photo: null };
+  saveRelationship(rel);
+
+  // The card itself resolves in place - accepted or declined - rather than vanishing, so
+  // scrolling back through history still makes sense.
+  const updated = updateMessageMeta(pending.message_id, { status: accept ? 'accepted' : 'declined' });
+  if (updated) {
+    bus.emitEvent({ type: 'message_updated', character_id: characterId, message: updated });
+  }
+
+  if (!accept) return { ok: true, enqueued: false };
+
+  enqueueImage({
+    characterId,
+    kind: pending.kind,
+    situation: pending.situation || DEFAULT_SITUATION[pending.kind],
+  });
+  return { ok: true, enqueued: true };
 }
 
 /** The Director has vision: it judges what the user sent and what that does to her. */

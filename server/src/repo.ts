@@ -256,6 +256,17 @@ export function getMessage(id: number): StoredMessage | null {
   return row ? hydrateMessage(row) : null;
 }
 
+/** Merges into a message's existing meta - used to resolve a photo-offer card in place. */
+export function updateMessageMeta(id: number, patch: Record<string, any>): StoredMessage | null {
+  const existing = getMessage(id);
+  if (!existing) return null;
+  db.prepare('UPDATE messages SET meta = ? WHERE id = ?').run(
+    JSON.stringify({ ...existing.meta, ...patch }),
+    id,
+  );
+  return getMessage(id);
+}
+
 /** Used by regenerate: removes specific messages outright, not a soft delete. */
 export function deleteMessages(ids: number[]): number {
   if (ids.length === 0) return 0;

@@ -2,6 +2,7 @@ import { EventEmitter } from 'node:events';
 
 export type AppEvent =
   | { type: 'message'; character_id: string; message: unknown }
+  | { type: 'message_updated'; character_id: string; message: unknown }
   | { type: 'typing'; character_id: string; on: boolean }
   | { type: 'read'; character_id: string; at: string }
   | { type: 'match'; character_id: string }

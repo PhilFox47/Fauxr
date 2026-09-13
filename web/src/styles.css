@@ -435,6 +435,13 @@ input[type='range'] {
   overflow: hidden;
 }
 .swipe-card.dragging { transition: none; }
+/* Not a photo - the emoji she picked for herself, so the stack is not a run of identical
+   cards. Sits at the top of the centred block; the auto margin used to live on .handle. */
+.swipe-emoji {
+  font-size: 34px;
+  line-height: 1;
+  margin-top: auto;
+}
 .swipe-card .handle {
   font-size: 21px;
   font-weight: 680;
@@ -455,7 +462,6 @@ input[type='range'] {
      sits centred in the card instead of clinging to the top of a tall empty box. */
   margin-bottom: auto;
 }
-.swipe-card .handle { margin-top: auto; }
 .swipe-card .hint {
   font-size: 11.5px;
   color: var(--faint);
@@ -681,6 +687,48 @@ input[type='range'] {
 .typing i:nth-child(2) { animation-delay: 0.18s; }
 .typing i:nth-child(3) { animation-delay: 0.36s; }
 @keyframes blink { 0%, 60%, 100% { opacity: 0.25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
+
+/**
+ * The consent card for an offered photo. Deliberately not a bubble on either side - it is
+ * not something either of them said, it is the app asking a real question - so it spans
+ * the log at its own width with its own shape, the way the day separator does.
+ */
+.photo-offer {
+  align-self: center;
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin: var(--s3) 0;
+  padding: var(--s3) var(--s3) var(--s3) 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-lg);
+  font-size: 13px;
+  line-height: 1.4;
+  animation: pop var(--med) var(--ease-out);
+}
+.photo-offer-ico {
+  display: flex;
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+.photo-offer-actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.photo-offer-actions .btn {
+  padding: 7px 13px;
+  font-size: 12.5px;
+  border-radius: var(--r-sm);
+  box-shadow: none;
+}
+.photo-offer-resolved {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
 
 /* Jump-to-latest, so reading history does not get yanked away by an incoming message. */
 .jump-latest {
