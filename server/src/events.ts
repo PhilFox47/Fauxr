@@ -9,7 +9,8 @@ export type AppEvent =
   | { type: 'presence'; character_id: string; online: boolean }
   | { type: 'stack'; count: number }
   | { type: 'generating'; count: number }
-  | { type: 'reset' };
+  | { type: 'reset' }
+  | { type: 'messages_removed'; character_id: string; message_ids: number[] };
 
 class Bus extends EventEmitter {
   emitEvent(e: AppEvent): void {

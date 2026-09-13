@@ -117,6 +117,11 @@ export const api = {
     request<Message>(`/api/chats/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   profile: (id: string) => request<CharacterProfile>(`/api/chats/${id}/profile`),
   markRead: (id: string) => request<any>(`/api/chats/${id}/read`, { method: 'POST' }),
+  regenerate: (id: string, messageId: number) =>
+    request<{ removed_ids: number[] }>(`/api/chats/${id}/regenerate`, {
+      method: 'POST',
+      body: JSON.stringify({ message_id: messageId }),
+    }),
   block: (id: string) => request<any>(`/api/chats/${id}/block`, { method: 'POST' }),
   sendImage: (id: string, file: File) => {
     const fd = new FormData();
@@ -152,6 +157,7 @@ export type ServerEvent =
   | { type: 'stack'; count: number }
   | { type: 'generating'; count: number }
   | { type: 'reset' }
+  | { type: 'messages_removed'; character_id: string; message_ids: number[] }
   | { type: 'hello'; at: string };
 
 /** Reconnecting WebSocket. The server is off between 02:00 and 06:00, so drops are normal. */

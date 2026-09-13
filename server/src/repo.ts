@@ -256,6 +256,13 @@ export function getMessage(id: number): StoredMessage | null {
   return row ? hydrateMessage(row) : null;
 }
 
+/** Used by regenerate: removes specific messages outright, not a soft delete. */
+export function deleteMessages(ids: number[]): number {
+  if (ids.length === 0) return 0;
+  const placeholders = ids.map(() => '?').join(',');
+  return db.prepare(`DELETE FROM messages WHERE id IN (${placeholders})`).run(...ids).changes;
+}
+
 export function recentMessages(characterId: string, limit = 40): StoredMessage[] {
   const rows = db
     .prepare('SELECT * FROM messages WHERE character_id = ? ORDER BY id DESC LIMIT ?')

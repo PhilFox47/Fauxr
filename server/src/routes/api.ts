@@ -11,7 +11,7 @@ import {
   getCharacter, getRelationship, getUserProfile, getWakeup, lastMessage, markCharacterMessagesRead,
   queryLogs, recentMessages, saveUserProfile, unreadCount,
 } from '../repo.js';
-import { blockCharacterByUser, handleUserMessage, isAway } from '../engine/chat.js';
+import { blockCharacterByUser, handleUserMessage, isAway, regenerateLastTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import { enqueueImage, evaluateUserImage, listImageJobs, retryImageJob } from '../engine/images.js';
@@ -145,6 +145,24 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     if (marked) logger.debug('app', `marked ${marked} message(s) read`, { character_id: req.params.id });
     return { ok: true, marked, unread: unreadCount(req.params.id) };
   });
+
+  /**
+   * Reroll her most recent reply. Only the trailing turn can be regenerated - the client
+   * sends the id of the bubble it wants replaced, which doubles as a guard against a stale
+   * UI (a second tab, a message that already got superseded by a new exchange).
+   */
+  app.post<{ Params: { id: string }; Body: { message_id?: number } }>(
+    '/api/chats/:id/regenerate',
+    async (req, reply) => {
+      const messageId = Number(req.body?.message_id);
+      if (!Number.isFinite(messageId)) return reply.code(400).send({ error: 'message_id is required' });
+      try {
+        return await regenerateLastTurn(req.params.id, messageId);
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
 
   app.post<{ Params: { id: string } }>('/api/chats/:id/block', async (req) => {
     await blockCharacterByUser(req.params.id);

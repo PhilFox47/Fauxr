@@ -268,9 +268,22 @@ input[type='range'] { width: 100%; accent-color: var(--accent); }
 .voice-wave { flex: 1; height: 20px; display: flex; align-items: center; gap: 2px; }
 .voice-wave i { display: block; width: 2px; border-radius: 2px; background: currentColor; opacity: 0.5; }
 .voice-transcript { font-size: 13px; opacity: 0.85; margin-top: 6px; white-space: pre-wrap; }
-.stamp { font-size: 10px; color: var(--muted); padding: 0 6px 6px; }
+.stamp { font-size: 10px; color: var(--muted); padding: 0 6px 6px; display: flex; align-items: center; gap: 5px; }
 .stamp.me { align-self: flex-end; }
 .stamp.them { align-self: flex-start; }
+
+.regen-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+.regen-btn:active { color: var(--text); }
+.regen-btn:disabled { opacity: 0.4; cursor: default; }
 
 .typing { align-self: flex-start; display: flex; gap: 4px; padding: 12px 15px; background: var(--bubble-them); border-radius: 18px; border-bottom-left-radius: 6px; }
 .typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: blink 1.25s infinite; }

@@ -3,8 +3,8 @@ import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
-  addMessage, clearWakeup, getCharacter, getRelationship, getWakeup, markUserMessagesRead,
-  recentMessages, saveRelationship, setCharacterState, type StoredMessage,
+  addMessage, clearWakeup, deleteMessages, getCharacter, getRelationship, getWakeup,
+  markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, type StoredMessage,
 } from '../repo.js';
 import type { Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
@@ -145,11 +145,49 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     opts.trigger === 'match_opener' ||
     isStaleSession(rel);
 
+  if (needsDirector) {
+    const directed = await runDirector(character, rel, {
+      reason: opts.reason ?? (check.expired ? check.reason : opts.trigger),
+    });
+    rel = getRelationship(characterId)!;
+    character = getCharacter(characterId)!;
+    if (directed.escalation === 'block') {
+      bus.emitEvent({ type: 'character_state', character_id: character.id, state: 'blocked_by_char' });
+      return;
+    }
+    if (directed.escalation === 'ghost') {
+      logger.info('actor', `${character.username} is ghosting, no reply sent`);
+      return;
+    }
+  }
+
+  if (rel.ghosted_at && opts.trigger === 'user_message') {
+    // Ghosting means she does not answer. A reactivation attempt is decided by the Director.
+    logger.debug('actor', `${character.username} is ghosting, staying silent`);
+    return;
+  }
+
+  await runActorPhase(character, rel, { startedIn, decrementValidFor: true });
+}
+
+/**
+ * The Actor call, delivery and post-turn bookkeeping, shared between a normal turn and a
+ * regenerate. `decrementValidFor` is false for a regenerate: the original turn already
+ * spent one use of the direction, and a reroll of its text should not spend a second.
+ */
+async function runActorPhase(
+  character: Character,
+  rel: Relationship,
+  opts: { startedIn: number; decrementValidFor: boolean },
+): Promise<void> {
+  const characterId = character.id;
+  const { startedIn } = opts;
+
   /**
    * The typing indicator covers the whole time she is composing, not only the pauses
-   * between her messages. Writing a reply means a director pass and an actor call, which
-   * takes seconds, and the first message is sent with no delay of its own - so without
-   * this the chat just sits there silently until her first bubble appears out of nowhere.
+   * between her messages. Writing a reply means an actor call, which takes seconds, and
+   * the first message is sent with no delay of its own - so without this the chat just
+   * sits there silently until her first bubble appears out of nowhere.
    */
   let typingShown = false;
   const showTyping = () => {
@@ -163,31 +201,9 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     bus.emitEvent({ type: 'typing', character_id: characterId, on: false });
   };
 
-  let result: ActorRun | null = null;
+  let result: ActorRun;
   try {
     showTyping();
-
-    if (needsDirector) {
-      const directed = await runDirector(character, rel, {
-        reason: opts.reason ?? (check.expired ? check.reason : opts.trigger),
-      });
-      rel = getRelationship(characterId)!;
-      character = getCharacter(characterId)!;
-      if (directed.escalation === 'block') {
-        bus.emitEvent({ type: 'character_state', character_id: character.id, state: 'blocked_by_char' });
-        return;
-      }
-      if (directed.escalation === 'ghost') {
-        logger.info('actor', `${character.username} is ghosting, no reply sent`);
-        return;
-      }
-    }
-
-    if (rel.ghosted_at && opts.trigger === 'user_message') {
-      // Ghosting means she does not answer. A reactivation attempt is decided by the Director.
-      logger.debug('actor', `${character.username} is ghosting, staying silent`);
-      return;
-    }
 
     const useVoice = wantsVoiceMessage(character);
     const ctx = { character, relationship: rel, direction: rel.active_direction };
@@ -204,9 +220,10 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     stopTyping();
   }
 
-  rel = getRelationship(characterId);
-  if (!rel || epoch !== startedIn) return;
-  if (rel.active_direction) {
+  const fresh = getRelationship(characterId);
+  if (!fresh || epoch !== startedIn) return;
+  rel = fresh;
+  if (opts.decrementValidFor && rel.active_direction) {
     rel.active_direction.valid_for = Math.max(0, rel.active_direction.valid_for - 1);
   }
   rel.last_contact_at = nowIso();
@@ -268,6 +285,56 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
       bus.emitEvent({ type: 'character_state', character_id: character.id, state: 'blocked_by_char' });
     }
   }
+}
+
+/**
+ * Reroll her most recent reply - the small redo button next to the timestamp. Only the
+ * trailing run of her messages (the last turn) can be regenerated: anything older has
+ * already had its stat and ledger effects folded into the relationship, and undoing those
+ * cleanly is not something this can do safely. If the user has replied since, that turn is
+ * done and there is nothing left to reroll.
+ *
+ * The Director is not re-run - the original turn already scored and directed this moment,
+ * and running it twice would double-apply trust/spark/investment/arousal deltas. This only
+ * asks the Actor to write different words for the same direction.
+ */
+export async function regenerateLastTurn(characterId: string, messageId: number): Promise<{ removed_ids: number[] }> {
+  if (running.has(characterId)) {
+    throw new Error('she is already in the middle of replying');
+  }
+  const character = getCharacter(characterId);
+  const rel = getRelationship(characterId);
+  if (!character || !rel) throw new Error('character not found');
+  if (character.state !== 'matched') throw new Error('cannot regenerate for an unmatched character');
+
+  const recent = recentMessages(characterId, 20);
+  const trailing: StoredMessage[] = [];
+  for (let i = recent.length - 1; i >= 0; i--) {
+    if (recent[i].sender !== 'character') break;
+    trailing.unshift(recent[i]);
+  }
+  if (trailing.length === 0) {
+    throw new Error('the last message is not hers - nothing to regenerate');
+  }
+  if (!trailing.some((m) => m.id === messageId)) {
+    throw new Error('that reply has already been superseded');
+  }
+  if (rel.ghosted_at) {
+    throw new Error('she is ghosting - there is nothing to regenerate into');
+  }
+
+  const removedIds = trailing.map((m) => m.id);
+  deleteMessages(removedIds);
+  bus.emitEvent({ type: 'messages_removed', character_id: characterId, message_ids: removedIds });
+  logger.info('actor', `regenerating last turn for ${character.username}`, { removed: removedIds });
+
+  running.add(characterId);
+  const startedIn = epoch;
+  void runActorPhase(character, rel, { startedIn, decrementValidFor: false })
+    .catch((err) => logger.error('actor', 'regenerate failed', { error: String(err) }))
+    .finally(() => running.delete(characterId));
+
+  return { removed_ids: removedIds };
 }
 
 function isStaleSession(rel: Relationship): boolean {

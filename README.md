@@ -363,6 +363,22 @@ than requested from the model — see **Message timing**.
 Voice messages are the single exception: they may be rambling spoken prose, because that
 is what a voice note is. Narration stays forbidden there too.
 
+### Regenerating a reply
+
+A small ↻ button sits next to the timestamp on her most recent message, for when a reply
+comes back broken, repeated, or just not worth keeping.
+
+Only her *last turn* can be regenerated - not any message in history. Anything older has
+already had its trust/spark/investment deltas, ledger facts and discovered profile entries
+folded into the relationship, and unwinding those cleanly is not something a redo button
+can do safely. The button only ever appears on the true last message in the conversation,
+so once you have replied again, that turn is done and there is nothing left to reroll.
+
+Regenerating deletes the old message(s) and asks the Actor to write the moment again from
+scratch. The Director is not re-run: the original turn already scored and directed this
+exchange, and doing that twice would double-apply its stat changes. This is a reroll of her
+words, not a rescore of what happened.
+
 ### Message timing
 
 The first message of a reply is sent the moment it exists. The wait before it is already

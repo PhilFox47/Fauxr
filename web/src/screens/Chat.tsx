@@ -51,6 +51,7 @@ export default function Chat({
   const [menuOpen, setMenuOpen] = useState(false);
   const [profile, setProfile] = useState<CharacterProfile | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
   const logRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -96,6 +97,25 @@ export default function Chat({
       alert(String(err instanceof Error ? err.message : err));
     } finally {
       setSending(false);
+    }
+  };
+
+  /**
+   * Rerolls her last reply - only the trailing turn is ever offered this, since anything
+   * older has already fed into trust/spark/the ledger and cannot be cleanly undone. The
+   * server enforces the same rule; this just keeps the button from appearing where it
+   * would fail anyway.
+   */
+  const regenerate = async (messageId: number) => {
+    if (regeneratingId !== null) return;
+    setRegeneratingId(messageId);
+    try {
+      await api.regenerate(characterId, messageId);
+      await load();
+    } catch (err) {
+      alert(String(err instanceof Error ? err.message : err));
+    } finally {
+      setRegeneratingId(null);
     }
   };
 
@@ -200,6 +220,17 @@ export default function Chat({
                 <div className={`stamp ${mine ? 'me' : 'them'}`}>
                   {clock(m.sent_at)}
                   {mine && (m.read_at ? ' · read' : ' · sent')}
+                  {!mine && last && !blocked && (
+                    <button
+                      className="regen-btn"
+                      onClick={() => void regenerate(m.id)}
+                      disabled={regeneratingId !== null || typing}
+                      aria-label="Regenerate this reply"
+                      title="Regenerate this reply"
+                    >
+                      {regeneratingId === m.id ? '…' : '↻'}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
