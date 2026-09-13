@@ -36,9 +36,9 @@ export const DEFAULT_SETTINGS: Settings = {
     image_api_key: process.env.FAUXR_IMAGE_API_KEY || '',
   },
   models: {
-    actor: { model: 'glm-5.3-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 900 },
-    director: { model: 'gemma-4', temperature: 0.4, top_p: 0.9, max_tokens: 1400 },
-    image: { model: 'seedream', size: '1024x1024' },
+    actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 900 },
+    director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 1400 },
+    image: { model: 'seedream-v4', size: '1024x1024' },
   },
   activity: 0.6,
   server_window: { from: '06:00', to: '02:00', timezone: 'local' },
@@ -52,9 +52,14 @@ function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
 
+/**
+ * Merge a patch over the defaults. Objects are merged key by key; anything else -
+ * strings, numbers, booleans, arrays - replaces the value outright. Only `undefined`
+ * means "leave it alone", so a patch can legitimately set an empty string or 0.
+ */
 function deepMerge<T>(base: T, override: unknown): T {
-  if (!isPlainObject(override)) return base;
-  if (!isPlainObject(base)) return override as T;
+  if (override === undefined) return base;
+  if (!isPlainObject(base) || !isPlainObject(override)) return override as T;
   const out: Record<string, unknown> = { ...(base as Record<string, unknown>) };
   for (const [k, v] of Object.entries(override)) {
     out[k] = k in out ? deepMerge((base as any)[k], v) : v;
@@ -64,12 +69,32 @@ function deepMerge<T>(base: T, override: unknown): T {
 
 let cached: Settings | null = null;
 
+/**
+ * Saved settings win over the environment, but an empty saved credential does not:
+ * saving the settings page once with a blank key would otherwise silently override the
+ * key supplied through docker compose.
+ */
+function applyEnvFallbacks(settings: Settings): Settings {
+  const api = { ...settings.api };
+  for (const [key, fallback] of [
+    ['base_url', DEFAULT_SETTINGS.api.base_url],
+    ['api_key', DEFAULT_SETTINGS.api.api_key],
+    ['image_base_url', DEFAULT_SETTINGS.api.image_base_url],
+    ['image_api_key', DEFAULT_SETTINGS.api.image_api_key],
+  ] as const) {
+    if (!api[key] && fallback) api[key] = fallback;
+  }
+  return { ...settings, api };
+}
+
 export function getSettings(): Settings {
   if (cached) return cached;
   const row = db.prepare("SELECT value FROM settings WHERE key = 'settings'").get() as
     | { value: string }
     | undefined;
-  cached = row ? deepMerge(DEFAULT_SETTINGS, JSON.parse(row.value)) : DEFAULT_SETTINGS;
+  cached = row
+    ? applyEnvFallbacks(deepMerge(DEFAULT_SETTINGS, JSON.parse(row.value)))
+    : DEFAULT_SETTINGS;
   return cached;
 }
 
@@ -78,6 +103,6 @@ export function saveSettings(patch: unknown): Settings {
   db.prepare(
     "INSERT INTO settings (key, value) VALUES ('settings', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
   ).run(JSON.stringify(next));
-  cached = next;
-  return next;
+  cached = applyEnvFallbacks(next);
+  return cached;
 }

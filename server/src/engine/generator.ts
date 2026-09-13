@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { getSettings } from '../config.js';
-import { nowIso } from '../db/index.js';
+import { db, nowIso } from '../db/index.js';
 import { byCategory, find, type Attribute } from '../db/attributes.js';
 import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
@@ -486,26 +486,93 @@ export async function generateCharacter(): Promise<Character> {
   return character;
 }
 
-const FALLBACK_BIOS = [
-  'ask me something that isn\'t "how was your day"',
-  'here against my better judgement',
-  'i will out-argue you about films you have not seen',
-  'low effort profile, high effort person. allegedly',
-  'currently avoiding something important by being here',
+/**
+ * Structural shapes for the bio. Picked per character so the swipe stack does not read
+ * like twelve variations of one joke - a cheap model left to its own devices will happily
+ * write the same bio twelve times.
+ */
+interface BioFormat {
+  hint: string;
+  /** Archetypes this shape would be out of character for. */
+  notFor?: string[];
+}
+
+const BIO_FORMATS: BioFormat[] = [
+  { hint: 'One flat, oddly specific statement about her life. No punchline, no explanation, no follow-up.' },
+  { hint: 'Two or three unrelated things, listed without any framing. The gaps between them do the work.' },
+  { hint: 'A question aimed straight at whoever is reading it, specific enough that a lazy answer is obviously lazy.' },
+  { hint: 'A small confession she is faintly embarrassed by, stated plainly and not apologised for.' },
+  { hint: 'A condition for anyone thinking about swiping right. Dry, not aggressive.', notFor: ['shy', 'earnest', 'dreamy'] },
+  { hint: 'One sentence from her actual week, dropped in with no conclusion drawn from it.' },
+  { hint: 'A deadpan understatement about something that is obviously a big deal.', notFor: ['earnest'] },
+  { hint: 'An opinion held far too strongly about something completely trivial.' },
+  { hint: 'Two lines that quietly contradict each other. She does not acknowledge it.' },
+  { hint: 'Something she wants, phrased so specifically that it is almost a joke, except she means it.' },
+  { hint: 'A self-aware line about being on this app at all, without being bitter about it.' },
+  { hint: 'One detail about her flat, her commute or her job that implies everything else.' },
+  { hint: 'An unfinished thought. It stops before the point, on purpose.', notFor: ['confident', 'ambitious'] },
+  { hint: 'A very short, very sincere sentence with nothing hiding behind it.', notFor: ['sarcastic', 'guarded'] },
 ];
 
+/** Shapes used for the last few characters, so the stack rotates through them. */
+const recentFormats: string[] = [];
+
+function pickBioFormat(archetype: string): string {
+  const inCharacter = BIO_FORMATS.filter((f) => !f.notFor?.includes(archetype));
+  const pool = inCharacter.length ? inCharacter : BIO_FORMATS;
+  const fresh = pool.filter((f) => !recentFormats.includes(f.hint));
+  const chosen = pickOne(fresh.length ? fresh : pool).hint;
+  recentFormats.push(chosen);
+  if (recentFormats.length > 6) recentFormats.shift();
+  return chosen;
+}
+
+/** Only used when no model is reachable, so the stack is still browsable offline. */
+const FALLBACK_BIOS = [
+  'my flatmate thinks i am at the gym right now',
+  'i will need you to have an opinion about something',
+  'three cancelled plans deep into this week and it is tuesday',
+  'ask me about the spreadsheet. do not ask me about the spreadsheet',
+  'i am the person who reads the plaque in the museum',
+  'currently avoiding something important by being here',
+  'i peaked at a pub quiz in 2019 and never recovered',
+  'looking for someone to be unreasonable about small things with',
+  'i have opinions about bread now. this is where i am',
+  'the last four books i bought are still in the bag',
+  'yes i have seen it. no i did not like it',
+  'i talk to the bus driver. that is the kind of person i am',
+  'my camera roll is 90 percent other people\'s dogs',
+  'i keep a list. you would be on the list',
+];
+
+function recentBios(limit = 12): string[] {
+  const rows = db
+    .prepare(
+      `SELECT bio FROM characters WHERE bio != '' AND state IN ('pool','swiped_left')
+       ORDER BY rowid DESC LIMIT ?`,
+    )
+    .all(limit) as { bio: string }[];
+  return rows.map((r) => r.bio);
+}
+
 async function writeBio(character: Character): Promise<string> {
+  const settings = getSettings();
+  const existing = recentBios();
   try {
     const out = await completeJson<{ bio: string }>({
       scope: 'generator',
       label: 'write_bio',
-      config: getSettings().models.director,
+      // The bio is in-voice writing rather than analysis, so it goes to the actor model.
+      // The director still designs the character; it just does not write her lines.
+      config: { ...settings.models.actor, max_tokens: 300 },
       messages: [
         {
           role: 'user',
           content: render('director_write_bio', {
             username: character.username,
             seed_block: describeSeed(character.seed),
+            format_hint: pickBioFormat(character.seed.archetype),
+            avoid_bios: existing.length ? existing.map((b) => `- ${b}`).join('\n') : '(none yet)',
           }),
         },
       ],
@@ -515,5 +582,6 @@ async function writeBio(character: Character): Promise<string> {
   } catch (err) {
     logger.warn('generator', 'bio generation failed, using fallback', { error: String(err) });
   }
-  return pickOne(FALLBACK_BIOS);
+  const unused = FALLBACK_BIOS.filter((b) => !existing.includes(b));
+  return pickOne(unused.length ? unused : FALLBACK_BIOS);
 }

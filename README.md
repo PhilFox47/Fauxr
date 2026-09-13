@@ -54,9 +54,9 @@ Three roles, configured separately in Settings:
 
 | Role | Default | Job |
 |---|---|---|
-| Actor | `glm-5.3-uncensored` | writes every chat and date message |
-| Director | `gemma-4` | direction, stats, ledger, generation, vision |
-| Image | `seedream` | profile and in-chat images |
+| Actor | `z-ai/glm-5.3-flash-uncensored` | writes every chat and date message, and the bios |
+| Director | `google/gemma-4-31b-it` | direction, stats, ledger, generation, vision |
+| Image | `seedream-v4` | profile and in-chat images |
 
 Nothing is hardcoded: base URL, key, model name and sampling parameters are all editable,
 and `server/src/llm/client.ts` is the only place that knows about the provider.
@@ -148,6 +148,20 @@ coherence is enforced in three stages:
 `search_motive`, `touchstone`, `turn_ons` and `turn_offs` are rolled *without* the
 archetype filter, on purpose. A character who ticks differently than she looks is the
 interesting case.
+
+### Bios
+
+The bio is the only thing you see before swiping, so it gets its own call, and it goes to
+the *Actor* model rather than the Director: it is in-voice writing, not analysis. The
+Director still designs the character, it just does not write her lines.
+
+Two things keep the stack from converging on one joke. Each character is assigned a
+structural shape at random — an oddly specific statement, a condition for swiping right,
+two lines that contradict each other, an unfinished thought — drawn from a pool that skips
+shapes which would be out of character for her archetype, and rotates so the same shape
+does not come up twice in a row. And because generation runs strictly one at a time, each
+bio is written with the bios already in the stack in front of it, under instructions not
+to resemble them.
 
 ### The attribute tables
 

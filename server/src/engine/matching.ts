@@ -12,35 +12,48 @@ import { nextOnlineAt } from './presence.js';
 
 export const STACK_SIZE = 10;
 
-let generating = 0;
+let queued = 0;
+let draining = false;
 
 export function stack(): Character[] {
   return swipeStack(STACK_SIZE);
 }
 
-/** Keep ten swipeable profiles available. Generation runs in the background. */
+/**
+ * Keep ten swipeable profiles available. Generation runs in the background and strictly
+ * one at a time: each character is written knowing the bios already in the stack, which
+ * is what stops them converging on one joke. It also keeps the API load flat.
+ */
 export async function ensureStack(): Promise<void> {
-  const missing = STACK_SIZE - countPoolAvailable() - generating;
+  const missing = STACK_SIZE - countPoolAvailable() - queued;
   if (missing <= 0) return;
-  for (let i = 0; i < missing; i++) void generateOne();
+  queued += missing;
+  bus.emitEvent({ type: 'generating', count: queued });
+  void drain();
 }
 
-async function generateOne(): Promise<void> {
-  generating++;
-  bus.emitEvent({ type: 'generating', count: generating });
+async function drain(): Promise<void> {
+  if (draining) return;
+  draining = true;
   try {
-    await generateCharacter();
-    bus.emitEvent({ type: 'stack', count: countPoolAvailable() });
-  } catch (err) {
-    logger.error('generator', 'character generation failed', { error: String(err) });
+    while (queued > 0) {
+      try {
+        await generateCharacter();
+        bus.emitEvent({ type: 'stack', count: countPoolAvailable() });
+      } catch (err) {
+        logger.error('generator', 'character generation failed', { error: String(err) });
+      } finally {
+        queued--;
+        bus.emitEvent({ type: 'generating', count: queued });
+      }
+    }
   } finally {
-    generating--;
-    bus.emitEvent({ type: 'generating', count: generating });
+    draining = false;
   }
 }
 
 export function generatingCount(): number {
-  return generating;
+  return queued;
 }
 
 export interface MatchResult {
