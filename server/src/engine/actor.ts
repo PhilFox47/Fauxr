@@ -29,6 +29,7 @@ const FALLBACK: ActorOutput = {
   messages: [{ text: 'sorry got distracted, what were u saying', delay: 0 }],
   hidden: {
     thoughts: 'fallback message, the model failed',
+    unresolved: null,
     mood: 'neutral',
     goal_fulfilled: false,
     boundary_touched: false,
@@ -42,6 +43,7 @@ const FALLBACK: ActorOutput = {
 function normalizeHidden(raw: any): ActorHidden {
   return {
     thoughts: String(raw?.thoughts ?? ''),
+    unresolved: raw?.unresolved ? String(raw.unresolved) : null,
     mood: String(raw?.mood ?? ''),
     goal_fulfilled: !!raw?.goal_fulfilled,
     boundary_touched: !!raw?.boundary_touched,
@@ -104,6 +106,7 @@ function buildPrompt(
   ctx: ActorContext,
   template: 'actor_chat' | 'actor_voice',
   nudge: string,
+  somethingLive = false,
 ): string {
   const { character, relationship, direction } = ctx;
   const settings = getSettings();
@@ -130,7 +133,7 @@ function buildPrompt(
     spice_block: spiceBlock(seed, relationship.arousal, flags),
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     ledger_block: ledgerBlock(relationship.ledger),
-    direction_block: directionBlock(direction),
+    direction_block: directionBlock(direction, somethingLive),
     mood_block: moodBlock(relationship.arousal, currentStage(character, relationship).label),
     moment_block: describeHerMoment(character),
     turn_nudge: nudge,
@@ -148,11 +151,21 @@ function writesFormally(character: { seed: { typing_style: string; slang_registe
 
 export async function runActor(ctx: ActorContext): Promise<ActorRun> {
   const settings = getSettings();
-  const nudge = pickNudge(ctx.character, ctx.relationship);
-  const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '');
+  const recent = recentMessages(ctx.character.id, 12);
+  const lastUserMessage = [...recent].reverse().find((m) => m.sender === 'user')?.text ?? '';
+
+  /**
+   * Two signals that the floor is not clear. The Actor's own report from last turn is the
+   * better one - it knows whether a bit is running - and an unanswered question from him
+   * is the obvious code-side case.
+   */
+  const somethingLive =
+    !!(ctx.relationship.mood as any)?.unresolved ||
+    (recent[recent.length - 1]?.sender === 'user' && lastUserMessage.includes('?'));
+
+  const nudge = pickNudge(ctx.character, ctx.relationship, { somethingLive });
+  const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '', somethingLive);
   const base = [{ role: 'user' as const, content: prompt }];
-  const lastUserMessage =
-    [...recentMessages(ctx.character.id, 12)].reverse().find((m) => m.sender === 'user')?.text ?? '';
 
   let correction: string | null = null;
 

@@ -182,6 +182,25 @@ This is deliberately the progression the game was missing. Stats are invisible b
 so without something like this there is nothing to work towards and no sense of getting
 anywhere. A counter in the chat header (`12/40`) opens the profile sheet.
 
+### One topic at a time
+
+While something is unfinished, nothing is allowed to open a second subject. The Actor
+reports an `unresolved` field each turn — a question he asked, a game in play, a bit that
+is still running — and that, plus a code check for an unanswered question from him,
+suppresses every nudge that introduces material and strips `bring_up` out of the direction
+entirely. What is left is the nudges that only change her manner.
+
+This came out of a real transcript: the user started a name-guessing game and she played
+along while also running an unrelated story about her cooking in the same messages, every
+turn, so neither went anywhere. The cause was a nudge of mine that read "bring something of
+your own into it — *it does not have to connect to what he said*", firing on roughly half of
+all turns regardless of what was already happening. Dropping `bring_up` mechanically rather
+than conditioning it in the prompt matters, because a direction lasts several turns and
+outlives the moment it was written for.
+
+With the floor clear she is still pushed to bring her own material on about two thirds of
+turns. The change is about timing, not about making her passive again.
+
 ### Open threads have a lifespan
 
 A thread she mentioned and he did not pick up dies on its own: two outings, or three days,

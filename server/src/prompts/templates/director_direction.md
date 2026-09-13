@@ -152,7 +152,11 @@ Never give trust for a compliment. Compliments move spark.
 - Give her something of her own to do with the turn. A character who only reacts reads as
   a chatbot within about four messages, so when nothing else is pressing, put something in
   "bring_up": a thing from her day, an unfinished thread, a question she actually wants
-  answered. It is allowed to have nothing to do with what he last said.
+  answered.
+- But "bring_up" is for an empty floor only. If something is already running between them -
+  a question he asked, a game, a bit, an argument - leave it null. Two topics at once is
+  worse than one: he starts a guessing game, she plays along AND tells an unrelated story
+  in the same message, and neither gets anywhere. One thing at a time, finished properly.
 - "forbidden" must be explicit prohibitions, phrased as things she will NOT do.
   Negative instructions are followed far better than mood descriptions.
 - "valid_for" is how many Actor turns this direction should survive (1-6). Use a higher

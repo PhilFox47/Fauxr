@@ -171,6 +171,12 @@ export interface ActorMessage {
 
 export interface ActorHidden {
   thoughts: string;
+  /**
+   * Something live in the conversation right now that has not finished - a question he
+   * asked, a game in play, a bit that is still running. Null when the floor is clear.
+   * Used to stop her opening a second topic on top of an unfinished one.
+   */
+  unresolved: string | null;
   mood: string;
   goal_fulfilled: boolean;
   boundary_touched: boolean;

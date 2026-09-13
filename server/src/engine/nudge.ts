@@ -23,7 +23,16 @@ function chance(p: number): boolean {
   return Math.random() < p;
 }
 
-export function pickNudge(character: Character, rel: Relationship): Nudge | null {
+export interface NudgeContext {
+  /** Something is still in play, so this is not the turn to start a second topic. */
+  somethingLive: boolean;
+}
+
+export function pickNudge(
+  character: Character,
+  rel: Relationship,
+  ctx: NudgeContext = { somethingLive: false },
+): Nudge | null {
   const seed = character.seed;
   const energy = { low: -0.12, medium: 0, high: 0.14 }[seed.social_energy] ?? 0;
   const warmth = rel.investment / 100;
@@ -74,6 +83,34 @@ export function pickNudge(character: Character, rel: Relationship): Nudge | null
     };
   }
 
+  /**
+   * While a topic is unfinished, nothing may open a second one.
+   *
+   * The nudges that introduce material used to fire regardless of what was already going
+   * on, which produced conversations running two threads in parallel: he starts a guessing
+   * game, she answers a guess AND tells an unrelated story about her day, in every message,
+   * and neither goes anywhere. The nudges that only change her manner still apply.
+   */
+  if (ctx.somethingLive) {
+    if (chance(0.16)) {
+      return {
+        id: 'half_present',
+        text:
+          'You are half paying attention this turn. Reply short, a bit off, maybe answer only part of ' +
+          'what he said. Do not apologise for it or explain it.',
+      };
+    }
+    if (chance(0.2)) {
+      return {
+        id: 'stay_on_it',
+        text:
+          'Stay on what is already going on. Do not introduce anything new this turn - no stories from ' +
+          'your day, no change of subject. Whatever is in play between you right now is the whole message.',
+      };
+    }
+    return null;
+  }
+
   if (openThreads.length && chance(0.12)) {
     const thread = openThreads[Math.floor(Math.random() * openThreads.length)];
     return {
@@ -90,9 +127,9 @@ export function pickNudge(character: Character, rel: Relationship): Nudge | null
     return {
       id: 'volunteer',
       text:
-        'Do not only answer him this turn. Bring something of your own into it - something from your actual day, ' +
-        'a thought you were already having, a thing that annoyed you. It does not have to connect to what he said. ' +
-        'You are not waiting for prompts; you have your own evening going on.',
+        'Nothing much is hanging in the air, so bring something of your own into it rather than just ' +
+        'answering - something from your actual day, a thought you were already having, a thing that ' +
+        'annoyed you, or a question you actually want the answer to. You are not waiting for prompts.',
     };
   }
 

@@ -239,7 +239,13 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   // A thread she was told to raise is now spent, whether or not he engaged with it.
   if (result.raisedThreadId) markThreadRaised(rel, result.raisedThreadId);
 
-  rel.mood = { ...rel.mood, actor_mood: result.hidden.mood, thoughts: result.hidden.thoughts };
+  rel.mood = {
+    ...rel.mood,
+    actor_mood: result.hidden.mood,
+    thoughts: result.hidden.thoughts,
+    // Carried to the next turn so nothing opens a second topic on top of a live one.
+    unresolved: result.hidden.unresolved,
+  };
   refreshModifiers(rel, recentMessages(character.id, 40), result.hidden.boundary_touched);
   saveRelationship(rel);
 

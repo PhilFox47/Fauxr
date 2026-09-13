@@ -232,7 +232,7 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags): 
   return lines.join('\n');
 }
 
-export function directionBlock(d: Direction | null): string {
+export function directionBlock(d: Direction | null, somethingLive = false): string {
   if (!d) {
     return [
       'Mood: ordinary, nothing special going on.',
@@ -250,7 +250,13 @@ export function directionBlock(d: Direction | null): string {
       + ` hint that you are working towards it - it only shows in what you do): ${d.goal}`,
     `Stance towards him: ${d.stance}`,
     d.forbidden?.length ? `You will NOT:\n${d.forbidden.map((f) => `- ${f}`).join('\n')}` : '',
-    d.bring_up ? `If it fits, bring up: ${d.bring_up}` : '',
+    // A direction lasts several turns, so its bring_up outlives the moment it was written
+    // for. Dropping it outright while something is unfinished is more reliable than asking
+    // the model to notice that the floor is no longer clear.
+    d.bring_up && !somethingLive ? `If it fits, and nothing else is hanging, bring up: ${d.bring_up}` : '',
+    somethingLive
+      ? 'Something is still unfinished between you. Stay on it. Do not start a new subject this turn.'
+      : '',
     d.unlock ? unlockInstruction(d.unlock) : '',
     d.offline_in_minutes ? `You have about ${d.offline_in_minutes} minutes before you have to go.` : '',
     `Length: ${d.length}`,
