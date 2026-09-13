@@ -230,9 +230,9 @@ export function directionBlock(d: Direction | null): string {
   if (!d) {
     return [
       'Mood: ordinary, nothing special going on.',
-      'What you privately want (never say it out loud): just see what he is like.',
+      'What you privately want (never say it out loud): work out whether you fancy him.',
       'Stance: neutral, mildly curious.',
-      'You will NOT: give out your real name, agree to meet, get sexual.',
+      'You will NOT: give out your real name, agree to meet up yet.',
       'Length: short.',
     ].join('\n');
   }

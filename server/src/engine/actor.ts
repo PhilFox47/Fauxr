@@ -26,7 +26,7 @@ Write it again from scratch - do not patch the old version, it is the wrong shap
 }
 
 const FALLBACK: ActorOutput = {
-  messages: [{ text: 'sorry got distracted, what were you saying', delay: 0 }],
+  messages: [{ text: 'sorry got distracted, what were u saying', delay: 0 }],
   hidden: {
     thoughts: 'fallback message, the model failed',
     mood: 'neutral',
@@ -136,6 +136,11 @@ function buildPrompt(
   });
 }
 
+/** A character who really does write in full sentences, so the register check exempts her. */
+function writesFormally(character: { seed: { typing_style: string; slang_register: string } }): boolean {
+  return character.seed.typing_style === 'proper' || character.seed.slang_register === 'formal';
+}
+
 export async function runActor(ctx: ActorContext): Promise<ActorOutput> {
   const settings = getSettings();
   const nudge = pickNudge(ctx.character, ctx.relationship);
@@ -185,7 +190,14 @@ export async function runActor(ctx: ActorContext): Promise<ActorOutput> {
     }
 
     const problem = out.messages
-      .map((m, i) => findVoiceProblem({ text: m.text, isFirst: i === 0, lastUserMessage }))
+      .map((m, i) =>
+        findVoiceProblem({
+          text: m.text,
+          isFirst: i === 0,
+          lastUserMessage,
+          writesFormally: writesFormally(ctx.character),
+        }),
+      )
       .find(Boolean);
 
     if (problem) {

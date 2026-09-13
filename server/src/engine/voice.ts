@@ -80,11 +80,27 @@ function isEcho(text: string, lastUserMessage: string): boolean {
   return mine.every((w) => his.has(w));
 }
 
+/**
+ * Writer's punctuation. Nobody reaches for an em-dash or a semicolon on a phone, and both
+ * are strong tells that prose came out instead of a text.
+ */
+const WRITER_PUNCTUATION = /[—;]|\s-{2}\s/;
+
+/** Formal constructions where a texting register would contract. */
+const UNCONTRACTED =
+  /\b(?:I am|I have|I will|I would|do not|does not|did not|cannot|can not|will not|would not|should not|could not|is not|are not|was not|were not|it is|that is|there is|you are|we are|they are|I'm afraid|perhaps)\b/;
+
 export interface VoiceCheckInput {
   text: string;
   /** True for the opening message of her turn, where the echo tic shows up. */
   isFirst: boolean;
   lastUserMessage: string;
+  /**
+   * Whether this character genuinely writes in full, properly punctuated sentences. For
+   * her the formal-register check is skipped, because it is a deliberate trait rather than
+   * the model defaulting to prose.
+   */
+  writesFormally?: boolean;
 }
 
 export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
@@ -113,6 +129,28 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
       fix: 'You announced that you are testing or evaluating him. Whatever you are privately measuring him against, you never say it out loud - saying it makes it meaningless. Just be harder to impress.',
     };
   }
+  if (!input.writesFormally) {
+    if (WRITER_PUNCTUATION.test(input.text)) {
+      return {
+        what: 'punctuation nobody uses on a phone',
+        fix: 'You used an em-dash or a semicolon. People do not type those into a messaging app - they are a tell that this was written rather than texted. Use a full stop, a comma, or just start a new message.',
+      };
+    }
+    // One full form on its own is not formal - "ok that was not the answer i expected" is
+    // perfectly normal texting. The tell is a message that reads formal as a whole: a
+    // capital letter to open, a full stop to close, AND an uncontracted construction.
+    const text = input.text.trim();
+    const words = text.split(/\s+/).length;
+    const opensFormally = /^[A-Z]/.test(text);
+    const closesFormally = /[.]$/.test(text);
+    if (words >= 7 && opensFormally && closesFormally && UNCONTRACTED.test(text)) {
+      return {
+        what: 'writing in full formal English',
+        fix: 'You wrote "I am" / "do not" / "it is" style full forms. She texts: im, dont, its, cant, youre. Contractions always, abbreviations where they fit, and drop words she would drop. Write it the way she would actually thumb it out.',
+      };
+    }
+  }
+
   if (input.isFirst && isEcho(input.text, input.lastUserMessage)) {
     return {
       what: 'repeating his words back',

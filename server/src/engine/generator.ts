@@ -578,18 +578,18 @@ function pickBioFormat(archetype: string): string {
 
 /** Only used when no model is reachable, so the stack is still browsable offline. */
 const FALLBACK_BIOS = [
-  'Night shifts, so my sense of time is a suggestion.\nHere for something uncomplicated and reasonably filthy.\nNot here to be anyone\'s girlfriend, sorry.',
-  'I read too much, sleep badly, and have a very specific idea of what I want.\nAsk and I will tell you. Do not ask and we will both be bored.',
-  'Things I am good at: bread, remembering birthdays, being extremely direct about this part.\nThings I am not: mornings, small talk, waiting three weeks.',
-  'Recently single and making up for lost time.\nI want someone who turns up when they say they will and does not need a map.\nLow bar. Surprisingly hard to clear.',
-  'I am better in person than I am at texting, which is awkward, because this is texting.\nCome and find out. Bring stamina.',
-  'People assume I am quiet. I am just picky.\nOnce I have decided about you I am not remotely quiet.\nStill deciding.',
-  'My week is work, the gym, and being annoyed about both.\nI would like one evening that is neither, ideally involving you and not much clothing.',
-  'Not looking for a boyfriend. Looking for a regular.\nThere is a difference and I will explain it if you are struggling.',
-  'Two coffees before I am a person. Three and I am a problem.\nI like being told what to do by people who are actually sure about it.\nThat is the whole profile really.',
-  'I am on here because my friends got tired of hearing about it.\nI know exactly what I want. The hard part has been finding someone who can keep up.',
-  'I will remember one strange detail about you for years.\nI cannot remember where I put my keys.\nSay something filthy and specific and I will remember that too.',
-  'Straightforward: I am here for sex, I am good company either side of it, and I am not interested in a three-week preamble.\nTell me what you are into.',
+  'night shifts so my body clock is a joke\nhere for something easy and filthy, not here to be ur girlfriend\ndont overthink the first message',
+  'i read too much, sleep badly, and know exactly what i want\nask and ill tell u. dont ask and well both be bored',
+  'good at: bread, remembering birthdays, being blunt about this bit\nbad at: mornings, small talk, waiting three weeks',
+  'newly single and making up for lost time tbh\ni just want someone who actually turns up when they say they will\nlow bar apparently',
+  'im way better in person than i am on here which is awkward bc this is here\ncome find out. bring stamina 😌',
+  'ppl assume im quiet. im just picky\nonce ive decided about u im not quiet at all\nstill deciding',
+  'my week is work, gym, being annoyed about both\nwould like one evening thats neither. ideally involving u and not much clothing',
+  'not looking for a bf. looking for a regular\ntheres a difference, ill explain it if ur struggling',
+  '2 coffees and im a person. 3 and im a problem\ni like being told what to do by ppl who are actually sure about it\nthats the whole profile really',
+  'on here bc my mates got sick of hearing about it\ni know what i want, finding someone who can keep up is the hard part',
+  'ill remember one weird detail about u for years. cant remember where my keys are\nsay smth filthy and specific and ill remember that too',
+  'straight up: im here for sex, im decent company either side of it, not interested in a three week warm up\nso. what are u into',
 ];
 
 function recentBios(limit = 12): string[] {

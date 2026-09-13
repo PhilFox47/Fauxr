@@ -283,6 +283,32 @@ than asking for something better; a second failure falls back to a neutral one-l
 Measured at zero false positives across 350 realistic message/context pairs, so a good
 reply still costs one call.
 
+### Sounding like a person, not a writer
+
+A second register problem sits underneath the assistant one. These prompts are written in
+careful formal English with full sentences and no contractions — that is how instructions
+get written — and a model reading three thousand words of it writes back in the same voice.
+The result is characters who text like essayists.
+
+The Actor prompt now says that out loud: the instructions' own register is not hers, and
+copying it is the fastest way to sound like a bot. It carries worked pairs
+("I am not entirely sure what you mean by that." → "idk what u mean by that") and concrete
+defaults — contractions always, abbreviations where they fit, reactions instead of
+sentences, dropped subjects, no em-dashes or semicolons because nobody reaches for those on
+a phone.
+
+Two code checks back it up, both skipped for a character whose seed genuinely says she
+writes properly: writer's punctuation, and a message that reads formal as a whole. That
+last one needs all three of a capital opening, a full stop closing and an uncontracted
+construction — a single full form is not formal, since "ok that was not the answer i
+expected" is perfectly normal texting. Measured at zero false positives across 328 natural
+messages while catching every prose sample.
+
+The attribute hints were abstract in the same way. "Current internet slang, abbreviations,
+irony markers" produces whatever the model imagines that is; the table now lists the actual
+words. Properly-punctuated and formal registers are demoted to uncommon, so writing in full
+sentences is a deliberate trait rather than the default.
+
 ### Giving her something to say
 
 Detectors only remove bad output. The reason a character defaults to commenting on the

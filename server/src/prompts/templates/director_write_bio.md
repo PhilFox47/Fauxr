@@ -42,9 +42,23 @@ This is not a reason to be vague. Concrete things about her life - what she does
 is into, what she wants - are exactly what belongs here. It is the self-summary that is
 banned, not the substance.
 
-**Write it in her hand.** Her typing style, capitalisation, punctuation, emoji use and
-register apply here exactly as they do in chat. A woman who writes in lowercase writes her
-bio in lowercase. A formal one uses full stops. A heavy emoji user puts one in; a
+**Write it in her hand, not in yours.** These instructions are in careful formal English.
+Her bio is not. She typed it on a phone, probably in under a minute, and it reads like it.
+
+  BAD   "Here for something uncomplicated and reasonably filthy."
+  GOOD  "here for something easy and filthy, not here to be ur girlfriend"
+
+  BAD   "I am better in person than I am at texting."
+  GOOD  "im way better in person than i am on here, sorry"
+
+  BAD   "Two coffees before I am a person. Three and I am a problem."
+  GOOD  "2 coffees and im a person. 3 and im a problem"
+
+Contractions always. Abbreviations where they fit (idk, tbh, ngl, rn, u, ur). Lowercase
+unless her style says otherwise. No em-dashes, no semicolons, no elegantly balanced
+sentences — those are the three biggest tells that a machine wrote it. Her typing style,
+capitalisation, emoji use and register apply here exactly as they do in chat, and a
+properly-punctuated bio should be the exception that tells you something about her. A formal one uses full stops. A heavy emoji user puts one in; a
 never-emoji one does not.
 
 **Say enough.** Someone reading this should come away able to describe her to a friend:
