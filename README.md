@@ -182,6 +182,18 @@ This is deliberately the progression the game was missing. Stats are invisible b
 so without something like this there is nothing to work towards and no sense of getting
 anywhere. A counter in the chat header (`12/40`) opens the profile sheet.
 
+### Open threads have a lifespan
+
+A thread she mentioned and he did not pick up dies on its own: two outings, or three days,
+whichever comes first, capped at four at a time. The Actor is only shown threads she has
+not raised in the last eight hours.
+
+This was originally recorded with an `expires_when` that nothing ever acted on, so nothing
+ever left the list — a passing remark stayed in the ledger, in every Actor prompt and in the
+callback pool indefinitely, which is how a character ends up bringing up the same anecdote
+every few messages and tallying the user's failure to care about it. Dropping something the
+other person did not bite on is what people actually do.
+
 ### Drive
 
 Two mechanisms stop a chat reading identically on message four and message eighty.
@@ -388,6 +400,14 @@ more interesting than one whose every trait agrees with the others. The Actor is
 shapes her week rather than being a fact to deploy once, the Director is told to lean on it
 when deciding what she brings up, and the bio is written around it. It is discoverable like
 anything else.
+
+It is deliberately kept as background rather than an agenda. The first version told the
+Actor it "shapes your week" and the Director that it "should drive what she brings up",
+which produced characters who steered every conversation back to their one thing and then
+started keeping score of whether the user had engaged with it. It now surfaces rarely and
+sideways, at most once per conversation, and the Director is told a character who mentions
+her thing in every message is worse than a bland one — bland is forgettable, obsessive is
+annoying.
 
 A **heightening** slider controls how far past an ordinary person the pool leans:
 

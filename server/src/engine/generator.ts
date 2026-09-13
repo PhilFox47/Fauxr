@@ -155,11 +155,18 @@ export function rollSeed(): RolledSeed {
     position: roll('tattoo_position', ctx, { transient: true })?.id ?? 'forearm',
   }));
 
+  // Type first, then a position that type can actually go in: rolling both independently
+  // produced things like a stretched lobe in a navel.
   const piercingCount = drawCount(counts.piercings, 1);
-  const piercings = Array.from({ length: piercingCount }, () => ({
-    type: roll('piercing_type', ctx, { transient: true })?.id ?? 'stud',
-    position: roll('piercing_position', ctx, { transient: true })?.id ?? 'earlobe',
-  }));
+  const piercings = Array.from({ length: piercingCount }, () => {
+    const type = roll('piercing_type', ctx, { transient: true });
+    const allowed: string[] = (type?.extra?.positions as string[]) ?? [];
+    const position = roll('piercing_position', ctx, {
+      transient: true,
+      only: allowed.length ? new Set(allowed) : undefined,
+    });
+    return { type: type?.id ?? 'stud', position: position?.id ?? 'earlobe' };
+  });
 
   const accessories = rollMany('accessory', ctx, drawCount(counts.accessories, 1)).map((a) => a.id);
 
@@ -458,7 +465,12 @@ export async function generateCharacter(): Promise<Character> {
     pass = await completeJson<DirectorPass>({
       scope: 'generator',
       label: 'generate_character',
-      config: settings.models.director,
+      // Writing a character is a creative job, not an analytical one, so it goes to the
+      // actor model like the bio does. The director model is picked for being cheap and
+      // is typically also the censored one, which makes it a poor choice for something
+      // that has to take a seed full of explicit traits seriously rather than sand them
+      // down. The director still runs the game; it just does not invent the cast.
+      config: { ...settings.models.actor, max_tokens: 1200 },
       messages: [
         {
           role: 'user',

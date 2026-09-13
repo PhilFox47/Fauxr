@@ -1,4 +1,5 @@
-import type { Character, Ledger, Relationship } from '../types.js';
+import type { Character, OpenThread, Relationship } from '../types.js';
+import { freshThreads } from './state.js';
 
 /**
  * A per-turn push on the shape of her reply.
@@ -14,6 +15,8 @@ import type { Character, Ledger, Relationship } from '../types.js';
 export interface Nudge {
   id: string;
   text: string;
+  /** Set when the nudge points at a specific open thread, so it can be burned down. */
+  threadId?: string;
 }
 
 function chance(p: number): boolean {
@@ -28,7 +31,8 @@ export function pickNudge(character: Character, rel: Relationship): Nudge | null
   // How likely she is to bring her own material rather than only answering.
   const initiative = 0.3 + energy + warmth * 0.25 + (seed.openness_curve === 'fast_then_plateau' ? 0.1 : 0);
 
-  const openThreads: Ledger['open_threads'] = rel.ledger?.open_threads ?? [];
+  // Only threads she has not just been on about, so a callback cannot become a fixation.
+  const openThreads: OpenThread[] = freshThreads(rel.ledger?.open_threads ?? []);
 
   /**
    * She has to make moves too. "Getting flirted at" does not happen if every advance has
@@ -70,11 +74,15 @@ export function pickNudge(character: Character, rel: Relationship): Nudge | null
     };
   }
 
-  if (openThreads.length && chance(0.18)) {
+  if (openThreads.length && chance(0.12)) {
     const thread = openThreads[Math.floor(Math.random() * openThreads.length)];
     return {
       id: 'callback',
-      text: `Come back to something that was left hanging: "${thread.text}". People do this - they return to things days later, out of nowhere, without explaining why they are bringing it up.`,
+      threadId: thread.id,
+      text:
+        `Come back to something that was left hanging: "${thread.text}". People do this - they return to ` +
+        'things days later, out of nowhere, without explaining why. Mention it once, in passing, and then ' +
+        'let the conversation go wherever he takes it. If he does not pick it up, that is the end of it.',
     };
   }
 

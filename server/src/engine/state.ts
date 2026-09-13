@@ -1,7 +1,7 @@
 import { nowIso } from '../db/index.js';
 import { logger } from '../log.js';
 import { saveRelationship, setCharacterState, clearWakeup } from '../repo.js';
-import type { Character, Ledger, Relationship, StateFlags } from '../types.js';
+import type { Character, Ledger, OpenThread, Relationship, StateFlags } from '../types.js';
 import { applyModifiers, clampStat, type Deltas } from './modifiers.js';
 import { arousalCeiling } from './stage.js';
 import { buildCatalogue, recordDiscoveries } from './discovery.js';
@@ -60,7 +60,49 @@ export interface DirectorUpdate {
 
 const MAX_FACTS = 60;
 const MAX_EVENTS = 50;
-const MAX_THREADS = 8;
+const MAX_THREADS = 4;
+/** A thread she has raised this many times is spent, whether or not he engaged. */
+const MAX_RAISES = 2;
+const THREAD_MAX_AGE_HOURS = 72;
+
+/**
+ * Threads expire on their own.
+ *
+ * `expires_when` was recorded and then never acted on, so nothing ever left the list: a
+ * thread stayed in the ledger, in every actor prompt and in the callback pool forever.
+ * The result was a character who brought up the same anecdote every few messages and
+ * started keeping score of whether he had engaged with it. A thread gets a couple of
+ * outings and a few days, then it is done, engaged with or not - which is how it works
+ * when a person mentions something and the other person does not bite.
+ */
+export function pruneThreads(threads: OpenThread[]): OpenThread[] {
+  const now = Date.now();
+  return threads
+    .filter((t) => (t.raised ?? 0) < MAX_RAISES)
+    .filter((t) => {
+      const age = now - Date.parse(t.created_at ?? new Date().toISOString());
+      return !Number.isFinite(age) || age < THREAD_MAX_AGE_HOURS * 3_600_000;
+    })
+    .slice(-MAX_THREADS);
+}
+
+/** Record that she actually brought a thread up, so it burns down instead of recurring. */
+export function markThreadRaised(rel: Relationship, threadId: string): void {
+  const thread = rel.ledger.open_threads?.find((t) => t.id === threadId);
+  if (!thread) return;
+  thread.raised = (thread.raised ?? 0) + 1;
+  thread.last_raised_at = nowIso();
+  rel.ledger.open_threads = pruneThreads(rel.ledger.open_threads);
+}
+
+/** Threads she has not touched recently, i.e. the ones worth coming back to. */
+export function freshThreads(threads: OpenThread[], cooldownHours = 8): OpenThread[] {
+  const now = Date.now();
+  return pruneThreads(threads).filter((t) => {
+    if (!t.last_raised_at) return true;
+    return now - Date.parse(t.last_raised_at) > cooldownHours * 3_600_000;
+  });
+}
 
 function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger']): Ledger {
   if (!patch) return ledger;
@@ -112,6 +154,7 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger']): Ledger {
       .map((p) => ({ text: p.text, expires_when: p.expires_when ?? 'soon' }));
   }
 
+  next.open_threads = pruneThreads(next.open_threads);
   next.facts.about_user = next.facts.about_user.slice(-MAX_FACTS);
   next.facts.about_her = next.facts.about_her.slice(-MAX_FACTS);
   next.events = next.events.slice(-MAX_EVENTS);

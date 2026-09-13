@@ -127,6 +127,9 @@ export interface OpenThread {
   text: string;
   expires_when: string;
   created_at: string;
+  /** How many times she has actually brought this up. Threads die after a couple of goes. */
+  raised?: number;
+  last_raised_at?: string;
 }
 
 export interface DirectorNotes {

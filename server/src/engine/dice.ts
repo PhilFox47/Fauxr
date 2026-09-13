@@ -66,12 +66,15 @@ export interface RollOptions {
   /** Ignore the archetype weight overrides - used for the deliberately surprising fields. */
   ignoreArchetype?: boolean;
   exclude?: Set<string>;
+  /** Restrict the draw to these ids, for tags that only make sense in combination. */
+  only?: Set<string>;
   /** Do not register the result in ctx.drawn (used for throwaway sub-rolls). */
   transient?: boolean;
 }
 
 export function roll(category: string, ctx: DiceContext, opts: RollOptions = {}): Attribute | null {
   const pool = byCategory(category).filter((a) => {
+    if (opts.only && !opts.only.has(a.id)) return false;
     if (opts.exclude?.has(a.id)) return false;
     if (a.conflicts.some((c) => ctx.drawn.has(c))) return false;
     return true;

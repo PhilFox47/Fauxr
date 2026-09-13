@@ -6,13 +6,13 @@ import {
   addMessage, clearWakeup, getCharacter, getRelationship, getWakeup, markUserMessagesRead,
   recentMessages, saveRelationship, setCharacterState, type StoredMessage,
 } from '../repo.js';
-import type { ActorOutput, Character, Relationship } from '../types.js';
-import { runActor, runActorVoice, wantsVoiceMessage } from './actor.js';
+import type { Character, Relationship } from '../types.js';
+import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
 import { detectEvents, directionExpired, runDirector } from './director.js';
 import { computePressure, computeReciprocity } from './modifiers.js';
 import { alwaysOnline, isOnline } from './presence.js';
 import { randInt } from './dice.js';
-import { clearExpiredNegativeFlags, hasActiveNegativeFlag } from './state.js';
+import { clearExpiredNegativeFlags, hasActiveNegativeFlag, markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
@@ -163,7 +163,7 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     bus.emitEvent({ type: 'typing', character_id: characterId, on: false });
   };
 
-  let result: ActorOutput | null = null;
+  let result: ActorRun | null = null;
   try {
     showTyping();
 
@@ -235,6 +235,9 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     const added = recordDiscoveries(rel, spotted, valid);
     if (added.length) logger.debug('actor', `revealed in passing: ${added.join(', ')}`);
   }
+
+  // A thread she was told to raise is now spent, whether or not he engaged with it.
+  if (result.raisedThreadId) markThreadRaised(rel, result.raisedThreadId);
 
   rel.mood = { ...rel.mood, actor_mood: result.hidden.mood, thoughts: result.hidden.thoughts };
   refreshModifiers(rel, recentMessages(character.id, 40), result.hidden.boundary_touched);

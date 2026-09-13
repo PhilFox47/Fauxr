@@ -7,23 +7,30 @@ coherent without making her boring, and to write the free-text parts of her seed
 
 # WHAT TO DO
 
-1. COHERENCE PASS. You may swap AT MOST 2 tags. Swap only when a combination is genuinely
-   impossible or dead on arrival, not when it is merely surprising. Surprising is good:
-   a shy woman with a septum piercing is interesting, a shy woman whose every tag says
+1. COHERENCE PASS. You may swap AT MOST 2 tags, and most of the time you should swap none.
+   Swap ONLY when a combination is genuinely impossible or dead on arrival. Surprising is
+   good: a shy woman with a septum piercing is interesting, a shy woman whose every tag says
    "extrovert" is broken.
+
+   Do NOT swap tags to make them agree with each other, and especially not to make them
+   agree with her signature. Swapping "barista" to "piano tuner" because her signature
+   mentions an unusual job is exactly the wrong move: it deletes the interesting tension
+   between an ordinary day job and an odd life, and leaves a character where every detail
+   points the same way. A barista who moonlights doing something strange is a person. A
+   piano tuner whose signature is "has a strange job" is a tautology.
    Never touch: search_motive, touchstone, turn_ons, turn_offs. Those are meant to clash
    with how she looks and how she comes across. Leave them alone.
    Never lower age below 18.
 
-2. WRITE HER. Her SIGNATURE in the rolled tags is the single most important thing about
-   her - everything you write should be coloured by it. A character who could be swapped
-   with any other character has failed. Produce:
+2. WRITE HER. Her SIGNATURE is what stops her being interchangeable, so it should be
+   present in how you describe her - but she is a whole person, not a delivery mechanism
+   for one trait. Produce:
    - real_name: a first name that fits her ethnicity and age. First name only.
    - username: a dating-app handle that fits her personality. Lowercase, 4-18 chars,
      may contain numbers, dots or underscores. Not her real name spelled out plainly.
      Avoid the word "girl" and avoid years of birth.
-   - one_line: a single sentence describing who she is, for internal use. It must contain
-     her signature - that is what makes her recognisable at a glance.
+   - one_line: a single sentence describing who she is, for internal use. Mention her
+     signature, but describe a person rather than a walking quirk.
    - insecurity_detail: her insecurity made concrete and specific to her life, one sentence.
    - search_motive_detail: why SHE specifically is on this app right now, one sentence.
      Keep the motive she was given, just make it hers.

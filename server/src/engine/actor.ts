@@ -95,6 +95,11 @@ export interface ActorContext {
   direction: Direction | null;
 }
 
+/** Set by runActor so the caller can burn down a thread she was told to raise. */
+export interface ActorRun extends ActorOutput {
+  raisedThreadId?: string;
+}
+
 function buildPrompt(
   ctx: ActorContext,
   template: 'actor_chat' | 'actor_voice',
@@ -141,7 +146,7 @@ function writesFormally(character: { seed: { typing_style: string; slang_registe
   return character.seed.typing_style === 'proper' || character.seed.slang_register === 'formal';
 }
 
-export async function runActor(ctx: ActorContext): Promise<ActorOutput> {
+export async function runActor(ctx: ActorContext): Promise<ActorRun> {
   const settings = getSettings();
   const nudge = pickNudge(ctx.character, ctx.relationship);
   const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '');
@@ -224,7 +229,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorOutput> {
     }
 
     if (nudge) logger.debug('actor', `nudge applied: ${nudge.id}`, { character: ctx.character.username });
-    return out;
+    return { ...out, raisedThreadId: nudge?.threadId };
   }
 
   logger.error('actor', `actor failed twice for ${ctx.character.username}, using fallback`);

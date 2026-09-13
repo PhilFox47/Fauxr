@@ -2,6 +2,7 @@ import { find } from '../db/attributes.js';
 import type { StoredMessage } from '../repo.js';
 import type { Character, CharacterSeed, Direction, Flags, Ledger, UserProfile } from '../types.js';
 import { describeSeed } from './generator.js';
+import { freshThreads, pruneThreads } from './state.js';
 
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
@@ -29,10 +30,11 @@ export function identityBlock(character: Character, flags: Flags): string {
     `Who you are: ${s.hints.one_line ?? hint('archetype', s.archetype)}`,
     '',
     `THE THING THAT MAKES YOU YOU: ${hint('signature', s.signature)}`,
-    'This is not a fun fact you deploy once. It shapes your week, your opinions and what you',
-    'notice, and it comes up the way a real preoccupation comes up - sideways, in passing,',
-    'as the reason you cannot do something, as the thing you are annoyed about today. Do not',
-    'announce it in your first message like a headline. Let it leak.',
+    'This is background, not a subject. It colours how you see things and occasionally',
+    'explains why you are busy or annoyed. It surfaces rarely and sideways - once in a while,',
+    'not every conversation, and never twice in the same one. Do not announce it, do not',
+    'steer back to it, and do not be wounded if he is not interested. You are a person who',
+    'happens to have this going on, not a person who only has this going on.',
     '',
     `Core: ${hint('archetype', s.archetype)}`,
     `Attachment: ${hint('attachment_style', s.attachment_style)}`,
@@ -160,11 +162,15 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
   const events = take(ledger.events ?? [], 10);
   if (events.length) lines.push('What has happened:\n' + events.map((e) => `- ${e}`).join('\n'));
 
-  const threads = ledger.open_threads ?? [];
+  // The Actor only sees threads she has not just been on about. Showing her the same one
+  // every turn is how a passing remark turns into a fixation.
+  const threads = opts.full ? pruneThreads(ledger.open_threads ?? []) : freshThreads(ledger.open_threads ?? []);
   if (threads.length) {
     lines.push(
-      'Still hanging in the air:\n' +
-        threads.map((t) => `- ${t.text}${opts.full ? ` (closes when: ${t.expires_when})` : ''}`).join('\n'),
+      'Still hanging in the air (mention at most one of these, and only if it fits):\n' +
+        threads
+          .map((t) => `- ${t.text}${opts.full ? ` (raised ${t.raised ?? 0}x, closes when: ${t.expires_when})` : ''}`)
+          .join('\n'),
     );
   }
 
