@@ -11,7 +11,7 @@ import {
   getCharacter, getRelationship, getUserProfile, getWakeup, lastMessage, markCharacterMessagesRead,
   queryLogs, recentMessages, saveUserProfile, unreadCount,
 } from '../repo.js';
-import { blockCharacterByUser, handleUserMessage } from '../engine/chat.js';
+import { blockCharacterByUser, handleUserMessage, isAway } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import { enqueueImage, evaluateUserImage, listImageJobs, retryImageJob } from '../engine/images.js';
@@ -33,7 +33,7 @@ function publicCharacter(c: Character) {
     bio: c.bio,
     state: c.state,
     matched_at: c.matched_at,
-    online: isOnline(c),
+    online: isOnline(c) && !(rel && isAway(rel)),
     profile_picture: rel?.flags.state.profile_picture_sent && picture ? `/media/${picture.path}` : null,
     ghosting: !!rel?.ghosted_at,
   };

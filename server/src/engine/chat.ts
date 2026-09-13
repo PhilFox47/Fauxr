@@ -6,11 +6,12 @@ import {
   addMessage, clearWakeup, getCharacter, getRelationship, getWakeup, markUserMessagesRead,
   recentMessages, saveRelationship, setCharacterState, type StoredMessage,
 } from '../repo.js';
-import type { ActorHidden, Character, Relationship } from '../types.js';
+import type { Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage } from './actor.js';
 import { detectEvents, directionExpired, runDirector } from './director.js';
 import { computePressure, computeReciprocity } from './modifiers.js';
 import { isOnline } from './presence.js';
+import { randInt } from './dice.js';
 import { clearExpiredNegativeFlags, hasActiveNegativeFlag } from './state.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
@@ -105,6 +106,12 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   if (!character || !rel) return;
   if (character.state !== 'matched') return;
 
+  // She said she was going. She is actually gone, mid-conversation or not.
+  if (isAway(rel) && opts.trigger === 'user_message') {
+    logger.debug('actor', `${character.username} said she was leaving and is away`);
+    return;
+  }
+
   // She only reads once she is actually online.
   if (markUserMessagesRead(character.id) > 0) {
     bus.emitEvent({ type: 'read', character_id: character.id, at: nowIso() });
@@ -149,7 +156,7 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     : null;
   const result = output ?? (await runActor(ctx));
 
-  await deliver(character, result.messages, result.hidden);
+  await deliver(character, result.messages);
 
   rel = getRelationship(characterId)!;
   if (rel.active_direction) {
@@ -177,8 +184,11 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   saveRelationship(rel);
 
   if (result.hidden.going_offline_in !== null) {
-    logger.debug('actor', `${character.username} announced going offline in ${result.hidden.going_offline_in}min`);
-    rel.mood = { ...rel.mood, offline_after: new Date(Date.now() + result.hidden.going_offline_in * 60_000).toISOString() };
+    // She leaves when she said she would, and stays gone for a while afterwards.
+    const leavesAt = Date.now() + result.hidden.going_offline_in * 60_000;
+    const awayUntil = new Date(leavesAt + randInt(25, 180) * 60_000).toISOString();
+    logger.debug('actor', `${character.username} is leaving in ${result.hidden.going_offline_in}min`, { away_until: awayUntil });
+    rel.mood = { ...rel.mood, leaves_at: new Date(leavesAt).toISOString(), away_until: awayUntil };
     saveRelationship(rel);
   }
 
@@ -203,7 +213,6 @@ function isStaleSession(rel: Relationship): boolean {
 async function deliver(
   character: Character,
   messages: { text: string; delay: number; kind?: string; duration_seconds?: number }[],
-  hidden: ActorHidden,
 ): Promise<void> {
   for (const m of messages) {
     bus.emitEvent({ type: 'typing', character_id: character.id, on: true });
@@ -220,13 +229,19 @@ async function deliver(
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
   }
-  void hidden;
 }
 
-/** She goes offline mid-conversation when the Actor said she would. */
-export function shouldBeOffline(rel: Relationship): boolean {
-  const at = (rel.mood as any)?.offline_after;
-  return !!at && Date.parse(at) <= Date.now();
+/**
+ * She goes offline mid-conversation when the Actor said she would, and is genuinely
+ * unreachable until the absence window closes.
+ */
+export function isAway(rel: Relationship): boolean {
+  const mood = rel.mood as any;
+  const leavesAt = mood?.leaves_at ? Date.parse(mood.leaves_at) : null;
+  const awayUntil = mood?.away_until ? Date.parse(mood.away_until) : null;
+  if (!leavesAt || !awayUntil) return false;
+  const now = Date.now();
+  return now >= leavesAt && now < awayUntil;
 }
 
 export async function blockCharacterByUser(characterId: string): Promise<void> {

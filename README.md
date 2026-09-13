@@ -178,7 +178,8 @@ The log view is the main tuning tool. Use it.
 **V1, implemented:** onboarding and profile · character generation with the full attribute
 tables · a swipe stack of ten · matching with instant and delayed behaviour · the
 Director/Actor chat loop · stats with the code modifiers · flags · the ledger · online
-windows, read receipts, typing indicator and per-message delays · the wakeup queue and
+windows, read receipts, typing indicator, per-message delays and leaving
+mid-conversation · the wakeup queue and
 catch-up job · proactivity · ghosting and blocking · settings with logs · Docker.
 
 **V2, prepared for but not finished:** image generation (the queue, prompt assembler,

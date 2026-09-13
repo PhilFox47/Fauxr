@@ -6,7 +6,7 @@ import {
   allWakeups, clearWakeup, dueWakeups, getCharacter, getRelationship,
   listActiveMatches, saveRelationship, setWakeup,
 } from '../repo.js';
-import type { Character, Relationship } from '../types.js';
+import type { Character } from '../types.js';
 import { takeTurn } from './chat.js';
 import { randInt } from './dice.js';
 import { ensureStack } from './matching.js';
@@ -194,8 +194,4 @@ export async function catchUp(): Promise<void> {
   decayPass();
   await ensureStack();
   logger.info('scheduler', 'catch-up complete');
-}
-
-export function relationshipSummary(rel: Relationship) {
-  return { trust: rel.trust, spark: rel.spark, investment: rel.investment };
 }
