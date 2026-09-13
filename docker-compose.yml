@@ -1,0 +1,21 @@
+services:
+  fauxr:
+    build: .
+    container_name: fauxr
+    restart: unless-stopped
+    ports:
+      - "${FAUXR_PORT:-8080}:8080"
+    volumes:
+      # The SQLite file, uploads and generated images live here so they survive rebuilds.
+      - fauxr-data:/data
+    environment:
+      TZ: ${TZ:-Europe/Berlin}
+      FAUXR_DATA_DIR: /data
+      # Optional bootstrap values. Everything is editable in the settings page afterwards.
+      FAUXR_API_BASE_URL: ${FAUXR_API_BASE_URL:-https://nano-gpt.com/api/v1}
+      FAUXR_API_KEY: ${FAUXR_API_KEY:-}
+      FAUXR_IMAGE_BASE_URL: ${FAUXR_IMAGE_BASE_URL:-https://nano-gpt.com/api/v1}
+      FAUXR_IMAGE_API_KEY: ${FAUXR_IMAGE_API_KEY:-}
+
+volumes:
+  fauxr-data:

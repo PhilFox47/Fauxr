@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS characters (
   matched_at       TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_characters_state ON characters(state);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_characters_username ON characters(username);
 
 CREATE TABLE IF NOT EXISTS relationships (
   character_id     TEXT PRIMARY KEY REFERENCES characters(id) ON DELETE CASCADE,

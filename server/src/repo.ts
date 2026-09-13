@@ -48,11 +48,30 @@ function hydrateCharacter(row: any): Character {
   };
 }
 
+/**
+ * Handles are unique on a platform, and a cheap model will happily hand out the same one
+ * twice. Characters are generated concurrently, so the check only holds if it happens in
+ * the same synchronous step as the insert. Mutates c.username when it has to.
+ */
+function claimUsername(base: string): string {
+  const taken = (name: string) => !!db.prepare('SELECT 1 FROM characters WHERE username = ?').get(name);
+  if (!taken(base)) return base;
+  for (let i = 0; i < 50; i++) {
+    const suffix = String(2 + Math.floor(Math.random() * 9998));
+    const candidate = `${base.slice(0, Math.max(1, 18 - suffix.length))}${suffix}`;
+    if (!taken(candidate)) return candidate;
+  }
+  return `${base.slice(0, 10)}${Date.now().toString(36)}`;
+}
+
 export function insertCharacter(c: Character): void {
-  db.prepare(
-    `INSERT INTO characters (id, username, real_name, bio, created_at, state, seed, reappear_at, rejection_count, matched_at)
-     VALUES (@id, @username, @real_name, @bio, @created_at, @state, @seed, @reappear_at, @rejection_count, @matched_at)`,
-  ).run({ ...c, seed: JSON.stringify(c.seed) });
+  db.transaction(() => {
+    c.username = claimUsername(c.username);
+    db.prepare(
+      `INSERT INTO characters (id, username, real_name, bio, created_at, state, seed, reappear_at, rejection_count, matched_at)
+       VALUES (@id, @username, @real_name, @bio, @created_at, @state, @seed, @reappear_at, @rejection_count, @matched_at)`,
+    ).run({ ...c, seed: JSON.stringify(c.seed) });
+  })();
 }
 
 export function getCharacter(id: string): Character | null {
@@ -206,6 +225,7 @@ export function addMessage(m: {
   kind?: 'text' | 'voice' | 'image';
   meta?: Record<string, any>;
   sent_at?: string;
+  /** Omit to use the default; pass null explicitly to leave a message unread. */
   read_at?: string | null;
 }): StoredMessage {
   const info = db
@@ -220,7 +240,9 @@ export function addMessage(m: {
       kind: m.kind ?? 'text',
       meta: JSON.stringify(m.meta ?? {}),
       sent_at: m.sent_at ?? nowIso(),
-      read_at: m.read_at ?? (m.sender === 'character' ? nowIso() : null),
+      // `null` is a meaningful value here (unread), so only fall back when the
+      // caller left it out entirely.
+      read_at: 'read_at' in m ? m.read_at ?? null : m.sender === 'character' ? nowIso() : null,
     });
   return getMessage(Number(info.lastInsertRowid))!;
 }

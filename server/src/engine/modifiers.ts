@@ -9,13 +9,16 @@ const WINDOW = 20;
 const PRESSURE_HALF_LIFE_HOURS = 12;
 
 const QUESTION_STARTERS = /^(what|why|how|when|where|who|which|do|does|did|are|is|was|were|can|could|would|will|have|has|any|tell me)\b/i;
+/** A wh-word aimed at her, wherever it sits in the sentence: "seriously, where do you work". */
+const DIRECTED_QUESTION = /\b(what|why|how|when|where|who|which)\b[^.?!]{0,40}\b(you|your|u|ur|yours)\b/i;
+const ASKS_HER = /\b(tell me|what about you|how about you|and you|hbu|wbu)\b/i;
 const SELF_MARKERS = /\b(i|i'm|im|i've|ive|i'd|id|i'll|my|me|mine|myself)\b/i;
 const REFUSAL_MARKERS =
   /\b(no|nope|not really|rather not|i'd rather|i would rather|maybe later|not yet|don't want|dont want|not comfortable|can't|cant|stop|later|not telling|nice try|next question|why do you (want to )?know)\b/i;
 
 function isQuestion(text: string): boolean {
   const t = text.trim();
-  return t.includes('?') || QUESTION_STARTERS.test(t);
+  return t.includes('?') || QUESTION_STARTERS.test(t) || DIRECTED_QUESTION.test(t) || ASKS_HER.test(t);
 }
 
 function isAboutSelf(text: string): boolean {

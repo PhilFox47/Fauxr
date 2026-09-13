@@ -375,6 +375,7 @@ function fallbackUsername(name: string): string {
   return `${name.toLowerCase()}${pickOne(suffixes)}`.slice(0, 18);
 }
 
+
 interface DirectorPass {
   swaps?: { field: string; to: string; why?: string }[];
   real_name?: string;
@@ -443,6 +444,8 @@ export async function generateCharacter(): Promise<Character> {
   if (online) seed.online_times = online;
 
   const realName = (pass.real_name ?? '').trim().split(/\s+/)[0] || pickOne(FALLBACK_NAMES);
+  // The final handle is settled by insertCharacter, which can only do it collision-free
+  // in the same synchronous step as the write.
   const username =
     (pass.username ?? '').trim().toLowerCase().replace(/[^a-z0-9._]/g, '').slice(0, 18) ||
     fallbackUsername(realName);
