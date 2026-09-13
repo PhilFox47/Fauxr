@@ -31,7 +31,7 @@ You are typing on a phone. Only the words you would actually type into the messa
 Reply again with the same JSON structure and nothing else.`;
 
 const FALLBACK: ActorOutput = {
-  messages: [{ text: 'sorry got distracted, what were you saying', delay: 6 }],
+  messages: [{ text: 'sorry got distracted, what were you saying', delay: 0 }],
   hidden: {
     thoughts: 'fallback message, the model failed',
     mood: 'neutral',
@@ -60,7 +60,24 @@ function normalizeHidden(raw: any): ActorHidden {
   };
 }
 
-/** Delays and message counts are software limits, never left to the model. */
+/**
+ * How long she appears to spend typing one message, from its length alone.
+ * Roughly fourteen characters a second plus a moment to start, which reads as a fast
+ * thumb-typist without ever becoming a wait.
+ */
+export function typingDelay(text: string, maxSeconds: number): number {
+  const seconds = 0.6 + text.length / 14;
+  return Math.max(1, Math.min(maxSeconds, Math.round(seconds)));
+}
+
+/**
+ * Delays and message counts are software limits, never left to the model.
+ *
+ * The first message of a turn is sent immediately: the wait for it is already real,
+ * because the model had to generate it. Adding an invented delay on top only makes her
+ * look slow. Every message after it is paced by its own length, since those arrive
+ * together and would otherwise land in the same instant.
+ */
 function normalizeMessages(raw: any): ActorMessage[] {
   const { max_messages_per_turn, max_delay_seconds } = getSettings().chat;
   const list = Array.isArray(raw) ? raw : [];
@@ -68,8 +85,11 @@ function normalizeMessages(raw: any): ActorMessage[] {
   for (const m of list.slice(0, max_messages_per_turn)) {
     const text = String(m?.text ?? '').trim();
     if (!text) continue;
-    const delay = Math.max(1, Math.min(max_delay_seconds, Math.round(Number(m?.delay) || 4)));
-    out.push({ text, delay, kind: 'text' });
+    out.push({
+      text,
+      delay: out.length === 0 ? 0 : typingDelay(text, max_delay_seconds),
+      kind: 'text',
+    });
   }
   return out;
 }
@@ -106,7 +126,6 @@ function buildPrompt(ctx: ActorContext, template: 'actor_chat' | 'actor_voice'):
     direction_block: directionBlock(direction),
     history_block: historyBlock(messages, character, user),
     max_messages: settings.chat.max_messages_per_turn,
-    max_delay: settings.chat.max_delay_seconds,
     voice_target:
       seed.message_length === 'paragraphs' ? '40 to 90 seconds of speech' : '12 to 40 seconds of speech',
   });
@@ -197,7 +216,8 @@ export async function runActorVoice(ctx: ActorContext): Promise<VoiceOutput | nu
     return {
       message: {
         text: body,
-        delay: Math.max(1, Math.min(settings.chat.max_delay_seconds, Math.round(Number(parsed?.message?.delay) || 5))),
+        // A voice note is the whole turn, so it is the first message: no invented delay.
+        delay: 0,
         kind: 'voice',
         duration_seconds: duration,
       },

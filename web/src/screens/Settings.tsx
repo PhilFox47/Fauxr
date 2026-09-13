@@ -307,12 +307,17 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
           />
         </label>
         <label className="field">
-          <span>Max delay per message (seconds)</span>
+          <span>Longest gap between messages in one reply (seconds)</span>
           <input
             type="number"
             value={settings.chat.max_delay_seconds}
             onChange={(e) => patch(['chat', 'max_delay_seconds'], Number(e.target.value))}
           />
+          <span className="tiny muted">
+            The first message of a reply always arrives immediately — the wait for it is
+            already real, because it had to be written. Messages after it are paced by how
+            long they would take to type, up to this cap.
+          </span>
         </label>
         <label className="row" style={{ marginBottom: 10 }}>
           <input

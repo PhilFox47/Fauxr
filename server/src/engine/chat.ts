@@ -235,10 +235,13 @@ async function deliver(
   startedIn: number,
 ): Promise<void> {
   for (const m of messages) {
-    bus.emitEvent({ type: 'typing', character_id: character.id, on: true });
-    await sleep(m.delay * 1000);
-    bus.emitEvent({ type: 'typing', character_id: character.id, on: false });
-    if (epoch !== startedIn) return;
+    // A zero delay means send now; showing a typing bubble for no time just flickers.
+    if (m.delay > 0) {
+      bus.emitEvent({ type: 'typing', character_id: character.id, on: true });
+      await sleep(m.delay * 1000);
+      bus.emitEvent({ type: 'typing', character_id: character.id, on: false });
+      if (epoch !== startedIn) return;
+    }
 
     const stored = addMessage({
       character_id: character.id,

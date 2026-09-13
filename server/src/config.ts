@@ -23,7 +23,12 @@ export interface Settings {
   activity: number;
   server_window: { from: string; to: string; timezone: string };
   budget: { max_calls_per_day: number; max_cost_per_day: number };
-  chat: { context_messages: number; max_messages_per_turn: number; max_delay_seconds: number };
+  chat: {
+    context_messages: number;
+    max_messages_per_turn: number;
+    /** Ceiling for the gap between messages inside one turn. The first is always instant. */
+    max_delay_seconds: number;
+  };
   images_enabled: boolean;
   voice_enabled: boolean;
   /**
@@ -49,7 +54,7 @@ export const DEFAULT_SETTINGS: Settings = {
   activity: 0.6,
   server_window: { from: '06:00', to: '02:00', timezone: 'local' },
   budget: { max_calls_per_day: 1500, max_cost_per_day: 0 },
-  chat: { context_messages: 40, max_messages_per_turn: 5, max_delay_seconds: 90 },
+  chat: { context_messages: 40, max_messages_per_turn: 5, max_delay_seconds: 10 },
   images_enabled: false,
   voice_enabled: false,
   always_online: true,

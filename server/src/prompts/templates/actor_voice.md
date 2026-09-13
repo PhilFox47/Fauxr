@@ -49,8 +49,7 @@ Reply with exactly one JSON object and nothing else:
 {
   "message": {
     "text": "the full transcript of the voice message",
-    "duration_seconds": 34,
-    "delay": 6
+    "duration_seconds": 34
   },
   "hidden": {
     "thoughts": "...",

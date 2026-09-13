@@ -137,7 +137,7 @@ user message
    │
    └─ Actor runs every turn
          sees the direction, never the numbers
-         segments its own messages and sets its own delays
+         segments its own messages; the server does the timing
          reports back through a hidden channel
 ```
 
@@ -180,11 +180,28 @@ data. Three defences:
 2. `detectRoleplay()` in `server/src/engine/actor.ts` checks every message before it is
    stored. On a hit the turn is re-requested once with a sharper instruction, and after a
    second failure a neutral one-liner is sent instead. Prose never reaches the chat.
-3. Delays, message counts and lengths are clamped by the server, not left to the model.
+3. Message counts and lengths are clamped by the server, and timing is computed by it
+   rather than requested from the model — see **Message timing**.
 
 Voice messages are the single exception: they may be rambling spoken prose, because that
 is what a voice note is. Narration stays forbidden there too.
 
+### Message timing
+
+The first message of a reply is sent the moment it exists. The wait before it is already
+real — the model had to write it — and stacking an invented delay on top of generation
+time only makes her look slow. A model asked to pick its own delay will happily say 42
+seconds.
+
+Messages after the first arrive together, so those are paced: each waits roughly its own
+length at about fourteen characters a second, capped at ten seconds (configurable). A
+two-word reaction lands in a second, a long rambling one takes most of the cap. The typing
+indicator runs for exactly that gap, and is skipped entirely when there is none.
+
+The model is no longer asked for delays at all. Its `response_speed` trait still shapes how
+she writes and how often she answers; it is not a stopwatch.
+
+### Voice messages
 ---
 
 ## Character generation
