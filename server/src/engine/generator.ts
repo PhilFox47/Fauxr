@@ -546,20 +546,21 @@ interface BioFormat {
 }
 
 const BIO_FORMATS: BioFormat[] = [
-  { hint: 'Three things about her, listed plainly: one about how her days actually go, one preference held far too strongly, one small admission. No framing around them.' },
-  { hint: 'What her week actually looks like, in two or three lines, ending on something that has nothing to do with work.' },
+  { hint: 'Three things about her, listed plainly: one about how her days actually go, one preference held far too strongly, and one about what she wants in bed. No framing around them.' },
   { hint: 'What she is after and what she is definitely not after, both stated plainly, plus the detail that explains why.' },
-  { hint: 'An opening line with some bite, then two more that quietly show she is warmer than the first line suggested.' },
-  { hint: 'A self-aware line about being on the app, then what she would honestly like to come out of it.' },
-  { hint: 'What she is into, described the way she would actually describe it, with the enthusiasm she would actually have. Never a list of nouns.' },
-  { hint: 'A small scene from her week, then a line about what she wants from someone, then something unrelated she is annoyed about.' },
-  { hint: 'One or two conditions for whoever swipes right, each with a reason attached that gives something away about her.', notFor: ['shy', 'earnest', 'dreamy'] },
-  { hint: 'What people assume about her, and then what is actually true. Both concrete.' },
-  { hint: 'Her ideal evening, described concretely enough to picture, then one honest line about why she is here.' },
-  { hint: 'Something she is currently obsessed with, explained at slightly too much length, then an abrupt shift to something practical.' },
-  { hint: 'A confession, the context that makes it make sense, and a question aimed at whoever is reading.' },
-  { hint: 'Two things she is good at and one she is visibly bad at, all specific, none of them impressive-sounding.' },
-  { hint: 'Where her head is at right now, in a few plain lines. Not a joke, not a pitch. Just honest.', notFor: ['sarcastic', 'guarded'] },
+  { hint: 'An opening line with some bite, then two more that make it obvious what she is here for.' },
+  { hint: 'What she is bored of on apps like this, and then what she actually wants instead. Specific on both counts.' },
+  { hint: 'A self-aware line about being back on here again, then exactly what she is hoping happens this time.' },
+  { hint: 'Her terms, laid out. What is on offer, what is not, and one reason that reveals something about her.' },
+  { hint: 'What people assume about her, and then what is actually true. Both concrete, and the true one is filthier.' },
+  { hint: 'A small scene from her week, then an abrupt shift into what she is actually on here for.' },
+  { hint: 'Something she is into, described with more enthusiasm than is strictly cool, then something entirely mundane.' },
+  { hint: 'A confession about what she wants, the context that makes it make sense, and a question aimed at whoever is reading.' },
+  { hint: 'What her ideal night looks like, described concretely enough to picture, start to finish.' },
+  { hint: 'Two things she is good at and one she is visibly bad at. At least one of them is not safe for work.' },
+  { hint: 'One or two conditions for whoever swipes right, each with a reason attached that gives something away.', notFor: ['shy', 'earnest', 'dreamy'] },
+  { hint: 'Blunt to the point of being funny about what she wants. No hedging, no softening, no apology.', notFor: ['shy', 'overthinker', 'still_water'] },
+  { hint: 'Where her head is at right now, in a few plain lines. Not a joke, not a pitch, and honest about wanting someone.', notFor: ['sarcastic', 'guarded', 'cynic'] },
 ];
 
 /** Shapes used for the last few characters, so the stack rotates through them. */
@@ -577,18 +578,18 @@ function pickBioFormat(archetype: string): string {
 
 /** Only used when no model is reachable, so the stack is still browsable offline. */
 const FALLBACK_BIOS = [
-  'night shifts, so my sense of time is a suggestion.\nI cook properly on days off and eat cereal standing up on the others.\nLooking for someone who can hold a conversation past the second message.',
-  'I read too much and finish about a third of it.\nMy flat is mostly plants and one very opinionated cat.\nWould like someone to be unreasonable about small things with.',
-  'Things I am good at: bread, remembering birthdays, losing arguments slowly.\nThings I am not: mornings, parallel parking, pretending to like a band I do not.\nSay something other than hey.',
-  'I moved here nine months ago and still do not really know anyone.\nSpend most weekends walking somewhere I have not been yet.\nNot looking for anything urgent, just someone worth the time.',
-  'Currently obsessed with a podcast nobody else I know listens to, so you will be hearing about it.\nI am better in person than I am at texting, which is an awkward thing to admit here.',
-  'People assume I am quiet. I am just slow to start.\nOnce I am going you will struggle to shut me up about films.\nI will absolutely judge your top three.',
-  'Work is loud, so my ideal evening is deeply boring: cooking, a film, being in bed by eleven.\nIf that sounds dull to you we have saved each other some time.',
-  'I make things and finish about half of them.\nThe other half are in a cupboard I do not open.\nLooking for someone with their own cupboard, metaphorically or otherwise.',
-  'Two coffees before I am a person. Three and I am a problem.\nI like being outside, arguing about nothing, and other people\'s dogs.\nTell me something you are actually into.',
-  'I am on here because my friends got tired of me complaining about being on here.\nI am funnier in writing than in person, which I am told is a red flag.\nWorth finding out.',
-  'My week is mostly work, the gym, and pretending I will go to bed early.\nI want someone who makes plans and then actually turns up.\nLow bar. Surprisingly hard to clear.',
-  'I will remember one strange detail about you for years and bring it up at the worst moment.\nI cannot remember where I put my keys.\nThat trade-off is the whole personality.',
+  'Night shifts, so my sense of time is a suggestion.\nHere for something uncomplicated and reasonably filthy.\nNot here to be anyone\'s girlfriend, sorry.',
+  'I read too much, sleep badly, and have a very specific idea of what I want.\nAsk and I will tell you. Do not ask and we will both be bored.',
+  'Things I am good at: bread, remembering birthdays, being extremely direct about this part.\nThings I am not: mornings, small talk, waiting three weeks.',
+  'Recently single and making up for lost time.\nI want someone who turns up when they say they will and does not need a map.\nLow bar. Surprisingly hard to clear.',
+  'I am better in person than I am at texting, which is awkward, because this is texting.\nCome and find out. Bring stamina.',
+  'People assume I am quiet. I am just picky.\nOnce I have decided about you I am not remotely quiet.\nStill deciding.',
+  'My week is work, the gym, and being annoyed about both.\nI would like one evening that is neither, ideally involving you and not much clothing.',
+  'Not looking for a boyfriend. Looking for a regular.\nThere is a difference and I will explain it if you are struggling.',
+  'Two coffees before I am a person. Three and I am a problem.\nI like being told what to do by people who are actually sure about it.\nThat is the whole profile really.',
+  'I am on here because my friends got tired of hearing about it.\nI know exactly what I want. The hard part has been finding someone who can keep up.',
+  'I will remember one strange detail about you for years.\nI cannot remember where I put my keys.\nSay something filthy and specific and I will remember that too.',
+  'Straightforward: I am here for sex, I am good company either side of it, and I am not interested in a three-week preamble.\nTell me what you are into.',
 ];
 
 function recentBios(limit = 12): string[] {

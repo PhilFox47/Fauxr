@@ -27,38 +27,38 @@ const STAGES: Record<StageId, Stage> = {
   opening: {
     id: 'opening',
     label: 'Opening',
-    what: 'They have barely spoken. She is deciding whether this is worth her attention at all, and she has other matches. Nothing is owed yet, by either of them.',
-    next: 'One real exchange instead of pleasantries. She finds out whether he is capable of being interesting, and lets him find out one thing about her.',
+    what: 'They have barely spoken. She is deciding whether he is worth the effort at all, and she has other matches doing the same thing. Nothing is owed yet, by either of them. She knows what he is here for because it is what she is here for.',
+    next: 'One exchange with something in it - a bit of wit, a bit of nerve, a real answer. Enough that she stops treating him as interchangeable with the other twelve.',
   },
   curious: {
     id: 'curious',
     label: 'Curious',
-    what: 'She is interested enough to keep replying without being asked twice. This is the getting-to-know-you phase and she is an active participant in it - she wants to know about him too, not just answer questions.',
-    next: 'Something personal from each of them. A real opinion, a story that costs something to tell, a question nobody else asks.',
+    what: 'She is interested enough to keep replying without being chased. She wants to know whether he is any good - as company, and as the other thing. Both questions are live and she is not being subtle about the second one.',
+    next: 'The first real flirting, from either of them. She is waiting to see whether he can do it without being crass or going shy.',
   },
   warming: {
     id: 'warming',
     label: 'Warming up',
-    what: 'There is something here and they both know it. She is comfortable, teases him, brings things up unprompted, and has started to look forward to his messages.',
-    next: 'The first open acknowledgement of attraction. Flirting that is not deniable. She may make the first move on that.',
+    what: 'She fancies him and is no longer hiding it. The conversation has an undertow to it and everything is slightly double-edged.',
+    next: 'Somebody says something they cannot take back. She is entirely capable of being the one who does.',
   },
   flirting: {
     id: 'flirting',
     label: 'Flirting',
-    what: 'Mutual, explicit interest. The conversation has charge to it. She is enjoying this and is not pretending otherwise.',
-    next: 'Either the conversation gets more intimate, or it gets real - meeting up. She has an appetite for one of those and it comes from who she is.',
+    what: 'Explicit, mutual, and enjoyable. She is teasing him properly and getting as good as she gives.',
+    next: 'It gets filthy, or it gets arranged. She has an appetite for one of those first, and which one comes from who she is.',
   },
   intimate: {
     id: 'intimate',
-    label: 'Intimate',
-    what: 'That side of the conversation is open. She is candid about wanting him and about what she likes, within her own limits.',
-    next: 'Meeting in person, if she wants that. Talk is not the destination for her.',
+    label: 'Sexting',
+    what: 'That side of it is wide open. She talks about what she wants in detail, asks what he wants, and is not shy about any of it - within her own limits, which do not move.',
+    next: 'Doing it rather than describing it. Talk is not the destination for her and she will start saying so.',
   },
   meeting: {
     id: 'meeting',
     label: 'Wants to meet',
-    what: 'She is ready to see him in person and is no longer being coy about it.',
-    next: 'An actual plan: a day, a time, a place. She will push for specifics rather than "sometime".',
+    what: 'She wants him in person and is done being coy about it. The conversation now has a purpose and she is impatient with anything that is not moving towards it.',
+    next: 'An actual plan: a day, a time, a place, whose flat. She pushes for specifics rather than "sometime".',
   },
 };
 
@@ -68,9 +68,11 @@ export function currentStage(character: Character, rel: Relationship): Stage {
 
   if (f.allows_date_requests && rel.trust >= character.seed.thresholds.allow_date) return STAGES.meeting;
   if (f.sexual_topics_allowed) return STAGES.intimate;
-  if (rel.spark >= 55 && rel.trust >= 35) return STAGES.flirting;
-  if (bond >= 35 || f.real_name_known) return STAGES.warming;
-  if (bond >= 22) return STAGES.curious;
+  // Attraction carries most of the weight on a hookup app; trust is a much smaller gate
+  // here than it would be on a relationship site, because less is being asked of it.
+  if (rel.spark >= 40 && rel.trust >= 20) return STAGES.flirting;
+  if (bond >= 26 || f.real_name_known) return STAGES.warming;
+  if (bond >= 18) return STAGES.curious;
   return STAGES.opening;
 }
 
@@ -82,9 +84,10 @@ export function currentStage(character: Character, rel: Relationship): Stage {
 export function arousalCeiling(character: Character, rel: Relationship): number {
   const { libido, sexting_readiness } = character.seed;
   const appetite = (libido + sexting_readiness) / 2; // 1..5
-  const base = 20 + appetite * 16; // 36..100
-  // Wanting him at all is a precondition for wanting him right now.
-  const sparkCap = 25 + rel.spark * 0.85;
+  const base = 30 + appetite * 14; // 44..100
+  // Wanting him at all still gates wanting him right now, but on a platform built for this
+  // the floor is higher: she arrived in the mood, he only has to not put her off.
+  const sparkCap = 40 + rel.spark * 0.75;
   return Math.round(Math.max(0, Math.min(100, Math.min(base, sparkCap))));
 }
 

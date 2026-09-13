@@ -1,9 +1,12 @@
 # Fauxr
 
-A self-hosted, single-user adult dating simulator. Think MeChat or Choices without the
-hardcoded stories, without the purchases, and considerably more explicit — a dating
-platform simulation where you swipe, match, chat, flirt, get flirted at, and find out what
-someone is actually into.
+A self-hosted, single-user adult hookup-app simulator. Think MeChat or Choices without the
+hardcoded stories, without the purchases, and considerably more explicit — you swipe, match,
+chat, flirt, get flirted at, and find out what someone is actually into.
+
+It is not a relationship site and the characters do not pretend it is. Everyone on it is an
+adult who wants something physical, their bios say so, and the conversation starts from
+that rather than working its way towards it over weeks.
 
 Characters are generated, not written. They have their own goals, their own schedules,
 their own hidden thresholds and their own fetishes to be discovered. Nothing happens
@@ -206,9 +209,17 @@ A **spice** slider in Settings scales all of it. It applies at generation time, 
 shapes new characters rather than rewriting matches you already have.
 
 Trust and spark are scored on separate scales. Trust is slow and about safety. Spark is
-attraction and moves fast, because that is the point of a dating app — the Director is told
+attraction and moves fast, because that is the point of the platform — the Director is told
 in as many words that a character who is still politely neutral after thirty messages is a
 failure of direction.
+
+The population reflects the premise: appetite floors are raised across every archetype, so
+nobody is a non-starter, while the spread is kept so a reserved character still reads as
+reserved beside a forward one. What that leaves is roughly: talking dirty is table stakes
+(the `sexual_topics` gate averages 15), while photos (33) and actually meeting (44) still
+take real work. Wanting sex in general is not the same as wanting it with *him*, and that
+gap is where the game is — turn-offs, pressure, dealbreakers and hard limits all still
+bite.
 
 ### Fetishes
 

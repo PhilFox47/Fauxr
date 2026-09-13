@@ -32,8 +32,9 @@ export interface Settings {
   images_enabled: boolean;
   voice_enabled: boolean;
   /**
-   * How fast the sexual side of a conversation opens up. 1 is the designed pacing;
-   * higher makes every character reachable sooner, lower makes them all harder work.
+   * How fast the sexual side of a conversation opens up, on top of each character's own
+   * appetite. 1 is the designed pacing. Pushing it much past 1.3 flattens the gates that
+   * still ought to mean something - photos and meeting up - into nothing.
    * Applied to the sexual and date thresholds at generation time, so it affects
    * characters created from now on rather than rewriting existing ones.
    */
@@ -75,7 +76,7 @@ export const DEFAULT_SETTINGS: Settings = {
   chat: { context_messages: 40, max_messages_per_turn: 5, max_delay_seconds: 10 },
   images_enabled: false,
   voice_enabled: false,
-  spice: 1.3,
+  spice: 1.15,
   heightening: 1.4,
   rarity_bias: 1,
   always_online: true,

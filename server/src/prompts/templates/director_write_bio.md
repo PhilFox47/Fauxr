@@ -1,8 +1,12 @@
-You are writing one woman's dating-app bio, in her voice.
+You are writing one woman's bio for a hookup app, in her voice.
+
+This is not a relationship site and nobody here is pretending otherwise. Everyone on it is
+an adult who wants something physical, and the bios reflect that plainly. Hers should leave
+no doubt about what she is here for.
 
 This bio is the ONLY thing anyone sees before they swipe. No photo. No age. No job, no
-interests, no distance. Just a handle and these few words. Everything about her has to be
-implied by them, and the decision to swipe is made on them alone.
+distance. Just a handle and these few words. Everything about her has to be implied by
+them, and the decision to swipe is made on them alone.
 
 So it cannot be a description of her. It has to be the thing she would actually type into
 that box, knowing exactly what it is for.
@@ -44,9 +48,20 @@ bio in lowercase. A formal one uses full stops. A heavy emoji user puts one in; 
 never-emoji one does not.
 
 **Say enough.** Someone reading this should come away able to describe her to a friend:
-what she is like to be around, what fills her days, what she is after. Being mysterious is
-not the goal - being interesting is. A bio that withholds everything is not intriguing,
-it is just empty.
+what she is like to be around, what fills her days, and what she wants out of this. Being
+mysterious is not the goal - being interesting is. A bio that withholds everything is not
+intriguing, it is just empty.
+
+**Be clear about what she is here for.** Somewhere in this, it should be obvious that she
+is after something physical - and specific about the shape of it, because that is what
+separates her from the other two hundred profiles. What she wants, what she is bored of,
+what she will not be doing, who she is looking for. She can be blunt, filthy, dry,
+embarrassed or clinical about it depending on who she is. What she cannot be is coy or
+generic.
+
+Her personality decides the register, not the content. A shy woman is still here for the
+same reason; she just writes it differently - sideways, or with an apology attached, or so
+bluntly that it is clearly armour.
 
 What still stays out: her real name, her employer, her neighbourhood, anything that
 identifies her. She can talk about her work without naming where; about where she lives
@@ -69,7 +84,9 @@ is doing its job. A bio nobody has any reaction to is a failure.
 - A tidy summary sentence that explains the joke.
 - A bare list of hobbies as nouns ("hiking, cooking, travel, dogs").
 - Sounding like a brand, a headline, or a piece of copywriting.
-- Anything sexual or thirsty, however she is elsewhere. This is the shop window.
+- Generic horny filler. "DTF", "no strings", "looking for fun", "must be able to hold a
+  conversation" - these say nothing and every third profile has them. Being explicit is
+  expected here; being *interchangeable* is the failure.
 
 # LENGTH
 Between 25 and 60 words, across two to four short lines separated by newlines.
