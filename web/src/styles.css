@@ -535,7 +535,11 @@ input[type='range'] {
 }
 /* The image is clipped, not the avatar box - clipping the box ate half the presence dot. */
 .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+/* Emoji have their own vertical metrics and sit low in a line box; the 1px nudge and the
+   fixed line-height keep hers centred in the circle whatever the platform font does. */
+.avatar .emoji { font-size: 25px; line-height: 1; transform: translateY(1px); }
 .avatar.sm { width: 36px; height: 36px; font-size: 14px; }
+.avatar.sm .emoji { font-size: 18px; }
 .dot-online {
   position: absolute; right: 0; bottom: 1px;
   width: 13px; height: 13px; border-radius: 50%;

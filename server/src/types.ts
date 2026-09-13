@@ -92,6 +92,12 @@ export interface CharacterSeed {
   appearance_prompt: string;
   /** Stable image seed for this character. */
   image_seed: number;
+  /**
+   * The emoji she picked for herself, shown as her avatar until a real photo is unlocked.
+   * Optional because characters generated before this existed do not have one; the UI
+   * falls back to her initial.
+   */
+  avatar_emoji?: string;
 }
 
 export interface StateFlags {

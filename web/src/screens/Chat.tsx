@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, type CharacterProfile, type MatchSummary, type Message } from '../api';
+import Avatar from '../components/Avatar';
 import Icon from '../components/Icon';
 
 function clock(iso: string): string {
@@ -209,14 +210,7 @@ export default function Chat({
         <button className="iconbtn" onClick={onBack} aria-label="Back">
           <Icon name="back" size={22} />
         </button>
-        <div className="avatar sm" aria-hidden="true">
-          {character?.profile_picture ? (
-            <img src={character.profile_picture} alt="" />
-          ) : (
-            (character?.display_name ?? '?').slice(0, 1).toUpperCase()
-          )}
-          {character?.online && !blocked && <span className="dot-online" />}
-        </div>
+        <Avatar match={character} small presence={!blocked} />
         <div style={{ minWidth: 0 }}>
           <h1>{character?.display_name ?? '…'}</h1>
           <span className={`sub${isTyping ? ' live' : ''}`}>

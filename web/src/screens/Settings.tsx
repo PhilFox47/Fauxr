@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type ImageJob, type LogEntry, type UserProfile } from '../api';
+import { api, type ImageJob, type LogEntry, type ResetParts, type UserProfile } from '../api';
 
 type Pane = 'models' | 'behaviour' | 'profile' | 'logs' | 'images' | 'reset';
 
@@ -13,6 +13,36 @@ const PANES: { id: Pane; label: string }[] = [
 ];
 
 const SCOPES = ['', 'director', 'actor', 'image', 'scheduler', 'api', 'generator', 'app'];
+
+/** The independently resettable parts, in the order they are worth thinking about. */
+const PARTS: { id: keyof ResetParts; label: string; short: string; detail: string }[] = [
+  {
+    id: 'world',
+    label: 'Everyone and every chat',
+    short: 'all characters and chats',
+    detail:
+      'Every character, conversation, stat, ledger and generated picture, then a fresh swipe stack. This is the one that starts the game over.',
+  },
+  {
+    id: 'profile',
+    label: 'Your own profile',
+    short: 'your profile',
+    detail:
+      'Your name, age, bio and the photos you uploaded. Leave this off to keep being yourself; turn it on to land back on onboarding.',
+  },
+  {
+    id: 'settings',
+    label: 'API keys and settings',
+    short: 'your API keys and settings',
+    detail: 'Keys, base URLs, model choices and every tuning slider go back to defaults.',
+  },
+  {
+    id: 'logs',
+    label: 'The debug log',
+    short: 'the debug log',
+    detail: 'Every prompt and response recorded under Logs. Costs you nothing but history.',
+  },
+];
 
 export default function Settings({
   profile,
@@ -594,17 +624,30 @@ function ImagesPane() {
 }
 
 function ResetPane() {
-  const [includeSettings, setIncludeSettings] = useState(false);
+  /** Default: wipe the cast and start swiping again, keeping who you are and your keys. */
+  const [parts, setParts] = useState<ResetParts>({
+    world: true,
+    profile: false,
+    settings: false,
+    logs: true,
+  });
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const toggle = (key: keyof ResetParts) => {
+    setParts((p) => ({ ...p, [key]: !p[key] }));
+    setConfirming(false);
+  };
+
+  const chosen = PARTS.filter((p) => parts[p.id]);
 
   const run = async () => {
     setBusy(true);
     setError(null);
     try {
-      await api.reset(includeSettings);
-      // Everything on screen refers to rows that no longer exist. Start from scratch.
+      await api.reset(parts);
+      // Whatever is on screen may refer to rows that no longer exist. Start clean.
       window.location.reload();
     } catch (err) {
       setError(String(err instanceof Error ? err.message : err));
@@ -618,46 +661,49 @@ function ResetPane() {
       <div className="section-title" style={{ padding: '0 0 10px' }}>Danger zone</div>
 
       <p className="small muted" style={{ marginTop: 0 }}>
-        Deletes your profile, every character, every chat, all stats, ledgers, images and
-        logs, then starts over at onboarding with a fresh stack. There is no undo.
+        Pick what to wipe. Anything left off survives untouched, so you can start the cast
+        over without losing your own profile or your API key. There is no undo.
       </p>
 
-      <label className="switch-row" style={{ marginBottom: 16 }}>
-        <span className="switch">
-          <input
-            type="checkbox"
-            checked={includeSettings}
-            onChange={(e) => setIncludeSettings(e.target.checked)}
-          />
-          <span className="track" />
-        </span>
-        <span className="small">
-          Also reset API keys and model settings
-          <br />
-          <span className="tiny muted">
-            Off by default, so a reset does not cost you your API key. Your daily usage
-            counter is never reset.
+      {PARTS.map((part) => (
+        <label className="switch-row" key={part.id} style={{ marginBottom: 14 }}>
+          <span className="switch">
+            <input type="checkbox" checked={parts[part.id]} onChange={() => toggle(part.id)} />
+            <span className="track" />
           </span>
-        </span>
-      </label>
+          <span className="small">
+            {part.label}
+            <br />
+            <span className="tiny muted">{part.detail}</span>
+          </span>
+        </label>
+      ))}
+
+      <p className="tiny muted">
+        Your daily usage and spend counter is never reset, whatever you pick here.
+      </p>
 
       {error && <div className="banner warn">{error}</div>}
 
       {!confirming ? (
-        <button className="btn danger block" onClick={() => setConfirming(true)}>
-          Reset everything
+        <button
+          className="btn danger block"
+          disabled={chosen.length === 0}
+          onClick={() => setConfirming(true)}
+        >
+          {chosen.length === 0 ? 'Nothing selected' : `Reset ${chosen.length} thing${chosen.length === 1 ? '' : 's'}`}
         </button>
       ) : (
         <>
           <p className="small" style={{ color: 'var(--err)' }}>
-            This deletes everything{includeSettings ? ', including your API key' : ''}. Sure?
+            This permanently deletes {chosen.map((p) => p.short).join(', ')}. Sure?
           </p>
           <div className="row">
             <button className="btn ghost grow" onClick={() => setConfirming(false)} disabled={busy}>
               Cancel
             </button>
             <button className="btn danger grow" onClick={run} disabled={busy}>
-              {busy ? 'Resetting…' : 'Yes, delete it all'}
+              {busy ? 'Resetting…' : 'Yes, delete it'}
             </button>
           </div>
         </>

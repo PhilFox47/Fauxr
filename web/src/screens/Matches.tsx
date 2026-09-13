@@ -1,4 +1,5 @@
 import type { MatchSummary } from '../api';
+import Avatar from '../components/Avatar';
 
 function ago(iso: string | null): string {
   if (!iso) return '';
@@ -46,14 +47,7 @@ export default function Matches({
             className={`match-row${m.unread > 0 ? ' unreadrow' : ''}`}
             onClick={() => onOpen(m.id)}
           >
-            <div className="avatar">
-              {m.profile_picture ? (
-                <img src={m.profile_picture} alt="" />
-              ) : (
-                m.display_name.slice(0, 1).toUpperCase()
-              )}
-              {m.online && <span className="dot-online" />}
-            </div>
+            <Avatar match={m} />
             <div style={{ minWidth: 0, flex: 1 }}>
               <div className="name">{m.display_name}</div>
               <div className={`preview${typing[m.id] ? ' typing-now' : ''}`}>
@@ -76,7 +70,7 @@ export default function Matches({
             <div className="section-title">Ended</div>
             {archived.map((m) => (
               <div key={m.id} className="match-row" onClick={() => onOpen(m.id)} style={{ opacity: 0.5 }}>
-                <div className="avatar">{m.display_name.slice(0, 1).toUpperCase()}</div>
+                <Avatar match={m} presence={false} />
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div className="name">{m.display_name}</div>
                   <div className="preview">

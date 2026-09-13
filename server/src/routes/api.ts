@@ -15,9 +15,9 @@ import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateL
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import { enqueueImage, evaluateUserImage, listImageJobs, retryImageJob } from '../engine/images.js';
-import { rollSeed, describeSeed } from '../engine/generator.js';
+import { rollSeed, describeSeed, avatarEmojiFor } from '../engine/generator.js';
 import { catchUp } from '../engine/scheduler.js';
-import { resetEverything } from '../engine/reset.js';
+import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
 import type { Character } from '../types.js';
 
@@ -36,6 +36,9 @@ function publicCharacter(c: Character) {
     state: c.state,
     matched_at: c.matched_at,
     online: isOnline(c) && !(rel && isAway(rel)),
+    // Stands in for her photo until one is actually unlocked, so a list of matches is
+    // distinguishable at a glance rather than a column of identical grey initials.
+    avatar_emoji: avatarEmojiFor(c),
     profile_picture: rel?.flags.state.profile_picture_sent && picture ? `/media/${picture.path}` : null,
     ghosting: !!rel?.ghosted_at,
   };
@@ -265,11 +268,22 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
    * Wipe everything and come back up at onboarding. Settings are kept unless the caller
    * asks otherwise, so a reset does not cost you your API key.
    */
-  app.post<{ Body: { confirm?: string; include_settings?: boolean } }>('/api/reset', async (req, reply) => {
-    if (req.body?.confirm !== 'RESET') {
+  app.post<{
+    Body: { confirm?: string; world?: boolean; profile?: boolean; settings?: boolean; logs?: boolean };
+  }>('/api/reset', async (req, reply) => {
+    const b = req.body ?? {};
+    if (b.confirm !== 'RESET') {
       return reply.code(400).send({ error: 'confirmation required' });
     }
-    return resetEverything({ includeSettings: !!req.body?.include_settings });
+    if (!b.world && !b.profile && !b.settings && !b.logs) {
+      return reply.code(400).send({ error: 'nothing selected to reset' });
+    }
+    return resetParts({
+      world: !!b.world,
+      profile: !!b.profile,
+      settings: !!b.settings,
+      logs: !!b.logs,
+    });
   });
 
   app.post('/api/catchup', async () => {

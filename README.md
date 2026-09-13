@@ -630,6 +630,24 @@ bio looks suspiciously identical to one seen before rather than just structurall
 that is the tell: check the logs (scope `generator`) for "bio generation failed, using
 fallback" to see whether the model is actually being reached.
 
+### Her face before there is a photo
+
+A match list where nobody has unlocked a photo yet is a column of identical grey initials,
+and several characters share a first letter. So the generation pass also picks her an
+**avatar emoji** — from her signature, her work or what she is into, with the prompt
+explicitly steering away from the default-romantic set, since ❤️🔥😍 on everyone solves
+nothing. It shows wherever her avatar does until a real photo is unlocked, at which point
+the photo takes over.
+
+The model's choice is validated rather than trusted: asked for an emoji, a model will
+sometimes answer `:)`, `U+1F98A` or `a fox`, so anything containing letters or digits, or
+containing no pictographic character at all, is rejected. Rejected or missing, it falls back
+to a stable pick from a curated pool, keyed off her **id** rather than her handle — handles
+are not unique at the point the seed is written (the final one is settled during the insert),
+so keying off the handle gave every character the same face whenever a model repeated a
+username. Because that fallback resolves at read time, characters generated before any of
+this existed get a distinct face too, with no migration.
+
 ### The attribute tables
 
 `server/src/data/attributes/*.json`, around 1050 entries across 47 categories, seeded into
@@ -672,10 +690,31 @@ Model endpoints, keys and sampling per role · a global activity multiplier for
 proactivity and wakeup frequency (start low) · the server uptime window · a daily call and
 cost budget with a usage readout · searchable logs filtered by scope, where every LLM call
 is stored with its full prompt, response, duration and token counts · a separate image log
-with a per-job retry button · your own profile · a reset that puts the whole app back to
-first boot.
+with a per-job retry button · your own profile · a reset.
 
 The log view is the main tuning tool. Use it.
+
+### Resetting
+
+The reset is four independent switches rather than one button, because "start the cast
+over" and "forget who I am" are different wishes:
+
+| Part | What goes |
+|---|---|
+| Everyone and every chat | Characters, conversations, stats, ledgers, wakeups, dates, generated images, then a fresh stack |
+| Your own profile | Your name, age, bio and the photos you uploaded |
+| API keys and settings | Keys, base URLs, model choices, every tuning slider |
+| The debug log | Everything under Logs |
+
+Anything left off survives untouched, and nothing is wiped that was not named — an omitted
+part is a part that stays. The default is the common case: new cast, same you, same keys.
+Your daily usage and spend counter is never reset by any of it, since it records money
+actually spent rather than game state.
+
+The subtle part is the media: `data/images/` is generated *for* characters and goes with
+the world, while `data/uploads/` is the photos on *your* profile and goes with the profile.
+Wiping both together, as the old single-button reset did, would leave a kept profile
+pointing at dead thumbnails.
 
 ---
 

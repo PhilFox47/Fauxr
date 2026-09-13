@@ -431,10 +431,54 @@ function fallbackUsername(name: string): string {
 }
 
 
+/**
+ * Avatars before a photo is unlocked. Her own emoji comes from the Director pass; this is
+ * the fallback for an offline generation or a model that returned something that was not an
+ * emoji. It only aims to make her distinguishable in the match list, not to characterise
+ * her - that is the model's job when it is reachable.
+ */
+const FALLBACK_EMOJI = [
+  '🦊', '🌙', '🍒', '🐍', '⚡', '🌵', '🦢', '🍋', '🎧', '🧨',
+  '🪩', '🐝', '🌶️', '🦑', '🎸', '🫧', '🪬', '🦉', '🍄', '🧿',
+  '🐙', '🌊', '🦩', '☕', '🧷', '🪐', '🥀', '🎲', '🦇', '🍷',
+];
+
+/** Stable per character, so she does not change face between restarts. */
+function fallbackEmoji(key: string): string {
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  return FALLBACK_EMOJI[hash % FALLBACK_EMOJI.length];
+}
+
+/**
+ * Her avatar emoji, resolved at read time rather than baked in at generation: characters
+ * made before this existed get a stable one too, and the fallback keys off her id rather
+ * than her handle. Handles are not unique at the point the seed is written - the final one
+ * is settled during the insert, and a model that hands back the same username twice would
+ * otherwise give both characters the same face.
+ */
+export function avatarEmojiFor(character: Character): string {
+  return character.seed.avatar_emoji ?? fallbackEmoji(character.id);
+}
+
+/**
+ * Models asked for an emoji will sometimes answer ":)", "U+1F98A" or "a fox". Anything with
+ * letters or digits in it is one of those, and anything with no pictographic character in it
+ * is not an emoji either.
+ */
+function sanitizeEmoji(raw: unknown): string | null {
+  const s = String(raw ?? '').trim();
+  if (!s || s.length > 12) return null;
+  if (/[A-Za-z0-9]/.test(s)) return null;
+  if (!/\p{Extended_Pictographic}/u.test(s)) return null;
+  return s;
+}
+
 interface DirectorPass {
   swaps?: { field: string; to: string; why?: string }[];
   real_name?: string;
   username?: string;
+  avatar_emoji?: string;
   one_line?: string;
   insecurity_detail?: string;
   search_motive_detail?: string;
@@ -514,6 +558,9 @@ export async function generateCharacter(): Promise<Character> {
   if (pass.search_motive_detail) seed.hints.search_motive = pass.search_motive_detail;
   if (pass.touchstone_detail) seed.hints.touchstone = pass.touchstone_detail;
   if (pass.one_line) seed.hints.one_line = pass.one_line;
+  // Only stored when the model actually chose one; otherwise avatarEmojiFor() derives it.
+  const chosenEmoji = sanitizeEmoji(pass.avatar_emoji);
+  if (chosenEmoji) seed.avatar_emoji = chosenEmoji;
 
   const character: Character = {
     id: randomUUID(),

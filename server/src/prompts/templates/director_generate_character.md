@@ -29,6 +29,13 @@ coherent without making her boring, and to write the free-text parts of her seed
    - username: a dating-app handle that fits her personality. Lowercase, 4-18 chars,
      may contain numbers, dots or underscores. Not her real name spelled out plainly.
      Avoid the word "girl" and avoid years of birth.
+   - avatar_emoji: ONE emoji she would put on her profile in place of a photo. This is the
+     only thing distinguishing her at a glance in a list of matches, so make it hers: it
+     should come from her signature, her work, what she is into or how she comes across,
+     and two different characters should not land on the same obvious one. Avoid the
+     default-romantic set (❤️😍💋🔥💕) unless it genuinely is who she is - a woman whose
+     whole thing is her allotment picks 🌱, a bassist picks 🎸, a night-shift nurse picks
+     ☕. The emoji itself and nothing else: no text, no name, no code point.
    - one_line: a single sentence describing who she is, for internal use. Mention her
      signature, but describe a person rather than a walking quirk.
    - insecurity_detail: her insecurity made concrete and specific to her life, one sentence.
@@ -54,6 +61,7 @@ Reply with exactly one JSON object and nothing else:
   "swaps": [{ "field": "clothing_style", "to": "cosy", "why": "..." }],
   "real_name": "...",
   "username": "...",
+  "avatar_emoji": "🦊",
   "one_line": "...",
   "insecurity_detail": "...",
   "search_motive_detail": "...",
