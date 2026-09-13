@@ -387,10 +387,31 @@ resemble them.
 
 ### The attribute tables
 
-`server/src/data/attributes/*.json`, seeded into SQLite on first boot. Rows already in the
-database are never overwritten, so future edits survive an upgrade. The field that matters
-most is `prompt_hint` — the text that actually reaches the model. Without it the Actor
-gets a bare label and reinvents its meaning every time.
+`server/src/data/attributes/*.json`, around 950 entries across 47 categories, seeded into
+SQLite on boot. The field that matters most is `prompt_hint` — the text that actually
+reaches the model. Without it the Actor gets a bare label and reinvents its meaning every
+time.
+
+Every entry carries a **rarity**: common, uncommon, rare or very rare, which is the coarse
+frequency dial (`weight` remains a manual nudge on top). This is how the niche material
+earns its place — the fetish table runs to ~100 entries covering everything from dirty talk
+to mummification, and the long tail only turns up when it should. A **rarity** slider in
+Settings pulls the whole tail up or down together:
+
+| rarity_bias | common | uncommon | rare | very rare |
+|---|---|---|---|---|
+| 0.5 | 75% | 23% | 2% | 0% |
+| 1 (default) | 51% | 38% | 10% | 1% |
+| 2 | 36% | 39% | 19% | 6% |
+
+Hard limits carry conflict rules against the fetishes they contradict, so nobody rolls
+"into spanking" alongside "cannot be hit at all". Verified across 800 generated characters:
+zero contradictions.
+
+The seeder tracks a content hash. New rows are always inserted; existing rows are only
+rewritten when the shipped tables actually change, so an upgrade that adds a field or
+rewrites a hint reaches installs that already have a database instead of silently applying
+to new ones only.
 
 `GET /api/attributes/testroll` rolls ten characters with no LLM calls, for checking
 weights by eye.

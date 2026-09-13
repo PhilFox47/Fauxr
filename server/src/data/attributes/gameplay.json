@@ -10,7 +10,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "something_real",
@@ -23,7 +24,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "validation",
@@ -36,7 +38,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "curiosity",
@@ -49,7 +52,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "rebound",
@@ -62,7 +66,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sex",
@@ -75,7 +80,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "friends_new_city",
@@ -88,7 +94,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "boredom",
@@ -101,7 +108,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "proving_point",
@@ -114,7 +122,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "last_try",
@@ -127,7 +136,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "does_he_listen",
@@ -140,7 +150,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "can_he_be_told_no",
@@ -153,7 +164,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "is_he_funny",
@@ -166,7 +178,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "does_he_have_a_life",
@@ -179,7 +192,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "is_he_honest",
@@ -192,7 +206,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "is_he_consistent",
@@ -205,7 +220,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "does_he_ask",
@@ -218,7 +234,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "effort_not_flattery",
@@ -231,7 +248,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "can_he_go_deep",
@@ -244,7 +262,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "does_he_respect_pace",
@@ -257,7 +276,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "is_he_kind_to_others",
@@ -270,7 +290,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "does_he_remember",
@@ -283,7 +304,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "competence",
@@ -296,7 +318,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "calm",
@@ -309,7 +332,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "curiosity_toward_her",
@@ -322,7 +346,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "self_deprecation",
@@ -335,7 +360,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "decisiveness",
@@ -348,7 +374,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "kindness_to_strangers",
@@ -361,7 +388,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "patience",
@@ -374,7 +402,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "intensity",
@@ -387,7 +416,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dry_wit",
@@ -400,7 +430,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "vulnerability",
@@ -413,7 +444,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "independence",
@@ -426,7 +458,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "attention_to_detail",
@@ -439,7 +472,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "physical_labour",
@@ -452,7 +486,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "good_taste",
@@ -465,7 +500,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "directness",
@@ -478,7 +514,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "compliment_spam",
@@ -491,7 +528,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sexual_too_fast",
@@ -504,7 +542,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "interrogation",
@@ -517,7 +556,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "negging",
@@ -530,7 +570,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "one_word",
@@ -543,7 +584,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "bragging",
@@ -556,7 +598,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "talking_over",
@@ -569,7 +612,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "pushiness",
@@ -582,7 +626,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "bitterness_about_exes",
@@ -595,7 +640,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "neediness",
@@ -608,7 +654,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "meeting_pressure",
@@ -621,7 +668,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cynicism",
@@ -634,7 +682,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cringe_pickup",
@@ -647,7 +696,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "nosiness",
@@ -660,7 +710,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "condescension",
@@ -673,7 +724,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "mirroring",
@@ -686,7 +738,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "remembers_detail",
@@ -699,7 +752,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "admits_not_knowing",
@@ -712,7 +766,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "changes_his_mind",
@@ -725,7 +780,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "lets_silence_be",
@@ -738,7 +794,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "asks_a_real_question",
@@ -751,7 +808,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "laughs_at_himself",
@@ -764,7 +822,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "says_no_himself",
@@ -777,7 +836,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "checks_in_without_agenda",
@@ -790,7 +850,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "specific_compliment",
@@ -803,7 +864,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "respects_a_dodge",
@@ -816,7 +878,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "shares_something_uncool",
@@ -829,7 +892,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "plans_something_thoughtful",
@@ -842,7 +906,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "lying",
@@ -855,7 +920,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "ignoring_no",
@@ -868,7 +934,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cruelty",
@@ -881,7 +948,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "unsolicited_explicit",
@@ -894,7 +962,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "racism_sexism",
@@ -907,7 +976,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "pressure_after_refusal",
@@ -920,7 +990,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "aggression",
@@ -933,7 +1004,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "prying_after_refusal",
@@ -946,7 +1018,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "mocking_insecurity",
@@ -959,7 +1032,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "treating_her_as_option",
@@ -972,53 +1046,16 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
-    "id": "dirty_talk",
-    "category": "fetish",
-    "label": "Dirty talk",
-    "weight": 1.2,
-    "prompt_hint": "words matter more than anything physical",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "being_praised",
-    "category": "fetish",
-    "label": "Praise",
-    "weight": 1.1,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "teasing_denial",
-    "category": "fetish",
-    "label": "Teasing and denial",
-    "weight": 0.9,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "neck",
-    "category": "fetish",
-    "label": "Neck",
+    "id": "curiosity_about_people",
+    "category": "search_motive",
+    "label": "Curiosity about people",
     "weight": 1.0,
-    "prompt_hint": "",
+    "rarity": "uncommon",
+    "prompt_hint": "she is here because other people are interesting, and that is genuinely it",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -1027,24 +1064,12 @@
     "enabled": true
   },
   {
-    "id": "hands",
-    "category": "fetish",
-    "label": "Hands",
-    "weight": 1.1,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "voice",
-    "category": "fetish",
-    "label": "Voice",
+    "id": "revenge_on_ex",
+    "category": "search_motive",
+    "label": "Something to prove to an ex",
     "weight": 1.0,
-    "prompt_hint": "",
+    "rarity": "uncommon",
+    "prompt_hint": "not over it, and would not admit this is why she is here",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -1053,167 +1078,12 @@
     "enabled": true
   },
   {
-    "id": "light_bondage",
-    "category": "fetish",
-    "label": "Light restraint",
-    "weight": 0.8,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "power_exchange",
-    "category": "fetish",
-    "label": "Power exchange",
-    "weight": 0.8,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "being_watched",
-    "category": "fetish",
-    "label": "Being watched",
-    "weight": 0.6,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "marks",
-    "category": "fetish",
-    "label": "Marks left behind",
-    "weight": 0.6,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "slow_buildup",
-    "category": "fetish",
-    "label": "Very slow buildup",
-    "weight": 1.1,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "public_risk",
-    "category": "fetish",
-    "label": "Risk of being caught",
-    "weight": 0.5,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "degradation_light",
-    "category": "fetish",
-    "label": "Light degradation",
-    "weight": 0.5,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "service",
-    "category": "fetish",
-    "label": "Taking care of someone",
-    "weight": 0.7,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "roleplay",
-    "category": "fetish",
-    "label": "Roleplay",
-    "weight": 0.6,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "sensory",
-    "category": "fetish",
-    "label": "Blindfolds and sensation play",
-    "weight": 0.6,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "mirrors",
-    "category": "fetish",
-    "label": "Mirrors",
-    "weight": 0.5,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "aftercare",
-    "category": "fetish",
-    "label": "Aftercare as the main event",
-    "weight": 0.7,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "pain",
-    "category": "hard_limit",
-    "label": "Pain",
+    "id": "deadline",
+    "category": "search_motive",
+    "label": "A self-imposed deadline",
     "weight": 1.0,
-    "prompt_hint": "",
+    "rarity": "uncommon",
+    "prompt_hint": "told herself she would sort this out by a certain date and the date is approaching",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -1222,11 +1092,12 @@
     "enabled": true
   },
   {
-    "id": "humiliation",
-    "category": "hard_limit",
-    "label": "Humiliation",
+    "id": "sexual_specifically",
+    "category": "search_motive",
+    "label": "One specific thing she wants to try",
     "weight": 1.0,
-    "prompt_hint": "",
+    "rarity": "uncommon",
+    "prompt_hint": "here for something particular she has not managed to arrange otherwise",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -1235,24 +1106,12 @@
     "enabled": true
   },
   {
-    "id": "anything_recorded",
-    "category": "hard_limit",
-    "label": "Anything recorded",
-    "weight": 1.2,
-    "prompt_hint": "photos or video of anything explicit",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "degradation",
-    "category": "hard_limit",
-    "label": "Degradation",
+    "id": "friend_made_profile",
+    "category": "search_motive",
+    "label": "A friend made the profile",
     "weight": 1.0,
-    "prompt_hint": "",
+    "rarity": "uncommon",
+    "prompt_hint": "did not choose to be here and is slightly annoyed about it",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -1261,37 +1120,12 @@
     "enabled": true
   },
   {
-    "id": "public",
-    "category": "hard_limit",
-    "label": "Anything public",
-    "weight": 0.9,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "choking",
-    "category": "hard_limit",
-    "label": "Choking",
-    "weight": 0.9,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "third_parties",
-    "category": "hard_limit",
-    "label": "Third parties",
+    "id": "new_version",
+    "category": "search_motive",
+    "label": "Testing a new version of herself",
     "weight": 1.0,
-    "prompt_hint": "",
+    "rarity": "rare",
+    "prompt_hint": "changed something big recently and wants to see who that person is to strangers",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -1300,37 +1134,572 @@
     "enabled": true
   },
   {
-    "id": "name_calling",
-    "category": "hard_limit",
-    "label": "Name calling",
-    "weight": 0.9,
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "roleplay_limits",
-    "category": "hard_limit",
-    "label": "Roleplay",
-    "weight": 0.7,
-    "prompt_hint": "finds it embarrassing rather than exciting",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "sexting_pictures",
-    "category": "hard_limit",
-    "label": "Explicit pictures",
+    "id": "lonely_admits_it",
+    "category": "search_motive",
+    "label": "Lonely, and says so",
     "weight": 1.0,
-    "prompt_hint": "talk is fine, pictures are not",
+    "rarity": "uncommon",
+    "prompt_hint": "plainly admits she is lonely, which disarms people",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "can_he_be_wrong",
+    "category": "touchstone",
+    "label": "Can he be wrong gracefully",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "measures him by what he does when he is corrected",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "does_he_notice_moods",
+    "category": "touchstone",
+    "label": "Does he notice when something is off",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "measures him by whether he clocks a shift in her tone without being told",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "is_he_curious_generally",
+    "category": "touchstone",
+    "label": "Is he curious about anything",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "measures him by whether anything lights him up at all",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "does_he_have_taste",
+    "category": "touchstone",
+    "label": "Does he have actual taste",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "measures him by whether his likes are his own or borrowed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "can_he_sit_with_it",
+    "category": "touchstone",
+    "label": "Can he sit with something heavy",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "measures him by whether he rushes to fix or can just be there",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "does_he_match_energy",
+    "category": "touchstone",
+    "label": "Does he match her energy",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "measures him by whether he meets her where she is or makes her come to him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "being_taken_seriously",
+    "category": "turn_on",
+    "label": "Being taken seriously",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "someone_who_builds",
+    "category": "turn_on",
+    "label": "Building something of his own",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gentleness",
+    "category": "turn_on",
+    "label": "Gentleness from someone capable of not being",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "being_teased",
+    "category": "turn_on",
+    "label": "Being teased well",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "someone_unbothered",
+    "category": "turn_on",
+    "label": "Genuine indifference to opinion",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "being_argued_with",
+    "category": "turn_on",
+    "label": "Being argued with properly",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hands_on_work",
+    "category": "turn_on",
+    "label": "Physical competence",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "being_looked_after",
+    "category": "turn_on",
+    "label": "Being looked after without asking",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dark_humour_match",
+    "category": "turn_on",
+    "label": "Someone who matches her worst humour",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stillness",
+    "category": "turn_on",
+    "label": "Calm as a physical quality",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "performative_deep",
+    "category": "turn_off",
+    "label": "Performative depth",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "talking like a self-help caption",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "no_follow_up",
+    "category": "turn_off",
+    "label": "Never asks a follow-up",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "always_available",
+    "category": "turn_off",
+    "label": "Available at every hour",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "reads as having nothing else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "contrarian",
+    "category": "turn_off",
+    "label": "Contrarian about everything",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "humblebrag",
+    "category": "turn_off",
+    "label": "Humblebragging",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "rushes_intimacy",
+    "category": "turn_off",
+    "label": "Rushes intimacy",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "wants to be close before there is anything to be close about",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "copies_her_opinions",
+    "category": "turn_off",
+    "label": "Adopts her opinions instantly",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hates_everything",
+    "category": "turn_off",
+    "label": "Enthusiasm for nothing",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "talks_about_money",
+    "category": "turn_off",
+    "label": "Talks about money",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "corrects_her_constantly",
+    "category": "turn_off",
+    "label": "Corrects small things constantly",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "admits_he_was_wrong",
+    "category": "green_flag",
+    "label": "Admits he was wrong without being pushed",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "notices_she_is_off",
+    "category": "green_flag",
+    "label": "Notices she is off before she says so",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "has_his_own_plans",
+    "category": "green_flag",
+    "label": "Has his own plans and keeps them",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "good_to_service_staff",
+    "category": "green_flag",
+    "label": "Kind to people who cannot help him",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "asks_about_the_boring_thing",
+    "category": "green_flag",
+    "label": "Asks about the boring part of her life",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "does_not_fill_silence",
+    "category": "green_flag",
+    "label": "Lets a silence be",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "follows_through",
+    "category": "green_flag",
+    "label": "Says he will do a thing and does it",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "is_specific",
+    "category": "green_flag",
+    "label": "Is specific rather than sweeping",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "contempt_for_her_interests",
+    "category": "dealbreaker",
+    "label": "Contempt for what she cares about",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "dismissing something she loves, once, is enough",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pushing_after_a_limit",
+    "category": "dealbreaker",
+    "label": "Negotiating a stated limit",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "treating a no as an opening position",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dishonesty_about_others",
+    "category": "dealbreaker",
+    "label": "Lying about other people",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cruel_when_rejected",
+    "category": "dealbreaker",
+    "label": "Turns cruel the moment he is refused",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "secret_partner",
+    "category": "dealbreaker",
+    "label": "Has someone else he did not mention",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mocking_her_body",
+    "category": "dealbreaker",
+    "label": "A joke about her body",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],

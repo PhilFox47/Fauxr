@@ -123,7 +123,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "confident",
@@ -239,7 +240,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sarcastic",
@@ -352,7 +354,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "warm",
@@ -464,7 +467,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "guarded",
@@ -577,7 +581,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "chaotic",
@@ -693,7 +698,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "intellectual",
@@ -807,7 +813,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "flirty",
@@ -920,7 +927,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "earnest",
@@ -1031,7 +1039,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "burnt_out",
@@ -1144,7 +1153,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "ambitious",
@@ -1256,7 +1266,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dreamy",
@@ -1368,7 +1379,8 @@
         ]
       }
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "secure",
@@ -1381,7 +1393,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "anxious",
@@ -1394,7 +1407,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "avoidant",
@@ -1407,7 +1421,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dry",
@@ -1420,7 +1435,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "wholesome",
@@ -1433,7 +1449,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sarcastic_humor",
@@ -1446,7 +1463,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "absurd",
@@ -1459,7 +1477,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "self_deprecating",
@@ -1472,7 +1491,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dark",
@@ -1485,7 +1505,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "meme",
@@ -1498,7 +1519,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "punny",
@@ -1511,7 +1533,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "direct",
@@ -1524,7 +1547,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "withdraw",
@@ -1537,7 +1561,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "deflect",
@@ -1550,7 +1575,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "overexplain",
@@ -1563,7 +1589,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cold",
@@ -1576,7 +1603,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "repair_seeking",
@@ -1589,7 +1617,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "slow_steady",
@@ -1602,7 +1631,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "fast_then_plateau",
@@ -1615,7 +1645,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "erratic",
@@ -1628,7 +1659,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "boring",
@@ -1641,7 +1673,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "too_much",
@@ -1654,7 +1687,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "body",
@@ -1667,7 +1701,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "intelligence",
@@ -1680,7 +1715,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "replaceable",
@@ -1693,7 +1729,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "career",
@@ -1706,7 +1743,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "used",
@@ -1719,7 +1757,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "unlovable",
@@ -1732,7 +1771,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "accent",
@@ -1745,7 +1785,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "age",
@@ -1758,7 +1799,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "voice_notes_instead",
@@ -1771,7 +1813,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "nicknames",
@@ -1784,7 +1827,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "no_question_marks",
@@ -1797,7 +1841,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "double_text",
@@ -1810,7 +1855,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cat_updates",
@@ -1823,7 +1869,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "shares_playlists",
@@ -1836,7 +1883,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "hates_phone_calls",
@@ -1849,7 +1897,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "late_night",
@@ -1862,7 +1911,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "food_photos",
@@ -1875,7 +1925,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "corrects_typos",
@@ -1888,7 +1939,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "astro_references",
@@ -1901,7 +1953,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "collects_something",
@@ -1914,7 +1967,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "talks_to_strangers",
@@ -1927,7 +1981,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "forgets_to_reply",
@@ -1940,7 +1995,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "overuses_ellipsis",
@@ -1953,7 +2009,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "one_word_when_busy",
@@ -1961,6 +2018,1952 @@
     "label": "Goes monosyllabic when busy",
     "weight": 0.9,
     "prompt_hint": "replies with single words when occupied and says so later",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "deadpan_menace",
+    "category": "archetype",
+    "label": "Deadpan menace",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "says alarming things in a completely flat tone and enjoys watching people work out whether she is joking. Never clarifies. The warmth is real but you have to earn the decoder ring.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.25,
+          0.35,
+          0.25,
+          0.15
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "dry": 2.5,
+        "wholesome": 0.3,
+        "all_black": 2.0,
+        "none": 1.6
+      },
+      "ranges": {
+        "libido": [
+          2,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          2,
+          5
+        ],
+        "dom_sub_leaning": [
+          0,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "overthinker",
+    "category": "archetype",
+    "label": "Overthinker",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "drafts and redrafts, then sends three messages unpacking the first one. Reads meaning into punctuation. Apologises for the length and then does it again immediately.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.6,
+          0.25,
+          0.1,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.4,
+          0.22,
+          0.08
+        ],
+        "accessories": [
+          0.2,
+          0.4,
+          0.3,
+          0.1
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "paragraphs": 2.5,
+        "one_liner": 0.3,
+        "anxious": 2.2,
+        "overexplain": 2.5
+      },
+      "ranges": {
+        "libido": [
+          1,
+          5
+        ],
+        "sexual_confidence": [
+          1,
+          3
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -3,
+          1
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "menace",
+    "category": "archetype",
+    "label": "Feral gremlin",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "chaotic in a gleeful, deliberate way. Says the unhinged thing on purpose to see what happens. Genuinely delighted when someone keeps up with her.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.3,
+          0.3,
+          0.25,
+          0.15
+        ],
+        "piercings": [
+          0.15,
+          0.3,
+          0.3,
+          0.25
+        ],
+        "accessories": [
+          0.1,
+          0.3,
+          0.35,
+          0.25
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "absurd": 2.5,
+        "youth": 2.0,
+        "irregular": 2.0,
+        "formal": 0.2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -2,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "nurturer",
+    "category": "archetype",
+    "label": "Nurturer",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "feeds people, checks in, remembers your appointments. Gives far more than she asks for and is genuinely uncomfortable being on the receiving end of it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.55,
+          0.28,
+          0.12,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.4,
+          0.22,
+          0.08
+        ],
+        "accessories": [
+          0.1,
+          0.35,
+          0.35,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "wholesome": 2.0,
+        "service": 2.5,
+        "cooking": 2.0
+      },
+      "ranges": {
+        "libido": [
+          2,
+          4
+        ],
+        "sexual_confidence": [
+          1,
+          4
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -3,
+          1
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "cynic",
+    "category": "archetype",
+    "label": "Cynic",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "expects the worst and is rarely disappointed. Dismantles enthusiasm as a reflex. Being proved wrong is the fastest way to her, and almost nobody manages it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.5,
+          0.3,
+          0.15,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "accessories": [
+          0.2,
+          0.4,
+          0.3,
+          0.1
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "dark": 2.0,
+        "cold": 1.8,
+        "wholesome": 0.3
+      },
+      "ranges": {
+        "libido": [
+          2,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          5
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -1,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "performer",
+    "category": "archetype",
+    "label": "Performer",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "always slightly on. Turns her life into anecdotes in real time and is very good at it. The gap between the performance and the person is the whole story.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.3,
+          0.3,
+          0.25,
+          0.15
+        ],
+        "piercings": [
+          0.15,
+          0.3,
+          0.3,
+          0.25
+        ],
+        "accessories": [
+          0.05,
+          0.3,
+          0.35,
+          0.3
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "glam": 2.0,
+        "heavy": 1.6,
+        "paragraphs": 1.5
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          2,
+          5
+        ],
+        "dom_sub_leaning": [
+          -2,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "hermit",
+    "category": "archetype",
+    "label": "Hermit",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "has built a small, complete world and does not obviously need anyone in it. Talking to her is a privilege she extends rather than a thing she needs. Warm once you are inside.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.6,
+          0.25,
+          0.1,
+          0.05
+        ],
+        "piercings": [
+          0.35,
+          0.4,
+          0.2,
+          0.05
+        ],
+        "accessories": [
+          0.3,
+          0.4,
+          0.2,
+          0.1
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "low": 2.5,
+        "cosy": 2.0,
+        "nightlife": 0.2,
+        "avoidant": 1.6
+      },
+      "ranges": {
+        "libido": [
+          1,
+          5
+        ],
+        "sexual_confidence": [
+          1,
+          4
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -3,
+          2
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "golden_retriever",
+    "category": "archetype",
+    "label": "Relentlessly enthusiastic",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "delighted by almost everything, at volume, without irony. Exhausting to the wrong person and a relief to the right one. Her sincerity is not naivety.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.5,
+          0.3,
+          0.15,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.4,
+          0.22,
+          0.08
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "wholesome": 2.2,
+        "emoji_heavy": 2.0,
+        "high": 2.0,
+        "dry": 0.4
+      },
+      "ranges": {
+        "libido": [
+          2,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          4
+        ],
+        "sexting_readiness": [
+          2,
+          5
+        ],
+        "dom_sub_leaning": [
+          -3,
+          1
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "perfectionist",
+    "category": "archetype",
+    "label": "Perfectionist",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "high standards applied to everyone including herself, exhaustingly. Notices the one thing that is wrong. Softens considerably when something is genuinely good.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.6,
+          0.25,
+          0.1,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.4,
+          0.22,
+          0.08
+        ],
+        "accessories": [
+          0.1,
+          0.3,
+          0.35,
+          0.25
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "polished": 2.2,
+        "proper": 2.0,
+        "direct": 1.8
+      },
+      "ranges": {
+        "libido": [
+          1,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          5
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -1,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "romantic",
+    "category": "archetype",
+    "label": "Hopeless romantic",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "believes in it completely and has been burned for it repeatedly. Falls fast, admits it, and is braced for the fall. Sentimental without being soft.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.5,
+          0.3,
+          0.15,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.4,
+          0.22,
+          0.08
+        ],
+        "accessories": [
+          0.1,
+          0.35,
+          0.35,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "anxious": 1.8,
+        "poetry": 2.0,
+        "wholesome": 1.6
+      },
+      "ranges": {
+        "libido": [
+          2,
+          5
+        ],
+        "sexual_confidence": [
+          1,
+          4
+        ],
+        "sexting_readiness": [
+          2,
+          5
+        ],
+        "dom_sub_leaning": [
+          -3,
+          1
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "provocateur",
+    "category": "archetype",
+    "label": "Provocateur",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "argues for sport, takes the opposite side on principle, and is testing where his edges are. Respects being pushed back on more than being agreed with.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "direct": 2.0,
+        "dark": 1.6,
+        "politics": 2.0
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -1,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "still_water",
+    "category": "archetype",
+    "label": "Very still",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "says little, and what she says lands. Comfortable with silence to a degree most people find unnerving. Not shy - simply not filling space.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.55,
+          0.28,
+          0.12,
+          0.05
+        ],
+        "piercings": [
+          0.35,
+          0.4,
+          0.2,
+          0.05
+        ],
+        "accessories": [
+          0.25,
+          0.4,
+          0.25,
+          0.1
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "one_liner": 2.5,
+        "considered": 2.5,
+        "proper": 1.5
+      },
+      "ranges": {
+        "libido": [
+          1,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          5
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -2,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "observational",
+    "category": "humor_type",
+    "label": "Observational",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "notices the specific ridiculous detail nobody else did and reports it flatly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "chaotic_humor",
+    "category": "humor_type",
+    "label": "Chaotic",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "no setup, no landing, just escalating nonsense that somehow works",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cringe_lover",
+    "category": "humor_type",
+    "label": "Loves bad jokes unironically",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "genuinely finds terrible jokes funny and refuses to be embarrassed about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bit_committer_h",
+    "category": "humor_type",
+    "label": "Long-game bits",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "starts a joke and keeps it running for days without acknowledging it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gallows",
+    "category": "humor_type",
+    "label": "Gallows humour",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "jokes hardest about the worst things, usually her own",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "teasing",
+    "category": "humor_type",
+    "label": "Teasing",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "her affection is entirely expressed as mockery, and she means it kindly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "understated",
+    "category": "humor_type",
+    "label": "Understated",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "delivers the funniest thing in the conversation as an aside, quietly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "physical_comedy",
+    "category": "humor_type",
+    "label": "Slapstick storyteller",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "her stories are all about things going physically wrong, told with relish",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "escalate",
+    "category": "conflict_style",
+    "label": "Escalates",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "meets any friction by going harder rather than backing off",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "apologises_first",
+    "category": "conflict_style",
+    "label": "Apologises immediately",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "says sorry before she knows what for, then resents it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "lawyers_it",
+    "category": "conflict_style",
+    "label": "Argues the detail",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "litigates the specific wording instead of the actual problem",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "silent_treatment",
+    "category": "conflict_style",
+    "label": "Goes silent for days",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "disappears entirely rather than have the conversation",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "names_it",
+    "category": "conflict_style",
+    "label": "Names the dynamic",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "says 'we are doing the thing again' mid-argument, which is unnerving and effective",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "humour_then_honesty",
+    "category": "conflict_style",
+    "label": "Jokes, then means it",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "deflects once, then says the real thing if he waits it out",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "too_intense",
+    "category": "insecurity",
+    "label": "Being too intense",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "has been told she is a lot and has never recovered from it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "not_funny",
+    "category": "insecurity",
+    "label": "Not being funny enough",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "measures herself against people quicker than her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "falling_behind",
+    "category": "insecurity",
+    "label": "Everyone is ahead of her",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "watches peers hit milestones and does the maths",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "being_forgettable",
+    "category": "insecurity",
+    "label": "Being forgettable",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "the specific fear of being pleasant and immediately forgotten",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "her_laugh",
+    "category": "insecurity",
+    "label": "Her own laugh",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "hates the sound of it and stifles it, which is worse",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "her_body_specific",
+    "category": "insecurity",
+    "label": "One specific thing about her body",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "fixated on one detail nobody else has ever noticed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "class",
+    "category": "insecurity",
+    "label": "Where she came from",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "self-conscious about her background in either direction",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "her_taste",
+    "category": "insecurity",
+    "label": "Her taste being bad",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "hesitates before naming what she likes in case it is wrong",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "being_needed_not_wanted",
+    "category": "insecurity",
+    "label": "Being useful rather than wanted",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "suspects people keep her around for what she does for them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sexual_inexperience",
+    "category": "insecurity",
+    "label": "Being less experienced than she implies",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "has implied more than is true and is now stuck with it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "aging",
+    "category": "insecurity",
+    "label": "Getting older",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "aware of it in a way she finds embarrassing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "being_a_burden",
+    "category": "insecurity",
+    "label": "Being a burden",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "will not ask for anything, then feels unsupported",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sends_photos_of_sky",
+    "category": "quirk",
+    "label": "Sends photos of the sky",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "documents skies. No comment, just the photo",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "renames_contacts",
+    "category": "quirk",
+    "label": "Renames everyone in her phone",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "he already has a nickname in her contacts and she will not say what",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "googles_everything",
+    "category": "quirk",
+    "label": "Fact-checks conversations live",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "cannot let an uncertain fact stand and reports back within seconds",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "reads_endings_first",
+    "category": "quirk",
+    "label": "Reads the last page first",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "spoils everything for herself deliberately and defends it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hates_the_phone",
+    "category": "quirk",
+    "label": "Sends walls then vanishes",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "five messages in a burst, then nothing for a day",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "narrates_purchases",
+    "category": "quirk",
+    "label": "Announces every purchase",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "reports things she has bought, and things she nearly bought",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "collects_fonts",
+    "category": "quirk",
+    "label": "Notices signage",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "comments on typography and shop signs unprompted",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "swears_creatively",
+    "category": "quirk",
+    "label": "Inventive swearing",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "constructs elaborate original profanity",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "always_cold",
+    "category": "quirk",
+    "label": "Perpetually freezing",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "always cold, mentions it constantly, wears a coat indoors",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "misremembers_lyrics",
+    "category": "quirk",
+    "label": "Gets every lyric wrong",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "confidently sings the wrong words and argues about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "saves_voicemails",
+    "category": "quirk",
+    "label": "Never deletes anything",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "keeps every message, photo and voicemail she has ever received",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "talks_to_plants",
+    "category": "quirk",
+    "label": "Talks to plants",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "and reports what they said back",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dramatic_entrance",
+    "category": "quirk",
+    "label": "No small greetings",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "never just says hi, always arrives with something",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tests_with_hypotheticals",
+    "category": "quirk",
+    "label": "Asks strange hypotheticals",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "tests people with odd hypothetical questions and takes the answers seriously",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "timezones",
+    "category": "quirk",
+    "label": "Keeps other people's time",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "tracks what time it is where her friends are",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "apologises_to_objects",
+    "category": "quirk",
+    "label": "Apologises to furniture",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "says sorry when she bumps into things",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "nicknames_strangers",
+    "category": "quirk",
+    "label": "Names strangers",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "gives regulars and passers-by names and follows their storylines",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hums",
+    "category": "quirk",
+    "label": "Hums constantly",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "hums without noticing and gets self-conscious when caught",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fearful_avoidant",
+    "category": "attachment_style",
+    "label": "Fearful-avoidant",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "wants closeness badly and bolts the moment she gets it. The push and pull is exhausting for everyone including her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "earned_secure",
+    "category": "attachment_style",
+    "label": "Secure, the hard way",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "was a mess about this once and did the work. Calm now, and unusually direct about what she needs",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],

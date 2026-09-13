@@ -12,7 +12,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "chronic_overcommitter",
@@ -27,7 +28,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "feud_with_neighbour",
@@ -42,7 +44,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "aggressively_punctual",
@@ -57,7 +60,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "recipe_perfectionist",
@@ -75,7 +79,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tiny_grudges",
@@ -90,7 +95,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "plant_mortician",
@@ -107,7 +113,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "terrible_liar",
@@ -122,7 +129,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sleep_schedule_disaster",
@@ -137,7 +145,8 @@
     "extra": {
       "bold": 1
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cryptid_podcast",
@@ -154,7 +163,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "secret_competitive_sport",
@@ -169,7 +179,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cursed",
@@ -186,7 +197,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "spreadsheet_of_people",
@@ -201,7 +213,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "unlicensed_therapist",
@@ -218,7 +231,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "aggressive_gift_giver",
@@ -233,7 +247,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "failed_cult_escapee",
@@ -248,7 +263,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "collects_taxidermy",
@@ -265,7 +281,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "insists_haunted",
@@ -280,7 +297,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "micro_famous",
@@ -297,7 +315,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "perfume_obsessive",
@@ -312,7 +331,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "vendetta_against_brand",
@@ -327,7 +347,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "professional_liar",
@@ -342,7 +363,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "adopted_by_animal",
@@ -359,7 +381,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "night_swimmer",
@@ -374,7 +397,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "bad_tattoo_story",
@@ -389,7 +413,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "obsessive_lists",
@@ -404,7 +429,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "ex_child_prodigy",
@@ -419,7 +445,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "conspiracy_but_fun",
@@ -434,7 +461,8 @@
     "extra": {
       "bold": 2
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "minor_nobility",
@@ -449,7 +477,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "professional_mourner",
@@ -464,7 +493,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "three_jobs_one_secret",
@@ -479,7 +509,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "banned_from_somewhere",
@@ -494,7 +525,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "nemesis",
@@ -509,7 +541,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "inherited_something_absurd",
@@ -524,7 +557,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "witness_protection_joke",
@@ -539,7 +573,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "won_something_ridiculous",
@@ -554,7 +589,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "collects_ex_boyfriends_pets",
@@ -569,7 +605,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "running_from_hobby",
@@ -584,7 +621,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "twin_swap",
@@ -599,7 +637,8 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "apocalypse_prepared",
@@ -614,6 +653,7 @@
     "extra": {
       "bold": 3
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   }
 ]

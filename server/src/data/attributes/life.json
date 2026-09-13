@@ -10,7 +10,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "lowercase_no_punct",
@@ -23,7 +24,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "standard",
@@ -36,7 +38,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "proper",
@@ -49,7 +52,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "caps_for_emphasis",
@@ -62,7 +66,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "ellipsis_heavy",
@@ -75,7 +80,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "no_apostrophes",
@@ -88,7 +94,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "double_punct",
@@ -101,7 +108,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "none",
@@ -114,7 +122,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sparse",
@@ -127,7 +136,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "heavy",
@@ -140,7 +150,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sob",
@@ -155,7 +166,8 @@
     "extra": {
       "char": "😭"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "skull",
@@ -170,7 +182,8 @@
     "extra": {
       "char": "💀"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "eyeroll",
@@ -185,7 +198,8 @@
     "extra": {
       "char": "🙄"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "relieved",
@@ -200,7 +214,8 @@
     "extra": {
       "char": "😌"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "smiling_tear",
@@ -215,7 +230,8 @@
     "extra": {
       "char": "🥲"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "smirk",
@@ -230,7 +246,8 @@
     "extra": {
       "char": "😏"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "melting",
@@ -245,7 +262,8 @@
     "extra": {
       "char": "🫠"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sparkles",
@@ -260,7 +278,8 @@
     "extra": {
       "char": "✨"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "woozy",
@@ -275,7 +294,8 @@
     "extra": {
       "char": "🥴"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "clown",
@@ -290,7 +310,8 @@
     "extra": {
       "char": "🤡"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "red_heart",
@@ -305,7 +326,8 @@
     "extra": {
       "char": "❤️"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "black_heart",
@@ -320,7 +342,8 @@
     "extra": {
       "char": "🖤"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sweat_smile",
@@ -335,7 +358,8 @@
     "extra": {
       "char": "😅"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "pinched_fingers",
@@ -350,7 +374,8 @@
     "extra": {
       "char": "🤌"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "heart_hands",
@@ -365,7 +390,8 @@
     "extra": {
       "char": "🫶"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "weary",
@@ -380,7 +406,8 @@
     "extra": {
       "char": "😩"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "upside_down",
@@ -395,7 +422,8 @@
     "extra": {
       "char": "🙃"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "eyes",
@@ -410,7 +438,8 @@
     "extra": {
       "char": "👀"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "butterfly",
@@ -425,7 +454,8 @@
     "extra": {
       "char": "🦋"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "moon",
@@ -440,7 +470,8 @@
     "extra": {
       "char": "🌙"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "one_liner",
@@ -453,7 +484,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "medium",
@@ -466,7 +498,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "paragraphs",
@@ -479,7 +512,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "instant",
@@ -492,7 +526,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "considered",
@@ -505,7 +540,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "irregular",
@@ -518,7 +554,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "never",
@@ -531,7 +568,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "rare",
@@ -544,7 +582,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "often",
@@ -557,7 +596,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "formal",
@@ -570,7 +610,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "casual",
@@ -583,7 +624,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "youth",
@@ -596,7 +638,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "nurse",
@@ -609,7 +652,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "barista",
@@ -622,7 +666,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "student_psych",
@@ -635,7 +680,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "student_art",
@@ -648,7 +694,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "graphic_designer",
@@ -661,7 +708,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "teacher",
@@ -674,7 +722,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "bartender",
@@ -687,7 +736,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dev",
@@ -700,7 +750,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "marketing",
@@ -713,7 +764,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "physio",
@@ -726,7 +778,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "vet_assistant",
@@ -739,7 +792,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "retail_manager",
@@ -752,7 +806,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "photographer",
@@ -765,7 +820,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "lab_tech",
@@ -778,7 +834,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "social_worker",
@@ -791,7 +848,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "musician",
@@ -804,7 +862,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "pastry_chef",
@@ -817,7 +876,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "flight_attendant",
@@ -830,7 +890,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "pt",
@@ -843,7 +904,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "between_jobs",
@@ -856,7 +918,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "alone_flat",
@@ -869,7 +932,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "flatshare",
@@ -882,7 +946,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "with_friend",
@@ -895,7 +960,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "with_parents",
@@ -908,7 +974,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "with_cat",
@@ -921,7 +988,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "new_city",
@@ -934,7 +1002,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "student_halls",
@@ -947,7 +1016,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sublet",
@@ -960,7 +1030,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "long_ended",
@@ -973,7 +1044,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "recent_breakup",
@@ -986,7 +1058,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "never_serious",
@@ -999,7 +1072,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "serial_short",
@@ -1012,7 +1086,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cheated_on",
@@ -1025,7 +1100,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "was_the_one_who_left",
@@ -1038,7 +1114,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "divorced_young",
@@ -1051,7 +1128,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "long_distance_failed",
@@ -1064,7 +1142,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "app_veteran",
@@ -1077,7 +1156,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "first_time",
@@ -1090,7 +1170,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "returning",
@@ -1103,7 +1184,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "rarely_matches",
@@ -1116,7 +1198,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "lots_of_attention",
@@ -1129,7 +1212,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "burned",
@@ -1142,7 +1226,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "low",
@@ -1155,7 +1240,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "medium",
@@ -1168,7 +1254,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "high",
@@ -1181,7 +1268,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "anime",
@@ -1198,7 +1286,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "gaming",
@@ -1214,7 +1303,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "reading",
@@ -1230,7 +1320,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "film",
@@ -1245,7 +1336,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "music_scene",
@@ -1261,7 +1353,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "true_crime",
@@ -1274,7 +1367,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "fashion",
@@ -1289,7 +1383,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cooking",
@@ -1304,7 +1399,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "travel",
@@ -1319,7 +1415,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "fitness",
@@ -1335,7 +1432,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "art",
@@ -1351,7 +1449,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "philosophy",
@@ -1367,7 +1466,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "astrology",
@@ -1380,7 +1480,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "animals",
@@ -1396,7 +1497,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "nightlife",
@@ -1411,7 +1513,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "politics",
@@ -1426,7 +1529,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tech",
@@ -1441,7 +1545,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "plants",
@@ -1454,7 +1559,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "football",
@@ -1467,7 +1573,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "psychology",
@@ -1482,7 +1589,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "history",
@@ -1498,7 +1606,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "memes",
@@ -1513,7 +1622,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "baking",
@@ -1528,7 +1638,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "running",
@@ -1543,7 +1654,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "climbing",
@@ -1558,7 +1670,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "photography",
@@ -1574,7 +1687,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "thrifting",
@@ -1589,7 +1703,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "music_practice",
@@ -1604,7 +1719,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "yoga",
@@ -1619,7 +1735,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dancing",
@@ -1634,7 +1751,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "drawing",
@@ -1649,7 +1767,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "gardening",
@@ -1664,7 +1783,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "chess",
@@ -1679,7 +1799,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cosplay",
@@ -1694,7 +1815,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "knitting",
@@ -1707,7 +1829,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "swimming",
@@ -1722,7 +1845,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "hiking",
@@ -1737,7 +1861,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "volunteering",
@@ -1750,7 +1875,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "streaming",
@@ -1765,7 +1891,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "museums",
@@ -1781,7 +1908,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "skating",
@@ -1794,7 +1922,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "poetry",
@@ -1809,7 +1938,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "german",
@@ -1822,7 +1952,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "spanish",
@@ -1835,7 +1966,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "french",
@@ -1848,7 +1980,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "italian",
@@ -1861,7 +1994,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "portuguese",
@@ -1874,7 +2008,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "polish",
@@ -1887,7 +2022,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "russian",
@@ -1900,7 +2036,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "turkish",
@@ -1913,7 +2050,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "arabic",
@@ -1926,7 +2064,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "japanese",
@@ -1941,7 +2080,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "korean",
@@ -1954,7 +2094,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "mandarin",
@@ -1967,7 +2108,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dutch",
@@ -1980,7 +2122,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "swedish",
@@ -1993,7 +2136,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "greek",
@@ -2006,7 +2150,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "hindi",
@@ -2019,7 +2164,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tagalog",
@@ -2032,7 +2178,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "czech",
@@ -2045,7 +2192,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "taxidermist",
@@ -2058,7 +2206,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "funeral_director",
@@ -2071,7 +2220,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "stunt_performer",
@@ -2084,7 +2234,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "zookeeper",
@@ -2097,7 +2248,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tattoo_artist",
@@ -2110,7 +2262,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "private_investigator",
@@ -2123,7 +2276,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "beekeeper",
@@ -2136,7 +2290,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sound_engineer",
@@ -2149,7 +2304,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "ice_cream_chemist",
@@ -2162,7 +2318,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "night_security",
@@ -2175,7 +2332,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "competitive_baker",
@@ -2188,7 +2346,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "archivist",
@@ -2201,7 +2360,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "names_objects",
@@ -2214,7 +2374,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "speaks_to_animals",
@@ -2227,7 +2388,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tiny_revenge",
@@ -2240,7 +2402,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "always_snacking",
@@ -2253,7 +2416,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "mispronounces_confidently",
@@ -2266,7 +2430,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "hoards_receipts",
@@ -2279,7 +2444,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "argues_with_strangers",
@@ -2292,7 +2458,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dramatic_weather",
@@ -2305,7 +2472,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "bit_committer",
@@ -2313,6 +2481,1119 @@
     "label": "Commits to a joke far too long",
     "weight": 0.55,
     "prompt_hint": "will not drop a bit, escalates it over days, waits to see who breaks first",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "midwife",
+    "category": "occupation",
+    "label": "Midwife",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "delivers babies, runs on adrenaline and tea, unshockable",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "paramedic",
+    "category": "occupation",
+    "label": "Paramedic",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "twelve-hour shifts, very dark humour, decisive about everything",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "architect",
+    "category": "occupation",
+    "label": "Architect",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "draws buildings that mostly do not get built, particular about space",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "translator",
+    "category": "occupation",
+    "label": "Translator",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "works between languages all day, precise about words",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "chef",
+    "category": "occupation",
+    "label": "Line cook",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "brutal hours, burnt forearms, swears constantly and cooks beautifully",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "florist",
+    "category": "occupation",
+    "label": "Florist",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "up at four for the flower market, hands always slightly wrecked",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "carpenter",
+    "category": "occupation",
+    "label": "Carpenter",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "makes things out of wood, sawdust in everything she owns",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "librarian_job",
+    "category": "occupation",
+    "label": "Librarian",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "quieter job than people assume, knows everyone's business",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pharmacist",
+    "category": "occupation",
+    "label": "Pharmacist",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "dispenses and judges silently, very exact",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "journalist",
+    "category": "occupation",
+    "label": "Journalist",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "chases stories, permanently on deadline, asks too many questions",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "illustrator",
+    "category": "occupation",
+    "label": "Illustrator",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "draws for money, works nights, chronically underpaid",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dog_walker",
+    "category": "occupation",
+    "label": "Dog walker",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "outside all day with six dogs, knows the neighbourhood's secrets",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "estate_agent",
+    "category": "occupation",
+    "label": "Estate agent",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "in other people's houses all day, performatively cheerful",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "air_traffic",
+    "category": "occupation",
+    "label": "Air traffic controller",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "holds several hundred lives in her head at once, then goes home",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "game_dev",
+    "category": "occupation",
+    "label": "Game developer",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "builds games, crunch-damaged, very online",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "academic",
+    "category": "occupation",
+    "label": "PhD student",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "three years into something nobody understands, defensive about the timeline",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "nanny",
+    "category": "occupation",
+    "label": "Nanny",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "raises other people's children, has opinions about their parents",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mechanic",
+    "category": "occupation",
+    "label": "Mechanic",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "hands permanently stained, deeply competent, takes no nonsense",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "audiologist",
+    "category": "occupation",
+    "label": "Audiologist",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "fits hearing aids, unusually gentle with people",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wine_buyer",
+    "category": "occupation",
+    "label": "Wine buyer",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "tastes for a living, tries not to be insufferable about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stage_manager",
+    "category": "occupation",
+    "label": "Stage manager",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "runs a theatre from the wings, terrifyingly organised",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "marine_biologist",
+    "category": "occupation",
+    "label": "Marine biologist",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "away on boats for weeks, sunburnt, obsessed with something small and wet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "locksmith",
+    "category": "occupation",
+    "label": "Locksmith",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "lets people into their own homes at 3am, fascinating stories",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "interpreter_sign",
+    "category": "occupation",
+    "label": "Sign language interpreter",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "works with her hands and her face, very expressive",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "perfumer",
+    "category": "occupation",
+    "label": "Perfumer",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "builds scents, smells everything twice, ruined for cheap candles",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cartographer",
+    "category": "occupation",
+    "label": "Cartographer",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "makes maps, has strong feelings about projections",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "piano_tuner",
+    "category": "occupation",
+    "label": "Piano tuner",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "in strangers' front rooms, listening",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "architecture",
+    "category": "interest",
+    "label": "Architecture",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "looks up constantly, photographs buildings, explains them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "horror",
+    "category": "interest",
+    "label": "Horror",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "watches everything, sleeps fine, defends the genre at length",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "theatre",
+    "category": "interest",
+    "label": "Theatre",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "goes properly, cries in the stalls, has a favourite seat",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "formula_one",
+    "category": "interest",
+    "label": "Motorsport",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "up at odd hours for races, knows the politics",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "birdwatching",
+    "category": "interest",
+    "label": "Birds",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "has a list, gets genuinely excited, will make you look",
+    "image_prompt": null,
+    "affinities": [
+      "animals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mycology",
+    "category": "interest",
+    "label": "Mushrooms",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "forages, identifies, has been to hospital about it once",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "linguistics",
+    "category": "interest",
+    "label": "Language itself",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "etymology, grammar, why people say things the way they do",
+    "image_prompt": null,
+    "affinities": [
+      "reading"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "boardgames",
+    "category": "interest",
+    "label": "Board games",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "heavy ones, four hours, takes them seriously",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "kdrama",
+    "category": "interest",
+    "label": "Korean drama",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "fully invested, will explain the plot in detail",
+    "image_prompt": null,
+    "affinities": [
+      "korean"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wrestling_fan",
+    "category": "interest",
+    "label": "Pro wrestling",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "knows it is fake, does not care, cries at the good bits",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "crafts",
+    "category": "interest",
+    "label": "Making things by hand",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "ceramics, weaving, bookbinding. Slow and physical",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "space",
+    "category": "interest",
+    "label": "Space",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "launches, telescopes, the genuinely enormous scale of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fashion_history",
+    "category": "interest",
+    "label": "Fashion history",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "knows why a silhouette happened when it did",
+    "image_prompt": null,
+    "affinities": [
+      "fashion"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tabletop",
+    "category": "interest",
+    "label": "Tabletop roleplaying",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "runs a game, does voices, spreadsheets of lore",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cocktails",
+    "category": "interest",
+    "label": "Cocktails",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "makes them properly, particular about ice",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "architecture_brutalist",
+    "category": "interest",
+    "label": "Brutalism specifically",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "photographs concrete car parks, entirely sincere",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "conspiracies",
+    "category": "interest",
+    "label": "Unsolved things",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "disappearances, hoaxes, things that were never explained",
+    "image_prompt": null,
+    "affinities": [
+      "true_crime"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sewing",
+    "category": "interest",
+    "label": "Making her own clothes",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "alters everything, will remake a bad charity shop find",
+    "image_prompt": null,
+    "affinities": [
+      "thrifting"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "climbing_outdoor",
+    "category": "interest",
+    "label": "Outdoor climbing",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "real rock, weekends away, callused hands",
+    "image_prompt": null,
+    "affinities": [
+      "climbing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "opera",
+    "category": "interest",
+    "label": "Opera",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "unexpectedly, and she will not apologise for it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pottery",
+    "category": "hobby",
+    "label": "Pottery",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "throws badly and persistently, gives away lopsided mugs",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "boxing",
+    "category": "hobby",
+    "label": "Boxing",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "trains properly, hits things, sleeps better for it",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "open_water",
+    "category": "hobby",
+    "label": "Cold water swimming",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "all year, evangelical about it",
+    "image_prompt": null,
+    "affinities": [
+      "swimming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bookbinding",
+    "category": "hobby",
+    "label": "Bookbinding",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "makes notebooks nobody needs, beautifully",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "foraging",
+    "category": "hobby",
+    "label": "Foraging",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "comes back with things and cooks them",
+    "image_prompt": null,
+    "affinities": [
+      "mycology"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "motorcycles",
+    "category": "hobby",
+    "label": "Motorbikes",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "rides, maintains it herself, knows the risk",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "choir",
+    "category": "hobby",
+    "label": "Sings in a choir",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "weekly, sincerely, would rather he did not come and watch",
+    "image_prompt": null,
+    "affinities": [
+      "music_practice"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "running_ultra",
+    "category": "hobby",
+    "label": "Very long distances",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "runs distances that alarm people, quiet about why",
+    "image_prompt": null,
+    "affinities": [
+      "running"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "lock_picking",
+    "category": "hobby",
+    "label": "Lock picking",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "a hobby that alarms people, practised on her own locks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "aerial",
+    "category": "hobby",
+    "label": "Aerial silks",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "strong in an unexpected way, permanently bruised",
+    "image_prompt": null,
+    "affinities": [
+      "dancing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "restoring",
+    "category": "hobby",
+    "label": "Restoring old things",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "furniture, radios, bikes. Patient work in a cold garage",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "baking_sourdough",
+    "category": "hobby",
+    "label": "Sourdough",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "has named the starter and is normal about nothing else",
+    "image_prompt": null,
+    "affinities": [
+      "baking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fishing",
+    "category": "hobby",
+    "label": "Fishing",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "alone, early, mostly for the quiet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "archery",
+    "category": "hobby",
+    "label": "Archery",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "target archery at a club, very still and precise",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "volunteer_animal",
+    "category": "hobby",
+    "label": "Animal shelter volunteer",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "walks the difficult dogs nobody else will",
+    "image_prompt": null,
+    "affinities": [
+      "animals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "djing",
+    "category": "hobby",
+    "label": "DJing",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "small rooms, bad money, loves it",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "with_sibling",
+    "category": "living_situation",
+    "label": "With her sister",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "shares with a sibling, constant low-level warfare and devotion",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "house_sitting",
+    "category": "living_situation",
+    "label": "Permanently house-sitting",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "lives in other people's homes, never her own",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "van",
+    "category": "living_situation",
+    "label": "In a converted van",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "actually lives in it, and it is not as romantic as it sounds",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "above_shop",
+    "category": "living_situation",
+    "label": "Above a shop",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "flat above a business, hears everything",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "with_ex",
+    "category": "living_situation",
+    "label": "Still living with an ex",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "logistics have not caught up with the breakup. It is as awkward as it sounds",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "narrowboat",
+    "category": "living_situation",
+    "label": "On a narrowboat",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "moves every two weeks, cold in winter, would not change it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "with_grandmother",
+    "category": "living_situation",
+    "label": "With her grandmother",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "looking after her, or being looked after, unclear which",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "widowed",
+    "category": "relationship_history",
+    "label": "Widowed young",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "does not bring it up, and it explains a great deal",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "long_situationship",
+    "category": "relationship_history",
+    "label": "Two years of something undefined",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "never had a label for it, and that was the problem",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "engaged_called_off",
+    "category": "relationship_history",
+    "label": "Called off an engagement",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "did it herself, close to the date, and stands by it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "just_out_of_ldr",
+    "category": "relationship_history",
+    "label": "Out of a long distance one",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "ended it, still grieving the version she imagined",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "first_love_still",
+    "category": "relationship_history",
+    "label": "Never got over the first one",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "measures everyone against someone from a decade ago",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "open_before",
+    "category": "relationship_history",
+    "label": "Was in an open relationship",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "knows what she does and does not want from that now",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "married_briefly",
+    "category": "relationship_history",
+    "label": "Married for eleven months",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "a short, decisive mistake she can now laugh about",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],

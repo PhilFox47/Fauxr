@@ -10,7 +10,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "eastern_european",
@@ -23,7 +24,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "mediterranean",
@@ -36,7 +38,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "latina",
@@ -49,7 +52,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "black_african",
@@ -62,7 +66,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "afro_caribbean",
@@ -75,7 +80,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "east_asian",
@@ -88,7 +94,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "southeast_asian",
@@ -101,7 +108,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "south_asian",
@@ -114,7 +122,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "middle_eastern",
@@ -127,7 +136,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "mixed_race",
@@ -140,7 +150,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "turkish",
@@ -153,7 +164,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "very_fair",
@@ -179,7 +191,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "fair",
@@ -201,7 +214,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "light_olive",
@@ -225,7 +239,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "olive",
@@ -249,7 +264,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tanned",
@@ -270,7 +286,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "brown",
@@ -294,7 +311,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "deep_brown",
@@ -318,7 +336,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "very_short",
@@ -331,7 +350,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "short",
@@ -344,7 +364,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "average",
@@ -357,7 +378,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tall",
@@ -370,7 +392,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "very_tall",
@@ -383,7 +406,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "slim",
@@ -396,7 +420,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "athletic",
@@ -409,7 +434,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "curvy",
@@ -422,7 +448,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "petite",
@@ -438,7 +465,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "average",
@@ -451,7 +479,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "plus_size",
@@ -464,7 +493,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "muscular",
@@ -477,7 +507,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "lanky",
@@ -492,7 +523,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "black",
@@ -515,7 +547,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dark_brown",
@@ -536,7 +569,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "light_brown",
@@ -559,7 +593,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "blonde",
@@ -583,7 +618,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "platinum",
@@ -607,7 +643,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "red",
@@ -633,7 +670,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "auburn",
@@ -658,7 +696,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dyed_pastel",
@@ -671,7 +710,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dyed_vivid",
@@ -684,7 +724,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "bleached_roots",
@@ -702,7 +743,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "long_straight",
@@ -723,7 +765,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "long_wavy",
@@ -736,7 +779,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "curly",
@@ -749,7 +793,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "coils",
@@ -775,7 +820,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "bob",
@@ -788,7 +834,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "pixie",
@@ -801,7 +848,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "shoulder_layered",
@@ -814,7 +862,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "messy_bun",
@@ -827,7 +876,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "braids",
@@ -848,7 +898,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "undercut",
@@ -861,7 +912,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "shaved",
@@ -874,7 +926,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "brown",
@@ -887,7 +940,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dark_brown",
@@ -900,7 +954,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "hazel",
@@ -913,7 +968,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "green",
@@ -931,7 +987,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "blue",
@@ -950,7 +1007,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "grey",
@@ -969,7 +1027,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "amber",
@@ -987,7 +1046,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "casual_basics",
@@ -1000,7 +1060,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "streetwear",
@@ -1013,7 +1074,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "soft_girl",
@@ -1026,7 +1088,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "alt_goth",
@@ -1039,7 +1102,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sporty",
@@ -1052,7 +1116,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "elegant",
@@ -1065,7 +1130,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "vintage",
@@ -1078,7 +1144,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "business",
@@ -1091,7 +1158,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "y2k",
@@ -1104,7 +1172,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "cosy",
@@ -1117,7 +1186,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "polished",
@@ -1130,7 +1200,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "effortless",
@@ -1143,7 +1214,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "low_effort",
@@ -1156,7 +1228,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "deliberately_messy",
@@ -1169,7 +1242,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "high_maintenance",
@@ -1182,7 +1256,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "none",
@@ -1199,7 +1274,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "natural",
@@ -1212,7 +1288,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "winged_liner",
@@ -1225,7 +1302,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "bold_lip",
@@ -1240,7 +1318,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "heavy_eye",
@@ -1255,7 +1334,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "glam",
@@ -1271,7 +1351,8 @@
     ],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "alt",
@@ -1284,7 +1365,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "freckles",
@@ -1297,7 +1379,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "gap_teeth",
@@ -1310,7 +1393,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "beauty_mark",
@@ -1323,7 +1407,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "heterochromia",
@@ -1336,7 +1421,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "strong_brows",
@@ -1349,7 +1435,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "dimples",
@@ -1362,7 +1449,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "long_neck",
@@ -1375,7 +1463,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "scar_eyebrow",
@@ -1388,7 +1477,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "sharp_jaw",
@@ -1401,7 +1491,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "round_face",
@@ -1414,7 +1505,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "vitiligo",
@@ -1427,7 +1519,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "crooked_smile",
@@ -1440,7 +1533,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "fineline_flower",
@@ -1453,7 +1547,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "script_quote",
@@ -1466,7 +1561,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "snake",
@@ -1479,7 +1575,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "moth",
@@ -1492,7 +1589,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "geometric",
@@ -1505,7 +1603,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "blackwork_sleeve",
@@ -1518,7 +1617,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "small_animal",
@@ -1531,7 +1631,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "star",
@@ -1544,7 +1645,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "date_numbers",
@@ -1557,7 +1659,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "traditional_rose",
@@ -1570,7 +1673,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "matching_friend",
@@ -1583,7 +1687,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "forearm",
@@ -1598,7 +1703,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "wrist",
@@ -1613,7 +1719,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "upper_arm",
@@ -1628,7 +1735,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "collarbone",
@@ -1643,7 +1751,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "neck",
@@ -1658,7 +1767,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "hand",
@@ -1673,7 +1783,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "ankle",
@@ -1688,7 +1799,8 @@
     "extra": {
       "visibility": "later"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "ribs",
@@ -1703,7 +1815,8 @@
     "extra": {
       "visibility": "private"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "thigh",
@@ -1718,7 +1831,8 @@
     "extra": {
       "visibility": "private"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "hip",
@@ -1733,7 +1847,8 @@
     "extra": {
       "visibility": "private"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "back",
@@ -1748,7 +1863,8 @@
     "extra": {
       "visibility": "later"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "behind_ear",
@@ -1763,7 +1879,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "stud",
@@ -1776,7 +1893,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "hoop",
@@ -1789,7 +1907,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "barbell",
@@ -1802,7 +1921,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "ring",
@@ -1815,7 +1935,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "chain",
@@ -1828,7 +1949,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "earlobe",
@@ -1843,7 +1965,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "helix",
@@ -1858,7 +1981,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tragus",
@@ -1873,7 +1997,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "industrial",
@@ -1888,7 +2013,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "nose",
@@ -1903,7 +2029,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "septum",
@@ -1918,7 +2045,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "eyebrow",
@@ -1933,7 +2061,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "lip",
@@ -1948,7 +2077,8 @@
     "extra": {
       "visibility": "profile"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tongue",
@@ -1963,7 +2093,8 @@
     "extra": {
       "visibility": "later"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "navel",
@@ -1978,7 +2109,8 @@
     "extra": {
       "visibility": "later"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "nipple",
@@ -1993,7 +2125,8 @@
     "extra": {
       "visibility": "private"
     },
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "thin_gold_chain",
@@ -2006,7 +2139,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "stacked_rings",
@@ -2019,7 +2153,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "scrunchie_wrist",
@@ -2032,7 +2167,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "glasses",
@@ -2045,7 +2181,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "chunky_boots",
@@ -2058,7 +2195,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "beaded_bracelet",
@@ -2071,7 +2209,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "watch",
@@ -2084,7 +2223,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "tote_bag",
@@ -2097,7 +2237,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "baseball_cap",
@@ -2110,7 +2251,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "layered_necklaces",
@@ -2123,7 +2265,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "anklet",
@@ -2136,7 +2279,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
-    "enabled": true
+    "enabled": true,
+    "rarity": "common"
   },
   {
     "id": "headphones",
@@ -2145,6 +2289,2330 @@
     "weight": 0.6,
     "prompt_hint": "",
     "image_prompt": "over-ear headphones around her neck",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "nordic",
+    "category": "ethnicity",
+    "label": "Nordic",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Scandinavian woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "irish",
+    "category": "ethnicity",
+    "label": "Irish",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Irish woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "balkan",
+    "category": "ethnicity",
+    "label": "Balkan",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Balkan woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "north_african",
+    "category": "ethnicity",
+    "label": "North African",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "North African woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "ethiopian",
+    "category": "ethnicity",
+    "label": "East African",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "East African woman with fine features",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "west_african",
+    "category": "ethnicity",
+    "label": "West African",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "West African woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "japanese",
+    "category": "ethnicity",
+    "label": "Japanese",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Japanese woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "korean",
+    "category": "ethnicity",
+    "label": "Korean",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Korean woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "filipina",
+    "category": "ethnicity",
+    "label": "Filipina",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Filipina woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "vietnamese",
+    "category": "ethnicity",
+    "label": "Vietnamese",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Vietnamese woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "indonesian",
+    "category": "ethnicity",
+    "label": "Indonesian",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "Indonesian woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "thai",
+    "category": "ethnicity",
+    "label": "Thai",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Thai woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "persian",
+    "category": "ethnicity",
+    "label": "Persian",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Persian woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "indigenous_american",
+    "category": "ethnicity",
+    "label": "Indigenous American",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "Indigenous American woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pacific_islander",
+    "category": "ethnicity",
+    "label": "Pacific Islander",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "Pacific Islander woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "romani",
+    "category": "ethnicity",
+    "label": "Romani",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "Romani woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "central_asian",
+    "category": "ethnicity",
+    "label": "Central Asian",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "Central Asian woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "caribbean_mixed",
+    "category": "ethnicity",
+    "label": "Caribbean mixed",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "mixed Caribbean woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "afro_latina",
+    "category": "ethnicity",
+    "label": "Afro-Latina",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Afro-Latina woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "eurasian",
+    "category": "ethnicity",
+    "label": "Eurasian",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "Eurasian woman with mixed features",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "strawberry_blonde",
+    "category": "hair_color",
+    "label": "Strawberry blonde",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "strawberry blonde hair",
+    "affinities": [
+      "white_european",
+      "eastern_european"
+    ],
+    "conflicts": [
+      "black_african",
+      "afro_caribbean",
+      "east_asian",
+      "southeast_asian"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "ash_blonde",
+    "category": "hair_color",
+    "label": "Ash blonde",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "ash blonde hair",
+    "affinities": [
+      "white_european",
+      "eastern_european"
+    ],
+    "conflicts": [
+      "black_african",
+      "afro_caribbean",
+      "east_asian",
+      "southeast_asian"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "honey_blonde",
+    "category": "hair_color",
+    "label": "Honey blonde",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "honey blonde hair",
+    "affinities": [
+      "white_european",
+      "eastern_european",
+      "mediterranean",
+      "latina"
+    ],
+    "conflicts": [
+      "black_african",
+      "afro_caribbean"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "jet_black_dyed",
+    "category": "hair_color",
+    "label": "Dyed jet black",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "dyed jet black hair",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "silver_grey",
+    "category": "hair_color",
+    "label": "Silver / grey dyed",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "silver-grey dyed hair",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dyed_red",
+    "category": "hair_color",
+    "label": "Dyed scarlet",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "vivid dyed scarlet hair",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dyed_purple",
+    "category": "hair_color",
+    "label": "Dyed purple",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "dyed deep purple hair",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "split_dye",
+    "category": "hair_color",
+    "label": "Split dye",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "half-and-half split dyed hair in two colours",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "ombre",
+    "category": "hair_color",
+    "label": "Ombre",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "dark roots fading to light ends",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "streaks",
+    "category": "hair_color",
+    "label": "Coloured streaks",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "dark hair with bright coloured streaks",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "salt_pepper",
+    "category": "hair_color",
+    "label": "Naturally greying",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "naturally greying hair worn without dye",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "long_curly",
+    "category": "hair_style",
+    "label": "Long and curly",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "long curly hair past her shoulders",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "afro",
+    "category": "hair_style",
+    "label": "Afro",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a full natural afro",
+    "affinities": [
+      "black_african",
+      "afro_caribbean"
+    ],
+    "conflicts": [
+      "white_european",
+      "eastern_european",
+      "east_asian",
+      "southeast_asian"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "locs",
+    "category": "hair_style",
+    "label": "Locs",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "shoulder-length locs",
+    "affinities": [
+      "black_african",
+      "afro_caribbean"
+    ],
+    "conflicts": [
+      "white_european",
+      "eastern_european",
+      "east_asian",
+      "southeast_asian"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bantu_knots",
+    "category": "hair_style",
+    "label": "Bantu knots",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "hair in bantu knots",
+    "affinities": [
+      "black_african",
+      "afro_caribbean"
+    ],
+    "conflicts": [
+      "white_european",
+      "eastern_european",
+      "east_asian",
+      "southeast_asian",
+      "south_asian",
+      "middle_eastern",
+      "turkish",
+      "mediterranean",
+      "latina"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cornrows",
+    "category": "hair_style",
+    "label": "Cornrows",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "neat cornrows",
+    "affinities": [
+      "black_african",
+      "afro_caribbean"
+    ],
+    "conflicts": [
+      "white_european",
+      "eastern_european",
+      "east_asian",
+      "southeast_asian"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "high_ponytail",
+    "category": "hair_style",
+    "label": "Always in a high ponytail",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "hair pulled up in a high ponytail",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "low_bun",
+    "category": "hair_style",
+    "label": "Low bun",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a neat low bun",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "french_crop",
+    "category": "hair_style",
+    "label": "Short and cropped",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a very short cropped cut",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mullet",
+    "category": "hair_style",
+    "label": "Modern mullet",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a modern shag mullet",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "blunt_fringe",
+    "category": "hair_style",
+    "label": "Blunt fringe",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a heavy blunt fringe",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "curtain_bangs",
+    "category": "hair_style",
+    "label": "Curtain bangs",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "long hair with curtain bangs",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "space_buns",
+    "category": "hair_style",
+    "label": "Space buns",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "hair in two high buns",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wolf_cut",
+    "category": "hair_style",
+    "label": "Wolf cut",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a layered wolf cut",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "half_up",
+    "category": "hair_style",
+    "label": "Half up, half down",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "half her hair tied up",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wet_look",
+    "category": "hair_style",
+    "label": "Never quite dry",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "hair perpetually half-dried",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "shaved_sides",
+    "category": "hair_style",
+    "label": "Shaved sides",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "shaved sides with length on top",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dark_hazel",
+    "category": "eye_color",
+    "label": "Dark hazel",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "dark hazel eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pale_blue",
+    "category": "eye_color",
+    "label": "Pale blue",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "very pale blue eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "deep_green",
+    "category": "eye_color",
+    "label": "Deep green",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "deep green eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "blue_grey",
+    "category": "eye_color",
+    "label": "Blue-grey",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "blue-grey eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dimple_one",
+    "category": "distinctive_feature",
+    "label": "One dimple",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a single dimple on one side",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mole_cheek",
+    "category": "distinctive_feature",
+    "label": "Mole on her cheek",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a small mole high on her cheek",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wide_smile",
+    "category": "distinctive_feature",
+    "label": "Very wide smile",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "an unusually wide smile",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hooded_eyes",
+    "category": "distinctive_feature",
+    "label": "Hooded eyes",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "hooded eyes that make her look sleepy",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "upturned_nose",
+    "category": "distinctive_feature",
+    "label": "Upturned nose",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a small upturned nose",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "roman_nose",
+    "category": "distinctive_feature",
+    "label": "Strong nose",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a strong roman nose",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "full_lips",
+    "category": "distinctive_feature",
+    "label": "Full lips",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "notably full lips",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "thin_lips",
+    "category": "distinctive_feature",
+    "label": "Thin expressive mouth",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a thin, very expressive mouth",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "high_cheekbones",
+    "category": "distinctive_feature",
+    "label": "High cheekbones",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "high sharp cheekbones",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "freckled_shoulders",
+    "category": "distinctive_feature",
+    "label": "Freckled all over",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "freckles across her shoulders and arms",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "scar_lip",
+    "category": "distinctive_feature",
+    "label": "Scar through her lip",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a faint scar through her upper lip",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "scar_hand",
+    "category": "distinctive_feature",
+    "label": "Burn scar on her hand",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "an old burn scar across the back of one hand",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "braces",
+    "category": "distinctive_feature",
+    "label": "Braces",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "clear braces on her teeth",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stretch_marks",
+    "category": "distinctive_feature",
+    "label": "Stretch marks",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "visible stretch marks she does not hide",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "birthmark",
+    "category": "distinctive_feature",
+    "label": "Birthmark",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a birthmark across her collarbone",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "crooked_nose",
+    "category": "distinctive_feature",
+    "label": "Nose broken once",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a nose that was broken once and set slightly off",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "long_lashes",
+    "category": "distinctive_feature",
+    "label": "Very long lashes",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "unusually long dark lashes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "prominent_brows",
+    "category": "distinctive_feature",
+    "label": "Heavy brow",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a heavy, serious brow",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "small_hands",
+    "category": "distinctive_feature",
+    "label": "Very small hands",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "notably small hands",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "long_fingers",
+    "category": "distinctive_feature",
+    "label": "Long fingers",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "long piano-player fingers",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "strong_arms",
+    "category": "distinctive_feature",
+    "label": "Visibly strong arms",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "visibly muscular arms",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gap_smile",
+    "category": "distinctive_feature",
+    "label": "Gap-toothed grin",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a wide gap-toothed grin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "one_eye_squint",
+    "category": "distinctive_feature",
+    "label": "Squints with one eye",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "squints slightly with one eye",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "heterochromia_partial",
+    "category": "distinctive_feature",
+    "label": "Sectoral heterochromia",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "",
+    "image_prompt": "one eye with a wedge of a different colour",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "albinism",
+    "category": "distinctive_feature",
+    "label": "Albinism",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "",
+    "image_prompt": "albinism, very pale hair and skin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "freckled_nose_only",
+    "category": "distinctive_feature",
+    "label": "Freckles only across her nose",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "a light dusting of freckles only across her nose",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hourglass",
+    "category": "body_type",
+    "label": "Hourglass",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a pronounced hourglass figure",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pear",
+    "category": "body_type",
+    "label": "Pear-shaped",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a pear-shaped figure",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "broad_shouldered",
+    "category": "body_type",
+    "label": "Broad shouldered",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "broad swimmer's shoulders",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "soft",
+    "category": "body_type",
+    "label": "Soft",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "a soft, rounded build",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wiry",
+    "category": "body_type",
+    "label": "Wiry",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "small and wiry, deceptively strong",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stocky",
+    "category": "body_type",
+    "label": "Stocky",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "short and solidly built",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "long_legs",
+    "category": "body_type",
+    "label": "All legs",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "unusually long legs for her height",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "short_torso",
+    "category": "body_type",
+    "label": "Compact",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a compact, short-torsoed build",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gorpcore",
+    "category": "clothing_style",
+    "label": "Outdoorsy technical",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "technical outdoor jacket and hiking trousers",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "preppy",
+    "category": "clothing_style",
+    "label": "Preppy",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "preppy collared shirt and knitwear",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "rockabilly",
+    "category": "clothing_style",
+    "label": "Rockabilly",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "rockabilly halter dress, fifties silhouette",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mob_wife",
+    "category": "clothing_style",
+    "label": "Fur and gold",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "fur coat and heavy gold jewellery",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "librarian",
+    "category": "clothing_style",
+    "label": "Quietly severe",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "high-collared blouse and long skirt",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "skater",
+    "category": "clothing_style",
+    "label": "Skater",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "baggy skate clothes and worn trainers",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "techwear",
+    "category": "clothing_style",
+    "label": "Techwear",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "black techwear with straps and buckles",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bohemian",
+    "category": "clothing_style",
+    "label": "Bohemian",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "flowing bohemian layers and scarves",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "all_black",
+    "category": "clothing_style",
+    "label": "Only ever black",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "entirely black outfit",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "borrowed",
+    "category": "clothing_style",
+    "label": "Wears other people's clothes",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "oversized borrowed menswear",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gym_clean",
+    "category": "grooming",
+    "label": "Always just showered",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "clean-scrubbed, damp hair",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "chaotic",
+    "category": "grooming",
+    "label": "Chaotic",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "half-finished styling, clearly rushed",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "glossy_lip",
+    "category": "makeup_style",
+    "label": "Glossy lip only",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "clear lip gloss and nothing else",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "freckle_drawn",
+    "category": "makeup_style",
+    "label": "Drawn-on freckles",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "drawn-on freckles",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "blush_heavy",
+    "category": "makeup_style",
+    "label": "Heavy blush",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "heavy blush across the nose and cheeks",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mono_lid",
+    "category": "makeup_style",
+    "label": "Sharp graphic liner",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "sharp graphic eyeliner across the lid",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "smudged",
+    "category": "makeup_style",
+    "label": "Yesterday's makeup",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "slightly smudged makeup from the night before",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "glitter",
+    "category": "makeup_style",
+    "label": "Glitter",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "glitter on her eyelids and cheekbones",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "swallow",
+    "category": "tattoo_motif",
+    "label": "Swallows",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a pair of traditional swallow tattoos",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dagger",
+    "category": "tattoo_motif",
+    "label": "Dagger",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a dagger tattoo",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "botanical_sleeve",
+    "category": "tattoo_motif",
+    "label": "Botanical sleeve",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a fine-line botanical sleeve",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "skeleton_hand",
+    "category": "tattoo_motif",
+    "label": "Skeleton hand",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a skeletal hand tattoo",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "jellyfish",
+    "category": "tattoo_motif",
+    "label": "Jellyfish",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a jellyfish tattoo",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "constellation",
+    "category": "tattoo_motif",
+    "label": "Constellation",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a small constellation in dots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "portrait",
+    "category": "tattoo_motif",
+    "label": "Portrait of someone",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a realistic portrait tattoo",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "lettering_foreign",
+    "category": "tattoo_motif",
+    "label": "Script in another alphabet",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "lettering in a non-Latin script",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stick_poke",
+    "category": "tattoo_motif",
+    "label": "Stick-and-poke",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a wobbly homemade stick-and-poke tattoo",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cover_up",
+    "category": "tattoo_motif",
+    "label": "An obvious cover-up",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a heavy tattoo covering something older",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "matching_family",
+    "category": "tattoo_motif",
+    "label": "Matching with a sibling",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a small matching family tattoo",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "insect",
+    "category": "tattoo_motif",
+    "label": "Beetle or moth",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a detailed insect tattoo",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mountain_range",
+    "category": "tattoo_motif",
+    "label": "Mountains",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a line-drawing mountain range",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "full_back",
+    "category": "tattoo_motif",
+    "label": "Full back piece",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a large full-back tattoo",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "knuckles",
+    "category": "tattoo_motif",
+    "label": "Knuckle lettering",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "lettering across her knuckles",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sternum",
+    "category": "tattoo_position",
+    "label": "Sternum",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "down her sternum",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "private"
+    },
+    "enabled": true
+  },
+  {
+    "id": "shoulder_blade",
+    "category": "tattoo_position",
+    "label": "Shoulder blade",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "across one shoulder blade",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later"
+    },
+    "enabled": true
+  },
+  {
+    "id": "calf",
+    "category": "tattoo_position",
+    "label": "Calf",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "on her calf",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later"
+    },
+    "enabled": true
+  },
+  {
+    "id": "foot",
+    "category": "tattoo_position",
+    "label": "Foot",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "on her foot",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later"
+    },
+    "enabled": true
+  },
+  {
+    "id": "inner_arm",
+    "category": "tattoo_position",
+    "label": "Inner arm",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "on the inside of her arm",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "elbow",
+    "category": "tattoo_position",
+    "label": "Elbow",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "around her elbow",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "finger",
+    "category": "tattoo_position",
+    "label": "Finger",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a tiny one on her finger",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "under_bust",
+    "category": "tattoo_position",
+    "label": "Under the bust",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "under her bust",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "private"
+    },
+    "enabled": true
+  },
+  {
+    "id": "nape",
+    "category": "tattoo_position",
+    "label": "Nape of the neck",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "at the nape of her neck",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hip_bone",
+    "category": "tattoo_position",
+    "label": "Hip bone",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "across her hip bone",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "private"
+    },
+    "enabled": true
+  },
+  {
+    "id": "cuff",
+    "category": "piercing_type",
+    "label": "Ear cuff",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "an ear cuff",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gauge",
+    "category": "piercing_type",
+    "label": "Stretched lobe",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a stretched earlobe",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dermal",
+    "category": "piercing_type",
+    "label": "Dermal anchor",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a single dermal anchor",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "horseshoe",
+    "category": "piercing_type",
+    "label": "Horseshoe ring",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a horseshoe ring",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "conch",
+    "category": "piercing_position",
+    "label": "Conch",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "in her conch",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "daith",
+    "category": "piercing_position",
+    "label": "Daith",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "in her daith",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "rook",
+    "category": "piercing_position",
+    "label": "Rook",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "in her rook",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "medusa",
+    "category": "piercing_position",
+    "label": "Philtrum",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "in her philtrum",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "monroe",
+    "category": "piercing_position",
+    "label": "Monroe",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a monroe piercing",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "smiley",
+    "category": "piercing_position",
+    "label": "Smiley",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "",
+    "image_prompt": "a smiley piercing",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "bridge",
+    "category": "piercing_position",
+    "label": "Bridge",
+    "weight": 1.0,
+    "rarity": "very_rare",
+    "prompt_hint": "",
+    "image_prompt": "a bridge piercing",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "second_lobe",
+    "category": "piercing_position",
+    "label": "Second lobe",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "a second lobe piercing",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "signet_ring",
+    "category": "accessory",
+    "label": "Signet ring",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a heavy signet ring",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "locket",
+    "category": "accessory",
+    "label": "Locket",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a small locket she never opens",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hoops",
+    "category": "accessory",
+    "label": "Big hoop earrings",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "large gold hoop earrings",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bandana",
+    "category": "accessory",
+    "label": "Bandana",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a bandana in her hair",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "crossbody",
+    "category": "accessory",
+    "label": "Tiny crossbody bag",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "a tiny crossbody bag",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "doc_martens",
+    "category": "accessory",
+    "label": "Docs",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "scuffed Dr Martens",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "varsity",
+    "category": "accessory",
+    "label": "Varsity jacket",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a worn varsity jacket",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "reading_glasses",
+    "category": "accessory",
+    "label": "Reading glasses on a chain",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "reading glasses on a chain",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "many_bracelets",
+    "category": "accessory",
+    "label": "Armful of bracelets",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a stack of bracelets up one forearm",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pendant",
+    "category": "accessory",
+    "label": "Single pendant",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "one pendant she always wears",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fanny_pack",
+    "category": "accessory",
+    "label": "Bum bag",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "a bum bag worn across the chest",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "keys_carabiner",
+    "category": "accessory",
+    "label": "Keys on a carabiner",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "keys clipped to a belt loop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "nail_art",
+    "category": "accessory",
+    "label": "Elaborate nails",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "long elaborately painted nails",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bitten_nails",
+    "category": "accessory",
+    "label": "Bitten nails",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "badly bitten nails",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wedding_ring_removed",
+    "category": "accessory",
+    "label": "Pale band on her finger",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a pale band of skin on her ring finger",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "freckled_fair",
+    "category": "skin_tone",
+    "label": "Fair and freckled",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "fair freckled skin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "golden",
+    "category": "skin_tone",
+    "label": "Golden",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": "golden-toned skin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "ebony",
+    "category": "skin_tone",
+    "label": "Very deep",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "very deep rich skin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "porcelain_cool",
+    "category": "skin_tone",
+    "label": "Cool porcelain",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": "cool-toned porcelain skin",
     "affinities": [],
     "conflicts": [],
     "modifies": {},

@@ -259,6 +259,22 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
 
       <div className="card">
         <label className="field">
+          <span>Rarity ({settings.rarity_bias.toFixed(2)}×) — how much niche material shows up</span>
+          <input
+            type="range" min={0.3} max={2.5} step={0.05}
+            value={settings.rarity_bias}
+            onChange={(e) => patch(['rarity_bias'], Number(e.target.value))}
+          />
+          <span className="tiny muted">
+            Every attribute is tagged common, uncommon, rare or very rare. Higher surfaces
+            more of the unusual tail — niche kinks, odd jobs, strange features. Lower keeps
+            characters closer to the common set. Applies to characters generated from now on.
+          </span>
+        </label>
+      </div>
+
+      <div className="card">
+        <label className="field">
           <span>Activity ({settings.activity.toFixed(2)}×) — how often characters reach out unprompted</span>
           <input
             type="range" min={0.1} max={3} step={0.05}

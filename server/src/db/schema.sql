@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS attribute_db (
   category     TEXT NOT NULL,
   label        TEXT NOT NULL,
   weight       REAL NOT NULL DEFAULT 1.0,
+  rarity       TEXT NOT NULL DEFAULT 'common',
   prompt_hint  TEXT NOT NULL DEFAULT '',
   image_prompt TEXT,
   affinities   TEXT NOT NULL DEFAULT '[]',

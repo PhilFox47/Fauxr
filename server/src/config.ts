@@ -45,6 +45,11 @@ export interface Settings {
    */
   heightening: number;
   /**
+   * How much of the rare tail shows up. 1 is the tuned default; higher surfaces niche
+   * attributes more often, lower keeps characters closer to the common set.
+   */
+  rarity_bias: number;
+  /**
    * Testing override: every character counts as online at all times, the server uptime
    * window is ignored, and nobody stays away after announcing they are leaving. Turn it
    * off to get the real pacing back.
@@ -72,6 +77,7 @@ export const DEFAULT_SETTINGS: Settings = {
   voice_enabled: false,
   spice: 1.3,
   heightening: 1.4,
+  rarity_bias: 1,
   always_online: true,
 };
 

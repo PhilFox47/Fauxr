@@ -30,6 +30,7 @@ db.pragma('foreign_keys = ON');
 const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'relationships', column: 'arousal', definition: "INTEGER NOT NULL DEFAULT 0" },
   { table: 'relationships', column: 'discovered', definition: "TEXT NOT NULL DEFAULT '{}'" },
+  { table: 'attribute_db', column: 'rarity', definition: "TEXT NOT NULL DEFAULT 'common'" },
 ];
 
 function addMissingColumns(): void {

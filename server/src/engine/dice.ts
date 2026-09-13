@@ -1,4 +1,5 @@
-import { byCategory, type Attribute } from '../db/attributes.js';
+import { byCategory, RARITY_WEIGHT, type Attribute } from '../db/attributes.js';
+import { getSettings } from '../config.js';
 
 export function randInt(min: number, max: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));
@@ -42,8 +43,17 @@ export function newContext(): DiceContext {
 
 const AFFINITY_BOOST = 2.5;
 
+function rarityWeight(a: Attribute): number {
+  const base = RARITY_WEIGHT[a.rarity] ?? 1;
+  if (base >= 1) return base;
+  // The bias dial pulls the whole rare tail up or down together: at 2 a very rare tag is
+  // about four times as likely as at 1, at 0.5 it all but disappears.
+  const bias = Math.max(0.1, Math.min(3, getSettings().rarity_bias));
+  return Math.pow(base, 1 / bias);
+}
+
 function effectiveWeight(a: Attribute, ctx: DiceContext): number {
-  let w = a.weight * (ctx.weights[a.id] ?? 1);
+  let w = a.weight * rarityWeight(a) * (ctx.weights[a.id] ?? 1);
   // Affinity works both ways: an already-drawn tag that lists this one, or vice versa.
   for (const id of ctx.drawn) {
     if (a.affinities.includes(id)) w *= AFFINITY_BOOST;
@@ -69,7 +79,10 @@ export function roll(category: string, ctx: DiceContext, opts: RollOptions = {})
   if (pool.length === 0) return null;
 
   const weights = pool.map((a) =>
-    opts.ignoreArchetype ? a.weight : Math.max(effectiveWeight(a, ctx), 0.0001),
+    // Rarity always applies; only the archetype's own re-weighting is skipped.
+    opts.ignoreArchetype
+      ? Math.max(a.weight * rarityWeight(a), 0.0001)
+      : Math.max(effectiveWeight(a, ctx), 0.0001),
   );
   const total = weights.reduce((a, b) => a + b, 0);
   let r = Math.random() * total;

@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6,11 +7,26 @@ import { db } from './index.js';
 const here = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(here, '..', 'data', 'attributes');
 
+/**
+ * How often an attribute should turn up. Weight is a manual nudge on top; rarity is the
+ * coarse dial, so a table of two hundred entries can be tuned by tagging rather than by
+ * hand-picking two hundred numbers.
+ */
+export type Rarity = 'common' | 'uncommon' | 'rare' | 'very_rare';
+
+export const RARITY_WEIGHT: Record<Rarity, number> = {
+  common: 1,
+  uncommon: 0.45,
+  rare: 0.16,
+  very_rare: 0.05,
+};
+
 export interface Attribute {
   id: string;
   category: string;
   label: string;
   weight: number;
+  rarity: Rarity;
   prompt_hint: string;
   image_prompt: string | null;
   affinities: string[];
@@ -21,7 +37,7 @@ export interface Attribute {
 }
 
 interface Row {
-  id: string; category: string; label: string; weight: number;
+  id: string; category: string; label: string; weight: number; rarity: string;
   prompt_hint: string; image_prompt: string | null;
   affinities: string; conflicts: string; modifies: string; extra: string;
   enabled: number;
@@ -33,6 +49,7 @@ function hydrate(r: Row): Attribute {
     category: r.category,
     label: r.label,
     weight: r.weight,
+    rarity: (r.rarity ?? 'common') as Rarity,
     prompt_hint: r.prompt_hint,
     image_prompt: r.image_prompt,
     affinities: JSON.parse(r.affinities),
@@ -47,25 +64,56 @@ function hydrate(r: Row): Attribute {
  * Insert shipped attribute rows that are not in the database yet. Existing rows are
  * left untouched so that edits made through the (V2) table editor survive an upgrade.
  */
+/**
+ * Load the shipped attribute tables.
+ *
+ * New rows are always inserted. Existing rows are only rewritten when the shipped content
+ * actually changes, tracked by a hash: without that, an upgrade that adds a field - rarity,
+ * say - or rewrites a prompt hint would silently apply to new installs only, because
+ * INSERT OR IGNORE leaves existing rows alone. A row's `enabled` flag is carried across a
+ * refresh, since that is the one thing a user is likely to have turned off deliberately.
+ */
 export function seedAttributes(): number {
+  const files = readdirSync(DATA_DIR).filter((f) => f.endsWith('.json')).sort();
+  const payloads = files.map((f) => readFileSync(join(DATA_DIR, f), 'utf8'));
+  const contentHash = createHash('sha256').update(payloads.join('\n')).digest('hex').slice(0, 16);
+
+  const stored = db.prepare("SELECT value FROM settings WHERE key = 'attribute_content_hash'").get() as
+    | { value: string }
+    | undefined;
+  const changed = stored?.value !== contentHash;
+
   const insert = db.prepare(`
-    INSERT OR IGNORE INTO attribute_db
-      (id, category, label, weight, prompt_hint, image_prompt, affinities, conflicts, modifies, extra, enabled)
-    VALUES (@id, @category, @label, @weight, @prompt_hint, @image_prompt, @affinities, @conflicts, @modifies, @extra, @enabled)
+    INSERT INTO attribute_db
+      (id, category, label, weight, rarity, prompt_hint, image_prompt, affinities, conflicts, modifies, extra, enabled)
+    VALUES (@id, @category, @label, @weight, @rarity, @prompt_hint, @image_prompt, @affinities, @conflicts, @modifies, @extra, @enabled)
+    ON CONFLICT(category, id) DO UPDATE SET
+      label = excluded.label, weight = excluded.weight, rarity = excluded.rarity,
+      prompt_hint = excluded.prompt_hint, image_prompt = excluded.image_prompt,
+      affinities = excluded.affinities, conflicts = excluded.conflicts,
+      modifies = excluded.modifies, extra = excluded.extra
   `);
-  let inserted = 0;
+  const insertOnly = db.prepare(`
+    INSERT OR IGNORE INTO attribute_db
+      (id, category, label, weight, rarity, prompt_hint, image_prompt, affinities, conflicts, modifies, extra, enabled)
+    VALUES (@id, @category, @label, @weight, @rarity, @prompt_hint, @image_prompt, @affinities, @conflicts, @modifies, @extra, @enabled)
+  `);
+
+  let touched = 0;
+  const statement = changed ? insert : insertOnly;
   const run = db.transaction((rows: any[]) => {
-    for (const row of rows) inserted += insert.run(row).changes;
+    for (const row of rows) touched += statement.run(row).changes;
   });
 
-  for (const file of readdirSync(DATA_DIR).filter((f) => f.endsWith('.json'))) {
-    const entries = JSON.parse(readFileSync(join(DATA_DIR, file), 'utf8')) as Attribute[];
+  for (const payload of payloads) {
+    const entries = JSON.parse(payload) as Attribute[];
     run(
       entries.map((a) => ({
         id: a.id,
         category: a.category,
         label: a.label,
-        weight: a.weight,
+        weight: a.weight ?? 1,
+        rarity: a.rarity ?? 'common',
         prompt_hint: a.prompt_hint ?? '',
         image_prompt: a.image_prompt ?? null,
         affinities: JSON.stringify(a.affinities ?? []),
@@ -76,7 +124,14 @@ export function seedAttributes(): number {
       })),
     );
   }
-  return inserted;
+
+  if (changed) {
+    db.prepare(
+      "INSERT INTO settings (key, value) VALUES ('attribute_content_hash', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+    ).run(contentHash);
+    invalidateAttributeCache();
+  }
+  return touched;
 }
 
 let cache: Map<string, Attribute[]> | null = null;
