@@ -35,8 +35,13 @@ For development, `npm run dev` starts the API on :8080 and Vite on :5173 with a 
 
 ### Data
 
-The SQLite database, uploads and generated images live in the `fauxr-data` volume
-(`/data` in the container, `./data` when running locally). Delete the volume to start over.
+The SQLite database, uploads and generated images all live in one place:
+
+- Docker: the `fauxr-data` named volume, mounted at `/data`.
+- Locally: `./data` at the repository root, regardless of where you started the process
+  from. Override with `FAUXR_DATA_DIR`.
+
+Nothing else on disk is state. See **Starting over** below.
 
 ### Uptime window
 
@@ -44,6 +49,40 @@ The app is built for a machine that is up 06:00–02:00. Outside that window not
 the background — that is intended, not a bug. On every start a catch-up job re-spreads
 overdue wakeups, applies elapsed investment decay, drops expired negative flags and lets
 anyone whose investment ran out start ghosting. The window is configurable in Settings.
+
+### Starting over
+
+Everything the app knows lives in the data directory, so wiping it is the whole reset:
+profile, characters, chats, stats, ledgers, settings, logs, uploads and generated images.
+
+```bash
+# Docker
+docker compose down -v            # -v is the point: it drops the fauxr-data volume
+docker compose up --build
+
+# Local
+rm -rf data/
+```
+
+Smaller resets, without losing everything:
+
+```bash
+# keep your settings and profile, wipe the dating world
+sqlite3 data/fauxr.db "DELETE FROM characters; DELETE FROM messages; DELETE FROM wakeups;"
+
+# re-seed the attribute tables from the shipped JSON after editing or upgrading them.
+# Existing rows are never overwritten on boot, so this is the only way to pick up changes.
+sqlite3 data/fauxr.db "DELETE FROM attribute_db;"
+
+# just clear the logs
+sqlite3 data/fauxr.db "DELETE FROM logs;"
+```
+
+Restart the server after any of these. Deleting characters cascades to their
+relationships, messages and wakeups.
+
+Build artefacts are not state and are rebuilt by `npm run build`; delete `node_modules/`,
+`server/dist/` and `server/public/` only if you want a genuinely clean rebuild.
 
 ---
 

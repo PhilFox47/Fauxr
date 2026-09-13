@@ -1,6 +1,9 @@
 node_modules/
 dist/
+# Runtime state: database, uploads, generated images.
 /data/
+**/data/
+!server/src/data/
 *.log
 .env
 .DS_Store

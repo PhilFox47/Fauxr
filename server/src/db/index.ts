@@ -5,7 +5,15 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
-export const DATA_DIR = process.env.FAUXR_DATA_DIR || join(process.cwd(), 'data');
+/**
+ * Resolved against this file, not the working directory: npm runs workspace scripts from
+ * the workspace folder, so a cwd-relative default put the database in server/data when
+ * started with `npm start` and in ./data when started by hand - two different worlds
+ * depending on how you launched it. This always lands on <repo root>/data, and on /data
+ * inside the container, which is where the volume is mounted anyway.
+ */
+export const DATA_DIR =
+  process.env.FAUXR_DATA_DIR || join(here, '..', '..', '..', 'data');
 mkdirSync(DATA_DIR, { recursive: true });
 mkdirSync(join(DATA_DIR, 'uploads'), { recursive: true });
 mkdirSync(join(DATA_DIR, 'images'), { recursive: true });
