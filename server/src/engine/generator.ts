@@ -8,6 +8,7 @@ import { render } from '../prompts/render.js';
 import { insertCharacter, createRelationship } from '../repo.js';
 import type { Character, CharacterSeed, OnlineWindow } from '../types.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
+import { textOverlap } from './voice.js';
 
 /** Fields the Director may swap during the coherence pass. */
 const SWAPPABLE: Record<string, string> = {
@@ -444,9 +445,58 @@ function sanitizeOnlineTimes(windows: OnlineWindow[] | undefined): OnlineWindow[
   return clean.length ? clean : null;
 }
 
+/**
+ * One cheap, targeted re-ask for a handle that landed too close to an existing one. Only
+ * the handle is regenerated - the character behind it is already settled and fine.
+ */
+async function rerollUsername(
+  seed: CharacterSeed,
+  rejected: string,
+  clash: string,
+  taken: string[],
+): Promise<string | null> {
+  try {
+    const out = await completeJson<{ username: string }>({
+      scope: 'generator',
+      label: 'reroll_username',
+      config: { ...getSettings().models.actor, max_tokens: 120 },
+      messages: [
+        {
+          role: 'user',
+          content: [
+            'Pick a dating-app handle for this woman.',
+            '',
+            describeSeed(seed),
+            '',
+            `"${rejected}" is not usable: it reads as a variation on "${clash}", which is already taken.`,
+            'These handles already exist, so yours must not be built from the same words or the same idea:',
+            taken.map((u) => `- @${u}`).join('\n') || '(none yet)',
+            '',
+            'Go somewhere genuinely different for this one - a different part of her, a different kind of',
+            'name. There is no house style to match and no format to follow: it only has to be lowercase,',
+            '4-18 characters, letters with optional numbers, dots or underscores, and unmistakably hers.',
+            '',
+            'Reply with exactly one JSON object and nothing else: { "username": "..." }',
+          ].join('\n'),
+        },
+      ],
+    });
+    const cleaned = cleanHandle(out.username);
+    if (cleaned.length < 4) return null;
+    // Taken verbatim is the one thing worse than the handle we already rejected - that ends
+    // up with digits stapled on. Anything else is an improvement on a known collision, even
+    // if it is not perfect, so it is kept rather than thrown away.
+    return taken.includes(cleaned) ? null : cleaned;
+  } catch (err) {
+    logger.warn('generator', 'username reroll failed, keeping the original', { error: String(err) });
+    return null;
+  }
+}
+
 export async function generateCharacter(): Promise<Character> {
   const { seed, fieldIds } = rollSeed();
   const settings = getSettings();
+  const takenHandles = existingUsernames();
   let pass: DirectorPass = {};
 
   try {
@@ -467,6 +517,9 @@ export async function generateCharacter(): Promise<Character> {
             age: seed.age,
             server_window: `${settings.server_window.from}-${settings.server_window.to}`,
             allowed_swaps: allowedSwapList(),
+            // Handles were being invented with no knowledge of the rest of the cast, so the
+            // model kept returning to the same two or three constructions.
+            avoid_usernames: takenHandles.length ? takenHandles.map((u) => `- @${u}`).join('\n') : '(none yet)',
           }),
         },
       ],
@@ -494,9 +547,17 @@ export async function generateCharacter(): Promise<Character> {
   const realName = (pass.real_name ?? '').trim().split(/\s+/)[0] || pickOne(FALLBACK_NAMES);
   // The final handle is settled by insertCharacter, which can only do it collision-free
   // in the same synchronous step as the write.
-  const username =
-    (pass.username ?? '').trim().toLowerCase().replace(/[^a-z0-9._]/g, '').slice(0, 18) ||
-    fallbackUsername(realName);
+  let username = cleanHandle(pass.username) || fallbackUsername(realName);
+
+  // The avoid-list gets most of the way there; this catches what it misses. Re-asking for
+  // just the handle is cheap, and it keeps the fix on the model's side rather than mangling
+  // a good handle into something with digits stuck on the end.
+  const handleClash = nearestHandle(username, takenHandles);
+  if (handleClash) {
+    logger.warn('generator', `handle "${username}" reads as a variant of "${handleClash}", re-asking`, {});
+    const fresh = await rerollUsername(seed, username, handleClash, takenHandles);
+    if (fresh) username = fresh;
+  }
 
   if (pass.insecurity_detail) seed.hints.insecurity = pass.insecurity_detail;
   if (pass.search_motive_detail) seed.hints.search_motive = pass.search_motive_detail;
@@ -553,14 +614,92 @@ const FALLBACK_BIOS = [
   'straight up: im here for sex, im decent company either side of it, not interested in a three week warm up\nso. what are u into',
 ];
 
-function recentBios(limit = 12): string[] {
+/**
+ * Every bio still in the app, not just the ones sitting unswiped in the pool. The old
+ * filter excluded matched characters, which meant the bios the player has actually read
+ * closely were the only ones a new character was free to imitate.
+ */
+function recentBios(limit = 30): string[] {
   const rows = db
-    .prepare(
-      `SELECT bio FROM characters WHERE bio != '' AND state IN ('pool','swiped_left')
-       ORDER BY rowid DESC LIMIT ?`,
-    )
+    .prepare(`SELECT bio FROM characters WHERE bio != '' ORDER BY rowid DESC LIMIT ?`)
     .all(limit) as { bio: string }[];
   return rows.map((r) => r.bio);
+}
+
+/**
+ * Normalise a handle the model gave us. Over-length ones are cut back to a separator rather
+ * than mid-word, because "genuinely.differen" looks like a glitch, which is the opposite of
+ * the point - a handle should always look like something a person chose.
+ */
+function cleanHandle(raw: unknown): string {
+  const s = String(raw ?? '').trim().toLowerCase().replace(/[^a-z0-9._]/g, '');
+  if (s.length <= 18) return s;
+  const cut = s.slice(0, 18);
+  const boundary = Math.max(cut.lastIndexOf('.'), cut.lastIndexOf('_'));
+  const trimmed = boundary >= 4 ? cut.slice(0, boundary) : cut;
+  return trimmed.replace(/[._]+$/, '');
+}
+
+function existingUsernames(limit = 40): string[] {
+  const rows = db
+    .prepare(`SELECT username FROM characters ORDER BY rowid DESC LIMIT ?`)
+    .all(limit) as { username: string }[];
+  return rows.map((r) => r.username);
+}
+
+/**
+ * The words in a handle, with the separators thrown away. "late.bloomer" and "latebloomer"
+ * and "bloomer_late" are the same idea wearing different punctuation, and a uniqueness check
+ * that only compares whole strings lets all three through.
+ */
+function handleParts(username: string): string[] {
+  return username
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\d+/g, ' ')
+    .split(/\s+/)
+    .filter((w) => w.length > 2);
+}
+
+/**
+ * Whether a handle reads as a variation on one that already exists - a shared distinctive
+ * word, or the same letters rearranged. Exact-match uniqueness was never the problem: the
+ * pool filling up with six handles built from the same two nouns is.
+ */
+function nearestHandle(username: string, existing: string[]): string | null {
+  const parts = new Set(handleParts(username));
+  const flat = username.toLowerCase().replace(/[^a-z]/g, '');
+  if (!flat) return null;
+  for (const prior of existing) {
+    if (prior === username) return prior;
+    const priorFlat = prior.toLowerCase().replace(/[^a-z]/g, '');
+    if (priorFlat && priorFlat === flat) return prior;
+    for (const part of handleParts(prior)) if (parts.has(part)) return prior;
+  }
+  return null;
+}
+
+/** The first few words, which is where a repeated bio gives itself away fastest. */
+function bioOpening(bio: string): string {
+  return bio.trim().toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean).slice(0, 4).join(' ');
+}
+
+/**
+ * Asking a model not to repeat itself is necessary but not sufficient - it has no memory of
+ * the other calls and will drift back to whatever phrasing it likes. This is the backstop
+ * that makes "do not repeat these" actually mean something: the bio is compared against the
+ * ones that already exist and sent back if it landed on the same words or the same opening.
+ *
+ * Deliberately a check and not a constraint. Nothing here tells her how a bio should be
+ * shaped - it only refuses one that has already been written.
+ */
+function nearestBio(bio: string, existing: string[]): string | null {
+  const opening = bioOpening(bio);
+  for (const prior of existing) {
+    if (textOverlap(bio, prior) > 0.45) return prior;
+    if (opening && opening === bioOpening(prior)) return prior;
+  }
+  return null;
 }
 
 const BIO_MIN_WORDS = 14;
@@ -580,9 +719,10 @@ async function writeBio(character: Character): Promise<string> {
   });
 
   // A model told to be pithy will happily answer with four words, which is not a bio -
-  // it is a fortune cookie, and nobody can decide whether to swipe on it. One retry.
+  // it is a fortune cookie, and nobody can decide whether to swipe on it. Retries also
+  // cover a bio that came back too close to one that already exists.
   let correction: string | null = null;
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const out = await completeJson<{ bio: string }>({
         scope: 'generator',
@@ -610,6 +750,17 @@ async function writeBio(character: Character): Promise<string> {
       if (words > BIO_MAX_WORDS) {
         logger.warn('generator', `bio too long (${words} words), trimming`, { bio });
         return bio.split(/\n/).slice(0, 4).join('\n').slice(0, 500);
+      }
+
+      const clash = nearestBio(bio, existing);
+      if (clash && attempt < 2) {
+        logger.warn('generator', 'bio too close to an existing one, re-requesting', { bio, clash });
+        correction =
+          `That is too close to a bio already in the app:\n"${clash}"\n\n` +
+          `It reuses its words, its opening or its joke. Throw it away and write a different one for ` +
+          `this same woman - a different angle on her, a different thing to lead with, a different ` +
+          `shape on the page. Same JSON, nothing else.`;
+        continue;
       }
       return bio.slice(0, 500);
     } catch (err) {

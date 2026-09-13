@@ -28,7 +28,13 @@ coherent without making her boring, and to write the free-text parts of her seed
    - real_name: a first name that fits her ethnicity and age. First name only.
    - username: a dating-app handle that fits her personality. Lowercase, 4-18 chars,
      may contain numbers, dots or underscores. Not her real name spelled out plainly.
-     Avoid the word "girl" and avoid years of birth.
+     There is no house style and no format to match. Real handles are all over the place -
+     a word she likes, a private joke, a mangled surname, something she typed in a hurry
+     eight years ago and never changed, two words jammed together, one word, a word with a
+     number that means something to her. Work out what THIS woman would have picked and
+     let the shape follow from that, rather than reaching for whichever construction comes
+     to mind first. The list under DO NOT REUSE THESE below is the cast so far; yours has
+     to sit apart from all of it, not just avoid being identical.
    - avatar_emoji: ONE emoji she would put on her profile in place of a photo. This is the
      only thing distinguishing her at a glance in a list of matches, so make it hers: it
      should come from her signature, her work, what she is into or how she comes across,
@@ -53,6 +59,11 @@ coherent without making her boring, and to write the free-text parts of her seed
    different patterns. Do not give everyone 20:00-23:00.
 
 All output in English. Her age is {{age}} and must stay at or above 18.
+
+# DO NOT REUSE THESE
+Handles already taken in this app. Yours must not share a word with any of them, rework one
+of them, or follow the same construction:
+{{avoid_usernames}}
 
 # OUTPUT
 Reply with exactly one JSON object and nothing else:

@@ -821,11 +821,44 @@ one might just state her terms, a dry one might build to a sting in the last lin
 prompt is explicit that there is no template and the first structure that comes to mind is
 usually the wrong one to reach for.
 
-The remaining defence against the stack converging on its own is the same one that always
-handled word-for-word repeats: generation runs strictly one at a time, and each bio is
-written with the last dozen bios already in the stack in front of it, under instructions not
-to resemble any of them "in structure, opening words, or joke" - now doing double duty as
-the only thing keeping shapes varied too.
+The defence against the stack converging on its own is deliberately a *check*, not a
+constraint — nothing tells her what shape a bio should take, it only refuses one that has
+already been written. Two things were wrong with the first version of this. The avoid-list
+was drawn from `state IN ('pool','swiped_left')`, which excluded matched characters, so the
+bios you had actually read closely were the only ones a new character was free to imitate;
+it now covers every bio in the app, thirty deep. And nothing verified the result — the
+retry loop only ever checked word count, so a model that ignored "do not repeat these"
+(which it has no memory of the other calls to hold it to) shipped a near-duplicate
+unchallenged.
+
+A new bio is now compared against the existing ones on word overlap and on its opening few
+words, reusing the same token-overlap heuristic already proven against her repeating her own
+lines mid-conversation. A collision is sent back with the offending bio quoted and an
+instruction to find a different angle on the same woman. Verified against a deliberately
+lazy mock that returns the identical bio on every call: three characters generated in a row
+came out with three unrelated bios, the retry firing each time.
+
+### Handles
+
+Usernames had the same problem in a worse form, because they had none of the defences bios
+had: the character-generation prompt passed **no avoid-list at all**. Every handle was
+invented with no knowledge of the rest of the cast, so the model kept returning to whichever
+two or three constructions it liked, and the only uniqueness check was an exact string match
+at insert time that "fixed" a clash by stapling random digits on the end — itself a
+giveaway, and useless against `late.bloomer` sitting next to `late.riser`.
+
+The cast so far now goes into the prompt as data, and the instruction around it is about
+variety rather than format: there is no house style to match, real handles are all over the
+place, work out what *this* woman would have picked. Behind that is a check that compares
+handles on their words with the separators and digits thrown away, so `late.bloomer`,
+`latebloomer` and `bloomer_late` all read as the same idea. A collision triggers one cheap
+re-ask for the handle alone — the character behind it is already settled and fine — and the
+fix stays on the model's side instead of mangling a good handle into a numbered one. Exact
+duplicates still fall back to the digit suffix, but that is now the rare last resort it was
+meant to be rather than the routine outcome.
+
+Over-long handles are cut back to a separator rather than mid-word, since `genuinely.differen`
+reads as a glitch, which is the opposite of the point.
 
 Separately, there is a small fixed pool of twelve fully hardcoded bios (`FALLBACK_BIOS`) —
 not AI-written at all — used only when the API call fails outright after its retry. If a

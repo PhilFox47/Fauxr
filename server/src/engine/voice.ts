@@ -116,7 +116,7 @@ function textTokens(text: string): Set<string> {
 }
 
 /** Fraction of the smaller message's substantial words that also appear in the other. */
-function textOverlap(a: string, b: string): number {
+export function textOverlap(a: string, b: string): number {
   const ta = textTokens(a);
   const tb = textTokens(b);
   if (ta.size < 3 || tb.size < 3) return 0; // too short for overlap to mean anything
