@@ -17,6 +17,7 @@ import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import { enqueueImage, evaluateUserImage, listImageJobs, retryImageJob } from '../engine/images.js';
 import { rollSeed, describeSeed } from '../engine/generator.js';
 import { catchUp } from '../engine/scheduler.js';
+import { resetEverything } from '../engine/reset.js';
 import type { Character } from '../types.js';
 
 function publicCharacter(c: Character) {
@@ -222,6 +223,17 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       const { seed } = rollSeed();
       return { archetype: seed.archetype, summary: describeSeed(seed) };
     });
+  });
+
+  /**
+   * Wipe everything and come back up at onboarding. Settings are kept unless the caller
+   * asks otherwise, so a reset does not cost you your API key.
+   */
+  app.post<{ Body: { confirm?: string; include_settings?: boolean } }>('/api/reset', async (req, reply) => {
+    if (req.body?.confirm !== 'RESET') {
+      return reply.code(400).send({ error: 'confirmation required' });
+    }
+    return resetEverything({ includeSettings: !!req.body?.include_settings });
   });
 
   app.post('/api/catchup', async () => {

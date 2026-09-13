@@ -56,6 +56,11 @@ export function generatingCount(): number {
   return queued;
 }
 
+/** Drop any queued generation work. The in-flight character, if any, is discarded. */
+export function resetGenerationQueue(): void {
+  queued = 0;
+}
+
 export interface MatchResult {
   matched: true;
   instant: boolean;

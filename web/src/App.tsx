@@ -49,6 +49,10 @@ export default function App() {
         case 'presence':
           void refreshMatches();
           break;
+        case 'reset':
+          // Another tab wiped the world; everything on screen refers to rows that are gone.
+          window.location.reload();
+          break;
         default:
           break;
       }

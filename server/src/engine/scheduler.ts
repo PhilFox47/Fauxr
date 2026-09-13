@@ -149,6 +149,10 @@ function maybeBeProactive(): void {
 
 let lastPresence = new Map<string, boolean>();
 
+export function clearPresenceCache(): void {
+  lastPresence = new Map();
+}
+
 function emitPresence(): void {
   const next = new Map<string, boolean>();
   for (const character of listActiveMatches()) {

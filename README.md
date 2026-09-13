@@ -52,33 +52,38 @@ anyone whose investment ran out start ghosting. The window is configurable in Se
 
 ### Starting over
 
-Everything the app knows lives in the data directory, so wiping it is the whole reset:
-profile, characters, chats, stats, ledgers, settings, logs, uploads and generated images.
+**Settings → reset → Reset everything.** Wipes your profile, every character, chat, stat,
+ledger, image and log, then drops you back at onboarding with a freshly generated stack.
+No restart, no shell.
+
+Your API keys and model settings are kept by default, since resetting often would
+otherwise mean retyping your key every time; a checkbox includes them if you want the lot.
+The daily usage counter is never reset — it records money actually spent, not game state.
+
+Resetting is safe at any moment, including mid-conversation: a turn can sit in an API call
+or a delivery delay for a minute or more, so turns carry the epoch they started in and
+abandon their work rather than writing into the world that replaced them.
+
+The equivalents from a shell, if you prefer:
 
 ```bash
-# Docker
+# everything, including the database file
 docker compose down -v            # -v is the point: it drops the fauxr-data volume
-docker compose up --build
+rm -rf data/                      # local
 
-# Local
-rm -rf data/
-```
-
-Smaller resets, without losing everything:
-
-```bash
-# keep your settings and profile, wipe the dating world
+# keep settings and profile, wipe only the dating world
 sqlite3 data/fauxr.db "DELETE FROM characters; DELETE FROM messages; DELETE FROM wakeups;"
 
 # re-seed the attribute tables from the shipped JSON after editing or upgrading them.
-# Existing rows are never overwritten on boot, so this is the only way to pick up changes.
+# Boot never overwrites existing rows, so this is the only way to pick up changes.
+# (The reset button does this for you.)
 sqlite3 data/fauxr.db "DELETE FROM attribute_db;"
 
 # just clear the logs
 sqlite3 data/fauxr.db "DELETE FROM logs;"
 ```
 
-Restart the server after any of these. Deleting characters cascades to their
+Restart the server after any of the SQL ones. Deleting characters cascades to their
 relationships, messages and wakeups.
 
 Build artefacts are not state and are rebuilt by `npm run build`; delete `node_modules/`,
@@ -220,7 +225,8 @@ Model endpoints, keys and sampling per role · a global activity multiplier for
 proactivity and wakeup frequency (start low) · the server uptime window · a daily call and
 cost budget with a usage readout · searchable logs filtered by scope, where every LLM call
 is stored with its full prompt, response, duration and token counts · a separate image log
-with a per-job retry button · your own profile.
+with a per-job retry button · your own profile · a reset that puts the whole app back to
+first boot.
 
 The log view is the main tuning tool. Use it.
 

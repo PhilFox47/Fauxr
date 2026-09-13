@@ -105,6 +105,11 @@ export const api = {
   images: () => request<ImageJob[]>('/api/images'),
   retryImage: (id: string) => request<any>(`/api/images/${id}/retry`, { method: 'POST' }),
   usage: () => request<any>('/api/usage'),
+  reset: (includeSettings: boolean) =>
+    request<{ cleared: string[]; settings_kept: boolean; files_removed: number }>('/api/reset', {
+      method: 'POST',
+      body: JSON.stringify({ confirm: 'RESET', include_settings: includeSettings }),
+    }),
   upload: (file: File) => {
     const fd = new FormData();
     fd.append('file', file);
@@ -121,6 +126,7 @@ export type ServerEvent =
   | { type: 'presence'; character_id: string; online: boolean }
   | { type: 'stack'; count: number }
   | { type: 'generating'; count: number }
+  | { type: 'reset' }
   | { type: 'hello'; at: string };
 
 /** Reconnecting WebSocket. The server is off between 02:00 and 06:00, so drops are normal. */

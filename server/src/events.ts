@@ -8,7 +8,8 @@ export type AppEvent =
   | { type: 'character_state'; character_id: string; state: string }
   | { type: 'presence'; character_id: string; online: boolean }
   | { type: 'stack'; count: number }
-  | { type: 'generating'; count: number };
+  | { type: 'generating'; count: number }
+  | { type: 'reset' };
 
 class Bus extends EventEmitter {
   emitEvent(e: AppEvent): void {

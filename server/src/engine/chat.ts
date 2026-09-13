@@ -17,6 +17,22 @@ import { clearExpiredNegativeFlags, hasActiveNegativeFlag } from './state.js';
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
 
+/**
+ * Bumped by a reset. A turn can sit in an API call or in a delivery delay for a minute or
+ * more, so rather than waiting for those to finish, they check the epoch they started in
+ * and abandon their work if the world has been wiped underneath them.
+ */
+let epoch = 0;
+
+export function currentEpoch(): number {
+  return epoch;
+}
+
+export function abandonRunningTurns(): void {
+  epoch++;
+  running.clear();
+}
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -101,6 +117,7 @@ export async function takeTurn(characterId: string, opts: TurnOptions): Promise<
 }
 
 async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
+  const startedIn = epoch;
   let character = getCharacter(characterId);
   let rel = getRelationship(characterId);
   if (!character || !rel) return;
@@ -155,10 +172,12 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     ? await runActorVoice(ctx).then((v) => (v ? { messages: [v.message], hidden: v.hidden } : null))
     : null;
   const result = output ?? (await runActor(ctx));
+  if (epoch !== startedIn) return;
 
-  await deliver(character, result.messages);
+  await deliver(character, result.messages, startedIn);
 
-  rel = getRelationship(characterId)!;
+  rel = getRelationship(characterId);
+  if (!rel || epoch !== startedIn) return;
   if (rel.active_direction) {
     rel.active_direction.valid_for = Math.max(0, rel.active_direction.valid_for - 1);
   }
@@ -213,11 +232,13 @@ function isStaleSession(rel: Relationship): boolean {
 async function deliver(
   character: Character,
   messages: { text: string; delay: number; kind?: string; duration_seconds?: number }[],
+  startedIn: number,
 ): Promise<void> {
   for (const m of messages) {
     bus.emitEvent({ type: 'typing', character_id: character.id, on: true });
     await sleep(m.delay * 1000);
     bus.emitEvent({ type: 'typing', character_id: character.id, on: false });
+    if (epoch !== startedIn) return;
 
     const stored = addMessage({
       character_id: character.id,

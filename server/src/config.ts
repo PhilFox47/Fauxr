@@ -87,6 +87,10 @@ function applyEnvFallbacks(settings: Settings): Settings {
   return { ...settings, api };
 }
 
+export function clearSettingsCache(): void {
+  cached = null;
+}
+
 export function getSettings(): Settings {
   if (cached) return cached;
   const row = db.prepare("SELECT value FROM settings WHERE key = 'settings'").get() as

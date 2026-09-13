@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { api, type ImageJob, type LogEntry, type UserProfile } from '../api';
 
-type Pane = 'models' | 'behaviour' | 'profile' | 'logs' | 'images';
+type Pane = 'models' | 'behaviour' | 'profile' | 'logs' | 'images' | 'reset';
 
 const SCOPES = ['', 'director', 'actor', 'image', 'scheduler', 'api', 'generator', 'app'];
 
@@ -59,7 +59,7 @@ export default function Settings({
       </div>
 
       <div className="chips">
-        {(['models', 'behaviour', 'profile', 'logs', 'images'] as Pane[]).map((p) => (
+        {(['models', 'behaviour', 'profile', 'logs', 'images', 'reset'] as Pane[]).map((p) => (
           <button key={p} className="chip" data-active={pane === p} onClick={() => setPane(p)}>
             {p}
           </button>
@@ -76,6 +76,7 @@ export default function Settings({
         {pane === 'profile' && <ProfilePane profile={profile} onSaved={onProfileSaved} />}
         {pane === 'logs' && <LogsPane />}
         {pane === 'images' && <ImagesPane />}
+        {pane === 'reset' && <ResetPane />}
       </div>
     </>
   );
@@ -439,5 +440,76 @@ function ImagesPane() {
         </div>
       ))}
     </>
+  );
+}
+
+function ResetPane() {
+  const [includeSettings, setIncludeSettings] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const run = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await api.reset(includeSettings);
+      // Everything on screen refers to rows that no longer exist. Start from scratch.
+      window.location.reload();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+      setBusy(false);
+      setConfirming(false);
+    }
+  };
+
+  return (
+    <div className="card">
+      <div className="section-title" style={{ padding: '0 0 10px' }}>Danger zone</div>
+
+      <p className="small muted" style={{ marginTop: 0 }}>
+        Deletes your profile, every character, every chat, all stats, ledgers, images and
+        logs, then starts over at onboarding with a fresh stack. There is no undo.
+      </p>
+
+      <label className="row" style={{ marginBottom: 14, alignItems: 'flex-start' }}>
+        <input
+          type="checkbox"
+          checked={includeSettings}
+          onChange={(e) => setIncludeSettings(e.target.checked)}
+          style={{ marginTop: 3 }}
+        />
+        <span className="small">
+          Also reset API keys and model settings
+          <br />
+          <span className="tiny muted">
+            Off by default, so a reset does not cost you your API key. Your daily usage
+            counter is never reset.
+          </span>
+        </span>
+      </label>
+
+      {error && <div className="banner warn">{error}</div>}
+
+      {!confirming ? (
+        <button className="btn danger block" onClick={() => setConfirming(true)}>
+          Reset everything
+        </button>
+      ) : (
+        <>
+          <p className="small" style={{ color: 'var(--err)' }}>
+            This deletes everything{includeSettings ? ', including your API key' : ''}. Sure?
+          </p>
+          <div className="row">
+            <button className="btn ghost grow" onClick={() => setConfirming(false)} disabled={busy}>
+              Cancel
+            </button>
+            <button className="btn danger grow" onClick={run} disabled={busy}>
+              {busy ? 'Resetting…' : 'Yes, delete it all'}
+            </button>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
