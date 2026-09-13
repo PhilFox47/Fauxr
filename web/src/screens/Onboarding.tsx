@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { api } from '../api';
+import Icon from '../components/Icon';
 
 export default function Onboarding({ onDone }: { onDone: () => void }) {
   const [displayName, setDisplayName] = useState('');
@@ -47,8 +48,11 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
   return (
     <div className="screen">
       <div className="topbar">
-        <h1>Fauxr</h1>
-        <span className="sub">Set up your profile</span>
+        <span className="brand-mark"><Icon name="spark" size={22} /></span>
+        <div>
+          <h1>Fauxr</h1>
+          <span className="sub">Set up your profile</span>
+        </div>
       </div>
 
       <div className="card">

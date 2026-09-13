@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, type SwipeProfile } from '../api';
+import Icon from '../components/Icon';
+
+/** How far the card has to travel before letting go counts as a decision. */
+const COMMIT_PX = 90;
 
 export default function Swipe({ onMatched }: { onMatched: () => void }) {
   const [profiles, setProfiles] = useState<SwipeProfile[]>([]);
@@ -63,54 +67,96 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
     setDrag(e.touches[0].clientX - startX.current);
   };
   const onTouchEnd = () => {
-    if (Math.abs(drag) > 90) void decide(drag > 0 ? 'right' : 'left');
+    if (Math.abs(drag) > COMMIT_PX) void decide(drag > 0 ? 'right' : 'left');
     else setDrag(0);
     startX.current = null;
   };
+
+  // Arrow keys on desktop, where there is nothing to swipe with.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLElement && /input|textarea/i.test(e.target.tagName)) return;
+      if (e.key === 'ArrowRight') void decide('right');
+      if (e.key === 'ArrowLeft') void decide('left');
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
 
   return (
     <>
       <div className="topbar">
         <h1>Discover</h1>
         <div className="spacer" />
-        <span className="sub">{profiles.length} in stack{generating > 0 ? ` · ${generating} loading` : ''}</span>
+        <span className="usage-pill">
+          {profiles.length} in stack{generating > 0 ? ` · ${generating} loading` : ''}
+        </span>
       </div>
 
       {toast && <div className="banner">{toast}</div>}
 
       <div className="swipe-area">
-        {loading && <div className="empty">Loading profiles…</div>}
+        {loading && (
+          <div className="swipe-deck" aria-hidden="true">
+            <div className="swipe-card">
+              <div className="skeleton" style={{ height: 24, width: '45%' }} />
+              <div className="col" style={{ gap: 10, flex: 1 }}>
+                <div className="skeleton" style={{ height: 15, width: '92%' }} />
+                <div className="skeleton" style={{ height: 15, width: '78%' }} />
+                <div className="skeleton" style={{ height: 15, width: '85%' }} />
+              </div>
+              <div className="skeleton" style={{ height: 11, width: '35%' }} />
+            </div>
+          </div>
+        )}
 
         {!loading && !current && (
           <div className="empty">
-            {generating > 0 ? 'Finding more people…' : 'Nobody left right now. Check back in a bit.'}
+            <strong>{generating > 0 ? 'Finding more people' : 'That is everyone'}</strong>
+            {generating > 0
+              ? 'New profiles are being written right now.'
+              : 'Nobody left in the stack. Check back in a bit.'}
           </div>
         )}
 
         {current && (
           <>
-            <div
-              className="swipe-card"
-              style={{
-                transform: `translateX(${drag}px) rotate(${drag / 26}deg)`,
-                opacity: 1 - Math.min(Math.abs(drag) / 340, 0.55),
-              }}
-              onTouchStart={onTouchStart}
-              onTouchMove={onTouchMove}
-              onTouchEnd={onTouchEnd}
-            >
-              <div className="handle">{current.username}</div>
-              <div className="bio">{current.bio}</div>
-              <div className="hint">That is all you get. Decide.</div>
+            <div className={`swipe-deck${profiles.length > 1 ? ' stacked' : ''}`}>
+              <div
+                className={`swipe-card${drag !== 0 ? ' dragging' : ''}`}
+                style={{
+                  transform: `translateX(${drag}px) rotate(${drag / 26}deg)`,
+                  opacity: 1 - Math.min(Math.abs(drag) / 340, 0.55),
+                }}
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+              >
+                {/* Half a swipe should already tell you which way it is going to land. */}
+                <div className="verdict like" style={{ opacity: Math.max(0, Math.min(drag / COMMIT_PX, 1)) }}>
+                  Yes
+                </div>
+                <div className="verdict nope" style={{ opacity: Math.max(0, Math.min(-drag / COMMIT_PX, 1)) }}>
+                  Nope
+                </div>
+
+                <div className="handle">{current.username}</div>
+                <div className="bio">{current.bio}</div>
+                <div className="hint">That is all you get</div>
+              </div>
             </div>
 
             <div className="swipe-actions">
-              <button className="nope" onClick={() => void decide('left')} aria-label="Pass">✕</button>
-              <button className="like" onClick={() => void decide('right')} aria-label="Like">♥</button>
+              <button className="nope" onClick={() => void decide('left')} aria-label="Pass">
+                <Icon name="cross" size={26} />
+              </button>
+              <button className="like" onClick={() => void decide('right')} aria-label="Like">
+                <Icon name="heart" size={28} />
+              </button>
             </div>
           </>
         )}
-        <div className="stack-count">Swipe or tap. No photos, no age, no filters.</div>
+        <div className="stack-count">No photos, no age, no filters. Just the bio.</div>
       </div>
     </>
   );

@@ -29,16 +29,23 @@ export default function Matches({
       <div className="topbar">
         <h1>Chats</h1>
         <div className="spacer" />
-        <span className="sub">{active.length} match{active.length === 1 ? '' : 'es'}</span>
+        <span className="usage-pill">{active.length} match{active.length === 1 ? '' : 'es'}</span>
       </div>
 
       <div className="screen">
         {active.length === 0 && (
-          <div className="empty">No matches yet. Go and swipe on someone.</div>
+          <div className="empty">
+            <strong>No matches yet</strong>
+            Swipe on someone over in Discover and see who writes back.
+          </div>
         )}
 
         {active.map((m) => (
-          <div key={m.id} className="match-row" onClick={() => onOpen(m.id)}>
+          <div
+            key={m.id}
+            className={`match-row${m.unread > 0 ? ' unreadrow' : ''}`}
+            onClick={() => onOpen(m.id)}
+          >
             <div className="avatar">
               {m.profile_picture ? (
                 <img src={m.profile_picture} alt="" />
@@ -49,7 +56,7 @@ export default function Matches({
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>
               <div className="name">{m.display_name}</div>
-              <div className="preview">
+              <div className={`preview${typing[m.id] ? ' typing-now' : ''}`}>
                 {typing[m.id]
                   ? 'typing…'
                   : m.last_message

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, type CharacterProfile, type MatchSummary, type Message } from '../api';
+import Icon from '../components/Icon';
 
 function clock(iso: string): string {
   return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -7,6 +8,17 @@ function clock(iso: string): string {
 
 function sameDay(a: string, b: string): boolean {
   return new Date(a).toDateString() === new Date(b).toDateString();
+}
+
+/** "Today" and "Yesterday" read as a conversation; a bare date reads as a log file. */
+function dayLabel(iso: string): string {
+  const d = new Date(iso);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  if (d.toDateString() === today.toDateString()) return 'Today';
+  if (d.toDateString() === yesterday.toDateString()) return 'Yesterday';
+  return d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'short' });
 }
 
 function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
@@ -17,7 +29,7 @@ function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
     <div className={`bubble voice ${mine ? 'me' : 'them'}`} onClick={() => setOpen((o) => !o)}>
       <div style={{ flex: 1 }}>
         <div className="row">
-          <span className="voice-play">▶</span>
+          <span className="voice-play"><Icon name="play" size={15} /></span>
           <span className="voice-wave">
             {bars.map((h, i) => (
               <i key={i} style={{ height: `${h}px` }} />
@@ -53,8 +65,18 @@ export default function Chat({
   const [profile, setProfile] = useState<CharacterProfile | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const [confirmBlock, setConfirmBlock] = useState(false);
+  /** False while the user has scrolled up to read history - see the autoscroll effect. */
+  const [atBottom, setAtBottom] = useState(true);
   const logRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const flashToast = useCallback((message: string) => {
+    setToast(message);
+    window.setTimeout(() => setToast((t) => (t === message ? null : t)), 4000);
+  }, []);
 
   const load = useCallback(async () => {
     try {
@@ -98,22 +120,52 @@ export default function Chat({
   // cannot reach through the proxy at all. Either one showing "typing" is enough to show it.
   const isTyping = typing || polledTyping;
 
+  /**
+   * Only follow the conversation down if the user is already at the bottom. Scrolling back
+   * through history used to be impossible: the three-second poll re-rendered and yanked the
+   * view to the newest message every time. When they are reading further up, the new
+   * message just arrives quietly and the jump-to-latest button appears instead.
+   */
   useEffect(() => {
     const el = logRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [messages.length, isTyping]);
+    if (el && atBottom) el.scrollTop = el.scrollHeight;
+  }, [messages.length, isTyping, atBottom]);
+
+  const onLogScroll = () => {
+    const el = logRef.current;
+    if (!el) return;
+    setAtBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 60);
+  };
+
+  const jumpToLatest = () => {
+    const el = logRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+    setAtBottom(true);
+  };
+
+  /** Grow with the text instead of staying a one-line slot with a scrollbar in it. */
+  const resizeInput = useCallback(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 140)}px`;
+  }, []);
+
+  useEffect(resizeInput, [draft, resizeInput]);
 
   const send = async () => {
     const text = draft.trim();
     if (!text || sending) return;
     setSending(true);
     setDraft('');
+    setAtBottom(true);
     try {
       await api.send(characterId, text);
       await load();
     } catch (err) {
+      // The draft goes back in the box so nothing typed is ever lost to a failed send.
       setDraft(text);
-      alert(String(err instanceof Error ? err.message : err));
+      flashToast(String(err instanceof Error ? err.message : err));
     } finally {
       setSending(false);
     }
@@ -132,7 +184,7 @@ export default function Chat({
       await api.regenerate(characterId, messageId);
       await load();
     } catch (err) {
-      alert(String(err instanceof Error ? err.message : err));
+      flashToast(String(err instanceof Error ? err.message : err));
     } finally {
       setRegeneratingId(null);
     }
@@ -144,7 +196,7 @@ export default function Chat({
       await api.sendImage(characterId, file);
       await load();
     } catch (err) {
-      alert(String(err));
+      flashToast(String(err instanceof Error ? err.message : err));
     }
   };
 
@@ -154,10 +206,20 @@ export default function Chat({
   return (
     <div className="chat">
       <div className="topbar">
-        <button className="iconbtn" onClick={onBack} aria-label="Back">←</button>
-        <div>
+        <button className="iconbtn" onClick={onBack} aria-label="Back">
+          <Icon name="back" size={22} />
+        </button>
+        <div className="avatar sm" aria-hidden="true">
+          {character?.profile_picture ? (
+            <img src={character.profile_picture} alt="" />
+          ) : (
+            (character?.display_name ?? '?').slice(0, 1).toUpperCase()
+          )}
+          {character?.online && !blocked && <span className="dot-online" />}
+        </div>
+        <div style={{ minWidth: 0 }}>
           <h1>{character?.display_name ?? '…'}</h1>
-          <span className="sub">
+          <span className={`sub${isTyping ? ' live' : ''}`}>
             {blocked
               ? character?.state === 'blocked_by_char' ? 'She blocked you' : 'You blocked her'
               : isTyping
@@ -172,14 +234,16 @@ export default function Chat({
           <button
             className="iconbtn known-count"
             onClick={() => setProfileOpen(true)}
-            aria-label="What you know about her"
+            aria-label={`What you know about her: ${profile.known} of ${profile.total}`}
             title="What you know about her"
           >
-            <span className="glyph">◔</span>
+            <span className="glyph"><Icon name="eye" size={15} /></span>
             <span>{profile.known}/{profile.total}</span>
           </button>
         )}
-        <button className="iconbtn" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">⋯</button>
+        <button className="iconbtn" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
+          <Icon name="more" size={20} />
+        </button>
       </div>
 
       {profileOpen && profile && (
@@ -188,27 +252,52 @@ export default function Chat({
 
       {menuOpen && (
         <div className="card">
-          <p className="small muted" style={{ marginTop: 0 }}>
+          <div className="section-title" style={{ padding: '0 0 6px' }}>Her bio</div>
+          <p className="small muted bio-quote" style={{ margin: '0 0 14px' }}>
             {character?.bio}
           </p>
-          <button
-            className="btn danger block"
-            onClick={async () => {
-              if (!confirm('Block this person? This cannot be undone.')) return;
-              await api.block(characterId);
-              setMenuOpen(false);
-              onBack();
-            }}
-          >
-            Block
-          </button>
+          {/* An in-app confirm rather than window.confirm(), which looks like a browser
+              error and is the one dialog a phone renders least gracefully. */}
+          {confirmBlock ? (
+            <>
+              <p className="small" style={{ color: 'var(--err)', marginTop: 0 }}>
+                Block {character?.display_name}? This cannot be undone.
+              </p>
+              <div className="row">
+                <button className="btn ghost grow" onClick={() => setConfirmBlock(false)}>
+                  Cancel
+                </button>
+                <button
+                  className="btn danger grow"
+                  onClick={async () => {
+                    try {
+                      await api.block(characterId);
+                      setMenuOpen(false);
+                      onBack();
+                    } catch (err) {
+                      setConfirmBlock(false);
+                      flashToast(String(err instanceof Error ? err.message : err));
+                    }
+                  }}
+                >
+                  Block her
+                </button>
+              </div>
+            </>
+          ) : (
+            <button className="btn danger block" onClick={() => setConfirmBlock(true)}>
+              Block
+            </button>
+          )}
         </div>
       )}
 
-      <div className="chat-log" ref={logRef}>
+      <div className="chat-log" ref={logRef} onScroll={onLogScroll}>
+        <div className={`chat-log-inner${messages.length === 0 ? ' is-empty' : ''}`}>
         {messages.length === 0 && (
           <div className="empty">
-            No messages yet. If she matched you first, she is waiting for you to start.
+            <strong>Nothing here yet</strong>
+            If she matched you first, she is waiting for you to start.
           </div>
         )}
 
@@ -218,14 +307,13 @@ export default function Chat({
           const showDay = !prev || !sameDay(prev.sent_at, m.sent_at);
           const last = i === messages.length - 1;
           const showStamp = last || messages[i + 1]?.sender !== m.sender;
+          // A run of messages from one person is one turn, so only its ends get the full
+          // corner radius - the middle of the run stays squared off against the run.
+          const mid = !showDay && prev?.sender === m.sender && !showStamp;
 
           return (
             <div key={m.id} style={{ display: 'contents' }}>
-              {showDay && (
-                <div className="center tiny muted" style={{ padding: '12px 0 6px' }}>
-                  {new Date(m.sent_at).toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'short' })}
-                </div>
-              )}
+              {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
               {m.kind === 'image' ? (
                 <div className={`bubble image ${mine ? 'me' : 'them'}`}>
                   {m.image_url ? <img src={m.image_url} alt="" /> : <span className="tiny">Photo unavailable</span>}
@@ -233,28 +321,30 @@ export default function Chat({
               ) : m.kind === 'voice' ? (
                 <VoiceBubble message={m} mine={mine} />
               ) : (
-                <div className={`bubble ${mine ? 'me' : 'them'}`}>
+                <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}`}>
                   {m.text}
                   {m.meta?.failed && (
                     <span className="fail-mark" title="Generation failed - this is a placeholder, not a real reply">
-                      ⚠
+                      <Icon name="alert" size={14} />
                     </span>
                   )}
                 </div>
               )}
               {showStamp && (
                 <div className={`stamp ${mine ? 'me' : 'them'}`}>
-                  {clock(m.sent_at)}
-                  {mine && (m.read_at ? ' · read' : ' · sent')}
+                  <span>
+                    {clock(m.sent_at)}
+                    {mine && (m.read_at ? ' · read' : ' · sent')}
+                  </span>
                   {!mine && last && !blocked && (
                     <button
-                      className="regen-btn"
+                      className={`regen-btn${regeneratingId === m.id ? ' spinning' : ''}`}
                       onClick={() => void regenerate(m.id)}
                       disabled={regeneratingId !== null || isTyping}
                       aria-label="Regenerate this reply"
                       title="Regenerate this reply"
                     >
-                      {regeneratingId === m.id ? '…' : '↻'}
+                      <Icon name="refresh" size={13} />
                     </button>
                   )}
                 </div>
@@ -272,7 +362,21 @@ export default function Chat({
             She is offline. She will see it when she is back.
           </div>
         )}
+        </div>
       </div>
+
+      {!atBottom && messages.length > 0 && (
+        <button className="jump-latest" onClick={jumpToLatest}>
+          Jump to latest
+        </button>
+      )}
+
+      {toast && (
+        <div className="toast err" role="status">
+          <span className="ico"><Icon name="alert" size={16} /></span>
+          <span className="grow">{toast}</span>
+        </div>
+      )}
 
       {!blocked && (
         <div className="composer">
@@ -283,8 +387,11 @@ export default function Chat({
             style={{ display: 'none' }}
             onChange={(e) => void attach(e.target.files?.[0])}
           />
-          <button className="attach" onClick={() => fileRef.current?.click()} aria-label="Send a photo">＋</button>
+          <button className="attach" onClick={() => fileRef.current?.click()} aria-label="Send a photo">
+            <Icon name="plus" size={20} />
+          </button>
           <textarea
+            ref={inputRef}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Message"
@@ -297,7 +404,7 @@ export default function Chat({
             }}
           />
           <button className="send" onClick={() => void send()} disabled={!draft.trim() || sending} aria-label="Send">
-            ↑
+            <Icon name="send" size={19} />
           </button>
         </div>
       )}
@@ -321,7 +428,9 @@ function ProfileSheet({ profile, onClose }: { profile: CharacterProfile; onClose
               {profile.known} of {profile.total} things known
             </span>
           </div>
-          <button className="iconbtn" onClick={onClose} aria-label="Close">✕</button>
+          <button className="iconbtn" onClick={onClose} aria-label="Close">
+            <Icon name="close" size={20} />
+          </button>
         </div>
 
         <div className="progress"><span style={{ width: `${pct}%` }} /></div>

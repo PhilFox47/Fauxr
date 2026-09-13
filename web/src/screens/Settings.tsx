@@ -3,6 +3,15 @@ import { api, type ImageJob, type LogEntry, type UserProfile } from '../api';
 
 type Pane = 'models' | 'behaviour' | 'profile' | 'logs' | 'images' | 'reset';
 
+const PANES: { id: Pane; label: string }[] = [
+  { id: 'models', label: 'Models' },
+  { id: 'behaviour', label: 'Behaviour' },
+  { id: 'profile', label: 'Your profile' },
+  { id: 'logs', label: 'Logs' },
+  { id: 'images', label: 'Images' },
+  { id: 'reset', label: 'Reset' },
+];
+
 const SCOPES = ['', 'director', 'actor', 'image', 'scheduler', 'api', 'generator', 'app'];
 
 export default function Settings({
@@ -52,16 +61,22 @@ export default function Settings({
         <h1>Settings</h1>
         <div className="spacer" />
         {usage && (
-          <span className="sub">
+          <span className="usage-pill">
             {usage.calls} calls today{usage.cost ? ` · ${usage.cost.toFixed(2)}` : ''}
           </span>
         )}
       </div>
 
       <div className="chips">
-        {(['models', 'behaviour', 'profile', 'logs', 'images', 'reset'] as Pane[]).map((p) => (
-          <button key={p} className="chip" data-active={pane === p} onClick={() => setPane(p)}>
-            {p}
+        {PANES.map((p) => (
+          <button
+            key={p.id}
+            className="chip"
+            data-active={pane === p.id}
+            aria-pressed={pane === p.id}
+            onClick={() => setPane(p.id)}
+          >
+            {p.label}
           </button>
         ))}
       </div>
@@ -130,7 +145,9 @@ function ModelsPane({ settings, patch, save, saved }: any) {
 
       {roles.map((role) => (
         <div className="card" key={role}>
-          <div className="section-title" style={{ padding: '0 0 10px' }}>{role}</div>
+          <div className="section-title" style={{ padding: '0 0 10px' }}>
+            {role === 'actor' ? 'Actor — writes her messages' : 'Director — scores and steers'}
+          </div>
           <label className="field">
             <span>Model</span>
             <input
@@ -154,7 +171,10 @@ function ModelsPane({ settings, patch, save, saved }: any) {
           </label>
           <div className="row">
             <label className="field grow">
-              <span>Temperature {settings.models[role].temperature}</span>
+              <div className="slider-head">
+                <span className="label">Temperature</span>
+                <span className="value">{settings.models[role].temperature}</span>
+              </div>
               <input
                 type="range" min={0} max={2} step={0.05}
                 value={settings.models[role].temperature}
@@ -162,7 +182,10 @@ function ModelsPane({ settings, patch, save, saved }: any) {
               />
             </label>
             <label className="field grow">
-              <span>Top p {settings.models[role].top_p}</span>
+              <div className="slider-head">
+                <span className="label">Top p</span>
+                <span className="value">{settings.models[role].top_p}</span>
+              </div>
               <input
                 type="range" min={0.1} max={1} step={0.01}
                 value={settings.models[role].top_p}
@@ -182,7 +205,7 @@ function ModelsPane({ settings, patch, save, saved }: any) {
       ))}
 
       <div className="card">
-        <div className="section-title" style={{ padding: '0 0 10px' }}>image</div>
+        <div className="section-title" style={{ padding: '0 0 10px' }}>Images</div>
         <label className="field">
           <span>Model</span>
           <input
@@ -220,13 +243,15 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
     <>
       <div className="card">
         <div className="section-title" style={{ padding: '0 0 10px' }}>Testing</div>
-        <label className="row" style={{ alignItems: 'flex-start' }}>
-          <input
-            type="checkbox"
-            checked={settings.always_online}
-            onChange={(e) => patch(['always_online'], e.target.checked)}
-            style={{ marginTop: 3 }}
-          />
+        <label className="switch-row">
+          <span className="switch">
+            <input
+              type="checkbox"
+              checked={settings.always_online}
+              onChange={(e) => patch(['always_online'], e.target.checked)}
+            />
+            <span className="track" />
+          </span>
           <span className="small">
             Everyone is always online
             <br />
@@ -248,7 +273,10 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
 
       <div className="card">
         <label className="field">
-          <span>Spice ({settings.spice.toFixed(2)}×) — how readily the sexual side opens up</span>
+          <div className="slider-head">
+            <span className="label">Spice</span>
+            <span className="value">{settings.spice.toFixed(2)}×</span>
+          </div>
           <input
             type="range" min={0.3} max={2} step={0.05}
             value={settings.spice}
@@ -265,7 +293,10 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
 
       <div className="card">
         <label className="field">
-          <span>Heightening ({settings.heightening.toFixed(2)}×) — how larger-than-life characters are</span>
+          <div className="slider-head">
+            <span className="label">Heightening</span>
+            <span className="value">{settings.heightening.toFixed(2)}×</span>
+          </div>
           <input
             type="range" min={0.3} max={2.5} step={0.05}
             value={settings.heightening}
@@ -281,7 +312,10 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
 
       <div className="card">
         <label className="field">
-          <span>Rarity ({settings.rarity_bias.toFixed(2)}×) — how much niche material shows up</span>
+          <div className="slider-head">
+            <span className="label">Rarity</span>
+            <span className="value">{settings.rarity_bias.toFixed(2)}×</span>
+          </div>
           <input
             type="range" min={0.3} max={2.5} step={0.05}
             value={settings.rarity_bias}
@@ -297,7 +331,10 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
 
       <div className="card">
         <label className="field">
-          <span>Activity ({settings.activity.toFixed(2)}×) — how often characters reach out unprompted</span>
+          <div className="slider-head">
+            <span className="label">Activity</span>
+            <span className="value">{settings.activity.toFixed(2)}×</span>
+          </div>
           <input
             type="range" min={0.1} max={3} step={0.05}
             value={settings.activity}
@@ -390,20 +427,26 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
             long they would take to type, up to this cap.
           </span>
         </label>
-        <label className="row" style={{ marginBottom: 10 }}>
-          <input
-            type="checkbox"
-            checked={settings.voice_enabled}
-            onChange={(e) => patch(['voice_enabled'], e.target.checked)}
-          />
+        <label className="switch-row" style={{ marginBottom: 14, alignItems: 'center' }}>
+          <span className="switch">
+            <input
+              type="checkbox"
+              checked={settings.voice_enabled}
+              onChange={(e) => patch(['voice_enabled'], e.target.checked)}
+            />
+            <span className="track" />
+          </span>
           <span className="small">Voice messages</span>
         </label>
-        <label className="row">
-          <input
-            type="checkbox"
-            checked={settings.images_enabled}
-            onChange={(e) => patch(['images_enabled'], e.target.checked)}
-          />
+        <label className="switch-row" style={{ alignItems: 'center' }}>
+          <span className="switch">
+            <input
+              type="checkbox"
+              checked={settings.images_enabled}
+              onChange={(e) => patch(['images_enabled'], e.target.checked)}
+            />
+            <span className="track" />
+          </span>
           <span className="small">Image generation</span>
         </label>
       </div>
@@ -579,13 +622,15 @@ function ResetPane() {
         logs, then starts over at onboarding with a fresh stack. There is no undo.
       </p>
 
-      <label className="row" style={{ marginBottom: 14, alignItems: 'flex-start' }}>
-        <input
-          type="checkbox"
-          checked={includeSettings}
-          onChange={(e) => setIncludeSettings(e.target.checked)}
-          style={{ marginTop: 3 }}
-        />
+      <label className="switch-row" style={{ marginBottom: 16 }}>
+        <span className="switch">
+          <input
+            type="checkbox"
+            checked={includeSettings}
+            onChange={(e) => setIncludeSettings(e.target.checked)}
+          />
+          <span className="track" />
+        </span>
         <span className="small">
           Also reset API keys and model settings
           <br />

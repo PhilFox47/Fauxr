@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, connectEvents, type AppState, type MatchSummary, type ServerEvent } from './api';
+import Icon, { type IconName } from './components/Icon';
 import Onboarding from './screens/Onboarding';
 import Swipe from './screens/Swipe';
 import Matches from './screens/Matches';
@@ -7,6 +8,12 @@ import Chat from './screens/Chat';
 import Settings from './screens/Settings';
 
 type Tab = 'swipe' | 'matches' | 'settings';
+
+const TABS: { id: Tab; label: string; icon: IconName }[] = [
+  { id: 'swipe', label: 'Discover', icon: 'spark' },
+  { id: 'matches', label: 'Chats', icon: 'chat' },
+  { id: 'settings', label: 'Settings', icon: 'settings' },
+];
 
 /** Longest a turn can plausibly take: model call, retries, plus the delivery delays. */
 const TYPING_TIMEOUT_MS = 180_000;
@@ -133,7 +140,14 @@ export default function App() {
   const unread = useMemo(() => matches.reduce((n, m) => n + m.unread, 0), [matches]);
 
   if (!state) {
-    return <div className="app"><div className="empty">Connecting…</div></div>;
+    return (
+      <div className="app">
+        <div className="splash">
+          <Icon name="spark" size={38} />
+          <span>Fauxr</span>
+        </div>
+      </div>
+    );
   }
 
   if (!state.onboarded) {
@@ -174,20 +188,22 @@ export default function App() {
       {tab === 'settings' && <Settings profile={state.profile} onProfileSaved={refreshState} />}
 
       <nav className="tabs">
-        <button data-active={tab === 'swipe'} onClick={() => setTab('swipe')}>
-          <span className="glyph">🔥</span>
-          Discover
-        </button>
-        <button data-active={tab === 'matches'} onClick={() => setTab('matches')}>
-          <span className="glyph">
-            💬{unread > 0 && <span className="badge">{unread}</span>}
-          </span>
-          Chats
-        </button>
-        <button data-active={tab === 'settings'} onClick={() => setTab('settings')}>
-          <span className="glyph">⚙️</span>
-          Settings
-        </button>
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            data-active={tab === t.id}
+            onClick={() => setTab(t.id)}
+            aria-current={tab === t.id ? 'page' : undefined}
+          >
+            <span className="glyph">
+              <Icon name={t.icon} size={21} />
+              {t.id === 'matches' && unread > 0 && (
+                <span className="badge">{unread > 99 ? '99+' : unread}</span>
+              )}
+            </span>
+            {t.label}
+          </button>
+        ))}
       </nav>
     </div>
   );

@@ -710,10 +710,49 @@ server/src/
   llm/client.ts      the only provider-aware file
   db/                schema and the attribute repository
 web/src/             React frontend, mobile first, installable
+  components/Icon    the icon set, as inline SVG
+  styles.css         design tokens first, component rules second
 ```
 
 All characters are adults; `age` has a hard minimum of 18 and is validated at generation.
 Single user, no auth, no moderation, not meant to be exposed to the internet.
+
+### The design system
+
+`styles.css` opens with the tokens — surfaces, text, one accent hue in five jobs, a 4px
+spacing scale, four radii, three elevations, two easing curves — and every component rule
+below picks from them. The rule is that a component never invents a one-off value, because
+a stylesheet of ad-hoc 13px paddings and 21px radii is exactly what makes an interface read
+as assembled rather than designed.
+
+A few things carry most of the difference from the first pass:
+
+- **No emoji.** Tab bars, buttons and affordances used 🔥 💬 ⚙️ ⋯ ＋ ↻ ◔. Emoji render as a
+  different typeface on every platform, sit on their own baseline and cannot take the accent
+  colour. They are inline SVG now (`components/Icon.tsx`), on one 24px grid at one stroke
+  weight, inheriting `currentColor`.
+- **Materials.** The header, tab bar and composer are translucent with `backdrop-filter`
+  blur, so content passes under them instead of hitting a flat bar. Raised surfaces get a
+  shadow *and* a hairline top edge, which is what actually reads as depth on a dark UI.
+- **Bottom-anchored chat.** A short conversation sits on the bottom edge like every
+  messenger, via an inner wrapper with `min-height: 100%` and `justify-content: flex-end`.
+- **`alert()` and `confirm()` are gone.** A failed send now raises a toast above the
+  composer and puts the draft back in the box; blocking someone asks inside the card. Both
+  were browser dialogs before, which stop the app dead and look like an error page.
+- **Autoscroll that lets go.** The log only follows the conversation down when you are
+  already at the bottom. Scrolling back through history used to be impossible — the
+  three-second poll yanked you to the newest message every time — and a jump-to-latest
+  button appears instead.
+- **Keyboard and pointer both work.** `:focus-visible` rings everywhere, arrow keys decide a
+  swipe on desktop where there is nothing to drag, 44px minimum tap targets, and
+  `prefers-reduced-motion` turns the animation off rather than down.
+- **Loading looks like arriving.** Skeletons on the swipe card instead of the word "Loading".
+
+Verified by driving the built app in Chromium at 412×900 with Playwright: every screen
+screenshotted, the swipe drag exercised with real `TouchEvent`s (the verdict stamp fades in
+proportionally and sits on the side the card is leaving, so it stays on screen), the
+composer re-checked at a 420px-tall viewport to confirm the keyboard fix below still holds,
+and desktop width checked at 1100px. No console errors on any screen.
 
 On Chrome for Android, the on-screen keyboard does not shrink the layout viewport by
 default - only the visual one - so anything sized with a plain `height: 100%`/`100vh`
