@@ -317,6 +317,21 @@ or sexual, and it scores on quality, never merely on having been said. The Actor
 the matching rule on its own side — she can find an honest answer boring or underwhelming,
 she cannot be offended that he gave it.
 
+### Her default mood is curious, not annoyed
+
+Nothing in the Director prompt ever said what she should feel when nothing in particular has
+happened — so a model with no anchor for "neutral" reached for irritation more often than
+warmth, especially in the opening exchanges, where "she's deciding if he's worth the effort"
+read closer to skeptical than curious. Being cold, curt, or visibly annoyed should be a real
+reaction to something, not the resting state.
+
+`director_direction.md` now says so explicitly: her baseline is curious and a little
+interested, particularly early on — she swiped on him for a reason, this is a new match, not
+a chore. Bad mood is still real and still allowed, it just needs a cause. The Opening stage
+description in `stage.ts` and the no-direction-yet default in `blocks.ts` (used before the
+Director has ever weighed in) got the same reframe, from "neutral, deciding if he's worth the
+effort" to "curious, actively interested."
+
 ### Flags
 
 Flags are set by events, not by thresholds. `real_name_known` goes true because she said
@@ -368,6 +383,11 @@ against a third-party endpoint will hit sometimes. The fallback itself is now a 
 of lines rather than one fixed sentence, so a longer outage does not repeat the exact same
 "sorry got distracted" back to back — which reads as far more obviously broken than any one
 of them does alone, especially if the user resends thinking their message did not arrive.
+
+That fallback line is still in-character flavor text, which means it is indistinguishable
+from a real message unless it's marked. It now carries a `failed: true` flag from
+`fallbackOutput()` through the message's `meta`, and the chat UI renders a small red ⚠ next
+to the bubble so it reads as "generation broke" rather than as something she actually typed.
 
 ### Sounding like a person, not a writer
 

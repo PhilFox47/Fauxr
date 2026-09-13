@@ -257,6 +257,12 @@ input[type='range'] { width: 100%; accent-color: var(--accent); }
 @keyframes pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .bubble.them { align-self: flex-start; background: var(--bubble-them); border-bottom-left-radius: 6px; }
 .bubble.me { align-self: flex-end; background: var(--bubble-me); color: #fff; border-bottom-right-radius: 6px; }
+.fail-mark {
+  display: inline-block;
+  margin-left: 6px;
+  color: #ff3b30;
+  font-weight: 700;
+}
 .bubble.image { padding: 5px; }
 .bubble.image img { display: block; max-width: 240px; border-radius: 14px; }
 .bubble.voice { display: flex; align-items: center; gap: 10px; min-width: 180px; }

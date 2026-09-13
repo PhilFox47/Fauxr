@@ -345,7 +345,7 @@ function isStaleSession(rel: Relationship): boolean {
 /** Play the messages out over time with a typing indicator, the way a person types. */
 async function deliver(
   character: Character,
-  messages: { text: string; delay: number; kind?: string; duration_seconds?: number }[],
+  messages: { text: string; delay: number; kind?: string; duration_seconds?: number; failed?: boolean }[],
   startedIn: number,
 ): Promise<void> {
   for (const m of messages) {
@@ -360,7 +360,12 @@ async function deliver(
       sender: 'character',
       text: m.text,
       kind: m.kind === 'voice' ? 'voice' : 'text',
-      meta: m.duration_seconds ? { duration_seconds: m.duration_seconds } : {},
+      // `failed` marks the canned line sent when generation genuinely failed twice, so the
+      // client can flag it instead of letting it pass as a real message she typed.
+      meta: {
+        ...(m.duration_seconds ? { duration_seconds: m.duration_seconds } : {}),
+        ...(m.failed ? { failed: true } : {}),
+      },
       read_at: null,
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });

@@ -214,7 +214,14 @@ export default function Chat({
               ) : m.kind === 'voice' ? (
                 <VoiceBubble message={m} mine={mine} />
               ) : (
-                <div className={`bubble ${mine ? 'me' : 'them'}`}>{m.text}</div>
+                <div className={`bubble ${mine ? 'me' : 'them'}`}>
+                  {m.text}
+                  {m.meta?.failed && (
+                    <span className="fail-mark" title="Generation failed - this is a placeholder, not a real reply">
+                      ⚠
+                    </span>
+                  )}
+                </div>
               )}
               {showStamp && (
                 <div className={`stamp ${mine ? 'me' : 'them'}`}>

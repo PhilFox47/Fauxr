@@ -235,9 +235,9 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags): 
 export function directionBlock(d: Direction | null, somethingLive = false): string {
   if (!d) {
     return [
-      'Mood: ordinary, nothing special going on.',
-      'What you privately want (never say it out loud): work out whether you fancy him.',
-      'Stance: neutral, mildly curious.',
+      'Mood: good - genuinely curious about this new match, nothing has soured it.',
+      'What you privately want (never say it out loud): find out if he is actually interesting.',
+      'Stance: warm and curious, actively interested rather than making him prove himself first.',
       'You will NOT: give out your real name, agree to meet up yet.',
       'Length: short.',
     ].join('\n');

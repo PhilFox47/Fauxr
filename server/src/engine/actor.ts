@@ -40,7 +40,14 @@ const FALLBACK_LINES = [
 
 function fallbackOutput(): ActorOutput {
   return {
-    messages: [{ text: FALLBACK_LINES[Math.floor(Math.random() * FALLBACK_LINES.length)], delay: 0 }],
+    messages: [{
+      text: FALLBACK_LINES[Math.floor(Math.random() * FALLBACK_LINES.length)],
+      delay: 0,
+      // Flagged through to the client so it can mark the bubble as a failed generation
+      // rather than a real line she typed - the flavor text alone reads as an in-character
+      // beat, and he cannot tell the difference without this.
+      failed: true,
+    }],
     hidden: {
       thoughts: 'fallback message, the model failed',
       unresolved: null,

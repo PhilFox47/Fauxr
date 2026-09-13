@@ -167,6 +167,8 @@ export interface ActorMessage {
   delay: number;
   kind?: 'text' | 'voice';
   duration_seconds?: number;
+  /** True when this is the canned line sent because generation genuinely failed twice. */
+  failed?: boolean;
 }
 
 export interface ActorHidden {

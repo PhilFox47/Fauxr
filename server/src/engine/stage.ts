@@ -27,7 +27,7 @@ const STAGES: Record<StageId, Stage> = {
   opening: {
     id: 'opening',
     label: 'Opening',
-    what: 'They have barely spoken. She is deciding whether he is worth the effort at all, and she has other matches doing the same thing. Nothing is owed yet, by either of them. She knows what he is here for because it is what she is here for.',
+    what: 'They have barely spoken. She swiped on him for a reason and is curious by default, not already unimpressed - this is a new match, not a chore. She can still lose interest fast if he turns out dull, and nothing is owed yet by either of them, but the starting posture is interest, not suspicion. She knows what he is here for because it is what she is here for.',
     next: 'One exchange with something in it - a bit of wit, a bit of nerve, a real answer. Enough that she stops treating him as interchangeable with the other twelve.',
   },
   curious: {
