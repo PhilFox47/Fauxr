@@ -64,6 +64,9 @@ export async function complete(opts: CompletionOptions): Promise<string> {
     max_tokens: opts.config.max_tokens,
   };
   if (opts.json) body.response_format = { type: 'json_object' };
+  // Pins an open-source model to one specific backend instead of leaving routing to the
+  // provider. Omitted entirely when unset, which is the existing default behaviour.
+  if (opts.config.provider) body.provider = opts.config.provider;
 
   const started = Date.now();
   const controller = new AbortController();
@@ -172,6 +175,7 @@ export async function generateImage(req: ImageRequest): Promise<string> {
   };
   if (req.seed !== undefined) body.seed = req.seed;
   if (req.refImage) body.image = req.refImage;
+  if (settings.models.image.provider) body.provider = settings.models.image.provider;
 
   const started = Date.now();
   const res = await fetch(`${base.replace(/\/$/, '')}/images/generations`, {

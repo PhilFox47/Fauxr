@@ -7,7 +7,7 @@ import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
 import { insertCharacter, createRelationship } from '../repo.js';
 import type { Character, CharacterSeed, OnlineWindow, Thresholds } from '../types.js';
-import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
+import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, shuffle, type DiceContext } from './dice.js';
 
 /** Fields the Director may swap during the coherence pass. */
 const SWAPPABLE: Record<string, string> = {
@@ -573,19 +573,37 @@ const BIO_FORMATS: BioFormat[] = [
   { hint: 'One or two conditions for whoever swipes right, each with a reason attached that gives something away.', notFor: ['shy', 'earnest', 'dreamy'] },
   { hint: 'Blunt to the point of being funny about what she wants. No hedging, no softening, no apology.', notFor: ['shy', 'overthinker', 'still_water'] },
   { hint: 'Where her head is at right now, in a few plain lines. Not a joke, not a pitch, and honest about wanting someone.', notFor: ['sarcastic', 'guarded', 'cynic'] },
+  { hint: 'A short list of rules for whoever matches with her, framed as a warning, ending on the one that actually matters.' },
+  { hint: 'Her verdict on dating apps so far, one or two dry lines, then the specific exception she would make.' },
+  { hint: 'What a normal day for her looks like, then the one thing that would break the routine in exactly the way she wants.' },
+  { hint: 'What her friends think this app is for versus what she is actually doing here, stated back to back.' },
+  { hint: 'One thing she will do for the right person and one thing she absolutely will not, no transition between them.' },
+  { hint: 'Three short lines building to a point, the last one landing hardest and doing most of the work.' },
+  { hint: 'What she is celebrating or getting over right now, and how that is shaping what she wants tonight specifically.', notFor: ['guarded', 'still_water'] },
+  { hint: 'A direct comparison between the last person she dated and what she actually wants this time.' },
 ];
 
-/** Shapes used for the last few characters, so the stack rotates through them. */
-const recentFormats: string[] = [];
+/**
+ * A shuffled draw order rather than an independent random pick each time. A plain random
+ * choice with only a short "avoid the last few" window still lets the same shape turn up
+ * three times in twenty characters by chance - visible the moment anyone actually swipes
+ * through a real stack, which is exactly the "these all feel built from the same pieces"
+ * complaint this replaced. Drawing without replacement until every shape has had a turn,
+ * then reshuffling, guarantees the same shape cannot repeat until all the others have.
+ */
+let formatBag: string[] = [];
 
 function pickBioFormat(archetype: string): string {
-  const inCharacter = BIO_FORMATS.filter((f) => !f.notFor?.includes(archetype));
-  const pool = inCharacter.length ? inCharacter : BIO_FORMATS;
-  const fresh = pool.filter((f) => !recentFormats.includes(f.hint));
-  const chosen = pickOne(fresh.length ? fresh : pool).hint;
-  recentFormats.push(chosen);
-  if (recentFormats.length > 6) recentFormats.shift();
-  return chosen;
+  const pool = BIO_FORMATS.filter((f) => !f.notFor?.includes(archetype)).map((f) => f.hint);
+  const usable = pool.length ? pool : BIO_FORMATS.map((f) => f.hint);
+
+  // Refill and reshuffle once the bag is empty, or once it no longer contains anything
+  // usable for this archetype (it may have been drawn down while generating others).
+  if (!formatBag.some((h) => usable.includes(h))) {
+    formatBag = shuffle(usable);
+  }
+  const idx = formatBag.findIndex((h) => usable.includes(h));
+  return formatBag.splice(idx, 1)[0];
 }
 
 /** Only used when no model is reachable, so the stack is still browsable offline. */

@@ -5,6 +5,12 @@ export interface ModelConfig {
   temperature: number;
   top_p: number;
   max_tokens: number;
+  /**
+   * Optional upstream routing hint (Nano-GPT's `provider` field on chat completions) -
+   * pins an open-source model to one specific backend instead of letting it pick. Left
+   * unset, the request omits the field entirely and the provider decides as usual.
+   */
+  provider?: string;
 }
 
 export interface Settings {
@@ -17,7 +23,7 @@ export interface Settings {
   models: {
     actor: ModelConfig;
     director: ModelConfig;
-    image: { model: string; size: string };
+    image: { model: string; size: string; provider?: string };
   };
   /** Global multiplier for proactivity and wakeup frequency. Conservative by default. */
   activity: number;

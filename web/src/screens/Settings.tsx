@@ -139,6 +139,19 @@ function ModelsPane({ settings, patch, save, saved }: any) {
               onChange={(e) => patch(['models', role, 'model'], e.target.value)}
             />
           </label>
+          <label className="field">
+            <span>Provider (optional)</span>
+            <input
+              type="text"
+              value={settings.models[role].provider ?? ''}
+              placeholder="leave blank to let it route itself"
+              onChange={(e) => patch(['models', role, 'provider'], e.target.value)}
+            />
+            <span className="tiny muted">
+              Pins this model to one specific backend instead of letting Nano-GPT pick, e.g.
+              "chutes" or "targon". Blank uses the default routing.
+            </span>
+          </label>
           <div className="row">
             <label className="field grow">
               <span>Temperature {settings.models[role].temperature}</span>
@@ -184,6 +197,15 @@ function ModelsPane({ settings, patch, save, saved }: any) {
             type="text"
             value={settings.models.image.size}
             onChange={(e) => patch(['models', 'image', 'size'], e.target.value)}
+          />
+        </label>
+        <label className="field">
+          <span>Provider (optional)</span>
+          <input
+            type="text"
+            value={settings.models.image.provider ?? ''}
+            placeholder="leave blank to let it route itself"
+            onChange={(e) => patch(['models', 'image', 'provider'], e.target.value)}
           />
         </label>
       </div>
