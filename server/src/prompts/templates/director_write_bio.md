@@ -14,6 +14,13 @@ handle: {{username}}
 # THE SHAPE FOR THIS ONE
 {{format_hint}}
 
+# THE THING THAT MAKES HER HER
+{{signature_hint}}
+
+This is the most interesting thing about her, so the bio should be shaped by it - not
+necessarily stated outright, but visible in what she chooses to mention and how. A bio that
+could belong to anyone has failed. If in doubt, let this be the thing she is oblique about.
+
 Use that shape. It exists so that the people in this app do not all sound the same.
 
 # HOW TO WRITE IT

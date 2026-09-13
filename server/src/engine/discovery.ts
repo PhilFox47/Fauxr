@@ -55,6 +55,7 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   add('dating_experience', 'life', 'On apps', label('dating_experience', s.dating_experience), 'How she talks about this place.');
 
   // ---- personality
+  add('signature', 'personality', 'Her whole thing', label('signature', s.signature), 'The thing she is really about. Hard to miss once it surfaces.');
   add('archetype', 'personality', 'Character', label('archetype', s.archetype), 'Becomes obvious over time.');
   add('humor_type', 'personality', 'Humour', label('humor_type', s.humor_type), 'Make her laugh and find out.');
   add('attachment_style', 'personality', 'In a relationship', label('attachment_style', s.attachment_style), 'Shows when things get close.');

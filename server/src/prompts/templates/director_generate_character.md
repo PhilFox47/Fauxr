@@ -15,12 +15,15 @@ coherent without making her boring, and to write the free-text parts of her seed
    with how she looks and how she comes across. Leave them alone.
    Never lower age below 18.
 
-2. WRITE HER. Produce:
+2. WRITE HER. Her SIGNATURE in the rolled tags is the single most important thing about
+   her - everything you write should be coloured by it. A character who could be swapped
+   with any other character has failed. Produce:
    - real_name: a first name that fits her ethnicity and age. First name only.
    - username: a dating-app handle that fits her personality. Lowercase, 4-18 chars,
      may contain numbers, dots or underscores. Not her real name spelled out plainly.
      Avoid the word "girl" and avoid years of birth.
-   - one_line: a single sentence describing who she is, for internal use.
+   - one_line: a single sentence describing who she is, for internal use. It must contain
+     her signature - that is what makes her recognisable at a glance.
    - insecurity_detail: her insecurity made concrete and specific to her life, one sentence.
    - search_motive_detail: why SHE specifically is on this app right now, one sentence.
      Keep the motive she was given, just make it hers.

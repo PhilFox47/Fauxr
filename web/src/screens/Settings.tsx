@@ -243,6 +243,22 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
 
       <div className="card">
         <label className="field">
+          <span>Heightening ({settings.heightening.toFixed(2)}×) — how larger-than-life characters are</span>
+          <input
+            type="range" min={0.3} max={2.5} step={0.05}
+            value={settings.heightening}
+            onChange={(e) => patch(['heightening'], Number(e.target.value))}
+          />
+          <span className="tiny muted">
+            Every character gets one defining trait. Low keeps them to real people with a
+            strong streak; high favours the loud ones — a declared nemesis, an inherited
+            lighthouse, a cryptid podcast. Applies to characters generated from now on.
+          </span>
+        </label>
+      </div>
+
+      <div className="card">
+        <label className="field">
           <span>Activity ({settings.activity.toFixed(2)}×) — how often characters reach out unprompted</span>
           <input
             type="range" min={0.1} max={3} step={0.05}

@@ -22,6 +22,15 @@ direction must be behaviour, not statistics.
 # THE CHARACTER (full seed - this never changes)
 {{seed_block}}
 
+# THE THING THAT MAKES HER HER
+{{signature_hint}}
+
+Lean on this. It is the reason she is worth talking to rather than a fun fact to be deployed
+once and dropped. It should drive what she brings up, what she is busy with, what she wants
+from him, and what she is unreasonable about. When you write "bring_up" or set a wakeup,
+this is the first place to look. Characters here are allowed to be larger than life - the
+failure mode is a generically pleasant woman, not an eccentric one.
+
 # WHERE THIS CONVERSATION IS
 Phase: {{stage_label}}
 {{stage_what}}
@@ -90,12 +99,15 @@ Score against HER touchstone, not against a universal scale of niceness:
   {{touchstone_hint}}
 The same sentence can be charming to a confident woman and creepy to a guarded one.
 
-TRUST is slow and hard to earn. It is about safety, not about liking him.
-  +5  something rare: he remembered a small thing unprompted, took a refusal gracefully,
+TRUST is the slower of the two. It is about safety, not about liking him. It should still
+be visibly moving over a good conversation - a character who is still guarded after an hour
+of genuine talk is not realistic, she is just tedious.
+  +6  something rare: he remembered a small thing unprompted, took a refusal gracefully,
       said something true that cost him something
-  +3  clearly above average effort aimed specifically at her
+  +4  clearly above average effort aimed specifically at her
+  +2  a real exchange where she told him something and he did something with it
   +1  a good, pleasant, ordinary exchange
-   0  filler, small talk, nothing happened. THIS IS THE DEFAULT FOR TRUST.
+   0  filler, small talk, nothing happened
   -1  low effort, self-absorbed, ignored something she said
   -3  pushed after a dodge, generic flattery, sexual turn she did not invite
   -8  crossed a stated boundary, was cruel, was caught lying
@@ -198,7 +210,9 @@ Reply with exactly one JSON object and nothing else:
 }
 
 "discovered" lists the things he has now actually learned about her - because she told him,
-or showed him, not because he could have guessed. Use the exact keys from this list, and
+or showed him, not because he could have guessed. Be generous with this where it is
+genuinely earned: if she mentioned her job in passing, he knows her job. Under-reporting
+makes the whole thing feel stuck. Use the exact keys from this list, and
 only ones that genuinely came out in the conversation above:
 {{undiscovered_keys}}
 

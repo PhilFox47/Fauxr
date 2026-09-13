@@ -38,6 +38,8 @@ export interface CharacterSeed {
 
   // personality
   archetype: string;
+  /** The one heightened, defining thing about her. See data/attributes/signature.json. */
+  signature: string;
   attachment_style: string;
   humor_type: string;
   conflict_style: string;

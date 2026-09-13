@@ -338,6 +338,32 @@ coherence is enforced in three stages:
 archetype filter, on purpose. A character who ticks differently than she looks is the
 interesting case.
 
+### Signatures
+
+Rolling forty plausible attributes produces forgettable soup: everyone comes out as a
+reasonable person with a job. So every character also draws a **signature** — the one
+heightened thing that makes her her. A declared nemesis. An inherited lighthouse. A small
+cryptid podcast she is entirely earnest about. Banned from a named town for reasons she
+considers an overreaction.
+
+It is rolled without the archetype filter, deliberately: a shy woman with a nemesis is far
+more interesting than one whose every trait agrees with the others. The Actor is told it
+shapes her week rather than being a fact to deploy once, the Director is told to lean on it
+when deciding what she brings up, and the bio is written around it. It is discoverable like
+anything else.
+
+A **heightening** slider controls how far past an ordinary person the pool leans:
+
+| heightening | grounded | heightened | cartoon |
+|---|---|---|---|
+| 0.4 | 50% | 41% | 8% |
+| 1.4 (default) | 17% | 42% | 41% |
+| 2.5 | 5% | 36% | 59% |
+
+The supporting tables carry a heightened tier too — taxidermist, funeral director, night
+security guard alongside the nurses and baristas; voicing her pet's inner monologue
+alongside double-texting.
+
 ### Bios
 
 The bio is the only thing you see before swiping, so it gets its own call, and it goes to

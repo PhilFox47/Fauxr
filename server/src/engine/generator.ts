@@ -163,6 +163,20 @@ export function rollSeed(): RolledSeed {
 
   const accessories = rollMany('accessory', ctx, drawCount(counts.accessories, 1)).map((a) => a.id);
 
+  /**
+   * Her signature: the one heightened thing that makes her memorable. Rolled without the
+   * archetype filter on purpose - a shy woman with a declared nemesis is far more
+   * interesting than a shy woman whose every trait agrees with the others. The heightening
+   * setting decides how far past an ordinary person the pool leans.
+   */
+  const heightening = Math.max(0.2, Math.min(3, getSettings().heightening));
+  for (const sig of byCategory('signature')) {
+    const bold = Number(sig.extra?.bold ?? 1);
+    ctx.weights[sig.id] = Math.pow(heightening, bold - 1);
+  }
+  const signature = roll('signature', ctx, { exclude: new Set() })!;
+  fieldIds.signature = signature.id;
+
   // personality
   const attachment_style = one('attachment_style');
   const humor_type = one('humor_type');
@@ -215,6 +229,7 @@ export function rollSeed(): RolledSeed {
 
   const hints: Record<string, string> = {
     archetype: hintOf(archetype),
+    signature: hintOf(signature),
     attachment_style: hintOf(attachment_style),
     humor_type: hintOf(humor_type),
     conflict_style: hintOf(conflict_style),
@@ -264,6 +279,7 @@ export function rollSeed(): RolledSeed {
     accessories,
 
     archetype: archetype.id,
+    signature: signature.id,
     attachment_style: attachment_style!.id,
     humor_type: humor_type!.id,
     conflict_style: conflict_style!.id,
@@ -346,6 +362,7 @@ export function describeSeed(seed: CharacterSeed): string {
   const labels = (cat: string, ids: string[]) => ids.map((i) => label(cat, i)).join(', ') || 'none';
   const lines = [
     `age: ${seed.age}`,
+    `SIGNATURE (the one thing that makes her her): ${label('signature', seed.signature)} - ${seed.hints.signature}`,
     `archetype: ${label('archetype', seed.archetype)} - ${seed.hints.archetype}`,
     `attachment: ${label('attachment_style', seed.attachment_style)} - ${seed.hints.attachment_style}`,
     `humour: ${label('humor_type', seed.humor_type)} - ${seed.hints.humor_type}`,

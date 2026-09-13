@@ -91,6 +91,7 @@ export async function runDirector(
     stage_next: stage.next,
     her_curiosity: herCuriosity(rel),
     fetish_block: describeFetishProgress(character, rel),
+    signature_hint: character.seed.hints.signature ?? '',
     arousal: rel.arousal,
     arousal_ceiling: ceiling,
     arousal_description: describeArousal(rel.arousal),

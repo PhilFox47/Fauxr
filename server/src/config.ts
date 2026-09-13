@@ -39,6 +39,12 @@ export interface Settings {
    */
   spice: number;
   /**
+   * How far characters are pushed past ordinary people. 1 is a normal person with one
+   * strong trait; higher favours the loud, cartoonish signatures over the grounded ones.
+   * Applied at generation time.
+   */
+  heightening: number;
+  /**
    * Testing override: every character counts as online at all times, the server uptime
    * window is ignored, and nobody stays away after announcing they are leaving. Turn it
    * off to get the real pacing back.
@@ -65,6 +71,7 @@ export const DEFAULT_SETTINGS: Settings = {
   images_enabled: false,
   voice_enabled: false,
   spice: 1.3,
+  heightening: 1.4,
   always_online: true,
 };
 
