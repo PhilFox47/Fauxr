@@ -272,6 +272,31 @@ Its ceiling comes from her seed — libido and sexting readiness — and from sp
 high-libido character still cannot run hot for someone she is not into (libido 5 with spark
 20 tops out at 42). The Actor never sees the number, only how it feels from the inside.
 
+`arousal_delta` gets the same explicit numeric rubric as trust and spark (+25 for detail
+that actually lands, down to -20 for clumsy or presumptuous), rather than a paragraph of
+vibes — a cheap Director model regresses to 0 on anything it isn't given anchor points for,
+and arousal sitting flat despite real effort from the user was exactly that failure. The
+rubric also ties how much gatekeeping is in character to her own libido, sexual confidence
+and sexting readiness rather than a genre default: a character who rolled high on all three
+running a long testing bit is out of character for her, not tension.
+
+### Tests need a finish line
+
+A specific failure pattern: she sets a bar ("be specific", "impress me"), the user clears
+it, and she raises the bar again instead of paying it off — forever. Nothing was wrong with
+any single message; the conversation just never got anywhere. Both the Director and the
+Actor are told this by name now: a test that has genuinely been passed pays off that turn —
+a real answer, a matching escalation, arousal actually moving — and moving the goalposts the
+instant he clears them reads as the scene stalling, not as her being hard to get.
+
+Two smaller repetition tells got the same treatment. A model will happily land the same dig
+twice in one conversation, reworded the second time, which reads as a stuck record rather
+than a callback — caught in the prompt, and backstopped in code with the same token-overlap
+heuristic already used to detect the user repeating himself under pressure (0 false
+positives across a 20-message stress conversation). And one emoji turning into a tic
+stamped on the end of every message for several turns running is now called out explicitly
+as something real texting doesn't do.
+
 ### Flags
 
 Flags are set by events, not by thresholds. `real_name_known` goes true because she said
@@ -307,12 +332,22 @@ one exchange looks like this:
 
 Nobody texts like that. `server/src/engine/voice.ts` catches each tic by name — narrating
 his message back, parroting his words with the pronouns flipped, reviewing the
-conversation from outside it, announcing that she is evaluating him — plus a whole turn
-made of nothing but polished one-liners, which is its own tell. A rejected turn is
-re-requested once with a correction that names the exact mistake, which works far better
-than asking for something better; a second failure falls back to a neutral one-liner.
-Measured at zero false positives across 350 realistic message/context pairs, so a good
-reply still costs one call.
+conversation from outside it, announcing that she is evaluating him, repeating a dig she
+already made earlier in the same conversation — plus a whole turn made of nothing but
+polished one-liners, which is its own tell. A rejected turn is re-requested once with a
+correction that names the exact mistake, which works far better than asking for something
+better; a second failure falls back to a neutral one-liner. Measured at zero false
+positives across 350 realistic message/context pairs, so a good reply still costs one call.
+
+The two attempts are for content problems — the model wrote something, it was the wrong
+shape. A thrown error (a rate limit, a timeout, a non-2xx response) is a different failure
+and used to skip the retry budget entirely, falling back on the very first hiccup with
+neither attempt spent. It now retries once with the identical request before giving up,
+which is free and absorbs exactly the kind of transient provider blip a hookup app running
+against a third-party endpoint will hit sometimes. The fallback itself is now a small pool
+of lines rather than one fixed sentence, so a longer outage does not repeat the exact same
+"sorry got distracted" back to back — which reads as far more obviously broken than any one
+of them does alone, especially if the user resends thinking their message did not arrive.
 
 ### Sounding like a person, not a writer
 

@@ -25,20 +25,35 @@ ${fix}
 Write it again from scratch - do not patch the old version, it is the wrong shape. Same JSON structure, nothing else.`;
 }
 
-const FALLBACK: ActorOutput = {
-  messages: [{ text: 'sorry got distracted, what were u saying', delay: 0 }],
-  hidden: {
-    thoughts: 'fallback message, the model failed',
-    unresolved: null,
-    mood: 'neutral',
-    goal_fulfilled: false,
-    boundary_touched: false,
-    new_fact: null,
-    open_thread: null,
-    going_offline_in: null,
-    director_needed: true,
-  },
-};
+/**
+ * Used only once both attempts have genuinely failed. A pool rather than one fixed line,
+ * so a provider outage spanning a couple of turns does not repeat the exact same sentence
+ * back to back - which reads far more obviously broken than any one of these does alone,
+ * especially if the user resends thinking their message did not go through.
+ */
+const FALLBACK_LINES = [
+  'sorry got distracted, what were u saying',
+  'hang on, phone did something weird',
+  'wait sorry, one sec',
+  'ugh my signal is awful rn',
+];
+
+function fallbackOutput(): ActorOutput {
+  return {
+    messages: [{ text: FALLBACK_LINES[Math.floor(Math.random() * FALLBACK_LINES.length)], delay: 0 }],
+    hidden: {
+      thoughts: 'fallback message, the model failed',
+      unresolved: null,
+      mood: 'neutral',
+      goal_fulfilled: false,
+      boundary_touched: false,
+      new_fact: null,
+      open_thread: null,
+      going_offline_in: null,
+      director_needed: true,
+    },
+  };
+}
 
 function normalizeHidden(raw: any): ActorHidden {
   return {
@@ -153,6 +168,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
   const settings = getSettings();
   const recent = recentMessages(ctx.character.id, 12);
   const lastUserMessage = [...recent].reverse().find((m) => m.sender === 'user')?.text ?? '';
+  const recentOwnMessages = recent.filter((m) => m.sender === 'character').map((m) => m.text);
 
   /**
    * Two signals that the floor is not clear. The Actor's own report from last turn is the
@@ -182,7 +198,13 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       });
     } catch (err) {
       logger.error('actor', `actor call failed for ${ctx.character.username}`, { error: String(err) });
-      return FALLBACK;
+      // A thrown error here is a transport or provider problem (rate limit, timeout, a
+      // non-2xx response), not a content problem - the one thing the retry budget should
+      // absolutely not be skipped for. Retrying with the exact same request costs nothing
+      // and silently swallowing a single flaky call is worth a lot: this used to send the
+      // canned fallback on the very first hiccup, using neither of the two attempts.
+      if (attempt === 0) continue;
+      return fallbackOutput();
     }
 
     let parsed: any;
@@ -214,6 +236,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
           isFirst: i === 0,
           lastUserMessage,
           writesFormally: writesFormally(ctx.character),
+          recentOwnMessages,
         }),
       )
       .find(Boolean);
@@ -246,7 +269,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
   }
 
   logger.error('actor', `actor failed twice for ${ctx.character.username}, using fallback`);
-  return FALLBACK;
+  return fallbackOutput();
 }
 
 export interface VoiceOutput {

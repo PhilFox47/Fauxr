@@ -101,6 +101,40 @@ export interface VoiceCheckInput {
    * the model defaulting to prose.
    */
   writesFormally?: boolean;
+  /** Her own last several messages in this conversation, oldest first. See selfRepeat. */
+  recentOwnMessages?: string[];
+}
+
+function textTokens(text: string): Set<string> {
+  return new Set(
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9äöüß\s']/g, ' ')
+      .split(/\s+/)
+      .filter((w) => w.length > 3),
+  );
+}
+
+/** Fraction of the smaller message's substantial words that also appear in the other. */
+function textOverlap(a: string, b: string): number {
+  const ta = textTokens(a);
+  const tb = textTokens(b);
+  if (ta.size < 3 || tb.size < 3) return 0; // too short for overlap to mean anything
+  let hits = 0;
+  for (const t of ta) if (tb.has(t)) hits++;
+  return hits / Math.min(ta.size, tb.size);
+}
+
+/**
+ * Catches a specific dig or observation landing twice in one conversation - "your bio
+ * just says :)" once as a real line, then again three exchanges later, reworded but
+ * clearly the same barb. The prompt already says not to do this; this is the backstop for
+ * when it happens anyway. High threshold and a length floor, because short natural
+ * repeats ("yeah", "same", "lol no") are not this and must never trip it.
+ */
+function selfRepeat(text: string, recentOwnMessages: string[] | undefined): boolean {
+  if (!recentOwnMessages?.length) return false;
+  return recentOwnMessages.some((prior) => textOverlap(text, prior) > 0.6);
 }
 
 export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
@@ -155,6 +189,12 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
     return {
       what: 'repeating his words back',
       fix: 'Your first message just repeated what he said back to him with the pronouns flipped. Drop it and start with your actual reply.',
+    };
+  }
+  if (selfRepeat(input.text, input.recentOwnMessages)) {
+    return {
+      what: 'repeating something she already said in this conversation',
+      fix: 'You already made basically this exact point or observation earlier in this conversation. Saying it again, even reworded, reads as a stuck record. Drop it - say something else, or just answer him.',
     };
   }
   return null;
