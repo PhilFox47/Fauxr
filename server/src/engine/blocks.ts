@@ -175,7 +175,7 @@ export function directionBlock(d: Direction | null): string {
   if (!d) {
     return [
       'Mood: ordinary, nothing special going on.',
-      'Goal: just see what he is like.',
+      'What you privately want (never say it out loud): just see what he is like.',
       'Stance: neutral, mildly curious.',
       'You will NOT: give out your real name, agree to meet, get sexual.',
       'Length: short.',
@@ -184,7 +184,9 @@ export function directionBlock(d: Direction | null): string {
   return [
     `Mood: ${d.mood}`,
     `Energy: ${d.energy}`,
-    `What you want out of the next few messages: ${d.goal}`,
+    // Spelled out as private, because a model handed a goal will otherwise announce it.
+    `What you privately want out of the next few messages (never say this out loud, never`
+      + ` hint that you are working towards it - it only shows in what you do): ${d.goal}`,
     `Stance towards him: ${d.stance}`,
     d.forbidden?.length ? `You will NOT:\n${d.forbidden.map((f) => `- ${f}`).join('\n')}` : '',
     d.bring_up ? `If it fits, bring up: ${d.bring_up}` : '',

@@ -8,27 +8,20 @@ import {
   appearanceBlock, communicationBlock, directionBlock, historyBlock, identityBlock,
   interestsBlock, languageBlock, ledgerBlock, lifeBlock, quirksBlock, sexualBlock, userBlock,
 } from './blocks.js';
+import { describeHerMoment } from './moment.js';
+import { pickNudge } from './nudge.js';
+import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty } from './voice.js';
 
-/** Narration and roleplay prose leaking into a chat app is the failure mode of this project. */
-const RP_PATTERNS: { re: RegExp; what: string }[] = [
-  { re: /\*[^*\n]{2,}\*/, what: 'asterisk action' },
-  { re: /^_[^_\n]{2,}_$/m, what: 'underscore action' },
-  { re: /~[^~\n]{2,}~/, what: 'tilde emote' },
-  { re: /\[(?:she|he|they)\b[^\]]*\]/i, what: 'bracketed stage direction' },
-  { re: /<[^>\n]{2,}>/, what: 'angle-bracket emote' },
-  { re: /\b(?:she|her)\s+(?:smiles|smiled|laughs|laughed|giggles|giggled|sighs|sighed|blushes|blushed|grins|grinned|bites|leans|tilts|nods|shrugs|raises an eyebrow|rolls her eyes)\b/i, what: 'third-person narration' },
-  { re: /\((?:smil|laugh|giggl|sigh|blush|grin|wink|shrug|nod)[a-z]*\)/i, what: 'parenthetical emote' },
-];
+export { detectRoleplay };
 
-export function detectRoleplay(text: string): string | null {
-  for (const p of RP_PATTERNS) if (p.re.test(text)) return p.what;
-  return null;
+/** The retry names the exact tic, which works far better than asking for "something better". */
+function retryHint(problem: string, fix: string): string {
+  return `Your last answer will not do: ${problem}.
+
+${fix}
+
+Write it again from scratch - do not patch the old version, it is the wrong shape. Same JSON structure, nothing else.`;
 }
-
-const STRICTER_HINT = `Your last answer broke the single hard rule: it contained narration or an action instead of a chat message.
-No asterisks. No description of movement, face, gestures or surroundings. No third-person sentences about yourself.
-You are typing on a phone. Only the words you would actually type into the message box.
-Reply again with the same JSON structure and nothing else.`;
 
 const FALLBACK: ActorOutput = {
   messages: [{ text: 'sorry got distracted, what were you saying', delay: 0 }],
@@ -100,7 +93,11 @@ export interface ActorContext {
   direction: Direction | null;
 }
 
-function buildPrompt(ctx: ActorContext, template: 'actor_chat' | 'actor_voice'): string {
+function buildPrompt(
+  ctx: ActorContext,
+  template: 'actor_chat' | 'actor_voice',
+  nudge: string,
+): string {
   const { character, relationship, direction } = ctx;
   const settings = getSettings();
   const user = getUserProfile();
@@ -124,6 +121,8 @@ function buildPrompt(ctx: ActorContext, template: 'actor_chat' | 'actor_voice'):
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     ledger_block: ledgerBlock(relationship.ledger),
     direction_block: directionBlock(direction),
+    moment_block: describeHerMoment(character),
+    turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),
     max_messages: settings.chat.max_messages_per_turn,
     voice_target:
@@ -133,9 +132,15 @@ function buildPrompt(ctx: ActorContext, template: 'actor_chat' | 'actor_voice'):
 
 export async function runActor(ctx: ActorContext): Promise<ActorOutput> {
   const settings = getSettings();
-  const prompt = buildPrompt(ctx, 'actor_chat');
-  const messages = [{ role: 'user' as const, content: prompt }];
+  const nudge = pickNudge(ctx.character, ctx.relationship);
+  const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '');
+  const base = [{ role: 'user' as const, content: prompt }];
+  const lastUserMessage =
+    [...recentMessages(ctx.character.id, 12)].reverse().find((m) => m.sender === 'user')?.text ?? '';
 
+  let correction: string | null = null;
+
+  // Two attempts: the first is the ask, the second names whatever went wrong with it.
   for (let attempt = 0; attempt < 2; attempt++) {
     let text: string;
     try {
@@ -144,7 +149,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorOutput> {
         label: `chat:${ctx.character.username}${attempt ? ':retry' : ''}`,
         config: settings.models.actor,
         json: true,
-        messages: attempt === 0 ? messages : [...messages, { role: 'user', content: STRICTER_HINT }],
+        messages: correction ? [...base, { role: 'user', content: correction }] : base,
       });
     } catch (err) {
       logger.error('actor', `actor call failed for ${ctx.character.username}`, { error: String(err) });
@@ -156,6 +161,10 @@ export async function runActor(ctx: ActorContext): Promise<ActorOutput> {
       parsed = extractJson(text);
     } catch {
       logger.warn('actor', 'actor returned unparseable JSON', { raw: text.slice(0, 500) });
+      correction = retryHint(
+        'it was not valid JSON',
+        'Reply with a single JSON object and nothing else. No prose, no code fences.',
+      );
       continue;
     }
 
@@ -165,17 +174,38 @@ export async function runActor(ctx: ActorContext): Promise<ActorOutput> {
     };
     if (out.messages.length === 0) {
       logger.warn('actor', 'actor produced no usable messages');
+      correction = retryHint('it contained no usable message', 'Send at least one actual message.');
       continue;
     }
 
-    const violation = out.messages.map((m) => detectRoleplay(m.text)).find(Boolean);
-    if (violation) {
-      logger.warn('actor', `roleplay prose detected (${violation}), re-requesting`, {
+    const problem = out.messages
+      .map((m, i) => findVoiceProblem({ text: m.text, isFirst: i === 0, lastUserMessage }))
+      .find(Boolean);
+
+    if (problem) {
+      logger.warn('actor', `rejected: ${problem.what}`, {
+        character: ctx.character.username,
+        attempt,
+        messages: out.messages.map((m) => m.text),
+      });
+      correction = retryHint(problem.what, problem.fix);
+      continue;
+    }
+
+    if (attempt === 0 && isRelentlesslyWitty(out.messages.map((m) => m.text))) {
+      logger.warn('actor', 'rejected: every message is a one-line quip', {
         character: ctx.character.username,
         messages: out.messages.map((m) => m.text),
       });
+      correction = retryHint(
+        'every message was the same polished one-liner',
+        'Three quips in a row is a performance, not a conversation. Keep at most one good line. ' +
+          'Let the others be ordinary, or say something real, or ask something you actually want to know.',
+      );
       continue;
     }
+
+    if (nudge) logger.debug('actor', `nudge applied: ${nudge.id}`, { character: ctx.character.username });
     return out;
   }
 
@@ -191,7 +221,7 @@ export interface VoiceOutput {
 export async function runActorVoice(ctx: ActorContext): Promise<VoiceOutput | null> {
   const settings = getSettings();
   if (!settings.voice_enabled) return null;
-  const prompt = buildPrompt(ctx, 'actor_voice');
+  const prompt = buildPrompt(ctx, 'actor_voice', '');
   try {
     const text = await complete({
       scope: 'actor',

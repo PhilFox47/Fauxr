@@ -170,18 +170,52 @@ block her too.
 
 ---
 
-## The chat must not read like roleplay
+## The chat must not read like roleplay, or like an assistant
 
-This is the hardest part of the project, because roleplay prose dominates the training
-data. Three defences:
+Two different things pull the Actor away from sounding like a person, and they need
+different answers.
 
-1. The Actor's system prompt forbids asterisk actions, narration, scene description and
-   any third-person sentence about herself, in explicit terms.
-2. `detectRoleplay()` in `server/src/engine/actor.ts` checks every message before it is
-   stored. On a hit the turn is re-requested once with a sharper instruction, and after a
-   second failure a neutral one-liner is sent instead. Prose never reaches the chat.
-3. Message counts and lengths are clamped by the server, and timing is computed by it
-   rather than requested from the model — see **Message timing**.
+**Roleplay prose**, because it dominates the training data. The prompt forbids asterisk
+actions, narration, scene description and third-person sentences about herself.
+
+**The assistant register**, which is subtler and does more damage. A model trained to be
+helpful acknowledges a request before answering it, summarises your message back to you,
+comments on the shape of the conversation, and explains its own intentions. All four in
+one exchange looks like this:
+
+> you opened with a greeting and a question about my wellbeing
+> bold strategy for a sunday
+> tell you about myself
+> i am testing whether you can do better than that
+
+Nobody texts like that. `server/src/engine/voice.ts` catches each tic by name — narrating
+his message back, parroting his words with the pronouns flipped, reviewing the
+conversation from outside it, announcing that she is evaluating him — plus a whole turn
+made of nothing but polished one-liners, which is its own tell. A rejected turn is
+re-requested once with a correction that names the exact mistake, which works far better
+than asking for something better; a second failure falls back to a neutral one-liner.
+Measured at zero false positives across 350 realistic message/context pairs, so a good
+reply still costs one call.
+
+### Giving her something to say
+
+Detectors only remove bad output. The reason a character defaults to commenting on the
+user is that she has nothing else — so two things supply material:
+
+- **Her moment** (`moment.ts`): the real time of day, the shape of her week, her job, her
+  living situation and her hobbies, assembled in code with no model call. She knows it is
+  Sunday morning, that she is a nurse, and that she shares a flat with two people.
+- **A per-turn nudge** (`nudge.ts`): most turns get nothing, but some ask her to bring in
+  something of her own unprompted, to circle back to an open thread, to be half-present,
+  or to not ask a question back. Frequency scales with her social energy and how invested
+  she is, so a warm character volunteers about half the time and a cold one rarely.
+
+The Director's `goal` is also explicitly marked private in the prompt. Handed a goal
+without that, a model states it out loud — which is exactly where "i am testing whether you
+can do better" came from.
+
+Message counts and lengths are clamped by the server, and timing is computed by it rather
+than requested from the model — see **Message timing**.
 
 Voice messages are the single exception: they may be rambling spoken prose, because that
 is what a voice note is. Narration stays forbidden there too.
