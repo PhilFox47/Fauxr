@@ -313,10 +313,12 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
             onChange={(e) => patch(['spice'], Number(e.target.value))}
           />
           <span className="tiny muted">
-            Scales every character's sexual and date thresholds. Higher means they get there
-            sooner; lower makes them work for it. Each character's own appetite still applies
-            on top, so a forward one is always ahead of a reserved one. Applies to characters
-            generated from now on — existing matches keep the thresholds they were born with.
+            Scales every character's explicit-photo and date thresholds. Higher means they get
+            there sooner; lower makes them work for it. Each character's own appetite still
+            applies on top, so a forward one is always ahead of a reserved one. Applies to
+            characters generated from now on — existing matches keep the thresholds they were
+            born with. Whether a chat itself turns sexual isn't a threshold at all — that's a
+            per-conversation call based on personality and how things are actually going.
           </span>
         </label>
       </div>

@@ -235,15 +235,15 @@ dating app for her own reasons and is expected to pursue them.
 
 ### Spice
 
-Sexual and date thresholds are pulled down by each character's own appetite — her libido,
-sexting readiness and sexual confidence — so a forward character is reachable early and a
-reserved one is a real climb. Measured across 400 rolls: a forward character's
-`sexual_topics` gate sits around spark 5, a reserved one's around 33; spicy photos 16
-versus 51. Before this they were rolled blind, so the most forward woman in the pool could
-be gated exactly as hard as the shyest, which made no sense.
+Explicit-photo and date thresholds are pulled down by each character's own appetite — her
+libido, sexting readiness and sexual confidence — so a forward character is reachable early
+and a reserved one is a real climb. Before this they were rolled blind, so the most forward
+woman in the pool could be gated exactly as hard as the shyest, which made no sense.
 
-A **spice** slider in Settings scales all of it. It applies at generation time, so it
-shapes new characters rather than rewriting matches you already have.
+A **spice** slider in Settings scales those thresholds. It applies at generation time, so it
+shapes new characters rather than rewriting matches you already have. It does not touch
+whether a chat turns sexual at all — see "There is no unlock timer on being sexual" below;
+that was deliberately pulled out of the threshold system entirely.
 
 Trust and spark are scored on separate scales. Trust is slow and about safety. Spark is
 attraction and moves fast, because that is the point of the platform — the Director is told
@@ -252,11 +252,9 @@ failure of direction.
 
 The population reflects the premise: appetite floors are raised across every archetype, so
 nobody is a non-starter, while the spread is kept so a reserved character still reads as
-reserved beside a forward one. What that leaves is roughly: talking dirty is table stakes
-(the `sexual_topics` gate averages 15), while photos (33) and actually meeting (44) still
-take real work. Wanting sex in general is not the same as wanting it with *him*, and that
-gap is where the game is — turn-offs, pressure, dealbreakers and hard limits all still
-bite.
+reserved beside a forward one. Wanting sex in general is not the same as wanting it with
+*him*, and that gap is where the game is — turn-offs, pressure, dealbreakers and hard
+limits all still bite.
 
 ### Fetishes
 
@@ -410,6 +408,50 @@ nothing live gets the `curious` nudge on ~22% of turns; a non-forward character 
 once spark clears 30 (0% below it, as before); the existing `forward`-seed bypass and the
 `somethingLive` suppression (still zero `curious`/`volunteer` while something is unresolved)
 are both unaffected.
+
+### There is no unlock timer on being sexual
+
+The `sexual_topics` unlock used to have a hidden numeric threshold behind it, just like
+`real_name`, `profile_picture` or `allow_date` still do: a spark number rolled at character
+creation (pulled down by her own libido/confidence/sexting-readiness, but never to zero) that
+had to be crossed before the Director was allowed to let a conversation turn sexual at all.
+In practice that meant a forward character built to be sexual from the jump could still be
+sitting on a real, if lower, number she had to hit first — and a good, well-aimed flirt from
+the user in message one could not turn a receptive character around right then, no matter how
+well it landed, because the threshold didn't care about quality, only about a spark total the
+conversation hadn't had time to accumulate yet. That is a pacing device, and it does not
+belong on every character: some of them are supposed to be exactly that easy, immediately,
+because that is who they are.
+
+The threshold is gone. `sexual_topics` is no longer part of `Thresholds` at all, and nothing
+in `thresholdsBlock()` mentions it to the Director anymore. Whether a chat turns sexual, and
+when, is now made fresh every turn from two things only: who she actually is (her seed's
+libido, sexual confidence, sexting readiness, what she's into) and what has actually happened
+in the conversation, including the exchange that just happened. `director_direction.md` says
+this explicitly now — message count is not a variable in the decision at all. A character
+built forward can take the conversation there herself in the very first message, unprompted.
+A reserved or guarded character can also be turned around in the very first message if the
+user is specifically good enough at it; a sharp, confident, well-aimed flirt is allowed to
+land immediately rather than needing to be repeated across several turns before it "counts."
+Refusing early is still a real, in-character answer for a character it doesn't fit — she just
+isn't required to plan out a slower unlock schedule to justify it; it's reconsidered fresh
+next turn like everything else the Director scores.
+
+Nothing downstream needed to change to support this: `sexual_topics_allowed` (the flag that
+actually gates the Actor's sexting instructions and self-initiated sexual nudges in
+`nudge.ts`) was already event-based rather than threshold-based — the Director sets it when
+the conversation has *actually* turned sexual, not when a number crosses a line — so removing
+the upstream threshold that used to gate *when* the Director was allowed to reach for that
+flag is sufficient on its own; the flag's own semantics didn't need touching. The two other
+gates on sexual content in `blocks.ts` (`spiceBlock`'s "flag set OR arousal >= 45" check, and
+the matching check for the Actor's own sexual self-knowledge block) are unaffected for the
+same reason — they were already reading live conversation state, not a rolled number, so a
+character can reach either path as early as the Director's own judgment allows.
+
+Explicit photos, real name, meeting up and personal (non-explicit) photos keep their existing
+threshold-gated unlocks — those are different asks (an image being generated and sent, an
+identity being shared, an in-person meeting), not "is this chat allowed to be sexual," and the
+Settings "Spice" slider now only scales those.
 
 ### Flags
 

@@ -59,11 +59,18 @@ interface SexualSeed {
  * Thresholds spread widely on purpose: every character is her own puzzle. The openness
  * curve and archetype nudge the centre, the dice do the rest.
  *
- * The sexual thresholds are pulled down hard by her own appetite. Without that, a
- * libido-5 sexting-5 character could roll a sexual_topics threshold of 78 and end up
- * gated exactly as hard as the shyest woman in the pool, which is nonsense: her seed says
- * she is forward, so she should be reachable. The global spice setting scales the same
- * thresholds, so pacing is tunable without touching any of this.
+ * There used to be a `sexual_topics` threshold here too, gating whether the conversation
+ * could turn sexual at all. That was removed: it was a hidden dice roll a character had to
+ * clear regardless of how well the user was actually flirting or how forward her own
+ * personality was, which meant even a built-forward character could be stuck waiting on a
+ * number for no in-character reason. Whether things turn sexual, and when, is now entirely
+ * the Director's per-turn call - made from her seed (libido, sexual confidence, sexting
+ * readiness) and the actual conversation, not a threshold rolled once at creation.
+ *
+ * The sexual gate that remains here (spicy photos) is still pulled down hard by her own
+ * appetite - a libido-5 sexting-5 character should be far easier to get an explicit photo
+ * from than a shy one - and the global spice setting scales it, so pacing there is tunable
+ * without touching any of this.
  */
 function rollThresholds(archetype: string, openness: string, sexual: SexualSeed): Thresholds {
   let shift = 0;
@@ -90,7 +97,6 @@ function rollThresholds(archetype: string, openness: string, sexual: SexualSeed)
     real_name: at(8, 45),
     profile_picture: at(12, 55),
     personal_photos: at(25, 65),
-    sexual_topics: sexualAt(20, 62),
     spicy_photos: sexualAt(40, 85),
     allow_date: Math.max(2, Math.min(98, Math.round(at(28, 68) / Math.max(0.6, spice)))),
   };

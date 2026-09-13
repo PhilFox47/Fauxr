@@ -310,7 +310,6 @@ export function thresholdsBlock(seed: CharacterSeed): string {
     `real_name needs trust >= ${t.real_name}`,
     `profile_picture needs trust >= ${t.profile_picture}`,
     `personal_photos needs trust >= ${t.personal_photos}`,
-    `sexual_topics needs spark >= ${t.sexual_topics} (and her sexting readiness is ${seed.sexting_readiness}/5)`,
     `spicy_photos needs trust >= ${t.spicy_photos}`,
     `allow_date needs trust >= ${t.allow_date}`,
     'A threshold being met does not mean it happens. It means you may consider allowing it.',

@@ -13,7 +13,6 @@ export interface Thresholds {
   real_name: number;
   profile_picture: number;
   personal_photos: number;
-  sexual_topics: number;
   spicy_photos: number;
   allow_date: number;
 }
