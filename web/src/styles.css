@@ -173,7 +173,7 @@ input[type='range'] { width: 100%; accent-color: var(--accent); }
   background: linear-gradient(160deg, var(--surface-2), var(--surface));
   border: 1px solid var(--line);
   border-radius: 26px;
-  padding: 34px 26px;
+  padding: 30px 24px;
   min-height: 320px;
   display: flex;
   flex-direction: column;
@@ -183,7 +183,13 @@ input[type='range'] { width: 100%; accent-color: var(--accent); }
   transition: transform 0.18s ease, opacity 0.18s ease;
 }
 .swipe-card .handle { font-size: 22px; font-weight: 700; letter-spacing: -0.2px; }
-.swipe-card .bio { font-size: 17px; line-height: 1.5; color: #d9d6e6; }
+/* Bios are written as two to four short lines; keep the author's line breaks. */
+.swipe-card .bio {
+  font-size: 17px;
+  line-height: 1.55;
+  color: #d9d6e6;
+  white-space: pre-line;
+}
 .swipe-card .hint { font-size: 12px; color: var(--muted); }
 .swipe-actions { display: flex; justify-content: center; gap: 26px; }
 .swipe-actions button {

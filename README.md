@@ -261,13 +261,20 @@ The bio is the only thing you see before swiping, so it gets its own call, and i
 the *Actor* model rather than the Director: it is in-voice writing, not analysis. The
 Director still designs the character, it just does not write her lines.
 
+It runs 25 to 60 words over two to four lines, not a single clever sentence. One cryptic
+line reads as someone who could not be bothered and gives a reader nothing to decide on;
+the bio exists to make her sound interesting, which takes more room than that. Anything
+under fourteen words is rejected and re-requested once. What still stays out is anything
+identifying — her real name, her employer, her street — and any self-summary
+("I'm sarcastic and a bit shy"): the substance belongs, the adjectives do not.
+
 Two things keep the stack from converging on one joke. Each character is assigned a
-structural shape at random — an oddly specific statement, a condition for swiping right,
-two lines that contradict each other, an unfinished thought — drawn from a pool that skips
-shapes which would be out of character for her archetype, and rotates so the same shape
-does not come up twice in a row. And because generation runs strictly one at a time, each
-bio is written with the bios already in the stack in front of it, under instructions not
-to resemble them.
+structural shape at random — three plain facts about her, what her week looks like, what
+people assume versus what is true, conditions for swiping right with reasons attached —
+drawn from a pool that skips shapes out of character for her archetype and rotates so one
+does not repeat within six. And because generation runs strictly one at a time, each bio
+is written with the bios already in the stack in front of it, under instructions not to
+resemble them.
 
 ### The attribute tables
 

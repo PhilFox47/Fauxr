@@ -498,20 +498,20 @@ interface BioFormat {
 }
 
 const BIO_FORMATS: BioFormat[] = [
-  { hint: 'One flat, oddly specific statement about her life. No punchline, no explanation, no follow-up.' },
-  { hint: 'Two or three unrelated things, listed without any framing. The gaps between them do the work.' },
-  { hint: 'A question aimed straight at whoever is reading it, specific enough that a lazy answer is obviously lazy.' },
-  { hint: 'A small confession she is faintly embarrassed by, stated plainly and not apologised for.' },
-  { hint: 'A condition for anyone thinking about swiping right. Dry, not aggressive.', notFor: ['shy', 'earnest', 'dreamy'] },
-  { hint: 'One sentence from her actual week, dropped in with no conclusion drawn from it.' },
-  { hint: 'A deadpan understatement about something that is obviously a big deal.', notFor: ['earnest'] },
-  { hint: 'An opinion held far too strongly about something completely trivial.' },
-  { hint: 'Two lines that quietly contradict each other. She does not acknowledge it.' },
-  { hint: 'Something she wants, phrased so specifically that it is almost a joke, except she means it.' },
-  { hint: 'A self-aware line about being on this app at all, without being bitter about it.' },
-  { hint: 'One detail about her flat, her commute or her job that implies everything else.' },
-  { hint: 'An unfinished thought. It stops before the point, on purpose.', notFor: ['confident', 'ambitious'] },
-  { hint: 'A very short, very sincere sentence with nothing hiding behind it.', notFor: ['sarcastic', 'guarded'] },
+  { hint: 'Three things about her, listed plainly: one about how her days actually go, one preference held far too strongly, one small admission. No framing around them.' },
+  { hint: 'What her week actually looks like, in two or three lines, ending on something that has nothing to do with work.' },
+  { hint: 'What she is after and what she is definitely not after, both stated plainly, plus the detail that explains why.' },
+  { hint: 'An opening line with some bite, then two more that quietly show she is warmer than the first line suggested.' },
+  { hint: 'A self-aware line about being on the app, then what she would honestly like to come out of it.' },
+  { hint: 'What she is into, described the way she would actually describe it, with the enthusiasm she would actually have. Never a list of nouns.' },
+  { hint: 'A small scene from her week, then a line about what she wants from someone, then something unrelated she is annoyed about.' },
+  { hint: 'One or two conditions for whoever swipes right, each with a reason attached that gives something away about her.', notFor: ['shy', 'earnest', 'dreamy'] },
+  { hint: 'What people assume about her, and then what is actually true. Both concrete.' },
+  { hint: 'Her ideal evening, described concretely enough to picture, then one honest line about why she is here.' },
+  { hint: 'Something she is currently obsessed with, explained at slightly too much length, then an abrupt shift to something practical.' },
+  { hint: 'A confession, the context that makes it make sense, and a question aimed at whoever is reading.' },
+  { hint: 'Two things she is good at and one she is visibly bad at, all specific, none of them impressive-sounding.' },
+  { hint: 'Where her head is at right now, in a few plain lines. Not a joke, not a pitch. Just honest.', notFor: ['sarcastic', 'guarded'] },
 ];
 
 /** Shapes used for the last few characters, so the stack rotates through them. */
@@ -529,20 +529,18 @@ function pickBioFormat(archetype: string): string {
 
 /** Only used when no model is reachable, so the stack is still browsable offline. */
 const FALLBACK_BIOS = [
-  'my flatmate thinks i am at the gym right now',
-  'i will need you to have an opinion about something',
-  'three cancelled plans deep into this week and it is tuesday',
-  'ask me about the spreadsheet. do not ask me about the spreadsheet',
-  'i am the person who reads the plaque in the museum',
-  'currently avoiding something important by being here',
-  'i peaked at a pub quiz in 2019 and never recovered',
-  'looking for someone to be unreasonable about small things with',
-  'i have opinions about bread now. this is where i am',
-  'the last four books i bought are still in the bag',
-  'yes i have seen it. no i did not like it',
-  'i talk to the bus driver. that is the kind of person i am',
-  'my camera roll is 90 percent other people\'s dogs',
-  'i keep a list. you would be on the list',
+  'night shifts, so my sense of time is a suggestion.\nI cook properly on days off and eat cereal standing up on the others.\nLooking for someone who can hold a conversation past the second message.',
+  'I read too much and finish about a third of it.\nMy flat is mostly plants and one very opinionated cat.\nWould like someone to be unreasonable about small things with.',
+  'Things I am good at: bread, remembering birthdays, losing arguments slowly.\nThings I am not: mornings, parallel parking, pretending to like a band I do not.\nSay something other than hey.',
+  'I moved here nine months ago and still do not really know anyone.\nSpend most weekends walking somewhere I have not been yet.\nNot looking for anything urgent, just someone worth the time.',
+  'Currently obsessed with a podcast nobody else I know listens to, so you will be hearing about it.\nI am better in person than I am at texting, which is an awkward thing to admit here.',
+  'People assume I am quiet. I am just slow to start.\nOnce I am going you will struggle to shut me up about films.\nI will absolutely judge your top three.',
+  'Work is loud, so my ideal evening is deeply boring: cooking, a film, being in bed by eleven.\nIf that sounds dull to you we have saved each other some time.',
+  'I make things and finish about half of them.\nThe other half are in a cupboard I do not open.\nLooking for someone with their own cupboard, metaphorically or otherwise.',
+  'Two coffees before I am a person. Three and I am a problem.\nI like being outside, arguing about nothing, and other people\'s dogs.\nTell me something you are actually into.',
+  'I am on here because my friends got tired of me complaining about being on here.\nI am funnier in writing than in person, which I am told is a red flag.\nWorth finding out.',
+  'My week is mostly work, the gym, and pretending I will go to bed early.\nI want someone who makes plans and then actually turns up.\nLow bar. Surprisingly hard to clear.',
+  'I will remember one strange detail about you for years and bring it up at the worst moment.\nI cannot remember where I put my keys.\nThat trade-off is the whole personality.',
 ];
 
 function recentBios(limit = 12): string[] {
@@ -555,33 +553,62 @@ function recentBios(limit = 12): string[] {
   return rows.map((r) => r.bio);
 }
 
+const BIO_MIN_WORDS = 14;
+const BIO_MAX_WORDS = 75;
+
+function bioWordCount(bio: string): number {
+  return bio.trim().split(/\s+/).filter(Boolean).length;
+}
+
 async function writeBio(character: Character): Promise<string> {
   const settings = getSettings();
   const existing = recentBios();
-  try {
-    const out = await completeJson<{ bio: string }>({
-      scope: 'generator',
-      label: 'write_bio',
-      // The bio is in-voice writing rather than analysis, so it goes to the actor model.
-      // The director still designs the character; it just does not write her lines.
-      config: { ...settings.models.actor, max_tokens: 300 },
-      messages: [
-        {
-          role: 'user',
-          content: render('director_write_bio', {
-            username: character.username,
-            seed_block: describeSeed(character.seed),
-            format_hint: pickBioFormat(character.seed.archetype),
-            avoid_bios: existing.length ? existing.map((b) => `- ${b}`).join('\n') : '(none yet)',
-          }),
-        },
-      ],
-    });
-    const bio = (out.bio ?? '').trim();
-    if (bio) return bio.slice(0, 220);
-  } catch (err) {
-    logger.warn('generator', 'bio generation failed, using fallback', { error: String(err) });
+  const prompt = render('director_write_bio', {
+    username: character.username,
+    seed_block: describeSeed(character.seed),
+    format_hint: pickBioFormat(character.seed.archetype),
+    avoid_bios: existing.length ? existing.map((b) => `- ${b}`).join('\n') : '(none yet)',
+  });
+
+  // A model told to be pithy will happily answer with four words, which is not a bio -
+  // it is a fortune cookie, and nobody can decide whether to swipe on it. One retry.
+  let correction: string | null = null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const out = await completeJson<{ bio: string }>({
+        scope: 'generator',
+        label: attempt ? 'write_bio:retry' : 'write_bio',
+        // The bio is in-voice writing rather than analysis, so it goes to the actor model.
+        // The director still designs the character; it just does not write her lines.
+        config: { ...settings.models.actor, max_tokens: 400 },
+        messages: correction
+          ? [{ role: 'user', content: prompt }, { role: 'user', content: correction }]
+          : [{ role: 'user', content: prompt }],
+      });
+      const bio = (out.bio ?? '').trim();
+      if (!bio) continue;
+
+      const words = bioWordCount(bio);
+      if (words < BIO_MIN_WORDS) {
+        logger.warn('generator', `bio too short (${words} words), re-requesting`, { bio });
+        correction =
+          `That is ${words} words. It reads as cryptic rather than interesting, and nobody can decide ` +
+          `whether to swipe on it. Write a new one, ${BIO_MIN_WORDS}-60 words over two to four lines, ` +
+          `that leaves a stranger with a real sense of what she is like and how she spends her time. ` +
+          `Same JSON, nothing else.`;
+        continue;
+      }
+      if (words > BIO_MAX_WORDS) {
+        logger.warn('generator', `bio too long (${words} words), trimming`, { bio });
+        return bio.split(/\n/).slice(0, 4).join('\n').slice(0, 500);
+      }
+      return bio.slice(0, 500);
+    } catch (err) {
+      logger.warn('generator', 'bio generation failed, using fallback', { error: String(err) });
+      break;
+    }
   }
+
   const unused = FALLBACK_BIOS.filter((b) => !existing.includes(b));
   return pickOne(unused.length ? unused : FALLBACK_BIOS);
 }

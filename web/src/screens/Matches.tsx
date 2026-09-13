@@ -54,7 +54,7 @@ export default function Matches({
                   ? 'typing…'
                   : m.last_message
                     ? `${m.last_message.sender === 'user' ? 'You: ' : ''}${m.last_message.text}`
-                    : m.bio}
+                    : m.bio.replace(/\s*\n\s*/g, ' ')}
               </div>
             </div>
             <div className="meta">
