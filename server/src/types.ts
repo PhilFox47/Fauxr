@@ -190,6 +190,10 @@ export interface Relationship {
   mood: Record<string, unknown>;
   her_tension: number;
   user_tension: number;
+  /** Session-level "in the mood right now", distinct from spark. Decays fast. */
+  arousal: number;
+  /** Fact key -> when the player learned it. See engine/discovery.ts. */
+  discovered: Record<string, string>;
   last_contact_at: string | null;
   last_decay_at: string | null;
   flags: Flags;

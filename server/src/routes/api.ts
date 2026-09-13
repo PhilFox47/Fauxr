@@ -18,6 +18,7 @@ import { enqueueImage, evaluateUserImage, listImageJobs, retryImageJob } from '.
 import { rollSeed, describeSeed } from '../engine/generator.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetEverything } from '../engine/reset.js';
+import { profileView } from '../engine/discovery.js';
 import type { Character } from '../types.js';
 
 function publicCharacter(c: Character) {
@@ -124,6 +125,19 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     } catch (err) {
       return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
     }
+  });
+
+  /** What he has actually found out about her. Locked rows carry a hint, never the value. */
+  app.get<{ Params: { id: string } }>('/api/chats/:id/profile', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    const rel = getRelationship(req.params.id);
+    if (!character || !rel) return reply.code(404).send({ error: 'not found' });
+    return {
+      username: character.username,
+      display_name: rel.flags.state.real_name_known ? character.real_name : character.username,
+      bio: character.bio,
+      ...profileView(character, rel),
+    };
   });
 
   app.post<{ Params: { id: string } }>('/api/chats/:id/read', async (req) => {

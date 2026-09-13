@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { api, type MatchSummary, type Message } from '../api';
+import { api, type CharacterProfile, type MatchSummary, type Message } from '../api';
 
 function clock(iso: string): string {
   return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -49,6 +49,8 @@ export default function Chat({
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profile, setProfile] = useState<CharacterProfile | null>(null);
+  const [profileOpen, setProfileOpen] = useState(false);
   const logRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -73,6 +75,11 @@ export default function Chat({
 
   useEffect(() => {
     void api.markRead(characterId).catch(() => {});
+  }, [characterId, messages.length]);
+
+  // Refetched on every new message: a reply is exactly when something new gets revealed.
+  useEffect(() => {
+    void api.profile(characterId).then(setProfile).catch(() => {});
   }, [characterId, messages.length]);
 
   useEffect(() => {
@@ -126,8 +133,23 @@ export default function Chat({
           </span>
         </div>
         <div className="spacer" />
+        {profile && (
+          <button
+            className="iconbtn known-count"
+            onClick={() => setProfileOpen(true)}
+            aria-label="What you know about her"
+            title="What you know about her"
+          >
+            <span className="glyph">◔</span>
+            <span>{profile.known}/{profile.total}</span>
+          </button>
+        )}
         <button className="iconbtn" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">⋯</button>
       </div>
+
+      {profileOpen && profile && (
+        <ProfileSheet profile={profile} onClose={() => setProfileOpen(false)} />
+      )}
 
       {menuOpen && (
         <div className="card">
@@ -226,6 +248,53 @@ export default function Chat({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * What he has found out about her so far. Everything starts as ??? and fills in only when
+ * she actually tells him - it is a record of the conversation, not a stat readout.
+ */
+function ProfileSheet({ profile, onClose }: { profile: CharacterProfile; onClose: () => void }) {
+  const pct = profile.total ? Math.round((profile.known / profile.total) * 100) : 0;
+  return (
+    <div className="sheet-backdrop" onClick={onClose}>
+      <div className="sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="sheet-head">
+          <div>
+            <h2>{profile.display_name}</h2>
+            <span className="tiny muted">
+              {profile.known} of {profile.total} things known
+            </span>
+          </div>
+          <button className="iconbtn" onClick={onClose} aria-label="Close">✕</button>
+        </div>
+
+        <div className="progress"><span style={{ width: `${pct}%` }} /></div>
+
+        <p className="small muted bio-quote">{profile.bio}</p>
+
+        <div className="sheet-body">
+          {profile.categories.map((cat) => (
+            <section key={cat.category}>
+              <div className="section-title">
+                {cat.label} <span className="muted">{cat.known}/{cat.total}</span>
+              </div>
+              {cat.rows.map((row) => (
+                <div key={row.key} className={`fact${row.known ? ' known' : ''}`}>
+                  <span className="fact-label">{row.label}</span>
+                  {row.known ? (
+                    <span className="fact-value">{row.value}</span>
+                  ) : (
+                    <span className="fact-value locked" title={row.hint}>???</span>
+                  )}
+                </div>
+              ))}
+            </section>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

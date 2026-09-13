@@ -10,6 +10,8 @@ import {
   thresholdsBlock, touchstoneHint, userBlock,
 } from './blocks.js';
 import { describeOnlineTimes, nextOnlineAt, onlineUntil } from './presence.js';
+import { arousalCeiling, currentStage, describeArousal } from './stage.js';
+import { herCuriosity, undiscoveredKeys } from './discovery.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
 
@@ -79,7 +81,22 @@ export async function runDirector(
   const history = since.length ? since : all.slice(-8);
   const offlineAt = onlineUntil(character);
 
+  const stage = currentStage(character, rel);
+  const ceiling = arousalCeiling(character, rel);
+  const open = undiscoveredKeys(character, rel);
+
   const prompt = render('director_direction', {
+    stage_label: stage.label,
+    stage_what: stage.what,
+    stage_next: stage.next,
+    her_curiosity: herCuriosity(rel),
+    arousal: rel.arousal,
+    arousal_ceiling: ceiling,
+    arousal_description: describeArousal(rel.arousal),
+    // Only what is still unknown, so the list shrinks as the profile fills in.
+    undiscovered_keys: open.length
+      ? open.slice(0, 40).map((f) => `- ${f.key} (${f.label}: ${f.value})`).join('\n')
+      : '(he knows everything there is to know)',
     char_real_name: character.real_name,
     char_username: character.username,
     user_block: userBlock(user),

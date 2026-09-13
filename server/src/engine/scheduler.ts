@@ -12,6 +12,7 @@ import { randInt } from './dice.js';
 import { ensureStack } from './matching.js';
 import { isOnline, nextOnlineAt, serverWindowOpen } from './presence.js';
 import { clampStat } from './modifiers.js';
+import { decayArousal } from './stage.js';
 import { clearExpiredNegativeFlags } from './state.js';
 
 const TICK_MS = 60_000;
@@ -126,6 +127,8 @@ function decayPass(): void {
     const rate = INVESTMENT_DECAY_PER_DAY * (1 + Math.min(2, silenceDays / 3));
     const before = rel.investment;
     rel.investment = clampStat(rel.investment - rate * days);
+    // Arousal is a session mood, not a trait: it is gone in hours, not days.
+    rel.arousal = decayArousal(rel.arousal, days * 24);
     rel.last_decay_at = nowIso();
     if (clearExpiredNegativeFlags(rel)) logger.debug('scheduler', `negative flags expired for ${character.username}`);
 

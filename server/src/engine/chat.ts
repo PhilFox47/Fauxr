@@ -13,6 +13,7 @@ import { computePressure, computeReciprocity } from './modifiers.js';
 import { alwaysOnline, isOnline } from './presence.js';
 import { randInt } from './dice.js';
 import { clearExpiredNegativeFlags, hasActiveNegativeFlag } from './state.js';
+import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -225,6 +226,16 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
       },
     ].slice(-8);
   }
+  // Deterministic backstop for the obvious reveals - if she named her job, he knows it,
+  // whether or not the director thought to report it.
+  const said = result.messages.map((m) => m.text).join(' ');
+  const spotted = detectMentions(character, rel, said);
+  if (spotted.length) {
+    const valid = new Set(buildCatalogue(character).map((f) => f.key));
+    const added = recordDiscoveries(rel, spotted, valid);
+    if (added.length) logger.debug('actor', `revealed in passing: ${added.join(', ')}`);
+  }
+
   rel.mood = { ...rel.mood, actor_mood: result.hidden.mood, thoughts: result.hidden.thoughts };
   refreshModifiers(rel, recentMessages(character.id, 40), result.hidden.boundary_touched);
   saveRelationship(rel);

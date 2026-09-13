@@ -171,6 +171,19 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
   return lines.join('\n\n');
 }
 
+/** What the arousal number feels like from the inside. The Actor never sees the number. */
+export function moodBlock(arousal: number, stageLabel: string): string {
+  const lines = [`Where this is: ${stageLabel}.`];
+  if (arousal >= 70) {
+    lines.push('You want him, right now, and it is affecting how you type. You are not hiding it well and you are not especially trying to.');
+  } else if (arousal >= 45) {
+    lines.push('There is a pull. You are aware of it. You would not bring it up unprompted, but you are not thinking about much else either.');
+  } else if (arousal >= 20) {
+    lines.push('Warm towards him. Not thinking about it in those terms right now.');
+  }
+  return lines.join('\n');
+}
+
 export function directionBlock(d: Direction | null): string {
   if (!d) {
     return [

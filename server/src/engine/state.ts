@@ -3,6 +3,8 @@ import { logger } from '../log.js';
 import { saveRelationship, setCharacterState, clearWakeup } from '../repo.js';
 import type { Character, Ledger, Relationship, StateFlags } from '../types.js';
 import { applyModifiers, clampStat, type Deltas } from './modifiers.js';
+import { arousalCeiling } from './stage.js';
+import { buildCatalogue, recordDiscoveries } from './discovery.js';
 
 export const STATE_FLAGS: (keyof StateFlags)[] = [
   'real_name_known',
@@ -37,6 +39,9 @@ export interface DirectorUpdate {
   spark_delta?: number;
   investment_delta?: number;
   her_tension?: number;
+  arousal_delta?: number;
+  /** Fact keys from engine/discovery.ts that he genuinely learned this exchange. */
+  discovered?: string[];
   reason?: string;
   set_flags?: string[];
   clear_flags?: string[];
@@ -143,6 +148,16 @@ export function applyUpdate(
   rel.investment = clampStat(rel.investment + applied.investment);
   if (typeof update.her_tension === 'number') {
     rel.her_tension = Math.max(0, Math.min(10, Math.round(update.her_tension)));
+  }
+
+  // Arousal moves freely but never past what this character is capable of over text.
+  const arousalDelta = Math.max(-40, Math.min(30, Number(update.arousal_delta ?? 0) || 0));
+  rel.arousal = Math.max(0, Math.min(arousalCeiling(character, rel), rel.arousal + arousalDelta));
+
+  if (update.discovered?.length) {
+    const valid = new Set(buildCatalogue(character).map((f) => f.key));
+    const added = recordDiscoveries(rel, update.discovered, valid);
+    if (added.length) logger.info('director', `${character.username} revealed: ${added.join(', ')}`);
   }
 
   for (const f of update.set_flags ?? []) {

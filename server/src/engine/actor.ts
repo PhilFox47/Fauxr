@@ -6,8 +6,10 @@ import { render } from '../prompts/render.js';
 import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Relationship } from '../types.js';
 import {
   appearanceBlock, communicationBlock, directionBlock, historyBlock, identityBlock,
-  interestsBlock, languageBlock, ledgerBlock, lifeBlock, quirksBlock, sexualBlock, userBlock,
+  interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
+  sexualBlock, userBlock,
 } from './blocks.js';
+import { currentStage } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { pickNudge } from './nudge.js';
 import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty } from './voice.js';
@@ -121,6 +123,7 @@ function buildPrompt(
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     ledger_block: ledgerBlock(relationship.ledger),
     direction_block: directionBlock(direction),
+    mood_block: moodBlock(relationship.arousal, currentStage(character, relationship).label),
     moment_block: describeHerMoment(character),
     turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),

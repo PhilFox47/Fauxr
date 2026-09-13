@@ -155,6 +155,8 @@ function hydrateRelationship(row: any): Relationship {
     mood: JSON.parse(row.mood),
     her_tension: row.her_tension,
     user_tension: row.user_tension,
+    arousal: row.arousal ?? 0,
+    discovered: JSON.parse(row.discovered ?? '{}'),
     last_contact_at: row.last_contact_at,
     last_decay_at: row.last_decay_at,
     flags: { ...EMPTY_FLAGS, ...JSON.parse(row.flags) },
@@ -188,13 +190,15 @@ export function saveRelationship(r: Relationship): void {
   db.prepare(
     `UPDATE relationships SET trust=@trust, spark=@spark, investment=@investment,
        reciprocity=@reciprocity, pressure=@pressure, mood=@mood, her_tension=@her_tension,
-       user_tension=@user_tension, last_contact_at=@last_contact_at, last_decay_at=@last_decay_at,
+       user_tension=@user_tension, arousal=@arousal, discovered=@discovered,
+       last_contact_at=@last_contact_at, last_decay_at=@last_decay_at,
        flags=@flags, ledger=@ledger, active_direction=@active_direction,
        direction_set_at=@direction_set_at, ghosted_at=@ghosted_at
      WHERE character_id=@character_id`,
   ).run({
     ...r,
     mood: JSON.stringify(r.mood),
+    discovered: JSON.stringify(r.discovered ?? {}),
     flags: JSON.stringify(r.flags),
     ledger: JSON.stringify(r.ledger),
     active_direction: r.active_direction ? JSON.stringify(r.active_direction) : null,

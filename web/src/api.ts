@@ -49,6 +49,25 @@ export interface Message {
   image_url?: string | null;
 }
 
+export interface ProfileRow {
+  key: string;
+  category: string;
+  label: string;
+  known: boolean;
+  value: string | null;
+  hint: string;
+  at: string | null;
+}
+
+export interface CharacterProfile {
+  username: string;
+  display_name: string;
+  bio: string;
+  known: number;
+  total: number;
+  categories: { category: string; label: string; known: number; total: number; rows: ProfileRow[] }[];
+}
+
 export interface LogEntry {
   id: number;
   ts: string;
@@ -91,6 +110,7 @@ export const api = {
   chat: (id: string) => request<{ character: MatchSummary; messages: Message[] }>(`/api/chats/${id}`),
   send: (id: string, text: string) =>
     request<Message>(`/api/chats/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
+  profile: (id: string) => request<CharacterProfile>(`/api/chats/${id}/profile`),
   markRead: (id: string) => request<any>(`/api/chats/${id}/read`, { method: 'POST' }),
   block: (id: string) => request<any>(`/api/chats/${id}/block`, { method: 'POST' }),
   sendImage: (id: string, file: File) => {

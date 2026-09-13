@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS relationships (
   mood             TEXT    NOT NULL DEFAULT '{}',
   her_tension      INTEGER NOT NULL DEFAULT 0,
   user_tension     INTEGER NOT NULL DEFAULT 0,
+  arousal          INTEGER NOT NULL DEFAULT 0,
+  discovered       TEXT    NOT NULL DEFAULT '{}',
   last_contact_at  TEXT,
   last_decay_at    TEXT,
   flags            TEXT    NOT NULL DEFAULT '{}',

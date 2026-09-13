@@ -155,6 +155,47 @@ applies two modifiers it computes itself:
 
 That is the anti-simp and anti-push mechanism, and it is deliberately not an LLM judgement.
 
+### Her profile: what he has found out
+
+Every character carries a catalogue of facts built from her seed — name, age, job, where
+she lives, her humour, her soft spot, her interests, what she looks like, and once that
+part of the conversation is open, what she is into. Roughly forty rows. All of them start
+as `???`.
+
+A row fills in when she actually tells him. Never when a stat crosses a line. The Director
+reports what came out in each exchange, and a deterministic backstop in code catches the
+obvious ones — if she names her job, he knows it, whether or not the Director thought to
+mention it. Looks are excluded from that backstop: saying "my hair" does not reveal its
+colour, that needs a photo or a date.
+
+This is deliberately the progression the game was missing. Stats are invisible by design,
+so without something like this there is nothing to work towards and no sense of getting
+anywhere. A counter in the chat header (`12/40`) opens the profile sheet.
+
+### Drive
+
+Two mechanisms stop a chat reading identically on message four and message eighty.
+
+**Stage.** Computed in code from stats and flags: opening → curious → warming → flirting →
+intimate → wants to meet. The Director is told which phase it is in, what that phase feels
+like, and *what would move it on*, so there is something pulling the conversation forward
+rather than it circling. The Actor gets the phase name only.
+
+**Her side of it.** The Director is given a list of what she still does not know about him
+— his work, why he is really here, whether he is talking to other people — and told that a
+character who only ever responds is a failure of the Director, not of the user. She is on a
+dating app for her own reasons and is expected to pursue them.
+
+### Arousal
+
+A session stat, separate from spark: spark is whether she fancies him, arousal is whether
+she wants him *right now*. It moves fast in both directions and decays on a three-hour
+half-life, so nobody stays at a simmer overnight.
+
+Its ceiling comes from her seed — libido and sexting readiness — and from spark, so a
+high-libido character still cannot run hot for someone she is not into (libido 5 with spark
+20 tops out at 42). The Actor never sees the number, only how it feels from the inside.
+
 ### Flags
 
 Flags are set by events, not by thresholds. `real_name_known` goes true because she said
