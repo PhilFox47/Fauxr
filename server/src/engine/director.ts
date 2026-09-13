@@ -7,7 +7,7 @@ import { render } from '../prompts/render.js';
 import type { ActorHidden, Character, Direction, Relationship } from '../types.js';
 import {
   directionBlock, flagsBlock, historyBlock, ledgerBlock, seedBlock,
-  thresholdsBlock, touchstoneHint, userBlock,
+  spiceDirective, touchstoneHint, userBlock,
 } from './blocks.js';
 import { describeOnlineTimes, nextOnlineAt, onlineUntil } from './presence.js';
 import { arousalCeiling, currentStage, describeArousal } from './stage.js';
@@ -81,7 +81,7 @@ export async function runDirector(
   const history = since.length ? since : all.slice(-8);
   const offlineAt = onlineUntil(character);
 
-  const stage = currentStage(character, rel);
+  const stage = currentStage(rel);
   const ceiling = arousalCeiling(character, rel);
   const open = undiscoveredKeys(character, rel);
 
@@ -113,8 +113,8 @@ export async function runDirector(
     last_contact: rel.last_contact_at ?? 'never',
     now: new Date().toLocaleString('en-GB'),
     offline_at: offlineAt ? offlineAt.toLocaleString('en-GB') : 'not tonight',
-    thresholds_block: thresholdsBlock(character.seed),
     flags_block: flagsBlock(rel.flags),
+    spice_directive: spiceDirective(settings.spice),
     ledger_block: ledgerBlock(rel.ledger, { full: true }) || '(empty)',
     previous_direction: rel.active_direction ? directionBlock(rel.active_direction) : '(none yet)',
     actor_report: opts.actorReport

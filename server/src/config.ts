@@ -38,11 +38,11 @@ export interface Settings {
   images_enabled: boolean;
   voice_enabled: boolean;
   /**
-   * How fast the sexual side of a conversation opens up, on top of each character's own
-   * appetite. 1 is the designed pacing. Pushing it much past 1.3 flattens the gates that
-   * still ought to mean something - photos and meeting up - into nothing.
-   * Applied to the sexual and date thresholds at generation time, so it affects
-   * characters created from now on rather than rewriting existing ones.
+   * How forward the cast runs, on top of each character's own appetite. 1 is the designed
+   * pacing. This is handed to the Director as a sentence about house pacing rather than
+   * applied to any gate - there are no thresholds left for it to scale - so it leans
+   * judgment across every character and takes effect immediately, including on matches you
+   * already have.
    */
   spice: number;
   /**

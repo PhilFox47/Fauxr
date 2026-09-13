@@ -6,7 +6,7 @@ import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
 import { insertCharacter, createRelationship } from '../repo.js';
-import type { Character, CharacterSeed, OnlineWindow, Thresholds } from '../types.js';
+import type { Character, CharacterSeed, OnlineWindow } from '../types.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 
 /** Fields the Director may swap during the coherence pass. */
@@ -43,63 +43,6 @@ function rollTypoRate(typingStyle: string, archetype: string): number {
   if (archetype === 'chaotic' || archetype === 'burnt_out') base += 0.06;
   if (archetype === 'intellectual') base *= 0.5;
   return Math.round(Math.min(0.35, base) * 100) / 100;
-}
-
-/**
- * Thresholds spread widely on purpose: every character is her own puzzle. The openness
- * curve and archetype nudge the centre, the dice do the rest.
- */
-interface SexualSeed {
-  libido: number;
-  sexual_confidence: number;
-  sexting_readiness: number;
-}
-
-/**
- * Thresholds spread widely on purpose: every character is her own puzzle. The openness
- * curve and archetype nudge the centre, the dice do the rest.
- *
- * There used to be a `sexual_topics` threshold here too, gating whether the conversation
- * could turn sexual at all. That was removed: it was a hidden dice roll a character had to
- * clear regardless of how well the user was actually flirting or how forward her own
- * personality was, which meant even a built-forward character could be stuck waiting on a
- * number for no in-character reason. Whether things turn sexual, and when, is now entirely
- * the Director's per-turn call - made from her seed (libido, sexual confidence, sexting
- * readiness) and the actual conversation, not a threshold rolled once at creation.
- *
- * The sexual gate that remains here (spicy photos) is still pulled down hard by her own
- * appetite - a libido-5 sexting-5 character should be far easier to get an explicit photo
- * from than a shy one - and the global spice setting scales it, so pacing there is tunable
- * without touching any of this.
- */
-function rollThresholds(archetype: string, openness: string, sexual: SexualSeed): Thresholds {
-  let shift = 0;
-  if (openness === 'slow_steady') shift += 8;
-  if (openness === 'fast_then_plateau') shift -= 6;
-  if (archetype === 'shy' || archetype === 'guarded') shift += 10;
-  if (archetype === 'confident' || archetype === 'flirty') shift -= 8;
-
-  const at = (min: number, max: number, weight = 1) =>
-    Math.max(2, Math.min(98, randInt(min, max) + Math.round(shift * weight)));
-
-  // 1 (never over text) .. 5 (forward from the first message)
-  const appetite = (sexual.libido + sexual.sexting_readiness * 1.5 + sexual.sexual_confidence * 0.5) / 3;
-  const spice = Math.max(0.2, Math.min(2, getSettings().spice));
-
-  /** Sexual gates: lowered by her appetite, then scaled by the global spice setting. */
-  const sexualAt = (min: number, max: number) => {
-    const raw = randInt(min, max) + Math.round(shift * 0.8);
-    const byAppetite = raw - (appetite - 1) * 11;
-    return Math.max(2, Math.min(98, Math.round(byAppetite / spice)));
-  };
-
-  return {
-    real_name: at(8, 45),
-    profile_picture: at(12, 55),
-    personal_photos: at(25, 65),
-    spicy_photos: sexualAt(40, 85),
-    allow_date: Math.max(2, Math.min(98, Math.round(at(28, 68) / Math.max(0.6, spice)))),
-  };
 }
 
 function fallbackOnlineTimes(): OnlineWindow[] {
@@ -333,11 +276,6 @@ export function rollSeed(): RolledSeed {
     fetishes,
     hard_limits,
 
-    thresholds: rollThresholds(archetype.id, openness_curve, {
-      libido,
-      sexual_confidence,
-      sexting_readiness,
-    }),
     hints,
     appearance_prompt: '',
     image_seed: randInt(1, 2_000_000_000),

@@ -235,15 +235,14 @@ dating app for her own reasons and is expected to pursue them.
 
 ### Spice
 
-Explicit-photo and date thresholds are pulled down by each character's own appetite — her
-libido, sexting readiness and sexual confidence — so a forward character is reachable early
-and a reserved one is a real climb. Before this they were rolled blind, so the most forward
-woman in the pool could be gated exactly as hard as the shyest, which made no sense.
+How forward a character is comes from her own appetite — libido, sexting readiness and
+sexual confidence. Nothing is gated behind a number: see "Nothing is locked any more" below
+for why the threshold system was removed outright.
 
-A **spice** slider in Settings scales those thresholds. It applies at generation time, so it
-shapes new characters rather than rewriting matches you already have. It does not touch
-whether a chat turns sexual at all — see "There is no unlock timer on being sexual" below;
-that was deliberately pulled out of the threshold system entirely.
+A **spice** slider in Settings leans the whole cast. It reaches the Director each turn as a
+sentence about house pacing rather than scaling any gate, so it applies immediately to
+matches you already have, and it never overrides an individual character's seed — a forward
+one stays ahead of a reserved one at every setting.
 
 Trust and spark are scored on separate scales. Trust is slow and about safety. Spark is
 attraction and moves fast, because that is the point of the platform — the Director is told
@@ -452,6 +451,63 @@ Explicit photos, real name, meeting up and personal (non-explicit) photos keep t
 threshold-gated unlocks — those are different asks (an image being generated and sent, an
 identity being shared, an in-person meeting), not "is this chat allowed to be sexual," and the
 Settings "Spice" slider now only scales those.
+
+### Nothing is locked any more, and she knows her own name
+
+Two transcripts killed the whole gate system. In the first, a character asked for an obscure
+song, got one with 300 Spotify listeners, conceded it cleared the bar, listened to it,
+admitted she liked it — and then immediately re-priced the earlier round as a loss and
+resumed a running tally ("kraftklub still counts as a loss, ur 1 for 2"). In the second, a
+character spent a dozen messages refusing her own first name, inventing a guessing game to
+justify it ("guess it or earn it, ill know if ur close"), telling the user he had "a whole
+profile's worth of trust to earn" — and then **rejected the correct answer**. Her name was
+Emi. He guessed Emi. She said "lol thats the handle phil. not even trying".
+
+That last one was a real bug, not a tuning problem. `identityBlock` only told the Actor her
+real name once `real_name_known` was true; before that it was handed the *handle* and the
+instruction "he does NOT know your real name and you have not told him... you do not simply
+hand it over." The model was being asked to guard a value it had never been given, so it had
+nothing to compare a guess against and denied a correct one. It now always knows her name,
+is told to confirm a correct guess immediately, and is told never to run a guess-my-name
+game at all.
+
+The rest was structural. A hidden `Thresholds` roll per character gated her name, her photos
+and meeting up behind trust numbers she had to accumulate. That is what produced all of the
+above: the system *required* her to withhold, so the model invented in-fiction justifications
+for withholding, and the justifications a model reaches for are exactly these — a toll booth,
+a guessing game, a scoreboard. The gamification wasn't sitting alongside the unpleasant
+behaviour, it was generating it.
+
+So `Thresholds` is gone entirely — the interface, `rollThresholds()`, `thresholdsBlock()`,
+and the "Hidden thresholds" section of the Director prompt. `unlock` survives as a *moment*
+marker rather than a permission level, for the things that are real events needing a right
+moment (photos, which trigger generation and a consent card; agreeing to meet). Her name is
+not among them and never needs unlocking. `currentStage()` no longer demands a trust number
+on top of her own stated position either — if she has agreed she wants to meet him, the
+phase follows her instead of overruling her.
+
+What replaces it is stated plainly to both models. The Director is told what the app is
+actually for, that friction is a tool serving that rather than the product itself, and is
+given two named failure modes to avoid: **withholding as a personality** (never write a goal
+that turns basic self-disclosure into a transaction) and **scorekeeping** (never write a goal
+like "make him work for it" or "maintain the upper hand", which have no resolution condition
+and become a scoreboard). The Actor gets a matching section: ordinary facts about her are not
+currency, answer the question and then say more than was asked, being closed about one
+specific thing for a real reason is character but being closed by default is a wall — plus
+explicit bans on marking his homework, on un-winning a round he already won, and on system
+vocabulary ever leaving her hands ("trust to earn", levels, unlocking).
+
+Discovery is untouched and is now the only progression: her profile still fills in as she
+actually tells you things. That was always threshold-free by design — "a fact becomes known
+because she said it" — it just could not work while the Director was simultaneously being
+told to make her hoard those facts.
+
+The **spice** slider was left driving nothing once the thresholds went, so rather than leave
+a dead control in Settings it now says the same thing in the one place that still decides
+pacing: it reaches the Director each turn as a sentence about house pacing (cooler / default
+/ hot). It leans the whole cast without overriding any individual character's seed, and
+because it is guidance rather than a generation-time roll, it applies immediately to matches
+you already have instead of only to new ones.
 
 ### Flags
 

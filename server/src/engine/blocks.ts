@@ -21,9 +21,12 @@ export function userBlock(user: UserProfile | null): string {
 
 export function identityBlock(character: Character, flags: Flags): string {
   const s = character.seed;
+  // She is always told her own name. Withholding it used to be done by withholding it from
+  // the model itself, which meant she could not confirm a correct guess even when he landed
+  // it exactly - she had only the handle to compare against, so she denied her own name.
   const nameLine = flags.state.real_name_known
     ? `Your name is ${character.real_name}. He knows it. Your handle is @${character.username}.`
-    : `Your handle is @${character.username}. He does NOT know your real name yet and you have not told him. If he asks, you deal with it your own way - you do not simply hand it over.`;
+    : `Your name is ${character.real_name}. Your handle is @${character.username}. He has not been told your name yet - it simply has not come up. If he asks, tell him: a first name is not a prize and not a secret. If he guesses it right, say so, straight away. NEVER deny your own name, and never make him guess it or earn it - that game is tedious and you are not playing it.`;
   return [
     nameLine,
     `You are ${s.age}.`,
@@ -276,8 +279,8 @@ export function directionBlock(d: Direction | null, somethingLive = false, photo
 
 function unlockInstruction(unlock: string): string {
   switch (unlock) {
-    case 'real_name':
-      return 'You are allowed to tell him your real name this turn, IF the conversation gives you a reason to. Do it your way. If the moment does not come, do not force it.';
+    // 'real_name' used to live here. Her name is not an unlock any more - she always knows
+    // it and can just say it, so a per-turn permission slip for it made no sense.
     case 'profile_picture':
       return 'You are allowed to offer him a picture of yourself this turn if it comes up naturally - say you are sending one, or ask if he wants one. Offering is the whole move; whether it actually reaches him is his call, not yours to narrate.';
     case 'personal_photos':
@@ -293,6 +296,24 @@ function unlockInstruction(unlock: string): string {
   }
 }
 
+/**
+ * The spice setting, as a sentence for the Director rather than a number on a gate.
+ *
+ * It used to scale the rolled thresholds. With those gone it would have become a dead
+ * slider, so it says the same thing in the one place that still decides pacing - the
+ * Director's own judgment. It leans the whole population, never overriding an individual
+ * character's seed.
+ */
+export function spiceDirective(spice: number): string {
+  if (spice <= 0.75) {
+    return 'House pacing: cooler than default. Characters here take a little longer to warm up and want more of a reason before things turn sexual. This leans the whole cast; it does not turn a forward character into a shy one.';
+  }
+  if (spice >= 1.4) {
+    return 'House pacing: hot. This world runs forward - characters are quick to flirt, quick to want, and comfortable taking things sexual early when it fits them at all. This leans the whole cast; it does not turn a genuinely reserved character into a forward one.';
+  }
+  return 'House pacing: default. Go by who she is and what has actually happened, with no particular lean in either direction.';
+}
+
 export function flagsBlock(flags: Flags): string {
   const on = Object.entries(flags.state ?? {}).filter(([, v]) => v).map(([k]) => k);
   const events = Object.keys(flags.events ?? {});
@@ -301,18 +322,6 @@ export function flagsBlock(flags: Flags): string {
     `state: ${on.length ? on.join(', ') : 'none set'}`,
     `milestones: ${events.length ? events.join(', ') : 'none'}`,
     `negative: ${negative.length ? negative.join(', ') : 'none'}`,
-  ].join('\n');
-}
-
-export function thresholdsBlock(seed: CharacterSeed): string {
-  const t = seed.thresholds;
-  return [
-    `real_name needs trust >= ${t.real_name}`,
-    `profile_picture needs trust >= ${t.profile_picture}`,
-    `personal_photos needs trust >= ${t.personal_photos}`,
-    `spicy_photos needs trust >= ${t.spicy_photos}`,
-    `allow_date needs trust >= ${t.allow_date}`,
-    'A threshold being met does not mean it happens. It means you may consider allowing it.',
   ].join('\n');
 }
 

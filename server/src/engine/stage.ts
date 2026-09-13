@@ -62,11 +62,14 @@ const STAGES: Record<StageId, Stage> = {
   },
 };
 
-export function currentStage(character: Character, rel: Relationship): Stage {
+export function currentStage(rel: Relationship): Stage {
   const f = rel.flags.state;
   const bond = (rel.trust + rel.spark + rel.investment) / 3;
 
-  if (f.allows_date_requests && rel.trust >= character.seed.thresholds.allow_date) return STAGES.meeting;
+  // The flag alone is the signal: the Director sets it when she has actually agreed she
+  // wants to meet him. Requiring a trust number on top of her own stated position meant a
+  // character could say yes and the phase would refuse to follow her.
+  if (f.allows_date_requests) return STAGES.meeting;
   if (f.sexual_topics_allowed) return STAGES.intimate;
   // Attraction carries most of the weight on a hookup app; trust is a much smaller gate
   // here than it would be on a relationship site, because less is being asked of it.

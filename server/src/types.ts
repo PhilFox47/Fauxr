@@ -9,14 +9,6 @@ export interface Tattoo { motif: string; position: string }
 export interface Piercing { type: string; position: string }
 export interface OnlineWindow { weekday: number; from: string; to: string }
 
-export interface Thresholds {
-  real_name: number;
-  profile_picture: number;
-  personal_photos: number;
-  spicy_photos: number;
-  allow_date: number;
-}
-
 export interface CharacterSeed {
   // appearance
   age: number;
@@ -82,8 +74,6 @@ export interface CharacterSeed {
   sexting_readiness: number;
   fetishes: string[];
   hard_limits: string[];
-
-  thresholds: Thresholds;
 
   /** Human-readable hints keyed by seed field, assembled from the attribute DB. */
   hints: Record<string, string>;
