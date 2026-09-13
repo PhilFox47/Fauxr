@@ -714,3 +714,12 @@ web/src/             React frontend, mobile first, installable
 
 All characters are adults; `age` has a hard minimum of 18 and is validated at generation.
 Single user, no auth, no moderation, not meant to be exposed to the internet.
+
+On Chrome for Android, the on-screen keyboard does not shrink the layout viewport by
+default - only the visual one - so anything sized with a plain `height: 100%`/`100vh`
+(the whole app shell, the chat column) keeps its keyboard-closed height, and the keyboard
+just overlays the bottom of it, covering the composer. Fixed with `100dvh` (with `100%` as
+the fallback for browsers that don't support it) on `html, body, #root` in `styles.css`,
+plus `interactive-widget=resizes-content` in the viewport meta tag in `index.html`, which
+also gets `.app`'s and `.chat`'s existing `height: 100%` chain to shrink correctly since it
+percentages down from a now-correctly-sized root.
