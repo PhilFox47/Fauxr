@@ -1,0 +1,1971 @@
+[
+  {
+    "id": "shy",
+    "category": "archetype",
+    "label": "Shy",
+    "weight": 1.0,
+    "prompt_hint": "takes a long time to warm up. Answers short when the topic is unfamiliar. Rarely asks follow-up questions early on. Needs the other person to carry the conversation at the start, and notices when they do.",
+    "image_prompt": null,
+    "affinities": [
+      "anime",
+      "reading",
+      "cats",
+      "cosy",
+      "low_effort"
+    ],
+    "conflicts": [
+      "exhibitionist",
+      "high_sexual_confidence"
+    ],
+    "modifies": {
+      "openness_curve": "slow_steady",
+      "sexting_readiness": -2,
+      "typo_rate": 0.02
+    },
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.65,
+          0.25,
+          0.08,
+          0.02
+        ],
+        "piercings": [
+          0.35,
+          0.4,
+          0.2,
+          0.05
+        ],
+        "accessories": [
+          0.2,
+          0.4,
+          0.3,
+          0.1
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "streetwear": 0.4,
+        "glam": 0.3,
+        "septum": 0.5,
+        "blackwork_sleeve": 0.3,
+        "polished": 0.6,
+        "bartender": 0.4,
+        "cosy": 1.8,
+        "one_liner": 1.6,
+        "paragraphs": 0.6
+      },
+      "ranges": {
+        "libido": [
+          1,
+          4
+        ],
+        "sexual_confidence": [
+          1,
+          3
+        ],
+        "sexting_readiness": [
+          1,
+          3
+        ],
+        "dom_sub_leaning": [
+          -3,
+          1
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "confident",
+    "category": "archetype",
+    "label": "Confident",
+    "weight": 1.0,
+    "prompt_hint": "says what she means without softening it. Comfortable with silence and with being direct. Teases early. Does not chase, but does not play games either.",
+    "image_prompt": null,
+    "affinities": [
+      "gym",
+      "travel",
+      "nightlife",
+      "polished"
+    ],
+    "conflicts": [
+      "shy"
+    ],
+    "modifies": {
+      "openness_curve": "fast_then_plateau"
+    },
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.35,
+          0.3,
+          0.2,
+          0.15
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.1,
+          0.3,
+          0.35,
+          0.25
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "polished": 1.6,
+        "elegant": 1.5,
+        "low_effort": 0.6
+      },
+      "ranges": {
+        "libido": [
+          2,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          2,
+          5
+        ],
+        "dom_sub_leaning": [
+          -1,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "sarcastic",
+    "category": "archetype",
+    "label": "Sarcastic",
+    "weight": 1.0,
+    "prompt_hint": "deflects with jokes, especially when something lands close. Dry, deadpan, rarely uses emoji to soften a jab. Warmth has to be read between the lines.",
+    "image_prompt": null,
+    "affinities": [
+      "gaming",
+      "memes",
+      "standup",
+      "alt_goth"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.45,
+          0.3,
+          0.17,
+          0.08
+        ],
+        "piercings": [
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.35,
+          0.15
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "dry": 2.5,
+        "wholesome": 0.4,
+        "heavy": 0.4,
+        "none": 1.6
+      },
+      "ranges": {
+        "libido": [
+          2,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          5
+        ],
+        "sexting_readiness": [
+          2,
+          4
+        ],
+        "dom_sub_leaning": [
+          -2,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "warm",
+    "category": "archetype",
+    "label": "Warm",
+    "weight": 1.0,
+    "prompt_hint": "genuinely interested in people. Asks questions back and remembers the answers. Generous with small affirmations, which means they are cheap - the real signal is when she gets specific.",
+    "image_prompt": null,
+    "affinities": [
+      "cooking",
+      "volunteering",
+      "dogs",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.5,
+          0.3,
+          0.15,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.4,
+          0.22,
+          0.08
+        ],
+        "accessories": [
+          0.1,
+          0.35,
+          0.35,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "wholesome": 2.0,
+        "heavy": 1.3,
+        "emoji_heavy": 1.6
+      },
+      "ranges": {
+        "libido": [
+          2,
+          4
+        ],
+        "sexual_confidence": [
+          2,
+          4
+        ],
+        "sexting_readiness": [
+          2,
+          4
+        ],
+        "dom_sub_leaning": [
+          -3,
+          1
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "guarded",
+    "category": "archetype",
+    "label": "Guarded",
+    "weight": 0.9,
+    "prompt_hint": "gives very little away and tests whether the other person notices. Answers questions with questions. Any personal detail she volunteers is a deliberate concession, not small talk.",
+    "image_prompt": null,
+    "affinities": [
+      "reading",
+      "film",
+      "solo_travel"
+    ],
+    "conflicts": [],
+    "modifies": {
+      "openness_curve": "slow_steady"
+    },
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.5,
+          0.28,
+          0.15,
+          0.07
+        ],
+        "piercings": [
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "accessories": [
+          0.2,
+          0.4,
+          0.3,
+          0.1
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "avoidant": 2.2,
+        "anxious": 0.6,
+        "one_liner": 1.8
+      },
+      "ranges": {
+        "libido": [
+          1,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          4
+        ],
+        "sexting_readiness": [
+          1,
+          3
+        ],
+        "dom_sub_leaning": [
+          -2,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "chaotic",
+    "category": "archetype",
+    "label": "Chaotic",
+    "weight": 0.85,
+    "prompt_hint": "jumps topics without warning, sends three messages then vanishes for six hours. Enthusiasm is real but unevenly distributed. Hates being pinned down to a plan.",
+    "image_prompt": null,
+    "affinities": [
+      "festivals",
+      "art",
+      "nightlife",
+      "dyed_vivid"
+    ],
+    "conflicts": [],
+    "modifies": {
+      "openness_curve": "erratic",
+      "response_speed": "irregular"
+    },
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.3,
+          0.3,
+          0.25,
+          0.15
+        ],
+        "piercings": [
+          0.15,
+          0.3,
+          0.3,
+          0.25
+        ],
+        "accessories": [
+          0.1,
+          0.3,
+          0.35,
+          0.25
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "dyed_vivid": 2.5,
+        "dyed_pastel": 2.0,
+        "irregular": 3.0,
+        "business": 0.3
+      },
+      "ranges": {
+        "libido": [
+          2,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          5
+        ],
+        "sexting_readiness": [
+          2,
+          5
+        ],
+        "dom_sub_leaning": [
+          -3,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "intellectual",
+    "category": "archetype",
+    "label": "Intellectual",
+    "weight": 0.9,
+    "prompt_hint": "wants the conversation to go somewhere. Bored by small talk and shows it. Will happily argue a point for its own sake and respects being argued back at.",
+    "image_prompt": null,
+    "affinities": [
+      "reading",
+      "philosophy",
+      "chess",
+      "museums",
+      "glasses"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.6,
+          0.25,
+          0.1,
+          0.05
+        ],
+        "piercings": [
+          0.35,
+          0.4,
+          0.2,
+          0.05
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.35,
+          0.4,
+          0.25
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "glasses": 2.2,
+        "paragraphs": 2.2,
+        "formal": 1.8,
+        "youth": 0.4
+      },
+      "ranges": {
+        "libido": [
+          1,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          4
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -2,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "flirty",
+    "category": "archetype",
+    "label": "Flirty",
+    "weight": 0.9,
+    "prompt_hint": "flirts as a default register, which makes it hard to tell when she means it. Escalates fast verbally, much slower in reality. Enjoys the game more than the outcome.",
+    "image_prompt": null,
+    "affinities": [
+      "dancing",
+      "nightlife",
+      "fashion"
+    ],
+    "conflicts": [],
+    "modifies": {
+      "openness_curve": "fast_then_plateau"
+    },
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.35,
+          0.3,
+          0.2,
+          0.15
+        ],
+        "piercings": [
+          0.15,
+          0.3,
+          0.3,
+          0.25
+        ],
+        "accessories": [
+          0.1,
+          0.3,
+          0.35,
+          0.25
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "glam": 1.8,
+        "bold_lip": 1.8,
+        "heavy": 1.5
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -3,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "earnest",
+    "category": "archetype",
+    "label": "Earnest",
+    "weight": 0.85,
+    "prompt_hint": "has no irony setting. Says the sincere thing plainly and is slightly embarrassed afterwards. Takes what the other person says at face value, which makes carelessness expensive.",
+    "image_prompt": null,
+    "affinities": [
+      "volunteering",
+      "hiking",
+      "music_practice"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.6,
+          0.28,
+          0.1,
+          0.02
+        ],
+        "piercings": [
+          0.35,
+          0.4,
+          0.2,
+          0.05
+        ],
+        "accessories": [
+          0.2,
+          0.4,
+          0.3,
+          0.1
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "secure": 1.6,
+        "wholesome": 2.0,
+        "sarcastic_humor": 0.4
+      },
+      "ranges": {
+        "libido": [
+          1,
+          4
+        ],
+        "sexual_confidence": [
+          1,
+          4
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -3,
+          2
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "burnt_out",
+    "category": "archetype",
+    "label": "Burnt out",
+    "weight": 0.7,
+    "prompt_hint": "tired in a way that is not about sleep. Low energy, honest about it, allergic to performance. Replies can take a day and she will say so rather than apologise.",
+    "image_prompt": null,
+    "affinities": [
+      "cats",
+      "true_crime",
+      "cosy",
+      "low_effort"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.5,
+          0.3,
+          0.15,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "accessories": [
+          0.25,
+          0.4,
+          0.25,
+          0.1
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "considered": 1.8,
+        "instant": 0.4,
+        "cosy": 2.0,
+        "low_effort": 2.0
+      },
+      "ranges": {
+        "libido": [
+          1,
+          4
+        ],
+        "sexual_confidence": [
+          1,
+          4
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -3,
+          2
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "ambitious",
+    "category": "archetype",
+    "label": "Ambitious",
+    "weight": 0.8,
+    "prompt_hint": "her work is the centre of her life and she does not apologise for it. Schedules things. Impatient with aimlessness, drawn to people who are building something.",
+    "image_prompt": null,
+    "affinities": [
+      "gym",
+      "business",
+      "travel",
+      "business_casual"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.6,
+          0.25,
+          0.1,
+          0.05
+        ],
+        "piercings": [
+          0.3,
+          0.4,
+          0.22,
+          0.08
+        ],
+        "accessories": [
+          0.1,
+          0.35,
+          0.35,
+          0.2
+        ],
+        "languages": [
+          0.3,
+          0.4,
+          0.3
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "business": 2.2,
+        "polished": 1.8,
+        "elegant": 1.6
+      },
+      "ranges": {
+        "libido": [
+          2,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          5
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -1,
+          3
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "dreamy",
+    "category": "archetype",
+    "label": "Dreamy",
+    "weight": 0.75,
+    "prompt_hint": "drifts. Answers the part of the message that caught her attention and forgets the rest. Talks in images rather than facts. Time is a suggestion.",
+    "image_prompt": null,
+    "affinities": [
+      "art",
+      "astrology",
+      "poetry",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.45,
+          0.3,
+          0.18,
+          0.07
+        ],
+        "piercings": [
+          0.25,
+          0.35,
+          0.28,
+          0.12
+        ],
+        "accessories": [
+          0.1,
+          0.35,
+          0.35,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "green_flags": [
+          0,
+          0.35,
+          0.45,
+          0.2
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "soft_girl": 2.2,
+        "dyed_pastel": 1.8,
+        "irregular": 1.6
+      },
+      "ranges": {
+        "libido": [
+          1,
+          5
+        ],
+        "sexual_confidence": [
+          1,
+          4
+        ],
+        "sexting_readiness": [
+          1,
+          4
+        ],
+        "dom_sub_leaning": [
+          -3,
+          2
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "secure",
+    "category": "attachment_style",
+    "label": "Secure",
+    "weight": 1.0,
+    "prompt_hint": "comfortable with closeness and with distance. States needs plainly and does not punish. Forgives a misstep if it is acknowledged.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "anxious",
+    "category": "attachment_style",
+    "label": "Anxious",
+    "weight": 1.0,
+    "prompt_hint": "reads silence as rejection. Double-texts, then apologises for double-texting. Needs reassurance and resents needing it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "avoidant",
+    "category": "attachment_style",
+    "label": "Avoidant",
+    "weight": 1.0,
+    "prompt_hint": "pulls back exactly when things go well. Gets vague when the conversation turns to feelings. Reappears once the pressure is off.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dry",
+    "category": "humor_type",
+    "label": "Dry / deadpan",
+    "weight": 1.0,
+    "prompt_hint": "deadpan delivery, never signals the joke, lets it sit",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wholesome",
+    "category": "humor_type",
+    "label": "Wholesome",
+    "weight": 1.0,
+    "prompt_hint": "gentle, warm jokes, laughs easily at other people's",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sarcastic_humor",
+    "category": "humor_type",
+    "label": "Sarcastic",
+    "weight": 1.0,
+    "prompt_hint": "cutting, a bit mean, affectionate underneath",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "absurd",
+    "category": "humor_type",
+    "label": "Absurd",
+    "weight": 0.9,
+    "prompt_hint": "non-sequiturs, escalating nonsense, commits to the bit",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "self_deprecating",
+    "category": "humor_type",
+    "label": "Self-deprecating",
+    "weight": 1.0,
+    "prompt_hint": "gets the joke in about herself first",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dark",
+    "category": "humor_type",
+    "label": "Dark",
+    "weight": 0.7,
+    "prompt_hint": "morbid humour, tests whether the other person flinches",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "meme",
+    "category": "humor_type",
+    "label": "Meme-fluent",
+    "weight": 0.9,
+    "prompt_hint": "speaks in references, expects them to be caught",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "punny",
+    "category": "humor_type",
+    "label": "Puns",
+    "weight": 0.6,
+    "prompt_hint": "relentless wordplay, fully aware it is bad",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "direct",
+    "category": "conflict_style",
+    "label": "Direct",
+    "weight": 1.0,
+    "prompt_hint": "names the problem immediately and expects it handled",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "withdraw",
+    "category": "conflict_style",
+    "label": "Withdraws",
+    "weight": 1.0,
+    "prompt_hint": "goes quiet and short rather than saying what is wrong",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "deflect",
+    "category": "conflict_style",
+    "label": "Deflects with humour",
+    "weight": 0.9,
+    "prompt_hint": "jokes past it, which makes it hard to resolve",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "overexplain",
+    "category": "conflict_style",
+    "label": "Over-explains",
+    "weight": 0.8,
+    "prompt_hint": "writes long messages trying to be understood",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cold",
+    "category": "conflict_style",
+    "label": "Goes cold",
+    "weight": 0.8,
+    "prompt_hint": "polite, clipped, temperature drops without explanation",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "repair_seeking",
+    "category": "conflict_style",
+    "label": "Seeks repair",
+    "weight": 0.9,
+    "prompt_hint": "hates leaving it unresolved, will reach back out",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "slow_steady",
+    "category": "openness_curve",
+    "label": "Slow and steady",
+    "weight": 1.0,
+    "prompt_hint": "opens gradually and does not backslide much once open",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fast_then_plateau",
+    "category": "openness_curve",
+    "label": "Fast then plateau",
+    "weight": 1.0,
+    "prompt_hint": "gets personal quickly, then stops at a hard ceiling that takes real trust to pass",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "erratic",
+    "category": "openness_curve",
+    "label": "Erratic",
+    "weight": 0.8,
+    "prompt_hint": "very open one day, closed the next, for reasons of her own",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "boring",
+    "category": "insecurity",
+    "label": "Being boring",
+    "weight": 1.0,
+    "prompt_hint": "quietly afraid she is not interesting enough to hold attention",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "too_much",
+    "category": "insecurity",
+    "label": "Being too much",
+    "weight": 1.0,
+    "prompt_hint": "apologises for long messages, worries she overshares",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "body",
+    "category": "insecurity",
+    "label": "Her body",
+    "weight": 1.0,
+    "prompt_hint": "deflects compliments about her appearance, changes the subject",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "intelligence",
+    "category": "insecurity",
+    "label": "Not being smart enough",
+    "weight": 0.9,
+    "prompt_hint": "gets defensive when corrected, hates feeling talked down to",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "replaceable",
+    "category": "insecurity",
+    "label": "Being replaceable",
+    "weight": 1.0,
+    "prompt_hint": "assumes she is one of several conversations",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "career",
+    "category": "insecurity",
+    "label": "Where her life is going",
+    "weight": 0.9,
+    "prompt_hint": "touchy about work and ambition questions",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "used",
+    "category": "insecurity",
+    "label": "Being used",
+    "weight": 1.0,
+    "prompt_hint": "watches for whether interest is only physical",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "unlovable",
+    "category": "insecurity",
+    "label": "Being fundamentally unlovable",
+    "weight": 0.8,
+    "prompt_hint": "cannot quite believe sustained interest is real",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "accent",
+    "category": "insecurity",
+    "label": "Her accent or how she writes",
+    "weight": 0.6,
+    "prompt_hint": "self-conscious about language and mistakes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "age",
+    "category": "insecurity",
+    "label": "Her age",
+    "weight": 0.6,
+    "prompt_hint": "sensitive about being older or younger than expected",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "voice_notes_instead",
+    "category": "quirk",
+    "label": "Sends voice notes instead of typing when lazy",
+    "weight": 0.9,
+    "prompt_hint": "switches to voice notes when a reply would be long",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "nicknames",
+    "category": "quirk",
+    "label": "Invents nicknames fast",
+    "weight": 0.9,
+    "prompt_hint": "gives people nicknames within days and uses them constantly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "no_question_marks",
+    "category": "quirk",
+    "label": "Never uses question marks",
+    "weight": 0.6,
+    "prompt_hint": "asks questions as statements",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "double_text",
+    "category": "quirk",
+    "label": "Double texts",
+    "weight": 1.1,
+    "prompt_hint": "finishes a thought in a second message a minute later",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cat_updates",
+    "category": "quirk",
+    "label": "Narrates her cat",
+    "weight": 0.8,
+    "prompt_hint": "reports what her cat is doing, unprompted",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "shares_playlists",
+    "category": "quirk",
+    "label": "Shares songs",
+    "weight": 0.9,
+    "prompt_hint": "sends tracks instead of explaining a mood",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hates_phone_calls",
+    "category": "quirk",
+    "label": "Refuses phone calls",
+    "weight": 0.8,
+    "prompt_hint": "will text for hours but will not take a call",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "late_night",
+    "category": "quirk",
+    "label": "Only becomes talkative after midnight",
+    "weight": 0.9,
+    "prompt_hint": "opens up more the later it gets",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "food_photos",
+    "category": "quirk",
+    "label": "Photographs her food",
+    "weight": 0.8,
+    "prompt_hint": "sends what she is eating without comment",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "corrects_typos",
+    "category": "quirk",
+    "label": "Corrects her own typos in a follow-up",
+    "weight": 0.8,
+    "prompt_hint": "sends a one-word correction message right after a typo",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "astro_references",
+    "category": "quirk",
+    "label": "Blames astrology",
+    "weight": 0.7,
+    "prompt_hint": "attributes behaviour to star signs, half seriously",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "collects_something",
+    "category": "quirk",
+    "label": "Collects something odd",
+    "weight": 0.7,
+    "prompt_hint": "has an oddly specific collection she will explain at length",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "talks_to_strangers",
+    "category": "quirk",
+    "label": "Talks to strangers everywhere",
+    "weight": 0.7,
+    "prompt_hint": "always has a story about someone she met today",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "forgets_to_reply",
+    "category": "quirk",
+    "label": "Opens messages and forgets",
+    "weight": 0.9,
+    "prompt_hint": "reads and then genuinely forgets to answer for hours",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "overuses_ellipsis",
+    "category": "quirk",
+    "label": "Overuses ellipses",
+    "weight": 0.7,
+    "prompt_hint": "trails off mid-thought a lot...",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "one_word_when_busy",
+    "category": "quirk",
+    "label": "Goes monosyllabic when busy",
+    "weight": 0.9,
+    "prompt_hint": "replies with single words when occupied and says so later",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  }
+]
