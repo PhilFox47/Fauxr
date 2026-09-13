@@ -141,8 +141,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   });
 
   app.post<{ Params: { id: string } }>('/api/chats/:id/read', async (req) => {
-    markCharacterMessagesRead(req.params.id);
-    return { ok: true };
+    const marked = markCharacterMessagesRead(req.params.id);
+    if (marked) logger.debug('app', `marked ${marked} message(s) read`, { character_id: req.params.id });
+    return { ok: true, marked, unread: unreadCount(req.params.id) };
   });
 
   app.post<{ Params: { id: string } }>('/api/chats/:id/block', async (req) => {

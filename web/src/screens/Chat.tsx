@@ -73,10 +73,6 @@ export default function Chat({
     void load();
   }, [eventSeq, load]);
 
-  useEffect(() => {
-    void api.markRead(characterId).catch(() => {});
-  }, [characterId, messages.length]);
-
   // Refetched on every new message: a reply is exactly when something new gets revealed.
   useEffect(() => {
     void api.profile(characterId).then(setProfile).catch(() => {});

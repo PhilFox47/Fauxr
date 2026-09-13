@@ -299,9 +299,11 @@ export function markUserMessagesRead(characterId: string): number {
     .run(nowIso(), characterId).changes;
 }
 
-export function markCharacterMessagesRead(characterId: string): void {
-  db.prepare("UPDATE messages SET read_at = ? WHERE character_id = ? AND sender = 'character' AND read_at IS NULL")
-    .run(nowIso(), characterId);
+/** Returns how many messages this actually marked, so callers can tell a no-op apart. */
+export function markCharacterMessagesRead(characterId: string): number {
+  return db
+    .prepare("UPDATE messages SET read_at = ? WHERE character_id = ? AND sender = 'character' AND read_at IS NULL")
+    .run(nowIso(), characterId).changes;
 }
 
 // ---------------------------------------------------------------- wakeups

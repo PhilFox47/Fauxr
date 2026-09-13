@@ -18,6 +18,8 @@ export default function App() {
   const [matches, setMatches] = useState<MatchSummary[]>([]);
   const [typing, setTyping] = useState<Record<string, boolean>>({});
   const [eventSeq, setEventSeq] = useState(0);
+  /** Bumps only on new messages, so the read-marking below does not run on typing events. */
+  const [messageSeq, setMessageSeq] = useState(0);
   const typingTimers = useRef<Record<string, number>>({});
 
   /**
@@ -70,6 +72,9 @@ export default function App() {
           setTypingFor(event.character_id, event.on);
           break;
         case 'message':
+          setMessageSeq((n) => n + 1);
+          void refreshMatches();
+          break;
         case 'match':
         case 'character_state':
         case 'presence':
@@ -96,6 +101,29 @@ export default function App() {
     }, 60_000);
     return () => clearInterval(id);
   }, [refreshState, refreshMatches]);
+
+  /**
+   * Marking messages read lives here rather than in the chat screen, because this is what
+   * owns the unread counts. Doing it in the child meant nothing refreshed the badge
+   * afterwards, and a message arriving while the chat was open refreshed the count first
+   * and marked it read second - so the counter only ever went up, even while you were
+   * sitting there reading it.
+   */
+  useEffect(() => {
+    if (!openChat) return;
+    let cancelled = false;
+    void api
+      .markRead(openChat)
+      .then(() => {
+        if (!cancelled) return refreshMatches();
+      })
+      .catch(() => {
+        /* offline: the badge corrects itself on the next poll */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [openChat, messageSeq, refreshMatches]);
 
   const unread = useMemo(() => matches.reduce((n, m) => n + m.unread, 0), [matches]);
 

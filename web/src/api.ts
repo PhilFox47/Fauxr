@@ -89,9 +89,14 @@ export interface ImageJob {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  // Only declare a JSON body when there actually is one. Sending
+  // `content-type: application/json` with no body makes Fastify reject the request with
+  // 400 FST_ERR_CTP_EMPTY_JSON_BODY, which silently broke every bodyless POST: marking a
+  // chat read, blocking someone, retrying an image.
+  const hasJsonBody = init?.body !== undefined && !(init.body instanceof FormData);
   const res = await fetch(path, {
-    headers: init?.body instanceof FormData ? undefined : { 'content-type': 'application/json' },
     ...init,
+    headers: hasJsonBody ? { 'content-type': 'application/json', ...init?.headers } : init?.headers,
   });
   if (!res.ok) {
     const body = await res.text();
