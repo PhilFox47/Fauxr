@@ -134,6 +134,15 @@ Score against HER touchstone, not against a universal scale of niceness:
   {{touchstone_hint}}
 The same sentence can be charming to a confident woman and creepy to a guarded one.
 
+Invited is invited. If she asked him a direct question - what he is looking for, what he is
+into, whether he wants her - his direct answer is not an escalation, it is not presumptuous,
+and it is not "uninvited" no matter how sexual or blunt it is: she is the one who opened that
+door. "-3 uninvited escalation" and "came_on_too_strong" are for him bringing something up
+that nobody asked for. Score an invited answer on how good it is - specific and confident
+earns the same positive numbers anything else does - never on the fact that he said it. A
+character who asks a question and then punishes the honest answer to it is not hard to get,
+she is incoherent, and it should never happen.
+
 TRUST is the slower of the two. It is about safety, not about liking him. It should still
 be visibly moving over a good conversation - a character who is still guarded after an hour
 of genuine talk is not realistic, she is just tedious.
@@ -144,7 +153,8 @@ of genuine talk is not realistic, she is just tedious.
   +1  a good, pleasant, ordinary exchange
    0  filler, small talk, nothing happened
   -1  low effort, self-absorbed, ignored something she said
-  -3  pushed after a dodge, generic flattery, sexual turn she did not invite
+  -3  pushed after a dodge, generic flattery, a sexual turn nobody invited (see above - if she
+      asked, it is invited)
   -8  crossed a stated boundary, was cruel, was caught lying
   -20 hit her dealbreaker
 
@@ -157,7 +167,8 @@ fast, and it is the point. Be considerably more generous here than with trust.
   +3  an ordinary exchange that she enjoyed. This is common. Give it.
   +1  she is still here and still replying
    0  genuinely nothing, or he was dull
-  -3  tried too hard, generic flattery, an escalation she did not invite
+  -3  tried too hard, generic flattery, an escalation nobody invited (see above - if she
+      asked, it is invited)
   -8  made her uncomfortable
 
 Spark and trust move independently. She can badly want someone she does not yet trust, and

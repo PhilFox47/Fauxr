@@ -33,6 +33,9 @@ last contact: {{last_contact}}, time now: {{now}}
 Score against HER touchstone, not a universal scale:
   {{touchstone_hint}}
 
+If she asked him a direct question, his direct answer to it is invited, however blunt or
+sexual - score it on quality, never as "-3 uninvited escalation" just for existing.
+
 Calibrate strictly. The normal case is 0 to +1.
   +5 rare and specific     +3 clearly above average     +1 pleasant and ordinary
    0 nothing happened (DEFAULT)

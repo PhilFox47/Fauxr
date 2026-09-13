@@ -297,6 +297,26 @@ positives across a 20-message stress conversation). And one emoji turning into a
 stamped on the end of every message for several turns running is now called out explicitly
 as something real texting doesn't do.
 
+### Invited is invited
+
+A more severe version of the same stalling problem: a character asks the user a direct
+question — what he's looking for, what he's into — he answers honestly, and she turns
+hostile at him for it ("you're like a goddamn fact sheet") as though a plain, invited answer
+were an offense. Her own seed stats (high libido, high sexting readiness) made this worse,
+not better, since nothing was gating her toward caution in the first place — she had no
+reason to be defensive except that the scoring rubric gave her one.
+
+The root cause: both Director templates scored "a sexual turn she did not invite" and
+"uninvited escalation" as negative, but nothing distinguished a genuinely unprompted move
+from a direct answer to a question she just asked. A cheap or careless Director pass could
+dock trust and spark for content that was, definitionally, invited — and the Actor, handed a
+negative-leaning direction with no explanation, improvised a reason for it, which is where
+the "fact sheet" hostility came from. The rubric in both `director_direction.md` and
+`director_update.md` now says explicitly: if she asked, the answer is invited, however blunt
+or sexual, and it scores on quality, never merely on having been said. The Actor prompt got
+the matching rule on its own side — she can find an honest answer boring or underwhelming,
+she cannot be offended that he gave it.
+
 ### Flags
 
 Flags are set by events, not by thresholds. `real_name_known` goes true because she said
