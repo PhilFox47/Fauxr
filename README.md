@@ -332,6 +332,32 @@ description in `stage.ts` and the no-direction-yet default in `blocks.ts` (used 
 Director has ever weighed in) got the same reframe, from "neutral, deciding if he's worth the
 effort" to "curious, actively interested."
 
+### Forward characters need to make the first move too
+
+A character built forward on her seed (high libido, high sexual confidence, high sexting
+readiness) is supposed to do some of the flirting and escalating herself, not just react
+generously once the user brings it up. Two things stood in the way of that:
+
+The Director's `sexual_topics` unlock only fired once "the moment in the conversation calls
+for it" — with nothing telling it that a forward character's own want is reason enough, that
+qualifier defaulted to waiting for the user to steer the conversation there first. It now
+says so explicitly, plus a standing "SHE MAKES MOVES TOO" instruction that `bring_up` can be
+a tease or her taking things sexual herself, not only mundane material.
+
+The bigger issue was in code, in `nudge.ts`: the `flirt` and `escalate` nudges — the ones
+that actually make her initiate rather than only answer — were gated almost entirely behind
+`arousal`, a transient stat that mostly rises *after* something sexual has already happened.
+That is a chicken-and-egg problem: a character waiting on her own arousal to justify the
+first move could never actually make it, so everything had to come from the user. Both
+nudges now also fire off her seed traits directly (`sexual_confidence >= 4` or `libido >= 4`,
+plus spark for flirting and `sexting_readiness` for escalating into sexting), with arousal
+still lowering the bar further once it exists rather than being the only way in. Verified
+with a script driving `pickNudge()` directly over 20k trials per scenario: a forward
+character with zero arousal now flirts on ~58% of turns instead of 0%, and once
+`sexual_topics` is unlocked, self-initiates escalation on ~63% of turns at arousal 30
+(previously required arousal 60 and fired standalone). A non-forward character in the same
+scenarios is unaffected — this only changes characters whose seed actually calls for it.
+
 ### Flags
 
 Flags are set by events, not by thresholds. `real_name_known` goes true because she said

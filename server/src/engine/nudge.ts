@@ -50,8 +50,21 @@ export function pickNudge(
    */
   const open = rel.flags?.state?.sexual_topics_allowed;
   const boldness = (seed.sexual_confidence - 2) * 0.06;
+  /**
+   * Gating her first move behind arousal alone was a chicken-and-egg problem: arousal is a
+   * transient, reactive stat that mostly climbs once something sexual has already happened,
+   * so a character waiting on it could never be the one to start it - everything had to
+   * come from the user first. A character built forward on her seed (confident, high
+   * libido) does not need permission from her own mood stat to act like herself; arousal
+   * still lowers the bar further once it exists, it just stops being the only way in.
+   */
+  const forward = seed.sexual_confidence >= 4 || seed.libido >= 4;
 
-  if (open && rel.arousal >= 60 && chance(0.45 + boldness)) {
+  if (
+    open &&
+    (rel.arousal >= 60 || (forward && seed.sexting_readiness >= 4 && rel.arousal >= 30)) &&
+    chance(0.45 + boldness)
+  ) {
     return {
       id: 'escalate',
       text:
@@ -61,7 +74,7 @@ export function pickNudge(
     };
   }
 
-  if (rel.arousal >= 35 && chance(0.3 + boldness)) {
+  if ((rel.arousal >= 35 || (forward && rel.spark >= 25)) && chance(0.3 + boldness + (forward ? 0.1 : 0))) {
     return {
       id: 'flirt',
       text:
@@ -73,7 +86,7 @@ export function pickNudge(
 
   // She hints at something she is into without naming it, and waits to see if he catches it.
   const hiddenFetishes = (seed.fetishes ?? []).filter((f) => !(rel.discovered ?? {})[`fetish:${f}`]);
-  if (open && hiddenFetishes.length && rel.arousal >= 45 && chance(0.3)) {
+  if (open && hiddenFetishes.length && (rel.arousal >= 45 || (forward && rel.arousal >= 30)) && chance(0.3)) {
     return {
       id: 'hint_fetish',
       text:
