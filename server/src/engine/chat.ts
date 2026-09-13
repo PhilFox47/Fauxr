@@ -29,6 +29,16 @@ export function currentEpoch(): number {
   return epoch;
 }
 
+/**
+ * Whether she is mid-turn right now. Backs a REST fallback for the typing indicator: the
+ * indicator's primary path is the WebSocket 'typing' event, but a reverse proxy that does
+ * not forward the Upgrade handshake silently breaks that with no error the app can detect,
+ * so the chat screen also polls this instead of relying on push alone.
+ */
+export function isRunning(characterId: string): boolean {
+  return running.has(characterId);
+}
+
 export function abandonRunningTurns(): void {
   epoch++;
   running.clear();

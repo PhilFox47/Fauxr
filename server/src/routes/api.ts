@@ -11,7 +11,7 @@ import {
   getCharacter, getRelationship, getUserProfile, getWakeup, lastMessage, markCharacterMessagesRead,
   queryLogs, recentMessages, saveUserProfile, unreadCount,
 } from '../repo.js';
-import { blockCharacterByUser, handleUserMessage, isAway, regenerateLastTurn } from '../engine/chat.js';
+import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateLastTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import { enqueueImage, evaluateUserImage, listImageJobs, retryImageJob } from '../engine/images.js';
@@ -110,6 +110,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     const limit = Math.min(Number(req.query.limit) || 200, 500);
     return {
       character: publicCharacter(character),
+      // Poll fallback for the typing indicator - see isRunning()'s comment. The WebSocket
+      // event is still what makes it appear instantly when the connection actually works.
+      typing: isRunning(character.id),
       messages: recentMessages(character.id, limit).map((m) => ({
         ...m,
         image_url: m.kind === 'image' && m.meta?.path ? `/media/${m.meta.path}` : null,

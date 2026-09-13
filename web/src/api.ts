@@ -112,7 +112,7 @@ export const api = {
   swipe: (id: string, direction: 'left' | 'right') =>
     request<any>(`/api/swipe/${id}`, { method: 'POST', body: JSON.stringify({ direction }) }),
   matches: () => request<MatchSummary[]>('/api/matches'),
-  chat: (id: string) => request<{ character: MatchSummary; messages: Message[] }>(`/api/chats/${id}`),
+  chat: (id: string) => request<{ character: MatchSummary; messages: Message[]; typing: boolean }>(`/api/chats/${id}`),
   send: (id: string, text: string) =>
     request<Message>(`/api/chats/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   profile: (id: string) => request<CharacterProfile>(`/api/chats/${id}/profile`),

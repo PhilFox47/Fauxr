@@ -93,12 +93,17 @@ export default function App() {
     });
   }, [refreshMatches, setTypingFor, clearAllTyping]);
 
-  // The server sleeps between 02:00 and 06:00; poll slowly so it reappears on its own.
+  /**
+   * Also the fallback for match list, presence and unread badges when the WebSocket above
+   * cannot connect at all - a reverse proxy that does not forward the Upgrade handshake
+   * breaks it silently, with no error the app can react to. Frequent enough to feel live
+   * on its own; the socket is still what makes it instant when it actually works.
+   */
   useEffect(() => {
     const id = setInterval(() => {
       void refreshState();
       void refreshMatches();
-    }, 60_000);
+    }, 15_000);
     return () => clearInterval(id);
   }, [refreshState, refreshMatches]);
 

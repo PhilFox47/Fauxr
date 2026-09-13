@@ -46,6 +46,7 @@ export default function Chat({
 }) {
   const [character, setCharacter] = useState<MatchSummary | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [polledTyping, setPolledTyping] = useState(false);
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -60,6 +61,7 @@ export default function Chat({
       const res = await api.chat(characterId);
       setCharacter(res.character);
       setMessages(res.messages);
+      setPolledTyping(res.typing);
     } catch {
       /* keep the current view if the server is unreachable */
     }
@@ -74,15 +76,32 @@ export default function Chat({
     void load();
   }, [eventSeq, load]);
 
+  /**
+   * A plain safety-net poll, independent of the WebSocket event stream above. Behind a
+   * reverse proxy that does not forward the Upgrade handshake, the socket never connects
+   * (silently - the browser gives no error the app can act on), and without this, new
+   * messages and the typing indicator would only ever show up on a manual reload. Cheap
+   * enough for a single-user app to just always run alongside the socket rather than
+   * trying to detect whether it is actually needed.
+   */
+  useEffect(() => {
+    const id = window.setInterval(() => void load(), 3000);
+    return () => window.clearInterval(id);
+  }, [load]);
+
   // Refetched on every new message: a reply is exactly when something new gets revealed.
   useEffect(() => {
     void api.profile(characterId).then(setProfile).catch(() => {});
   }, [characterId, messages.length]);
 
+  // The WebSocket event is instant when it works; the poll above is the fallback when it
+  // cannot reach through the proxy at all. Either one showing "typing" is enough to show it.
+  const isTyping = typing || polledTyping;
+
   useEffect(() => {
     const el = logRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [messages.length, typing]);
+  }, [messages.length, isTyping]);
 
   const send = async () => {
     const text = draft.trim();
@@ -141,7 +160,7 @@ export default function Chat({
           <span className="sub">
             {blocked
               ? character?.state === 'blocked_by_char' ? 'She blocked you' : 'You blocked her'
-              : typing
+              : isTyping
                 ? 'typing…'
                 : character?.online
                   ? 'online'
@@ -231,7 +250,7 @@ export default function Chat({
                     <button
                       className="regen-btn"
                       onClick={() => void regenerate(m.id)}
-                      disabled={regeneratingId !== null || typing}
+                      disabled={regeneratingId !== null || isTyping}
                       aria-label="Regenerate this reply"
                       title="Regenerate this reply"
                     >
@@ -244,11 +263,11 @@ export default function Chat({
           );
         })}
 
-        {typing && (
+        {isTyping && (
           <div className="typing"><i /><i /><i /></div>
         )}
 
-        {!typing && character && !character.online && lastMine && !lastMine.read_at && (
+        {!isTyping && character && !character.online && lastMine && !lastMine.read_at && (
           <div className="center tiny muted" style={{ padding: '8px 0' }}>
             She is offline. She will see it when she is back.
           </div>

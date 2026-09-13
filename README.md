@@ -509,6 +509,37 @@ goes off after her last message, including when the turn ends without one becaus
 ghosting or the provider was unreachable. The client also expires it on its own, so a
 connection dropped mid-turn cannot leave it stuck.
 
+**Live updates run over one WebSocket (`/ws`)** — new messages, typing, presence, matches,
+all of it. Behind a reverse proxy that does not forward the `Upgrade`/`Connection: Upgrade`
+handshake (the default on plain `nginx` and Apache configs, and on some one-click reverse
+proxy panels), the socket silently never connects: no error either the browser or the app
+can act on, it just retries forever. Without a fallback that meant new messages and the
+typing indicator only ever appeared on a manual page reload, while the match list and unread
+badges still limped along on their own 60-second poll.
+
+Two fixes, so the app is correct either way rather than depending on the proxy being
+configured right:
+- Fix the proxy if you can — it is the lower-latency path. For `nginx`, the `/ws` location
+  needs:
+  ```
+  location /ws {
+      proxy_pass http://127.0.0.1:8080;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+  }
+  ```
+  Caddy and Traefik forward WebSocket upgrades automatically and need no special config.
+- Fixed either way: the open chat screen now also polls `/api/chats/:id` every 3 seconds
+  regardless of the socket, and that endpoint reports whether she is currently mid-turn
+  (`typing`, backed by the same in-memory state the WebSocket event reads from) alongside
+  the message list. The match list's own poll dropped from 60s to 15s for the same reason.
+  Verified end-to-end over plain HTTP with no WebSocket involved at all: a mock LLM backend
+  with an artificial delay, driven purely with `curl` against `/api/chats/:id/messages` and
+  repeated `GET /api/chats/:id` — `typing` flips true for the duration of the turn and the
+  reply lands in the polled message list, exactly like the WebSocket path, just a few
+  seconds later.
+
 ### Voice messages
 ---
 
