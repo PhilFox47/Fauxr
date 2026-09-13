@@ -7,7 +7,7 @@ import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Rela
 import {
   appearanceBlock, communicationBlock, directionBlock, historyBlock, identityBlock,
   interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
-  sexualBlock, userBlock,
+  sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
 import { currentStage } from './stage.js';
 import { describeHerMoment } from './moment.js';
@@ -119,7 +119,10 @@ function buildPrompt(
     appearance_block: wanted.has('appearance') || flags.state.profile_picture_sent ? appearanceBlock(seed, flags) : '',
     life_block: wanted.has('life') ? lifeBlock(seed) : '',
     interests_block: wanted.has('interests') ? interestsBlock(seed) : '',
-    sexual_block: flags.state.sexual_topics_allowed && wanted.has('sexual') ? sexualBlock(seed) : '',
+    // The sexual block used to need the director to request it, which meant she could be
+    // fully unlocked and still have no idea what she likes. If that door is open, she knows.
+    sexual_block: flags.state.sexual_topics_allowed || relationship.arousal >= 45 ? sexualBlock(seed) : '',
+    spice_block: spiceBlock(seed, relationship.arousal, flags),
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     ledger_block: ledgerBlock(relationship.ledger),
     direction_block: directionBlock(direction),

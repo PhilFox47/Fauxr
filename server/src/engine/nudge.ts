@@ -30,6 +30,46 @@ export function pickNudge(character: Character, rel: Relationship): Nudge | null
 
   const openThreads: Ledger['open_threads'] = rel.ledger?.open_threads ?? [];
 
+  /**
+   * She has to make moves too. "Getting flirted at" does not happen if every advance has
+   * to come from him first, and a character who is visibly keen but never acts on it is
+   * the most common way this kind of app falls flat.
+   */
+  const open = rel.flags?.state?.sexual_topics_allowed;
+  const boldness = (seed.sexual_confidence - 2) * 0.06;
+
+  if (open && rel.arousal >= 60 && chance(0.45 + boldness)) {
+    return {
+      id: 'escalate',
+      text:
+        'You are the one pushing this turn. Do not wait for him to take it somewhere - take it there ' +
+        'yourself, say the specific thing you have been thinking about, or ask him something you ' +
+        'genuinely want the answer to. Be direct. You are past being coy about it.',
+    };
+  }
+
+  if (rel.arousal >= 35 && chance(0.3 + boldness)) {
+    return {
+      id: 'flirt',
+      text:
+        'Flirt with him this turn, and mean it. Not a polite compliment - something with an edge, ' +
+        'a double meaning, a line that makes him work out whether you meant it. You are interested ' +
+        'and you are allowed to let that show.',
+    };
+  }
+
+  // She hints at something she is into without naming it, and waits to see if he catches it.
+  const hiddenFetishes = (seed.fetishes ?? []).filter((f) => !(rel.discovered ?? {})[`fetish:${f}`]);
+  if (open && hiddenFetishes.length && rel.arousal >= 45 && chance(0.3)) {
+    return {
+      id: 'hint_fetish',
+      text:
+        'Steer towards something you are into that he has not worked out yet. Do not announce it - ' +
+        'circle it. A leading question, a detail you did not have to include, a joke you could take ' +
+        'back if he does not pick it up. See whether he notices.',
+    };
+  }
+
   if (openThreads.length && chance(0.18)) {
     const thread = openThreads[Math.floor(Math.random() * openThreads.length)];
     return {

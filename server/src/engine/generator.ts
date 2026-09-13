@@ -49,7 +49,23 @@ function rollTypoRate(typingStyle: string, archetype: string): number {
  * Thresholds spread widely on purpose: every character is her own puzzle. The openness
  * curve and archetype nudge the centre, the dice do the rest.
  */
-function rollThresholds(archetype: string, openness: string): Thresholds {
+interface SexualSeed {
+  libido: number;
+  sexual_confidence: number;
+  sexting_readiness: number;
+}
+
+/**
+ * Thresholds spread widely on purpose: every character is her own puzzle. The openness
+ * curve and archetype nudge the centre, the dice do the rest.
+ *
+ * The sexual thresholds are pulled down hard by her own appetite. Without that, a
+ * libido-5 sexting-5 character could roll a sexual_topics threshold of 78 and end up
+ * gated exactly as hard as the shyest woman in the pool, which is nonsense: her seed says
+ * she is forward, so she should be reachable. The global spice setting scales the same
+ * thresholds, so pacing is tunable without touching any of this.
+ */
+function rollThresholds(archetype: string, openness: string, sexual: SexualSeed): Thresholds {
   let shift = 0;
   if (openness === 'slow_steady') shift += 8;
   if (openness === 'fast_then_plateau') shift -= 6;
@@ -59,13 +75,24 @@ function rollThresholds(archetype: string, openness: string): Thresholds {
   const at = (min: number, max: number, weight = 1) =>
     Math.max(2, Math.min(98, randInt(min, max) + Math.round(shift * weight)));
 
+  // 1 (never over text) .. 5 (forward from the first message)
+  const appetite = (sexual.libido + sexual.sexting_readiness * 1.5 + sexual.sexual_confidence * 0.5) / 3;
+  const spice = Math.max(0.2, Math.min(2, getSettings().spice));
+
+  /** Sexual gates: lowered by her appetite, then scaled by the global spice setting. */
+  const sexualAt = (min: number, max: number) => {
+    const raw = randInt(min, max) + Math.round(shift * 0.8);
+    const byAppetite = raw - (appetite - 1) * 11;
+    return Math.max(2, Math.min(98, Math.round(byAppetite / spice)));
+  };
+
   return {
     real_name: at(8, 45),
     profile_picture: at(12, 55),
-    personal_photos: at(30, 75),
-    sexual_topics: at(25, 80, 1.2),
-    spicy_photos: at(55, 95, 1.2),
-    allow_date: at(35, 80),
+    personal_photos: at(25, 65),
+    sexual_topics: sexualAt(20, 62),
+    spicy_photos: sexualAt(40, 85),
+    allow_date: Math.max(2, Math.min(98, Math.round(at(28, 68) / Math.max(0.6, spice)))),
   };
 }
 
@@ -277,7 +304,11 @@ export function rollSeed(): RolledSeed {
     fetishes,
     hard_limits,
 
-    thresholds: rollThresholds(archetype.id, openness_curve),
+    thresholds: rollThresholds(archetype.id, openness_curve, {
+      libido,
+      sexual_confidence,
+      sexting_readiness,
+    }),
     hints,
     appearance_prompt: '',
     image_seed: randInt(1, 2_000_000_000),

@@ -11,7 +11,7 @@ import {
 } from './blocks.js';
 import { describeOnlineTimes, nextOnlineAt, onlineUntil } from './presence.js';
 import { arousalCeiling, currentStage, describeArousal } from './stage.js';
-import { herCuriosity, undiscoveredKeys } from './discovery.js';
+import { describeFetishProgress, herCuriosity, undiscoveredKeys } from './discovery.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
 
@@ -90,6 +90,7 @@ export async function runDirector(
     stage_what: stage.what,
     stage_next: stage.next,
     her_curiosity: herCuriosity(rel),
+    fetish_block: describeFetishProgress(character, rel),
     arousal: rel.arousal,
     arousal_ceiling: ceiling,
     arousal_description: describeArousal(rel.arousal),

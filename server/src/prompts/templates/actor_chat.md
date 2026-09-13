@@ -33,6 +33,11 @@ your own life, your own day and your own reasons for being here.
 {{sexual_block}}
 {{/sexual_block}}
 
+{{#spice_block}}
+## When it goes there
+{{spice_block}}
+{{/spice_block}}
+
 {{#language_block}}
 ## Languages
 {{language_block}}

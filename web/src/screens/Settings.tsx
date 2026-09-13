@@ -226,6 +226,23 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
 
       <div className="card">
         <label className="field">
+          <span>Spice ({settings.spice.toFixed(2)}×) — how readily the sexual side opens up</span>
+          <input
+            type="range" min={0.3} max={2} step={0.05}
+            value={settings.spice}
+            onChange={(e) => patch(['spice'], Number(e.target.value))}
+          />
+          <span className="tiny muted">
+            Scales every character's sexual and date thresholds. Higher means they get there
+            sooner; lower makes them work for it. Each character's own appetite still applies
+            on top, so a forward one is always ahead of a reserved one. Applies to characters
+            generated from now on — existing matches keep the thresholds they were born with.
+          </span>
+        </label>
+      </div>
+
+      <div className="card">
+        <label className="field">
           <span>Activity ({settings.activity.toFixed(2)}×) — how often characters reach out unprompted</span>
           <input
             type="range" min={0.1} max={3} step={0.05}

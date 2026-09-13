@@ -32,6 +32,13 @@ export interface Settings {
   images_enabled: boolean;
   voice_enabled: boolean;
   /**
+   * How fast the sexual side of a conversation opens up. 1 is the designed pacing;
+   * higher makes every character reachable sooner, lower makes them all harder work.
+   * Applied to the sexual and date thresholds at generation time, so it affects
+   * characters created from now on rather than rewriting existing ones.
+   */
+  spice: number;
+  /**
    * Testing override: every character counts as online at all times, the server uptime
    * window is ignored, and nobody stays away after announcing they are leaving. Turn it
    * off to get the real pacing back.
@@ -57,6 +64,7 @@ export const DEFAULT_SETTINGS: Settings = {
   chat: { context_messages: 40, max_messages_per_turn: 5, max_delay_seconds: 10 },
   images_enabled: false,
   voice_enabled: false,
+  spice: 1.3,
   always_online: true,
 };
 

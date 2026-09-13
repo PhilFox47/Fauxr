@@ -217,3 +217,51 @@ export function herCuriosity(rel: Relationship, limit = 4): string {
   if (!open.length) return 'She knows a fair amount about him by now. Find something more specific she would want.';
   return open.slice(0, limit).map((q) => `- ${q.topic}`).join('\n');
 }
+
+export interface FetishProgress {
+  key: string;
+  label: string;
+  hint: string;
+  known: boolean;
+}
+
+/**
+ * Which of her fetishes he has actually found, and which are still hidden.
+ *
+ * Fetish exploration is a core loop rather than flavour, so the Director needs it broken
+ * out explicitly: it is the difference between "she is into things" and "he found the one
+ * thing and she came apart". Undiscovered ones are what she hints at when she is worked
+ * up; discovered ones are what she wants him to use.
+ */
+export function fetishProgress(character: Character, rel: Relationship): FetishProgress[] {
+  const discovered = rel.discovered ?? {};
+  return character.seed.fetishes.map((f) => {
+    const attr = find('fetish', f);
+    return {
+      key: `fetish:${f}`,
+      label: attr?.label ?? f,
+      hint: attr?.prompt_hint ?? '',
+      known: `fetish:${f}` in discovered,
+    };
+  });
+}
+
+export function describeFetishProgress(character: Character, rel: Relationship): string {
+  const all = fetishProgress(character, rel);
+  if (!all.length) return '(none rolled for her)';
+  const found = all.filter((f) => f.known);
+  const hidden = all.filter((f) => !f.known);
+  const lines: string[] = [];
+  if (found.length) {
+    lines.push('He has found out about: ' + found.map((f) => f.label).join(', ') +
+      '. She knows he knows. Using these on her works, and she will not pretend otherwise.');
+  }
+  if (hidden.length) {
+    lines.push('Still hidden: ' + hidden.map((f) => `${f.label} (${f.hint || 'no detail'})`).join('; ') +
+      '. She does not announce these. When she is worked up she circles them, hints, tests whether he picks it up. ' +
+      'If he lands on one himself, that is a large spark and arousal jump and she should react like it.');
+  }
+  const limits = character.seed.hard_limits.map((h) => find('hard_limit', h)?.label ?? h);
+  if (limits.length) lines.push('Absolute limits, never crossed whatever the mood: ' + limits.join(', ') + '.');
+  return lines.join('\n');
+}

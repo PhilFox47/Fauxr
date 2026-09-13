@@ -1,11 +1,18 @@
 # Fauxr
 
-A self-hosted, single-user dating simulator. Not a roleplay frontend — a dating platform
-simulation: you swipe, you match, you chat, you build trust, and you can lose it.
+A self-hosted, single-user adult dating simulator. Think MeChat or Choices without the
+hardcoded stories, without the purchases, and considerably more explicit — a dating
+platform simulation where you swipe, match, chat, flirt, get flirted at, and find out what
+someone is actually into.
 
-Characters have their own goals, their own schedules and their own hidden thresholds.
-Nothing happens because a number crossed a line; numbers only decide what the Director
-*considers*. What actually happens, happens in the conversation.
+Characters are generated, not written. They have their own goals, their own schedules,
+their own hidden thresholds and their own fetishes to be discovered. Nothing happens
+because a number crossed a line; numbers only decide what the Director *considers*. What
+actually happens, happens in the conversation.
+
+Everyone in it is an adult — `age` has a hard minimum of 18, validated at generation — and
+refusal is real: characters say no, have limits they do not cross, and pushing costs you.
+That is what makes the yes worth anything.
 
 The UI and all model prompts are in English.
 
@@ -185,6 +192,33 @@ rather than it circling. The Actor gets the phase name only.
 — his work, why he is really here, whether he is talking to other people — and told that a
 character who only ever responds is a failure of the Director, not of the user. She is on a
 dating app for her own reasons and is expected to pursue them.
+
+### Spice
+
+Sexual and date thresholds are pulled down by each character's own appetite — her libido,
+sexting readiness and sexual confidence — so a forward character is reachable early and a
+reserved one is a real climb. Measured across 400 rolls: a forward character's
+`sexual_topics` gate sits around spark 5, a reserved one's around 33; spicy photos 16
+versus 51. Before this they were rolled blind, so the most forward woman in the pool could
+be gated exactly as hard as the shyest, which made no sense.
+
+A **spice** slider in Settings scales all of it. It applies at generation time, so it
+shapes new characters rather than rewriting matches you already have.
+
+Trust and spark are scored on separate scales. Trust is slow and about safety. Spark is
+attraction and moves fast, because that is the point of a dating app — the Director is told
+in as many words that a character who is still politely neutral after thirty messages is a
+failure of direction.
+
+### Fetishes
+
+Every character rolls two to five, plus hard limits. The Director is shown which ones the
+player has found and which are still hidden: she circles the hidden ones when she is worked
+up — a leading question, a detail she did not have to include, a joke she could take back —
+and landing on one is a large spark and arousal jump. Found ones become part of how she
+talks to him. Hard limits never move, whatever the mood.
+
+They appear in her profile as they are discovered, like everything else.
 
 ### Arousal
 
