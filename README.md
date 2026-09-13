@@ -235,6 +235,14 @@ indicator runs for exactly that gap, and is skipped entirely when there is none.
 The model is no longer asked for delays at all. Its `response_speed` trait still shapes how
 she writes and how often she answers; it is not a stopwatch.
 
+The typing indicator covers the whole turn, not just the pauses between messages. Composing
+a reply means a director pass and an actor call — several seconds of real work — and since
+the first message has no delay of its own, without this the chat would sit silent and then
+produce a bubble out of nowhere. It comes on the moment she starts working on a reply and
+goes off after her last message, including when the turn ends without one because she is
+ghosting or the provider was unreachable. The client also expires it on its own, so a
+connection dropped mid-turn cannot leave it stuck.
+
 ### Voice messages
 ---
 

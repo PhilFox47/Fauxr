@@ -6,7 +6,7 @@ import {
   addMessage, clearWakeup, getCharacter, getRelationship, getWakeup, markUserMessagesRead,
   recentMessages, saveRelationship, setCharacterState, type StoredMessage,
 } from '../repo.js';
-import type { Character, Relationship } from '../types.js';
+import type { ActorOutput, Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage } from './actor.js';
 import { detectEvents, directionExpired, runDirector } from './director.js';
 import { computePressure, computeReciprocity } from './modifiers.js';
@@ -144,37 +144,64 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     opts.trigger === 'match_opener' ||
     isStaleSession(rel);
 
-  if (needsDirector) {
-    const result = await runDirector(character, rel, {
-      reason: opts.reason ?? (check.expired ? check.reason : opts.trigger),
-    });
-    rel = getRelationship(characterId)!;
-    character = getCharacter(characterId)!;
-    if (result.escalation === 'block') {
-      bus.emitEvent({ type: 'character_state', character_id: character.id, state: 'blocked_by_char' });
+  /**
+   * The typing indicator covers the whole time she is composing, not only the pauses
+   * between her messages. Writing a reply means a director pass and an actor call, which
+   * takes seconds, and the first message is sent with no delay of its own - so without
+   * this the chat just sits there silently until her first bubble appears out of nowhere.
+   */
+  let typingShown = false;
+  const showTyping = () => {
+    if (typingShown) return;
+    typingShown = true;
+    bus.emitEvent({ type: 'typing', character_id: characterId, on: true });
+  };
+  const stopTyping = () => {
+    if (!typingShown) return;
+    typingShown = false;
+    bus.emitEvent({ type: 'typing', character_id: characterId, on: false });
+  };
+
+  let result: ActorOutput | null = null;
+  try {
+    showTyping();
+
+    if (needsDirector) {
+      const directed = await runDirector(character, rel, {
+        reason: opts.reason ?? (check.expired ? check.reason : opts.trigger),
+      });
+      rel = getRelationship(characterId)!;
+      character = getCharacter(characterId)!;
+      if (directed.escalation === 'block') {
+        bus.emitEvent({ type: 'character_state', character_id: character.id, state: 'blocked_by_char' });
+        return;
+      }
+      if (directed.escalation === 'ghost') {
+        logger.info('actor', `${character.username} is ghosting, no reply sent`);
+        return;
+      }
+    }
+
+    if (rel.ghosted_at && opts.trigger === 'user_message') {
+      // Ghosting means she does not answer. A reactivation attempt is decided by the Director.
+      logger.debug('actor', `${character.username} is ghosting, staying silent`);
       return;
     }
-    if (result.escalation === 'ghost') {
-      logger.info('actor', `${character.username} is ghosting, no reply sent`);
-      return;
-    }
+
+    const useVoice = wantsVoiceMessage(character);
+    const ctx = { character, relationship: rel, direction: rel.active_direction };
+    const output = useVoice
+      ? await runActorVoice(ctx).then((v) => (v ? { messages: [v.message], hidden: v.hidden } : null))
+      : null;
+    result = output ?? (await runActor(ctx));
+    if (epoch !== startedIn) return;
+
+    await deliver(character, result.messages, startedIn);
+  } finally {
+    // Every exit path clears it, including a thrown call or an abandoned turn. A stuck
+    // indicator is worse than none.
+    stopTyping();
   }
-
-  if (rel.ghosted_at && opts.trigger === 'user_message') {
-    // Ghosting means she does not answer. A reactivation attempt is decided by the Director.
-    logger.debug('actor', `${character.username} is ghosting, staying silent`);
-    return;
-  }
-
-  const useVoice = wantsVoiceMessage(character);
-  const ctx = { character, relationship: rel, direction: rel.active_direction };
-  const output = useVoice
-    ? await runActorVoice(ctx).then((v) => (v ? { messages: [v.message], hidden: v.hidden } : null))
-    : null;
-  const result = output ?? (await runActor(ctx));
-  if (epoch !== startedIn) return;
-
-  await deliver(character, result.messages, startedIn);
 
   rel = getRelationship(characterId);
   if (!rel || epoch !== startedIn) return;
@@ -235,11 +262,9 @@ async function deliver(
   startedIn: number,
 ): Promise<void> {
   for (const m of messages) {
-    // A zero delay means send now; showing a typing bubble for no time just flickers.
+    // The indicator is held on by the caller for the whole turn, so this only paces.
     if (m.delay > 0) {
-      bus.emitEvent({ type: 'typing', character_id: character.id, on: true });
       await sleep(m.delay * 1000);
-      bus.emitEvent({ type: 'typing', character_id: character.id, on: false });
       if (epoch !== startedIn) return;
     }
 

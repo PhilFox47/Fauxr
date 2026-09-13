@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, connectEvents, type AppState, type MatchSummary, type ServerEvent } from './api';
 import Onboarding from './screens/Onboarding';
 import Swipe from './screens/Swipe';
@@ -8,6 +8,9 @@ import Settings from './screens/Settings';
 
 type Tab = 'swipe' | 'matches' | 'settings';
 
+/** Longest a turn can plausibly take: model call, retries, plus the delivery delays. */
+const TYPING_TIMEOUT_MS = 180_000;
+
 export default function App() {
   const [state, setState] = useState<AppState | null>(null);
   const [tab, setTab] = useState<Tab>('swipe');
@@ -15,6 +18,29 @@ export default function App() {
   const [matches, setMatches] = useState<MatchSummary[]>([]);
   const [typing, setTyping] = useState<Record<string, boolean>>({});
   const [eventSeq, setEventSeq] = useState(0);
+  const typingTimers = useRef<Record<string, number>>({});
+
+  /**
+   * The indicator is now held for a whole turn, which is seconds of model work rather
+   * than a short pause. That makes a missed "off" event much more visible, so each "on"
+   * carries its own expiry: if the server goes away mid-turn, the bubble clears itself
+   * instead of sitting there for the rest of the session.
+   */
+  const setTypingFor = useCallback((characterId: string, on: boolean) => {
+    window.clearTimeout(typingTimers.current[characterId]);
+    setTyping((t) => ({ ...t, [characterId]: on }));
+    if (on) {
+      typingTimers.current[characterId] = window.setTimeout(() => {
+        setTyping((t) => ({ ...t, [characterId]: false }));
+      }, TYPING_TIMEOUT_MS);
+    }
+  }, []);
+
+  const clearAllTyping = useCallback(() => {
+    for (const id of Object.keys(typingTimers.current)) window.clearTimeout(typingTimers.current[id]);
+    typingTimers.current = {};
+    setTyping({});
+  }, []);
 
   const refreshState = useCallback(async () => {
     try {
@@ -41,7 +67,7 @@ export default function App() {
     return connectEvents((event: ServerEvent) => {
       switch (event.type) {
         case 'typing':
-          setTyping((t) => ({ ...t, [event.character_id]: event.on }));
+          setTypingFor(event.character_id, event.on);
           break;
         case 'message':
         case 'match':
@@ -56,10 +82,11 @@ export default function App() {
         default:
           break;
       }
+      if (event.type === 'hello') clearAllTyping();
       setEventSeq((n) => n + 1);
       (window as any).__fauxrEvent?.(event);
     });
-  }, [refreshMatches]);
+  }, [refreshMatches, setTypingFor, clearAllTyping]);
 
   // The server sleeps between 02:00 and 06:00; poll slowly so it reappears on its own.
   useEffect(() => {
