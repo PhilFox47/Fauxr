@@ -364,6 +364,53 @@ character with zero arousal now flirts on ~58% of turns instead of 0%, and once
 (previously required arousal 60 and fired standalone). A non-forward character in the same
 scenarios is unaffected — this only changes characters whose seed actually calls for it.
 
+### A trade needs a finish line too, and characters need to be curious on their own
+
+Two related reports, both from the same transcript: a trading game ("give me your most
+controversial opinion, I'll give you mine") where the user answered first, was told fairly
+that it was now her turn, and she answered — then immediately demanded another round
+("ur turn again") with nothing settled and no payoff, and separately, that her own answer to
+"give me something spicy" was flat and mundane instead of matching the register asked for.
+Raw generation logs showed the actual mechanism: the Director had written a goal
+("maintain the upper hand while rewarding his curiosity") several turns earlier, and because
+`direction.unlock`/`goal`/`stance` persist across every Actor turn until `valid_for` runs out
+or a fresh Director call overwrites them, that same stale, open-ended goal was still steering
+her two Actor calls later — and a goal phrased as an edge to *maintain* has no condition
+under which it is ever satisfied, so the Actor kept extracting one more turn from him even
+immediately after paying its own.
+
+This is the "test with no finish line" problem from above, in a different shape: a
+back-and-forth trade is a ledger just as much as a vibe-check is a bar, and once a turn is
+actually paid on both sides, the round is settled. `director_direction.md` now names this
+pattern explicitly and tells the Director to write goals for a reciprocal exchange with an
+actual endpoint ("trade one answer each, then let the game breathe") rather than an
+open-ended edge. `actor_chat.md` got two matching bullets on the Actor side: a trade is not a
+debt (don't answer your own turn and then immediately demand another unless it's genuinely
+his turn by the game's own rhythm), and answer in the flavour he actually asked for (if he
+asked for spicy, blunt, or filthy and you're answering at all, answer at that level in your
+own register — safe-and-mundane is its own kind of not-answering, and staying in-register
+doesn't require anything the character's seed hasn't unlocked).
+
+The user's broader point — that characters should push and steer conversations themselves,
+be curious about the user, and flirt in a way that matches their own personality, rather than
+only reacting to what he brings — pointed at a real gap in `nudge.ts` underneath the prompt
+fix. The nudge system had plenty of ways for her to bring material about *herself*
+(`volunteer`, `unprompted_detail`) or escalate things physically (`flirt`, `escalate`), but
+nothing that pushed her to actually want to know something about *him* — which "being
+interested, they matched after all" needs at least as much as flirting does. A new `curious`
+nudge fires on ~22% of turns where nothing else is already live, asking him something real
+about himself rather than small talk. Separately, `flirt` was gated almost entirely behind
+`arousal >= 35` unless a character was already "forward" on her seed — a moderate,
+personality-driven-but-statistically-average character (normal libido, normal sexual
+confidence, but decent spark) had no route into teasing him at all until arousal had already
+climbed, the same chicken-and-egg gap fixed for forward characters above, just one tier down.
+`flirt` now also fires once `spark >= 30`, independent of the forward bypass. Verified with a
+script driving `pickNudge()` directly over 20k trials per scenario: a moderate character with
+nothing live gets the `curious` nudge on ~22% of turns; a non-forward character now flirts
+once spark clears 30 (0% below it, as before); the existing `forward`-seed bypass and the
+`somethingLive` suppression (still zero `curious`/`volunteer` while something is unresolved)
+are both unaffected.
+
 ### Flags
 
 Flags are set by events, not by thresholds. `real_name_known` goes true because she said

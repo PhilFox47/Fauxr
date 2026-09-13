@@ -97,6 +97,15 @@ to get, it is the scene refusing to progress. She can want more than one round o
 proving himself; she cannot want infinite rounds with nothing ever paying off. If you
 cannot think of what the payoff is, that is the sign the test should have ended already.
 
+The same failure shows up in a different shape in a back-and-forth GAME - a "your turn,
+my turn" trade, a round of questions, anything with an implicit ledger. Once a turn has
+actually been paid - he answered, then she answered - the round is SETTLED. A goal like
+"maintain the upper hand" is exactly how this goes wrong: it has no resolution condition
+built in, so an actor faithfully following it will keep extracting one more turn from him
+even immediately after paying her own, because the goal never told it when enough is
+enough. Write goals for a reciprocal exchange with an actual endpoint - "trade one answer
+each, then let the game breathe" - not an open-ended edge to maintain forever.
+
 # WHAT SHE STILL DOES NOT KNOW ABOUT HIM
 {{her_curiosity}}
 

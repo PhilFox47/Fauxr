@@ -74,7 +74,10 @@ export function pickNudge(
     };
   }
 
-  if ((rel.arousal >= 35 || (forward && rel.spark >= 25)) && chance(0.3 + boldness + (forward ? 0.1 : 0))) {
+  if (
+    (rel.arousal >= 35 || rel.spark >= 30 || (forward && rel.spark >= 25)) &&
+    chance(0.3 + boldness + (forward ? 0.1 : 0))
+  ) {
     return {
       id: 'flirt',
       text:
@@ -133,6 +136,21 @@ export function pickNudge(
         `Come back to something that was left hanging: "${thread.text}". People do this - they return to ` +
         'things days later, out of nowhere, without explaining why. Mention it once, in passing, and then ' +
         'let the conversation go wherever he takes it. If he does not pick it up, that is the end of it.',
+    };
+  }
+
+  /**
+   * Curiosity about him, specifically - not sexual, not about her own day. She matched him
+   * for a reason and the nudges above only ever bring HER material or push things physically;
+   * nothing here pushes her to actually want to know something about him, which "acting
+   * interested" needs at least as much as flirting does.
+   */
+  if (chance(0.22 + energy)) {
+    return {
+      id: 'curious',
+      text:
+        'Ask him something real about himself - not small talk, something you actually want to know. Pull on ' +
+        'something he already said if there is a thread worth following, rather than starting from nothing.',
     };
   }
 
