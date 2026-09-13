@@ -3,11 +3,11 @@ import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
-  allWakeups, clearWakeup, dueWakeups, getCharacter, getRelationship,
-  listActiveMatches, saveRelationship, setWakeup,
+  allWakeups, clearWakeup, dueWakeups, getCharacter, getRelationship, getWakeup,
+  listActiveMatches, pendingUserMessageCount, saveRelationship, setWakeup,
 } from '../repo.js';
 import type { Character } from '../types.js';
-import { takeTurn } from './chat.js';
+import { isAway, takeTurn } from './chat.js';
 import { randInt } from './dice.js';
 import { ensureStack } from './matching.js';
 import { isOnline, nextOnlineAt, serverWindowOpen } from './presence.js';
@@ -60,10 +60,38 @@ export async function tick(): Promise<void> {
     }).catch((err) => logger.error('scheduler', 'wakeup turn failed', { error: String(err) }));
   }
 
+  answerPendingMessages();
   decayPass();
   maybeBeProactive();
   void ensureStack();
   emitPresence();
+}
+
+/**
+ * Messages sent while she was offline are read and answered once she is back. Without
+ * this nothing ever picks them up: a turn only starts from a due wakeup or from a message
+ * arriving while she is already online, so anything written into an empty window sat
+ * there until an unrelated wakeup happened to fire.
+ *
+ * It queues a wakeup a few minutes out rather than replying on the spot, so she does not
+ * answer in the same second her window opens.
+ */
+function answerPendingMessages(): void {
+  for (const character of listActiveMatches()) {
+    if (!isOnline(character)) continue;
+    const rel = getRelationship(character.id);
+    if (!rel || rel.ghosted_at || isAway(rel)) continue;
+    if (getWakeup(character.id)) continue; // a wakeup is already going to wake her
+    if (pendingUserMessageCount(character.id) === 0) continue;
+
+    setWakeup({
+      character_id: character.id,
+      scheduled_at: new Date(Date.now() + randInt(1, 10) * 60_000).toISOString(),
+      reason: 'she is back and has unread messages',
+      cancel_if_user_writes: true,
+    });
+    logger.debug('scheduler', `${character.username} is back with unread messages`);
+  }
 }
 
 function reschedule(character: Character, reason: string, cancelIfUserWrites: boolean): void {

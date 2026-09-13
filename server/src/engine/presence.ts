@@ -1,6 +1,16 @@
 import { getSettings } from '../config.js';
 import type { Character, OnlineWindow } from '../types.js';
 
+/**
+ * Testing override. Every presence question funnels through here, so one switch covers
+ * her weekly windows, the server uptime window and the forced absences - otherwise a
+ * character stays unreachable at 03:00 or after saying she is going to bed, and testing
+ * turns into waiting.
+ */
+export function alwaysOnline(): boolean {
+  return getSettings().always_online;
+}
+
 function minutesOfDay(d: Date): number {
   return d.getHours() * 60 + d.getMinutes();
 }
@@ -12,6 +22,7 @@ export function parseHm(hm: string): number {
 
 /** True while the host machine is inside its configured uptime window. */
 export function serverWindowOpen(now = new Date()): boolean {
+  if (alwaysOnline()) return true;
   const { from, to } = getSettings().server_window;
   const start = parseHm(from);
   const end = parseHm(to);
@@ -28,6 +39,7 @@ function windowMatches(w: OnlineWindow, now: Date): boolean {
 }
 
 export function isOnline(character: Character, now = new Date()): boolean {
+  if (alwaysOnline()) return true;
   if (!serverWindowOpen(now)) return false;
   const windows = character.seed.online_times ?? [];
   if (windows.length === 0) return true;
@@ -39,6 +51,7 @@ export function isOnline(character: Character, now = new Date()): boolean {
  * over the next two weeks and gives up afterwards (a seed with no usable window).
  */
 export function nextOnlineAt(character: Character, from = new Date()): Date | null {
+  if (alwaysOnline()) return from;
   const windows = character.seed.online_times ?? [];
   if (windows.length === 0) return from;
 
@@ -69,6 +82,7 @@ export function nextOnlineAt(character: Character, from = new Date()): Date | nu
 
 /** End of the current online window, used to tell the Director when she has to leave. */
 export function onlineUntil(character: Character, now = new Date()): Date | null {
+  if (alwaysOnline()) return null;
   const windows = (character.seed.online_times ?? []).filter((w) => windowMatches(w, now));
   if (windows.length === 0) return null;
   const end = Math.max(...windows.map((w) => parseHm(w.to)));
@@ -79,6 +93,7 @@ export function onlineUntil(character: Character, now = new Date()): Date | null
 }
 
 export function describeOnlineTimes(character: Character): string {
+  if (alwaysOnline()) return 'any time (testing mode: always online)';
   const names = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const windows = character.seed.online_times ?? [];
   if (windows.length === 0) return 'always available';

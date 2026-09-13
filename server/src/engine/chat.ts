@@ -10,7 +10,7 @@ import type { Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage } from './actor.js';
 import { detectEvents, directionExpired, runDirector } from './director.js';
 import { computePressure, computeReciprocity } from './modifiers.js';
-import { isOnline } from './presence.js';
+import { alwaysOnline, isOnline } from './presence.js';
 import { randInt } from './dice.js';
 import { clearExpiredNegativeFlags, hasActiveNegativeFlag } from './state.js';
 
@@ -257,6 +257,7 @@ async function deliver(
  * unreachable until the absence window closes.
  */
 export function isAway(rel: Relationship): boolean {
+  if (alwaysOnline()) return false;
   const mood = rel.mood as any;
   const leavesAt = mood?.leaves_at ? Date.parse(mood.leaves_at) : null;
   const awayUntil = mood?.away_until ? Date.parse(mood.away_until) : null;

@@ -43,6 +43,17 @@ The SQLite database, uploads and generated images all live in one place:
 
 Nothing else on disk is state. See **Starting over** below.
 
+### Testing mode
+
+**Settings → behaviour → "Everyone is always online"**, on by default. Characters reply
+whenever you write, whatever the hour: their own schedules, the server uptime window and
+any "I'm heading off" absence are all ignored. Ghosting and blocking still work, and the
+schedules themselves are kept rather than overwritten, so turning it off puts the real
+pacing straight back.
+
+Turn it off before you judge how the game feels. Waiting for someone to come online is a
+large part of what makes them read as people rather than as a chatbot.
+
 ### Uptime window
 
 The app is built for a machine that is up 06:00–02:00. Outside that window nothing runs in

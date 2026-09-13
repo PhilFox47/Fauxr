@@ -26,6 +26,12 @@ export interface Settings {
   chat: { context_messages: number; max_messages_per_turn: number; max_delay_seconds: number };
   images_enabled: boolean;
   voice_enabled: boolean;
+  /**
+   * Testing override: every character counts as online at all times, the server uptime
+   * window is ignored, and nobody stays away after announcing they are leaving. Turn it
+   * off to get the real pacing back.
+   */
+  always_online: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -46,6 +52,7 @@ export const DEFAULT_SETTINGS: Settings = {
   chat: { context_messages: 40, max_messages_per_turn: 5, max_delay_seconds: 90 },
   images_enabled: false,
   voice_enabled: false,
+  always_online: true,
 };
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {

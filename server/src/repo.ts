@@ -280,6 +280,14 @@ export function unreadCount(characterId: string): number {
   return row.n;
 }
 
+/** Messages he has sent that she has not seen yet, because she was offline. */
+export function pendingUserMessageCount(characterId: string): number {
+  const row = db
+    .prepare("SELECT COUNT(*) AS n FROM messages WHERE character_id = ? AND sender = 'user' AND read_at IS NULL")
+    .get(characterId) as { n: number };
+  return row.n;
+}
+
 /** Mark the user's messages as seen by her. Only ever called while she is online. */
 export function markUserMessagesRead(characterId: string): number {
   return db

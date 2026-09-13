@@ -197,6 +197,34 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
   return (
     <>
       <div className="card">
+        <div className="section-title" style={{ padding: '0 0 10px' }}>Testing</div>
+        <label className="row" style={{ alignItems: 'flex-start' }}>
+          <input
+            type="checkbox"
+            checked={settings.always_online}
+            onChange={(e) => patch(['always_online'], e.target.checked)}
+            style={{ marginTop: 3 }}
+          />
+          <span className="small">
+            Everyone is always online
+            <br />
+            <span className="tiny muted">
+              Characters reply whenever you write, whatever time it is. Ignores their own
+              schedules, the server uptime window, and anyone who said they were heading off.
+              Turn this off for real pacing — waiting for someone to come online is most of
+              what makes them feel like people.
+            </span>
+          </span>
+        </label>
+        {settings.always_online && (
+          <p className="tiny muted" style={{ marginBottom: 0 }}>
+            Ghosting and blocking still work. Their schedules are kept, not overwritten, so
+            turning this off restores them.
+          </p>
+        )}
+      </div>
+
+      <div className="card">
         <label className="field">
           <span>Activity ({settings.activity.toFixed(2)}×) — how often characters reach out unprompted</span>
           <input
@@ -228,7 +256,10 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
             />
           </label>
         </div>
-        <p className="tiny muted">Nothing happens outside this window. That is by design, not a bug.</p>
+        <p className="tiny muted">
+          Nothing happens outside this window. That is by design, not a bug.
+          {settings.always_online && ' Currently ignored, because everyone is always online.'}
+        </p>
       </div>
 
       <div className="card">
