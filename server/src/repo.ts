@@ -1,5 +1,6 @@
 import { db, nowIso } from './db/index.js';
 import { byCategory } from './db/attributes.js';
+import { newContext, roll } from './engine/dice.js';
 import type {
   Character, CharacterSeed, CharacterState, Direction, Flags, Ledger,
   Relationship, UserProfile,
@@ -89,7 +90,30 @@ export function saveUserProfile(p: UserProfile): UserProfile {
 
 // ---------------------------------------------------------------- characters
 
+/**
+ * Characters generated before breast_size existed have none - rather than leaving a gap in
+ * the fixed appearance block forever, roll one in now, on first load. Seeded with her
+ * existing body_type/height/ethnicity so the same affinities that make a size "fit" a build
+ * during normal generation still apply here, not just a flat random pick. Persisted
+ * immediately so this only ever runs once per character; every load after the first is a
+ * no-op check.
+ */
+function backfillBreastSize(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.breast_size) return seed;
+  const ctx = newContext();
+  for (const id of [seed.body_type, seed.height, seed.ethnicity]) if (id) ctx.drawn.add(id);
+  const chosen = roll('breast_size', ctx) ?? byCategory('breast_size')[0];
+  if (!chosen) return seed; // attribute table not seeded yet - nothing to assign
+  seed.breast_size = chosen.id;
+  if (chosen.image_prompt) {
+    seed.appearance_prompt = [seed.appearance_prompt, chosen.image_prompt].filter(Boolean).join(', ');
+  }
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
+  const seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
   return {
     id: row.id,
     username: row.username,
@@ -97,7 +121,7 @@ function hydrateCharacter(row: any): Character {
     bio: row.bio,
     created_at: row.created_at,
     state: row.state as CharacterState,
-    seed: JSON.parse(row.seed) as CharacterSeed,
+    seed,
     reappear_at: row.reappear_at,
     rejection_count: row.rejection_count,
     matched_at: row.matched_at,

@@ -1547,6 +1547,32 @@ same job id/path; "new idea" genuinely calls the actor for a new situation and a
 gets a different one back; and `retryImageJob` now reuses the stored situation rather than
 the old final prompt.
 
+### Spicy stays suggestive, on purpose
+
+Nothing had ever told a spicy photo where the actual line was. `photo_situation` and the
+prompt assembler were both free to describe full genital nudity if that is what the moment
+implied, which turned out to be a bad idea twice over: providers tend to refuse a request
+that so much as names a vagina or a penis, even to explicitly avoid depicting one, and the
+result is usually an ugly, anatomically-wrong render on the rare occasions it does go
+through. The fix is not a word filter - it is telling both the character and the assembler to
+think about the shot the way a photographer actually would.
+
+`actor_chat.md` (the "Sending a photo" section) and `actor_photo_idea.md`'s spicy branch now
+say plainly where the line is: as daring and hot as the app gets, breasts included, but never
+a shot of her genitals bare and centred - gotten there through angle, crop and pose the way
+real intimate photography usually stays suggestive, not through anything drawn over the
+image. `image_prompt_assembler.md` picked up a matching `is_spicy` section (a new flag from
+`images.ts`, set only for the `spicy` kind) that tells the assembler the same thing, plus the
+part that actually matters mechanically: **never write the word for what the shot is avoiding,
+in either the prompt or the negative_prompt** - naming it, even to exclude it, is exactly what
+tends to trigger a refusal instead of preventing the thing it was trying to prevent.
+`DEFAULT_SITUATION.spicy` (the fallback when the Actor left no concrete detail) was reworded
+the same way, from "an explicit photo" to "a suggestive, revealing photo".
+
+Verified against a mock: a spicy job's assembler prompt carries the new section, explicitly
+says breasts are fine and explicitly forbids naming the thing being avoided; a chat or
+profile job - kinds where this was never reachable anyway - renders neither.
+
 ### Every photo she sent, kept
 
 A photo used to exist only as a bubble in the chat. Scroll far enough and it was gone —
@@ -1616,6 +1642,37 @@ which contribute nothing. Everything else is expanded, from the ~1.6x on the nat
 small, real-world-bounded tables (`orientation`, `height`, `attachment_style`) up to ~3x+ on
 the ones that carry the most day-to-day texture (`occupation`, `interest`, `insecurity`,
 `turn_on`/`turn_off`).
+
+### Breast size joined body_type as a proper attribute
+
+It used to be entirely absent from the seed - `body_type`'s `image_prompt` ("curvy hourglass
+figure", "athletic toned build") was the only thing carrying any signal about it into an
+image prompt, which meant it was never actually decided, just vaguely implied by whichever
+body-type phrase happened to get drawn.
+
+`breast_size` is now its own category in `appearance.json` (`flat` through `very_large`,
+six entries, common sizes weighted heaviest), rolled right after `body_type` in the same
+staged cascade so the two can lean on each other: several sizes carry `affinities` toward
+the body types they naturally pair with (`full`/`large`/`very_large` toward `curvy`,
+`hourglass`, `plus_size` and the like; `flat`/`small` toward `slim`, `athletic`, `petite`,
+`lanky`) the same way any other pair of attributes nudges each other, not a hardcoded rule.
+`average` carries no affinities - it is the one that fits everyone equally, same as a
+population actually skews. The result folds into `appearance_prompt` right after
+`body_type`, so every image prompt and the Actor's own self-knowledge (`appearanceBlock()`
+starts from `appearance_prompt` too) carry it exactly the way they already carry hair colour
+or height.
+
+**Existing characters, generated before this existed, get one assigned automatically rather
+than being left with a permanent gap.** `hydrateCharacter()` - the one function every
+character load already goes through - checks for a missing `breast_size` and, if it finds
+one, rolls it right there: a fresh `DiceContext` seeded with her actual `body_type`, `height`
+and `ethnicity` so the same affinities that make a size "fit" a build during normal
+generation apply to the backfill too, not a flat random pick. The result is written back to
+the row immediately, so this only ever runs once per character - every load after the first
+is a single cheap presence check. Verified against a mock: a freshly generated character
+always has one baked into her `appearance_prompt`; a character seed with the field stripped
+out (simulating a pre-existing save) gets one assigned and persisted on first load, and a
+second load neither re-rolls it nor appends the phrase a second time.
 
 ### Some categories quietly gate real behaviour, not just prompt text
 

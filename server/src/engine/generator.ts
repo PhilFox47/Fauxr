@@ -249,6 +249,7 @@ export function rollSeed(): RolledSeed {
   const skin_tone = one('skin_tone');
   const height = one('height');
   const body_type = one('body_type');
+  const breast_size = one('breast_size');
   const hair_color = one('hair_color');
   const hair_style = one('hair_style');
   const eye_color = one('eye_color');
@@ -381,6 +382,7 @@ export function rollSeed(): RolledSeed {
     skin_tone: skin_tone!.id,
     height: height!.id,
     body_type: body_type!.id,
+    breast_size: breast_size!.id,
     hair_color: hair_color!.id,
     hair_style: hair_style!.id,
     eye_color: eye_color!.id,
@@ -456,6 +458,7 @@ export function buildAppearancePrompt(seed: CharacterSeed): string {
     ['skin_tone', seed.skin_tone],
     ['height', seed.height],
     ['body_type', seed.body_type],
+    ['breast_size', seed.breast_size],
     ['hair_color', seed.hair_color],
     ['hair_style', seed.hair_style],
     ['eye_color', seed.eye_color],

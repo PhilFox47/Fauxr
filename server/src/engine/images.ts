@@ -390,6 +390,9 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             // A profile picture always shows her face by convention; a chat/spicy shot
             // only when she did not deliberately pick one that hides it.
             hides_face: facesCamera ? '' : '1',
+            // The one tier that can plausibly reach nudity at all - see "HOW FAR THIS ONE
+            // ACTUALLY GOES" in the template for what that does and does not mean.
+            is_spicy: job.kind === 'spicy' ? '1' : '',
             mode_seedream: promptStyle === 'seedream' ? '1' : '',
             mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
             z_char_budget: zCharBudget,
@@ -590,7 +593,7 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
 const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy', string> = {
   profile: 'a plain, friendly selfie for her profile',
   chat: 'a casual photo of whatever she is doing right now',
-  spicy: 'an explicit photo, framed the way she is comfortable sharing',
+  spicy: 'a suggestive, revealing photo, framed and cropped the way she is comfortable sharing',
 };
 
 /**

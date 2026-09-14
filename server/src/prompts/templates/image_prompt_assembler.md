@@ -110,6 +110,22 @@ no studio polish, no professional-model posing; real skin has texture, pores and
 asymmetries, and keeping them is what makes her look like a person. If you can only have one
 of those two in the sentence, choose real - a plastic face is the more obvious failure.
 {{/is_moment}}
+{{#is_spicy}}
+
+# HOW FAR THIS ONE ACTUALLY GOES
+This can be the most daring shot in the app, and it should read as genuinely hot - but it
+stops short of full nudity of her genitals, whatever the situation implies. Breasts are
+fine, bare or not. Get the rest through composition, not concealment written into the
+description: the angle, the crop, a shot that ends at the waist or is taken from behind or
+the side, what her own pose happens to cover - the way real intimate photography usually
+stays suggestive rather than clinical, not a shot with something drawn over it. Decide the
+actual framing from the situation the same way you would for any other shot.
+
+Do not write the word for what you are avoiding showing anywhere in this prompt, positive or
+negative - naming it, even to say "no", tends to make the model refuse the request outright
+rather than actually avoiding it, and it reads worse in the output either way. The fix is
+what the shot is of and how it is framed, never a word to exclude.
+{{/is_spicy}}
 
 # NEGATIVE PROMPT
 {{#mode_seedream}}

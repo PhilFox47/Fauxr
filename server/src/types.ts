@@ -19,6 +19,7 @@ export interface CharacterSeed {
   skin_tone: string;
   height: string;
   body_type: string;
+  breast_size: string;
   hair_color: string;
   hair_style: string;
   eye_color: string;
