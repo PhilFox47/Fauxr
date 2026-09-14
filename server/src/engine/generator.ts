@@ -19,6 +19,7 @@ const SWAPPABLE: Record<string, string> = {
   hair_color: 'hair_color',
   occupation: 'occupation',
   living_situation: 'living_situation',
+  relationship_status: 'relationship_status',
   humor_type: 'humor_type',
   conflict_style: 'conflict_style',
   insecurity: 'insecurity',
@@ -69,17 +70,54 @@ export interface RolledSeed {
   fieldIds: Record<string, string>;
 }
 
+/**
+ * Age is a number rather than a tag, so unlike the attribute tables it cannot carry its own
+ * `extra.weights`. This is its equivalent: the nudges that stop an eighteen-year-old
+ * divorcee or a forty-year-old in student halls, without making any of it impossible.
+ */
+function ageWeights(age: number): Record<string, number> {
+  const w: Record<string, number> = {};
+  const scale = (ids: string[], mult: number) => {
+    for (const id of ids) w[id] = (w[id] ?? 1) * mult;
+  };
+
+  if (age <= 22) {
+    scale(['student_halls', 'with_parents', 'flatshare'], 2.2);
+    scale(['student_psych', 'student_art'], 2.0);
+    scale(['never_serious', 'first_love_still', 'serial_short'], 1.6);
+    scale(['divorced_young', 'married_briefly', 'widowed', 'engaged_called_off'], 0.15);
+    scale(['open_marriage', 'engaged_open', 'separated', 'long_distance_partner'], 0.1);
+    scale(['polycule'], 0.5);
+  } else if (age >= 33) {
+    scale(['student_halls', 'with_parents'], 0.2);
+    scale(['student_psych', 'student_art'], 0.15);
+    scale(['alone_flat', 'above_shop', 'house_sitting'], 1.4);
+    scale(['divorced_young', 'married_briefly', 'long_ended', 'separated'], 1.8);
+    scale(['open_marriage', 'engaged_open'], 1.6);
+    scale(['never_serious'], 0.4);
+  }
+  if (age >= 26) scale(['student_halls', 'student_psych', 'student_art'], 0.4);
+  return w;
+}
+
+/**
+ * Generation runs as a cascade rather than one flat roll, because the order is what makes a
+ * character hold together. Each stage is drawn knowing the ones before it, via ctx.weights:
+ *
+ *   1. age and languages  - the base, conditioned on nothing
+ *   2. who she is         - archetype, personality, how she writes, her life
+ *   3. what she looks like
+ *   4. what she is into   - non-sexual
+ *   5. the intimate half
+ *
+ * Languages come first because they are a soft stand-in for where she or her family are
+ * from, which is what later makes a name plausible; age decides which lives are even
+ * available to her. Rolling looks before personality, as this used to, meant appearance
+ * could never reflect the person underneath - only the archetype could reach it.
+ */
 export function rollSeed(): RolledSeed {
   const ctx = newContext();
   const fieldIds: Record<string, string> = {};
-
-  // 1. archetype first - it re-weights every other table
-  const archetype = roll('archetype', ctx)!;
-  const extra = archetype.extra ?? {};
-  ctx.weights = { ...(extra.weights ?? {}) };
-  ctx.drawn.add(archetype.id);
-  const counts = extra.counts ?? {};
-  const ranges = extra.ranges ?? {};
 
   const one = (category: string, opts: { ignoreArchetype?: boolean } = {}) => {
     const a = roll(category, ctx, opts);
@@ -87,6 +125,50 @@ export function rollSeed(): RolledSeed {
     return a;
   };
 
+  // ---- 1. the base: age and languages, conditioned on nothing
+  const age = rollAge();
+  // Most people here speak English and maybe one other. This used to come from the
+  // archetype, which coupled how many languages she speaks to how she behaves - an odd
+  // pairing now that a language is standing in for background rather than personality.
+  const extraLanguages = rollMany('language', ctx, drawCount([0.55, 0.33, 0.12], 0)).map((a) => a.id);
+  ctx.weights = { ...ctx.weights, ...ageWeights(age) };
+
+  // ---- 2. who she is. The archetype re-weights everything after it; roll() merges its
+  // extra.weights into the context on the way past, so nothing has to be applied by hand.
+  const archetype = roll('archetype', ctx)!;
+  const extra = archetype.extra ?? {};
+  const counts = extra.counts ?? {};
+  const ranges = extra.ranges ?? {};
+
+  const attachment_style = one('attachment_style');
+  const humor_type = one('humor_type');
+  const conflict_style = one('conflict_style');
+  const insecurity = one('insecurity');
+  const quirks = rollMany('quirk', ctx, drawCount(counts.quirks, 2)).map((a) => a.id);
+
+  const opennessFromArchetype = (archetype.modifies as any)?.openness_curve as string | undefined;
+  const openness_curve = opennessFromArchetype ?? roll('openness_curve', ctx)!.id;
+
+  // how she writes
+  const typing_style = one('typing_style');
+  const emoji_usage = one('emoji_usage');
+  const emojiCount = emoji_usage?.id === 'none' ? 0 : emoji_usage?.id === 'heavy' ? randInt(2, 3) : randInt(0, 2);
+  const favorite_emojis = rollMany('favorite_emoji', ctx, emojiCount).map((a) => a.extra?.char ?? a.label);
+  const message_length = one('message_length');
+  const speedFromArchetype = (archetype.modifies as any)?.response_speed as string | undefined;
+  const response_speed = speedFromArchetype ?? roll('response_speed', ctx)!.id;
+  const voice_msg_tendency = one('voice_msg_tendency');
+  const slang_register = one('slang_register');
+
+  // her life
+  const occupation = one('occupation');
+  const living_situation = one('living_situation');
+  const relationship_status = one('relationship_status');
+  const relationship_history = one('relationship_history');
+  const dating_experience = one('dating_experience');
+  const social_energy = one('social_energy');
+
+  // ---- 3. looks, drawn knowing who she is and how old she is
   const ethnicity = one('ethnicity');
   const skin_tone = one('skin_tone');
   const height = one('height');
@@ -120,52 +202,10 @@ export function rollSeed(): RolledSeed {
 
   const accessories = rollMany('accessory', ctx, drawCount(counts.accessories, 1)).map((a) => a.id);
 
-  /**
-   * Her signature: the one heightened thing that makes her memorable. Rolled without the
-   * archetype filter on purpose - a shy woman with a declared nemesis is far more
-   * interesting than a shy woman whose every trait agrees with the others. The heightening
-   * setting decides how far past an ordinary person the pool leans.
-   */
-  const heightening = Math.max(0.2, Math.min(3, getSettings().heightening));
-  for (const sig of byCategory('signature')) {
-    const bold = Number(sig.extra?.bold ?? 1);
-    ctx.weights[sig.id] = Math.pow(heightening, bold - 1);
-  }
-  const signature = roll('signature', ctx, { exclude: new Set() })!;
-  fieldIds.signature = signature.id;
-
-  // personality
-  const attachment_style = one('attachment_style');
-  const humor_type = one('humor_type');
-  const conflict_style = one('conflict_style');
-  const insecurity = one('insecurity');
-  const quirks = rollMany('quirk', ctx, drawCount(counts.quirks, 2)).map((a) => a.id);
-
-  const opennessFromArchetype = (archetype.modifies as any)?.openness_curve as string | undefined;
-  const openness_curve = opennessFromArchetype ?? roll('openness_curve', ctx)!.id;
-
-  // communication
-  const typing_style = one('typing_style');
-  const emoji_usage = one('emoji_usage');
-  const emojiCount = emoji_usage?.id === 'none' ? 0 : emoji_usage?.id === 'heavy' ? randInt(2, 3) : randInt(0, 2);
-  const favorite_emojis = rollMany('favorite_emoji', ctx, emojiCount).map((a) => a.extra?.char ?? a.label);
-  const message_length = one('message_length');
-  const speedFromArchetype = (archetype.modifies as any)?.response_speed as string | undefined;
-  const response_speed = speedFromArchetype ?? roll('response_speed', ctx)!.id;
-  const voice_msg_tendency = one('voice_msg_tendency');
-  const slang_register = one('slang_register');
-
-  // life
-  const occupation = one('occupation');
-  const living_situation = one('living_situation');
-  const relationship_history = one('relationship_history');
-  const dating_experience = one('dating_experience');
-  const social_energy = one('social_energy');
+  // ---- 4. what she is into, the non-sexual half. search_motive, touchstone and the
+  // turn-ons deliberately skip the archetype filter so she can still surprise.
   const interests = rollMany('interest', ctx, drawCount(counts.interests, 3)).map((a) => a.id);
   const hobbies = rollMany('hobby', ctx, drawCount(counts.hobbies, 2)).map((a) => a.id);
-  const extraLanguages = rollMany('language', ctx, drawCount(counts.languages, 0)).map((a) => a.id);
-
-  // gameplay - deliberately rolled WITHOUT the archetype filter so she can surprise
   const search_motive = roll('search_motive', ctx, { ignoreArchetype: true })!;
   const touchstone = roll('touchstone', ctx, { ignoreArchetype: true })!;
   const turn_ons = rollMany('turn_on', ctx, randInt(2, 4), { ignoreArchetype: true }).map((a) => a.id);
@@ -173,7 +213,7 @@ export function rollSeed(): RolledSeed {
   const green_flags = rollMany('green_flag', ctx, drawCount(counts.green_flags, 2)).map((a) => a.id);
   const dealbreaker = roll('dealbreaker', ctx)!;
 
-  // sexual
+  // ---- 5. the intimate half, last, knowing everything above
   const libido = rollRange(ranges.libido, 1, 5);
   const sexual_confidence = rollRange(ranges.sexual_confidence, 1, 5);
   const dom_sub_leaning = rollRange(ranges.dom_sub_leaning, -3, 3);
@@ -182,11 +222,8 @@ export function rollSeed(): RolledSeed {
   const fetishes = rollMany('fetish', ctx, drawCount(counts.fetishes, 3)).map((a) => a.id);
   const hard_limits = rollMany('hard_limit', ctx, drawCount(counts.hard_limits, 2)).map((a) => a.id);
 
-  const age = rollAge();
-
   const hints: Record<string, string> = {
     archetype: hintOf(archetype),
-    signature: hintOf(signature),
     attachment_style: hintOf(attachment_style),
     humor_type: hintOf(humor_type),
     conflict_style: hintOf(conflict_style),
@@ -200,6 +237,7 @@ export function rollSeed(): RolledSeed {
     slang_register: hintOf(slang_register),
     occupation: hintOf(occupation),
     living_situation: hintOf(living_situation),
+    relationship_status: hintOf(relationship_status),
     relationship_history: hintOf(relationship_history),
     dating_experience: hintOf(dating_experience),
     social_energy: hintOf(social_energy),
@@ -236,7 +274,6 @@ export function rollSeed(): RolledSeed {
     accessories,
 
     archetype: archetype.id,
-    signature: signature.id,
     attachment_style: attachment_style!.id,
     humor_type: humor_type!.id,
     conflict_style: conflict_style!.id,
@@ -255,6 +292,7 @@ export function rollSeed(): RolledSeed {
 
     occupation: occupation!.id,
     living_situation: living_situation!.id,
+    relationship_status: relationship_status!.id,
     relationship_history: relationship_history!.id,
     dating_experience: dating_experience!.id,
     social_energy: social_energy!.id,
@@ -314,7 +352,6 @@ export function describeSeed(seed: CharacterSeed): string {
   const labels = (cat: string, ids: string[]) => ids.map((i) => label(cat, i)).join(', ') || 'none';
   const lines = [
     `age: ${seed.age}`,
-    `SIGNATURE (the one thing that makes her her): ${label('signature', seed.signature)} - ${seed.hints.signature}`,
     `archetype: ${label('archetype', seed.archetype)} - ${seed.hints.archetype}`,
     `attachment: ${label('attachment_style', seed.attachment_style)} - ${seed.hints.attachment_style}`,
     `humour: ${label('humor_type', seed.humor_type)} - ${seed.hints.humor_type}`,
@@ -338,6 +375,7 @@ export function describeSeed(seed: CharacterSeed): string {
     '',
     `occupation: ${label('occupation', seed.occupation)} - ${seed.hints.occupation}`,
     `lives: ${label('living_situation', seed.living_situation)} - ${seed.hints.living_situation}`,
+    `relationship status: ${label('relationship_status', seed.relationship_status)} - ${seed.hints.relationship_status}`,
     `history: ${label('relationship_history', seed.relationship_history)} - ${seed.hints.relationship_history}`,
     `dating experience: ${label('dating_experience', seed.dating_experience)} - ${seed.hints.dating_experience}`,
     `social energy: ${seed.social_energy}`,
@@ -445,71 +483,109 @@ function sanitizeOnlineTimes(windows: OnlineWindow[] | undefined): OnlineWindow[
   return clean.length ? clean : null;
 }
 
-/**
- * One cheap, targeted re-ask for a name and/or handle that landed too close to one already
- * in the cast. Only those fields are regenerated - the character behind them is settled and
- * fine - and both go in the same call when both collided.
- */
-async function rerollIdentity(
+/** One cheap, targeted re-ask for a name that landed on one already in the cast. */
+async function rerollName(
   seed: CharacterSeed,
-  need: { handle?: { rejected: string; clash: string }; name?: { rejected: string; clash: string } },
-  takenHandles: string[],
+  rejected: string,
+  clash: string,
   takenNames: string[],
-): Promise<{ username?: string; real_name?: string }> {
-  const wants: string[] = [];
-  if (need.handle) wants.push('username');
-  if (need.name) wants.push('real_name');
-  if (!wants.length) return {};
-
+): Promise<string | null> {
   try {
-    const out = await completeJson<{ username?: string; real_name?: string }>({
+    const out = await completeJson<{ real_name?: string }>({
       scope: 'generator',
-      label: 'reroll_identity',
-      config: { ...getSettings().models.actor, max_tokens: 160 },
+      label: 'reroll_name',
+      config: { ...getSettings().models.actor, max_tokens: 120 },
       messages: [
         {
           role: 'user',
           content: [
-            `Pick a new ${wants.join(' and ')} for this woman. Everything else about her is already settled.`,
+            `Pick a different first name for a ${seed.age} year old woman who speaks ${seed.languages.join(', ')}.`,
             '',
-            describeSeed(seed),
+            `"${rejected}" is not usable: "${clash}" is already in the cast and they read as the same name.`,
+            'Names already used, none of which yours may repeat or closely resemble:',
+            takenNames.map((n) => `- ${n}`).join('\n') || '(none yet)',
             '',
-            need.name
-              ? `The name "${need.name.rejected}" is not usable: "${need.name.clash}" is already in the cast and they read as the same name.\n` +
-                `Names already used:\n${takenNames.map((n) => `- ${n}`).join('\n') || '(none yet)'}`
-              : '',
-            need.handle
-              ? `The handle "${need.handle.rejected}" is not usable: it reads as a variation on "${need.handle.clash}".\n` +
-                `Handles already used:\n${takenHandles.map((u) => `- @${u}`).join('\n') || '(none yet)'}`
-              : '',
+            'Her languages are a soft hint at where she or her family are from, and her age says which',
+            'names were being given out when she was born. Lean on both, then go further afield than the',
+            'first name that comes to mind - that one is almost certainly already on the list above.',
             '',
-            'Go somewhere genuinely different. Names in particular: the world is wider than the handful that',
-            'come to mind first, and hers should fit her background and her age rather than a default. A handle',
-            'has no house style to match and no format to follow - lowercase, 4-18 characters, letters with',
-            'optional numbers, dots or underscores, and unmistakably hers.',
-            '',
-            `Reply with exactly one JSON object and nothing else: { ${wants.map((w) => `"${w}": "..."`).join(', ')} }`,
-          ].filter(Boolean).join('\n'),
+            'Reply with exactly one JSON object and nothing else: { "real_name": "..." }',
+          ].join('\n'),
         },
       ],
     });
-
-    const result: { username?: string; real_name?: string } = {};
-    if (need.handle) {
-      const cleaned = cleanHandle(out.username);
-      // Taken verbatim is the one thing worse than the handle we already rejected - that
-      // ends up with digits stapled on. Anything else beats a known collision.
-      if (cleaned.length >= 4 && !takenHandles.includes(cleaned)) result.username = cleaned;
-    }
-    if (need.name) {
-      const cleaned = (out.real_name ?? '').trim().split(/\s+/)[0] ?? '';
-      if (cleaned.length >= 2 && !nearestName(cleaned, takenNames)) result.real_name = cleaned;
-    }
-    return result;
+    const cleaned = (out.real_name ?? '').trim().split(/\s+/)[0] ?? '';
+    if (cleaned.length < 2) return null;
+    return nearestName(cleaned, takenNames) ? null : cleaned;
   } catch (err) {
-    logger.warn('generator', 'identity reroll failed, keeping the originals', { error: String(err) });
-    return {};
+    logger.warn('generator', 'name reroll failed, keeping the original', { error: String(err) });
+    return null;
   }
+}
+
+/**
+ * Her handle, written last and by the actor model, against the finished character rather
+ * than a half-built one. It used to come out of the coherence pass alongside her name and
+ * her stats, which meant it was being invented before there was much of a person for it to
+ * belong to - and a handle is one of the few things on a profile she actually chose.
+ */
+async function writeUsername(seed: CharacterSeed, realName: string, taken: string[]): Promise<string> {
+  let correction: string | null = null;
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const prompt = [
+        'Pick the dating-app handle this woman would actually have. This is the adult hookup app',
+        'she is on, and the handle sits next to her bio as the only things anyone sees before',
+        'swiping.',
+        '',
+        describeSeed(seed),
+        '',
+        'Work out what SHE would have typed into the box. Some people are obvious and say exactly',
+        'who they are; some pick something nobody else could decode; some are still using a handle',
+        'they made at sixteen; some use a word they like, a mangled surname, an inside joke, a place,',
+        'a number that means something to them. A guarded woman and a loud one do not pick the same',
+        'kind of handle. There is no house style to match and nothing has to be clever.',
+        '',
+        'Rules, and only these: lowercase, 4-18 characters, letters with optional numbers, dots or',
+        `underscores. Not "${realName}" spelled out plainly.`,
+        '',
+        'These handles are already taken. Yours must not share a word with any of them, rework one,',
+        'or follow the same construction:',
+        taken.map((u) => `- @${u}`).join('\n') || '(none yet)',
+        '',
+        'Reply with exactly one JSON object and nothing else: { "username": "..." }',
+      ].join('\n');
+
+      const out = await completeJson<{ username?: string }>({
+        scope: 'generator',
+        label: attempt ? 'write_username:retry' : 'write_username',
+        config: { ...getSettings().models.actor, max_tokens: 120 },
+        messages: correction
+          ? [{ role: 'user', content: prompt }, { role: 'user', content: correction }]
+          : [{ role: 'user', content: prompt }],
+      });
+
+      const cleaned = cleanHandle(out.username);
+      if (cleaned.length < 4) continue;
+
+      const clash = nearestHandle(cleaned, taken);
+      if (clash && attempt < 2) {
+        logger.warn('generator', 'handle reads as a variant of an existing one, re-asking', { cleaned, clash });
+        correction =
+          `"${cleaned}" is too close to "@${clash}", which is already taken - it reuses its words or its ` +
+          `shape. Pick something that starts from a different part of her entirely. Same JSON, nothing else.`;
+        continue;
+      }
+      // A last-attempt near-miss is still kept: it beats the digit suffix insertCharacter
+      // would otherwise staple on, and only an exact match actually triggers that.
+      return cleaned;
+    } catch (err) {
+      logger.warn('generator', 'username generation failed, using fallback', { error: String(err) });
+      break;
+    }
+  }
+  return fallbackUsername(realName);
 }
 
 export async function generateCharacter(): Promise<Character> {
@@ -537,9 +613,6 @@ export async function generateCharacter(): Promise<Character> {
             age: seed.age,
             server_window: `${settings.server_window.from}-${settings.server_window.to}`,
             allowed_swaps: allowedSwapList(),
-            // Handles were being invented with no knowledge of the rest of the cast, so the
-            // model kept returning to the same two or three constructions.
-            avoid_usernames: takenHandles.length ? takenHandles.map((u) => `- @${u}`).join('\n') : '(none yet)',
             avoid_names: takenNames.length ? takenNames.map((n) => `- ${n}`).join('\n') : '(none yet)',
           }),
         },
@@ -566,36 +639,23 @@ export async function generateCharacter(): Promise<Character> {
   if (online) seed.online_times = online;
 
   let realName = (pass.real_name ?? '').trim().split(/\s+/)[0] || pickOne(FALLBACK_NAMES);
-  // The final handle is settled by insertCharacter, which can only do it collision-free
-  // in the same synchronous step as the write.
-  let username = cleanHandle(pass.username) || fallbackUsername(realName);
-
-  // The avoid-lists get most of the way there; this catches what they miss. Re-asking is
-  // cheap, keeps the fix on the model's side rather than mangling a good handle into
-  // something with digits stuck on the end, and does both fields in one call.
-  const handleClash = nearestHandle(username, takenHandles);
   const nameClash = nearestName(realName, takenNames);
-  if (handleClash || nameClash) {
-    logger.warn('generator', 'name or handle too close to one already in the cast, re-asking', {
-      username, handleClash, realName, nameClash,
-    });
-    const fresh = await rerollIdentity(
-      seed,
-      {
-        handle: handleClash ? { rejected: username, clash: handleClash } : undefined,
-        name: nameClash ? { rejected: realName, clash: nameClash } : undefined,
-      },
-      takenHandles,
-      takenNames,
-    );
-    if (fresh.username) username = fresh.username;
-    if (fresh.real_name) realName = fresh.real_name;
+  if (nameClash) {
+    logger.warn('generator', 'name too close to one already in the cast, re-asking', { realName, nameClash });
+    const fresh = await rerollName(seed, realName, nameClash, takenNames);
+    if (fresh) realName = fresh;
   }
 
   if (pass.insecurity_detail) seed.hints.insecurity = pass.insecurity_detail;
   if (pass.search_motive_detail) seed.hints.search_motive = pass.search_motive_detail;
   if (pass.touchstone_detail) seed.hints.touchstone = pass.touchstone_detail;
   if (pass.one_line) seed.hints.one_line = pass.one_line;
+
+  // The handle is picked last, once she is a finished person, so it can actually be hers -
+  // an inside joke, a mangled surname, or something completely opaque. The final collision
+  // check still happens inside insertCharacter, which is the only place it can be done
+  // atomically with the write.
+  const username = await writeUsername(seed, realName, takenHandles);
   // Only stored when the model actually chose one; otherwise avatarEmojiFor() derives it.
   const chosenEmoji = sanitizeEmoji(pass.avatar_emoji);
   if (chosenEmoji) seed.avatar_emoji = chosenEmoji;

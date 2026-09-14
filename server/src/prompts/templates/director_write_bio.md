@@ -15,12 +15,8 @@ that box, knowing exactly what it is for.
 handle: {{username}}
 {{seed_block}}
 
-# THE THING THAT MAKES HER HER
-{{signature_hint}}
-
-This is the most interesting thing about her, so the bio should be shaped by it - not
-necessarily stated outright, but visible in what she chooses to mention and how. A bio that
-could belong to anyone has failed. If in doubt, let this be the thing she is oblique about.
+Everything above is hers to draw on. A bio that could belong to anyone has failed, so find
+the one or two things in that profile that only she would have thought to mention.
 
 # FIND HER SHAPE, NOT A SHAPE
 There is no template for this. Do not reach for the first structure that comes to mind -

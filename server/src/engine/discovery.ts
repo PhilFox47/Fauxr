@@ -51,11 +51,11 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   add('occupation', 'life', 'Work', label('occupation', s.occupation), 'Ask what she does. Or notice when she says it.');
   add('living_situation', 'life', 'Living', label('living_situation', s.living_situation), 'Where she is when she texts you.');
   add('social_energy', 'life', 'Social battery', label('social_energy', s.social_energy), 'Watch how she talks about her weekends.');
+  add('relationship_status', 'life', 'Status', label('relationship_status', s.relationship_status), 'Whether anyone else is in the picture. She will say if it comes up.');
   add('relationship_history', 'life', 'History', label('relationship_history', s.relationship_history), 'Not a first-week question.');
   add('dating_experience', 'life', 'On apps', label('dating_experience', s.dating_experience), 'How she talks about this place.');
 
   // ---- personality
-  add('signature', 'personality', 'Her whole thing', label('signature', s.signature), 'The thing she is really about. Hard to miss once it surfaces.');
   add('archetype', 'personality', 'Character', label('archetype', s.archetype), 'Becomes obvious over time.');
   add('humor_type', 'personality', 'Humour', label('humor_type', s.humor_type), 'Make her laugh and find out.');
   add('attachment_style', 'personality', 'In a relationship', label('attachment_style', s.attachment_style), 'Shows when things get close.');

@@ -29,8 +29,6 @@ export interface CharacterSeed {
 
   // personality
   archetype: string;
-  /** The one heightened, defining thing about her. See data/attributes/signature.json. */
-  signature: string;
   attachment_style: string;
   humor_type: string;
   conflict_style: string;
@@ -50,7 +48,10 @@ export interface CharacterSeed {
 
   // life
   occupation: string;
+  /** Where she lives: alone, a flatshare, her parents'. Housing, not romance. */
   living_situation: string;
+  /** Who she is currently attached to, if anyone: single, a partner, a polycule. */
+  relationship_status: string;
   relationship_history: string;
   dating_experience: string;
   social_energy: string;

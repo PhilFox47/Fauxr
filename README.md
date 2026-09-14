@@ -748,54 +748,87 @@ then again by driving the built app in a real browser.
 
 ## Character generation
 
-Every seed is rolled once and never changes. Raw random rolls produce unusable people, so
-coherence is enforced in three stages:
+Every seed is rolled once and never changes. Generation runs as a **cascade** rather than
+one flat roll, because the order is what makes a character hold together:
 
-1. **Archetype first.** It re-weights every other table, sets the count curves for
-   tattoos, piercings, accessories and languages, and bounds the sexual stats. Weights are
-   lowered, never zeroed — outliers should be rare, not impossible.
-2. **Affinities and conflicts.** Drawing "anime" raises the odds of cosplay, gaming and
-   Japanese. Implausible physical combinations are blocked outright.
-3. **A Director pass** that may swap at most two tags, and writes the free-text parts:
-   name, handle, her concrete insecurity, why she is really here, and her online windows.
+1. **Age and the languages she speaks**, conditioned on nothing. These are the base.
+   Languages are a soft stand-in for where she or her family are from, which is what later
+   makes a name plausible; age decides which lives are even available to her.
+2. **Who she is** — archetype, personality, how she writes, and her life (work, housing,
+   relationship status, history).
+3. **What she looks like**, drawn knowing the person underneath.
+4. **What she is into**, the non-sexual half.
+5. **The intimate half**, last, knowing everything above.
 
-`search_motive`, `touchstone`, `turn_ons` and `turn_offs` are rolled *without* the
-archetype filter, on purpose. A character who ticks differently than she looks is the
-interesting case.
+Each stage is drawn knowing the ones before it. The mechanism is `ctx.weights`: any drawn
+tag may carry `extra.weights` that re-weight later draws, which used to be a privilege of
+the archetype alone and is now available to every row in the tables. Weights are lowered,
+never zeroed — outliers should be rare, not impossible. Affinities and conflicts still
+apply on top (drawing "anime" raises cosplay, gaming and Japanese; implausible physical
+combinations are blocked outright).
 
-### Signatures
+Age is the exception, because it is a number rather than a tag and cannot carry weights of
+its own; `ageWeights()` is its equivalent. Measured over 4000 rolls it moves what it should:
 
-Rolling forty plausible attributes produces forgettable soup: everyone comes out as a
-reasonable person with a job. So every character also draws a **signature** — the one
-heightened thing that makes her her. A declared nemesis. An inherited lighthouse. A small
-cryptid podcast she is entirely earnest about. Banned from a named town for reasons she
-considers an overreaction.
+| | 22 or under | 33 or over |
+|---|---|---|
+| in student halls or at her parents' | 24.9% | 3.0% |
+| is a student | 14.6% | 0.5% |
+| divorced, or married briefly | 0.5% | 10.4% |
+| never had a serious relationship | 14.6% | 3.7% |
+| married / engaged-open / separated | 1.3% | 10.9% |
 
-It is rolled without the archetype filter, deliberately: a shy woman with a nemesis is far
-more interesting than one whose every trait agrees with the others. The Actor is told it
-shapes her week rather than being a fact to deploy once, the Director is told to lean on it
-when deciding what she brings up, and the bio is written around it. It is discoverable like
-anything else.
+Looks used to be rolled *before* personality, which meant appearance could never reflect
+the person underneath — only the archetype could reach it. The language count used to come
+from the archetype too, which coupled how many languages she speaks to how she behaves; that
+is an odd pairing once a language is standing in for background rather than personality, so
+it now uses one distribution for everyone.
 
-It is deliberately kept as background rather than an agenda. The first version told the
-Actor it "shapes your week" and the Director that it "should drive what she brings up",
-which produced characters who steered every conversation back to their one thing and then
-started keeping score of whether the user had engaged with it. It now surfaces rarely and
-sideways, at most once per conversation, and the Director is told a character who mentions
-her thing in every message is worse than a bland one — bland is forgettable, obsessive is
-annoying.
+After the rolls, three LLM passes finish her: a **Director coherence pass** that may swap at
+most two tags and writes her name and the free-text parts of her seed, then the Actor writes
+her **handle**, then her **bio**.
 
-A **heightening** slider controls how far past an ordinary person the pool leans:
+`search_motive`, `touchstone`, `turn_ons` and `turn_offs` are rolled *without* the archetype
+filter, on purpose. A character who ticks differently than she looks is the interesting case.
 
-| heightening | grounded | heightened | cartoon |
-|---|---|---|---|
-| 0.4 | 50% | 41% | 8% |
-| 1.4 (default) | 17% | 42% | 41% |
-| 2.5 | 5% | 36% | 59% |
+### There is no "her whole thing" any more
 
-The supporting tables carry a heightened tier too — taxidermist, funeral director, night
-security guard alongside the nurses and baristas; voicing her pet's inner monologue
-alongside double-texting.
+Every character used to draw a **signature** — one heightened defining trait. A declared
+nemesis, an inherited lighthouse, a small cryptid podcast. It was rolled without the
+archetype filter so it would cut against the rest of her, and the Actor, Director and bio
+prompt were all told to build around it.
+
+It has been removed outright. The intent was to stop characters being forgettable soup; the
+effect was characters who were one-dimensional in a different way — every conversation bent
+back toward the one thing, because three separate prompts were pointing at it. Successive
+attempts to tune that down (surface it "rarely and sideways", "at most once per
+conversation") were treating the symptom: as long as one tag is designated *the* interesting
+one, it gets used like one.
+
+What replaces it is the rest of the profile. The Director is now told her whole profile is
+material and no single part of it is her defining trait, and to pull `bring_up` from all of
+it in turn — her work, her flat, a hobby, who she lives with, what she did at the weekend.
+The character prompt says the same thing from the other side: what stops her being
+interchangeable is the particular combination, and there is no headline trait to invent.
+
+The **heightening** slider went with it, since it existed only to weight the signature pool.
+`rarity_bias` already covers how much of the rare tail shows up.
+
+### Relationship status
+
+Separate from `living_situation`, which is housing (lives alone, flatshare, at her parents'),
+and from `relationship_history`, which is the past. This is who she is attached to *now*:
+single, newly single, seeing someone casually, has a regular, a boyfriend or girlfriend in an
+open relationship, part of a polycule, an open marriage, separated, a partner abroad, or
+deliberately vague about something unresolved.
+
+Weighted so the cast reads like a hookup app rather than a scenario: about 61% are single or
+newly single, a quarter are attached in some openly non-monogamous way, and the rarer
+arrangements sit in the tail (polycule 1.4%, open marriage 1.3%). Anything involving a
+partner is written as openly non-monogamous in its prompt hint — "he knows she is on here,
+do not play this as cheating" — so it is a fact about her life rather than a betrayal plot.
+Age conditions it: an eighteen-year-old is very unlikely to be separated or in an open
+marriage, and a thirty-five-year-old is much more likely to be.
 
 ### Bios
 
@@ -916,7 +949,7 @@ fallback" to see whether the model is actually being reached.
 
 A match list where nobody has unlocked a photo yet is a column of identical grey initials,
 and several characters share a first letter. So the generation pass also picks her an
-**avatar emoji** — from her signature, her work or what she is into, with the prompt
+**avatar emoji** — from her work, what she is into or where she lives, with the prompt
 explicitly steering away from the default-romantic set, since ❤️🔥😍 on everyone solves
 nothing. It shows wherever her avatar does until a real photo is unlocked, at which point
 the photo takes over.

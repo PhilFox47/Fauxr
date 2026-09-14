@@ -102,6 +102,14 @@ export function roll(category: string, ctx: DiceContext, opts: RollOptions = {})
     for (const aff of chosen.affinities) {
       ctx.weights[aff] = (ctx.weights[aff] ?? 1) * 1.8;
     }
+    // Any tag may re-weight what comes after it, not just the archetype. This is what lets
+    // generation cascade: a language nudges which names and occupations fit, a personality
+    // nudges which looks do. Multiplied in rather than replacing, so several stages can
+    // each have a say instead of the last one winning.
+    for (const [id, mult] of Object.entries(chosen.extra?.weights ?? {})) {
+      const m = Number(mult);
+      if (Number.isFinite(m) && m > 0) ctx.weights[id] = (ctx.weights[id] ?? 1) * m;
+    }
   }
   return chosen;
 }

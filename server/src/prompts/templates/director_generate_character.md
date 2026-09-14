@@ -12,45 +12,44 @@ coherent without making her boring, and to write the free-text parts of her seed
    good: a shy woman with a septum piercing is interesting, a shy woman whose every tag says
    "extrovert" is broken.
 
-   Do NOT swap tags to make them agree with each other, and especially not to make them
-   agree with her signature. Swapping "barista" to "piano tuner" because her signature
-   mentions an unusual job is exactly the wrong move: it deletes the interesting tension
-   between an ordinary day job and an odd life, and leaves a character where every detail
-   points the same way. A barista who moonlights doing something strange is a person. A
-   piano tuner whose signature is "has a strange job" is a tautology.
+   Do NOT swap tags to make them agree with each other. Swapping "barista" to "piano tuner"
+   because something else about her is unusual is exactly the wrong move: it deletes the
+   tension between an ordinary day job and an odd life, and leaves a character where every
+   detail points the same way. A barista who moonlights doing something strange is a person.
+   A woman whose every tag agrees is a diagram.
    Never touch: search_motive, touchstone, turn_ons, turn_offs. Those are meant to clash
    with how she looks and how she comes across. Leave them alone.
    Never lower age below 18.
 
-2. WRITE HER. Her SIGNATURE is what stops her being interchangeable, so it should be
-   present in how you describe her - but she is a whole person, not a delivery mechanism
-   for one trait. Produce:
-   - real_name: a first name that fits her ethnicity and age. First name only.
+2. WRITE HER. What stops her being interchangeable is the particular combination of
+   everything above - her work next to her flat next to what she is into next to how she
+   talks. There is no single headline trait, and you should not invent one. Produce:
+   - real_name: a first name, first name only. Start from the two things that actually
+     decide a name in real life:
+       * The languages she speaks. Besides English these are a soft stand-in for where she
+         or her family are from, so they are the strongest hint you have. A woman who speaks
+         Turkish or Polish or Tagalog plausibly has a name from there - but this is a lean,
+         not a rule: plenty of people speak a language they have no family link to, and
+         plenty have a name that says nothing about their background. Break the pattern
+         sometimes, deliberately.
+       * Her age. Names go in and out of fashion, so hers should read like one given to a
+         baby the year she was born, not one that sounds current now.
      Whatever name comes to mind first for a woman like this is almost certainly one you
      have used already - check the list under DO NOT REUSE THESE and go further afield than
      your first instinct. Real people are named across the whole range: family names passed
-     down, names that were fashionable the decade she was born, names from her parents'
-     country rather than the one she lives in, shortenings and nicknames she actually goes
-     by, the occasional plain one. Pick from that whole range, not from the handful that
-     sound right for a dating app.
-   - username: a dating-app handle that fits her personality. Lowercase, 4-18 chars,
-     may contain numbers, dots or underscores. Not her real name spelled out plainly.
-     There is no house style and no format to match. Real handles are all over the place -
-     a word she likes, a private joke, a mangled surname, something she typed in a hurry
-     eight years ago and never changed, two words jammed together, one word, a word with a
-     number that means something to her. Work out what THIS woman would have picked and
-     let the shape follow from that, rather than reaching for whichever construction comes
-     to mind first. The list under DO NOT REUSE THESE below is the cast so far; yours has
-     to sit apart from all of it, not just avoid being identical.
+     down, names from her parents' country rather than the one she lives in, shortenings and
+     nicknames she actually goes by, the occasional plain one. Pick from that whole range,
+     not from the handful that sound right for a dating app.
    - avatar_emoji: ONE emoji she would put on her profile in place of a photo. This is the
      only thing distinguishing her at a glance in a list of matches, so make it hers: it
-     should come from her signature, her work, what she is into or how she comes across,
+     should come from her work, what she is into, where she lives or how she comes across,
      and two different characters should not land on the same obvious one. Avoid the
-     default-romantic set (❤️😍💋🔥💕) unless it genuinely is who she is - a woman whose
-     whole thing is her allotment picks 🌱, a bassist picks 🎸, a night-shift nurse picks
-     ☕. The emoji itself and nothing else: no text, no name, no code point.
-   - one_line: a single sentence describing who she is, for internal use. Mention her
-     signature, but describe a person rather than a walking quirk.
+     default-romantic set (❤️😍💋🔥💕) unless it genuinely is who she is - a woman who
+     spends every weekend on her allotment picks 🌱, a bassist picks 🎸, a night nurse
+     picks ☕. The emoji itself and nothing else: no text, no name, no code point.
+   - one_line: a single sentence describing who she is, for internal use. Draw on her
+     profile as a whole and describe a person, not a walking quirk. No single tag is "her
+     thing" - she is the combination.
    - insecurity_detail: her insecurity made concrete and specific to her life, one sentence.
    - search_motive_detail: why SHE specifically is on this app right now, one sentence.
      Keep the motive she was given, just make it hers.
@@ -72,17 +71,12 @@ Names already in this app. Yours must not be any of these, a spelling variant of
 obvious near-neighbour of one (Mila next to Mia, Sofia next to Sophia):
 {{avoid_names}}
 
-Handles already taken in this app. Yours must not share a word with any of them, rework one
-of them, or follow the same construction:
-{{avoid_usernames}}
-
 # OUTPUT
 Reply with exactly one JSON object and nothing else:
 
 {
   "swaps": [{ "field": "clothing_style", "to": "cosy", "why": "..." }],
   "real_name": "...",
-  "username": "...",
   "avatar_emoji": "🦊",
   "one_line": "...",
   "insecurity_detail": "...",

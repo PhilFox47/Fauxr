@@ -3670,5 +3670,181 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "single",
+    "category": "relationship_status",
+    "label": "Single",
+    "weight": 3.2,
+    "prompt_hint": "single, and not quietly working around anyone. what she does is her own business",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "single_recently",
+    "category": "relationship_status",
+    "label": "Newly single",
+    "weight": 1.6,
+    "prompt_hint": "single again fairly recently and still working out what she wants from that",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "casually_seeing",
+    "category": "relationship_status",
+    "label": "Casually seeing someone",
+    "weight": 1.2,
+    "prompt_hint": "seeing someone casually. nothing agreed, nothing owed, and she is still on here",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fwb_already",
+    "category": "relationship_status",
+    "label": "Has a regular",
+    "weight": 1.0,
+    "prompt_hint": "already has one regular arrangement going. this would be a second, and she is fine with that",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "boyfriend_open",
+    "category": "relationship_status",
+    "label": "Has a boyfriend (open)",
+    "weight": 1.0,
+    "prompt_hint": "has a boyfriend. it is open and he knows she is on here - do not play this as cheating",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "open_before": 2.0
+      }
+    },
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "girlfriend_open",
+    "category": "relationship_status",
+    "label": "Has a girlfriend (open)",
+    "weight": 0.9,
+    "prompt_hint": "has a girlfriend. openly non-monogamous and she is not hiding any of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "open_before": 2.0
+      }
+    },
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "polycule",
+    "category": "relationship_status",
+    "label": "Part of a polycule",
+    "weight": 0.7,
+    "prompt_hint": "part of a polycule. several people, all of whom know, and the logistics are a running joke of hers",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "open_marriage",
+    "category": "relationship_status",
+    "label": "Open marriage",
+    "weight": 0.6,
+    "prompt_hint": "married, openly. her husband knows and it is not a secret or a crisis",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "engaged_open",
+    "category": "relationship_status",
+    "label": "Engaged, open",
+    "weight": 0.5,
+    "prompt_hint": "engaged, with an arrangement that allows this. she will say so rather than hide it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "separated",
+    "category": "relationship_status",
+    "label": "Separated",
+    "weight": 0.8,
+    "prompt_hint": "separated but not divorced yet, and in the strange free-floating bit in between",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "long_distance_partner",
+    "category": "relationship_status",
+    "label": "Partner abroad",
+    "weight": 0.6,
+    "prompt_hint": "has a partner living in another country and an agreement about what happens in between",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "complicated",
+    "category": "relationship_status",
+    "label": "It's complicated",
+    "weight": 0.9,
+    "prompt_hint": "something unresolved with someone that she is deliberately vague about, at least at first",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
   }
 ]

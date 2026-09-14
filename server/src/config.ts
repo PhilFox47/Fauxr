@@ -46,12 +46,6 @@ export interface Settings {
    */
   spice: number;
   /**
-   * How far characters are pushed past ordinary people. 1 is a normal person with one
-   * strong trait; higher favours the loud, cartoonish signatures over the grounded ones.
-   * Applied at generation time.
-   */
-  heightening: number;
-  /**
    * How much of the rare tail shows up. 1 is the tuned default; higher surfaces niche
    * attributes more often, lower keeps characters closer to the common set.
    */
@@ -83,7 +77,6 @@ export const DEFAULT_SETTINGS: Settings = {
   images_enabled: false,
   voice_enabled: false,
   spice: 1.15,
-  heightening: 1.4,
   rarity_bias: 1,
   always_online: true,
 };
