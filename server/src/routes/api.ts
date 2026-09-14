@@ -16,7 +16,7 @@ import { bus } from '../events.js';
 import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
-import { evaluateUserImage, listImageJobs, respondToPhotoOffer, retryImageJob } from '../engine/images.js';
+import { characterGallery, evaluateUserImage, listImageJobs, respondToPhotoOffer, retryImageJob } from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
@@ -244,6 +244,20 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       .catch((err) => logger.error('director', 'image evaluation failed', { error: String(err) }));
 
     return { ...stored, image_url: `/media/${relPath}` };
+  });
+
+  /** Everything she has actually sent him, for the gallery on her profile sheet. */
+  app.get<{ Params: { id: string } }>('/api/chats/:id/gallery', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    if (!character) return reply.code(404).send({ error: 'not found' });
+    const rel = getRelationship(character.id);
+    const images = characterGallery(character.id, !!rel?.flags.state.photos_exchanged);
+    return images.map((i) => ({
+      id: i.id,
+      kind: i.kind,
+      url: `/media/${i.path}`,
+      created_at: i.created_at,
+    }));
   });
 
   app.get('/api/images', async () => listImageJobs(100));

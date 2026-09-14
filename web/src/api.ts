@@ -113,6 +113,13 @@ export interface ProfileRow {
   at: string | null;
 }
 
+export interface GalleryImage {
+  id: string;
+  kind: string;
+  url: string;
+  created_at: string;
+}
+
 export interface CharacterProfile {
   username: string;
   display_name: string;
@@ -174,6 +181,7 @@ export const api = {
   send: (id: string, text: string) =>
     request<Message>(`/api/chats/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   profile: (id: string) => request<CharacterProfile>(`/api/chats/${id}/profile`),
+  gallery: (id: string) => request<GalleryImage[]>(`/api/chats/${id}/gallery`),
   markRead: (id: string) => request<any>(`/api/chats/${id}/read`, { method: 'POST' }),
   regenerate: (id: string, messageId: number) =>
     request<{ removed_ids: number[] }>(`/api/chats/${id}/regenerate`, {

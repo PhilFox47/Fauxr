@@ -86,6 +86,25 @@ export function listImageJobs(limit = 50): ImageJob[] {
   return db.prepare('SELECT * FROM images ORDER BY rowid DESC LIMIT ?').all(limit) as ImageJob[];
 }
 
+/**
+ * Every finished picture of one character, newest first.
+ *
+ * Her profile shot is held back until the two of them have actually swapped, for the same
+ * reason her avatar is: an image existing on disk is not the same as him being allowed to
+ * look at it. In practice generation only starts from an accepted swap anyway, so this is
+ * a guard for saves made before that existed rather than a live gate.
+ */
+export function characterGallery(characterId: string, swapped: boolean): ImageJob[] {
+  const rows = db
+    .prepare(
+      `SELECT * FROM images
+       WHERE character_id = ? AND status = 'done' AND path IS NOT NULL
+       ORDER BY rowid DESC`,
+    )
+    .all(characterId) as ImageJob[];
+  return swapped ? rows : rows.filter((r) => r.kind !== 'profile');
+}
+
 export function getImageJob(id: string): ImageJob | null {
   return (db.prepare('SELECT * FROM images WHERE id = ?').get(id) as ImageJob) ?? null;
 }

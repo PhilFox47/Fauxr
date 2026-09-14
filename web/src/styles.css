@@ -1114,3 +1114,76 @@ input[type='range'] {
 }
 .card-section[open] > summary::after { content: '–'; }
 .card-section-note { display: block; margin-bottom: var(--s3); line-height: 1.5; }
+
+
+/* ---- per-character gallery, on her profile sheet.
+   The sheet has no padding of its own - every child supplies its own gutter - so this has
+   to carry --s5 as well or the grid bleeds off both edges. */
+.gallery { margin: var(--s4) 0 var(--s2); padding: 0 var(--s5); }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s2);
+}
+.gallery-thumb {
+  all: unset;
+  cursor: pointer;
+  aspect-ratio: 1;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  transition: transform var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.gallery-thumb:hover, .gallery-thumb:focus-visible { transform: scale(1.03); border-color: var(--accent); }
+.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+@keyframes lightbox-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- full-screen viewer */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: var(--s6) var(--s4);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(6px);
+  animation: lightbox-in var(--fast) var(--ease);
+}
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-3);
+}
+.lightbox-close { position: absolute; top: var(--s4); right: var(--s4); z-index: 1; }
+.lightbox-count {
+  position: absolute;
+  top: calc(var(--s4) + 10px);
+  left: var(--s5);
+  color: var(--text-dim);
+  letter-spacing: 0.4px;
+}
+.lightbox-nav {
+  all: unset;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  padding: var(--s3);
+  border-radius: var(--r-full);
+  color: var(--text);
+  opacity: 0.75;
+  background: rgba(255, 255, 255, 0.06);
+  transition: opacity var(--fast) var(--ease);
+}
+.lightbox-nav:hover, .lightbox-nav:focus-visible { opacity: 1; }
+.lightbox-nav.prev { left: var(--s3); }
+/* One back-chevron asset, mirrored, rather than shipping a second icon for it. */
+.lightbox-nav.next { right: var(--s3); transform: translateY(-50%) rotate(180deg); }
+
+/* Chat photos are tappable now, so they should look it. */
+.bubble.image img { cursor: pointer; }

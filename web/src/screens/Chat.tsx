@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { api, type CharacterProfile, type MatchSummary, type Message } from '../api';
+import { api, type CharacterProfile, type GalleryImage, type MatchSummary, type Message } from '../api';
 import Avatar from '../components/Avatar';
 import Icon from '../components/Icon';
+import Lightbox from '../components/Lightbox';
 
 function clock(iso: string): string {
   return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -125,10 +126,20 @@ export default function Chat({
   const [menuOpen, setMenuOpen] = useState(false);
   const [profile, setProfile] = useState<CharacterProfile | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [gallery, setGallery] = useState<GalleryImage[]>([]);
+  const [lightboxAt, setLightboxAt] = useState<number | null>(null);
   const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
   const [respondingOfferId, setRespondingOfferId] = useState<string | null>(null);
   const [swapping, setSwapping] = useState(false);
   const swapped = !!character?.photos_exchanged;
+  // One deduped set that both surfaces index into. A photo she sent in the chat is also in
+  // her gallery, so concatenating the two blind would show it twice while paging.
+  const allImages = [
+    ...new Set([
+      ...messages.filter((m) => m.kind === 'image' && m.image_url).map((m) => m.image_url!),
+      ...gallery.map((g) => g.url),
+    ]),
+  ];
   const [toast, setToast] = useState<string | null>(null);
   const [confirmBlock, setConfirmBlock] = useState(false);
   /** False while the user has scrolled up to read history - see the autoscroll effect. */
@@ -175,9 +186,11 @@ export default function Chat({
     return () => window.clearInterval(id);
   }, [load]);
 
-  // Refetched on every new message: a reply is exactly when something new gets revealed.
+  // Refetched on every new message: a reply is exactly when something new gets revealed -
+  // and a photo arriving is exactly when the gallery gains one.
   useEffect(() => {
     void api.profile(characterId).then(setProfile).catch(() => {});
+    void api.gallery(characterId).then(setGallery).catch(() => {});
   }, [characterId, messages.length]);
 
   // The WebSocket event is instant when it works; the poll above is the fallback when it
@@ -341,7 +354,21 @@ export default function Chat({
       </div>
 
       {profileOpen && profile && (
-        <ProfileSheet profile={profile} onClose={() => setProfileOpen(false)} />
+        <ProfileSheet
+          profile={profile}
+          gallery={gallery}
+          onOpenImage={(url) => setLightboxAt(allImages.indexOf(url))}
+          onClose={() => setProfileOpen(false)}
+        />
+      )}
+
+      {lightboxAt !== null && (
+        <Lightbox
+          images={allImages}
+          index={lightboxAt}
+          onIndex={setLightboxAt}
+          onClose={() => setLightboxAt(null)}
+        />
       )}
 
       {menuOpen && (
@@ -434,7 +461,15 @@ export default function Chat({
               {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
               {m.kind === 'image' ? (
                 <div className={`bubble image ${mine ? 'me' : 'them'}`}>
-                  {m.image_url ? <img src={m.image_url} alt="" /> : <span className="tiny">Photo unavailable</span>}
+                  {m.image_url ? (
+                    <img
+                      src={m.image_url}
+                      alt=""
+                      onClick={() => setLightboxAt(allImages.indexOf(m.image_url!))}
+                    />
+                  ) : (
+                    <span className="tiny">Photo unavailable</span>
+                  )}
                 </div>
               ) : m.kind === 'voice' ? (
                 <VoiceBubble message={m} mine={mine} />
@@ -534,7 +569,17 @@ export default function Chat({
  * What he has found out about her so far. Everything starts as ??? and fills in only when
  * she actually tells him - it is a record of the conversation, not a stat readout.
  */
-function ProfileSheet({ profile, onClose }: { profile: CharacterProfile; onClose: () => void }) {
+function ProfileSheet({
+  profile,
+  gallery,
+  onOpenImage,
+  onClose,
+}: {
+  profile: CharacterProfile;
+  gallery: GalleryImage[];
+  onOpenImage: (url: string) => void;
+  onClose: () => void;
+}) {
   const pct = profile.total ? Math.round((profile.known / profile.total) * 100) : 0;
   return (
     <div className="sheet-backdrop" onClick={onClose}>
@@ -554,6 +599,21 @@ function ProfileSheet({ profile, onClose }: { profile: CharacterProfile; onClose
         <div className="progress"><span style={{ width: `${pct}%` }} /></div>
 
         <p className="small muted bio-quote">{profile.bio}</p>
+
+        {gallery.length > 0 && (
+          <div className="gallery">
+            <div className="section-title" style={{ padding: '0 0 var(--s2)' }}>
+              Photos ({gallery.length})
+            </div>
+            <div className="gallery-grid">
+              {gallery.map((g) => (
+                <button key={g.id} className="gallery-thumb" onClick={() => onOpenImage(g.url)}>
+                  <img src={g.url} alt="" loading="lazy" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="sheet-body">
           {profile.categories.map((cat) => (

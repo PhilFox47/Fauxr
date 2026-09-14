@@ -1177,6 +1177,31 @@ that fights both failure modes: airbrushing, beauty filters, plastic skin, glamo
 studio setups on one side; ugly, unflattering angles, harsh flash and sickly tones on the
 other; plus the usual renders, anatomy errors and watermarks.
 
+### Every photo she sent, kept
+
+A photo used to exist only as a bubble in the chat. Scroll far enough and it was gone —
+there was no way back to a picture from three hundred messages ago short of scrolling for it.
+
+Each character now has a **gallery**, served by `GET /api/chats/:id/gallery` and shown inside
+her profile sheet under a `Photos (n)` heading: every finished image for that character,
+newest first, as a three-column grid of thumbnails. It reads straight from the `images` table
+rather than from the message log, so a picture is in the gallery because it was generated for
+her, not because a bubble survived.
+
+The one image it withholds is her **profile shot**, until `photos_exchanged` is set. That
+flag is the whole point of the picture swap, and a gallery that quietly showed her face
+before she agreed to show it would hand back exactly what the swap is there to gate. Chat
+photos are unaffected — she already chose to send those.
+
+**Tap any photo to open it full-screen.** The same viewer backs both surfaces, and it is
+handed the whole set with an index rather than a single URL, so opening a chat bubble still
+lets you page through the rest of her photos. Arrow keys and on-screen chevrons move,
+`Escape` or a tap on the backdrop closes, and a tap on the image itself does nothing — a
+photo you opened to look at should not vanish because you touched it. The page behind is
+scroll-locked while it is up, or a swipe drags the conversation around underneath. The chat
+bubbles and the gallery overlap (a photo she sent is in both), so the set is deduplicated
+before it is paged, otherwise the same picture showed up twice in the counter.
+
 ### Her face before there is a photo
 
 A match list where nobody has unlocked a photo yet is a column of identical grey initials,
