@@ -1313,16 +1313,76 @@ makes the stack a run of distinguishable cards instead of identical ones.
 
 ### The attribute tables
 
-`server/src/data/attributes/*.json`, around 1050 entries across 47 categories, seeded into
-SQLite on boot. The field that matters most is `prompt_hint` — the text that actually
-reaches the model. Without it the Actor gets a bare label and reinvents its meaning every
-time.
+`server/src/data/attributes/*.json`, 2409 entries across 50 categories, seeded into SQLite
+on boot. The field that matters most is `prompt_hint` — the text that actually reaches the
+model. Without it the Actor gets a bare label and reinvents its meaning every time.
+
+**The non-fetish, non-domain tables went from 863 entries to 2211 (2.56x)** — the fetish
+table was already judged to have enough variance and stayed at 183. Bios and handles have their own
+variance guards already, described below — this pass is about the raw material feeding
+them: an `archetype` roll used to come from 24 options, `insecurity` from 22, `occupation`
+from 59. With five of these compounding into one seed, a cast that repeated felt inevitable
+long before any single table looked small on its own.
+
+Two categories were **deliberately left alone**. `fetish` (183 entries), per the brief.
+`kink_domain` (15) is the taxonomy that groups those 183 fetishes and hands them to
+`rollKinkMap()` — adding domains means either reassigning existing fetishes to them (which
+touches the one table meant to stay untouched) or shipping domains with nothing in them,
+which contribute nothing. Everything else is expanded, from the ~1.6x on the naturally
+small, real-world-bounded tables (`orientation`, `height`, `attachment_style`) up to ~3x+ on
+the ones that carry the most day-to-day texture (`occupation`, `interest`, `insecurity`,
+`turn_on`/`turn_off`).
+
+### Some categories quietly gate real behaviour, not just prompt text
+
+Auditing every table before writing new entries turned up several categories where an
+attribute's **id** is checked directly in code, rather than its `prompt_hint` just being
+handed to a model:
+
+- `social_energy` scaled a character's proactivity (`nudge.ts`), her chance of texting first
+  (`scheduler.ts`) and her photo demeanour (`images.ts`) through three separate `{ low, medium,
+  high }` lookup tables — literal object keys. A fourth `social_energy` entry would have
+  matched none of them and silently fallen back to a flat default, contributing nothing.
+- `message_length`, `emoji_usage`, `voice_msg_tendency`, `slang_register`/`typing_style`
+  (the "writes formally" check) and `openness_curve` had the same shape: two or three
+  hardcoded ids doing real work, everything else inert.
+- `humor_type`'s photo-demeanour check in `images.ts` compared against `['dry', 'deadpan',
+  'dark']` and `['silly', 'goofy', 'playful']` — and neither `deadpan`, `silly` nor `goofy`
+  has ever existed as a `humor_type` id. Both branches had been dead code since they were
+  written; a pre-existing bug this pass happened to trip over.
+
+Rather than ship dozens of new entries into categories where only a couple of ids actually
+did anything, each of these now reads its behaviour from `extra` on the attribute row itself
+(`extra.pace`, `extra.bucket`, `extra.chance`, `extra.demeanour`, and so on), with every
+existing id's `extra` set to reproduce its exact old hardcoded value — checked by an
+automated comparison against the original lookup tables before anything shipped, so no
+existing character's behaviour moved. A new entry in any of these tables is now a real,
+functioning option rather than fifteen new labels that all behave like "medium".
+
+### What was verified before this shipped
+
+- **Schema**: every one of the 2409 rows has all twelve required fields, a valid `rarity`,
+  and a positive `weight`.
+- **No duplicate `(category, id)` pairs**, old or new.
+- **No dangling references** — every id named in an `affinities`, `conflicts` or
+  `extra.weights` list, across all 2409 rows, resolves to a real attribute somewhere in the
+  tables. This also caught and fixed 23 references that were already broken before this
+  pass (an old `archetype` affinity pointing at `"gym"`, which has never been an id anywhere
+  in the tables; `hard_limit` conflicts naming fetish ids that do not exist) — dead weight
+  that quietly did nothing on every roll.
+- **12,000 trials of `rollSeed()`**: zero errors, zero characters where a `hard_limit`
+  contradicted one of her own `fetishes`, and — checked per category — every single new
+  archetype, occupation, ethnicity, hobby, interest, humour type and openness curve was
+  actually reachable at least once.
 
 Every entry carries a **rarity**: common, uncommon, rare or very rare, which is the coarse
 frequency dial (`weight` remains a manual nudge on top). This is how the niche material
-earns its place — the fetish table runs to ~100 entries covering everything from dirty talk
-to mummification, and the long tail only turns up when it should. A **rarity** slider in
-Settings pulls the whole tail up or down together:
+earns its place — the fetish table runs to ~180 entries covering everything from dirty talk
+to mummification, and the long tail only turns up when it should. Every one of the roughly
+1350 new entries added in this pass was given a rarity by hand rather than left at the
+`common` default, in roughly the same proportions the existing tables already used (common
+the majority, tapering through uncommon and rare, very rare reserved for the genuinely
+unusual). A **rarity** slider in Settings pulls the whole tail up or down together:
 
 | rarity_bias | common | uncommon | rare | very rare |
 |---|---|---|---|---|

@@ -61,12 +61,15 @@ export function communicationBlock(seed: CharacterSeed): string {
       : seed.typo_rate >= 0.08
         ? 'You make the occasional typo and leave it.'
         : 'You rarely make typos.';
+  // The habit itself is the entry's own prompt_hint rather than a hardcoded none/heavy
+  // switch, so a new bucket between sparse and heavy describes itself properly. Whether to
+  // mention favourites at all is still decided in code, off her actual range rather than
+  // her id - a character with extra.range [0,0] should never be told to favour an emoji
+  // she is never going to use.
+  const emojiRange = (find('emoji_usage', seed.emoji_usage)?.extra?.range as [number, number] | undefined) ?? [0, 2];
   const emojiLine =
-    seed.emoji_usage === 'none'
-      ? 'You never use emoji.'
-      : seed.emoji_usage === 'heavy'
-        ? `You use emoji constantly${seed.favorite_emojis.length ? `, especially ${seed.favorite_emojis.join(' ')}` : ''}.`
-        : `You use an emoji now and then${seed.favorite_emojis.length ? `, usually ${seed.favorite_emojis.join(' ')}` : ''}.`;
+    `Emoji: ${hint('emoji_usage', seed.emoji_usage)}` +
+    (emojiRange[1] > 0 && seed.favorite_emojis.length ? ` Reaches for ${seed.favorite_emojis.join(' ')} especially.` : '');
   return [
     `Typing style: ${hint('typing_style', seed.typing_style)}`,
     typoLine,

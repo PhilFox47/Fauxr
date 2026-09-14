@@ -1,4 +1,5 @@
 import { getSettings } from '../config.js';
+import { find } from '../db/attributes.js';
 import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
@@ -160,7 +161,8 @@ function maybeBeProactive(): void {
     const hoursSilent = rel.last_contact_at ? (Date.now() - Date.parse(rel.last_contact_at)) / 3_600_000 : 99;
     if (hoursSilent < 2) continue;
 
-    const energy = { low: 0.5, medium: 1, high: 1.6 }[character.seed.social_energy] ?? 1;
+    // Off the attribute row, not a literal id switch - see nudge.ts for why.
+    const energy = Number(find('social_energy', character.seed.social_energy)?.extra?.pace ?? 1);
     // Per-minute probability; deliberately small, the slider is what opens the tap.
     const p =
       0.0025 * settings.activity * energy * (0.3 + rel.investment / 100) * Math.min(3, hoursSilent / 4);

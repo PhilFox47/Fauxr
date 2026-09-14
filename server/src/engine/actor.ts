@@ -1,4 +1,5 @@
 import { getSettings } from '../config.js';
+import { find } from '../db/attributes.js';
 import { complete, extractJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { getUserProfile, recentMessages } from '../repo.js';
@@ -183,10 +184,18 @@ function buildPrompt(
     turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),
     max_messages: settings.chat.max_messages_per_turn,
-    voice_target:
-      seed.message_length === 'paragraphs' ? '40 to 90 seconds of speech' : '12 to 40 seconds of speech',
+    voice_target: messageBucket(seed.message_length) === 'long' ? '40 to 90 seconds of speech' : '12 to 40 seconds of speech',
     text_target: textTarget(seed.message_length),
   });
+}
+
+/**
+ * Every `message_length` entry declares which of three buckets it behaves like via
+ * `extra.bucket` - not the id itself, so a new nuanced entry ("clipped", "rambling_when_into_it")
+ * still gets a real, concrete length target instead of silently falling through to "medium".
+ */
+function messageBucket(messageLength: string): string {
+  return String(find('message_length', messageLength)?.extra?.bucket ?? 'medium');
 }
 
 /**
@@ -196,19 +205,27 @@ function buildPrompt(
  * which reads as terse even for characters whose setting allows much more.
  */
 function textTarget(messageLength: string): string {
-  switch (messageLength) {
-    case 'one_liner':
+  switch (messageBucket(messageLength)) {
+    case 'short':
       return 'One short line, rarely more than a handful of words. That is the whole reply, not a first message with more to follow.';
-    case 'paragraphs':
+    case 'long':
       return 'Real substance when there is something to say - two to four sentences, often split across two or three messages rather than one block. Still allowed to send just "same" when that is genuinely the whole reply.';
     default:
       return 'A sentence or two of actual content, not just a reaction word. Split it across a second message rather than cramming everything into one.';
   }
 }
 
-/** A character who really does write in full sentences, so the register check exempts her. */
+/**
+ * A character who really does write in full sentences, so the register check exempts her.
+ * Either attribute can carry the flag - `typing_style` for how she types day to day,
+ * `slang_register` for how formal her vocabulary is - and a new entry earns the exemption by
+ * setting `extra.formal` rather than by being named "proper" or "formal" specifically.
+ */
 function writesFormally(character: { seed: { typing_style: string; slang_register: string } }): boolean {
-  return character.seed.typing_style === 'proper' || character.seed.slang_register === 'formal';
+  return (
+    !!find('typing_style', character.seed.typing_style)?.extra?.formal ||
+    !!find('slang_register', character.seed.slang_register)?.extra?.formal
+  );
 }
 
 export async function runActor(ctx: ActorContext): Promise<ActorRun> {
@@ -368,12 +385,8 @@ export async function runActorVoice(ctx: ActorContext): Promise<VoiceOutput | nu
 /** Should she reach for a voice note this turn? */
 export function wantsVoiceMessage(character: Character): boolean {
   if (!getSettings().voice_enabled) return false;
-  switch (character.seed.voice_msg_tendency) {
-    case 'often':
-      return Math.random() < 0.25;
-    case 'rare':
-      return Math.random() < 0.07;
-    default:
-      return false;
-  }
+  // Off the attribute row rather than a literal-id switch, so a new tendency between
+  // "rare" and "often" gets its own real probability instead of defaulting to never.
+  const chance = Number(find('voice_msg_tendency', character.seed.voice_msg_tendency)?.extra?.chance ?? 0);
+  return Math.random() < chance;
 }

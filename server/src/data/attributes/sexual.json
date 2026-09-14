@@ -346,13 +346,7 @@
     "prompt_hint": "",
     "image_prompt": null,
     "affinities": [],
-    "conflicts": [
-      "pet_play",
-      "pony_play",
-      "plush",
-      "monster",
-      "hucow"
-    ],
+    "conflicts": [],
     "modifies": {},
     "extra": {},
     "enabled": true
@@ -3682,5 +3676,707 @@
     "extra": {},
     "enabled": true,
     "rarity": "uncommon"
+  },
+  {
+    "id": "types_faster",
+    "category": "arousal_tell",
+    "label": "Types noticeably faster",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "her typing speed visibly picks up, more typos than usual and does not stop to fix them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "asks_more_questions",
+    "category": "arousal_tell",
+    "label": "Suddenly full of questions",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "starts asking him things rapid-fire, genuinely wants the answers",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "drops_the_jokes",
+    "category": "arousal_tell",
+    "label": "Stops joking around",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "the deflecting humour disappears entirely and she gets plain",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "uses_his_name_more",
+    "category": "arousal_tell",
+    "label": "Starts using his name more",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "his name shows up in nearly every message, which is unusual for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sends_more_messages",
+    "category": "arousal_tell",
+    "label": "Message frequency spikes",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "starts sending noticeably more messages, faster, back to back",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gets_more_polite",
+    "category": "arousal_tell",
+    "label": "Gets oddly more polite",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "manners tighten up right when she is most turned on, which reads almost formal",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stops_using_punctuation",
+    "category": "arousal_tell",
+    "label": "Punctuation falls apart",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "full sentences give way to fragments with no punctuation at all",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "repeats_herself",
+    "category": "arousal_tell",
+    "label": "Starts repeating a phrase",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "circles back to the same specific phrase or word more than once",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gets_demanding",
+    "category": "arousal_tell",
+    "label": "Gets openly demanding",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "drops the hedging entirely and starts telling him what she wants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "goes_monosyllabic",
+    "category": "arousal_tell",
+    "label": "Words get shorter, not fewer",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "keeps replying at the same pace but every word gets clipped shorter",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "admits_things_mid_message",
+    "category": "arousal_tell",
+    "label": "Admits things she would not otherwise say",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "confessions slip out mid-sentence that she would normally keep to herself",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stops_deflecting_compliments",
+    "category": "arousal_tell",
+    "label": "Actually accepts a compliment for once",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "takes a compliment plainly instead of deflecting it, which is out of character",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gets_bossy_briefly",
+    "category": "arousal_tell",
+    "label": "Gets briefly, uncharacteristically bossy",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "issues instructions rather than requests, just for a stretch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "voice_notes_increase",
+    "category": "arousal_tell",
+    "label": "Switches to voice notes",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "abandons text for voice notes specifically once she is worked up",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "asks_whats_he_wearing",
+    "category": "arousal_tell",
+    "label": "Suddenly cares what he is wearing right now",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "wants a concrete, specific picture of the moment, not a general one",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stops_multitasking",
+    "category": "arousal_tell",
+    "label": "Stops doing anything else",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "mentions she has put everything else down, which she does not usually admit",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gets_specific_fast",
+    "category": "arousal_tell",
+    "label": "Skips vague for specific, fast",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "abandons general flirting for very specific detail almost immediately",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "laughs_less",
+    "category": "arousal_tell",
+    "label": "Stops finding things funny as easily",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "the usual jokes stop landing, or stop coming, entirely",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "checks_in_on_him",
+    "category": "arousal_tell",
+    "label": "Starts checking he is actually enjoying it too",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "gets unusually attentive to whether he is into it as much as she is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gets_possessive_in_text",
+    "category": "arousal_tell",
+    "label": "Language turns briefly possessive",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "starts using words like mine without quite meaning to",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stops_apologising",
+    "category": "arousal_tell",
+    "label": "Stops apologising for wanting things",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "usually softens a request; stops doing that entirely once she is properly into it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sends_a_photo_unprompted",
+    "category": "arousal_tell",
+    "label": "Offers a photo without being asked",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "volunteers a picture rather than waiting to be asked, which is unusual for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "time_stamps_go_erratic",
+    "category": "arousal_tell",
+    "label": "Replies at odd hours suddenly",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "starts texting at times she normally would not, clearly distracted by the conversation",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gets_quieter_and_shorter",
+    "category": "arousal_tell",
+    "label": "Goes quiet in a focused way",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "the chatty energy drops into short, focused, deliberate replies",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "double_penetration_limit",
+    "category": "hard_limit",
+    "label": "Double penetration",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "double_penetration"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "deepthroat_limit",
+    "category": "hard_limit",
+    "label": "Deepthroat specifically",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "deepthroat_giving"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "temperature_play_limit",
+    "category": "hard_limit",
+    "label": "Wax or ice play",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "wax_play_giving",
+      "wax_play_receiving",
+      "ice_play_giving",
+      "ice_play_receiving"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "denial_limit",
+    "category": "hard_limit",
+    "label": "Being denied or edged",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "edging_giving",
+      "edging_receiving",
+      "denying_him",
+      "self_denial",
+      "forced_orgasm"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "rough_handling_limit",
+    "category": "hard_limit",
+    "label": "Anything rough or forceful",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "hair_pulling",
+      "nail_dragging",
+      "pushed_against_wall"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "lactation_limit",
+    "category": "hard_limit",
+    "label": "Lactation content",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "lactation_fantasy"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "praise_during_limit",
+    "category": "hard_limit",
+    "label": "Talking during, at all",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "dirty_talk_giving",
+      "dirty_talk_receiving",
+      "being_told_beautiful",
+      "praising_him"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "costume_limit",
+    "category": "hard_limit",
+    "label": "Costumes or uniforms",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "costume_roleplay",
+      "uniform_wearing",
+      "uniform_seeing"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "toys_limit",
+    "category": "hard_limit",
+    "label": "Toys of any kind",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "using_toys_together",
+      "using_a_swing_or_wedge"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "extended_session_limit",
+    "category": "hard_limit",
+    "label": "Multiple rounds, prefers it to end",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "multiple_rounds",
+      "overstimulation"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "outdoor_water_limit",
+    "category": "hard_limit",
+    "label": "Outdoors or water",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "risky_outdoor",
+      "tent_camping",
+      "car_sex",
+      "beach_water",
+      "shower_sex",
+      "hot_tub_pool"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mirror_limit",
+    "category": "hard_limit",
+    "label": "Mirrors involved at all",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "mirror_watching_him",
+      "mirror_watching_self"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "formal_power_exchange_limit",
+    "category": "hard_limit",
+    "label": "Formal D/s dynamics specifically",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "power_exchange_formal",
+      "collar_receiving",
+      "collaring_him"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "eye_contact_limit",
+    "category": "hard_limit",
+    "label": "Sustained eye contact during",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "eye_contact_during"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pansexual_leaning_curious",
+    "category": "orientation",
+    "label": "Pan, mostly untested",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women",
+        "enby"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "gay_leaning_open",
+    "category": "orientation",
+    "label": "Mostly into women, open",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "women",
+        "men"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "demisexual",
+    "category": "orientation",
+    "label": "Demisexual",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women",
+        "enby"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "heteroflexible",
+    "category": "orientation",
+    "label": "Straight, with exceptions",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "bi_leaning_women",
+    "category": "orientation",
+    "label": "Bi, leans toward women",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women",
+        "enby"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "questioning",
+    "category": "orientation",
+    "label": "Still working it out",
+    "weight": 0.4,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women",
+        "enby"
+      ]
+    },
+    "enabled": true
   }
 ]

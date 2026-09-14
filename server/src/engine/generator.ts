@@ -225,7 +225,10 @@ export function rollSeed(): RolledSeed {
   // how she writes
   const typing_style = one('typing_style');
   const emoji_usage = one('emoji_usage');
-  const emojiCount = emoji_usage?.id === 'none' ? 0 : emoji_usage?.id === 'heavy' ? randInt(2, 3) : randInt(0, 2);
+  // Off extra.range rather than the id itself, so a new bucket between sparse and heavy
+  // draws its own count instead of quietly landing on the sparse default.
+  const [emojiMin, emojiMax] = (emoji_usage?.extra?.range as [number, number] | undefined) ?? [0, 2];
+  const emojiCount = randInt(emojiMin, emojiMax);
   const favorite_emojis = rollMany('favorite_emoji', ctx, emojiCount).map((a) => a.extra?.char ?? a.label);
   const message_length = one('message_length');
   const speedFromArchetype = (archetype.modifies as any)?.response_speed as string | undefined;

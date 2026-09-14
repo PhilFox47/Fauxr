@@ -55,15 +55,16 @@ function demeanourFor(seed: CharacterSeed): string {
   const arch = find('archetype', seed.archetype);
   if (arch?.extra?.photo) parts.push(String(arch.extra.photo));
 
-  const energy = {
-    low: 'low-key and a bit reluctant about being photographed',
-    medium: 'relaxed, unbothered by the camera',
-    high: 'lively, clearly enjoying taking it',
-  }[seed.social_energy];
-  if (energy) parts.push(energy);
+  // Off the attribute row, not a literal id switch. This used to check `seed.social_energy`
+  // against a fixed { low, medium, high } map and `seed.humor_type` against two hardcoded id
+  // lists - lists that named ids ("deadpan", "silly", "goofy", "playful") which do not
+  // actually exist in personality.json, so neither humour branch had ever fired.
+  const energy = find('social_energy', seed.social_energy)?.extra?.demeanour;
+  if (energy) parts.push(String(energy));
 
-  if (['dry', 'deadpan', 'dark'].includes(seed.humor_type)) parts.push('deliberately undersold expression');
-  if (['silly', 'goofy', 'playful'].includes(seed.humor_type)) parts.push('playful, mid-expression rather than posed');
+  const humourDemeanour = find('humor_type', seed.humor_type)?.extra?.demeanour;
+  if (humourDemeanour === 'undersold') parts.push('deliberately undersold expression');
+  if (humourDemeanour === 'playful') parts.push('playful, mid-expression rather than posed');
 
   return parts.join(', ');
 }

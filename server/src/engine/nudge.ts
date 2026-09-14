@@ -1,3 +1,4 @@
+import { find } from '../db/attributes.js';
 import type { Character, OpenThread, Relationship } from '../types.js';
 import { freshThreads } from './state.js';
 
@@ -34,11 +35,15 @@ export function pickNudge(
   ctx: NudgeContext = { somethingLive: false },
 ): Nudge | null {
   const seed = character.seed;
-  const energy = { low: -0.12, medium: 0, high: 0.14 }[seed.social_energy] ?? 0;
+  // Read off the attribute row rather than switching on the id, so a new social_energy or
+  // openness_curve entry actually pulls its own weight instead of silently defaulting to 0 -
+  // this used to be a literal id lookup that only ever recognised the three shipped values.
+  const energy = Number(find('social_energy', seed.social_energy)?.extra?.initiative ?? 0);
   const warmth = rel.investment / 100;
+  const opennessBonus = Number(find('openness_curve', seed.openness_curve)?.extra?.initiative_bonus ?? 0);
 
   // How likely she is to bring her own material rather than only answering.
-  const initiative = 0.3 + energy + warmth * 0.25 + (seed.openness_curve === 'fast_then_plateau' ? 0.1 : 0);
+  const initiative = 0.3 + energy + warmth * 0.25 + opennessBonus;
 
   // Only threads she has not just been on about, so a callback cannot become a fixation.
   const openThreads: OpenThread[] = freshThreads(rel.ledger?.open_threads ?? []);
@@ -182,7 +187,8 @@ export function pickNudge(
     };
   }
 
-  if (seed.message_length !== 'one_liner' && chance(0.1)) {
+  const isTerse = (find('message_length', seed.message_length)?.extra?.bucket ?? 'medium') === 'short';
+  if (!isTerse && chance(0.1)) {
     return {
       id: 'unprompted_detail',
       text:
