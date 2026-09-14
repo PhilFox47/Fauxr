@@ -1330,9 +1330,52 @@ survive into a tag, the prompt says choose real.
 **A negative prompt is finally sent.** The assembler had always returned a `negative_prompt`
 and it was being dropped on the floor — `generateImage` never had a parameter for it, so
 nothing was ever excluded. Its shot-specific negatives now ride along with a standing set
-that fights both failure modes: airbrushing, beauty filters, plastic skin, glamour and
-studio setups on one side; ugly, unflattering angles, harsh flash and sickly tones on the
-other; plus the usual renders, anatomy errors and watermarks.
+that fights airbrushing, beauty filters and plastic skin on one side and ugly angles, harsh
+flash and sickly tones on the other, plus the usual renders, anatomy errors and watermarks —
+a **glamour-shot/studio-lighting ban** used to ride along too, universally, until it started
+actively fighting the one case it should not: see below.
+
+### Her profile picture is her choice of photo, not a house style
+
+Every image used to get the same forced style suffix - `candid amateur phone photo`,
+handheld, sensor grain - and the same standing negative banning `studio lighting,
+professional model, ... stock photo`. That is right for a photo from inside a
+conversation, which really is a moment caught on her phone. It is wrong for a **profile
+picture**, which real people lead with in every register there is: a professional headshot,
+a work photo repurposed because it is simply the best one that exists, a friend's candid, a
+posed full-body shot, a five-minutes-ago mirror selfie. Forcing the candid look onto all of
+them, and banning "professional" outright, meant every profile picture came out the same -
+an amateur selfie, regardless of who she was.
+
+Worse, the situation handed to the assembler for a profile shot was `''`. Blank. The
+assembler had no framing, no setting, nothing to distinguish a headshot from a full-body
+shot - it filled the gap with the same default every time.
+
+**The fix asks her.** A new Actor call - `actor_profile_pic.md`, working from her
+**dossier** - answers one question in her own voice: what does her actual lead photo look
+like, and why this one and not some other perfectly fine photo of her? It is told explicitly
+not to default to candid: a professional or studio shot, a repurposed work photo, a posed
+shot a friend took, a mirror selfie, something from a hobby - genuinely vary it, and let the
+kind of photo and how much of her is in frame (face only, waist-up, full body) follow from
+who she is, not from a house style. An ambitious, put-together archetype plausibly has a
+good professional photo and uses it without a second thought; a guarded one might have
+exactly one old picture she still likes; a chaotic one might have grabbed the
+least-blurry shot from a night out an hour before opening the app. This runs once, lazily,
+the first time a character actually needs a profile picture - not for every character
+rolled, most of whom are never matched with, let alone reach the picture swap.
+
+That answer becomes the situation the image assembler works from, and the assembler's own
+instructions now branch on it: for a profile picture, her account of the photo decides the
+register, and the style suffix and the studio-lighting ban are only applied to a chat or
+spicy photo - a real moment inside the conversation, which still always has to look candid.
+A studio headshot now gets composed lighting and a clean background instead of being fought
+into looking like a bad phone photo; a selfie still looks like a selfie. Whichever it is,
+she is still a fairly represented, attractive woman - a bad photo is not what "honest"
+means, in either format.
+
+If the call fails outright, generation still proceeds with a plain generic default rather
+than stalling - verified against a mock that always fails it: the retries exhaust, the
+fallback situation reaches the assembler, and the job still completes.
 
 ### Every photo she sent, kept
 

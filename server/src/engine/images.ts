@@ -9,39 +9,59 @@ import { logger } from '../log.js';
 import { addMessage, getCharacter, getRelationship, saveRelationship, updateMessageMeta } from '../repo.js';
 import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
+import { describeSeed } from './generator.js';
 import type { Character, CharacterSeed, PendingPhoto } from '../types.js';
 
 /**
- * The look every generated photo lands in.
+ * The floor every generated photo lands on, whatever kind of shot it is.
  *
- * Two failure modes to stay between. Push "amateur phone photo" alone and the model reads it
- * as permission to make her unflattering - bad angles, sickly light, a face nobody would
- * swipe on. Push "beautiful" alone and it returns a retouched studio render with plastic
- * skin, which is the thing that most obviously is not a real person. So both are said
- * explicitly: a real candid photo, of someone who happens to be attractive, unretouched.
+ * Used to be one fixed "candid amateur phone photo" suffix forced onto every image,
+ * profile pictures included - which is exactly why every profile picture came out the
+ * same: an amateur selfie, because the style was decided before the shot's own situation
+ * was. This is now only the part that has to hold regardless of format: a real texture,
+ * not a plastic one, and an attractive but fairly represented woman rather than a bad
+ * angle excused as "candid". Which kind of photo it actually is - candid or composed,
+ * phone or studio - is CANDID_SUFFIX below plus whatever the assembler itself wrote from
+ * her own account of the shot.
  */
-const STYLE_SUFFIX = [
-  'candid amateur phone photo',
-  'natural available light',
+const BASE_SUFFIX = [
+  'photorealistic photograph',
   'real unretouched skin with visible texture and pores',
   'naturally attractive, healthy, flattering angle',
+].join(', ');
+
+/**
+ * The "taken on her phone, right now" look - added on top of BASE_SUFFIX for a chat or
+ * spicy photo, which is always a moment inside the conversation rather than a picture she
+ * chose to lead with. A profile picture does not get this forced on: see is_moment in the
+ * assembler template for the matching instructions, and runImageJob for where it applies.
+ */
+const CANDID_SUFFIX = [
+  'candid amateur phone photo',
+  'natural available light',
   'softly imperfect handheld framing',
   'slight sensor grain',
   'shallow phone-lens depth of field',
 ].join(', ');
 
 /**
- * Sent with every image. The first half fights the airbrushed-render look, the second half
- * fights the opposite over-correction, and the rest is the usual anatomy rubbish.
+ * Sent with every image regardless of kind - the airbrushed-render look, the opposite
+ * over-correction into unflattering, and the usual anatomy rubbish.
  */
 const BASE_NEGATIVE = [
   'airbrushed, heavy retouching, beauty filter, smoothed plastic skin, waxy skin, doll-like',
-  'glamour shot, studio lighting, professional model, magazine cover, stock photo',
   'ugly, unflattering angle, harsh direct flash, sickly skin tone, sunken eyes, grotesque',
   'cgi, 3d render, illustration, painting, anime, cartoon, airbrush art',
   'deformed, disfigured, bad anatomy, extra fingers, extra limbs, mutated hands, asymmetric eyes',
   'oversaturated, heavy hdr, watermark, text, logo, lowres, out-of-focus face',
 ].join(', ');
+
+/**
+ * Only for a chat/spicy moment: a profile picture is now allowed to genuinely be a studio
+ * headshot or a posed professional-looking shot, so banning that look outright would
+ * contradict the one case it is meant to happen.
+ */
+const CANDID_NEGATIVE = 'glamour shot, studio lighting, professional model, magazine cover, stock photo';
 
 /**
  * How she holds herself in a photo, from who she is rather than what she looks like.
@@ -157,6 +177,49 @@ function referenceImage(characterId: string): string | null {
   return readFileSync(abs, 'base64');
 }
 
+/** Sized like BIO_TOKENS in generator.ts - one real paragraph, from a reasoning model. */
+const PROFILE_PIC_TOKENS = 4800;
+
+/**
+ * What her profile picture actually is, in her own words - asked once, lazily, the first
+ * time she needs one rather than for every character rolled (most never reach this point).
+ *
+ * Before this, every profile picture got the same brief nobody gave it: `situation: ''`,
+ * so the assembler had nothing to work from but "profile" and invented the same amateur
+ * phone-selfie default every time. A dating profile in reality has professional headshots,
+ * recycled work photos, posed shots a friend took, full-body outfit pictures, alongside
+ * the selfies - and which one a given woman leads with says something about her. Asking
+ * her, rather than deciding for her, is what makes that variance real instead of a coin
+ * flip in code.
+ */
+async function profilePicConcept(character: Character): Promise<string> {
+  try {
+    const out = await completeJson<{ profile_pic?: string }>({
+      scope: 'image',
+      label: `profile_pic_concept:${character.username}`,
+      config: { ...getSettings().models.actor, max_tokens: PROFILE_PIC_TOKENS },
+      require: ['profile_pic'],
+      messages: [
+        {
+          role: 'user',
+          content: render('actor_profile_pic', {
+            real_name: character.real_name,
+            dossier: character.seed.hints.dossier || describeSeed(character.seed),
+          }),
+        },
+      ],
+    });
+    const concept = (out.profile_pic ?? '').trim();
+    if (concept) return concept;
+  } catch (err) {
+    logger.warn('image', 'profile picture concept failed, using a generic default', {
+      character: character.username,
+      error: String(err),
+    });
+  }
+  return DEFAULT_SITUATION.profile;
+}
+
 export function enqueueImage(opts: {
   characterId: string;
   kind: 'profile' | 'chat' | 'spicy';
@@ -189,6 +252,14 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
 
   setStatus(id, 'running');
   try {
+    // The one photo she leads with has no "right now" to describe, so nothing upstream
+    // ever gave it a situation - it arrived here as ''. Asking her what it actually is
+    // happens once, lazily, right where that gap used to go unfilled.
+    const isProfile = job.kind === 'profile';
+    if (isProfile && !situation.trim()) {
+      situation = await profilePicConcept(character);
+    }
+
     const assembled = await completeJson<{ prompt: string; negative_prompt?: string }>({
       scope: 'image',
       label: `assemble:${character.username}`,
@@ -203,17 +274,31 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             situation,
             visible_marks: visibleMarks(character, job.kind),
             demeanour: demeanourFor(character.seed),
+            // Only a profile picture gets to be a professional shot, a repurposed work
+            // photo, a posed full-body - anything her own account above says it is. A
+            // chat or spicy photo is always a moment inside the conversation, so it keeps
+            // the candid, taken-right-now rules regardless of what image_kind spells out.
+            is_profile: isProfile ? '1' : '',
+            is_moment: isProfile ? '' : '1',
           }),
         },
       ],
     });
 
-    const prompt = `${assembled.prompt}, ${STYLE_SUFFIX}`;
+    // Candid phone-photo texture only applies to a moment inside the conversation. A
+    // profile picture's style - polished headshot or grainy selfie - was already decided
+    // by the assembler from her own account of the photo, so forcing the candid suffix on
+    // top would fight a studio shot into looking like a bad phone photo.
+    const styleSuffix = isProfile ? BASE_SUFFIX : `${BASE_SUFFIX}, ${CANDID_SUFFIX}`;
+    const prompt = `${assembled.prompt}, ${styleSuffix}`;
     // The assembler has always returned a negative prompt and it was being dropped on the
     // floor here - never passed to the image call at all. Its shot-specific negatives now
-    // ride along with the standing ones.
-    const negative = [assembled.negative_prompt, BASE_NEGATIVE].filter(Boolean).join(', ');
-    const ref = job.kind === 'profile' ? null : referenceImage(character.id);
+    // ride along with the standing ones. CANDID_NEGATIVE (no studio lighting, no
+    // professional-model posing) only applies to a moment shot, for the same reason.
+    const negative = [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : CANDID_NEGATIVE]
+      .filter(Boolean)
+      .join(', ');
+    const ref = isProfile ? null : referenceImage(character.id);
     const b64 = await generateImage({
       prompt,
       negativePrompt: negative,
@@ -311,7 +396,9 @@ export async function respondToPhotoOffer(
   enqueueImage({
     characterId,
     kind: pending.kind,
-    situation: pending.situation || DEFAULT_SITUATION[pending.kind],
+    // A blank profile situation is generated lazily inside runImageJob, from the character
+    // herself, rather than papered over with the same generic default every time.
+    situation: pending.kind === 'profile' ? pending.situation ?? '' : pending.situation || DEFAULT_SITUATION[pending.kind],
   });
   return { ok: true, enqueued: true };
 }
