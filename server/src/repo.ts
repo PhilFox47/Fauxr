@@ -429,9 +429,11 @@ export function allWakeups(): Wakeup[] {
 
 // ---------------------------------------------------------------- logs
 
-export function queryLogs(opts: { scope?: string; level?: string; q?: string; limit?: number; before?: number }) {
+export function queryLogs(opts: { scope?: string; level?: string; q?: string; limit?: number; before?: number; id?: number }) {
   const where: string[] = [];
   const params: any[] = [];
+  // An exact id, for exporting the single entry someone is looking at.
+  if (opts.id) { where.push('id = ?'); params.push(opts.id); }
   if (opts.scope) { where.push('scope = ?'); params.push(opts.scope); }
   if (opts.level) { where.push('level = ?'); params.push(opts.level); }
   if (opts.q) { where.push('(message LIKE ? OR payload LIKE ?)'); params.push(`%${opts.q}%`, `%${opts.q}%`); }

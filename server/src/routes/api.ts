@@ -7,6 +7,7 @@ import { allCategories, byCategory, find, invalidateAttributeCache } from '../db
 import { getSettings, saveSettings } from '../config.js';
 import { usageToday } from '../llm/client.js';
 import { logger } from '../log.js';
+import { exportLogs } from '../logexport.js';
 import {
   addMessage, getCharacter, getRelationship, getUserProfile, getWakeup, lastMessage,
   markCharacterMessagesRead, queryLogs, recentMessages, saveRelationship, saveUserProfile,
@@ -305,6 +306,30 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         before: req.query.before ? Number(req.query.before) : undefined,
       }),
   );
+
+  /**
+   * The same logs, rendered for pasting into a chat window rather than for scrolling. Sent
+   * as plain text with a filename attached, so the browser can either drop it on the
+   * clipboard or save it without the client re-implementing the formatting.
+   */
+  app.get<{
+    Querystring: { scope?: string; level?: string; q?: string; limit?: string; prompts?: string; id?: string };
+  }>('/api/logs/export', async (req, reply) => {
+    const prompts = req.query.prompts;
+    const text = exportLogs({
+      id: req.query.id ? Number(req.query.id) : undefined,
+      scope: req.query.scope,
+      level: req.query.level,
+      q: req.query.q,
+      limit: Number(req.query.limit) || 200,
+      prompts: prompts === 'trim' || prompts === 'none' ? prompts : 'full',
+    });
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+    return reply
+      .type('text/markdown; charset=utf-8')
+      .header('content-disposition', `attachment; filename="fauxr-logs-${stamp}.md"`)
+      .send(text);
+  });
 
   app.get('/api/usage', async () => usageToday());
 

@@ -725,11 +725,58 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
   );
 }
 
+/**
+ * navigator.clipboard exists only in a secure context, and a self-hosted app reached at
+ * http://<the box on your LAN>:3000 is not one - which is exactly how this gets used. The
+ * old execCommand path still works there, so it is the fallback rather than an error.
+ */
+async function copyText(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // Fall through - a permissions policy can reject it even in a secure context.
+  }
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
+function download(text: string, filename: string) {
+  const url = URL.createObjectURL(new Blob([text], { type: 'text/markdown' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+const sizeOf = (text: string) => {
+  const kb = new Blob([text]).size / 1024;
+  return kb >= 1024 ? `${(kb / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(kb))} KB`;
+};
+
 function LogsPane() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [scope, setScope] = useState('');
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<number | null>(null);
+  const [prompts, setPrompts] = useState('full');
+  const [count, setCount] = useState('60');
+  const [note, setNote] = useState('');
+  const [busy, setBusy] = useState(false);
 
   const load = useCallback(async () => {
     const params: Record<string, string> = { limit: '60' };
@@ -744,6 +791,31 @@ function LogsPane() {
     return () => clearInterval(id);
   }, [load]);
 
+  /** The export follows whatever is on screen, so the filters are the selection. */
+  const runExport = async (mode: 'copy' | 'download') => {
+    setBusy(true);
+    setNote('');
+    try {
+      const params: Record<string, string> = { limit: count, prompts };
+      if (scope) params.scope = scope;
+      if (query) params.q = query;
+      const text = await api.exportLogs(params);
+      if (mode === 'download') {
+        download(text, `fauxr-logs-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.md`);
+        setNote(`Saved ${sizeOf(text)}.`);
+      } else if (await copyText(text)) {
+        setNote(`Copied ${sizeOf(text)} to the clipboard.`);
+      } else {
+        setNote(`Could not reach the clipboard here - ${sizeOf(text)} downloaded instead.`);
+        download(text, 'fauxr-logs.md');
+      }
+    } catch (err) {
+      setNote(`Export failed: ${(err as Error).message}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <>
       <div className="chips">
@@ -757,6 +829,33 @@ function LogsPane() {
         <input type="text" placeholder="Search prompts and responses" value={query} onChange={(e) => setQuery(e.target.value)} />
       </div>
 
+      <div className="export-bar">
+        <div className="row">
+          <select value={count} onChange={(e) => setCount(e.target.value)} aria-label="How many entries">
+            <option value="20">Last 20</option>
+            <option value="60">Last 60</option>
+            <option value="200">Last 200</option>
+            <option value="2000">Everything kept</option>
+          </select>
+          <select value={prompts} onChange={(e) => setPrompts(e.target.value)} aria-label="How much of each prompt">
+            <option value="full">Full prompts</option>
+            <option value="trim">Trimmed prompts</option>
+            <option value="none">Replies only</option>
+          </select>
+        </div>
+        <div className="row">
+          <button className="btn ghost grow" disabled={busy} onClick={() => void runExport('copy')}>
+            Copy for pasting
+          </button>
+          <button className="btn ghost grow" disabled={busy} onClick={() => void runExport('download')}>
+            Download
+          </button>
+        </div>
+        <div className="tiny muted">
+          {note || 'Exports what the filters above are showing, as Markdown. Your prompts contain what you have told these characters; no API keys are included.'}
+        </div>
+      </div>
+
       {logs.length === 0 && <div className="empty">Nothing logged yet.</div>}
 
       {logs.map((entry) => (
@@ -766,7 +865,27 @@ function LogsPane() {
             <span className="scope">{entry.scope}</span>
             <span className={`level-${entry.level}`}>{entry.message}</span>
           </div>
-          {open === entry.id && <pre>{JSON.stringify(entry.payload, null, 2)}</pre>}
+          {open === entry.id && (
+            <>
+              <pre>{JSON.stringify(entry.payload, null, 2)}</pre>
+              {/* One bad turn is usually the whole question, and pasting the other fifty-nine
+                  around it only buries it. */}
+              <button
+                className="btn ghost"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  const text = await api.exportLogs({ id: String(entry.id), prompts: 'full' });
+                  setNote(
+                    (await copyText(text))
+                      ? `Copied this entry (${sizeOf(text)}).`
+                      : 'Could not reach the clipboard here.',
+                  );
+                }}
+              >
+                Copy this entry
+              </button>
+            </>
+          )}
         </div>
       ))}
     </>

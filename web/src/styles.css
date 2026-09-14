@@ -877,6 +877,22 @@ input[type='range'] {
   max-height: 380px;
   overflow-y: auto;
 }
+/* Sits between the filters it obeys and the feed it exports, so the relationship is
+   obvious without a label saying so. */
+.export-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  padding: var(--s3) var(--s4);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.export-bar .row { display: flex; gap: var(--s2); }
+.export-bar select { flex: 1; min-width: 0; font-size: 13px; }
+.export-bar .tiny { line-height: 1.45; }
+.log-entry .btn.ghost { margin-top: var(--s2); font-size: 12px; padding: 6px 12px; }
+
 .level-error { color: var(--err); }
 .level-warn { color: var(--warn); }
 .level-info { color: var(--text-dim); }

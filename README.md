@@ -1266,10 +1266,44 @@ weights by eye.
 Model endpoints, keys and sampling per role · a global activity multiplier for
 proactivity and wakeup frequency (start low) · the server uptime window · a daily call and
 cost budget with a usage readout · searchable logs filtered by scope, where every LLM call
-is stored with its full prompt, response, duration and token counts · a separate image log
-with a per-job retry button · your own profile · a reset.
+is stored with its full prompt, response, duration and token counts, and can be exported as
+Markdown · a separate image log with a per-job retry button · your own profile · a reset.
 
 The log view is the main tuning tool. Use it.
+
+### Getting the logs out
+
+Reading a bad turn in the pane is one thing; asking someone about it is another, and the
+pane cannot be pasted. **Copy for pasting** and **Download** render the same logs as
+Markdown, ready to drop into a chat window.
+
+The export follows whatever the filters are already showing — pick the `actor` scope, search
+for her handle, and that is what you get — with two controls of its own: how many entries
+(20, 60, 200, or everything still kept), and how much of each prompt. **Full prompts** is the
+default because a prompt problem is rarely visible from the reply alone; **trimmed** caps each
+message at 800 characters when the system block is drowning everything else; **replies only**
+keeps the responses, timings and token counts and drops the prompts entirely.
+
+Two differences from the pane, both deliberate. The export runs **oldest first** — a pane is a
+feed you scan downwards, an export is a narrative you read forwards, and a conversation makes
+no sense backwards. And a prompt is rendered as **one section per message**, headed by its
+role, with the content printed as written. Dumped as raw JSON it arrives as escape soup, `\n`
+between every line and the whole system block one unbroken string, which is precisely the part
+that needs reading.
+
+Each entry carries its call's vitals — model, duration, tokens in and out — and the header
+carries both models with their sampling, the image model, and the tuning sliders, because a
+prompt problem is usually a settings problem and the answer is otherwise a round of
+questions. **No API key is in the file**: the header is built from named fields and the
+credentials are not among them. What *is* in there is every prompt, which means everything
+you have told these characters about yourself. The pane says so next to the buttons.
+
+Expanding a single entry also gives it a **Copy this entry** button. One bad turn is usually
+the whole question, and pasting the fifty-nine around it only buries it.
+
+The clipboard needs a secure context, which `http://<the box on your LAN>:8080` is not — so
+that path falls back to the older copy mechanism, and if that is refused too the export
+downloads instead of failing silently.
 
 ### Resetting
 

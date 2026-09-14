@@ -203,6 +203,12 @@ export const api = {
   saveSettings: (patch: unknown) => request<any>('/api/settings', { method: 'PUT', body: JSON.stringify(patch) }),
   logs: (params: Record<string, string>) =>
     request<LogEntry[]>(`/api/logs?${new URLSearchParams(params).toString()}`),
+  /** Markdown, not JSON - the server does the formatting so both surfaces agree. */
+  exportLogs: async (params: Record<string, string>) => {
+    const res = await fetch(`/api/logs/export?${new URLSearchParams(params).toString()}`);
+    if (!res.ok) throw new Error((await res.text()) || `${res.status} ${res.statusText}`);
+    return res.text();
+  },
   images: () => request<ImageJob[]>('/api/images'),
   retryImage: (id: string) => request<any>(`/api/images/${id}/retry`, { method: 'POST' }),
   usage: () => request<any>('/api/usage'),
