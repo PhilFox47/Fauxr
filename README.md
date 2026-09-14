@@ -1472,10 +1472,7 @@ style itself had to switch too, not just the model name - the two want genuinely
 prompts, not a shared one with a different label on it. Z Image Turbo runs with no
 classifier-free guidance at inference at all, so it never reads a negative prompt - every
 constraint has to be a positive statement inside the main prompt ("natural, unretouched
-skin", not "no airbrushing"). It also wants a longer, more fully-specified prompt than
-Seedream's concise brief - a real creative brief in five parts (subject, context, style,
-composition, constraints) rather than a short paragraph, though still natural language, not
-Stable-Diffusion tag syntax.
+skin", not "no airbrushing").
 
 `settings.models.image.prompt_style` (`'seedream'` | `'z_image_turbo'`, a new dropdown in
 Settings → Images) picks between them. `image_prompt_assembler.md` branches its own
@@ -1487,6 +1484,31 @@ and `runImageJob` skips sending `negativePrompt` to the image call entirely when
 Z Image Turbo, whatever the assembler returned. Switching modes is meant to travel with
 switching "Model" below it; the two are independent settings because nothing stops testing
 one against a Seedream-shaped model name by mistake, but they are meant to move together.
+
+**The first version of this got the length wrong, and it was not a style nitpick - it
+produced real request errors.** Z Image Turbo's own published guidance says it prefers long,
+fully-specified prompts, and the instructions here originally said so too. What actually
+matters is the specific deployment this app talks to, which hard-rejects a "prompt" over
+roughly 1200 characters regardless of what the model itself would rather have. Two things
+now enforce that instead of one hopeful paragraph:
+
+- `zCharBudget` in `runImageJob` computes the room actually left for the assembler's own
+  text - `Z_IMAGE_MAX_CHARS` minus however long `BASE_SUFFIX`/`CANDID_SUFFIX` already are for
+  this shot - and hands it to the assembler as a concrete number (`{{z_char_budget}}`), not a
+  vague "keep it short". The template's Z Image Turbo section now leads with that as a HARD
+  LIMIT and explicitly disclaims the model's own "long prompts are fine" reputation as not
+  applying to this deployment.
+- The instruction is still just a request the model can ignore, so `runImageJob` also trims
+  the assembled prompt in code if it comes back over budget (`truncateAtWord`, cutting at the
+  last whole word rather than mid-word) before it ever reaches the image API. The style
+  suffix itself is never trimmed - it is short and carries the standing quality instructions
+  that matter on every shot, so the assembler's own prose is what gives way if something has
+  to.
+
+Verified against a mock that deliberately ignores the budget and returns a several-thousand-
+character reply: the request that reaches the image API still stays under the limit, cut at
+a word boundary, with the assembler's own instruction text carrying the real number rather
+than a hardcoded one.
 
 ### Regenerating a photo, two different ways
 

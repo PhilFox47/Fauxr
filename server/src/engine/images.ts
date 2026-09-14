@@ -91,6 +91,23 @@ const BASE_NEGATIVE =
 const CANDID_NEGATIVE = 'No studio lighting or posed professional-model styling.';
 
 /**
+ * The provider this goes through hard-rejects a Z Image Turbo prompt over this length -
+ * confirmed from actual request errors, not from the model's own published guidance (which
+ * says the opposite: that it prefers long, detailed prompts). Whatever the model itself
+ * would rather have, this specific deployment enforces the cap, so the prompt this app
+ * builds has to stay under it. Seedream has no equivalent limit here.
+ */
+const Z_IMAGE_MAX_CHARS = 1200;
+
+/** Cuts at the last whole word at or before `max`, so a trim never lands mid-word. */
+function truncateAtWord(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trim();
+}
+
+/**
  * Resolution per shot. A profile picture is always square - it is the one photo she leads
  * with, and a dating app's main photo slot is square everywhere. Anything after that is
  * her call between a tall phone-style frame and a wide one, made from what she is actually
@@ -332,6 +349,24 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
 
     const facesCamera = isProfile || showsFace(job);
     const promptStyle: PromptStyle = settings.models.image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream';
+
+    // Candid phone-photo texture only applies to a moment inside the conversation. A
+    // profile picture's style - polished headshot or grainy selfie - was already decided
+    // by the assembler from her own account of the photo, so forcing the candid suffix on
+    // top would fight a studio shot into looking like a bad phone photo. Computed before the
+    // assembler call, not after, because Z Image Turbo needs to know how much of its own
+    // character budget this suffix is going to eat - see zCharBudget below.
+    const styleSuffix = isProfile
+      ? BASE_SUFFIX[promptStyle]
+      : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
+    // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
+    // characters - not a soft quality preference, an actual request error. That leaves the
+    // assembler only whatever headroom styleSuffix does not already spend, plus a safety
+    // margin for the joining space. Handed to it as a concrete number rather than a vague
+    // "keep it short", because "this model likes long prompts" is the model's general
+    // reputation and directly wrong for this specific limit.
+    const zCharBudget = Z_IMAGE_MAX_CHARS - styleSuffix.length - 1;
+
     const assembled = await completeJson<{ prompt: string; negative_prompt?: string }>({
       scope: 'image',
       label: `assemble:${character.username}`,
@@ -357,22 +392,31 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             hides_face: facesCamera ? '' : '1',
             mode_seedream: promptStyle === 'seedream' ? '1' : '',
             mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
+            z_char_budget: zCharBudget,
           }),
         },
       ],
     });
 
-    // Candid phone-photo texture only applies to a moment inside the conversation. A
-    // profile picture's style - polished headshot or grainy selfie - was already decided
-    // by the assembler from her own account of the photo, so forcing the candid suffix on
-    // top would fight a studio shot into looking like a bad phone photo.
-    const styleSuffix = isProfile
-      ? BASE_SUFFIX[promptStyle]
-      : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
     // Plain sentences joined as prose, not comma-glued tags - this model reasons over the
     // prompt as a written brief, and a tag-stack tail would undo the paragraph the assembler
     // just wrote.
-    const prompt = `${assembled.prompt} ${styleSuffix}`;
+    //
+    // The instruction above is a request, not an enforcement - the model can still ignore
+    // the budget, so this is the actual backstop against a rejected API call. Trims the
+    // assembler's own text, never styleSuffix: styleSuffix is short and carries standing
+    // quality/style instructions that matter on every single shot, where the assembler's
+    // prose is the one part that is safe to lose the tail end of.
+    let assembledPrompt = assembled.prompt;
+    if (promptStyle === 'z_image_turbo' && assembledPrompt.length > zCharBudget) {
+      logger.warn('image', 'z_image_turbo prompt over the character budget, trimming', {
+        character: character.username,
+        length: assembledPrompt.length,
+        budget: zCharBudget,
+      });
+      assembledPrompt = truncateAtWord(assembledPrompt, zCharBudget);
+    }
+    const prompt = `${assembledPrompt} ${styleSuffix}`;
     // Z Image Turbo runs with no classifier-free guidance at all, so it never reads a
     // negative prompt - sending one is not wrong exactly, just pure dead weight, and the
     // constraints it would have carried are already folded into the prompt itself above

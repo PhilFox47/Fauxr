@@ -10,14 +10,20 @@ not write that way here. Aim for one solid paragraph - concise, not a page.
 {{#mode_z_image}}
 The model this goes to has no classifier-free guidance at inference, which means it does not
 read a negative prompt at all - every constraint has to be a positive statement inside the
-main prompt itself ("natural unretouched skin", not "no airbrushing"). It also responds
-better to a longer, more fully-specified prompt than most image models - hundreds of words
-is fine, thin one-liners are not. Write it like a real creative brief with five parts working
-together in one flowing passage: the subject, the context/setting, the style, the
-composition/framing, and any constraints (stated positively). Do not write old
-Stable-Diffusion tag syntax ("1girl, solo, masterpiece, best quality") - this model speaks
-natural language, not tags, and stacking contradictory style words ("photorealistic" next to
-"anime") produces an uncanny-valley mess rather than picking one.
+main prompt itself ("natural unretouched skin", not "no airbrushing").
+
+HARD LIMIT: this specific deployment rejects the request outright past
+**{{z_char_budget}} characters** for "prompt" - not a style preference, an actual error if
+you go over. Ignore anything you have heard about this model liking long, hundred-word
+prompts; that does not apply here. Pick the handful of details that actually matter for this
+shot - subject, the
+one or two things about light and setting that make it specific, and how it is framed - and
+say them in as few words as still reads as a real sentence, not a keyword fragment. Cut
+constraints and description that are not doing real work before you cut the ones that are.
+Still write it as one flowing sentence or two, not old Stable-Diffusion tag syntax ("1girl,
+solo, masterpiece, best quality") - this model speaks natural language, not tags, and
+stacking contradictory style words ("photorealistic" next to "anime") produces an
+uncanny-valley mess rather than picking one. Short and well-chosen beats long and complete.
 {{/mode_z_image}}
 
 # FIXED APPEARANCE BLOCK (her look, if she is actually in this shot)
