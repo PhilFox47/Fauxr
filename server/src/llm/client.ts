@@ -111,7 +111,11 @@ export interface CompletionOptions {
  */
 const EXPAND_FACTOR = 3;
 const EXPAND_FLOOR = 1200;
-const EXPAND_CEILING = 4000;
+// Raised from 4000: the character-generation call now writes a full prose dossier on top
+// of its structured fields, based at 3600 tokens - a ceiling only 400 above that base left
+// a retry almost nothing extra to work with, which is the exact failure this mechanism
+// exists to fix.
+const EXPAND_CEILING = 6000;
 
 /** Provider-side failures worth waiting out rather than giving up on. */
 const RETRYABLE = (status: number) => status === 429 || status === 408 || status >= 500;

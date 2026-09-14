@@ -592,9 +592,16 @@ export function sanitizeEmoji(raw: unknown): string | null {
 interface DirectorPass {
   swaps?: { field: string; to: string; why?: string }[];
   real_name?: string;
-  username?: string;
   avatar_emoji?: string;
   one_line?: string;
+  /**
+   * The character written out in full prose from the rolled tags - who she is, how she
+   * talks, what she is into, in a form a person could actually read. This is what
+   * writeUsername and writeBio work from now, instead of the raw attribute dump: a handle
+   * or a bio pulled from a spec sheet reads like it was assembled from a spec sheet, and
+   * two women who rolled the same three tags produced suspiciously similar ones.
+   */
+  dossier?: string;
   insecurity_detail?: string;
   search_motive_detail?: string;
   touchstone_detail?: string;
@@ -683,7 +690,7 @@ async function writeUsername(seed: CharacterSeed, realName: string, taken: strin
         'she is on, and the handle sits next to her bio as the only things anyone sees before',
         'swiping.',
         '',
-        describeSeed(seed),
+        seed.hints.dossier,
         '',
         'Work out what SHE would have typed into the box. Some people are obvious and say exactly',
         'who they are; some pick something nobody else could decode; some are still using a handle',
@@ -758,7 +765,7 @@ export async function generateCharacter(): Promise<Character> {
       // that has to take a seed full of explicit traits seriously rather than sand them
       // down. The director still runs the game; it just does not invent the cast.
       config: { ...settings.models.actor, max_tokens: CHARACTER_TOKENS },
-      require: ['real_name'],
+      require: ['real_name', 'dossier'],
       messages: [
         {
           role: 'user',
@@ -809,6 +816,12 @@ export async function generateCharacter(): Promise<Character> {
   if (pass.search_motive_detail) seed.hints.search_motive = pass.search_motive_detail;
   if (pass.touchstone_detail) seed.hints.touchstone = pass.touchstone_detail;
   if (pass.one_line) seed.hints.one_line = pass.one_line;
+
+  // Everything written about her from here on is built from this, not from the raw tags -
+  // that is the entire point of asking for it. If the coherence pass failed outright, or
+  // came back without one despite `require`, describeSeed() is the only fallback that
+  // still lets username/bio generation produce something rather than nothing.
+  seed.hints.dossier = (pass.dossier ?? '').trim() || describeSeed(seed);
 
   // The handle is picked last, once she is a finished person, so it can actually be hers -
   // an inside joke, a mangled surname, or something completely opaque. The final collision
@@ -1005,7 +1018,10 @@ const BIOS_SHOWN = 10;
 
 const NAME_TOKENS = 600;
 const BIO_TOKENS = 1200;
-const CHARACTER_TOKENS = 2400;
+// Raised from 2400 once this call started writing the dossier - several paragraphs of
+// prose plus the existing structured fields (swaps, online times, the detail strings) no
+// longer fits in the room sized for the fields alone.
+const CHARACTER_TOKENS = 3600;
 
 const BIO_MIN_WORDS = 14;
 const BIO_MAX_WORDS = 75;
@@ -1019,7 +1035,10 @@ async function writeBio(character: Character): Promise<string> {
   const existing = recentBios();
   const prompt = render('director_write_bio', {
     username: character.username,
-    seed_block: describeSeed(character.seed),
+    // The dossier, not the raw tags - written from and covering the same ground, but as
+    // an actual person rather than a spec sheet, which is what let two women who rolled
+    // three of the same tags come out with suspiciously similar bios.
+    seed_block: character.seed.hints.dossier || describeSeed(character.seed),
     // Same reasoning as the handles: the whole list still decides the clash, but showing
     // thirty bios spends a thousand tokens teaching the model exactly what to sound like.
     avoid_bios: existing.length

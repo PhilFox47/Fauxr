@@ -981,11 +981,51 @@ is an odd pairing once a language is standing in for background rather than pers
 it now uses one distribution for everyone.
 
 After the rolls, three LLM passes finish her: a **Director coherence pass** that may swap at
-most two tags and writes her name and the free-text parts of her seed, then the Actor writes
-her **handle**, then her **bio**.
+most two tags and writes her **dossier** along with the rest of her seed's free text, then
+the Actor writes her **handle** from the dossier, then her **bio** from the dossier.
 
 `search_motive`, `touchstone`, `turn_ons` and `turn_offs` are rolled *without* the archetype
 filter, on purpose. A character who ticks differently than she looks is the interesting case.
+
+### The dossier: a character, not a tag list
+
+Her handle and her bio used to be written from the raw roll — `describeSeed()`, the full
+attribute dump, straight into both prompts: forty-odd lines of `label - hint` pairs. Two
+women who happened to roll three of the same tags produced suspiciously similar bios,
+because "suspiciously similar" is exactly what a spec sheet read out loud sounds like.
+
+The coherence pass now writes a **dossier** — several paragraphs of prose, the way a casting
+document or a character bible entry would, not a restatement of the tags with commas turned
+into sentences — and it is what everything downstream actually reads. Nothing else changed
+about the pass itself: it still does the coherence swaps, still writes her name, her avatar
+emoji, her online windows. Writing her out in full is just the main thing it does now, and
+everything else is the smaller output alongside it.
+
+The instruction leans hard on one point: a real woman with this exact profile has specifics
+the dice never rolled — what she actually calls her cat, why this job and not some other
+one, what she is like at 2am versus a work lunch — and inventing two or three of those,
+consistent with everything else, is what a spec sheet cannot do and prose can. That is the
+actual point of the exercise, not the prose itself.
+
+One section of the dossier is deliberately load-bearing rather than merely descriptive: how
+she actually texts. Typing habits, typo rate, emoji use, message length, reply speed, voice
+notes. The bio prompt has always leaned on this ("a lowercase no-punctuation woman writes
+the bio that way"), and once the raw attributes are gone from that prompt, this paragraph is
+the only place that information still exists — so it is asked for as usable fact, concrete
+enough to write a message in her exact voice, not just flavour.
+
+The raw attribute dump did not go anywhere — `describeSeed()` is still what the coherence
+pass itself reads to write the dossier in the first place, and it still backs the debug
+endpoints and the vision self-check. It just stopped being what the handle and the bio see.
+If the coherence pass fails outright, `seed.hints.dossier` falls back to it, so a character
+still gets a handle and a bio rather than nothing — verified against a mock that fails the
+coherence call specifically: generation still completes, and only in that failure case does
+the handle prompt see the raw tags again.
+
+The pass writes more now, so its budget went from 2400 tokens to 3600, and the shared
+retry-on-truncation ceiling in the LLM client went from 4000 to 6000 — 400 tokens of
+headroom above a 3600 base was not the "real room to think and then answer" that mechanism
+is supposed to give a stuck call.
 
 ### There is no "her whole thing" any more
 
