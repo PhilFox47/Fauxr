@@ -330,7 +330,11 @@ async function runActorPhase(
     const eligible =
       getSettings().images_enabled &&
       rel.active_direction?.unlock === PHOTO_UNLOCK_FOR[offerKind] &&
-      !(offerKind === 'profile' && rel.flags.state.profile_picture_sent);
+      !(offerKind === 'profile' && rel.flags.state.profile_picture_sent) &&
+      // Her profile picture is always the first photo she ever sends. A chat or spicy
+      // offer is not eligible until that one has actually finished generating - not just
+      // been requested, which is what profile_picture_sent tracks.
+      (offerKind === 'profile' || !!rel.flags.state.profile_picture_sent);
     if (eligible) {
       const offerId = randomUUID();
       const offerMsg = addMessage({
@@ -346,6 +350,10 @@ async function runActorPhase(
         offer_id: offerId,
         kind: offerKind,
         situation: result.hidden.photo_situation ?? '',
+        // Her own choice of orientation for a chat/spicy shot; a profile picture ignores
+        // it and is always square. Default to portrait if she offered one without picking
+        // an aspect - the common case for a phone photo of herself.
+        aspect: offerKind === 'profile' ? null : result.hidden.photo_aspect ?? 'portrait',
         message_id: offerMsg.id,
         offered_at: nowIso(),
       };

@@ -1377,6 +1377,71 @@ If the call fails outright, generation still proceeds with a plain generic defau
 than stalling - verified against a mock that always fails it: the retries exhaust, the
 fallback situation reaches the assembler, and the job still completes.
 
+### Her profile picture is always first, on purpose
+
+Nothing used to stop her offering a spicy photo before he had ever seen her face. The
+Director's `unlock` field treats every tier as the same fresh, no-schedule judgment call —
+deliberately, so nothing reads as a trust meter — but "no schedule" also meant a forward
+character could jump straight to `spicy_photos` in her first exchange while
+`profile_picture` had never even come up. `director_direction.md` now carries one fixed
+exception on top of that judgment: `unlock` cannot be `personal_photos` or `spicy_photos`
+until the `profile_picture_sent` flag — not just the unlock, actually generated and
+delivered — is already on. It is framed as how a real dating profile works, not as a
+reintroduced trust gate: you see her main photo before anything else, every time.
+
+That is also enforced server-side, not just requested in the prompt: `chat.ts`'s photo-offer
+eligibility check now requires `profile_picture_sent` before it will honour a `chat` or
+`spicy` offer at all, regardless of what the model does. A model that ignores the direction
+text produces a silent no-op, not a broken chat — the offer card simply never raises, the
+same failure mode an ordinary ineligible offer already had.
+
+### What else she sends, and in what shape
+
+Two things were still narrower than a real person's camera roll:
+
+**Subject matter.** Every non-profile offer implicitly meant a selfie. `actor_chat.md` now
+says plainly that once it is not the profile picture, she is free in what the photo actually
+shows — an outfit she is proud of, her view right now, food, something she is doing, or
+nothing of her at all: a sunset, her dog, the mess on her desk. The assembler template
+carries the matching instruction on the other end: read the situation first, and if it does
+not put her in frame, do not paint a woman into the image at all — her appearance block and
+visible marks are background continuity only in that case, not something to render.
+
+**Aspect ratio.** Every shot used to render at one fixed size regardless of what it showed.
+She now picks one herself: `photo_aspect` (`portrait` or `landscape`) joins `photo_offer` and
+`photo_situation` in the Actor's hidden output, carried through `PendingPhoto` and the
+`images` table's new `aspect` column so a retried job reuses the same call rather than
+re-guessing. A profile picture ignores it and is always square (`2048x2048` — the one slot
+every dating app treats as square); everything else resolves to `2048x3072` for a tall
+phone-style frame or `3072x2048` for a wide one, sent as `generateImage`'s `size` override.
+Omitting `photo_aspect` defaults to portrait rather than failing closed.
+
+Verified against a mock provider end to end: a profile job renders square regardless of
+aspect; a chat offer with `aspect: 'landscape'` renders `3072x2048`; a spicy offer with no
+aspect set defaults to portrait and renders `2048x3072`; and accepting a pending offer
+through `respondToPhotoOffer` carries the aspect she offered with into the real job, not just
+a freshly-enqueued one.
+
+### The prompt itself, rewritten for how this model actually reads it
+
+The assembler's contract used to be "output one line of comma-separated tags" — standard
+practice for most diffusion front-ends, but a bad fit for the model this app actually
+targets. Seedream 5.0 Lite reasons over the prompt like a brief before it renders: it wants a
+written paragraph that front-loads the subject, names the light and pins how things sit in
+space, and it has no dedicated negative-prompt channel — negations are plain sentences kept
+to one or two items, not a tag dump. Keyword-stacking and quality-booster words
+("masterpiece", "8K", "ultra-detailed") are noise to it, not signal.
+
+`image_prompt_assembler.md` now says this explicitly up front and asks for one flowing
+paragraph in photographer's-brief style instead of a tag line, with the negative prompt cut
+to the one or two things a given shot actually risks. `images.ts`'s standing suffixes and
+negatives moved the same direction: `BASE_SUFFIX`/`CANDID_SUFFIX` are now sentences appended
+as prose rather than comma-joined onto the assembler's output, and `BASE_NEGATIVE` — five
+long comma-separated tag dumps before this — is two short plain-language sentences. Verified
+against a mock: the final prompt sent to the image endpoint reads as continuous prose with no
+bare comma-tag tail, and the negative prompt carries the assembler's own text plus the
+shortened standing set, space-joined rather than comma-glued.
+
 ### Every photo she sent, kept
 
 A photo used to exist only as a bubble in the chat. Scroll far enough and it was gone —

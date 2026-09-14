@@ -224,6 +224,12 @@ export interface ActorHidden {
   /** A short concrete description of what the offered photo would show, for continuity. */
   photo_situation: string | null;
   /**
+   * Her call on the shot's orientation - only meaningful for "chat" or "spicy"; a profile
+   * picture is always square. "portrait" is the tall phone-style frame, "landscape" the
+   * wide one. Null when photo_offer is null or the kind is "profile".
+   */
+  photo_aspect: 'portrait' | 'landscape' | null;
+  /**
    * Her answer when he has asked to swap profile pictures. Genuinely her call - a refusal
    * is a real outcome, not a failure state, and it should come with a reason in her voice.
    */
@@ -255,6 +261,8 @@ export interface PendingPhoto {
   offer_id: string;
   kind: 'profile' | 'chat' | 'spicy';
   situation: string;
+  /** Null for a profile picture, which is always square. See ActorHidden.photo_aspect. */
+  aspect: 'portrait' | 'landscape' | null;
   /** The system message carrying the offer card, so the response can resolve it. */
   message_id: number;
   offered_at: string;

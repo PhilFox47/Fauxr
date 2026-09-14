@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS images (
   status        TEXT NOT NULL DEFAULT 'queued',
   path          TEXT,
   error         TEXT,
+  aspect        TEXT,
   created_at    TEXT NOT NULL,
   updated_at    TEXT NOT NULL
 );

@@ -343,6 +343,8 @@ export interface ImageRequest {
   negativePrompt?: string;
   seed?: number;
   refImage?: string;
+  /** Overrides settings.models.image.size for this one call - see images.ts's IMAGE_SIZE. */
+  size?: string;
 }
 
 /** Image generation. Returns base64 image data. */
@@ -354,7 +356,7 @@ export async function generateImage(req: ImageRequest): Promise<string> {
   const body: Record<string, unknown> = {
     model: settings.models.image.model,
     prompt: req.prompt,
-    size: settings.models.image.size,
+    size: req.size || settings.models.image.size,
     response_format: 'b64_json',
     n: 1,
   };

@@ -24,11 +24,9 @@ import type { Character, CharacterSeed, PendingPhoto } from '../types.js';
  * phone or studio - is CANDID_SUFFIX below plus whatever the assembler itself wrote from
  * her own account of the shot.
  */
-const BASE_SUFFIX = [
-  'photorealistic photograph',
-  'real unretouched skin with visible texture and pores',
-  'naturally attractive, healthy, flattering angle',
-].join(', ');
+const BASE_SUFFIX =
+  'Rendered as a photorealistic photograph, not an illustration or a render, with real ' +
+  'unretouched skin texture and a naturally attractive, flattering angle.';
 
 /**
  * The "taken on her phone, right now" look - added on top of BASE_SUFFIX for a chat or
@@ -36,32 +34,43 @@ const BASE_SUFFIX = [
  * chose to lead with. A profile picture does not get this forced on: see is_moment in the
  * assembler template for the matching instructions, and runImageJob for where it applies.
  */
-const CANDID_SUFFIX = [
-  'candid amateur phone photo',
-  'natural available light',
-  'softly imperfect handheld framing',
-  'slight sensor grain',
-  'shallow phone-lens depth of field',
-].join(', ');
+const CANDID_SUFFIX =
+  'Shot as a candid amateur phone photo, taken in this exact moment: natural available ' +
+  'light, softly imperfect handheld framing, a little sensor grain, shallow phone-lens depth ' +
+  'of field.';
 
 /**
  * Sent with every image regardless of kind - the airbrushed-render look, the opposite
  * over-correction into unflattering, and the usual anatomy rubbish.
  */
-const BASE_NEGATIVE = [
-  'airbrushed, heavy retouching, beauty filter, smoothed plastic skin, waxy skin, doll-like',
-  'ugly, unflattering angle, harsh direct flash, sickly skin tone, sunken eyes, grotesque',
-  'cgi, 3d render, illustration, painting, anime, cartoon, airbrush art',
-  'deformed, disfigured, bad anatomy, extra fingers, extra limbs, mutated hands, asymmetric eyes',
-  'oversaturated, heavy hdr, watermark, text, logo, lowres, out-of-focus face',
-].join(', ');
+/**
+ * Kept short and in plain language on purpose: this model's own negative-prompt guidance
+ * says a long list of banned tags produces inconsistent results, where one or two clear
+ * sentences actually get honored. Used to be five long comma-separated tag dumps.
+ */
+const BASE_NEGATIVE =
+  'No airbrushing, beauty-filter skin or doll-like retouching. No cgi, illustration or ' +
+  'anime look, and no deformed anatomy or extra limbs.';
 
 /**
  * Only for a chat/spicy moment: a profile picture is now allowed to genuinely be a studio
  * headshot or a posed professional-looking shot, so banning that look outright would
  * contradict the one case it is meant to happen.
  */
-const CANDID_NEGATIVE = 'glamour shot, studio lighting, professional model, magazine cover, stock photo';
+const CANDID_NEGATIVE = 'No studio lighting or posed professional-model styling.';
+
+/**
+ * Resolution per shot. A profile picture is always square - it is the one photo she leads
+ * with, and a dating app's main photo slot is square everywhere. Anything after that is
+ * her call between a tall phone-style frame and a wide one, made from what she is actually
+ * showing (see photo_aspect on ActorHidden) - a portrait for a selfie or an outfit shot, a
+ * landscape for a view or a wider scene.
+ */
+const IMAGE_SIZE: Record<'profile' | 'portrait' | 'landscape', string> = {
+  profile: '2048x2048',
+  portrait: '2048x3072',
+  landscape: '3072x2048',
+};
 
 /**
  * How she holds herself in a photo, from who she is rather than what she looks like.
@@ -99,6 +108,7 @@ export interface ImageJob {
   status: 'queued' | 'running' | 'done' | 'failed';
   path: string | null;
   error: string | null;
+  aspect: 'portrait' | 'landscape' | null;
   created_at: string;
   updated_at: string;
 }
@@ -224,13 +234,16 @@ export function enqueueImage(opts: {
   characterId: string;
   kind: 'profile' | 'chat' | 'spicy';
   situation: string;
+  /** Ignored for a profile picture, which is always square. Defaults to portrait. */
+  aspect?: 'portrait' | 'landscape' | null;
   postToChat?: boolean;
 }): ImageJob {
   const id = randomUUID();
+  const aspect = opts.kind === 'profile' ? null : opts.aspect ?? 'portrait';
   db.prepare(
-    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, created_at, updated_at)
-     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?)`,
-  ).run(id, opts.characterId, opts.kind, nowIso(), nowIso());
+    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, created_at, updated_at)
+     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?)`,
+  ).run(id, opts.characterId, opts.kind, aspect, nowIso(), nowIso());
   const job = getImageJob(id)!;
   void runImageJob(id, opts.situation, opts.postToChat !== false);
   return job;
@@ -289,21 +302,27 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     // profile picture's style - polished headshot or grainy selfie - was already decided
     // by the assembler from her own account of the photo, so forcing the candid suffix on
     // top would fight a studio shot into looking like a bad phone photo.
-    const styleSuffix = isProfile ? BASE_SUFFIX : `${BASE_SUFFIX}, ${CANDID_SUFFIX}`;
-    const prompt = `${assembled.prompt}, ${styleSuffix}`;
+    const styleSuffix = isProfile ? BASE_SUFFIX : `${BASE_SUFFIX} ${CANDID_SUFFIX}`;
+    // Plain sentences joined as prose, not comma-glued tags - this model reasons over the
+    // prompt as a written brief, and a tag-stack tail would undo the paragraph the assembler
+    // just wrote.
+    const prompt = `${assembled.prompt} ${styleSuffix}`;
     // The assembler has always returned a negative prompt and it was being dropped on the
-    // floor here - never passed to the image call at all. Its shot-specific negatives now
-    // ride along with the standing ones. CANDID_NEGATIVE (no studio lighting, no
-    // professional-model posing) only applies to a moment shot, for the same reason.
+    // floor here - never passed to the image call at all. Its shot-specific negative now
+    // rides along with the standing ones. CANDID_NEGATIVE (no studio lighting, no
+    // professional-model posing) only applies to a moment shot, for the same reason. Kept
+    // short throughout: see BASE_NEGATIVE for why.
     const negative = [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : CANDID_NEGATIVE]
       .filter(Boolean)
-      .join(', ');
+      .join(' ');
     const ref = isProfile ? null : referenceImage(character.id);
+    const size = isProfile ? IMAGE_SIZE.profile : IMAGE_SIZE[job.aspect === 'landscape' ? 'landscape' : 'portrait'];
     const b64 = await generateImage({
       prompt,
       negativePrompt: negative,
       seed: character.seed.image_seed,
       refImage: ref ?? undefined,
+      size,
     });
 
     const relPath = join('images', `${id}.png`);
@@ -399,6 +418,7 @@ export async function respondToPhotoOffer(
     // A blank profile situation is generated lazily inside runImageJob, from the character
     // herself, rather than papered over with the same generic default every time.
     situation: pending.kind === 'profile' ? pending.situation ?? '' : pending.situation || DEFAULT_SITUATION[pending.kind],
+    aspect: pending.aspect,
   });
   return { ok: true, enqueued: true };
 }

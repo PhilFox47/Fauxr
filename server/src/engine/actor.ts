@@ -63,12 +63,14 @@ function fallbackOutput(): ActorOutput {
       director_needed: true,
       photo_offer: null,
       photo_situation: null,
+      photo_aspect: null,
       exchange_response: null,
     },
   };
 }
 
 const PHOTO_OFFER_KINDS = new Set(['profile', 'chat', 'spicy']);
+const PHOTO_ASPECTS = new Set(['portrait', 'landscape']);
 
 function normalizeHidden(raw: any): ActorHidden {
   return {
@@ -86,6 +88,7 @@ function normalizeHidden(raw: any): ActorHidden {
     director_needed: !!raw?.director_needed,
     photo_offer: PHOTO_OFFER_KINDS.has(raw?.photo_offer) ? raw.photo_offer : null,
     photo_situation: raw?.photo_situation ? String(raw.photo_situation).slice(0, 300) : null,
+    photo_aspect: PHOTO_ASPECTS.has(raw?.photo_aspect) ? raw.photo_aspect : null,
     exchange_response:
       raw?.exchange_response === 'accept' || raw?.exchange_response === 'decline'
         ? raw.exchange_response
