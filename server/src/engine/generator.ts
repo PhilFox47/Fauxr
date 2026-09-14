@@ -446,50 +446,69 @@ function sanitizeOnlineTimes(windows: OnlineWindow[] | undefined): OnlineWindow[
 }
 
 /**
- * One cheap, targeted re-ask for a handle that landed too close to an existing one. Only
- * the handle is regenerated - the character behind it is already settled and fine.
+ * One cheap, targeted re-ask for a name and/or handle that landed too close to one already
+ * in the cast. Only those fields are regenerated - the character behind them is settled and
+ * fine - and both go in the same call when both collided.
  */
-async function rerollUsername(
+async function rerollIdentity(
   seed: CharacterSeed,
-  rejected: string,
-  clash: string,
-  taken: string[],
-): Promise<string | null> {
+  need: { handle?: { rejected: string; clash: string }; name?: { rejected: string; clash: string } },
+  takenHandles: string[],
+  takenNames: string[],
+): Promise<{ username?: string; real_name?: string }> {
+  const wants: string[] = [];
+  if (need.handle) wants.push('username');
+  if (need.name) wants.push('real_name');
+  if (!wants.length) return {};
+
   try {
-    const out = await completeJson<{ username: string }>({
+    const out = await completeJson<{ username?: string; real_name?: string }>({
       scope: 'generator',
-      label: 'reroll_username',
-      config: { ...getSettings().models.actor, max_tokens: 120 },
+      label: 'reroll_identity',
+      config: { ...getSettings().models.actor, max_tokens: 160 },
       messages: [
         {
           role: 'user',
           content: [
-            'Pick a dating-app handle for this woman.',
+            `Pick a new ${wants.join(' and ')} for this woman. Everything else about her is already settled.`,
             '',
             describeSeed(seed),
             '',
-            `"${rejected}" is not usable: it reads as a variation on "${clash}", which is already taken.`,
-            'These handles already exist, so yours must not be built from the same words or the same idea:',
-            taken.map((u) => `- @${u}`).join('\n') || '(none yet)',
+            need.name
+              ? `The name "${need.name.rejected}" is not usable: "${need.name.clash}" is already in the cast and they read as the same name.\n` +
+                `Names already used:\n${takenNames.map((n) => `- ${n}`).join('\n') || '(none yet)'}`
+              : '',
+            need.handle
+              ? `The handle "${need.handle.rejected}" is not usable: it reads as a variation on "${need.handle.clash}".\n` +
+                `Handles already used:\n${takenHandles.map((u) => `- @${u}`).join('\n') || '(none yet)'}`
+              : '',
             '',
-            'Go somewhere genuinely different for this one - a different part of her, a different kind of',
-            'name. There is no house style to match and no format to follow: it only has to be lowercase,',
-            '4-18 characters, letters with optional numbers, dots or underscores, and unmistakably hers.',
+            'Go somewhere genuinely different. Names in particular: the world is wider than the handful that',
+            'come to mind first, and hers should fit her background and her age rather than a default. A handle',
+            'has no house style to match and no format to follow - lowercase, 4-18 characters, letters with',
+            'optional numbers, dots or underscores, and unmistakably hers.',
             '',
-            'Reply with exactly one JSON object and nothing else: { "username": "..." }',
-          ].join('\n'),
+            `Reply with exactly one JSON object and nothing else: { ${wants.map((w) => `"${w}": "..."`).join(', ')} }`,
+          ].filter(Boolean).join('\n'),
         },
       ],
     });
-    const cleaned = cleanHandle(out.username);
-    if (cleaned.length < 4) return null;
-    // Taken verbatim is the one thing worse than the handle we already rejected - that ends
-    // up with digits stapled on. Anything else is an improvement on a known collision, even
-    // if it is not perfect, so it is kept rather than thrown away.
-    return taken.includes(cleaned) ? null : cleaned;
+
+    const result: { username?: string; real_name?: string } = {};
+    if (need.handle) {
+      const cleaned = cleanHandle(out.username);
+      // Taken verbatim is the one thing worse than the handle we already rejected - that
+      // ends up with digits stapled on. Anything else beats a known collision.
+      if (cleaned.length >= 4 && !takenHandles.includes(cleaned)) result.username = cleaned;
+    }
+    if (need.name) {
+      const cleaned = (out.real_name ?? '').trim().split(/\s+/)[0] ?? '';
+      if (cleaned.length >= 2 && !nearestName(cleaned, takenNames)) result.real_name = cleaned;
+    }
+    return result;
   } catch (err) {
-    logger.warn('generator', 'username reroll failed, keeping the original', { error: String(err) });
-    return null;
+    logger.warn('generator', 'identity reroll failed, keeping the originals', { error: String(err) });
+    return {};
   }
 }
 
@@ -497,6 +516,7 @@ export async function generateCharacter(): Promise<Character> {
   const { seed, fieldIds } = rollSeed();
   const settings = getSettings();
   const takenHandles = existingUsernames();
+  const takenNames = existingNames();
   let pass: DirectorPass = {};
 
   try {
@@ -520,6 +540,7 @@ export async function generateCharacter(): Promise<Character> {
             // Handles were being invented with no knowledge of the rest of the cast, so the
             // model kept returning to the same two or three constructions.
             avoid_usernames: takenHandles.length ? takenHandles.map((u) => `- @${u}`).join('\n') : '(none yet)',
+            avoid_names: takenNames.length ? takenNames.map((n) => `- ${n}`).join('\n') : '(none yet)',
           }),
         },
       ],
@@ -544,19 +565,31 @@ export async function generateCharacter(): Promise<Character> {
   const online = sanitizeOnlineTimes(pass.online_times);
   if (online) seed.online_times = online;
 
-  const realName = (pass.real_name ?? '').trim().split(/\s+/)[0] || pickOne(FALLBACK_NAMES);
+  let realName = (pass.real_name ?? '').trim().split(/\s+/)[0] || pickOne(FALLBACK_NAMES);
   // The final handle is settled by insertCharacter, which can only do it collision-free
   // in the same synchronous step as the write.
   let username = cleanHandle(pass.username) || fallbackUsername(realName);
 
-  // The avoid-list gets most of the way there; this catches what it misses. Re-asking for
-  // just the handle is cheap, and it keeps the fix on the model's side rather than mangling
-  // a good handle into something with digits stuck on the end.
+  // The avoid-lists get most of the way there; this catches what they miss. Re-asking is
+  // cheap, keeps the fix on the model's side rather than mangling a good handle into
+  // something with digits stuck on the end, and does both fields in one call.
   const handleClash = nearestHandle(username, takenHandles);
-  if (handleClash) {
-    logger.warn('generator', `handle "${username}" reads as a variant of "${handleClash}", re-asking`, {});
-    const fresh = await rerollUsername(seed, username, handleClash, takenHandles);
-    if (fresh) username = fresh;
+  const nameClash = nearestName(realName, takenNames);
+  if (handleClash || nameClash) {
+    logger.warn('generator', 'name or handle too close to one already in the cast, re-asking', {
+      username, handleClash, realName, nameClash,
+    });
+    const fresh = await rerollIdentity(
+      seed,
+      {
+        handle: handleClash ? { rejected: username, clash: handleClash } : undefined,
+        name: nameClash ? { rejected: realName, clash: nameClash } : undefined,
+      },
+      takenHandles,
+      takenNames,
+    );
+    if (fresh.username) username = fresh.username;
+    if (fresh.real_name) realName = fresh.real_name;
   }
 
   if (pass.insecurity_detail) seed.hints.insecurity = pass.insecurity_detail;
@@ -599,19 +632,27 @@ export async function generateCharacter(): Promise<Character> {
 }
 
 /** Only used when no model is reachable, so the stack is still browsable offline. */
+/**
+ * The emergency pool, used only when the API fails outright. Deliberately varied in SHAPE,
+ * not just in wording: these were previously twelve versions of one three-beat structure
+ * (quirky detail / blunt want / sign-off), and because the bio prompt's examples had been
+ * lifted straight out of this list, that one shape was being taught to the model as well as
+ * shipped on failure. Run-ons, fragments, one-liners and a properly-punctuated one all
+ * belong here, or the fallback quietly becomes the house style again.
+ */
 const FALLBACK_BIOS = [
-  'night shifts so my body clock is a joke\nhere for something easy and filthy, not here to be ur girlfriend\ndont overthink the first message',
-  'i read too much, sleep badly, and know exactly what i want\nask and ill tell u. dont ask and well both be bored',
-  'good at: bread, remembering birthdays, being blunt about this bit\nbad at: mornings, small talk, waiting three weeks',
-  'newly single and making up for lost time tbh\ni just want someone who actually turns up when they say they will\nlow bar apparently',
-  'im way better in person than i am on here which is awkward bc this is here\ncome find out. bring stamina 😌',
-  'ppl assume im quiet. im just picky\nonce ive decided about u im not quiet at all\nstill deciding',
-  'my week is work, gym, being annoyed about both\nwould like one evening thats neither. ideally involving u and not much clothing',
-  'not looking for a bf. looking for a regular\ntheres a difference, ill explain it if ur struggling',
-  '2 coffees and im a person. 3 and im a problem\ni like being told what to do by ppl who are actually sure about it\nthats the whole profile really',
-  'on here bc my mates got sick of hearing about it\ni know what i want, finding someone who can keep up is the hard part',
-  'ill remember one weird detail about u for years. cant remember where my keys are\nsay smth filthy and specific and ill remember that too',
-  'straight up: im here for sex, im decent company either side of it, not interested in a three week warm up\nso. what are u into',
+  'night shifts so my body clock is a joke. i am awake when nobody else is and it has made me strange about it. anyway. if you are also up at 4am we should probably do something about that',
+  'ask me about bread\nno seriously. ask me about bread\nthen ask me what else im good with my hands at, ill wait',
+  'good at: remembering birthdays, parallel parking, being blunt about this bit\nbad at: mornings, small talk, pretending i want a boyfriend',
+  'I am told I write like a woman who owns a label maker. I do own a label maker. I also know exactly what I want out of this and I am not going to be shy about it, so please keep up.',
+  'newly single, making up for lost time, sorry in advance',
+  'ppl assume im quiet\nim not quiet. im picky\nthose r different and youll find out which one applies to u fairly quickly',
+  'whats the point of the gym if nobody ever sees it. genuine question. i have been going for four years and the answer is increasingly you, apparently',
+  'not looking for a bf. looking for a regular. theres a difference and ill explain it to u slowly if ur struggling',
+  'my flatmates cat has decided this bio is his and honestly he has more personality than most of u so ive left it. he says hi. i say come over',
+  'i will remember one weird detail about u for years and cannot remember where my keys are. say something filthy and specific and watch it get filed permanently',
+  'here for sex. decent company either side of it. not interested in a three week warm up. what are u into',
+  'ive rewritten this six times which probably tells u everything\nim funnier in person\nim also worse in person, depending what ur after',
 ];
 
 /**
@@ -638,6 +679,34 @@ function cleanHandle(raw: unknown): string {
   const boundary = Math.max(cut.lastIndexOf('.'), cut.lastIndexOf('_'));
   const trimmed = boundary >= 4 ? cut.slice(0, boundary) : cut;
   return trimmed.replace(/[._]+$/, '');
+}
+
+function existingNames(limit = 40): string[] {
+  const rows = db
+    .prepare(`SELECT real_name FROM characters WHERE real_name != '' ORDER BY rowid DESC LIMIT ?`)
+    .all(limit) as { real_name: string }[];
+  return rows.map((r) => r.real_name);
+}
+
+/**
+ * Names had no protection of any kind - whatever the model said was kept. Asked for "a first
+ * name that fits her" with no knowledge of the rest of the cast, a model goes to its priors
+ * every single time, which is why the stack fills up with four variations on the same handful
+ * of names. Matching is loose on purpose: Lena/Lena is the obvious case, but Mila/Mia and
+ * Sofia/Sophia are the ones that actually make the cast feel small.
+ */
+function nearestName(name: string, existing: string[]): string | null {
+  const norm = (s: string) => s.trim().toLowerCase().replace(/[^a-z]/g, '');
+  const a = norm(name);
+  if (!a) return null;
+  for (const prior of existing) {
+    const b = norm(prior);
+    if (!b) continue;
+    if (a === b) return prior;
+    // Same start and near-identical length reads as a variant spelling of one name.
+    if (Math.abs(a.length - b.length) <= 1 && a.slice(0, 3) === b.slice(0, 3)) return prior;
+  }
+  return null;
 }
 
 function existingUsernames(limit = 40): string[] {
@@ -753,14 +822,21 @@ async function writeBio(character: Character): Promise<string> {
       }
 
       const clash = nearestBio(bio, existing);
-      if (clash && attempt < 2) {
-        logger.warn('generator', 'bio too close to an existing one, re-requesting', { bio, clash });
-        correction =
-          `That is too close to a bio already in the app:\n"${clash}"\n\n` +
-          `It reuses its words, its opening or its joke. Throw it away and write a different one for ` +
-          `this same woman - a different angle on her, a different thing to lead with, a different ` +
-          `shape on the page. Same JSON, nothing else.`;
-        continue;
+      if (clash) {
+        if (attempt < 2) {
+          logger.warn('generator', 'bio too close to an existing one, re-requesting', { bio, clash });
+          correction =
+            `That is too close to a bio already in the app:\n"${clash}"\n\n` +
+            `It reuses its words, its opening or its joke. Throw it away and write a different one for ` +
+            `this same woman - a different angle on her, a different thing to lead with, a different ` +
+            `shape on the page. Same JSON, nothing else.`;
+          continue;
+        }
+        // Out of retries and it is still a near-duplicate. Kept rather than swapped for a
+        // hardcoded fallback: those are a fixed pool of twelve, so leaning on them is how the
+        // cast converges for real. Logged loudly instead, because a model that cannot get
+        // clear of the existing bios after three goes is worth knowing about.
+        logger.warn('generator', 'bio still resembles an existing one after 3 attempts, keeping it', { bio, clash });
       }
       return bio.slice(0, 500);
     } catch (err) {

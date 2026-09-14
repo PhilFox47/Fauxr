@@ -834,9 +834,55 @@ unchallenged.
 A new bio is now compared against the existing ones on word overlap and on its opening few
 words, reusing the same token-overlap heuristic already proven against her repeating her own
 lines mid-conversation. A collision is sent back with the offending bio quoted and an
-instruction to find a different angle on the same woman. Verified against a deliberately
-lazy mock that returns the identical bio on every call: three characters generated in a row
-came out with three unrelated bios, the retry firing each time.
+instruction to find a different angle on the same woman. If it still resembles an existing
+bio after three attempts it is kept rather than swapped for a hardcoded fallback — leaning
+on a fixed pool of twelve is how a cast converges for real — but it is logged loudly, since
+a model that cannot get clear in three goes is worth knowing about.
+
+**That check fixed word-for-word repeats and the bios still felt the same**, because the
+sameness was never lexical. Two causes, both in the prompt:
+
+The three GOOD examples under "write it in her hand" were lifted verbatim out of
+`FALLBACK_BIOS` — and all twelve of those were the same three-beat shape (quirky concrete
+detail / blunt line about what she wants / closing hook). So the model was shown three
+samples of one house style and asked to produce a fourth, which is the strongest attractor a
+prompt can contain. The examples are now register-level fragments ("I am not particularly
+good at this part" → "im bad at this bit") that demonstrate how words sit on a page without
+modelling what a bio is made of, and the fallback pool has been rewritten across genuinely
+different shapes — run-ons, fragments, a one-liner, a properly-punctuated one.
+
+More importantly the prompt *specified* that shape while claiming not to. It required a
+concrete detail AND what she is like AND what fills her days AND what she wants AND
+something physical AND a hook, in 25–60 words across "two to four short lines" — six
+mandatory beats and a layout, which between them admit roughly one bio. Saying "there is no
+template for this" at the top does not help when the rest of the page enumerates one. Those
+beats are now described as what *tends* to make a bio work, followed by an explicit
+instruction not to hit them all: most real bios are lopsided, some are three unrelated
+fragments with no hook, some never mention anything physical until the last four words. The
+line-count rule is gone — how the words are broken up is hers. And the test is stated as a
+check rather than a recipe: if the bio could be handed to another woman in the list by
+swapping a couple of nouns, it is the wrong bio.
+
+Her typing style now also drives the register outright. It previously said lowercase unless
+her style says otherwise, with a properly-punctuated bio framed as "the exception" — which
+made nearly every character write in the same voice regardless of her seed.
+
+### Names
+
+Real names were the last field with no protection of any kind: whatever the model returned
+was kept, with no avoid-list and no duplicate check. Asked for "a first name that fits her"
+with no knowledge of the rest of the cast, a model goes to its priors every single time,
+which is why the stack kept filling with four variations on the same handful of names. (The
+hardcoded `FALLBACK_NAMES` pool — Mila, Lena, Sofia, Nora, Nina, Maya — is the same priors
+written down, which is the tell.)
+
+Names now get what handles get: the cast so far goes into the prompt, with a note that the
+name which comes to mind first is almost certainly one already used, and a pointer at the
+range real people are actually named across — names passed down, names fashionable the
+decade she was born, names from her parents' country rather than the one she lives in,
+nicknames she actually goes by. Behind that, a check catches exact repeats *and* near
+neighbours, since Mila beside Mia and Sofia beside Sophia are what actually make a cast feel
+small. A clash re-asks, in the same call as a clashing handle when both collided.
 
 ### Handles
 

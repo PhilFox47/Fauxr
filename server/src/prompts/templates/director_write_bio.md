@@ -49,49 +49,57 @@ banned, not the substance.
 **Write it in her hand, not in yours.** These instructions are in careful formal English.
 Her bio is not. She typed it on a phone, probably in under a minute, and it reads like it.
 
-  BAD   "Here for something uncomplicated and reasonably filthy."
-  GOOD  "here for something easy and filthy, not here to be ur girlfriend"
+These are about register only - how the words sit on the page, not what a bio is made of.
+They are fragments, not models to build from:
 
-  BAD   "I am better in person than I am at texting."
-  GOOD  "im way better in person than i am on here, sorry"
+  BAD   "I am not particularly good at this part."     GOOD  "im bad at this bit"
+  BAD   "I finish work at around eleven."              GOOD  "i get off work at 11ish"
+  BAD   "That is genuinely my entire personality."     GOOD  "thats genuinely my whole personality"
 
-  BAD   "Two coffees before I am a person. Three and I am a problem."
-  GOOD  "2 coffees and im a person. 3 and im a problem"
+No em-dashes, no semicolons, no elegantly balanced sentences - those are the three biggest
+tells that a machine wrote it.
 
-Contractions always. Abbreviations where they fit (idk, tbh, ngl, rn, u, ur). Lowercase
-unless her style says otherwise. No em-dashes, no semicolons, no elegantly balanced
-sentences — those are the three biggest tells that a machine wrote it. Her typing style,
-capitalisation, emoji use and register apply here exactly as they do in chat, and a
-properly-punctuated bio should be the exception that tells you something about her. A formal one uses full stops. A heavy emoji user puts one in; a
-never-emoji one does not.
+Beyond that, her own typing style decides everything: capitalisation, punctuation,
+abbreviations, emoji, how much she bothers. Read it off her seed rather than defaulting.
+A lowercase no-punctuation woman writes the bio that way; one whose style is proper really
+does use full stops and capitals, and that is not an exception to be avoided, it is her. A
+heavy emoji user puts them in; a never-emoji one does not.
 
-**Say enough.** Someone reading this should come away able to describe her to a friend:
-what she is like to be around, what fills her days, and what she wants out of this. Being
-mysterious is not the goal - being interesting is. A bio that withholds everything is not
-intriguing, it is just empty.
+**Say enough.** Someone reading this should come away able to describe her to a friend.
+Being mysterious is not the goal - being interesting is. A bio that withholds everything is
+not intriguing, it is just empty.
 
-**Be clear about what she is here for.** Somewhere in this, it should be obvious that she
-is after something physical - and specific about the shape of it, because that is what
-separates her from the other two hundred profiles. What she wants, what she is bored of,
-what she will not be doing, who she is looking for. She can be blunt, filthy, dry,
-embarrassed or clinical about it depending on who she is. What she cannot be is coy or
-generic.
-
-Her personality decides the register, not the content. A shy woman is still here for the
-same reason; she just writes it differently - sideways, or with an apology attached, or so
-bluntly that it is clearly armour.
-
-What still stays out: her real name, her employer, her neighbourhood, anything that
-identifies her. She can talk about her work without naming where; about where she lives
-without naming the street.
-
-**Leave a gap.** Alongside all that, leave one edge someone can grab: something slightly
-unexplained, a claim worth challenging, a question that is actually answerable. It should
-suggest a first message rather than close the subject.
+**Be clear about what she is here for.** It should not be in doubt that she is after
+something physical. She can be blunt, filthy, dry, embarrassed, funny or clinical about it
+depending on who she is; what she cannot be is coy or interchangeable. A shy woman is here
+for the same reason as a brash one - she just writes it differently.
 
 **Earn the swipe honestly.** It is allowed to be unappealing to most people, as long as it
 is the right kind of unappealing. A bio that makes someone swipe left for a clear reason
 is doing its job. A bio nobody has any reaction to is a failure.
+
+What stays out: her real name, her employer, her neighbourhood, anything that identifies
+her. She can talk about her work without naming where; about where she lives without naming
+the street.
+
+# DO NOT WRITE A COMPLETE ONE
+Everything above describes what tends to make a bio work. It is NOT a checklist, and this
+is the part that matters most:
+
+A bio that dutifully contains a quirky concrete detail, AND a line about what she wants in
+bed, AND a closing hook is the single most recognisable shape there is. Hit all of those
+beats every time and every woman in this app writes the same bio with different nouns in
+it - which is exactly the failure, and it is worse than leaving something out.
+
+So leave things out. Most real bios are lopsided. Some are three unrelated fragments with
+no hook at all. Some are one long unbroken run-on that never mentions anything physical
+until the last four words. Some are almost entirely about one object. Some are a complaint.
+Some are a question and nothing else. Some are just badly typed and charming for it.
+
+Pick the one or two things THIS woman would actually have bothered to type, and let the
+rest go. If the bio you are about to write could be handed to another woman in the list
+below by swapping a couple of nouns, it is the wrong bio - start again from something only
+she would say.
 
 # NEVER
 - Cliches: "partner in crime", "fluent in sarcasm", "here for a good time not a long
@@ -107,13 +115,15 @@ is doing its job. A bio nobody has any reaction to is a failure.
   expected here; being *interchangeable* is the failure.
 
 # LENGTH
-Between 25 and 60 words, across two to four short lines separated by newlines.
+Between 25 and 60 words. Four lines is the ceiling.
 
 One clever line is not enough. A single cryptic sentence reads as someone who could not be
 bothered, and it gives a reader nothing to decide on. Give her enough room that a stranger
 finishes reading with a real sense of what she is like and roughly how she spends her time.
 
-Not a wall of text either. Four lines is the ceiling.
+How those words are broken up is hers, not a rule: one unbroken paragraph, two lines, four
+stubby fragments, a line that is a single word. Do not reach for the same arrangement every
+time - "three short lines" is a habit, not a format.
 
 # DO NOT REPEAT THESE
 These bios already exist in this app. Yours must not resemble any of them in structure,

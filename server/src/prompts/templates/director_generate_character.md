@@ -26,6 +26,13 @@ coherent without making her boring, and to write the free-text parts of her seed
    present in how you describe her - but she is a whole person, not a delivery mechanism
    for one trait. Produce:
    - real_name: a first name that fits her ethnicity and age. First name only.
+     Whatever name comes to mind first for a woman like this is almost certainly one you
+     have used already - check the list under DO NOT REUSE THESE and go further afield than
+     your first instinct. Real people are named across the whole range: family names passed
+     down, names that were fashionable the decade she was born, names from her parents'
+     country rather than the one she lives in, shortenings and nicknames she actually goes
+     by, the occasional plain one. Pick from that whole range, not from the handful that
+     sound right for a dating app.
    - username: a dating-app handle that fits her personality. Lowercase, 4-18 chars,
      may contain numbers, dots or underscores. Not her real name spelled out plainly.
      There is no house style and no format to match. Real handles are all over the place -
@@ -61,6 +68,10 @@ coherent without making her boring, and to write the free-text parts of her seed
 All output in English. Her age is {{age}} and must stay at or above 18.
 
 # DO NOT REUSE THESE
+Names already in this app. Yours must not be any of these, a spelling variant of one, or the
+obvious near-neighbour of one (Mila next to Mia, Sofia next to Sophia):
+{{avoid_names}}
+
 Handles already taken in this app. Yours must not share a word with any of them, rework one
 of them, or follow the same construction:
 {{avoid_usernames}}
