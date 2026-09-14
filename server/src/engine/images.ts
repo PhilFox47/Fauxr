@@ -192,6 +192,7 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
       scope: 'image',
       label: `assemble:${character.username}`,
       config: settings.models.director,
+      require: ['prompt'],
       messages: [
         {
           role: 'user',

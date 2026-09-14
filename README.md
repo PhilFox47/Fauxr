@@ -135,6 +135,42 @@ entirely and routing behaves exactly as before.
 Without an API key the app still runs. Characters generate from the dice tables with
 fallback names and bios, so the swipe stack and the UI can be exercised offline.
 
+### When a model runs out of room to answer
+
+A log export turned up 58 calls that had burned their entire `max_tokens` budget and come
+back with `{}` or an empty string — **63% of all model time, producing nothing**. Every
+failure sat exactly on its ceiling; every success sat under it.
+
+The cause is reasoning models: their thinking is billed against `max_tokens`, so a 120-token
+budget that is generous for `{ "username": "..." }` was spent before the answer began. The app
+made this much worse than it had to be:
+
+- A truncated answer looked identical to malformed JSON, so it was retried **unchanged** —
+  same ceiling, same result, three times over.
+- `{}` is valid JSON, so the parse layer passed it through as a success.
+- `write_username` then discarded the empty handle with `continue` and **no log at all**, so
+  the only visible trace was a fallback handle appearing out of nowhere.
+- A 429 saying *"try again after 60 seconds"* was caught by the same handler, logged as
+  `JSON parse failed`, retried **immediately**, and told that its JSON was invalid.
+
+Now there are three separate failures with three separate recoveries. A **truncation** is
+detected from `finish_reason` or the completion count sitting on the cap, logged with the
+ceiling it hit, and re-asked once with real room — at least 1200 tokens, because tripling a
+tiny budget just fails more slowly. A **rate limit or 5xx** is waited out for as long as the
+provider asked for, read from the `retry-after` header or from the prose in its own error
+body. Only genuinely **malformed JSON** gets the "that was not valid JSON" nudge, and a
+well-formed but empty answer gets a targeted one naming the key it left out.
+
+Every call log now carries `max_tokens`, `finish_reason` and `truncated`, so a ceiling that
+is quietly too tight shows up in an export before it becomes a wave of empty answers. The
+base budgets were raised to match (handles 600, bios 1200, a character 2400, and the Actor
+and Director defaults to 1800 and 2600) — saved settings keep whatever they already have,
+since the automatic widening covers them either way.
+
+Measured against a mock reproducing the exact failure: **one character went from 6.7 provider
+calls to 3**, and a model whose thinking still overruns the raised ceiling recovers in one
+extra call with a clear trail, instead of three silent failures and a fallback.
+
 ---
 
 ## How a turn works
@@ -158,6 +194,44 @@ user message
 ```
 
 Target ratio is roughly one Director call per three to five Actor calls.
+
+### Both prompts are ordered static-first
+
+Neither prompt is written in the order you would read it in. Everything that is the same on
+every turn for a character comes first; everything that changes comes last. That is what lets
+a provider with prefix caching reuse the bulk of an eight-thousand-token prompt instead of
+reprocessing it cold each turn.
+
+It was not like that. The ledger, her mood and the direction sat up among her traits, and the
+largest static blocks — the texting rules for the Actor, the whole scoring rubric for the
+Director — sat at the very end, *after* everything volatile. Measured on two consecutive
+renders:
+
+| | before | after |
+|---|---|---|
+| Actor stable prefix | 2% | **86%** |
+| Director stable prefix | 15% | **73%** |
+
+Both prompts now also put him, the moment and the direction nearest the conversation they
+apply to, and leave the output shape last, which is where it is most likely to be followed.
+There is a comment at the seam in each template: adding a per-turn value above that line
+quietly undoes the whole thing.
+
+### The ledger is additions, not a restatement
+
+The Director was scoring turns as hits and recording nothing about them — `what_landed: []`
+and `facts_about_user: []` alongside `spark_delta: 3`, turn after turn, while `intent` and
+`plans` came back word-for-word identical on every call. A plan that is re-emitted unchanged
+never fires and never expires, and a character whose ledger stays empty has no accumulating
+memory: every turn is scored fresh.
+
+The merge in `state.ts` was always additive; the prompt was the problem. The output schema
+showed every ledger array as `[]`, which is exactly what a model copies. Now the schema shows
+each array's *shape*, and a `WHAT TO RECORD` section says plainly that entries are appended,
+that repeating a stored one does nothing, and that `director_notes` should be left out
+entirely unless her intent has actually shifted. Two rules catch the observed failure
+directly: if `spark_delta` or `arousal_delta` is above zero, `what_landed` must name what did
+it; and anything he said about himself goes in `facts_about_user`.
 
 ### Stats
 
@@ -1078,6 +1152,18 @@ meant to be rather than the routine outcome.
 
 Over-long handles are cut back to a separator rather than mid-word, since `genuinely.differen`
 reads as a glitch, which is the opposite of the point.
+
+**Only a sample of the cast reaches the prompt.** The whole list still decides the clash, but
+showing all of it was quietly making the ask impossible: the instruction was "must not share a
+word with any of them, rework one, *or follow the same construction*", against every handle
+ever made. By the twentieth character that forbids `_jpg`, `hrs`, `.exe`, `_xo`, `__`, `ish`,
+`404` and `_txt` at once — which is most of the ways a handle is built — and it tightens with
+every character generated. An ask that cannot be satisfied does not produce originality, it
+produces a refusal, and the avoid-list in the logs was itself the evidence: it was full of the
+repetition it was supposed to prevent. Eight handles now, phrased as "not these", with
+`nearestHandle` catching what slips through. Bios get the same treatment for the same reason —
+ten shown rather than thirty, which also stops a thousand tokens of the prompt being a lesson
+in exactly what to sound like.
 
 Separately, there is a small fixed pool of twelve fully hardcoded bios (`FALLBACK_BIOS`) —
 not AI-written at all — used only when the API call fails outright after its retry. If a

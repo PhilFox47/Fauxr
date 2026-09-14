@@ -623,7 +623,8 @@ async function rerollName(
     const out = await completeJson<{ real_name?: string }>({
       scope: 'generator',
       label: 'reroll_name',
-      config: { ...getSettings().models.actor, max_tokens: 120 },
+      config: { ...getSettings().models.actor, max_tokens: NAME_TOKENS },
+      require: ['real_name'],
       messages: [
         {
           role: 'user',
@@ -660,6 +661,17 @@ async function rerollName(
  */
 async function writeUsername(seed: CharacterSeed, realName: string, taken: string[]): Promise<string> {
   let correction: string | null = null;
+  /**
+   * Only a sample reaches the prompt, though the whole list still decides the clash below.
+   *
+   * The instruction used to be "must not share a word with any of them, rework one, or follow
+   * the same construction", against every handle in the cast. By the twentieth character that
+   * forbids `_jpg`, `hrs`, `.exe`, `_xo`, `__`, `ish`, `404` and `_txt` at once - which is
+   * most of the ways a handle is built - and the constraint tightens with every character
+   * made. An ask that cannot be satisfied does not produce originality, it produces a refusal.
+   * A short list still says "not these", and `nearestHandle` catches what slips through.
+   */
+  const shown = taken.slice(0, HANDLES_SHOWN);
 
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
@@ -679,9 +691,9 @@ async function writeUsername(seed: CharacterSeed, realName: string, taken: strin
         'Rules, and only these: lowercase, 4-18 characters, letters with optional numbers, dots or',
         `underscores. Not "${realName}" spelled out plainly.`,
         '',
-        'These handles are already taken. Yours must not share a word with any of them, rework one,',
-        'or follow the same construction:',
-        taken.map((u) => `- @${u}`).join('\n') || '(none yet)',
+        'A few that are already taken. Do not reuse a word from one of these or rework it into',
+        'something adjacent:',
+        shown.map((u) => `- @${u}`).join('\n') || '(none yet)',
         '',
         'Reply with exactly one JSON object and nothing else: { "username": "..." }',
       ].join('\n');
@@ -689,14 +701,23 @@ async function writeUsername(seed: CharacterSeed, realName: string, taken: strin
       const out = await completeJson<{ username?: string }>({
         scope: 'generator',
         label: attempt ? 'write_username:retry' : 'write_username',
-        config: { ...getSettings().models.actor, max_tokens: 120 },
+        config: { ...getSettings().models.actor, max_tokens: NAME_TOKENS },
+        require: ['username'],
         messages: correction
           ? [{ role: 'user', content: prompt }, { role: 'user', content: correction }]
           : [{ role: 'user', content: prompt }],
       });
 
       const cleaned = cleanHandle(out.username);
-      if (cleaned.length < 4) continue;
+      if (cleaned.length < 4) {
+        // This used to `continue` in silence, which is how three dead calls in a row left
+        // no trace at all: the only sign anything had happened was a fallback handle.
+        logger.warn('generator', 'no usable handle came back, re-asking', {
+          raw: out.username ?? null,
+          attempt: attempt + 1,
+        });
+        continue;
+      }
 
       const clash = nearestHandle(cleaned, taken);
       if (clash && attempt < 2) {
@@ -733,7 +754,8 @@ export async function generateCharacter(): Promise<Character> {
       // is typically also the censored one, which makes it a poor choice for something
       // that has to take a seed full of explicit traits seriously rather than sand them
       // down. The director still runs the game; it just does not invent the cast.
-      config: { ...settings.models.actor, max_tokens: 1200 },
+      config: { ...settings.models.actor, max_tokens: CHARACTER_TOKENS },
+      require: ['real_name'],
       messages: [
         {
           role: 'user',
@@ -965,6 +987,23 @@ function nearestBio(bio: string, existing: string[]): string | null {
   return null;
 }
 
+/**
+ * Output budgets for the generation calls.
+ *
+ * These were sized for the answer alone - 120 tokens is generous for `{ "username": "..." }`.
+ * A reasoning model bills its thinking against the same budget, so it spent the lot working
+ * out what she would type and had nothing left to type it with, returning `{}`. Every one of
+ * those failures sat exactly on its ceiling; every success sat under it. The room is for the
+ * thinking, not for a longer answer.
+ */
+/** How many existing handles and bios the prompt names. Enough to steer, not enough to box in. */
+const HANDLES_SHOWN = 8;
+const BIOS_SHOWN = 10;
+
+const NAME_TOKENS = 600;
+const BIO_TOKENS = 1200;
+const CHARACTER_TOKENS = 2400;
+
 const BIO_MIN_WORDS = 14;
 const BIO_MAX_WORDS = 75;
 
@@ -978,7 +1017,11 @@ async function writeBio(character: Character): Promise<string> {
   const prompt = render('director_write_bio', {
     username: character.username,
     seed_block: describeSeed(character.seed),
-    avoid_bios: existing.length ? existing.map((b) => `- ${b}`).join('\n') : '(none yet)',
+    // Same reasoning as the handles: the whole list still decides the clash, but showing
+    // thirty bios spends a thousand tokens teaching the model exactly what to sound like.
+    avoid_bios: existing.length
+      ? existing.slice(0, BIOS_SHOWN).map((b) => `- ${b}`).join('\n')
+      : '(none yet)',
   });
 
   // A model told to be pithy will happily answer with four words, which is not a bio -
@@ -992,13 +1035,17 @@ async function writeBio(character: Character): Promise<string> {
         label: attempt ? 'write_bio:retry' : 'write_bio',
         // The bio is in-voice writing rather than analysis, so it goes to the actor model.
         // The director still designs the character; it just does not write her lines.
-        config: { ...settings.models.actor, max_tokens: 400 },
+        config: { ...settings.models.actor, max_tokens: BIO_TOKENS },
+        require: ['bio'],
         messages: correction
           ? [{ role: 'user', content: prompt }, { role: 'user', content: correction }]
           : [{ role: 'user', content: prompt }],
       });
       const bio = (out.bio ?? '').trim();
-      if (!bio) continue;
+      if (!bio) {
+        logger.warn('generator', 'no bio came back, re-asking', { attempt: attempt + 1 });
+        continue;
+      }
 
       const words = bioWordCount(bio);
       if (words < BIO_MIN_WORDS) {

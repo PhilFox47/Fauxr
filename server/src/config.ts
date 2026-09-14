@@ -66,8 +66,12 @@ export const DEFAULT_SETTINGS: Settings = {
     image_api_key: process.env.FAUXR_IMAGE_API_KEY || '',
   },
   models: {
-    actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 900 },
-    director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 1400 },
+    // The ceilings are deliberately well clear of the answer's own size. Reasoning models
+    // bill their thinking against max_tokens, so a budget sized for the reply alone is spent
+    // before the reply starts and comes back empty. Saved settings keep whatever they have;
+    // complete() widens a ceiling that is plainly too tight rather than failing on it.
+    actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 1800 },
+    director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 2600 },
     image: { model: 'seedream-v4', size: '1024x1024' },
   },
   activity: 0.6,
