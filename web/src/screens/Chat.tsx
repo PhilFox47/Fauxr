@@ -51,6 +51,26 @@ function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
  * alone - see ActorHidden.photo_offer server-side - so this is the one place that actually
  * starts it, and the only place that can turn it down.
  */
+/**
+ * His side of the swap. There is no accept/decline here because it is not his to answer -
+ * he asked, and the card resolves when she says yes or no on her next turn.
+ */
+function ExchangeRequestCard({ text, status }: { text: string; status: string }) {
+  return (
+    <div className="photo-offer">
+      <span className="photo-offer-ico"><Icon name="camera" size={17} /></span>
+      <span className="grow">{text}</span>
+      <span className="tiny muted photo-offer-resolved">
+        {status === 'accepted'
+          ? 'She said yes — swapped'
+          : status === 'declined'
+            ? 'She said no'
+            : 'Waiting for her'}
+      </span>
+    </div>
+  );
+}
+
 function PhotoOfferCard({
   text,
   status,
@@ -107,6 +127,8 @@ export default function Chat({
   const [profileOpen, setProfileOpen] = useState(false);
   const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
   const [respondingOfferId, setRespondingOfferId] = useState<string | null>(null);
+  const [swapping, setSwapping] = useState(false);
+  const swapped = !!character?.photos_exchanged;
   const [toast, setToast] = useState<string | null>(null);
   const [confirmBlock, setConfirmBlock] = useState(false);
   /** False while the user has scrolled up to read history - see the autoscroll effect. */
@@ -232,6 +254,19 @@ export default function Chat({
     }
   };
 
+  const offerExchange = async () => {
+    if (swapping) return;
+    setSwapping(true);
+    try {
+      await api.offerProfileExchange(characterId);
+      await load();
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+    } finally {
+      setSwapping(false);
+    }
+  };
+
   const respondPhotoOffer = async (offerId: string, accept: boolean) => {
     if (respondingOfferId) return;
     setRespondingOfferId(offerId);
@@ -278,6 +313,17 @@ export default function Chat({
           </span>
         </div>
         <div className="spacer" />
+        {!swapped && (
+          <button
+            className="iconbtn"
+            onClick={() => void offerExchange()}
+            disabled={blocked || swapping}
+            aria-label="Offer to swap profile pictures"
+            title="Swap profile pictures"
+          >
+            <Icon name="camera" size={20} />
+          </button>
+        )}
         {profile && (
           <button
             className="iconbtn known-count"
@@ -358,6 +404,15 @@ export default function Chat({
           // A run of messages from one person is one turn, so only its ends get the full
           // corner radius - the middle of the run stays squared off against the run.
           const mid = !showDay && prev?.sender === m.sender && !showStamp;
+
+          if (m.sender === 'system' && m.meta?.type === 'exchange_request') {
+            return (
+              <div key={m.id} style={{ display: 'contents' }}>
+                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                <ExchangeRequestCard text={m.text} status={m.meta.status ?? 'pending'} />
+              </div>
+            );
+          }
 
           if (m.sender === 'system' && m.meta?.type === 'photo_offer') {
             return (

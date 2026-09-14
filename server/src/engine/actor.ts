@@ -5,7 +5,7 @@ import { getUserProfile, recentMessages } from '../repo.js';
 import { render } from '../prompts/render.js';
 import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Relationship } from '../types.js';
 import {
-  appearanceBlock, communicationBlock, directionBlock, historyBlock, identityBlock,
+  appearanceBlock, communicationBlock, directionBlock, exchangeRequestBlock, historyBlock, identityBlock,
   interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
   sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
@@ -61,6 +61,7 @@ function fallbackOutput(): ActorOutput {
       director_needed: true,
       photo_offer: null,
       photo_situation: null,
+      exchange_response: null,
     },
   };
 }
@@ -83,6 +84,10 @@ function normalizeHidden(raw: any): ActorHidden {
     director_needed: !!raw?.director_needed,
     photo_offer: PHOTO_OFFER_KINDS.has(raw?.photo_offer) ? raw.photo_offer : null,
     photo_situation: raw?.photo_situation ? String(raw.photo_situation).slice(0, 300) : null,
+    exchange_response:
+      raw?.exchange_response === 'accept' || raw?.exchange_response === 'decline'
+        ? raw.exchange_response
+        : null,
   };
 }
 
@@ -150,7 +155,14 @@ function buildPrompt(
   return render(template, {
     char_display_name: flags.state.real_name_known ? character.real_name : `@${character.username}`,
     user_name: user?.display_name ?? 'him',
-    user_block: [userBlock(user), describeHim(relationship)].filter(Boolean).join('\n\n'),
+    user_block: [
+      userBlock(user, flags),
+      describeHim(relationship),
+      exchangeRequestBlock(
+        !!(relationship.mood as any)?.pending_exchange,
+        !!flags.state.photos_exchanged,
+      ),
+    ].filter(Boolean).join('\n\n'),
     identity_block: identityBlock(character, flags),
     communication_block: communicationBlock(seed),
     quirks_block: quirksBlock(seed),

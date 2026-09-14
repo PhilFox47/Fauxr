@@ -216,6 +216,13 @@ export async function respondToPhotoOffer(
 
   if (!accept) return { ok: true, enqueued: false };
 
+  // Seeing a real picture goes both ways: saying yes to hers shows her his at the same
+  // time, which is the whole reason a character has any reason to offer one.
+  if (pending.kind === 'profile') {
+    rel.flags.state.photos_exchanged = true;
+    saveRelationship(rel);
+  }
+
   enqueueImage({
     characterId,
     kind: pending.kind,

@@ -58,6 +58,7 @@ export function getUserProfile(): UserProfile | null {
     age_min: row.age_min ?? 18,
     age_max: row.age_max ?? 42,
     kink_map: JSON.parse(row.kink_map ?? '{}'),
+    avatar_emoji: row.avatar_emoji ?? '',
     seeking: row.seeking,
   };
 }
@@ -65,18 +66,20 @@ export function getUserProfile(): UserProfile | null {
 export function saveUserProfile(p: UserProfile): UserProfile {
   const ts = nowIso();
   db.prepare(
-    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, kink_map, created_at, updated_at)
-     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @kink_map, @ts, @ts)
+    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, kink_map, avatar_emoji, created_at, updated_at)
+     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @kink_map, @avatar_emoji, @ts, @ts)
      ON CONFLICT(id) DO UPDATE SET display_name = excluded.display_name, age = excluded.age,
        bio = excluded.bio, photos = excluded.photos, gender = excluded.gender,
        seeking = excluded.seeking, age_min = excluded.age_min, age_max = excluded.age_max,
-       kink_map = excluded.kink_map, updated_at = excluded.updated_at`,
+       kink_map = excluded.kink_map, avatar_emoji = excluded.avatar_emoji,
+       updated_at = excluded.updated_at`,
   ).run({
     ...p,
     photos: JSON.stringify(p.photos ?? []),
     age_min: clampPreferredAge(p.age_min, 18),
     age_max: clampPreferredAge(p.age_max, 42),
     kink_map: JSON.stringify(p.kink_map ?? {}),
+    avatar_emoji: p.avatar_emoji ?? '',
     ts,
   });
   return getUserProfile()!;

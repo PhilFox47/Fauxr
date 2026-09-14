@@ -334,7 +334,8 @@ Reply with exactly one JSON object and nothing else:
     "going_offline_in": null,
     "director_needed": false,
     "photo_offer": null,
-    "photo_situation": null
+    "photo_situation": null,
+    "exchange_response": null
   }
 }
 
@@ -351,6 +352,8 @@ Set "going_offline_in" to a number of minutes if you are about to leave the conv
 Set "photo_offer" to "profile", "chat" or "spicy" if, in these messages, you decided to
 actually offer him one of those - see "Sending a photo" above. Null otherwise, and null if
 you only talked about photos in general without actually offering.
+Set "exchange_response" to "accept" or "decline" ONLY when he has asked to swap profile
+pictures this turn and you are answering him. Null every other time.
 
 # THE CONVERSATION SO FAR
 {{history_block}}

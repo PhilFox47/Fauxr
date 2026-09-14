@@ -113,6 +113,13 @@ export interface CharacterSeed {
 export interface StateFlags {
   real_name_known?: boolean;
   profile_picture_sent?: boolean;
+  /**
+   * The two of them have actually swapped profile pictures. Seeing a real picture goes both
+   * ways by design: she cannot see his until he has seen hers, and the reverse. Separate
+   * from `profile_picture_sent`, which records that her image finished generating - the
+   * agreement stands even if generation later fails.
+   */
+  photos_exchanged?: boolean;
   personal_photos_allowed?: boolean;
   sexual_topics_allowed?: boolean;
   spicy_photos_allowed?: boolean;
@@ -216,6 +223,11 @@ export interface ActorHidden {
   photo_offer: 'profile' | 'chat' | 'spicy' | null;
   /** A short concrete description of what the offered photo would show, for continuity. */
   photo_situation: string | null;
+  /**
+   * Her answer when he has asked to swap profile pictures. Genuinely her call - a refusal
+   * is a real outcome, not a failure state, and it should come with a reason in her voice.
+   */
+  exchange_response: 'accept' | 'decline' | null;
 }
 
 export interface ActorOutput {
@@ -228,6 +240,17 @@ export interface ActorOutput {
  * (a loosely-typed blob already used for session-only state like `leaves_at`) rather than
  * its own column - it is exactly the same shape of thing, and did not need a migration.
  */
+/**
+ * A profile-picture swap he offered and she has not answered yet. Deliberately the mirror
+ * of PendingPhoto: either side can propose, and the other side gets to say no.
+ */
+export interface PendingExchange {
+  request_id: string;
+  /** The system message carrying the request card, so the answer can resolve it. */
+  message_id: number;
+  requested_at: string;
+}
+
 export interface PendingPhoto {
   offer_id: string;
   kind: 'profile' | 'chat' | 'spicy';
@@ -289,4 +312,9 @@ export interface UserProfile {
    * him, which is the point - it gives them something real to be curious about.
    */
   kink_map: Record<string, KinkStance>;
+  /**
+   * The emoji standing in for his profile picture. This is what a character sees of him
+   * until the two of them have actually swapped real pictures.
+   */
+  avatar_emoji: string;
 }

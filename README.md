@@ -1085,6 +1085,32 @@ bio looks suspiciously identical to one seen before rather than just structurall
 that is the tell: check the logs (scope `generator`) for "bio generation failed, using
 fallback" to see whether the model is actually being reached.
 
+### Profile pictures go both ways
+
+You get an emoji too. It sits on your profile the same way hers sits on hers, and it is what
+a character sees of you until the two of you have actually swapped.
+
+Seeing a real picture is **one mutual event**. A character cannot see yours until you have
+seen hers, and the reverse — so her picture is worth offering, and asking for yours is worth
+doing. Either side can start it:
+
+- **She offers.** The existing consent card, now worded as a swap: accepting shows her yours
+  at the same moment her image starts generating.
+- **You offer.** A camera button in the chat header raises a request — and she answers it on
+  her next turn. She is told plainly that it is her call, that no is a real answer, and that
+  a refusal comes with a reason in her own voice. It is not a button that reveals things
+  regardless; that would make both pictures worth nothing.
+
+The agreement and the delivery are tracked separately. `photos_exchanged` records that the
+two of you agreed, `profile_picture_sent` that her image actually finished generating — so
+she can see yours even if her own generation later fails, and her picture only renders for
+you when both are true. The server refuses a second request while one is pending, and any
+request once you have already swapped.
+
+What she is told tracks it exactly: before a swap she has your emoji and knows a real one
+exists behind it; after, she has seen it and can refer to it or ask about it. If you have no
+photo uploaded at all she is told that too — and that she is allowed to find it funny.
+
 ### Her face before there is a photo
 
 A match list where nobody has unlocked a photo yet is a column of identical grey initials,

@@ -8,14 +8,16 @@ import { getSettings, saveSettings } from '../config.js';
 import { usageToday } from '../llm/client.js';
 import { logger } from '../log.js';
 import {
-  getCharacter, getRelationship, getUserProfile, getWakeup, lastMessage, markCharacterMessagesRead,
-  queryLogs, recentMessages, saveUserProfile, unreadCount,
+  addMessage, getCharacter, getRelationship, getUserProfile, getWakeup, lastMessage,
+  markCharacterMessagesRead, queryLogs, recentMessages, saveRelationship, saveUserProfile,
+  unreadCount,
 } from '../repo.js';
-import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateLastTurn } from '../engine/chat.js';
+import { bus } from '../events.js';
+import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import { evaluateUserImage, listImageJobs, respondToPhotoOffer, retryImageJob } from '../engine/images.js';
-import { rollSeed, describeSeed, avatarEmojiFor } from '../engine/generator.js';
+import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji } from '../engine/generator.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
@@ -39,7 +41,15 @@ function publicCharacter(c: Character) {
     // Stands in for her photo until one is actually unlocked, so a list of matches is
     // distinguishable at a glance rather than a column of identical grey initials.
     avatar_emoji: avatarEmojiFor(c),
-    profile_picture: rel?.flags.state.profile_picture_sent && picture ? `/media/${picture.path}` : null,
+    // Both halves: her image has to exist AND the two of them have to have swapped. A
+    // picture that arrived without an exchange is not one he gets to look at.
+    profile_picture:
+      rel?.flags.state.profile_picture_sent && rel?.flags.state.photos_exchanged && picture
+        ? `/media/${picture.path}`
+        : null,
+    // Exposed separately from profile_picture: she can have agreed to swap while her image
+    // is still generating, or with images turned off entirely, and the button should know.
+    photos_exchanged: !!rel?.flags.state.photos_exchanged,
     ghosting: !!rel?.ghosted_at,
   };
 }
@@ -88,6 +98,8 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       // Only the four known stances survive, keyed by a real domain id, so nothing the
       // client sends can put junk in front of a model later.
       kink_map: sanitizeKinkMap(b.kink_map),
+      // Same validation the generated characters get, so his emoji cannot be ":)" either.
+      avatar_emoji: sanitizeEmoji(b.avatar_emoji) ?? '',
     });
     void ensureStack();
     return saved;
@@ -283,6 +295,48 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   /** Just the domains and their descriptions, for the profile editor. */
   app.get('/api/kink-domains', async () =>
     byCategory('kink_domain').map((d) => ({ id: d.id, label: d.label, hint: d.prompt_hint })));
+
+  /**
+   * He offers to swap profile pictures. This only raises the request - she answers it on
+   * her next turn and is allowed to say no, which is the point of asking rather than a
+   * button that simply reveals things.
+   */
+  app.post<{ Params: { id: string } }>('/api/chats/:id/profile-exchange', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    if (!character) return reply.code(404).send({ error: 'not found' });
+    const rel = getRelationship(character.id);
+    if (!rel) return reply.code(404).send({ error: 'not found' });
+    if (rel.flags.state.photos_exchanged) {
+      return reply.code(400).send({ error: 'you have already swapped pictures' });
+    }
+    if ((rel.mood as any)?.pending_exchange) {
+      return reply.code(400).send({ error: 'she has not answered the last one yet' });
+    }
+
+    const requestId = randomUUID();
+    const msg = addMessage({
+      character_id: character.id,
+      sender: 'system',
+      text: `You offered to swap profile pictures with ${character.real_name}.`,
+      kind: 'text',
+      meta: { type: 'exchange_request', request_id: requestId, status: 'pending' },
+      read_at: null,
+    });
+    bus.emitEvent({ type: 'message', character_id: character.id, message: msg });
+
+    rel.mood = {
+      ...rel.mood,
+      pending_exchange: { request_id: requestId, message_id: msg.id, requested_at: nowIso() },
+    };
+    saveRelationship(rel);
+
+    // Her answer comes back through the normal turn machinery. Only if she is around -
+    // offline, the request just sits there like any other unread message.
+    if (isOnline(character) && !isAway(rel)) {
+      void takeTurn(character.id, { trigger: 'user_message' }).catch(() => {});
+    }
+    return { ok: true, request_id: requestId };
+  });
 
   app.get('/api/attributes', async () => {
     return allCategories().map((category) => ({ category, entries: byCategory(category) }));

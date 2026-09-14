@@ -104,7 +104,7 @@ export async function runDirector(
       : '(he knows everything there is to know)',
     char_real_name: character.real_name,
     char_username: character.username,
-    user_block: userBlock(user),
+    user_block: userBlock(user, rel.flags),
     seed_block: seedBlock(character),
     trust: rel.trust,
     spark: rel.spark,

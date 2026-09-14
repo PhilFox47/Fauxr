@@ -537,7 +537,7 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
   const [form, setForm] = useState<UserProfile>(
     profile ?? {
       display_name: '', age: 18, bio: '', photos: [], gender: '', seeking: '',
-      age_min: 18, age_max: 42, kink_map: {},
+      age_min: 18, age_max: 42, kink_map: {}, avatar_emoji: '',
     },
   );
   const [saved, setSaved] = useState(false);
@@ -551,6 +551,20 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
       <label className="field">
         <span>Age</span>
         <input type="number" min={18} value={form.age} onChange={(e) => setForm({ ...form, age: Number(e.target.value) })} />
+      </label>
+      <label className="field">
+        <span>Your profile emoji</span>
+        <input
+          type="text"
+          value={form.avatar_emoji ?? ''}
+          placeholder="🦊"
+          maxLength={4}
+          onChange={(e) => setForm({ ...form, avatar_emoji: e.target.value })}
+        />
+        <span className="tiny muted">
+          What characters see instead of your photo. They only get the real one once you have
+          swapped — and a swap goes both ways, so you see hers at the same moment.
+        </span>
       </label>
       <label className="field">
         <span>Bio</span>

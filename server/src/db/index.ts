@@ -34,6 +34,7 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'user_profile', column: 'age_min', definition: 'INTEGER NOT NULL DEFAULT 18' },
   { table: 'user_profile', column: 'age_max', definition: 'INTEGER NOT NULL DEFAULT 42' },
   { table: 'user_profile', column: 'kink_map', definition: "TEXT NOT NULL DEFAULT '{}'" },
+  { table: 'user_profile', column: 'avatar_emoji', definition: "TEXT NOT NULL DEFAULT ''" },
 ];
 
 function addMissingColumns(): void {

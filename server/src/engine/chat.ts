@@ -5,9 +5,9 @@ import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
   addMessage, clearWakeup, deleteMessages, getCharacter, getRelationship, getWakeup,
-  markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, type StoredMessage,
+  markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, updateMessageMeta, type StoredMessage,
 } from '../repo.js';
-import type { Character, PendingPhoto, Relationship } from '../types.js';
+import type { Character, PendingExchange, PendingPhoto, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
 import { detectEvents, directionExpired, runDirector } from './director.js';
 import { computePressure, computeReciprocity } from './modifiers.js';
@@ -15,6 +15,7 @@ import { alwaysOnline, isOnline } from './presence.js';
 import { randInt } from './dice.js';
 import { clearExpiredNegativeFlags, hasActiveNegativeFlag, markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
+import { enqueueImage } from './images.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -196,7 +197,7 @@ const PHOTO_UNLOCK_FOR: Record<'profile' | 'chat' | 'spicy', string> = {
 function photoOfferText(name: string, kind: 'profile' | 'chat' | 'spicy'): string {
   switch (kind) {
     case 'profile':
-      return `${name} wants to send you her profile picture.`;
+      return `${name} wants to swap profile pictures. Accepting shows her yours too.`;
     case 'spicy':
       return `${name} wants to send you a photo. It might be explicit.`;
     default:
@@ -297,6 +298,32 @@ async function runActorPhase(
    * actually match the tier she is offering, one is not already pending, images have to be
    * turned on, and a profile picture cannot be offered twice.
    */
+  /**
+   * She has been asked to swap profile pictures and this turn carries her answer. It is
+   * genuinely her decision: a refusal resolves the card and nothing is revealed, which is
+   * why the request is worth making rather than being a button that always works.
+   */
+  const pendingExchange: PendingExchange | null = (rel.mood as any)?.pending_exchange ?? null;
+  let exchangeLeft: PendingExchange | null = pendingExchange;
+  if (pendingExchange && result.hidden.exchange_response) {
+    const accepted = result.hidden.exchange_response === 'accept';
+    exchangeLeft = null;
+    const updated = updateMessageMeta(pendingExchange.message_id, {
+      status: accepted ? 'accepted' : 'declined',
+    });
+    if (updated) bus.emitEvent({ type: 'message_updated', character_id: character.id, message: updated });
+
+    if (accepted) {
+      // The agreement is what counts, and it is symmetrical: from here she can see his
+      // picture whether or not her own image generates successfully afterwards.
+      rel.flags.state.photos_exchanged = true;
+      if (getSettings().images_enabled && !rel.flags.state.profile_picture_sent) {
+        enqueueImage({ characterId: character.id, kind: 'profile', situation: '' });
+      }
+    }
+    logger.debug('actor', `${character.username} ${accepted ? 'accepted' : 'declined'} the picture swap`);
+  }
+
   let pendingPhoto: PendingPhoto | null = (rel.mood as any)?.pending_photo ?? null;
   const offerKind = result.hidden.photo_offer;
   if (offerKind && !pendingPhoto) {
@@ -339,6 +366,7 @@ async function runActorPhase(
     // Carried to the next turn so nothing opens a second topic on top of a live one.
     unresolved: result.hidden.unresolved,
     pending_photo: pendingPhoto,
+    pending_exchange: exchangeLeft,
   };
   refreshModifiers(rel, recentMessages(character.id, 40), result.hidden.boundary_touched);
   saveRelationship(rel);

@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS user_profile (
   age_min       INTEGER NOT NULL DEFAULT 18,
   age_max       INTEGER NOT NULL DEFAULT 42,
   kink_map      TEXT NOT NULL DEFAULT '{}',
+  avatar_emoji  TEXT NOT NULL DEFAULT '',
   created_at    TEXT NOT NULL,
   updated_at    TEXT NOT NULL
 );

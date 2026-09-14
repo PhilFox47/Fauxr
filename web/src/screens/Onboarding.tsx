@@ -32,6 +32,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
         age_max: 42,
         // Set later under Settings; an empty map just means nobody knows anything yet.
         kink_map: {},
+        avatar_emoji: '',
       });
       onDone();
     } catch (err) {

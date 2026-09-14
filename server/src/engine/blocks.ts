@@ -7,15 +7,28 @@ import { freshThreads, pruneThreads } from './state.js';
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
 
-export function userBlock(user: UserProfile | null): string {
+export function userBlock(user: UserProfile | null, flags?: Flags): string {
   if (!user) return 'Unknown - he has not filled in his profile.';
+  const swapped = !!flags?.state.photos_exchanged;
+  const hasPhoto = user.photos.length > 0;
+
+  // Profile pictures are a swap, so what she can see of him depends on what he has seen of
+  // her. Until then he is an emoji, exactly as she is to him.
+  const pictureLine = swapped
+    ? hasPhoto
+      ? 'You have seen his actual profile picture - you swapped. You can refer to it, and ask him about it.'
+      : 'You swapped profile pictures, but he had no real photo to send, so all you have is his emoji. You are allowed to find that funny.'
+    : hasPhoto
+      ? `You have NOT seen his real picture. All you have is the emoji on his profile: ${user.avatar_emoji || '(none set)'}. He does have a real one - you would have to swap to see it, and you only get his once he has yours.`
+      : `You have NOT seen a real picture of him. His profile is just an emoji: ${user.avatar_emoji || '(none set)'}.`;
+
   return [
     `Name: ${user.display_name}`,
     `Age: ${user.age}`,
     user.gender ? `Gender: ${user.gender}` : '',
     user.seeking ? `Looking for: ${user.seeking}` : '',
     user.bio ? `His dating profile says: "${user.bio}"` : 'His profile has no bio.',
-    user.photos.length ? `He has ${user.photos.length} photo(s) on his profile.` : 'He has no photos on his profile.',
+    pictureLine,
   ].filter(Boolean).join('\n');
 }
 
@@ -278,6 +291,24 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags): 
     lines.push('', 'You are the one pushing this right now, not him. Act like it.');
   }
   return lines.join('\n');
+}
+
+/**
+ * Shown only while he has actually asked to swap. Her answer is a real decision - the
+ * alternative is a button on his side that reveals things regardless, which makes both
+ * pictures worth nothing.
+ */
+export function exchangeRequestBlock(pending: boolean, alreadySwapped: boolean): string {
+  if (alreadySwapped) return '';
+  if (!pending) return '';
+  return [
+    'HE HAS ASKED TO SWAP PROFILE PICTURES. He shows you his, you show him yours, both at once.',
+    'Answer it this turn, in your own words, and set "exchange_response" to "accept" or "decline".',
+    'This is genuinely your call and no is a real answer. Say yes if you want him to see you and',
+    'you are curious what he looks like; say no if you are not there yet, if he has been off with',
+    'you, or if you would simply rather not - and if you say no, say why, the way you actually',
+    'would. Do not agree just because you were asked.',
+  ].join('\n');
 }
 
 const PHOTO_UNLOCKS = new Set(['profile_picture', 'personal_photos', 'spicy_photos']);

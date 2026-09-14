@@ -18,6 +18,8 @@ export interface UserProfile {
   age_max: number;
   /** Your own stances. Characters are told none of this; they find it out by talking to you. */
   kink_map: Record<string, KinkStance>;
+  /** Stands in for your photo until you have actually swapped with someone. */
+  avatar_emoji: string;
 }
 
 export interface AppState {
@@ -59,6 +61,8 @@ export interface MatchSummary {
   /** Her stand-in avatar until a real photo is unlocked. Always set by the server. */
   avatar_emoji: string;
   profile_picture: string | null;
+  /** The two of you have swapped profile pictures. */
+  photos_exchanged: boolean;
   ghosting: boolean;
   unread: number;
   last_message: { text: string; sender: string; sent_at: string } | null;
@@ -138,6 +142,8 @@ export const api = {
   saveProfile: (p: UserProfile) => request<UserProfile>('/api/profile', { method: 'PUT', body: JSON.stringify(p) }),
   stack: () => request<{ generating: number; profiles: SwipeProfile[] }>('/api/stack'),
   kinkDomains: () => request<KinkDomain[]>('/api/kink-domains'),
+  offerProfileExchange: (id: string) =>
+    request<{ ok: true; request_id: string }>(`/api/chats/${id}/profile-exchange`, { method: 'POST' }),
   swipe: (id: string, direction: 'left' | 'right') =>
     request<any>(`/api/swipe/${id}`, { method: 'POST', body: JSON.stringify({ direction }) }),
   matches: () => request<MatchSummary[]>('/api/matches'),

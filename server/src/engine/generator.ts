@@ -578,7 +578,7 @@ export function avatarEmojiFor(character: Character): string {
  * letters or digits in it is one of those, and anything with no pictographic character in it
  * is not an emoji either.
  */
-function sanitizeEmoji(raw: unknown): string | null {
+export function sanitizeEmoji(raw: unknown): string | null {
   const s = String(raw ?? '').trim();
   if (!s || s.length > 12) return null;
   if (/[A-Za-z0-9]/.test(s)) return null;
