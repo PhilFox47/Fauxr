@@ -9,10 +9,64 @@ import { logger } from '../log.js';
 import { addMessage, getCharacter, getRelationship, saveRelationship, updateMessageMeta } from '../repo.js';
 import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
-import type { Character, PendingPhoto } from '../types.js';
+import type { Character, CharacterSeed, PendingPhoto } from '../types.js';
 
-const STYLE_SUFFIX =
-  'shot on a phone camera, natural light, candid, slight grain, realistic skin texture, 4k';
+/**
+ * The look every generated photo lands in.
+ *
+ * Two failure modes to stay between. Push "amateur phone photo" alone and the model reads it
+ * as permission to make her unflattering - bad angles, sickly light, a face nobody would
+ * swipe on. Push "beautiful" alone and it returns a retouched studio render with plastic
+ * skin, which is the thing that most obviously is not a real person. So both are said
+ * explicitly: a real candid photo, of someone who happens to be attractive, unretouched.
+ */
+const STYLE_SUFFIX = [
+  'candid amateur phone photo',
+  'natural available light',
+  'real unretouched skin with visible texture and pores',
+  'naturally attractive, healthy, flattering angle',
+  'softly imperfect handheld framing',
+  'slight sensor grain',
+  'shallow phone-lens depth of field',
+].join(', ');
+
+/**
+ * Sent with every image. The first half fights the airbrushed-render look, the second half
+ * fights the opposite over-correction, and the rest is the usual anatomy rubbish.
+ */
+const BASE_NEGATIVE = [
+  'airbrushed, heavy retouching, beauty filter, smoothed plastic skin, waxy skin, doll-like',
+  'glamour shot, studio lighting, professional model, magazine cover, stock photo',
+  'ugly, unflattering angle, harsh direct flash, sickly skin tone, sunken eyes, grotesque',
+  'cgi, 3d render, illustration, painting, anime, cartoon, airbrush art',
+  'deformed, disfigured, bad anatomy, extra fingers, extra limbs, mutated hands, asymmetric eyes',
+  'oversaturated, heavy hdr, watermark, text, logo, lowres, out-of-focus face',
+].join(', ');
+
+/**
+ * How she holds herself in a photo, from who she is rather than what she looks like.
+ *
+ * Appearance alone produced twelve women with the same blank catalogue expression. The
+ * archetype carries a written demeanour (see personality.json), and social energy and humour
+ * bend it - the same face is a different photo on someone who hates being photographed.
+ */
+function demeanourFor(seed: CharacterSeed): string {
+  const parts: string[] = [];
+  const arch = find('archetype', seed.archetype);
+  if (arch?.extra?.photo) parts.push(String(arch.extra.photo));
+
+  const energy = {
+    low: 'low-key and a bit reluctant about being photographed',
+    medium: 'relaxed, unbothered by the camera',
+    high: 'lively, clearly enjoying taking it',
+  }[seed.social_energy];
+  if (energy) parts.push(energy);
+
+  if (['dry', 'deadpan', 'dark'].includes(seed.humor_type)) parts.push('deliberately undersold expression');
+  if (['silly', 'goofy', 'playful'].includes(seed.humor_type)) parts.push('playful, mid-expression rather than posed');
+
+  return parts.join(', ');
+}
 
 export interface ImageJob {
   id: string;
@@ -127,14 +181,24 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             image_kind: job.kind,
             situation,
             visible_marks: visibleMarks(character, job.kind),
+            demeanour: demeanourFor(character.seed),
           }),
         },
       ],
     });
 
     const prompt = `${assembled.prompt}, ${STYLE_SUFFIX}`;
+    // The assembler has always returned a negative prompt and it was being dropped on the
+    // floor here - never passed to the image call at all. Its shot-specific negatives now
+    // ride along with the standing ones.
+    const negative = [assembled.negative_prompt, BASE_NEGATIVE].filter(Boolean).join(', ');
     const ref = job.kind === 'profile' ? null : referenceImage(character.id);
-    const b64 = await generateImage({ prompt, seed: character.seed.image_seed, refImage: ref ?? undefined });
+    const b64 = await generateImage({
+      prompt,
+      negativePrompt: negative,
+      seed: character.seed.image_seed,
+      refImage: ref ?? undefined,
+    });
 
     const relPath = join('images', `${id}.png`);
     writeFileSync(join(DATA_DIR, relPath), Buffer.from(b64, 'base64'));

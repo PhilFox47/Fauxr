@@ -121,7 +121,8 @@
           -3,
           1
         ]
-      }
+      },
+      "photo": "small closed-mouth smile, eyes slightly off-camera, shoulders drawn in a little, arm across her body, photo taken at slight distance"
     },
     "enabled": true,
     "rarity": "common"
@@ -238,7 +239,8 @@
           -1,
           3
         ]
-      }
+      },
+      "photo": "direct eye contact, easy open smile, relaxed square shoulders, chin level, arm-length selfie held high and steady"
     },
     "enabled": true,
     "rarity": "common"
@@ -352,7 +354,8 @@
           -2,
           3
         ]
-      }
+      },
+      "photo": "one eyebrow raised, flat unimpressed half-smile, head tilted, looking straight down the lens"
     },
     "enabled": true,
     "rarity": "common"
@@ -465,7 +468,8 @@
           -3,
           1
         ]
-      }
+      },
+      "photo": "genuine crinkle-eyed smile, head tipped toward the camera, open relaxed posture, soft eye contact"
     },
     "enabled": true,
     "rarity": "common"
@@ -579,7 +583,8 @@
           -2,
           3
         ]
-      }
+      },
+      "photo": "neutral closed expression, level appraising gaze, chin slightly down, body angled away from the lens"
     },
     "enabled": true,
     "rarity": "common"
@@ -696,7 +701,8 @@
           -3,
           3
         ]
-      }
+      },
+      "photo": "caught mid-laugh, eyes half shut, hair a bit everywhere, crooked framing, motion blur on one hand"
     },
     "enabled": true,
     "rarity": "common"
@@ -811,7 +817,8 @@
           -2,
           3
         ]
-      }
+      },
+      "photo": "calm steady gaze, faint amused mouth, thoughtful stillness, slightly formal posture, plain considered background"
     },
     "enabled": true,
     "rarity": "common"
@@ -925,7 +932,8 @@
           -3,
           3
         ]
-      }
+      },
+      "photo": "chin lowered eyes up at the lens, knowing half-smile, hand near jaw or collarbone, close crop"
     },
     "enabled": true,
     "rarity": "common"
@@ -1037,7 +1045,8 @@
           -3,
           2
         ]
-      }
+      },
+      "photo": "open honest expression, full unguarded smile, looking directly at the camera, plain natural posture"
     },
     "enabled": true,
     "rarity": "common"
@@ -1151,7 +1160,8 @@
           -3,
           2
         ]
-      }
+      },
+      "photo": "tired soft smile, slightly heavy eyelids, leaning on one hand, late evening indoor light"
     },
     "enabled": true,
     "rarity": "common"
@@ -1264,7 +1274,8 @@
           -1,
           3
         ]
-      }
+      },
+      "photo": "composed confident look, faint controlled smile, straight posture, tidy deliberate framing"
     },
     "enabled": true,
     "rarity": "common"
@@ -1377,7 +1388,8 @@
           -3,
           2
         ]
-      }
+      },
+      "photo": "soft unfocused gaze past the camera, faint absent smile, loose relaxed posture, window light"
     },
     "enabled": true,
     "rarity": "common"
@@ -2131,7 +2143,8 @@
           0,
           3
         ]
-      }
+      },
+      "photo": "completely straight face, unblinking direct stare, very still, tight centred crop"
     },
     "enabled": true
   },
@@ -2240,7 +2253,8 @@
           -3,
           1
         ]
-      }
+      },
+      "photo": "slightly anxious half-smile, eyes searching the lens, hand fidgeting near her sleeve, several near-identical attempts energy"
     },
     "enabled": true
   },
@@ -2349,7 +2363,8 @@
           -2,
           3
         ]
-      }
+      },
+      "photo": "wicked grin, mischief in the eyes, leaning into the lens, slightly too close to the camera"
     },
     "enabled": true
   },
@@ -2457,7 +2472,8 @@
           -3,
           1
         ]
-      }
+      },
+      "photo": "warm reassuring smile, soft attentive eyes, slightly leaning in as if listening"
     },
     "enabled": true
   },
@@ -2565,7 +2581,8 @@
           -1,
           3
         ]
-      }
+      },
+      "photo": "dry unimpressed mouth, flat direct gaze, one shoulder shrugged, deliberately unglamorous framing"
     },
     "enabled": true
   },
@@ -2673,7 +2690,8 @@
           -2,
           3
         ]
-      }
+      },
+      "photo": "big expressive grin, chin up, arm out, clearly aware of the camera and enjoying it"
     },
     "enabled": true
   },
@@ -2782,7 +2800,8 @@
           -3,
           2
         ]
-      }
+      },
+      "photo": "small private smile, indoors, soft lamp light, cosy layers, photo obviously taken alone at home"
     },
     "enabled": true
   },
@@ -2891,7 +2910,8 @@
           -3,
           1
         ]
-      }
+      },
+      "photo": "huge delighted open smile, bright eyes, head slightly tilted, a bit too close to the lens"
     },
     "enabled": true
   },
@@ -2999,7 +3019,8 @@
           -1,
           3
         ]
-      }
+      },
+      "photo": "measured composed smile, neat hair, considered posture, carefully level framing, tidy background"
     },
     "enabled": true
   },
@@ -3107,7 +3128,8 @@
           -3,
           1
         ]
-      }
+      },
+      "photo": "soft wistful smile, gentle eyes, chin resting on hand, warm golden light"
     },
     "enabled": true
   },
@@ -3215,7 +3237,8 @@
           -1,
           3
         ]
-      }
+      },
+      "photo": "challenging direct stare, slow deliberate smirk, eyebrow up, leaning back as if daring the viewer"
     },
     "enabled": true
   },
@@ -3323,7 +3346,8 @@
           -2,
           3
         ]
-      }
+      },
+      "photo": "quiet unreadable expression, calm level gaze, very composed stillness, plain understated setting"
     },
     "enabled": true
   },

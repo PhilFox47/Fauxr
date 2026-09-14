@@ -1147,6 +1147,36 @@ What she is told tracks it exactly: before a swap she has your emoji and knows a
 exists behind it; after, she has seen it and can refer to it or ask about it. If you have no
 photo uploaded at all she is told that too — and that she is allowed to find it funny.
 
+### What a generated photo looks like
+
+Her **appearance** is fixed at generation and must survive into every prompt unchanged —
+that part already worked. What was missing is that nothing about *who she is* reached the
+image, so twelve different women came back wearing the same blank catalogue expression.
+
+Every archetype now carries a written **photo demeanour** in `personality.json`: expression,
+where her eyes go, how she holds herself, and how the shot itself was taken. A shy character
+gets a small closed-mouth smile, eyes slightly off-camera, shoulders drawn in, taken at
+arm's length; a provocateur gets a challenging stare, a slow smirk, leaning back as if
+daring you. Social energy and humour bend it further — the same face is a different photo on
+someone who hates being photographed. The assembler is told plainly that appearance decides
+what she looks like and this decides everything else, and that two characters with identical
+faces should not produce the same picture.
+
+**The style holds two things at once**, because pushing either alone fails in a predictable
+way. "Candid amateur phone photo" on its own reads as licence to make her unflattering — bad
+angle, sickly cast, a face nobody would swipe on. "Beautiful" on its own returns a retouched
+render with plastic skin, which is the single most obvious way a picture stops looking like a
+person. So both are stated: a real photo, available light, unretouched skin with visible
+texture — of someone who happens to be attractive, at a flattering angle. If only one can
+survive into a tag, the prompt says choose real.
+
+**A negative prompt is finally sent.** The assembler had always returned a `negative_prompt`
+and it was being dropped on the floor — `generateImage` never had a parameter for it, so
+nothing was ever excluded. Its shot-specific negatives now ride along with a standing set
+that fights both failure modes: airbrushing, beauty filters, plastic skin, glamour and
+studio setups on one side; ugly, unflattering angles, harsh flash and sickly tones on the
+other; plus the usual renders, anatomy errors and watermarks.
+
 ### Her face before there is a photo
 
 A match list where nobody has unlocked a photo yet is a column of identical grey initials,

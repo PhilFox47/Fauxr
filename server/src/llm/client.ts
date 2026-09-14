@@ -156,6 +156,8 @@ export async function completeJson<T = any>(opts: JsonCallOptions): Promise<T> {
 
 export interface ImageRequest {
   prompt: string;
+  /** Sent as `negative_prompt`. Omitted entirely when empty, as before. */
+  negativePrompt?: string;
   seed?: number;
   refImage?: string;
 }
@@ -173,6 +175,7 @@ export async function generateImage(req: ImageRequest): Promise<string> {
     response_format: 'b64_json',
     n: 1,
   };
+  if (req.negativePrompt) body.negative_prompt = req.negativePrompt;
   if (req.seed !== undefined) body.seed = req.seed;
   if (req.refImage) body.image = req.refImage;
   if (settings.models.image.provider) body.provider = settings.models.image.provider;
