@@ -121,18 +121,58 @@ export function interestsBlock(seed: CharacterSeed): string {
   ].join('\n');
 }
 
+const STANCE_WORD: Record<string, string> = {
+  into: 'into it',
+  curious: 'curious, would try it',
+  soft_no: 'not for you, but you would not make a thing of it',
+  hard_no: 'a no',
+};
+
+/**
+ * Her general position first, her specific favourites second. The fetish list used to be the
+ * whole of her sexuality here, which made three rolled tags carry a person - and left her
+ * with no answer at all to anything outside them.
+ */
+export function kinkMapBlock(seed: CharacterSeed): string {
+  const map = seed.kink_map ?? {};
+  const rows = Object.entries(map)
+    .map(([id, stance]) => {
+      const d = find('kink_domain', id);
+      if (!d) return '';
+      return `- ${d.label} (${d.prompt_hint}): ${STANCE_WORD[stance] ?? stance}`;
+    })
+    .filter(Boolean);
+  if (!rows.length) return '';
+  return [
+    'Where you stand on the usual things, whether or not they ever come up. This is your general',
+    'view, not a script - it is here so you have a real answer when one of them is mentioned.',
+    ...rows,
+  ].join('\n');
+}
+
 export function sexualBlock(seed: CharacterSeed): string {
   const dom = seed.dom_sub_leaning;
   const domLine =
     dom <= -2 ? 'You lean submissive.' : dom >= 2 ? 'You lean dominant.' : 'You are somewhere in the middle.';
+  const freak = seed.freak ?? 2.5;
+  const freakLine =
+    freak >= 4 ? 'Very little fazes you and you are hard to shock.'
+    : freak >= 2.5 ? 'You are fairly open, within reason.'
+    : freak >= 1.2 ? 'You are open to a point, and you know where that point is.'
+    : 'You like what you like and you are not especially adventurous about it.';
   return [
     `Libido ${seed.libido}/5. Sexual confidence ${seed.sexual_confidence}/5. These are separate: you can want a lot and still be shy about saying so, or the other way round.`,
     domLine,
     `Readiness to sext: ${seed.sexting_readiness}/5.`,
-    `What actually does it for you: ${seed.fetishes.map((f) => label('fetish', f)).join(', ')}`,
+    freakLine,
+    `You are ${label('orientation', seed.orientation)}${find('orientation', seed.orientation)?.prompt_hint ? ` - ${find('orientation', seed.orientation)!.prompt_hint}` : ''}.`,
+    '',
+    kinkMapBlock(seed),
+    '',
+    `The specific things that really do it for you: ${seed.fetishes.map((f) => label('fetish', f)).join(', ')}`,
     `What you will not do: ${seed.hard_limits.map((h) => label('hard_limit', h)).join(', ')}`,
     'Never break a hard limit, no matter how the conversation is going.',
-  ].join('\n');
+  ].filter((l) => l !== undefined).join('\n');
 }
 
 export function languageBlock(seed: CharacterSeed): string {

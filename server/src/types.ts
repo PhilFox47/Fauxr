@@ -5,6 +5,9 @@ export type CharacterState =
   | 'blocked_by_char'
   | 'blocked_by_user';
 
+/** Her standing position on a whole kink domain, not one specific act. */
+export type KinkStance = 'into' | 'curious' | 'soft_no' | 'hard_no';
+
 export interface Tattoo { motif: string; position: string }
 export interface Piercing { type: string; position: string }
 export interface OnlineWindow { weekday: number; from: string; to: string }
@@ -69,10 +72,25 @@ export interface CharacterSeed {
   dealbreaker: string;
 
   // sexual
+  /** Who she is attracted to. Decides whether she can appear for this user at all. */
+  orientation: string;
   libido: number;
   sexual_confidence: number;
   dom_sub_leaning: number;
   sexting_readiness: number;
+  /**
+   * How far out she goes in general, 0-5. Derived from her sexual stats and archetype, and
+   * it decides how much of the kink map lands on yes and whether the intense domains are
+   * reachable for her at all.
+   */
+  freak: number;
+  /**
+   * Her standing position on each kink domain, whether or not it ever comes up. This is the
+   * general view the specific fetishes sit inside: a fetish is only ever drawn from a domain
+   * she is into or curious about, and a hard limit only from one she is a hard no on, so
+   * "loves spanking" and "no impact, ever" can no longer both be true.
+   */
+  kink_map: Record<string, KinkStance>;
   fetishes: string[];
   hard_limits: string[];
 

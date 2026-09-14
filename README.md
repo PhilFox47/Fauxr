@@ -260,6 +260,49 @@ reserved beside a forward one. Wanting sex in general is not the same as wanting
 *him*, and that gap is where the game is — turn-offs, pressure, dealbreakers and hard
 limits all still bite.
 
+### Orientation
+
+Everyone generated is a woman, so what varies is who she is into: straight, bi, mostly into
+men, pan, queer or lesbian, each carrying who it is attracted to. A dating app does not show
+you people who are not into you, so this is matched against the gender on your profile —
+generation only rolls compatible orientations, and the swipe stack filters the same way so
+characters made before you changed anything cannot leak through. A man sees straight, bi,
+mostly-straight, pan and queer women; a woman sees lesbian, bi, mostly-straight, pan and
+queer; someone non-binary or who did not say sees the orientations that are not defined by
+binary attraction. Characters generated before this existed have no orientation and stay
+visible rather than vanishing out of a save.
+
+### Where she stands, before what she is into
+
+Fetishes used to be the whole of a character's sexuality: three tags drawn from 183, plus two
+hard limits drawn independently from 22. Two problems. Three tags were carrying a person, and
+she had no answer at all to anything outside them. And because the two tables never consulted
+each other, a character could genuinely come out loving spanking and refusing all impact.
+
+So the general view comes first now. Fifteen **kink domains** — power play, restraint,
+impact, sharper sensation, breath play, degradation, praise, feet, being seen, other people,
+anal, toys, roleplay, camera, what she wears — and she has a standing position on every one
+of them whether or not it ever comes up: **into it**, **curious**, **not for her**, or **a
+hard no**. That is what the Actor reads first, so "what do you think about X" has a real
+answer for any X, not just the three she rolled.
+
+The specifics then live *inside* that. Her named fetishes are drawn only from domains she is
+into or curious about; her hard limits only from domains she is a hard no on. The 88 fetishes
+no domain claims — kissing, massage, mornings, staying close afterwards — belong to nobody
+and stay available to everyone, because ordinary intimacy is not a kink to be gated.
+
+A **freak** figure, 0–5, is derived from her libido, sexual confidence and sexting readiness
+with an archetype nudge, and it decides how generous the stances are. Domains carry an
+intensity, so the far end stays out of reach for someone not built for it rather than being
+impossible for anyone. Measured over 3000 characters: low-freak characters are open to about
+3 of the 15 domains, mid about 6, high about 10, with stances landing 27% into / 24% curious
+/ 33% not-for-her / 16% hard no.
+
+The consistency is verified rather than assumed — 3000 generated characters, zero
+contradictions. Getting there caught a real one: `marks_limit` belongs to *two* domains
+(impact and sharper sensation), so a single hard no was enough to claim it while she was
+still into the other. A limit is now dropped if she is into any domain it would contradict.
+
 ### Fetishes
 
 Every character rolls two to five, plus hard limits. The Director is shown which ones the
@@ -279,6 +322,21 @@ half-life, so nobody stays at a simmer overnight.
 Its ceiling comes from her seed — libido and sexting readiness — and from spark, so a
 high-libido character still cannot run hot for someone she is not into (libido 5 with spark
 20 tops out at 42). The Actor never sees the number, only how it feels from the inside.
+
+The biggest single move available is landing on something she is actually into, and that
+is now detected in code rather than left for the Director to spot in a forty-message
+transcript — which a cheap model misses most of the time. Each domain carries a short list
+of unambiguous terms; when the user's own messages hit one, the Director is told plainly
+what he walked into and where she stands on it: one of hers (move arousal hard, and she does
+not hide that it landed), something she is curious about, something that does nothing for
+her, or a hard limit (say so plainly; pushing costs him). The term lists are deliberately
+short — a false positive is worse than a miss.
+
+The rubric also says arousal is cumulative within a session: past 50 she does not drift back
+to small talk on her own, she stays warm, gets more direct and starts reaching for it
+herself. The Actor is told the matching thing from her side — that being worked up shows in
+how she types, and that going quiet and polite while plainly turned on is the failure, not
+being explicit.
 
 `arousal_delta` gets the same explicit numeric rubric as trust and spark (+25 for detail
 that actually lands, down to -20 for clumsy or presumptuous), rather than a paragraph of

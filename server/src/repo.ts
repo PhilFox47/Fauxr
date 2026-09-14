@@ -1,4 +1,5 @@
 import { db, nowIso } from './db/index.js';
+import { byCategory } from './db/attributes.js';
 import type {
   Character, CharacterSeed, CharacterState, Direction, Flags, Ledger,
   Relationship, UserProfile,
@@ -20,6 +21,23 @@ function clampPreferredAge(value: unknown, fallback: number): number {
  * The age band he wants to see. Read straight from the profile rather than cached, because
  * generation and the swipe stack both have to agree with it the moment it changes.
  */
+/**
+ * Orientations that could be interested in this user, as a SQL-safe id list. Kept next to
+ * the age band because it is the same kind of filter and has the same failure mode: hide a
+ * character from the stack without also hiding her from the counter and the stack stops
+ * topping itself up.
+ */
+export function compatibleOrientationIds(): string[] {
+  const gender = getUserProfile()?.gender ?? '';
+  const bucket = gender === 'man' ? 'men' : gender === 'woman' ? 'women' : 'enby';
+  const all = byCategory('orientation');
+  const fits = all.filter((o) => ((o.extra?.attracted_to as string[]) ?? []).includes(bucket));
+  const chosen = fits.length ? fits : all.filter((o) => ((o.extra?.attracted_to as string[]) ?? []).length > 1);
+  // Characters generated before orientation existed have none; they stay visible rather
+  // than vanishing out of an existing save.
+  return chosen.map((o) => o.id);
+}
+
 export function preferredAgeRange(): { min: number; max: number } {
   const p = getUserProfile();
   const min = clampPreferredAge(p?.age_min, AGE_FLOOR);
@@ -131,28 +149,34 @@ export function updateCharacterProfile(id: string, fields: { username?: string; 
 /** The swipe stack: pool characters plus rejected ones whose cooldown has expired. */
 export function swipeStack(limit = 10): Character[] {
   const band = preferredAgeRange();
+  const ok = compatibleOrientationIds();
   const rows = db
     .prepare(
       `SELECT * FROM characters
        WHERE (state = 'pool'
           OR (state = 'swiped_left' AND rejection_count < 2 AND reappear_at IS NOT NULL AND reappear_at <= ?))
          AND json_extract(seed, '$.age') BETWEEN ? AND ?
+         AND (json_extract(seed, '$.orientation') IS NULL
+              OR json_extract(seed, '$.orientation') IN (SELECT value FROM json_each(?)))
        ORDER BY created_at ASC LIMIT ?`,
     )
-    .all(nowIso(), band.min, band.max, limit) as any[];
+    .all(nowIso(), band.min, band.max, JSON.stringify(ok), limit) as any[];
   return rows.map(hydrateCharacter);
 }
 
 export function countPoolAvailable(): number {
   const band = preferredAgeRange();
+  const ok = compatibleOrientationIds();
   const row = db
     .prepare(
       `SELECT COUNT(*) AS n FROM characters
        WHERE (state = 'pool'
           OR (state = 'swiped_left' AND rejection_count < 2 AND reappear_at IS NOT NULL AND reappear_at <= ?))
-         AND json_extract(seed, '$.age') BETWEEN ? AND ?`,
+         AND json_extract(seed, '$.age') BETWEEN ? AND ?
+         AND (json_extract(seed, '$.orientation') IS NULL
+              OR json_extract(seed, '$.orientation') IN (SELECT value FROM json_each(?)))`,
     )
-    .get(nowIso(), band.min, band.max) as { n: number };
+    .get(nowIso(), band.min, band.max, JSON.stringify(ok)) as { n: number };
   return row.n;
 }
 

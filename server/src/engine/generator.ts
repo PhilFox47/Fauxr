@@ -5,8 +5,8 @@ import { byCategory, find, type Attribute } from '../db/attributes.js';
 import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
-import { AGE_FLOOR, createRelationship, insertCharacter, preferredAgeRange } from '../repo.js';
-import type { Character, CharacterSeed, OnlineWindow } from '../types.js';
+import { AGE_FLOOR, createRelationship, getUserProfile, insertCharacter, preferredAgeRange } from '../repo.js';
+import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { textOverlap } from './voice.js';
 
@@ -107,6 +107,70 @@ function ageWeights(age: number): Record<string, number> {
   }
   if (age >= 26) scale(['student_halls', 'student_psych', 'student_art'], 0.4);
   return w;
+}
+
+/**
+ * Which orientations could plausibly be interested in this user. Everyone generated here is
+ * a woman, so what varies is whether she is into men, women or both - and a dating app does
+ * not show you people who are not into you at all.
+ */
+export function compatibleOrientations(): Attribute[] {
+  const gender = getUserProfile()?.gender ?? '';
+  const bucket = gender === 'man' ? 'men' : gender === 'woman' ? 'women' : 'enby';
+  const all = byCategory('orientation');
+  const fits = all.filter((o) => ((o.extra?.attracted_to as string[]) ?? []).includes(bucket));
+  // A user who did not state a gender still needs a stack; the orientations that are not
+  // defined by binary attraction are the honest answer there rather than showing nobody.
+  return fits.length ? fits : all.filter((o) => ((o.extra?.attracted_to as string[]) ?? []).length > 1);
+}
+
+/**
+ * How far out she goes in general, 0-5. Her sexual stats carry it, with the archetype
+ * nudging: the same libido reads differently on someone reckless than on someone careful.
+ * This is deliberately not a sixth stat to tune - it is derived, so it cannot drift out of
+ * step with the three it comes from.
+ */
+function rollFreak(libido: number, confidence: number, sexting: number, archetype: string): number {
+  const base = (libido + confidence + sexting) / 3;
+  let shift = 0;
+  if (['chaotic', 'provocateur', 'menace', 'deadpan_menace', 'flirty'].includes(archetype)) shift += 0.8;
+  if (['shy', 'guarded', 'earnest', 'perfectionist', 'still_water'].includes(archetype)) shift -= 0.7;
+  const jitter = Math.random() * 1.4 - 0.7;
+  return Math.max(0, Math.min(5, Math.round((base + shift + jitter) * 10) / 10));
+}
+
+/**
+ * Her standing position on every kink domain, decided before any specific fetish is drawn.
+ *
+ * The point is that the general view comes first and the specifics live inside it. Fetishes
+ * used to be drawn from all 183 rows independently of the 22 hard limits, so a character
+ * could genuinely come out loving spanking and refusing all impact - the two tables never
+ * consulted each other. Now a domain gets a stance, and both the fetishes and the limits are
+ * drawn from that.
+ *
+ * `freak` decides how generous the stances are, and intensity gates the far end: a domain
+ * marked intense is mostly off the table for someone who is not built for it, rather than
+ * being impossible for anyone.
+ */
+function rollKinkMap(freak: number, domains: Attribute[]): Record<string, KinkStance> {
+  const map: Record<string, KinkStance> = {};
+  for (const d of domains) {
+    const intensity = Number(d.extra?.intensity ?? 0);
+    // Roughly: freak 0 says yes to almost nothing, freak 5 says yes to most of the
+    // mainstream and a fair bit of the rest.
+    const reach = freak - intensity * 1.7;
+    const intoChance = Math.max(0.02, Math.min(0.6, 0.05 + reach * 0.115));
+    const curiousChance = Math.max(0.05, Math.min(0.4, 0.12 + reach * 0.07));
+    const r = Math.random();
+    if (r < intoChance) map[d.id] = 'into';
+    else if (r < intoChance + curiousChance) map[d.id] = 'curious';
+    else {
+      // A hard no is a real position, not just absence of interest, and it is much more
+      // likely on the things she is furthest from.
+      map[d.id] = Math.random() < 0.25 + intensity * 0.16 - freak * 0.04 ? 'hard_no' : 'soft_no';
+    }
+  }
+  return map;
 }
 
 /**
@@ -228,8 +292,48 @@ export function rollSeed(): RolledSeed {
   const dom_sub_leaning = rollRange(ranges.dom_sub_leaning, -3, 3);
   const sextingMod = Number((archetype.modifies as any)?.sexting_readiness ?? 0);
   const sexting_readiness = Math.max(1, Math.min(5, rollRange(ranges.sexting_readiness, 1, 5) + sextingMod));
-  const fetishes = rollMany('fetish', ctx, drawCount(counts.fetishes, 3)).map((a) => a.id);
-  const hard_limits = rollMany('hard_limit', ctx, drawCount(counts.hard_limits, 2)).map((a) => a.id);
+  const orientation = roll('orientation', ctx, {
+    only: new Set(compatibleOrientations().map((o) => o.id)),
+  })!;
+  const freak = rollFreak(libido, sexual_confidence, sexting_readiness, archetype.id);
+  const domains = byCategory('kink_domain');
+  const kink_map = rollKinkMap(freak, domains);
+
+  // Her named fetishes are drawn only from domains she is actually open to, and the
+  // unmapped ones (kissing, massage, mornings - most of the table) stay available to
+  // everyone. Being "into feet" now means the feet domain already said yes.
+  const openIds = new Set<string>();
+  for (const d of domains) {
+    const stance = kink_map[d.id];
+    if (stance === 'into' || stance === 'curious') {
+      for (const f of (d.extra?.fetishes as string[]) ?? []) openIds.add(f);
+    }
+  }
+  const claimed = new Set<string>(domains.flatMap((d) => (d.extra?.fetishes as string[]) ?? []));
+  const allowedFetishes = new Set(
+    byCategory('fetish').map((f) => f.id).filter((id) => openIds.has(id) || !claimed.has(id)),
+  );
+  const fetishes = rollMany('fetish', ctx, drawCount(counts.fetishes, 3), { only: allowedFetishes })
+    .map((a) => a.id);
+
+  // Limits come from the domains she is a hard no on, so they can never contradict a
+  // fetish she was just given. The two limits no domain owns stay open to anyone.
+  const limitIds = new Set<string>();
+  for (const d of domains) {
+    if (kink_map[d.id] === 'hard_no') for (const l of (d.extra?.limits as string[]) ?? []) limitIds.add(l);
+  }
+  // A limit can belong to more than one domain - "nothing that leaves marks" sits under
+  // both impact and sharper sensation - so a single hard no is not enough to claim it. If
+  // she is into ANY domain the limit would contradict, it is not one of her limits.
+  for (const d of domains) {
+    const st = kink_map[d.id];
+    if (st !== 'into' && st !== 'curious') continue;
+    for (const l of (d.extra?.limits as string[]) ?? []) limitIds.delete(l);
+  }
+  const ownedLimits = new Set<string>(domains.flatMap((d) => (d.extra?.limits as string[]) ?? []));
+  for (const l of byCategory('hard_limit')) if (!ownedLimits.has(l.id)) limitIds.add(l.id);
+  const hard_limits = rollMany('hard_limit', ctx, drawCount(counts.hard_limits, 2), { only: limitIds })
+    .map((a) => a.id);
 
   const hints: Record<string, string> = {
     archetype: hintOf(archetype),
@@ -255,6 +359,7 @@ export function rollSeed(): RolledSeed {
     search_motive: hintOf(search_motive),
     touchstone: hintOf(touchstone),
     dealbreaker: hintOf(dealbreaker),
+    orientation: hintOf(orientation),
   };
   for (const id of quirks) hints[`quirk:${id}`] = hintOf(find('quirk', id));
   for (const id of interests) hints[`interest:${id}`] = hintOf(find('interest', id));
@@ -317,10 +422,13 @@ export function rollSeed(): RolledSeed {
     green_flags,
     dealbreaker: dealbreaker.id,
 
+    orientation: orientation.id,
     libido,
     sexual_confidence,
     dom_sub_leaning,
     sexting_readiness,
+    freak,
+    kink_map,
     fetishes,
     hard_limits,
 
@@ -394,6 +502,14 @@ export function describeSeed(seed: CharacterSeed): string {
     '',
     `search motive: ${label('search_motive', seed.search_motive)} - ${seed.hints.search_motive}`,
     `touchstone: ${label('touchstone', seed.touchstone)} - ${seed.hints.touchstone}`,
+    `orientation: ${label('orientation', seed.orientation)} - ${seed.hints.orientation ?? ''}`,
+    `how far she goes in general (0-5): ${seed.freak}`,
+    `where she stands on the usual kinks: ${
+      Object.entries(seed.kink_map ?? {})
+        .filter(([, st]) => st === 'into' || st === 'hard_no')
+        .map(([d, st]) => `${label('kink_domain', d)} = ${st === 'into' ? 'into it' : 'hard no'}`)
+        .join('; ') || 'nothing strong either way'
+    }`,
     `turn ons: ${labels('turn_on', seed.turn_ons)}`,
     `turn offs: ${labels('turn_off', seed.turn_offs)}`,
     `green flags: ${labels('green_flag', seed.green_flags)}`,
@@ -647,7 +763,12 @@ export async function generateCharacter(): Promise<Character> {
   const online = sanitizeOnlineTimes(pass.online_times);
   if (online) seed.online_times = online;
 
-  let realName = (pass.real_name ?? '').trim().split(/\s+/)[0] || pickOne(FALLBACK_NAMES);
+  // The fallback pool is only reached when the API is down, but it can repeat just as
+  // easily as the model can, so it gets the same avoid-list treatment.
+  const freshFallbacks = FALLBACK_NAMES.filter((n) => !nearestName(n, takenNames));
+  let realName =
+    (pass.real_name ?? '').trim().split(/\s+/)[0] ||
+    pickOne(freshFallbacks.length ? freshFallbacks : FALLBACK_NAMES);
   const nameClash = nearestName(realName, takenNames);
   if (nameClash) {
     logger.warn('generator', 'name too close to one already in the cast, re-asking', { realName, nameClash });

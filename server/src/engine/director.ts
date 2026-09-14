@@ -11,7 +11,7 @@ import {
 } from './blocks.js';
 import { describeOnlineTimes, nextOnlineAt, onlineUntil } from './presence.js';
 import { arousalCeiling, currentStage, describeArousal } from './stage.js';
-import { describeFetishProgress, herCuriosity, undiscoveredKeys } from './discovery.js';
+import { describeFetishProgress, describeKinkHits, detectKinkHits, herCuriosity, undiscoveredKeys } from './discovery.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
 
@@ -91,6 +91,10 @@ export async function runDirector(
     stage_next: stage.next,
     her_curiosity: herCuriosity(rel),
     fetish_block: describeFetishProgress(character, rel),
+    // Only his side of the exchange: this is about what HE brought up, not what she said.
+    kink_hits: describeKinkHits(
+      detectKinkHits(character, history.filter((m) => m.sender === 'user').map((m) => m.text).join(' ')),
+    ),
     arousal: rel.arousal,
     arousal_ceiling: ceiling,
     arousal_description: describeArousal(rel.arousal),

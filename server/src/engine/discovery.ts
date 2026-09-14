@@ -83,6 +83,17 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
     add(`piercing:${i}`, 'looks', 'Piercing', `${label('piercing_type', p.type)}, ${label('piercing_position', p.position)}`, 'Some are easier to see than others.'));
 
   // ---- intimate: only once that side of the conversation is open
+  add('orientation', 'basics', 'Orientation', label('orientation', s.orientation), 'Comes up when it comes up.');
+  add('freak', 'intimate', 'How far she goes',
+    s.freak >= 4 ? 'Very little fazes her' : s.freak >= 2.5 ? 'Fairly open' : s.freak >= 1.2 ? 'Open to a point' : 'Knows what she likes',
+    'You will get a sense of it.');
+  for (const [domain, stance] of Object.entries(s.kink_map ?? {})) {
+    if (stance !== 'into' && stance !== 'hard_no') continue;
+    const d = find('kink_domain', domain);
+    if (!d) continue;
+    add(`kink:${domain}`, 'intimate', stance === 'into' ? 'Into' : 'Not for her', d.label,
+      stance === 'into' ? 'She will let you know, one way or another.' : 'She will say so if it comes up.');
+  }
   add('libido', 'intimate', 'Drive', `${s.libido}/5`, 'She has to be comfortable first.');
   add('sexual_confidence', 'intimate', 'Confidence', `${s.sexual_confidence}/5`, 'She has to be comfortable first.');
   add('dom_sub_leaning', 'intimate', 'Leaning',
@@ -254,6 +265,66 @@ export function fetishProgress(character: Character, rel: Relationship): FetishP
       known: `fetish:${f}` in discovered,
     };
   });
+}
+
+/**
+ * Words that put a kink domain on the table, for spotting when he has just walked into one
+ * of hers. Deliberately a short list of unambiguous terms per domain: this fires a strong
+ * signal to the Director, so a false positive is worse than a miss.
+ */
+const DOMAIN_TERMS: Record<string, string[]> = {
+  bdsm_power: ['dominant', 'submissive', 'dom ', 'sub ', 'domme', 'in charge', 'boss me', 'obey', 'good girl', 'collar', 'safeword', 'bdsm', 'edging', 'beg'],
+  bondage: ['tie you', 'tie me', 'tied up', 'rope', 'restrain', 'handcuff', 'cuffs', 'blindfold', 'bondage', 'shibari'],
+  impact: ['spank', 'spanking', 'smack', 'paddle', 'flogger', 'riding crop', 'hair pulling', 'pull your hair'],
+  pain_intense: ['wax', 'scratch', 'bite you', 'bite me', 'marks', 'bruis'],
+  breath_play: ['choke', 'choking', 'hand on your throat', 'breath play'],
+  degradation: ['degrade', 'humiliat', 'call you names', 'talk down to'],
+  praise: ['good girl', 'so good', 'praise', 'tell you how good'],
+  feet: ['feet', 'foot', 'toes', 'soles'],
+  exhibitionism: ['in public', 'somewhere public', 'get caught', 'car park', 'outdoors', 'someone might see'],
+  sharing: ['threesome', 'third person', 'watch you with', 'another guy', 'another girl', 'cuckold', 'share you'],
+  anal: ['anal', 'from behind properly', 'back door'],
+  toys: ['toy', 'vibrator', 'dildo', 'plug'],
+  roleplay: ['roleplay', 'role play', 'pretend to be', 'costume', 'uniform', 'nurse outfit'],
+  recording: ['film', 'record', 'video', 'send a pic', 'photos of you', 'camera'],
+  fetishwear: ['latex', 'leather', 'lingerie', 'corset', 'stockings', 'fishnet', 'heels'],
+};
+
+export interface KinkHit {
+  domain: string;
+  label: string;
+  stance: string;
+}
+
+/**
+ * Which of her domains the user just touched, and where she stands on each. The Director is
+ * told about it explicitly rather than being left to spot it in the transcript, because
+ * "he landed on one of her things" is the single biggest arousal move available and a cheap
+ * model reading forty messages will miss it most of the time.
+ */
+export function detectKinkHits(character: Character, saidByUser: string): KinkHit[] {
+  const text = ` ${saidByUser.toLowerCase()} `;
+  const map = character.seed.kink_map ?? {};
+  const hits: KinkHit[] = [];
+  for (const [domain, terms] of Object.entries(DOMAIN_TERMS)) {
+    const stance = map[domain];
+    if (!stance) continue;
+    if (!terms.some((t) => text.includes(t))) continue;
+    hits.push({ domain, label: find('kink_domain', domain)?.label ?? domain, stance });
+  }
+  return hits;
+}
+
+/** The Director-facing line for what he just walked into. Empty when he walked into nothing. */
+export function describeKinkHits(hits: KinkHit[]): string {
+  if (!hits.length) return '';
+  const lines = hits.map((h) => {
+    if (h.stance === 'into') return `- ${h.label}: he just brought this up and it is one of HERS. This should move arousal hard, and she does not have to hide that it landed.`;
+    if (h.stance === 'curious') return `- ${h.label}: he brought this up and she is curious about it. Interest, not indifference.`;
+    if (h.stance === 'hard_no') return `- ${h.label}: he brought this up and it is a hard limit. She says so plainly. This is not arousal, and pushing it costs him.`;
+    return `- ${h.label}: he brought this up and it does nothing for her. Not offended, just not interested.`;
+  });
+  return 'WHAT HE JUST WALKED INTO:\n' + lines.join('\n');
 }
 
 export function describeFetishProgress(character: Character, rel: Relationship): string {

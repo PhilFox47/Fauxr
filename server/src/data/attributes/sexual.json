@@ -2987,5 +2987,532 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "bdsm_power",
+    "category": "kink_domain",
+    "label": "Power play",
+    "weight": 1.0,
+    "prompt_hint": "being in charge or being told what to do, commands, collars, making each other wait",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "being_dominated",
+        "being_dominant",
+        "giving_commands",
+        "taking_commands",
+        "being_pinned",
+        "pinning_him",
+        "role_reversal",
+        "being_claimed",
+        "claiming_him",
+        "being_called_pet",
+        "calling_him_pet",
+        "power_exchange_formal",
+        "collar_receiving",
+        "collaring_him",
+        "being_made_to_strip",
+        "telling_him_to_strip",
+        "denying_him",
+        "self_denial",
+        "being_made_to_wait",
+        "forced_orgasm",
+        "edging_receiving",
+        "edging_giving",
+        "overstimulation",
+        "boss_roleplay",
+        "secretary_roleplay"
+      ],
+      "limits": [
+        "power_play"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "bondage",
+    "category": "kink_domain",
+    "label": "Restraint",
+    "weight": 1.0,
+    "prompt_hint": "rope, ties, cuffs, blindfolds, not being able to move or see",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "restraint_receiving",
+        "restraint_giving",
+        "bondage_shibari",
+        "tying_him",
+        "blindfold_receiving",
+        "blindfold_giving",
+        "sensory_deprivation",
+        "scarf_tie",
+        "using_a_swing_or_wedge"
+      ],
+      "limits": [
+        "restraint",
+        "blindfolds"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "impact",
+    "category": "kink_domain",
+    "label": "Impact",
+    "weight": 1.0,
+    "prompt_hint": "spanking, a firm hand, anything with a sting to it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "spanking_receiving",
+        "spanking_giving",
+        "impact_receiving",
+        "impact_giving",
+        "flogging_receiving",
+        "flogging_giving",
+        "crop_receiving",
+        "crop_giving",
+        "ass_slapping_receiving",
+        "hair_pulling"
+      ],
+      "limits": [
+        "impact",
+        "marks_limit"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "pain_intense",
+    "category": "kink_domain",
+    "label": "Sharper sensation",
+    "weight": 1.0,
+    "prompt_hint": "wax, ice, nails, teeth - sensation that crosses into actual pain",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 2,
+      "fetishes": [
+        "wax_play_receiving",
+        "wax_play_giving",
+        "nail_dragging",
+        "back_scratching",
+        "shoulder_biting",
+        "ice_play_receiving",
+        "ice_play_giving",
+        "metal_cold"
+      ],
+      "limits": [
+        "pain",
+        "marks_limit"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "breath_play",
+    "category": "kink_domain",
+    "label": "Breath play",
+    "weight": 1.0,
+    "prompt_hint": "a hand at the throat, anything restricting air",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 2,
+      "fetishes": [
+        "breath_play_light"
+      ],
+      "limits": [
+        "choking"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "degradation",
+    "category": "kink_domain",
+    "label": "Degradation",
+    "weight": 1.0,
+    "prompt_hint": "being talked down to, humiliated, called names, as play",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 2,
+      "fetishes": [
+        "humiliating_him_lightly",
+        "mild_public_tease"
+      ],
+      "limits": [
+        "humiliation",
+        "degradation",
+        "name_calling",
+        "degrading_language"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "praise",
+    "category": "kink_domain",
+    "label": "Praise",
+    "weight": 1.0,
+    "prompt_hint": "being told she is good, wanted, beautiful, and meaning it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "being_praised",
+        "praising_him",
+        "being_told_beautiful",
+        "being_told_she_smells_good"
+      ],
+      "limits": []
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "feet",
+    "category": "kink_domain",
+    "label": "Feet",
+    "weight": 1.0,
+    "prompt_hint": "feet and toes as the actual point rather than incidental",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "feet_worship_receiving",
+        "feet_worship_giving",
+        "toe_sucking_receiving",
+        "toe_sucking_giving"
+      ],
+      "limits": [
+        "feet_limit"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "exhibitionism",
+    "category": "kink_domain",
+    "label": "Being seen",
+    "weight": 1.0,
+    "prompt_hint": "somewhere public or semi-public, the risk of being caught",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "risky_outdoor",
+        "being_caught_almost",
+        "claimed_in_public",
+        "claiming_in_public",
+        "beach_water",
+        "tent_camping",
+        "office_after_hours",
+        "car_sex"
+      ],
+      "limits": [
+        "public",
+        "being_watched_limit"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "sharing",
+    "category": "kink_domain",
+    "label": "Other people",
+    "weight": 1.0,
+    "prompt_hint": "a third person, watching him with someone else, sharing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 2,
+      "fetishes": [
+        "threesome_fantasy",
+        "watching_him_with_another",
+        "double_penetration"
+      ],
+      "limits": [
+        "third_parties",
+        "filming_others"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "anal",
+    "category": "kink_domain",
+    "label": "Anal",
+    "weight": 1.0,
+    "prompt_hint": "anal, in either direction",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "anal_receiving",
+        "anal_giving"
+      ],
+      "limits": []
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "toys",
+    "category": "kink_domain",
+    "label": "Toys",
+    "weight": 1.0,
+    "prompt_hint": "toys, used together rather than alone",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "using_toys_together"
+      ],
+      "limits": []
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "roleplay",
+    "category": "kink_domain",
+    "label": "Roleplay",
+    "weight": 1.0,
+    "prompt_hint": "playing characters, scenarios, costumes, pretending not to know each other",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "stranger_roleplay",
+        "enemies_roleplay",
+        "costume_roleplay",
+        "uniform_seeing",
+        "uniform_wearing",
+        "truth_or_dare"
+      ],
+      "limits": [
+        "roleplay_limits",
+        "animals_costume"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "recording",
+    "category": "kink_domain",
+    "label": "Camera",
+    "weight": 1.0,
+    "prompt_hint": "photos and video, sent or kept",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "filming_together",
+        "suggestive_photos_receiving",
+        "suggestive_photos_giving"
+      ],
+      "limits": [
+        "anything_recorded",
+        "sexting_pictures"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "fetishwear",
+    "category": "kink_domain",
+    "label": "What she wears",
+    "weight": 1.0,
+    "prompt_hint": "latex, leather, lace, corsets - clothes as the point",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "latex_wearing",
+        "leather_wearing",
+        "seeing_him_in_leather",
+        "corset_wearing",
+        "garter_belt",
+        "nylon_fishnet",
+        "high_heels_wearing",
+        "stockings_wearing",
+        "lace_lingerie"
+      ],
+      "limits": []
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "straight",
+    "category": "orientation",
+    "label": "Straight",
+    "weight": 3.4,
+    "prompt_hint": "into men, and that is the whole of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "bi",
+    "category": "orientation",
+    "label": "Bisexual",
+    "weight": 1.5,
+    "prompt_hint": "into men and women both, not necessarily equally",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women",
+        "enby"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "mostly_straight",
+    "category": "orientation",
+    "label": "Mostly into men",
+    "weight": 0.9,
+    "prompt_hint": "into men, with exceptions she does not over-explain",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women"
+      ]
+    },
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "pan",
+    "category": "orientation",
+    "label": "Pansexual",
+    "weight": 0.7,
+    "prompt_hint": "gender is not really the axis she sorts people on",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women",
+        "enby"
+      ]
+    },
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "queer",
+    "category": "orientation",
+    "label": "Queer",
+    "weight": 0.5,
+    "prompt_hint": "uses queer rather than anything narrower, and means it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "men",
+        "women",
+        "enby"
+      ]
+    },
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "lesbian",
+    "category": "orientation",
+    "label": "Lesbian",
+    "weight": 1.4,
+    "prompt_hint": "into women, and not into men",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "attracted_to": [
+        "women"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
   }
 ]
