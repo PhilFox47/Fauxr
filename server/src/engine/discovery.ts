@@ -35,6 +35,8 @@ export const CATEGORY_LABELS: Record<DiscoveryCategory, string> = {
 };
 
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
+/** English has no row in the language table, so it would otherwise render lowercase. */
+const langLabel = (id: string) => find('language', id)?.label ?? id.charAt(0).toUpperCase() + id.slice(1);
 
 /** The full set of facts for one character. Stable keys, so progress survives a restart. */
 export function buildCatalogue(character: Character): DiscoverableFact[] {
@@ -46,8 +48,8 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
 
   // ---- basics
   add('real_name', 'basics', 'Name', character.real_name, 'She has to want to tell you.');
-  add('age', 'basics', 'Age', String(s.age), 'Comes up sooner or later.');
-  add('languages', 'basics', 'Languages', s.languages.map((l) => label('language', l)).join(', '), 'Listen for words that are not English.');
+  add('age', 'basics', 'Age', String(s.age), 'On her profile from the start.');
+  add('languages', 'basics', 'Languages', s.languages.map(langLabel).join(', '), 'On her profile from the start.');
   add('occupation', 'life', 'Work', label('occupation', s.occupation), 'Ask what she does. Or notice when she says it.');
   add('living_situation', 'life', 'Living', label('living_situation', s.living_situation), 'Where she is when she texts you.');
   add('social_energy', 'life', 'Social battery', label('social_energy', s.social_energy), 'Watch how she talks about her weekends.');
@@ -94,9 +96,16 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
 
 export type DiscoveredMap = Record<string, string>;
 
+/**
+ * Known from the moment she appears, because they are on her card before you swipe. Nothing
+ * is gained by making someone extract a number that was printed on the profile, and the
+ * Director being told to "reveal" her age produced conversations that opened by stating it.
+ */
+const ALWAYS_KNOWN = ['age', 'languages'];
+
 /** Flags already record some reveals; keep the profile consistent with them. */
 function impliedByFlags(flags: Flags): string[] {
-  const keys: string[] = [];
+  const keys: string[] = [...ALWAYS_KNOWN];
   if (flags.state.real_name_known) keys.push('real_name');
   if (flags.state.profile_picture_sent) keys.push('hair', 'eyes', 'style', 'distinctive_feature');
   if (flags.state.has_had_first_date) keys.push('height', 'body_type');

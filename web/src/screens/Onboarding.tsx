@@ -26,6 +26,10 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
         photos,
         gender,
         seeking,
+        // The defaults; the range is tunable later under Settings rather than adding
+        // another field to the first screen anyone sees.
+        age_min: 18,
+        age_max: 42,
       });
       onDone();
     } catch (err) {

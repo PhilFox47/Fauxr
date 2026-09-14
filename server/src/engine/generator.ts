@@ -5,7 +5,7 @@ import { byCategory, find, type Attribute } from '../db/attributes.js';
 import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
-import { insertCharacter, createRelationship } from '../repo.js';
+import { AGE_FLOOR, createRelationship, insertCharacter, preferredAgeRange } from '../repo.js';
 import type { Character, CharacterSeed, OnlineWindow } from '../types.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { textOverlap } from './voice.js';
@@ -32,10 +32,19 @@ function hintOf(a: Attribute | null | undefined): string {
   return a.prompt_hint || a.label;
 }
 
+/**
+ * Her age, drawn inside whatever band he asked for in his profile (18-42 by default).
+ * Two draws averaged give a triangular curve rather than a flat one, so the middle of the
+ * band is common and its edges are not - the same shape the fixed 18-42 roll had, just
+ * rescaled to fit. The 18 floor is enforced here as well as at the profile, because this
+ * is the last place it can be got wrong.
+ */
 function rollAge(): number {
-  // Skewed young-adult curve, hard minimum 18.
-  const base = 18 + Math.floor(Math.abs(Math.min(randInt(0, 10) + randInt(0, 12), 22)));
-  return Math.max(18, Math.min(42, base));
+  const { min, max } = preferredAgeRange();
+  const lo = Math.max(AGE_FLOOR, min);
+  const hi = Math.max(lo, max);
+  const span = hi - lo;
+  return lo + Math.round((randInt(0, span) + randInt(0, span)) / 2);
 }
 
 function rollTypoRate(typingStyle: string, archetype: string): number {

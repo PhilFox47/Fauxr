@@ -6,6 +6,28 @@ import type {
 
 // ---------------------------------------------------------------- user profile
 
+/** Everyone on here is an adult; the floor is not negotiable from the client. */
+export const AGE_FLOOR = 18;
+export const AGE_CEILING = 70;
+
+function clampPreferredAge(value: unknown, fallback: number): number {
+  const n = Math.round(Number(value));
+  if (!Number.isFinite(n)) return fallback;
+  return Math.max(AGE_FLOOR, Math.min(AGE_CEILING, n));
+}
+
+/**
+ * The age band he wants to see. Read straight from the profile rather than cached, because
+ * generation and the swipe stack both have to agree with it the moment it changes.
+ */
+export function preferredAgeRange(): { min: number; max: number } {
+  const p = getUserProfile();
+  const min = clampPreferredAge(p?.age_min, AGE_FLOOR);
+  const max = clampPreferredAge(p?.age_max, 42);
+  // A range saved back to front would otherwise match nothing at all.
+  return min <= max ? { min, max } : { min: max, max: min };
+}
+
 export function getUserProfile(): UserProfile | null {
   const row = db.prepare('SELECT * FROM user_profile WHERE id = 1').get() as any;
   if (!row) return null;
@@ -15,6 +37,8 @@ export function getUserProfile(): UserProfile | null {
     bio: row.bio,
     photos: JSON.parse(row.photos),
     gender: row.gender,
+    age_min: row.age_min ?? 18,
+    age_max: row.age_max ?? 42,
     seeking: row.seeking,
   };
 }
@@ -22,12 +46,19 @@ export function getUserProfile(): UserProfile | null {
 export function saveUserProfile(p: UserProfile): UserProfile {
   const ts = nowIso();
   db.prepare(
-    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, created_at, updated_at)
-     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @ts, @ts)
+    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, created_at, updated_at)
+     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @ts, @ts)
      ON CONFLICT(id) DO UPDATE SET display_name = excluded.display_name, age = excluded.age,
        bio = excluded.bio, photos = excluded.photos, gender = excluded.gender,
-       seeking = excluded.seeking, updated_at = excluded.updated_at`,
-  ).run({ ...p, photos: JSON.stringify(p.photos ?? []), ts });
+       seeking = excluded.seeking, age_min = excluded.age_min, age_max = excluded.age_max,
+       updated_at = excluded.updated_at`,
+  ).run({
+    ...p,
+    photos: JSON.stringify(p.photos ?? []),
+    age_min: clampPreferredAge(p.age_min, 18),
+    age_max: clampPreferredAge(p.age_max, 42),
+    ts,
+  });
   return getUserProfile()!;
 }
 
@@ -99,25 +130,29 @@ export function updateCharacterProfile(id: string, fields: { username?: string; 
 
 /** The swipe stack: pool characters plus rejected ones whose cooldown has expired. */
 export function swipeStack(limit = 10): Character[] {
+  const band = preferredAgeRange();
   const rows = db
     .prepare(
       `SELECT * FROM characters
-       WHERE state = 'pool'
-          OR (state = 'swiped_left' AND rejection_count < 2 AND reappear_at IS NOT NULL AND reappear_at <= ?)
+       WHERE (state = 'pool'
+          OR (state = 'swiped_left' AND rejection_count < 2 AND reappear_at IS NOT NULL AND reappear_at <= ?))
+         AND json_extract(seed, '$.age') BETWEEN ? AND ?
        ORDER BY created_at ASC LIMIT ?`,
     )
-    .all(nowIso(), limit) as any[];
+    .all(nowIso(), band.min, band.max, limit) as any[];
   return rows.map(hydrateCharacter);
 }
 
 export function countPoolAvailable(): number {
+  const band = preferredAgeRange();
   const row = db
     .prepare(
       `SELECT COUNT(*) AS n FROM characters
-       WHERE state = 'pool'
-          OR (state = 'swiped_left' AND rejection_count < 2 AND reappear_at IS NOT NULL AND reappear_at <= ?)`,
+       WHERE (state = 'pool'
+          OR (state = 'swiped_left' AND rejection_count < 2 AND reappear_at IS NOT NULL AND reappear_at <= ?))
+         AND json_extract(seed, '$.age') BETWEEN ? AND ?`,
     )
-    .get(nowIso()) as { n: number };
+    .get(nowIso(), band.min, band.max) as { n: number };
   return row.n;
 }
 

@@ -143,6 +143,10 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
 
                 <div className="swipe-emoji" aria-hidden="true">{current.avatar_emoji}</div>
                 <div className="handle">{current.username}</div>
+                <div className="swipe-meta">
+                  <span>{current.age}</span>
+                  {!!current.languages?.length && <span>{current.languages.join(', ')}</span>}
+                </div>
                 <div className="bio">{current.bio}</div>
                 <div className="hint">That is all you get</div>
               </div>
@@ -158,7 +162,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
             </div>
           </>
         )}
-        <div className="stack-count">No photos, no age, no filters. Just the bio.</div>
+        <div className="stack-count">No photos. Her age, her languages and the bio.</div>
       </div>
     </>
   );

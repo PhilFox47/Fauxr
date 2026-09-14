@@ -5,6 +5,9 @@ export interface UserProfile {
   photos: string[];
   gender: string;
   seeking: string;
+  /** The age band to generate and show, applied to new characters as they are made. */
+  age_min: number;
+  age_max: number;
 }
 
 export interface AppState {
@@ -22,6 +25,9 @@ export interface SwipeProfile {
   bio: string;
   /** Not a photo - just the emoji she picked for herself, so cards are tellable apart. */
   avatar_emoji: string;
+  age: number;
+  /** Display labels, already resolved server-side. */
+  languages: string[];
 }
 
 /** Which parts of the install a reset should take out. Anything false survives. */

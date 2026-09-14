@@ -273,8 +273,8 @@ button { cursor: pointer; }
 .col { display: flex; flex-direction: column; gap: var(--s3); }
 .grow { flex: 1; }
 
-label.field { display: block; margin-bottom: var(--s4); }
-label.field > span:first-child {
+.field { display: block; margin-bottom: var(--s4); }
+.field > span:first-child {
   display: block;
   font-size: 11px;
   color: var(--muted);
@@ -283,7 +283,7 @@ label.field > span:first-child {
   letter-spacing: 0.7px;
   font-weight: 600;
 }
-label.field .tiny.muted { margin-top: var(--s2); display: block; line-height: 1.5; }
+.field .tiny.muted { margin-top: var(--s2); display: block; line-height: 1.5; }
 
 input[type='text'], input[type='number'], input[type='file'], textarea, select {
   width: 100%;
@@ -452,6 +452,22 @@ input[type='range'] {
   color: var(--accent);
   margin-right: 1px;
 }
+/* Age, and any language beyond English. Small, dim and factual - it is profile furniture,
+   not part of what she wrote. */
+.swipe-card .swipe-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s1);
+  font-size: 13.5px;
+  color: var(--text-dim);
+}
+.swipe-card .swipe-meta span + span::before {
+  content: '·';
+  margin-right: var(--s2);
+  opacity: 0.6;
+}
+
 /* Bios are written as two to four short lines; keep the author's line breaks. */
 .swipe-card .bio {
   font-size: 16.5px;

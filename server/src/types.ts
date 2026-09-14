@@ -254,4 +254,7 @@ export interface UserProfile {
   photos: string[];
   gender: string;
   seeking: string;
+  /** The age band he wants to see, applied when characters are generated. */
+  age_min: number;
+  age_max: number;
 }

@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS user_profile (
   photos        TEXT NOT NULL DEFAULT '[]',
   gender        TEXT NOT NULL DEFAULT '',
   seeking       TEXT NOT NULL DEFAULT '',
+  age_min       INTEGER NOT NULL DEFAULT 18,
+  age_max       INTEGER NOT NULL DEFAULT 42,
   created_at    TEXT NOT NULL,
   updated_at    TEXT NOT NULL
 );

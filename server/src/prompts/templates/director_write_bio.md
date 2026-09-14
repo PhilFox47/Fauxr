@@ -4,9 +4,12 @@ This is not a relationship site and nobody here is pretending otherwise. Everyon
 an adult who wants something physical, and the bios reflect that plainly. Hers should leave
 no doubt about what she is here for.
 
-This bio is the ONLY thing anyone sees before they swipe. No photo. No age. No job, no
-distance. Just a handle and these few words. Everything about her has to be implied by
-them, and the decision to swipe is made on them alone.
+Before anyone swipes they see four things: her handle, her age, any language she speaks
+besides English, and this bio. No photo, no job, no distance. Everything else about her has
+to be implied by these few words, and the decision to swipe is made on them alone.
+
+Her age and languages are already on the card, so the bio saying them again is a wasted
+line - write as though the reader has just read them.
 
 So it cannot be a description of her. It has to be the thing she would actually type into
 that box, knowing exactly what it is for.

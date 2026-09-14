@@ -3,7 +3,7 @@ import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import { DATA_DIR, db, nowIso } from '../db/index.js';
-import { allCategories, byCategory, invalidateAttributeCache } from '../db/attributes.js';
+import { allCategories, byCategory, find, invalidateAttributeCache } from '../db/attributes.js';
 import { getSettings, saveSettings } from '../config.js';
 import { usageToday } from '../llm/client.js';
 import { logger } from '../log.js';
@@ -70,6 +70,10 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       photos: Array.isArray(b.photos) ? b.photos.slice(0, 9) : [],
       gender: String(b.gender ?? ''),
       seeking: String(b.seeking ?? ''),
+      // saveUserProfile clamps these to the 18 floor and sorts them if they arrive
+      // back to front, so a bad pair from the client cannot produce an empty stack.
+      age_min: Number(b.age_min ?? 18),
+      age_max: Number(b.age_max ?? 42),
     });
     void ensureStack();
     return saved;
@@ -80,11 +84,22 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     void ensureStack();
     return {
       generating: generatingCount(),
-      // Handle, bio and the emoji she picked for herself - no real photo, no age, no
-      // interests. The emoji is not a photo: it exists so the stack is not a run of
-      // identical cards, not to give away anything about what she actually looks like.
+      // Handle, bio, age, languages and the emoji she picked for herself. Age and
+      // languages are on the card because they are what a dating app actually shows before
+      // you swipe, and making someone extract them in conversation was never a game. Still
+      // no photo and no interests: the emoji exists so the stack is not a run of identical
+      // cards, not to give away what she looks like.
       profiles: stack().map((c) => ({
-        id: c.id, username: c.username, bio: c.bio, avatar_emoji: avatarEmojiFor(c),
+        id: c.id,
+        username: c.username,
+        bio: c.bio,
+        avatar_emoji: avatarEmojiFor(c),
+        age: c.seed.age,
+        // English is not listed: everyone speaks it, so it says nothing about her. It is
+        // also the one language with no row in the table, hence the capitalising fallback.
+        languages: c.seed.languages
+          .filter((l) => l !== 'english')
+          .map((l) => find('language', l)?.label ?? l.charAt(0).toUpperCase() + l.slice(1)),
       })),
     };
   });

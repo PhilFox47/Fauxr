@@ -178,6 +178,11 @@ she lives, her humour, her soft spot, her interests, what she looks like, and on
 part of the conversation is open, what she is into. Roughly forty rows. All of them start
 as `???`.
 
+Two rows start filled in: **age** and **languages**. They are printed on her card before
+you swipe, so making someone extract them in conversation was never a game — and the
+Director being told to "reveal" her age produced chats that opened by stating it. Everything
+else starts as `???`.
+
 A row fills in when she actually tells him. Never when a stat crosses a line. The Director
 reports what came out in each exchange, and a deterministic backstop in code catches the
 obvious ones — if she names her job, he knows it, whether or not the Director thought to
@@ -813,6 +818,24 @@ interchangeable is the particular combination, and there is no headline trait to
 
 The **heightening** slider went with it, since it existed only to weight the signature pool.
 `rarity_bias` already covers how much of the rare tail shows up.
+
+### What the swipe card shows, and who is on it
+
+The card is her handle, her avatar emoji, her **age**, any **language she speaks besides
+English**, and the bio. No photo, no job, no distance. English is left off because everyone
+speaks it, so it says nothing about her; the bio prompt is told the age and languages are
+already on the card, so a bio that repeats them is wasting a line.
+
+A **preferred age range** lives on your profile under Settings, defaulting to 18–42, which
+is exactly the band generation used to be hardcoded to. It does two things: new characters
+are rolled inside it, and anyone already in the pool outside it is hidden. Both halves
+matter — `swipeStack` and `countPoolAvailable` filter identically, because a stack that hid
+characters the counter still counted would stop topping itself up and sit empty forever.
+
+Ages are drawn on a triangular curve across whatever band is set, so the middle is common
+and the edges are not — the same shape the fixed 18–42 roll had, rescaled. 18 is a hard
+floor enforced at the profile, at the clamp and again at the roll, and a range saved back to
+front is sorted rather than matching nothing.
 
 ### Relationship status
 

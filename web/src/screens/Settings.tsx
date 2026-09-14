@@ -471,7 +471,7 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
 
 function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSaved: () => void }) {
   const [form, setForm] = useState<UserProfile>(
-    profile ?? { display_name: '', age: 18, bio: '', photos: [], gender: '', seeking: '' },
+    profile ?? { display_name: '', age: 18, bio: '', photos: [], gender: '', seeking: '', age_min: 18, age_max: 42 },
   );
   const [saved, setSaved] = useState(false);
 
@@ -489,6 +489,25 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
         <span>Bio</span>
         <textarea value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} />
       </label>
+      <div className="field">
+        <span>Ages you want to see</span>
+        <div className="row">
+          <input
+            className="grow"
+            type="number" min={18} max={70} value={form.age_min}
+            onChange={(e) => setForm({ ...form, age_min: Number(e.target.value) })}
+          />
+          <input
+            className="grow"
+            type="number" min={18} max={70} value={form.age_max}
+            onChange={(e) => setForm({ ...form, age_max: Number(e.target.value) })}
+          />
+        </div>
+        <span className="tiny muted">
+          Applies to characters generated from now on, and hides anyone already in the stack
+          who falls outside it. 18 is the floor whatever you type here.
+        </span>
+      </div>
       <label className="field">
         <span>Add a photo ({form.photos.length})</span>
         <input
