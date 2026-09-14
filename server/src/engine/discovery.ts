@@ -1,4 +1,5 @@
 import { find } from '../db/attributes.js';
+import { getUserProfile } from '../repo.js';
 import type { Character, Flags, Relationship } from '../types.js';
 
 /**
@@ -325,6 +326,70 @@ export function describeKinkHits(hits: KinkHit[]): string {
     return `- ${h.label}: he brought this up and it does nothing for her. Not offended, just not interested.`;
   });
   return 'WHAT HE JUST WALKED INTO:\n' + lines.join('\n');
+}
+
+/**
+ * What she has worked out about what HE likes, and what she has not.
+ *
+ * His stances live on his profile and nobody is told them. A character learns one by him
+ * actually bringing it up, and the knowledge is per-relationship and permanent - so the
+ * woman he has been talking to for a fortnight knows things the new match does not, which
+ * is the whole point of having it be discovered rather than handed over.
+ *
+ * Stored in the same `discovered` map as everything else under a `his:` prefix, so it
+ * needed no new column and survives a restart like the rest of it.
+ */
+export function learnAboutHim(rel: Relationship, saidByUser: string): string[] {
+  const profile = getUserProfile();
+  const his = profile?.kink_map ?? {};
+  if (!Object.keys(his).length) return [];
+  const text = ` ${saidByUser.toLowerCase()} `;
+  const learned: string[] = [];
+  for (const [domain, terms] of Object.entries(DOMAIN_TERMS)) {
+    if (!(domain in his)) continue;
+    const key = `his:${domain}`;
+    if (rel.discovered?.[key]) continue;
+    if (!terms.some((t) => text.includes(t))) continue;
+    rel.discovered[key] = new Date().toISOString();
+    learned.push(domain);
+  }
+  return learned;
+}
+
+const HIS_STANCE_WORD: Record<string, string> = {
+  into: 'he is into it',
+  curious: 'he is curious about it',
+  soft_no: 'not his thing',
+  hard_no: 'a hard no for him',
+};
+
+/** What she knows about his side, and the gaps she could actually ask about. */
+export function describeHim(rel: Relationship): string {
+  const his = getUserProfile()?.kink_map ?? {};
+  const entries = Object.entries(his);
+  if (!entries.length) return '';
+
+  const known = entries.filter(([d]) => rel.discovered?.[`his:${d}`]);
+  const unknown = entries.filter(([d]) => !rel.discovered?.[`his:${d}`]);
+  const lines: string[] = [];
+
+  if (known.length) {
+    lines.push(
+      'What she has worked out about what HE likes:\n' +
+        known.map(([d, st]) => `- ${find('kink_domain', d)?.label ?? d}: ${HIS_STANCE_WORD[st] ?? st}`).join('\n') +
+        '\nShe knows these because he told her. She can use them, refer back to them, and take them into account.',
+    );
+  }
+  if (unknown.length) {
+    lines.push(
+      'She does NOT know where he stands on: ' +
+        unknown.map(([d]) => find('kink_domain', d)?.label ?? d).join(', ') +
+        '.\nThese are real gaps in what she knows, and asking about one is a genuinely good use of a turn - ' +
+        'not an interview question, the way someone actually asks when they want to know what they are dealing with. ' +
+        'Never assume an answer to one of these, and never act as though he has already said.',
+    );
+  }
+  return lines.join('\n\n');
 }
 
 export function describeFetishProgress(character: Character, rel: Relationship): string {

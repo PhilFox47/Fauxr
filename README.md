@@ -303,6 +303,65 @@ contradictions. Getting there caught a real one: `marks_limit` belongs to *two* 
 (impact and sharper sensation), so a single hard no was enough to claim it while she was
 still into the other. A limit is now dropped if she is into any domain it would contradict.
 
+### Your own side of it
+
+The characters have a kink map; so do you. The same fifteen domains sit on your profile under
+Settings, set by you, with the same four stances. Nothing is handed to anyone: a character
+starts a conversation knowing **none** of it and learns a stance only when you actually bring
+that thing up. What she learns is per-relationship and permanent, so the match you have been
+talking to for a fortnight knows things the one you matched this morning does not — which is
+the entire reason it is discovered rather than given.
+
+The Director is also told the **gaps**: which domains she has no idea where you stand on, and
+that asking about one is a good use of a turn. That is the difference between a character who
+interviews you and one who is actually curious about something specific.
+
+It rides in the existing `discovered` map under a `his:` prefix, so it needed no new column
+and survives a restart like everything else. Leaving a domain unset simply means it never
+comes up.
+
+### Her tell
+
+Every character has one: how it shows when she is turned on. Goes quiet and short. Drops the
+hedging and gets blunt. Starts giving orders. Types worse. Talks more. Goes oddly proper.
+Jokes harder the worse she has got it. Turns interrogator. Starts talking in hypotheticals.
+Reaches for voice notes. One word at a time. Gets mean with it.
+
+It surfaces to the Actor once arousal is past 35. Before this, every character warmed up
+identically, which is the sort of sameness you feel without being able to name it.
+
+### Arousal has no ceiling any more
+
+There used to be a hard clamp, and the half of it keyed on spark capped her at **40** early
+on — below the 45 the sexting guidance needs, and nowhere near the 70 that reads as openly
+wanting him. So a character could be handed exactly the thing she is into and the formula
+would throw the reaction away. It was the last artificial lock in the app and it was working
+against everything else.
+
+Gone. The Director gets a sentence about how hot she plausibly runs, drawn from her libido
+and sexting readiness, and told plainly that there is no cap and two people hitting it off
+immediately is normal here. Her seed still matters — a low-libido character running to 90 is
+out of character — but that is a judgement made with the numbers in front of it rather than a
+lid that discards them.
+
+### What worked, remembered
+
+A short ledger list, capped at twelve, of things he did that visibly got to her — a specific
+line, the moment he worked out what she meant. Kept apart from `events` because this is the
+list she is allowed to reach back into unprompted, days later, out of nowhere. The Director is
+told to write them concretely enough to reuse ("the thing he said about her hands", not "he
+was charming") and only when something genuinely moved her.
+
+### Sexting has a shape, not a script
+
+It builds, it gets somewhere, and there is a moment afterwards. What it should not do is
+hover at the same temperature forever, which is the sexual version of a test with no finish
+line and reads as a machine that cannot finish a thought. The Director is told to notice
+which part of the shape it is in and write a direction that belongs there — and told
+explicitly that this is not a script, that there are no beats to hit in order, and never to
+plan a scene or decide in advance where it ends. The Actor gets one line about the
+afterwards being worth having.
+
 ### Fetishes
 
 Every character rolls two to five, plus hard limits. The Director is shown which ones the

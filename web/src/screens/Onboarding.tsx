@@ -30,6 +30,8 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
         // another field to the first screen anyone sees.
         age_min: 18,
         age_max: 42,
+        // Set later under Settings; an empty map just means nobody knows anything yet.
+        kink_map: {},
       });
       onDone();
     } catch (err) {

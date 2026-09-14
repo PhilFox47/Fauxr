@@ -74,6 +74,8 @@ export interface CharacterSeed {
   // sexual
   /** Who she is attracted to. Decides whether she can appear for this user at all. */
   orientation: string;
+  /** How it shows when she is turned on, so warming up is not identical for everyone. */
+  arousal_tell: string;
   libido: number;
   sexual_confidence: number;
   dom_sub_leaning: number;
@@ -156,6 +158,12 @@ export interface DirectorNotes {
 export interface Ledger {
   facts: { about_user: string[]; about_her: string[] };
   events: string[];
+  /**
+   * Specific things he did or said that visibly got her going. Kept apart from `events`
+   * because this is the list she is allowed to reach back into unprompted - progression
+   * that is remembered rather than counted. Optional: older saves have no such array.
+   */
+  what_landed?: string[];
   open_threads: OpenThread[];
   director_notes: DirectorNotes;
 }
@@ -275,4 +283,10 @@ export interface UserProfile {
   /** The age band he wants to see, applied when characters are generated. */
   age_min: number;
   age_max: number;
+  /**
+   * His own standing position on the same kink domains the characters have. He sets this;
+   * nobody is told it. Characters start knowing none of it and find it out by talking to
+   * him, which is the point - it gives them something real to be curious about.
+   */
+  kink_map: Record<string, KinkStance>;
 }

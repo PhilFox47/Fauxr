@@ -1074,3 +1074,16 @@ input[type='range'] {
 .fact-value { font-size: 14px; flex: 1; color: var(--text); }
 .fact-value.locked { color: var(--faint); letter-spacing: 3px; font-size: 12px; }
 .fact.known .fact-label { color: var(--text-dim); }
+
+
+/* ---- kink stance editor (Settings -> Your profile) */
+.kink-row {
+  padding: var(--s3) 0;
+  border-top: 1px solid var(--line);
+}
+.kink-row:first-of-type { border-top: none; }
+.kink-label { display: flex; flex-direction: column; gap: 2px; margin-bottom: var(--s2); }
+.kink-label strong { font-size: 14.5px; font-weight: 620; }
+.kink-label .tiny { line-height: 1.45; }
+.kink-stances { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.kink-stances .chip { font-size: 12.5px; padding: 6px 11px; }

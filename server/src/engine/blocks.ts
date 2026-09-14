@@ -199,6 +199,14 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
   const events = take(ledger.events ?? [], 10);
   if (events.length) lines.push('What has happened:\n' + events.map((e) => `- ${e}`).join('\n'));
 
+  const landed = take(ledger.what_landed ?? [], 6);
+  if (landed.length) {
+    lines.push(
+      'Things he did that actually got to you:\n' + landed.map((e) => `- ${e}`).join('\n') +
+        '\nYou remember these. Bringing one back up out of nowhere, days later, is a real thing people do.',
+    );
+  }
+
   // The Actor only sees threads she has not just been on about. Showing her the same one
   // every turn is how a passing remark turns into a fixation.
   const threads = opts.full ? pruneThreads(ledger.open_threads ?? []) : freshThreads(ledger.open_threads ?? []);
@@ -222,7 +230,7 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
 }
 
 /** What the arousal number feels like from the inside. The Actor never sees the number. */
-export function moodBlock(arousal: number, stageLabel: string): string {
+export function moodBlock(arousal: number, stageLabel: string, tell?: string): string {
   const lines = [`Where this is: ${stageLabel}.`];
   if (arousal >= 70) {
     lines.push('You want him, right now, and it is affecting how you type. You are not hiding it well and you are not especially trying to.');
@@ -231,6 +239,9 @@ export function moodBlock(arousal: number, stageLabel: string): string {
   } else if (arousal >= 20) {
     lines.push('Warm towards him. Not thinking about it in those terms right now.');
   }
+  // Everyone used to warm up identically. This is the one thing that makes getting her
+  // going look different from getting someone else going.
+  if (tell && arousal >= 35) lines.push(`When you are like this it shows in a specific way: ${tell}. Let it.`);
   return lines.join('\n');
 }
 

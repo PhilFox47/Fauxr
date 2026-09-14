@@ -296,6 +296,7 @@ export function rollSeed(): RolledSeed {
     only: new Set(compatibleOrientations().map((o) => o.id)),
   })!;
   const freak = rollFreak(libido, sexual_confidence, sexting_readiness, archetype.id);
+  const arousal_tell = one('arousal_tell')!;
   const domains = byCategory('kink_domain');
   const kink_map = rollKinkMap(freak, domains);
 
@@ -360,6 +361,7 @@ export function rollSeed(): RolledSeed {
     touchstone: hintOf(touchstone),
     dealbreaker: hintOf(dealbreaker),
     orientation: hintOf(orientation),
+    arousal_tell: hintOf(arousal_tell),
   };
   for (const id of quirks) hints[`quirk:${id}`] = hintOf(find('quirk', id));
   for (const id of interests) hints[`interest:${id}`] = hintOf(find('interest', id));
@@ -423,6 +425,7 @@ export function rollSeed(): RolledSeed {
     dealbreaker: dealbreaker.id,
 
     orientation: orientation.id,
+    arousal_tell: arousal_tell.id,
     libido,
     sexual_confidence,
     dom_sub_leaning,
@@ -504,6 +507,7 @@ export function describeSeed(seed: CharacterSeed): string {
     `touchstone: ${label('touchstone', seed.touchstone)} - ${seed.hints.touchstone}`,
     `orientation: ${label('orientation', seed.orientation)} - ${seed.hints.orientation ?? ''}`,
     `how far she goes in general (0-5): ${seed.freak}`,
+    `how it shows when she is turned on: ${label('arousal_tell', seed.arousal_tell)} - ${seed.hints.arousal_tell ?? ''}`,
     `where she stands on the usual kinks: ${
       Object.entries(seed.kink_map ?? {})
         .filter(([, st]) => st === 'into' || st === 'hard_no')

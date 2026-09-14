@@ -80,18 +80,32 @@ export function currentStage(rel: Relationship): Stage {
 }
 
 /**
- * Session-level arousal. Separate from spark: spark is whether she fancies him, this is
- * whether she is in the mood right now. It moves fast and decays fast, and it is capped by
- * who she is - a low-libido character never runs hot just because the chat went well.
+ * How hot she plausibly runs, as a sentence for the Director rather than a number that
+ * clamps her.
+ *
+ * There used to be a hard ceiling here, and the half of it keyed on spark capped her at 40
+ * early on - below the 45 the sexting guidance needs and nowhere near the 70 that reads as
+ * openly wanting him. So a character could be handed exactly the thing she is into and the
+ * formula would throw the reaction away, which is the opposite of what this app is for. Two
+ * people hitting it off immediately is not unusual on a hookup app, and nothing should make
+ * it impossible.
+ *
+ * Her seed still matters - a low-libido character running to 90 is out of character - but
+ * that is a judgement the Director makes with the numbers in front of it, not a lid.
  */
-export function arousalCeiling(character: Character, rel: Relationship): number {
-  const { libido, sexting_readiness } = character.seed;
-  const appetite = (libido + sexting_readiness) / 2; // 1..5
-  const base = 30 + appetite * 14; // 44..100
-  // Wanting him at all still gates wanting him right now, but on a platform built for this
-  // the floor is higher: she arrived in the mood, he only has to not put her off.
-  const sparkCap = 40 + rel.spark * 0.75;
-  return Math.round(Math.max(0, Math.min(100, Math.min(base, sparkCap))));
+export function describeAppetite(character: Character): string {
+  const { libido, sexting_readiness, sexual_confidence } = character.seed;
+  const appetite = (libido + sexting_readiness) / 2;
+  if (appetite >= 4.2) {
+    return `libido ${libido}/5, sexting readiness ${sexting_readiness}/5 - she runs hot easily and has no problem showing it. Do not be shy with this number when he earns it.`;
+  }
+  if (appetite >= 3) {
+    return `libido ${libido}/5, sexting readiness ${sexting_readiness}/5 - she gets there readily enough when something actually lands.`;
+  }
+  if (appetite >= 2) {
+    return `libido ${libido}/5, sexting readiness ${sexting_readiness}/5 - it takes something specific to her, but when it happens it is real.`;
+  }
+  return `libido ${libido}/5, sexting readiness ${sexting_readiness}/5 - she does not run hot often, and when she does it is quiet rather than loud. Sexual confidence ${sexual_confidence}/5.`;
 }
 
 export function describeArousal(value: number): string {

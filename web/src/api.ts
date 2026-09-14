@@ -1,3 +1,11 @@
+export type KinkStance = 'into' | 'curious' | 'soft_no' | 'hard_no';
+
+export interface KinkDomain {
+  id: string;
+  label: string;
+  hint: string;
+}
+
 export interface UserProfile {
   display_name: string;
   age: number;
@@ -8,6 +16,8 @@ export interface UserProfile {
   /** The age band to generate and show, applied to new characters as they are made. */
   age_min: number;
   age_max: number;
+  /** Your own stances. Characters are told none of this; they find it out by talking to you. */
+  kink_map: Record<string, KinkStance>;
 }
 
 export interface AppState {
@@ -127,6 +137,7 @@ export const api = {
   state: () => request<AppState>('/api/state'),
   saveProfile: (p: UserProfile) => request<UserProfile>('/api/profile', { method: 'PUT', body: JSON.stringify(p) }),
   stack: () => request<{ generating: number; profiles: SwipeProfile[] }>('/api/stack'),
+  kinkDomains: () => request<KinkDomain[]>('/api/kink-domains'),
   swipe: (id: string, direction: 'left' | 'right') =>
     request<any>(`/api/swipe/${id}`, { method: 'POST', body: JSON.stringify({ direction }) }),
   matches: () => request<MatchSummary[]>('/api/matches'),

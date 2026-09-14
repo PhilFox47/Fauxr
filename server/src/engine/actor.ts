@@ -9,6 +9,7 @@ import {
   interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
   sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
+import { describeHim } from './discovery.js';
 import { currentStage } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { pickNudge } from './nudge.js';
@@ -149,7 +150,7 @@ function buildPrompt(
   return render(template, {
     char_display_name: flags.state.real_name_known ? character.real_name : `@${character.username}`,
     user_name: user?.display_name ?? 'him',
-    user_block: userBlock(user),
+    user_block: [userBlock(user), describeHim(relationship)].filter(Boolean).join('\n\n'),
     identity_block: identityBlock(character, flags),
     communication_block: communicationBlock(seed),
     quirks_block: quirksBlock(seed),
@@ -163,7 +164,7 @@ function buildPrompt(
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     ledger_block: ledgerBlock(relationship.ledger),
     direction_block: directionBlock(direction, somethingLive, photoPending),
-    mood_block: moodBlock(relationship.arousal, currentStage(relationship).label),
+    mood_block: moodBlock(relationship.arousal, currentStage(relationship).label, seed.hints.arousal_tell),
     moment_block: describeHerMoment(character),
     turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),

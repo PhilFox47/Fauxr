@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type ImageJob, type LogEntry, type ResetParts, type UserProfile } from '../api';
+import { api, type ImageJob, type KinkDomain, type KinkStance, type LogEntry, type ResetParts, type UserProfile } from '../api';
 
 type Pane = 'models' | 'behaviour' | 'profile' | 'logs' | 'images' | 'reset';
 
@@ -469,9 +469,76 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
   );
 }
 
+const STANCES: { id: KinkStance; label: string }[] = [
+  { id: 'into', label: 'Into it' },
+  { id: 'curious', label: 'Curious' },
+  { id: 'soft_no', label: 'Not for me' },
+  { id: 'hard_no', label: 'Hard no' },
+];
+
+/**
+ * Your own side of the kink map. Nothing here is shown to a character - they start knowing
+ * none of it and find it out by talking to you, which is what makes them ask.
+ */
+function KinkEditor({
+  value,
+  onChange,
+}: {
+  value: Record<string, KinkStance>;
+  onChange: (v: Record<string, KinkStance>) => void;
+}) {
+  const [domains, setDomains] = useState<KinkDomain[]>([]);
+  useEffect(() => {
+    void api.kinkDomains().then(setDomains).catch(() => setDomains([]));
+  }, []);
+  if (!domains.length) return null;
+
+  const set = (id: string, stance: KinkStance) => {
+    const next = { ...value };
+    if (next[id] === stance) delete next[id];
+    else next[id] = stance;
+    onChange(next);
+  };
+
+  return (
+    <div className="field">
+      <span>What you are into</span>
+      <span className="tiny muted" style={{ marginBottom: 'var(--s3)' }}>
+        Nobody is told any of this. Characters start knowing nothing about you and work it out
+        from what you actually say — leaving one unset just means it never comes up.
+      </span>
+      {domains.map((d) => (
+        <div key={d.id} className="kink-row">
+          <div className="kink-label">
+            <strong>{d.label}</strong>
+            <span className="tiny muted">{d.hint}</span>
+          </div>
+          <div className="kink-stances">
+            {STANCES.map((st) => (
+              <button
+                key={st.id}
+                type="button"
+                className="chip"
+                data-active={value[d.id] === st.id}
+                aria-pressed={value[d.id] === st.id}
+                onClick={() => set(d.id, st.id)}
+              >
+                {st.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSaved: () => void }) {
   const [form, setForm] = useState<UserProfile>(
-    profile ?? { display_name: '', age: 18, bio: '', photos: [], gender: '', seeking: '', age_min: 18, age_max: 42 },
+    profile ?? {
+      display_name: '', age: 18, bio: '', photos: [], gender: '', seeking: '',
+      age_min: 18, age_max: 42, kink_map: {},
+    },
   );
   const [saved, setSaved] = useState(false);
 
@@ -508,6 +575,10 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
           who falls outside it. 18 is the floor whatever you type here.
         </span>
       </div>
+      <KinkEditor
+        value={form.kink_map ?? {}}
+        onChange={(kink_map) => setForm((f) => ({ ...f, kink_map }))}
+      />
       <label className="field">
         <span>Add a photo ({form.photos.length})</span>
         <input

@@ -19,7 +19,7 @@ import { rollSeed, describeSeed, avatarEmojiFor } from '../engine/generator.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
-import type { Character } from '../types.js';
+import type { Character, KinkStance } from '../types.js';
 
 function publicCharacter(c: Character) {
   const rel = getRelationship(c.id);
@@ -57,6 +57,17 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     };
   });
 
+  /** Keep only real domain ids and real stances. */
+  const sanitizeKinkMap = (raw: unknown): Record<string, KinkStance> => {
+    const valid = new Set(byCategory('kink_domain').map((d) => d.id));
+    const stances = new Set<KinkStance>(['into', 'curious', 'soft_no', 'hard_no']);
+    const out: Record<string, KinkStance> = {};
+    for (const [k, v] of Object.entries((raw ?? {}) as Record<string, unknown>)) {
+      if (valid.has(k) && stances.has(v as KinkStance)) out[k] = v as KinkStance;
+    }
+    return out;
+  };
+
   // ------------------------------------------------------------- profile
   app.put<{ Body: any }>('/api/profile', async (req, reply) => {
     const b = (req.body ?? {}) as Record<string, any>;
@@ -74,6 +85,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       // back to front, so a bad pair from the client cannot produce an empty stack.
       age_min: Number(b.age_min ?? 18),
       age_max: Number(b.age_max ?? 42),
+      // Only the four known stances survive, keyed by a real domain id, so nothing the
+      // client sends can put junk in front of a model later.
+      kink_map: sanitizeKinkMap(b.kink_map),
     });
     void ensureStack();
     return saved;
@@ -265,6 +279,10 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   );
 
   app.get('/api/usage', async () => usageToday());
+
+  /** Just the domains and their descriptions, for the profile editor. */
+  app.get('/api/kink-domains', async () =>
+    byCategory('kink_domain').map((d) => ({ id: d.id, label: d.label, hint: d.prompt_hint })));
 
   app.get('/api/attributes', async () => {
     return allCategories().map((category) => ({ category, entries: byCategory(category) }));

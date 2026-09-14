@@ -10,8 +10,8 @@ import {
   spiceDirective, touchstoneHint, userBlock,
 } from './blocks.js';
 import { describeOnlineTimes, nextOnlineAt, onlineUntil } from './presence.js';
-import { arousalCeiling, currentStage, describeArousal } from './stage.js';
-import { describeFetishProgress, describeKinkHits, detectKinkHits, herCuriosity, undiscoveredKeys } from './discovery.js';
+import { currentStage, describeAppetite, describeArousal } from './stage.js';
+import { describeFetishProgress, describeHim, describeKinkHits, detectKinkHits, herCuriosity, undiscoveredKeys } from './discovery.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
 
@@ -82,7 +82,6 @@ export async function runDirector(
   const offlineAt = onlineUntil(character);
 
   const stage = currentStage(rel);
-  const ceiling = arousalCeiling(character, rel);
   const open = undiscoveredKeys(character, rel);
 
   const prompt = render('director_direction', {
@@ -91,12 +90,13 @@ export async function runDirector(
     stage_next: stage.next,
     her_curiosity: herCuriosity(rel),
     fetish_block: describeFetishProgress(character, rel),
+    his_side: describeHim(rel),
     // Only his side of the exchange: this is about what HE brought up, not what she said.
     kink_hits: describeKinkHits(
       detectKinkHits(character, history.filter((m) => m.sender === 'user').map((m) => m.text).join(' ')),
     ),
     arousal: rel.arousal,
-    arousal_ceiling: ceiling,
+    arousal_calibration: describeAppetite(character),
     arousal_description: describeArousal(rel.arousal),
     // Only what is still unknown, so the list shrinks as the profile fills in.
     undiscovered_keys: open.length

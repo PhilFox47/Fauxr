@@ -14,7 +14,7 @@ import { computePressure, computeReciprocity } from './modifiers.js';
 import { alwaysOnline, isOnline } from './presence.js';
 import { randInt } from './dice.js';
 import { clearExpiredNegativeFlags, hasActiveNegativeFlag, markThreadRaised } from './state.js';
-import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
+import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -97,6 +97,10 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
   const messages = recentMessages(character.id, getSettings().chat.context_messages);
   refreshModifiers(rel, messages, false);
   clearExpiredNegativeFlags(rel);
+  // She only knows what he likes because he said it, and only in this conversation - the
+  // match he told last week knows, the one he matched this morning does not.
+  const learned = learnAboutHim(rel, input.text);
+  if (learned.length) logger.debug('actor', `${character.username} learned his stance on ${learned.join(', ')}`);
   saveRelationship(rel);
 
   if (!isOnline(character)) {

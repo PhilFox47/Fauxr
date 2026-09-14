@@ -3,7 +3,6 @@ import { logger } from '../log.js';
 import { saveRelationship, setCharacterState, clearWakeup } from '../repo.js';
 import type { Character, Ledger, OpenThread, Relationship, StateFlags } from '../types.js';
 import { applyModifiers, clampStat, type Deltas } from './modifiers.js';
-import { arousalCeiling } from './stage.js';
 import { buildCatalogue, recordDiscoveries } from './discovery.js';
 
 export const STATE_FLAGS: (keyof StateFlags)[] = [
@@ -52,6 +51,7 @@ export interface DirectorUpdate {
     facts_about_user?: string[];
     facts_about_her?: string[];
     events?: string[];
+    what_landed?: string[];
     open_threads_add?: { text: string; expires_when?: string }[];
     open_threads_close?: string[];
     director_notes?: { intent?: string; plans?: { text: string; expires_when?: string }[] };
@@ -60,6 +60,8 @@ export interface DirectorUpdate {
 
 const MAX_FACTS = 60;
 const MAX_EVENTS = 50;
+/** Short on purpose: this is the shortlist she reaches back into, not a transcript. */
+const MAX_LANDED = 12;
 const MAX_THREADS = 4;
 /** A thread she has raised this many times is spent, whether or not he engaged. */
 const MAX_RAISES = 2;
@@ -112,6 +114,7 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger']): Ledger {
       about_her: [...(ledger.facts?.about_her ?? [])],
     },
     events: [...(ledger.events ?? [])],
+    what_landed: [...(ledger.what_landed ?? [])],
     open_threads: [...(ledger.open_threads ?? [])],
     director_notes: {
       intent: ledger.director_notes?.intent ?? '',
@@ -128,6 +131,7 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger']): Ledger {
   pushUnique(next.facts.about_user, patch.facts_about_user);
   pushUnique(next.facts.about_her, patch.facts_about_her);
   pushUnique(next.events, patch.events);
+  pushUnique(next.what_landed as string[], patch.what_landed);
 
   for (const t of patch.open_threads_add ?? []) {
     const text = String(t?.text ?? '').trim();
@@ -158,6 +162,7 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger']): Ledger {
   next.facts.about_user = next.facts.about_user.slice(-MAX_FACTS);
   next.facts.about_her = next.facts.about_her.slice(-MAX_FACTS);
   next.events = next.events.slice(-MAX_EVENTS);
+  next.what_landed = (next.what_landed ?? []).slice(-MAX_LANDED);
   next.open_threads = next.open_threads.slice(-MAX_THREADS);
   return next;
 }
@@ -195,7 +200,7 @@ export function applyUpdate(
 
   // Arousal moves freely but never past what this character is capable of over text.
   const arousalDelta = Math.max(-40, Math.min(30, Number(update.arousal_delta ?? 0) || 0));
-  rel.arousal = Math.max(0, Math.min(arousalCeiling(character, rel), rel.arousal + arousalDelta));
+  rel.arousal = Math.max(0, Math.min(100, rel.arousal + arousalDelta));
 
   if (update.discovered?.length) {
     const valid = new Set(buildCatalogue(character).map((f) => f.key));
