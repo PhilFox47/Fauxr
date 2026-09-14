@@ -211,6 +211,8 @@ export const api = {
   },
   images: () => request<ImageJob[]>('/api/images'),
   retryImage: (id: string) => request<any>(`/api/images/${id}/retry`, { method: 'POST' }),
+  regenerateImage: (id: string, mode: 'same_idea' | 'new_idea') =>
+    request<any>(`/api/images/${id}/regenerate`, { method: 'POST', body: JSON.stringify({ mode }) }),
   usage: () => request<any>('/api/usage'),
   reset: (parts: ResetParts) =>
     request<{ cleared: string[]; kept: string[]; files_removed: number }>('/api/reset', {

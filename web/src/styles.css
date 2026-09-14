@@ -688,6 +688,7 @@ input[type='range'] {
 .regen-btn:disabled { opacity: 0.35; }
 .regen-btn.spinning svg { animation: spin 0.9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.regen-menu { display: inline-flex; gap: 8px; }
 
 .typing {
   align-self: flex-start;

@@ -101,6 +101,8 @@ CREATE TABLE IF NOT EXISTS images (
   path          TEXT,
   error         TEXT,
   aspect        TEXT,
+  shows_face    INTEGER NOT NULL DEFAULT 1,
+  situation     TEXT,
   created_at    TEXT NOT NULL,
   updated_at    TEXT NOT NULL
 );

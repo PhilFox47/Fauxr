@@ -230,6 +230,12 @@ export interface ActorHidden {
    */
   photo_aspect: 'portrait' | 'landscape' | null;
   /**
+   * False only when she has deliberately picked a shot that does not put her face in frame
+   * - turned away, cropped, a hands/outfit close-up, a scene she is not even in. Null or
+   * omitted means her face is in the shot as normal, which is by far the common case.
+   */
+  photo_shows_face: boolean | null;
+  /**
    * Her answer when he has asked to swap profile pictures. Genuinely her call - a refusal
    * is a real outcome, not a failure state, and it should come with a reason in her voice.
    */
@@ -263,6 +269,8 @@ export interface PendingPhoto {
   situation: string;
   /** Null for a profile picture, which is always square. See ActorHidden.photo_aspect. */
   aspect: 'portrait' | 'landscape' | null;
+  /** Resolved, non-null: true unless she deliberately offered a shot that omits her face. */
+  showsFace: boolean;
   /** The system message carrying the offer card, so the response can resolve it. */
   message_id: number;
   offered_at: string;

@@ -354,6 +354,10 @@ async function runActorPhase(
         // it and is always square. Default to portrait if she offered one without picking
         // an aspect - the common case for a phone photo of herself.
         aspect: offerKind === 'profile' ? null : result.hidden.photo_aspect ?? 'portrait',
+        // A profile picture always shows her face, by dating-app convention - that is the
+        // one photo real profiles never lead with a from-behind or cropped shot for.
+        // Otherwise trust what she actually said; omitted means face-in-frame as normal.
+        showsFace: offerKind === 'profile' ? true : result.hidden.photo_shows_face ?? true,
         message_id: offerMsg.id,
         offered_at: nowIso(),
       };

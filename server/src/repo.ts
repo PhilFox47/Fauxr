@@ -322,6 +322,18 @@ export function getMessage(id: number): StoredMessage | null {
   return row ? hydrateMessage(row) : null;
 }
 
+/**
+ * The chat bubble that delivered a given image job, if it ever reached the chat - used by
+ * regenerateImage() to bump its meta so the browser reloads the new bytes at the same path
+ * instead of showing what it already cached under that URL.
+ */
+export function findMessageByImageId(imageId: string): StoredMessage | null {
+  const row = db
+    .prepare("SELECT * FROM messages WHERE json_extract(meta, '$.image_id') = ? ORDER BY id DESC LIMIT 1")
+    .get(imageId) as any;
+  return row ? hydrateMessage(row) : null;
+}
+
 /** Merges into a message's existing meta - used to resolve a photo-offer card in place. */
 export function updateMessageMeta(id: number, patch: Record<string, any>): StoredMessage | null {
   const existing = getMessage(id);

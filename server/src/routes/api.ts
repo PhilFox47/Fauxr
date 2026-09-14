@@ -17,7 +17,9 @@ import { bus } from '../events.js';
 import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
-import { characterGallery, evaluateUserImage, listImageJobs, respondToPhotoOffer, retryImageJob } from '../engine/images.js';
+import {
+  characterGallery, evaluateUserImage, listImageJobs, regenerateImage, respondToPhotoOffer, retryImageJob,
+} from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
@@ -166,7 +168,12 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       typing: isRunning(character.id),
       messages: recentMessages(character.id, limit).map((m) => ({
         ...m,
-        image_url: m.kind === 'image' && m.meta?.path ? `/media/${m.meta.path}` : null,
+        // image_v is bumped on regenerate - same file path, so without a cache-bust query
+        // param the browser would just keep showing what it already cached for that URL.
+        image_url:
+          m.kind === 'image' && m.meta?.path
+            ? `/media/${m.meta.path}${m.meta.image_v ? `?v=${m.meta.image_v}` : ''}`
+            : null,
       })),
     };
   });
@@ -256,7 +263,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     return images.map((i) => ({
       id: i.id,
       kind: i.kind,
-      url: `/media/${i.path}`,
+      // Cache-busted on updated_at so a regenerated shot - same file path, new bytes -
+      // actually reloads instead of showing what the browser cached for that URL.
+      url: `/media/${i.path}?v=${encodeURIComponent(i.updated_at)}`,
       created_at: i.created_at,
     }));
   });
@@ -271,6 +280,22 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       return reply.code(400).send({ error: String(err) });
     }
   });
+
+  // Two different asks: "same idea" reassembles the same situation into a fresh prompt and
+  // a fresh image; "new idea" asks her to think of a different photo first. Either way this
+  // overwrites the existing job/file in place - see regenerateImage().
+  app.post<{ Params: { id: string }; Body: { mode?: string } }>(
+    '/api/images/:id/regenerate',
+    async (req, reply) => {
+      const mode = req.body?.mode === 'new_idea' ? 'new_idea' : 'same_idea';
+      try {
+        await regenerateImage(req.params.id, mode);
+        return { ok: true };
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
 
   // Generation only ever starts from an accepted consent card, never on request - see
   // respondToPhotoOffer(). This used to be a direct-trigger endpoint with no caller; kept

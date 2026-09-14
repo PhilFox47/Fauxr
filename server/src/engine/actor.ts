@@ -64,6 +64,7 @@ function fallbackOutput(): ActorOutput {
       photo_offer: null,
       photo_situation: null,
       photo_aspect: null,
+      photo_shows_face: null,
       exchange_response: null,
     },
   };
@@ -89,6 +90,7 @@ function normalizeHidden(raw: any): ActorHidden {
     photo_offer: PHOTO_OFFER_KINDS.has(raw?.photo_offer) ? raw.photo_offer : null,
     photo_situation: raw?.photo_situation ? String(raw.photo_situation).slice(0, 300) : null,
     photo_aspect: PHOTO_ASPECTS.has(raw?.photo_aspect) ? raw.photo_aspect : null,
+    photo_shows_face: typeof raw?.photo_shows_face === 'boolean' ? raw.photo_shows_face : null,
     exchange_response:
       raw?.exchange_response === 'accept' || raw?.exchange_response === 'decline'
         ? raw.exchange_response

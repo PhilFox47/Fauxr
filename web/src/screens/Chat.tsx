@@ -129,6 +129,7 @@ export default function Chat({
   const [gallery, setGallery] = useState<GalleryImage[]>([]);
   const [lightboxAt, setLightboxAt] = useState<number | null>(null);
   const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
+  const [regeneratingImageId, setRegeneratingImageId] = useState<number | null>(null);
   const [respondingOfferId, setRespondingOfferId] = useState<string | null>(null);
   const [swapping, setSwapping] = useState(false);
   const swapped = !!character?.photos_exchanged;
@@ -267,6 +268,25 @@ export default function Chat({
     }
   };
 
+  /**
+   * Two different asks, not one "retry": "same idea" reassembles the same photo into a
+   * fresh prompt and a fresh render; "new idea" has her think of a different photo first.
+   * Either overwrites this same bubble's image in place, so no reload of the message list
+   * is skipped even on failure - a half-regenerated job still changed its status.
+   */
+  const regenerateImagePhoto = async (messageId: number, imageId: string, mode: 'same_idea' | 'new_idea') => {
+    if (regeneratingImageId !== null) return;
+    setRegeneratingImageId(messageId);
+    try {
+      await api.regenerateImage(imageId, mode);
+      await load();
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+    } finally {
+      setRegeneratingImageId(null);
+    }
+  };
+
   const offerExchange = async () => {
     if (swapping) return;
     setSwapping(true);
@@ -305,6 +325,9 @@ export default function Chat({
 
   const blocked = character?.state === 'blocked_by_char' || character?.state === 'blocked_by_user';
   const lastMine = [...messages].reverse().find((m) => m.sender === 'user');
+  // Only the photo she sent most recently can be regenerated - an older one stays put, the
+  // same restriction the text regen button already applies to her last reply.
+  const lastHerImageId = [...messages].reverse().find((m) => m.kind === 'image' && m.sender === 'character')?.id ?? null;
 
   return (
     <div className="chat">
@@ -483,13 +506,23 @@ export default function Chat({
                   )}
                 </div>
               )}
-              {showStamp && (
+              {/*
+                An image message's own regen row is included in this condition, not gated by
+                showStamp alone: it is posted as its own standalone entry (once the job
+                finishes, never batched with her text), so "is this her most recent photo"
+                and "is this the end of a run of her messages" are different questions - a
+                later reply from her in a following turn would otherwise hide this row even
+                though the photo is still the one worth regenerating.
+              */}
+              {(showStamp || (!mine && !blocked && m.kind === 'image' && m.id === lastHerImageId)) && (
                 <div className={`stamp ${mine ? 'me' : 'them'}`}>
-                  <span>
-                    {clock(m.sent_at)}
-                    {mine && (m.read_at ? ' · read' : ' · sent')}
-                  </span>
-                  {!mine && last && !blocked && (
+                  {showStamp && (
+                    <span>
+                      {clock(m.sent_at)}
+                      {mine && (m.read_at ? ' · read' : ' · sent')}
+                    </span>
+                  )}
+                  {!mine && last && !blocked && m.kind !== 'image' && m.kind !== 'voice' && (
                     <button
                       className={`regen-btn${regeneratingId === m.id ? ' spinning' : ''}`}
                       onClick={() => void regenerate(m.id)}
@@ -499,6 +532,28 @@ export default function Chat({
                     >
                       <Icon name="refresh" size={13} />
                     </button>
+                  )}
+                  {!mine && !blocked && m.kind === 'image' && m.id === lastHerImageId && m.meta?.image_id && (
+                    <span className="regen-menu">
+                      <button
+                        className={`regen-btn${regeneratingImageId === m.id ? ' spinning' : ''}`}
+                        onClick={() => void regenerateImagePhoto(m.id, m.meta.image_id, 'same_idea')}
+                        disabled={regeneratingImageId !== null}
+                        aria-label="Regenerate this photo, same idea"
+                        title="Regenerate this photo, same idea"
+                      >
+                        <Icon name="refresh" size={13} />
+                      </button>
+                      <button
+                        className={`regen-btn${regeneratingImageId === m.id ? ' spinning' : ''}`}
+                        onClick={() => void regenerateImagePhoto(m.id, m.meta.image_id, 'new_idea')}
+                        disabled={regeneratingImageId !== null}
+                        aria-label="Regenerate this photo with a new idea"
+                        title="Regenerate this photo with a new idea"
+                      >
+                        <Icon name="spark" size={13} />
+                      </button>
+                    </span>
                   )}
                 </div>
               )}

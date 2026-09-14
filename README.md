@@ -1442,6 +1442,89 @@ against a mock: the final prompt sent to the image endpoint reads as continuous 
 bare comma-tag tail, and the negative prompt carries the assembler's own text plus the
 shortened standing set, space-joined rather than comma-glued.
 
+### Only what the shot actually shows
+
+The fixed appearance block used to be dumped into every prompt whole, and the reference
+image (her profile picture, sent to the image model so a chat/spicy shot's face actually
+matches her) was attached to every non-profile shot regardless of what that shot was. Both
+were wrong for a photo that does not put her face - or all of her - in frame: a hands-only
+close-up got her eye colour recited anyway, and a from-behind shot still came back with her
+face front-on, because a reference image is a strong pull toward showing the face it depicts.
+
+`ActorHidden` gained `photo_shows_face` alongside `photo_aspect` - false only when she
+deliberately picked a shot that does not put her face in frame (turned away, cropped to her
+hands, a scene she is not even in), true otherwise. `images.ts` now skips the reference image
+entirely whenever this is false (`runImageJob`'s `facesCamera` check), and the assembler gets
+a `hides_face` flag that tells it plainly not to describe her face, eyes or expression for
+that shot - describe what is actually visible instead. The instruction above it was also
+loosened from "keep every attribute in the fixed block" to "only describe what this specific
+framing would actually show" - a waist-up shot does not need her shoes, a from-behind shot
+does not need her eye colour. `visibleMarks()` picked up the same principle mechanically: a
+facial piercing (nose, septum, eyebrow, lip, and the rest of `FACIAL_PIERCING_POSITIONS`)
+drops out of the list whenever the shot hides her face, the same way a piercing already
+dropped out when its own visibility tier did not clear.
+
+### Two models, two prompts: Seedream 5.0 Lite and Z Image Turbo
+
+Everything under "The prompt itself, rewritten..." above was written for one model. Wanting
+to actually compare it against Z Image Turbo (cheaper, quality unverified) meant the prompt
+style itself had to switch too, not just the model name - the two want genuinely different
+prompts, not a shared one with a different label on it. Z Image Turbo runs with no
+classifier-free guidance at inference at all, so it never reads a negative prompt - every
+constraint has to be a positive statement inside the main prompt ("natural, unretouched
+skin", not "no airbrushing"). It also wants a longer, more fully-specified prompt than
+Seedream's concise brief - a real creative brief in five parts (subject, context, style,
+composition, constraints) rather than a short paragraph, though still natural language, not
+Stable-Diffusion tag syntax.
+
+`settings.models.image.prompt_style` (`'seedream'` | `'z_image_turbo'`, a new dropdown in
+Settings → Images) picks between them. `image_prompt_assembler.md` branches its own
+instructions on `mode_seedream`/`mode_z_image`, including telling the model to leave
+`negative_prompt` empty in Z Image Turbo mode rather than writing one nobody will read.
+`images.ts`'s `BASE_SUFFIX`/`CANDID_SUFFIX` became per-mode records - Z Image Turbo's variant
+folds what Seedream would have put in the negative prompt into the positive suffix instead -
+and `runImageJob` skips sending `negativePrompt` to the image call entirely when the mode is
+Z Image Turbo, whatever the assembler returned. Switching modes is meant to travel with
+switching "Model" below it; the two are independent settings because nothing stops testing
+one against a Seedream-shaped model name by mistake, but they are meant to move together.
+
+### Regenerating a photo, two different ways
+
+There was no way to ask for another take on a photo that was not what she meant, or to
+retry one that failed with anything but its own raw final prompt fed back in as if it were a
+fresh situation (`retryImageJob` used to do exactly that - a real bug once the same jobs
+row started carrying a proper `situation` column, fixed alongside this). Two genuinely
+different asks needed two different paths:
+
+- **Same idea** reassembles the stored `situation` through the assembler and the image model
+  again from scratch - same content, a fresh prompt, different pixels. Useful when the idea
+  was right but the render was not.
+- **New idea** asks her to think of a different photo first: `profilePicConcept()` again for
+  a profile picture, and a new `actor_photo_idea.md` call (mirroring it, but for a chat/spicy
+  tier, with its own aspect choice) for anything else.
+
+`regenerateImage(id, mode)` in `images.ts` does both, reusing the same job id and file path
+so the chat bubble and gallery thumbnail that already point at it just show the new image
+once it lands, rather than needing a duplicate message or a second file on disk. The one real
+wrinkle is that regenerating does not change the URL - a browser that already cached the old
+bytes under that exact path would just keep showing them. Fixed with a cache-bust rather than
+a versioned filename: the message meta gets an `image_v` timestamp bumped onto it
+(`findMessageByImageId()` finds the message from the job's stable id), appended to
+`image_url` as `?v=...`; the gallery endpoint does the same off the job's own `updated_at`.
+Two small icon buttons appear on her most recently sent photo in chat - a refresh icon for
+"same idea", a spark icon for "new idea" - deliberately scoped to her *last photo*, not
+every photo she has ever sent, mirroring the existing text-reply regenerate button; unlike
+that button, this one is not tied to being the literal last message in the conversation,
+since a photo is delivered as its own standalone entry and a later reply from her should not
+hide the ability to redo it.
+
+Verified against a mock: a face-shown shot still sends the reference image and lists a
+visible facial piercing, a face-hidden shot sends neither; Seedream sends a negative prompt
+and Z Image Turbo sends none at all; "same idea" reuses the stored situation and keeps the
+same job id/path; "new idea" genuinely calls the actor for a new situation and aspect and
+gets a different one back; and `retryImageJob` now reuses the stored situation rather than
+the old final prompt.
+
 ### Every photo she sent, kept
 
 A photo used to exist only as a bubble in the chat. Scroll far enough and it was gone —

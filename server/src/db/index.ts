@@ -37,6 +37,8 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'user_profile', column: 'avatar_emoji', definition: "TEXT NOT NULL DEFAULT ''" },
   { table: 'user_profile', column: 'card', definition: "TEXT NOT NULL DEFAULT '{}'" },
   { table: 'images', column: 'aspect', definition: 'TEXT' },
+  { table: 'images', column: 'shows_face', definition: 'INTEGER NOT NULL DEFAULT 1' },
+  { table: 'images', column: 'situation', definition: 'TEXT' },
 ];
 
 function addMissingColumns(): void {

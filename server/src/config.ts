@@ -23,7 +23,20 @@ export interface Settings {
   models: {
     actor: ModelConfig;
     director: ModelConfig;
-    image: { model: string; size: string; provider?: string };
+    image: {
+      model: string;
+      size: string;
+      provider?: string;
+      /**
+       * These two models want fundamentally different prompts - Seedream 5.0 Lite reads a
+       * concise photographer's-brief paragraph and a short natural-language negative;
+       * Z Image Turbo runs with no classifier-free guidance at all, so it ignores negative
+       * prompts entirely and wants every constraint folded into a longer, more detailed
+       * positive prompt instead. See image_prompt_assembler.md and images.ts's per-mode
+       * suffix/negative constants for what actually changes.
+       */
+      prompt_style: 'seedream' | 'z_image_turbo';
+    };
   };
   /** Global multiplier for proactivity and wakeup frequency. Conservative by default. */
   activity: number;
@@ -76,7 +89,7 @@ export const DEFAULT_SETTINGS: Settings = {
     // why the ceiling matters more than it looks like it should for a reasoning model.
     actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 7200 },
     director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 10400 },
-    image: { model: 'seedream-v4', size: '1024x1024' },
+    image: { model: 'seedream-v4', size: '1024x1024', prompt_style: 'seedream' },
   },
   activity: 0.6,
   server_window: { from: '06:00', to: '02:00', timezone: 'local' },

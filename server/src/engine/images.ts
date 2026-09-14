@@ -6,27 +6,52 @@ import { db, nowIso, DATA_DIR } from '../db/index.js';
 import { bus } from '../events.js';
 import { completeJson, generateImage } from '../llm/client.js';
 import { logger } from '../log.js';
-import { addMessage, getCharacter, getRelationship, saveRelationship, updateMessageMeta } from '../repo.js';
+import {
+  addMessage,
+  findMessageByImageId,
+  getCharacter,
+  getRelationship,
+  saveRelationship,
+  updateMessageMeta,
+} from '../repo.js';
 import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
 import { describeSeed } from './generator.js';
 import type { Character, CharacterSeed, PendingPhoto } from '../types.js';
 
+type PromptStyle = 'seedream' | 'z_image_turbo';
+
 /**
- * The floor every generated photo lands on, whatever kind of shot it is.
+ * The floor every generated photo lands on, whatever kind of shot it is - split per
+ * prompt-model, because the two send this in completely different shapes.
  *
- * Used to be one fixed "candid amateur phone photo" suffix forced onto every image,
- * profile pictures included - which is exactly why every profile picture came out the
- * same: an amateur selfie, because the style was decided before the shot's own situation
- * was. This is now only the part that has to hold regardless of format: a real texture,
- * not a plastic one, and an attractive but fairly represented woman rather than a bad
- * angle excused as "candid". Which kind of photo it actually is - candid or composed,
- * phone or studio - is CANDID_SUFFIX below plus whatever the assembler itself wrote from
- * her own account of the shot.
+ * Seedream 5.0 Lite: a short natural-language suffix, and constraints as a genuinely
+ * separate negative_prompt (see SEEDREAM_NEGATIVE below).
+ *
+ * Z Image Turbo: this model runs with no classifier-free guidance at all, so a
+ * negative_prompt is simply never read - everything SEEDREAM would put there instead has to
+ * be folded into this suffix as a positive statement ("natural, unretouched skin", not "no
+ * airbrushing"). See images.ts's runImageJob for where negativePrompt is skipped entirely
+ * in this mode, and image_prompt_assembler.md for the matching instructions to the model
+ * that writes the rest of the prompt.
+ *
+ * Used to be one fixed "candid amateur phone photo" suffix forced onto every image, profile
+ * pictures included - which is exactly why every profile picture came out the same. This is
+ * now only the part that has to hold regardless of format: a real texture, not a plastic
+ * one, and an attractive but fairly represented woman rather than a bad angle excused as
+ * "candid". Which kind of photo it actually is - candid or composed, phone or studio - is
+ * CANDID_SUFFIX below plus whatever the assembler itself wrote from her own account of the
+ * shot.
  */
-const BASE_SUFFIX =
-  'Rendered as a photorealistic photograph, not an illustration or a render, with real ' +
-  'unretouched skin texture and a naturally attractive, flattering angle.';
+const BASE_SUFFIX: Record<PromptStyle, string> = {
+  seedream:
+    'Rendered as a photorealistic photograph, not an illustration or a render, with real ' +
+    'unretouched skin texture and a naturally attractive, flattering angle.',
+  z_image_turbo:
+    'Rendered as a photorealistic photograph, not an illustration, cgi render or anime ' +
+    'style - real, unretouched skin with natural texture and pores, anatomically correct ' +
+    'hands and limbs, and a naturally attractive, flattering angle.',
+};
 
 /**
  * The "taken on her phone, right now" look - added on top of BASE_SUFFIX for a chat or
@@ -34,19 +59,25 @@ const BASE_SUFFIX =
  * chose to lead with. A profile picture does not get this forced on: see is_moment in the
  * assembler template for the matching instructions, and runImageJob for where it applies.
  */
-const CANDID_SUFFIX =
-  'Shot as a candid amateur phone photo, taken in this exact moment: natural available ' +
-  'light, softly imperfect handheld framing, a little sensor grain, shallow phone-lens depth ' +
-  'of field.';
+const CANDID_SUFFIX: Record<PromptStyle, string> = {
+  seedream:
+    'Shot as a candid amateur phone photo, taken in this exact moment: natural available ' +
+    'light, softly imperfect handheld framing, a little sensor grain, shallow phone-lens ' +
+    'depth of field.',
+  z_image_turbo:
+    'Shot as a candid amateur phone photo taken in this exact moment, with natural ' +
+    'available light, softly imperfect handheld framing, a little sensor grain and shallow ' +
+    'phone-lens depth of field - not a studio-lit or posed professional-model photo.',
+};
 
 /**
- * Sent with every image regardless of kind - the airbrushed-render look, the opposite
- * over-correction into unflattering, and the usual anatomy rubbish.
- */
-/**
- * Kept short and in plain language on purpose: this model's own negative-prompt guidance
- * says a long list of banned tags produces inconsistent results, where one or two clear
- * sentences actually get honored. Used to be five long comma-separated tag dumps.
+ * Sent with every Seedream image regardless of kind - the airbrushed-render look, the
+ * opposite over-correction into unflattering, and the usual anatomy rubbish. Kept short and
+ * in plain language on purpose: this model's own negative-prompt guidance says a long list
+ * of banned tags produces inconsistent results, where one or two clear sentences actually
+ * get honored. Used to be five long comma-separated tag dumps. Z Image Turbo has no
+ * equivalent constant - see BASE_SUFFIX/CANDID_SUFFIX above for where those constraints go
+ * for that model instead.
  */
 const BASE_NEGATIVE =
   'No airbrushing, beauty-filter skin or doll-like retouching. No cgi, illustration or ' +
@@ -55,7 +86,7 @@ const BASE_NEGATIVE =
 /**
  * Only for a chat/spicy moment: a profile picture is now allowed to genuinely be a studio
  * headshot or a posed professional-looking shot, so banning that look outright would
- * contradict the one case it is meant to happen.
+ * contradict the one case it is meant to happen. Seedream-only, same reason as above.
  */
 const CANDID_NEGATIVE = 'No studio lighting or posed professional-model styling.';
 
@@ -109,8 +140,17 @@ export interface ImageJob {
   path: string | null;
   error: string | null;
   aspect: 'portrait' | 'landscape' | null;
+  /** Stored as 0/1 by sqlite. Use showsFace() rather than reading this raw. */
+  shows_face: number;
+  /** The idea the photo is of, resolved (never the blank the Actor may have offered with). */
+  situation: string | null;
   created_at: string;
   updated_at: string;
+}
+
+/** better-sqlite3 hands back 0/1 for an INTEGER column, not a real boolean. */
+function showsFace(job: Pick<ImageJob, 'shows_face'>): boolean {
+  return job.shows_face !== 0;
 }
 
 export function listImageJobs(limit = 50): ImageJob[] {
@@ -152,8 +192,19 @@ function setStatus(id: string, status: ImageJob['status'], fields: Partial<Image
   });
 }
 
+/**
+ * Piercing positions that sit on the face itself - the one set that a "face not shown" shot
+ * also has to drop, on top of whatever visibility() already hides. Ear piercings are left
+ * out of this list on purpose: a from-behind or angled shot that hides her face can still
+ * show an ear.
+ */
+const FACIAL_PIERCING_POSITIONS = new Set([
+  'nose', 'septum', 'eyebrow', 'lip', 'tongue', 'medusa', 'monroe', 'smiley', 'bridge',
+  'vertical_labret', 'dahlia', 'anti_eyebrow', 'nasallang',
+]);
+
 /** What is actually visible on her in this kind of shot. */
-function visibleMarks(character: Character, kind: string): string {
+function visibleMarks(character: Character, kind: string, showsFaceInShot: boolean): string {
   const showLater = kind !== 'profile';
   const showPrivate = kind === 'spicy';
   const vis = (position: string, category: string) => {
@@ -169,6 +220,7 @@ function visibleMarks(character: Character, kind: string): string {
     }
   }
   for (const p of character.seed.piercings) {
+    if (!showsFaceInShot && FACIAL_PIERCING_POSITIONS.has(p.position)) continue;
     if (vis(p.position, 'piercing_position')) {
       parts.push(`${find('piercing_type', p.type)?.image_prompt ?? p.type} ${find('piercing_position', p.position)?.image_prompt ?? ''}`.trim());
     }
@@ -236,14 +288,16 @@ export function enqueueImage(opts: {
   situation: string;
   /** Ignored for a profile picture, which is always square. Defaults to portrait. */
   aspect?: 'portrait' | 'landscape' | null;
+  /** False only for a shot that deliberately does not put her face in frame. Defaults true. */
+  showsFace?: boolean;
   postToChat?: boolean;
 }): ImageJob {
   const id = randomUUID();
   const aspect = opts.kind === 'profile' ? null : opts.aspect ?? 'portrait';
   db.prepare(
-    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, created_at, updated_at)
-     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?)`,
-  ).run(id, opts.characterId, opts.kind, aspect, nowIso(), nowIso());
+    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, shows_face, situation, created_at, updated_at)
+     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?, ?, ?)`,
+  ).run(id, opts.characterId, opts.kind, aspect, opts.showsFace === false ? 0 : 1, opts.situation, nowIso(), nowIso());
   const job = getImageJob(id)!;
   void runImageJob(id, opts.situation, opts.postToChat !== false);
   return job;
@@ -272,7 +326,12 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     if (isProfile && !situation.trim()) {
       situation = await profilePicConcept(character);
     }
+    // Resolved once here - persisted so a later regenerate ("same idea") has the actual
+    // idea to reassemble from, not the blank a profile job may have started with.
+    db.prepare('UPDATE images SET situation = ? WHERE id = ?').run(situation, id);
 
+    const facesCamera = isProfile || showsFace(job);
+    const promptStyle: PromptStyle = settings.models.image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream';
     const assembled = await completeJson<{ prompt: string; negative_prompt?: string }>({
       scope: 'image',
       label: `assemble:${character.username}`,
@@ -285,7 +344,7 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             appearance_prompt: character.seed.appearance_prompt,
             image_kind: job.kind,
             situation,
-            visible_marks: visibleMarks(character, job.kind),
+            visible_marks: visibleMarks(character, job.kind, facesCamera),
             demeanour: demeanourFor(character.seed),
             // Only a profile picture gets to be a professional shot, a repurposed work
             // photo, a posed full-body - anything her own account above says it is. A
@@ -293,6 +352,11 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             // the candid, taken-right-now rules regardless of what image_kind spells out.
             is_profile: isProfile ? '1' : '',
             is_moment: isProfile ? '' : '1',
+            // A profile picture always shows her face by convention; a chat/spicy shot
+            // only when she did not deliberately pick one that hides it.
+            hides_face: facesCamera ? '' : '1',
+            mode_seedream: promptStyle === 'seedream' ? '1' : '',
+            mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
           }),
         },
       ],
@@ -302,20 +366,30 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     // profile picture's style - polished headshot or grainy selfie - was already decided
     // by the assembler from her own account of the photo, so forcing the candid suffix on
     // top would fight a studio shot into looking like a bad phone photo.
-    const styleSuffix = isProfile ? BASE_SUFFIX : `${BASE_SUFFIX} ${CANDID_SUFFIX}`;
+    const styleSuffix = isProfile
+      ? BASE_SUFFIX[promptStyle]
+      : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
     // Plain sentences joined as prose, not comma-glued tags - this model reasons over the
     // prompt as a written brief, and a tag-stack tail would undo the paragraph the assembler
     // just wrote.
     const prompt = `${assembled.prompt} ${styleSuffix}`;
-    // The assembler has always returned a negative prompt and it was being dropped on the
-    // floor here - never passed to the image call at all. Its shot-specific negative now
-    // rides along with the standing ones. CANDID_NEGATIVE (no studio lighting, no
-    // professional-model posing) only applies to a moment shot, for the same reason. Kept
-    // short throughout: see BASE_NEGATIVE for why.
-    const negative = [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : CANDID_NEGATIVE]
-      .filter(Boolean)
-      .join(' ');
-    const ref = isProfile ? null : referenceImage(character.id);
+    // Z Image Turbo runs with no classifier-free guidance at all, so it never reads a
+    // negative prompt - sending one is not wrong exactly, just pure dead weight, and the
+    // constraints it would have carried are already folded into the prompt itself above
+    // (see BASE_SUFFIX/CANDID_SUFFIX and the assembler's own negative_prompt, left blank in
+    // this mode). Seedream gets the real thing: the assembler has always returned a negative
+    // prompt and it used to be dropped on the floor here - never passed to the image call at
+    // all. Its shot-specific negative now rides along with the standing ones. CANDID_NEGATIVE
+    // (no studio lighting, no professional-model posing) only applies to a moment shot, for
+    // the same reason. Kept short throughout: see BASE_NEGATIVE for why.
+    const negative =
+      promptStyle === 'z_image_turbo'
+        ? ''
+        : [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : CANDID_NEGATIVE].filter(Boolean).join(' ');
+    // Forcing her face to match a reference photo is exactly wrong for a shot that is not
+    // supposed to show her face at all - it just makes one appear anyway. Skip the
+    // reference whenever this shot does not put her face in frame.
+    const ref = isProfile || !facesCamera ? null : referenceImage(character.id);
     const size = isProfile ? IMAGE_SIZE.profile : IMAGE_SIZE[job.aspect === 'landscape' ? 'landscape' : 'portrait'];
     const b64 = await generateImage({
       prompt,
@@ -366,7 +440,106 @@ export async function retryImageJob(id: string): Promise<void> {
   const job = getImageJob(id);
   if (!job) throw new Error('image job not found');
   setStatus(id, 'queued', { error: null });
-  await runImageJob(id, job.prompt || 'same as before', true);
+  // Retry means "try the same thing again", so it reuses the situation actually resolved
+  // last time - not job.prompt, which is the FINAL assembled tag/prose string with the
+  // style suffix already baked in, not something fit to feed back into the assembler as a
+  // fresh situation. A job that never got that far (failed before resolving one at all)
+  // falls back to blank, which is what lets a profile job's lazy profilePicConcept() run.
+  await runImageJob(id, job.situation ?? '', true);
+}
+
+/** Sized like PROFILE_PIC_TOKENS - one real paragraph, from a reasoning model. */
+const PHOTO_IDEA_TOKENS = 2400;
+
+/**
+ * A fresh idea for a chat/spicy photo, in her own words - used only by regenerateImage()'s
+ * "new idea" mode. Mirrors profilePicConcept() but for the two tiers that come after the
+ * profile picture, where the "idea" is normally just whatever she offered in the moment
+ * rather than something asked for in isolation like this.
+ */
+async function freshPhotoIdea(
+  character: Character,
+  kind: 'chat' | 'spicy',
+): Promise<{ situation: string; aspect: 'portrait' | 'landscape' }> {
+  try {
+    const out = await completeJson<{ situation?: string; aspect?: string }>({
+      scope: 'image',
+      label: `photo_idea:${character.username}`,
+      config: { ...getSettings().models.actor, max_tokens: PHOTO_IDEA_TOKENS },
+      require: ['situation'],
+      messages: [
+        {
+          role: 'user',
+          content: render('actor_photo_idea', {
+            real_name: character.real_name,
+            dossier: character.seed.hints.dossier || describeSeed(character.seed),
+            is_spicy: kind === 'spicy' ? '1' : '',
+            is_chat: kind === 'chat' ? '1' : '',
+          }),
+        },
+      ],
+    });
+    const situation = (out.situation ?? '').trim();
+    if (situation) return { situation, aspect: out.aspect === 'landscape' ? 'landscape' : 'portrait' };
+  } catch (err) {
+    logger.warn('image', 'fresh photo idea failed, using a generic default', {
+      character: character.username,
+      kind,
+      error: String(err),
+    });
+  }
+  return { situation: DEFAULT_SITUATION[kind], aspect: 'portrait' };
+}
+
+/**
+ * Regenerates an already-finished photo in place - same job id, same file path, so the chat
+ * bubble and gallery entry that already point at it pick up the new one automatically.
+ *
+ * "same_idea" reassembles from the situation actually resolved last time: a fresh run
+ * through the assembler and the image model, same content, different pixels. "new_idea"
+ * asks her to think of a different photo altogether first - profilePicConcept() again for a
+ * profile picture, freshPhotoIdea() for a chat/spicy one - before doing the same.
+ */
+export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'): Promise<void> {
+  const job = getImageJob(id);
+  if (!job) throw new Error('image job not found');
+  const character = job.character_id ? getCharacter(job.character_id) : null;
+  if (!character) throw new Error('character not found');
+  const kind = job.kind as 'profile' | 'chat' | 'spicy';
+
+  let situation: string;
+  let aspect = job.aspect;
+  if (mode === 'new_idea') {
+    if (kind === 'profile') {
+      situation = await profilePicConcept(character);
+    } else {
+      const idea = await freshPhotoIdea(character, kind);
+      situation = idea.situation;
+      aspect = idea.aspect;
+    }
+  } else {
+    situation = job.situation || DEFAULT_SITUATION[kind];
+  }
+
+  if (aspect !== job.aspect) {
+    db.prepare('UPDATE images SET aspect = ? WHERE id = ?').run(aspect, id);
+  }
+  setStatus(id, 'queued', { error: null });
+  // No new chat message - this job already delivered one (or this is a gallery-only shot),
+  // and it keeps the same id and file path, so that bubble just shows the new bytes once
+  // they land. See the cache-bust bump below for why it actually does.
+  await runImageJob(id, situation, false);
+
+  const done = getImageJob(id);
+  if (done?.status !== 'done') return;
+  const msg = findMessageByImageId(id);
+  if (!msg) return;
+  // The path on disk did not change, so without this the browser would just keep showing
+  // the image it already cached under that exact URL. Bumping a version marker into the
+  // message's own meta - rather than touching the images.path column - is what makes the
+  // URL change without needing a second file on disk per regeneration.
+  const updated = updateMessageMeta(msg.id, { image_v: Date.now() });
+  if (updated) bus.emitEvent({ type: 'message_updated', character_id: character.id, message: updated });
 }
 
 /** Used only when the Actor left no concrete detail to work from. */
@@ -419,6 +592,7 @@ export async function respondToPhotoOffer(
     // herself, rather than papered over with the same generic default every time.
     situation: pending.kind === 'profile' ? pending.situation ?? '' : pending.situation || DEFAULT_SITUATION[pending.kind],
     aspect: pending.aspect,
+    showsFace: pending.showsFace,
   });
   return { ok: true, enqueued: true };
 }

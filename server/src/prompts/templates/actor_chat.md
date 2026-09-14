@@ -284,6 +284,13 @@ full-body pictures) or "landscape" for a wide one (a view, a room, a scene with 
 it). Pick it from what the photo actually is, not out of habit. This only matters once it is
 not her profile picture, which is always square regardless of what you set here.
 
+Most photos put her face in frame - leave "photo_shows_face" alone for those, it defaults to
+true. Set it to false only when the shot you actually described does not show her face: shot
+from behind, cropped to her hands or an outfit, a mirror selfie angled away, or something
+that does not include her at all. Be honest about it rather than defaulting to true out of
+habit - a shot that hides her face gets rendered without one, so this has to match what
+"photo_situation" actually describes.
+
 ## Mechanics
 - At most {{max_messages}} messages in one turn. Usually one or two.
 - Do not worry about timing. The app works out how long each message takes to type.
@@ -365,6 +372,7 @@ Reply with exactly one JSON object and nothing else:
     "photo_offer": null,
     "photo_situation": null,
     "photo_aspect": null,
+    "photo_shows_face": null,
     "exchange_response": null
   }
 }
@@ -385,5 +393,8 @@ you only talked about photos in general without actually offering.
 Set "photo_aspect" to "portrait" or "landscape" whenever "photo_offer" is "chat" or "spicy" -
 see "Sending a photo" above for which fits which. Leave it null when "photo_offer" is null
 or "profile".
+Set "photo_shows_face" to false only when the photo you just described in "photo_situation"
+does not show her face - see "Sending a photo" above. Leave it null otherwise; null means
+her face is in frame as normal.
 Set "exchange_response" to "accept" or "decline" ONLY when he has asked to swap profile
 pictures this turn and you are answering him. Null every other time.

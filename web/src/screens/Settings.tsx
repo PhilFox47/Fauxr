@@ -237,6 +237,22 @@ function ModelsPane({ settings, patch, save, saved }: any) {
       <div className="card">
         <div className="section-title" style={{ padding: '0 0 10px' }}>Images</div>
         <label className="field">
+          <span>Prompt style</span>
+          <select
+            value={settings.models.image.prompt_style ?? 'seedream'}
+            onChange={(e) => patch(['models', 'image', 'prompt_style'], e.target.value)}
+          >
+            <option value="seedream">Seedream 5.0 Lite</option>
+            <option value="z_image_turbo">Z Image Turbo</option>
+          </select>
+          <span className="tiny muted">
+            These two want different prompts, not just a different model name - Seedream
+            reads a concise brief with a short negative prompt; Z Image Turbo ignores
+            negative prompts entirely and wants a longer, more detailed positive one instead.
+            Switch this when you switch "Model" below to match.
+          </span>
+        </label>
+        <label className="field">
           <span>Model</span>
           <input
             type="text"
