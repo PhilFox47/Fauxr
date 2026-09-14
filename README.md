@@ -1085,6 +1085,42 @@ bio looks suspiciously identical to one seen before rather than just structurall
 that is the tell: check the logs (scope `generator`) for "bio generation failed, using
 fallback" to see whether the model is actually being reached.
 
+### Your own character card
+
+You get the same card the characters get, built from the same attribute tables — so whatever
+you pick, a character already has the vocabulary to talk about it. Twenty-seven fields across
+five collapsible sections in Settings → Your profile, all optional; a blank card is valid and
+just means nobody knows much.
+
+What is deliberately *not* there: typing style, message length, response speed, emoji usage,
+slang register. Those are machinery for driving the Actor's voice. You have a voice of your
+own, so they would be filled in and then never read.
+
+Who sees what follows the rules the app already has, rather than inventing a fourth one:
+
+| Section | Who sees it, and when |
+|---|---|
+| Your life, what you're into, what you want | On your profile — known, the way she would having read it |
+| What you look like | Only after you have swapped profile pictures |
+| The intimate half | Discovered in conversation, on the existing kink-discovery path |
+| Your hard limits | **Always** visible to her |
+
+Limits are the deliberate exception. Finding one by crossing it is not a game, so she is
+told them up front and told they hold whatever the mood is — not to push, not to talk you
+round, not to bring one up to test it.
+
+The Director sees the whole card including what puts you off and your dealbreaker, because
+it scores your side of the conversation against them; the Actor does not, so she is not
+quietly avoiding things she was never told.
+
+Two details worth knowing. The editor is rendered from the same spec the validator uses
+(`CARD_SECTIONS` in `engine/usercard.ts`), so adding a field needs no frontend change — and
+the server keeps only ids that actually exist in the right table, so nothing invented reaches
+a prompt. And because the attribute tables were written for the women the app generates,
+their labels say "her" — "still at her parents'", "small flat of her own". Reused verbatim on
+your card that reads as a mistake in every prompt you appear in, so pronouns are swapped to
+match the gender you gave, on word boundaries only.
+
 ### Profile pictures go both ways
 
 You get an emoji too. It sits on your profile the same way hers sits on hers, and it is what

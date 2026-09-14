@@ -1087,3 +1087,30 @@ input[type='range'] {
 .kink-label .tiny { line-height: 1.45; }
 .kink-stances { display: flex; flex-wrap: wrap; gap: var(--s2); }
 .kink-stances .chip { font-size: 12.5px; padding: 6px 11px; }
+
+
+/* ---- user character card editor: collapsed by default, since it is a long form */
+.card-section {
+  border-top: 1px solid var(--line);
+  padding: var(--s3) 0 0;
+}
+.card-section > summary {
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: var(--s2) 0;
+  list-style: none;
+}
+.card-section > summary::-webkit-details-marker { display: none; }
+.card-section > summary::after {
+  content: '+';
+  float: right;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.7;
+}
+.card-section[open] > summary::after { content: '–'; }
+.card-section-note { display: block; margin-bottom: var(--s3); line-height: 1.5; }

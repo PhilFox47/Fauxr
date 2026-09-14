@@ -10,6 +10,7 @@ import {
   sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
 import { describeHim } from './discovery.js';
+import { userCardBlock } from './usercard.js';
 import { currentStage } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { pickNudge } from './nudge.js';
@@ -157,6 +158,7 @@ function buildPrompt(
     user_name: user?.display_name ?? 'him',
     user_block: [
       userBlock(user, flags),
+      user ? userCardBlock(user, flags) : '',
       describeHim(relationship),
       exchangeRequestBlock(
         !!(relationship.mood as any)?.pending_exchange,

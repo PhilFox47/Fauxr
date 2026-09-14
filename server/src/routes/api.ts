@@ -18,6 +18,7 @@ import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatc
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import { evaluateUserImage, listImageJobs, respondToPhotoOffer, retryImageJob } from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji } from '../engine/generator.js';
+import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
@@ -100,6 +101,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       kink_map: sanitizeKinkMap(b.kink_map),
       // Same validation the generated characters get, so his emoji cannot be ":)" either.
       avatar_emoji: sanitizeEmoji(b.avatar_emoji) ?? '',
+      card: sanitizeCard(b.card),
     });
     void ensureStack();
     return saved;
@@ -291,6 +293,20 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   );
 
   app.get('/api/usage', async () => usageToday());
+
+  /**
+   * The card's shape and every option in it, so the editor is rendered from the same spec
+   * the validator uses and a new field needs no frontend change.
+   */
+  app.get('/api/card-spec', async () => ({
+    sections: CARD_SECTIONS,
+    options: Object.fromEntries(
+      [...new Set(CARD_SECTIONS.flatMap((s) => s.fields.map((f) => f.category)))].map((cat) => [
+        cat,
+        byCategory(cat).map((a) => ({ id: a.id, label: a.label })),
+      ]),
+    ),
+  }));
 
   /** Just the domains and their descriptions, for the profile editor. */
   app.get('/api/kink-domains', async () =>

@@ -296,6 +296,48 @@ export interface Character {
   matched_at: string | null;
 }
 
+/**
+ * His own character card, drawn from the same attribute tables the characters use. Every
+ * field optional: a blank card is a perfectly valid one, it just means nobody knows much.
+ */
+export interface UserCard {
+  ethnicity?: string;
+  skin_tone?: string;
+  height?: string;
+  body_type?: string;
+  hair_color?: string;
+  hair_style?: string;
+  eye_color?: string;
+  clothing_style?: string;
+  grooming?: string;
+  distinctive_feature?: string;
+  accessories?: string[];
+
+  occupation?: string;
+  living_situation?: string;
+  relationship_status?: string;
+  relationship_history?: string;
+  dating_experience?: string;
+  social_energy?: string;
+  languages?: string[];
+
+  interests?: string[];
+  hobbies?: string[];
+  humor_type?: string;
+
+  search_motive?: string;
+  turn_ons?: string[];
+  turn_offs?: string[];
+  dealbreaker?: string;
+
+  fetishes?: string[];
+  hard_limits?: string[];
+  libido?: number;
+  sexual_confidence?: number;
+  sexting_readiness?: number;
+  dom_sub_leaning?: number;
+}
+
 export interface UserProfile {
   display_name: string;
   age: number;
@@ -317,4 +359,6 @@ export interface UserProfile {
    * until the two of them have actually swapped real pictures.
    */
   avatar_emoji: string;
+  /** Everything else about him, same vocabulary the characters are built from. */
+  card: UserCard;
 }

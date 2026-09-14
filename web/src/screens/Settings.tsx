@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type ImageJob, type KinkDomain, type KinkStance, type LogEntry, type ResetParts, type UserProfile } from '../api';
+import { api, type CardSpec, type ImageJob, type KinkDomain, type KinkStance, type LogEntry, type ResetParts, type UserProfile } from '../api';
 
 type Pane = 'models' | 'behaviour' | 'profile' | 'logs' | 'images' | 'reset';
 
@@ -469,6 +469,106 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
   );
 }
 
+/**
+ * His own character card. Every control is rendered from the spec the server sends, so a
+ * field added to CARD_SECTIONS shows up here without touching this file.
+ */
+function CardEditor({
+  value,
+  onChange,
+}: {
+  value: Record<string, any>;
+  onChange: (v: Record<string, any>) => void;
+}) {
+  const [spec, setSpec] = useState<CardSpec | null>(null);
+  useEffect(() => {
+    void api.cardSpec().then(setSpec).catch(() => setSpec(null));
+  }, []);
+  if (!spec) return null;
+
+  const set = (key: string, v: unknown) => {
+    const next = { ...value };
+    if (v == null || v === '' || (Array.isArray(v) && !v.length)) delete next[key];
+    else next[key] = v;
+    onChange(next);
+  };
+
+  const toggle = (key: string, id: string, max: number) => {
+    const current: string[] = Array.isArray(value[key]) ? value[key] : [];
+    if (current.includes(id)) set(key, current.filter((x) => x !== id));
+    else if (current.length < max) set(key, [...current, id]);
+  };
+
+  return (
+    <>
+      {spec.sections.map((section) => (
+        <details key={section.id} className="card-section">
+          <summary>{section.label}</summary>
+          <span className="tiny muted card-section-note">{section.note}</span>
+          {section.fields.map((f) => {
+            const options = spec.options[f.category] ?? [];
+            if (f.multi) {
+              const picked: string[] = Array.isArray(value[f.key]) ? value[f.key] : [];
+              return (
+                <div className="field" key={f.key}>
+                  <span>{f.label} ({picked.length}/{f.max ?? 6})</span>
+                  <div className="kink-stances">
+                    {options.map((o) => (
+                      <button
+                        key={o.id}
+                        type="button"
+                        className="chip"
+                        data-active={picked.includes(o.id)}
+                        aria-pressed={picked.includes(o.id)}
+                        onClick={() => toggle(f.key, o.id, f.max ?? 6)}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <label className="field" key={f.key}>
+                <span>{f.label}</span>
+                <select value={(value[f.key] as string) ?? ''} onChange={(e) => set(f.key, e.target.value)}>
+                  <option value="">—</option>
+                  {options.map((o) => (
+                    <option key={o.id} value={o.id}>{o.label}</option>
+                  ))}
+                </select>
+              </label>
+            );
+          })}
+          {section.id === 'intimate' && (
+            <>
+              {([
+                ['libido', 'Drive', 1, 5],
+                ['sexual_confidence', 'Sexual confidence', 1, 5],
+                ['sexting_readiness', 'Up for sexting', 1, 5],
+                ['dom_sub_leaning', 'Leaning (sub ← → dom)', -3, 3],
+              ] as const).map(([key, label, lo, hi]) => (
+                <label className="field" key={key}>
+                  <div className="slider-head">
+                    <span className="label">{label}</span>
+                    <span className="value">{value[key] ?? '—'}</span>
+                  </div>
+                  <input
+                    type="range" min={lo} max={hi} step={1}
+                    value={typeof value[key] === 'number' ? value[key] : Math.round((lo + hi) / 2)}
+                    onChange={(e) => set(key, Number(e.target.value))}
+                  />
+                </label>
+              ))}
+            </>
+          )}
+        </details>
+      ))}
+    </>
+  );
+}
+
 const STANCES: { id: KinkStance; label: string }[] = [
   { id: 'into', label: 'Into it' },
   { id: 'curious', label: 'Curious' },
@@ -537,7 +637,7 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
   const [form, setForm] = useState<UserProfile>(
     profile ?? {
       display_name: '', age: 18, bio: '', photos: [], gender: '', seeking: '',
-      age_min: 18, age_max: 42, kink_map: {}, avatar_emoji: '',
+      age_min: 18, age_max: 42, kink_map: {}, avatar_emoji: '', card: {},
     },
   );
   const [saved, setSaved] = useState(false);
@@ -589,6 +689,10 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
           who falls outside it. 18 is the floor whatever you type here.
         </span>
       </div>
+      <CardEditor
+        value={(form.card as Record<string, any>) ?? {}}
+        onChange={(card) => setForm((f) => ({ ...f, card }))}
+      />
       <KinkEditor
         value={form.kink_map ?? {}}
         onChange={(kink_map) => setForm((f) => ({ ...f, kink_map }))}

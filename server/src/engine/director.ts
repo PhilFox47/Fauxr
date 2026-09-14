@@ -12,6 +12,7 @@ import {
 import { describeOnlineTimes, nextOnlineAt, onlineUntil } from './presence.js';
 import { currentStage, describeAppetite, describeArousal } from './stage.js';
 import { describeFetishProgress, describeHim, describeKinkHits, detectKinkHits, herCuriosity, undiscoveredKeys } from './discovery.js';
+import { userCardFullBlock } from './usercard.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
 
@@ -104,7 +105,9 @@ export async function runDirector(
       : '(he knows everything there is to know)',
     char_real_name: character.real_name,
     char_username: character.username,
-    user_block: userBlock(user, rel.flags),
+    user_block: [userBlock(user, rel.flags), user ? userCardFullBlock(user) : '']
+      .filter(Boolean)
+      .join('\n\n'),
     seed_block: seedBlock(character),
     trust: rel.trust,
     spark: rel.spark,

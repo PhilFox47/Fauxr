@@ -1,5 +1,25 @@
 export type KinkStance = 'into' | 'curious' | 'soft_no' | 'hard_no';
 
+export interface CardField {
+  key: string;
+  category: string;
+  label: string;
+  multi?: boolean;
+  max?: number;
+}
+
+export interface CardSection {
+  id: string;
+  label: string;
+  note: string;
+  fields: CardField[];
+}
+
+export interface CardSpec {
+  sections: CardSection[];
+  options: Record<string, { id: string; label: string }[]>;
+}
+
 export interface KinkDomain {
   id: string;
   label: string;
@@ -20,6 +40,8 @@ export interface UserProfile {
   kink_map: Record<string, KinkStance>;
   /** Stands in for your photo until you have actually swapped with someone. */
   avatar_emoji: string;
+  /** Everything else about you, same vocabulary the characters are built from. */
+  card: Record<string, unknown>;
 }
 
 export interface AppState {
@@ -142,6 +164,7 @@ export const api = {
   saveProfile: (p: UserProfile) => request<UserProfile>('/api/profile', { method: 'PUT', body: JSON.stringify(p) }),
   stack: () => request<{ generating: number; profiles: SwipeProfile[] }>('/api/stack'),
   kinkDomains: () => request<KinkDomain[]>('/api/kink-domains'),
+  cardSpec: () => request<CardSpec>('/api/card-spec'),
   offerProfileExchange: (id: string) =>
     request<{ ok: true; request_id: string }>(`/api/chats/${id}/profile-exchange`, { method: 'POST' }),
   swipe: (id: string, direction: 'left' | 'right') =>

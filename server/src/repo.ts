@@ -59,6 +59,7 @@ export function getUserProfile(): UserProfile | null {
     age_max: row.age_max ?? 42,
     kink_map: JSON.parse(row.kink_map ?? '{}'),
     avatar_emoji: row.avatar_emoji ?? '',
+    card: JSON.parse(row.card ?? '{}'),
     seeking: row.seeking,
   };
 }
@@ -66,12 +67,12 @@ export function getUserProfile(): UserProfile | null {
 export function saveUserProfile(p: UserProfile): UserProfile {
   const ts = nowIso();
   db.prepare(
-    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, kink_map, avatar_emoji, created_at, updated_at)
-     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @kink_map, @avatar_emoji, @ts, @ts)
+    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, kink_map, avatar_emoji, card, created_at, updated_at)
+     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @kink_map, @avatar_emoji, @card, @ts, @ts)
      ON CONFLICT(id) DO UPDATE SET display_name = excluded.display_name, age = excluded.age,
        bio = excluded.bio, photos = excluded.photos, gender = excluded.gender,
        seeking = excluded.seeking, age_min = excluded.age_min, age_max = excluded.age_max,
-       kink_map = excluded.kink_map, avatar_emoji = excluded.avatar_emoji,
+       kink_map = excluded.kink_map, avatar_emoji = excluded.avatar_emoji, card = excluded.card,
        updated_at = excluded.updated_at`,
   ).run({
     ...p,
@@ -80,6 +81,7 @@ export function saveUserProfile(p: UserProfile): UserProfile {
     age_max: clampPreferredAge(p.age_max, 42),
     kink_map: JSON.stringify(p.kink_map ?? {}),
     avatar_emoji: p.avatar_emoji ?? '',
+    card: JSON.stringify(p.card ?? {}),
     ts,
   });
   return getUserProfile()!;

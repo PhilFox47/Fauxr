@@ -33,6 +33,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
         // Set later under Settings; an empty map just means nobody knows anything yet.
         kink_map: {},
         avatar_emoji: '',
+        card: {},
       });
       onDone();
     } catch (err) {
