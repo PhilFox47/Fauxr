@@ -171,6 +171,39 @@ Measured against a mock reproducing the exact failure: **one character went from
 calls to 3**, and a model whose thinking still overruns the raised ceiling recovers in one
 extra call with a clear trail, instead of three silent failures and a fallback.
 
+### Headroom over truncation, everywhere
+
+The fix above still worked by recovering from a truncation after it happened - one extra
+round trip, a clear log line, but a truncation all the same. Every base budget was then
+**4x'd outright**, a deliberate call to trade worst-case cost and latency for never having a
+real answer, or a reasoning model's thinking, cut off by its own ceiling in the first place:
+
+| | before | now |
+|---|---|---|
+| Actor default | 1800 | **7200** |
+| Director default | 2600 | **10400** |
+| `write_username` / `reroll_name` | 600 | **2400** |
+| `write_bio` | 1200 | **4800** |
+| `generate_character` (the dossier pass) | 3600 | **14400** |
+| Truncation-retry floor | 1200 | **4800** |
+| Truncation-retry ceiling | 6000 | **24000** |
+
+The retry ceiling has to move with the base budgets, not stay fixed - it exists to guarantee
+the second attempt has *more* room than the first, and a ceiling below the new largest base
+budget would invert that: a call that filled 14400 tokens thinking would get throttled back
+to 6000 on the one retry meant to give it more space. Verified directly: a mock that always
+truncates, whatever cap it is asked with, still gets a wider retry cap every time, at every
+one of the new base sizes.
+
+The per-request timeout moved too, from 120 to 300 seconds, for a reason that is easy to
+miss: a ceiling four times larger needs real wall-clock time to actually be written, or
+calls that would otherwise have finished start getting cut off by the clock instead of the
+token cap - trading one kind of truncation for another rather than removing it.
+
+Settings saved before this shipped keep whatever `max_tokens` they already have - deepMerge
+only fills in what is missing - so an existing install picks up the new defaults by editing
+Models in Settings (or resetting API keys and settings), not automatically on upgrade.
+
 ---
 
 ## How a turn works
@@ -1022,10 +1055,8 @@ still gets a handle and a bio rather than nothing — verified against a mock th
 coherence call specifically: generation still completes, and only in that failure case does
 the handle prompt see the raw tags again.
 
-The pass writes more now, so its budget went from 2400 tokens to 3600, and the shared
-retry-on-truncation ceiling in the LLM client went from 4000 to 6000 — 400 tokens of
-headroom above a 3600 base was not the "real room to think and then answer" that mechanism
-is supposed to give a stuck call.
+The pass writes more now, so its budget was raised accordingly — see *"Headroom over
+truncation, everywhere"* below for the current numbers, which have moved again since.
 
 ### There is no "her whole thing" any more
 

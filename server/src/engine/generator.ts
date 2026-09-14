@@ -1016,12 +1016,12 @@ function nearestBio(bio: string, existing: string[]): string | null {
 const HANDLES_SHOWN = 8;
 const BIOS_SHOWN = 10;
 
-const NAME_TOKENS = 600;
-const BIO_TOKENS = 1200;
-// Raised from 2400 once this call started writing the dossier - several paragraphs of
-// prose plus the existing structured fields (swaps, online times, the detail strings) no
-// longer fits in the room sized for the fields alone.
-const CHARACTER_TOKENS = 3600;
+// 4x'd across the board (600/1200/3600 -> 2400/4800/14400): headroom traded for cost and
+// worst-case latency, on purpose, so a genuinely long answer - or a reasoning model that
+// wants to think at length before it writes one - never gets cut off by its own ceiling.
+const NAME_TOKENS = 2400;
+const BIO_TOKENS = 4800;
+const CHARACTER_TOKENS = 14400;
 
 const BIO_MIN_WORDS = 14;
 const BIO_MAX_WORDS = 75;

@@ -70,8 +70,12 @@ export const DEFAULT_SETTINGS: Settings = {
     // bill their thinking against max_tokens, so a budget sized for the reply alone is spent
     // before the reply starts and comes back empty. Saved settings keep whatever they have;
     // complete() widens a ceiling that is plainly too tight rather than failing on it.
-    actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 1800 },
-    director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 2600 },
+    // 4x'd from 1800/2600: a deliberate tradeoff toward never letting a real answer get cut
+    // off by its own ceiling, at the cost of a slower/pricier worst case on a call that
+    // genuinely fills the budget thinking. See complete()'s truncation handling below for
+    // why the ceiling matters more than it looks like it should for a reasoning model.
+    actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 7200 },
+    director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 10400 },
     image: { model: 'seedream-v4', size: '1024x1024' },
   },
   activity: 0.6,

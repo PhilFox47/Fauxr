@@ -110,12 +110,12 @@ export interface CompletionOptions {
  * enough room to think and then answer.
  */
 const EXPAND_FACTOR = 3;
-const EXPAND_FLOOR = 1200;
-// Raised from 4000: the character-generation call now writes a full prose dossier on top
-// of its structured fields, based at 3600 tokens - a ceiling only 400 above that base left
-// a retry almost nothing extra to work with, which is the exact failure this mechanism
-// exists to fix.
-const EXPAND_CEILING = 6000;
+// Floor and ceiling 4x'd along with every base budget below (1200/6000 -> 4800/24000), for
+// the same reason: the ceiling has to clear the largest base budget with room to spare, or
+// a call that fills a large budget thinking gets LESS room on the retry than it started
+// with, which is backwards.
+const EXPAND_FLOOR = 4800;
+const EXPAND_CEILING = 24000;
 
 /** Provider-side failures worth waiting out rather than giving up on. */
 const RETRYABLE = (status: number) => status === 429 || status === 408 || status >= 500;
@@ -183,7 +183,11 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
 
   const started = Date.now();
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), opts.timeoutMs ?? 120_000);
+  // Raised alongside the token budgets above, for the same reason: a ceiling four times
+  // larger needs real time to actually be written, or calls that would have finished start
+  // getting cut off by the clock instead of the token cap - trading one kind of truncation
+  // for another rather than removing it.
+  const timer = setTimeout(() => controller.abort(), opts.timeoutMs ?? 300_000);
   try {
     const res = await fetch(url, {
       method: 'POST',
