@@ -1002,6 +1002,47 @@ twice and never leaks that offer to the caller; a model that self-corrects on th
 succeeds cleanly with `photo_offer` cleared; and an eligible offer still passes through in
 one attempt, unchanged - no new false positive on the common case.
 
+### She was sometimes writing the app's own system message as her own text
+
+A real log turned up something stranger than the broken promise above: three separate turns
+where one of her own chat bubbles read `system: Saskia wants to send you a photo. It might
+be explicit.` - not her talking, a verbatim copy of the consent card's own text. That exact
+sentence sits in her conversation history every time she has already sent a photo, and the
+model was pattern-matching it back out as if it were something she would type, sometimes with
+a literal `system:` prefix, once even inventing extra `photo_offer`/`photo_situation` fields
+directly on the message object (harmlessly ignored, since only `text` is read from it). It
+slipped through undetected: nothing in `findVoiceProblem()` checked for this, and the one
+check that happened to catch it once (the one-line-quip filter) only runs on the first
+attempt, so the identical mistake sailed through untouched on the retry.
+
+`voice.ts` now has a dedicated pattern for it - a literal `system:` prefix, or the exact
+third-person "wants to send you a photo" / "wants to swap profile pictures" phrasing the
+consent card itself uses - checked on every attempt, not just the first, with a correction
+telling her plainly that offering is done through `photo_offer`, not by describing the offer
+card. Verified against a mock: a model that keeps writing the fake system line gets rejected
+twice and that text never reaches the player; a model that self-corrects on the retry
+succeeds cleanly with the real message.
+
+### The self-repeat guard could burn both attempts on a narrow-themed scene
+
+Early in that same log, an extended, tightly-themed exchange (a running feet bit) had two
+genuinely different Actor generations in a row both rejected as "repeating something she
+already said" - the retry budget ran out and a canned fallback line reached the player
+instead of real dialogue. The check itself (`textOverlap > 0.6` against her recent messages)
+is doing its job; the problem is that a sustained, narrow topic makes two independently
+written replies sharing enough vocabulary to look repetitive a real possibility, not proof
+either one was actually wrong - unlike the harder, close-to-unambiguous checks next to it
+(roleplay prose, narrating him, announcing her own agenda), which stay enforced on every
+attempt because they are actual formatting violations, not a judgment call.
+
+`findVoiceProblem()` takes a `skipRepeatCheck` flag, set by `actor.ts` only on the final
+retry attempt - mirroring the precedent already set by the one-line-quip filter, which has
+always only run on the first attempt for the same reason. A reply that still reads as
+repetitive on the very last try now gets accepted rather than thrown away for a canned line;
+everything else she could still be rejected for stays enforced right up to the end. Verified
+against a mock: a second attempt that still overlaps with an earlier message is now accepted
+and returned as the real reply, not swapped for the fallback.
+
 ### Voice messages
 ---
 
@@ -1231,6 +1272,20 @@ decade she was born, names from her parents' country rather than the one she liv
 nicknames she actually goes by. Behind that, a check catches exact repeats *and* near
 neighbours, since Mila beside Mia and Sofia beside Sophia are what actually make a cast feel
 small. A clash re-asks, in the same call as a clashing handle when both collided.
+
+**A reroll used to fix the field and nothing else.** The dossier — the paragraph everything
+else, including the handle and the bio, is actually written from — comes from the same
+generation call that picked the name that just got rejected, and it names her throughout its
+own prose. Rerolling `real_name` never touched that prose, so `write_username()` and
+`writeBio()` went on reading a dossier that confidently described "Layla" for a character who
+was, from that point on, actually named something else entirely — caught in a real log twice,
+both times producing a handle built for the wrong name (`layla.raw` for a woman actually named
+Thalia). `renameInProse()` now swaps every whole-word occurrence of the rejected name for the
+real one, in both the dossier and the short `one_line` descriptor, the moment a reroll
+succeeds — so everything written after it, including the stored `seed.hints.dossier` itself,
+actually agrees with who she ended up being. Verified against a mock: forcing a name clash
+and reroll, the username and bio prompts (and the persisted dossier) all use the new name and
+never mention the rejected one.
 
 ### Handles
 

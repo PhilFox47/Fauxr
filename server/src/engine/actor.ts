@@ -307,6 +307,10 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
           lastUserMessage,
           writesFormally: writesFormally(ctx.character),
           recentOwnMessages,
+          // Last attempt: two independently generated replies both reading as repetitive is
+          // more likely a narrow-themed exchange than a model that is actually stuck, and
+          // rejecting this one too would only spend the last retry on a fallback line.
+          skipRepeatCheck: attempt > 0,
         }),
       )
       .find(Boolean);

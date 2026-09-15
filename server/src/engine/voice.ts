@@ -44,6 +44,17 @@ const NARRATES_HIM =
 const META_COMMENTARY =
   /\b(?:bold (?:strategy|move|choice|opener)|classic opener|textbook|opening (?:line|move|gambit|salvo)|conversation starter|strong opener|that(?:'s| is) (?:a|quite) (?:an )?opener|as an opener|for an opener|you(?:'re| are) doing the thing where|is that your opener)\b/i;
 
+/**
+ * The app's own consent-card text ("Mira wants to send you a photo", "X wants to swap
+ * profile pictures") sits verbatim in the conversation history every time a photo has
+ * already been offered - a real, recurring failure has the model copying that exact line
+ * back out as if it were one of her own messages, sometimes with a literal "system:" prefix.
+ * She never has a reason to write either: offering is done through photo_offer, not by
+ * describing the offer in third person the way the system message does.
+ */
+const MIMICS_SYSTEM_LINE =
+  /^\s*system\s*:|\bwants to (?:send you (?:a|another) photo|swap profile pictures)\b/i;
+
 /** Saying the quiet part out loud: announcing that she is evaluating him. */
 const ANNOUNCES_AGENDA =
   /\b(?:i(?:'m| am) testing (?:you|whether|if)|i(?:'m| am) seeing (?:if|whether) you|this is a test|consider this a test|let(?:'s| us) see (?:if|whether) you|i want to see (?:if|whether) you (?:can|could|will)|i(?:'m| am) (?:currently )?(?:evaluating|assessing|judging) (?:you|whether)|you(?:'re| are) being tested|testing whether you)\b/i;
@@ -103,6 +114,16 @@ export interface VoiceCheckInput {
   writesFormally?: boolean;
   /** Her own last several messages in this conversation, oldest first. See selfRepeat. */
   recentOwnMessages?: string[];
+  /**
+   * Skips the self-repeat check - used on the Actor's last retry attempt. Self-repeat is a
+   * judgment call, not a formatting violation, and a sustained, narrowly-themed exchange
+   * (the same fetish or bit carried across several turns) makes two independently generated
+   * replies landing on similar vocabulary a real possibility rather than proof either one
+   * was actually wrong. Rejecting both in a row used to burn the whole retry budget and
+   * hand back a canned fallback line instead of real dialogue - see actor.ts for where this
+   * gets set.
+   */
+  skipRepeatCheck?: boolean;
 }
 
 function textTokens(text: string): Set<string> {
@@ -157,6 +178,12 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
       fix: 'You commented on the conversation as if watching it from outside - calling something an opener, a strategy, a move. You are in the conversation, not reviewing it. Reply to the person.',
     };
   }
+  if (MIMICS_SYSTEM_LINE.test(input.text)) {
+    return {
+      what: "writing the app's own system message as if it were her text",
+      fix: 'You wrote something like "system: X wants to send you a photo" or described yourself in the third person wanting to send/swap a photo - that is the app\'s own consent-card text, not something you would ever type. If you are offering a photo, just say so in your own voice ("wanna see something?"), and set photo_offer - never write out the offer card itself.',
+    };
+  }
   if (ANNOUNCES_AGENDA.test(input.text)) {
     return {
       what: 'announcing that she is testing him',
@@ -191,7 +218,7 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
       fix: 'Your first message just repeated what he said back to him with the pronouns flipped. Drop it and start with your actual reply.',
     };
   }
-  if (selfRepeat(input.text, input.recentOwnMessages)) {
+  if (!input.skipRepeatCheck && selfRepeat(input.text, input.recentOwnMessages)) {
     return {
       what: 'repeating something she already said in this conversation',
       fix: 'You already made basically this exact point or observation earlier in this conversation. Saying it again, even reworded, reads as a stuck record. Drop it - say something else, or just answer him.',

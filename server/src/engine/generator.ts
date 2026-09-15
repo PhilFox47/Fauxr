@@ -811,8 +811,18 @@ export async function generateCharacter(): Promise<Character> {
   const nameClash = nearestName(realName, takenNames);
   if (nameClash) {
     logger.warn('generator', 'name too close to one already in the cast, re-asking', { realName, nameClash });
+    const rejectedName = realName;
     const fresh = await rerollName(seed, realName, nameClash, takenNames);
-    if (fresh) realName = fresh;
+    if (fresh) {
+      realName = fresh;
+      // The dossier and one_line were drafted by the same call that picked the name that
+      // just got rejected, so they still refer to her by it throughout - a reroll only ever
+      // touches the name field, never the prose already written around it. Without this,
+      // write_username() and writeBio() read a dossier that confidently describes "Layla"
+      // for a woman who, from here on, is actually named something else entirely.
+      pass.dossier = renameInProse(pass.dossier, rejectedName, realName);
+      pass.one_line = renameInProse(pass.one_line, rejectedName, realName);
+    }
   }
 
   if (pass.insecurity_detail) seed.hints.insecurity = pass.insecurity_detail;
@@ -942,6 +952,17 @@ function nearestName(name: string, existing: string[]): string | null {
     if (Math.abs(a.length - b.length) <= 1 && a.slice(0, 3) === b.slice(0, 3)) return prior;
   }
   return null;
+}
+
+/**
+ * Swaps every whole-word occurrence of a rejected name for the one that replaced it, so a
+ * reroll actually reaches the prose that was written around the old name - not just the
+ * seed field that held it. See the nameClash handling above for why this exists.
+ */
+function renameInProse(text: string | undefined, oldName: string, newName: string): string | undefined {
+  if (!text || !oldName) return text;
+  const escaped = oldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(`\\b${escaped}\\b`, 'g'), newName);
 }
 
 function existingUsernames(limit = 40): string[] {
