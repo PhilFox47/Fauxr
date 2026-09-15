@@ -345,6 +345,42 @@ rather than it circling. The Actor gets the phase name only.
 character who only ever responds is a failure of the Director, not of the user. She is on a
 dating app for her own reasons and is expected to pursue them.
 
+### Double-texting
+
+The wakeup system above covers reconnecting after real distance - hours, days. It does not
+cover the much smaller, much quicker thing a real person does mid-conversation: she said
+something, he has not replied in a while, and she sends one follow-up. `scheduler.ts`'s
+`maybeDoubleText()` runs every tick alongside the existing proactive checks: if the last
+message in a chat is hers and it has sat unanswered for at least 30 minutes, and she has not
+already followed up once on this particular silence, it queues a wakeup for a low-key
+"still there?" kind of turn. It only ever fires once per silence - the flag that gates it
+(`rel.mood.double_texted`) is set the moment it is queued and only clears again once he
+actually replies, so this is a single natural follow-up, never a nag repeating every half
+hour. It also never competes with the longer-gap "reach out again" mechanism below it in the
+tick, since that one already skips any character with a wakeup already queued.
+
+**She is never annoyed about the silence, here or anywhere else.** This runs in a gooner
+app, not a guilt-trip generator: going quiet for twenty minutes or three days has to stay a
+completely normal, unremarkable thing, never something she reads as owed a reply for.
+`director_direction.md` now states this as a standing rule - no passive-aggressive "oh NOW
+you text back", no hurt or annoyed undertone about a gap, whatever the mood otherwise is -
+and the double-text's own trigger reason repeats it inline, right where the model actually
+reads why this turn is happening, since it costs nothing to say it twice.
+
+Verified against a mock: no wakeup before 30 minutes; one queued (with the anti-annoyance
+framing baked into the reason text) once the threshold passes; calling it again does not
+duplicate the wakeup or fire a second follow-up for the same silence; and replying resets
+the flag so a later, fresh silence can earn another one.
+
+### Chats sorted by last activity, not match date
+
+The matches list was ordered by `matched_at` - whoever she matched most recently stayed on
+top forever, regardless of who had actually said anything since. `GET /api/matches` now
+sorts by `last_activity` (her last real message, falling back to when you matched if there
+is not one yet) descending, the same way every other chat app on earth orders its list -
+whoever most recently has something new floats up, and a match that has gone quiet sinks
+without needing to be dismissed.
+
 ### Spice
 
 How forward a character is comes from her own appetite — libido, sexting readiness and

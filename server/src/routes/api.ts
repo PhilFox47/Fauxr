@@ -144,17 +144,23 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
 
   // ------------------------------------------------------------- matches & chat
   app.get('/api/matches', async () => {
-    return visibleMatches().map((c) => {
-      const last = lastMessage(c.id);
-      return {
-        ...publicCharacter(c),
-        unread: unreadCount(c.id),
-        last_message: last
-          ? { text: last.kind === 'image' ? 'Photo' : last.kind === 'voice' ? 'Voice message' : last.text, sender: last.sender, sent_at: last.sent_at }
-          : null,
-        last_activity: last?.sent_at ?? c.matched_at,
-      };
-    });
+    // visibleMatches() itself is ordered by matched_at - the right order for a fresh cast,
+    // wrong for a chat list. Re-sorted here by last_activity (a real message if there is
+    // one, else when they matched) so whoever most recently said something floats to the
+    // top, the same way every other chat app on earth works.
+    return visibleMatches()
+      .map((c) => {
+        const last = lastMessage(c.id);
+        return {
+          ...publicCharacter(c),
+          unread: unreadCount(c.id),
+          last_message: last
+            ? { text: last.kind === 'image' ? 'Photo' : last.kind === 'voice' ? 'Voice message' : last.text, sender: last.sender, sent_at: last.sent_at }
+            : null,
+          last_activity: last?.sent_at ?? c.matched_at,
+        };
+      })
+      .sort((a, b) => Date.parse(b.last_activity ?? '') - Date.parse(a.last_activity ?? ''));
   });
 
   app.get<{ Params: { id: string }; Querystring: { limit?: string } }>('/api/chats/:id', async (req, reply) => {

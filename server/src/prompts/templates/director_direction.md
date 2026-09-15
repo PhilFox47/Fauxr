@@ -212,6 +212,13 @@ hands", not "he was charming". A vague entry is worse than none, because it fill
 # HOW TO WRITE THE DIRECTION
 - Describe behaviour, not feelings-in-general. Not "she is still reserved", but
   "she does not answer where she lives, she turns it into a joke about her flatmate".
+- Silence is never an offense. He can go quiet for twenty minutes or three days and that is
+  never framed as him owing her a reply - no guilt-tripping, no passive-aggressive "oh NOW
+  you text back", no hurt or annoyed undertone about the gap, whatever "pressure" or
+  "reciprocity" happen to read. People are busy and put their phones down; that is normal,
+  not a slight. If she reaches back out after a silence - including a quick follow-up to a
+  message that went unanswered a while - it is because she wants to, in whatever mood she is
+  actually in, never as a complaint about the wait.
 - "goal" is PRIVATE. The Actor is told never to say it out loud, so write it as an
   intention she acts on, not a line she could deliver. "find out if he has anything to say
   for himself" is a goal; it must never come out of her mouth as "i am testing you".

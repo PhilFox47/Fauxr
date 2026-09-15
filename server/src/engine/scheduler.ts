@@ -5,7 +5,7 @@ import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
   allWakeups, clearWakeup, dueWakeups, getCharacter, getRelationship, getWakeup,
-  listActiveMatches, pendingUserMessageCount, saveRelationship, setWakeup,
+  lastMessage, listActiveMatches, pendingUserMessageCount, saveRelationship, setWakeup,
 } from '../repo.js';
 import type { Character } from '../types.js';
 import { isAway, takeTurn } from './chat.js';
@@ -64,9 +64,53 @@ export async function tick(): Promise<void> {
 
   answerPendingMessages();
   decayPass();
+  maybeDoubleText();
   maybeBeProactive();
   void ensureStack();
   emitPresence();
+}
+
+/**
+ * A real person who sent something and got no reply for a while will often follow up once -
+ * not because he owes her a reply, just because she has more to say or wants to check the
+ * message actually landed. This is deliberately separate from maybeBeProactive() below,
+ * which reopens a conversation after real distance (hours) has passed: this is the much
+ * quicker, much smaller "hey, you still there?" that happens mid-conversation, and it only
+ * ever fires once per silence - real double-texting, not a nag every half hour forever.
+ */
+const DOUBLE_TEXT_AFTER_MS = 30 * 60_000;
+
+export function maybeDoubleText(): void {
+  for (const character of listActiveMatches()) {
+    const rel = getRelationship(character.id);
+    if (!rel || rel.ghosted_at) continue;
+    if (getWakeup(character.id)) continue; // something is already going to wake her
+    if ((rel.mood as any)?.double_texted) continue; // already followed up once on this silence
+
+    const last = lastMessage(character.id);
+    // Only when SHE is the one waiting on a reply - if he spoke last, a turn is either
+    // already running or about to be, and there is nothing to follow up on.
+    if (!last || last.sender !== 'character') continue;
+    if (Date.now() - Date.parse(last.sent_at) < DOUBLE_TEXT_AFTER_MS) continue;
+
+    const at = new Date(Date.now() + randInt(0, 10) * 60_000);
+    setWakeup({
+      character_id: character.id,
+      scheduled_at: at.toISOString(),
+      // This exact phrasing reaches the Director as the reason for the turn (see
+      // runDirector's actor_report fallback) - the "never annoyed" instruction is stated
+      // once, generally, in director_direction.md, but it costs nothing to say it again
+      // right where the trigger itself is described.
+      reason:
+        'a while has passed since her last message and he has not replied yet - if it still ' +
+        'feels natural, she can send a quick, low-key follow-up. Never annoyed, hurt or ' +
+        'guilt-tripping about the silence - people get busy, that is just normal, not a slight.',
+      cancel_if_user_writes: true,
+    });
+    rel.mood = { ...rel.mood, double_texted: true };
+    saveRelationship(rel);
+    logger.debug('scheduler', `double-text queued for ${character.username}`, { at: at.toISOString() });
+  }
 }
 
 /**

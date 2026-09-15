@@ -95,6 +95,12 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
   const wakeup = getWakeup(character.id);
   if (wakeup?.cancel_if_user_writes) clearWakeup(character.id);
 
+  // He replied - the silence that may have earned a double-text is over, so a future one
+  // (after whatever she sends this turn) is fair game again. See maybeDoubleText().
+  if ((rel.mood as any)?.double_texted) {
+    rel.mood = { ...rel.mood, double_texted: false };
+  }
+
   const messages = recentMessages(character.id, getSettings().chat.context_messages);
   refreshModifiers(rel, messages, false);
   clearExpiredNegativeFlags(rel);
