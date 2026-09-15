@@ -1741,6 +1741,24 @@ Verified against a mock: a spicy job's assembler prompt carries the new section,
 says breasts are fine and explicitly forbids naming the thing being avoided; a chat or
 profile job - kinds where this was never reachable anyway - renders neither.
 
+**Later found to undersell itself even during heavy sexting.** A real log turned up two
+spicy photos, sent mid-sexting, that came back reading as barely more than a low-cut top -
+`photo_situation` had settled for "a hint of cleavage" and "her resort wear, cleavage
+prominent" rather than anything that matched how far the conversation had actually gone. The
+old wording leaned entirely on "the angle, the crop, what a hand or a sheet happens to be
+covering" as the way to stay suggestive - good advice for the one line this tier still does
+not cross, but nothing was pushing the rest of the shot toward being explicit in the first
+place, so both the Actor and the assembler defaulted conservative.
+
+`actor_chat.md`'s "Sending a photo" section, `actor_photo_idea.md`'s spicy branch, and
+`image_prompt_assembler.md`'s `is_spicy` section all now say the same thing more concretely:
+the shot should genuinely match the heat of the moment it comes from, not undersell what has
+already been said - underwear or lingerie with real skin showing, a hand between her thighs
+or slipped inside her waistband, a visibly aroused expression are all normal for this tier,
+not something to hold back "to keep it classy." The one line that still does not move is full
+nudity of her genitals - get past that one specific point through angle, crop or pose, rather
+than pulling the whole shot back into something demure to stay safely clear of it.
+
 ### Every photo she sent, kept
 
 A photo used to exist only as a bubble in the chat. Scroll far enough and it was gone —

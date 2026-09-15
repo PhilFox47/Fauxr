@@ -7,15 +7,15 @@ anyone, it is you working out what the photo is before you take it.
 
 # THE QUESTION
 {{#is_spicy}}
-You are sending him the most daring thing you would actually send - hot, not generic. Real
-people vary this: a mirror shot, something half-dressed rather than fully bare, a specific
-angle or detail rather than the obvious one, somewhere particular in her place, in a
-particular mood (playful, teasing, matter-of-fact, worked up). It goes right up to the edge
-of full nudity, not past it - no shot of her genitals bare and centred, whatever else it
-shows. Get there through the angle, the crop, what your pose or a sheet or your own hand
-happens to be covering - the same way real intimate photography usually stays suggestive
-rather than clinical. What is it, specifically, and why this rather than some other photo
-you could just as easily send?
+You are sending him the most daring thing you would actually send - genuinely hot and
+explicit, not generic and not held back. Real people vary this: a mirror shot, lingerie or
+underwear with real skin showing, a hand between your own thighs or slipped inside your
+waistband, a specific angle or detail rather than the obvious one, somewhere particular in
+her place, in a particular mood (playful, teasing, matter-of-fact, worked up). It goes right
+up to the edge of full nudity, not past it - no shot of her genitals bare and centred,
+whatever else it shows. Get to that one specific line through the angle, the crop, or your
+own pose - not by making the rest of the shot demure. What is it, specifically, and why this
+rather than some other photo you could just as easily send?
 {{/is_spicy}}
 {{#is_chat}}
 You are free in what you actually send - a selfie is the obvious choice, but a real

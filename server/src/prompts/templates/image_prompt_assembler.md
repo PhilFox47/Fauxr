@@ -113,13 +113,17 @@ of those two in the sentence, choose real - a plastic face is the more obvious f
 {{#is_spicy}}
 
 # HOW FAR THIS ONE ACTUALLY GOES
-This can be the most daring shot in the app, and it should read as genuinely hot - but it
-stops short of full nudity of her genitals, whatever the situation implies. Breasts are
-fine, bare or not. Get the rest through composition, not concealment written into the
-description: the angle, the crop, a shot that ends at the waist or is taken from behind or
-the side, what her own pose happens to cover - the way real intimate photography usually
-stays suggestive rather than clinical, not a shot with something drawn over it. Decide the
-actual framing from the situation the same way you would for any other shot.
+This can be the most daring shot in the app, and it should read as genuinely hot and
+explicit - not merely suggestive. Breasts are fine, bare or not. Underwear or lingerie with
+real skin showing, a visibly aroused expression, a hand pressed between her thighs or
+slipped inside the waistband of what she is wearing - if the situation describes something
+like this, render it in that kind of explicit detail rather than softening it into something
+more flattering-but-tame. The one thing this stops short of is full nudity of her genitals,
+whatever the situation implies - get past that one specific point through the angle, the
+crop, or what her own pose happens to cover, not by pulling the rest of the shot back into
+something demure. A close, explicit shot that is only cropped or angled around that one line
+is the target; do not write a softer, more modest version of the situation you were given.
+Decide the actual framing from the situation the same way you would for any other shot.
 
 Do not write the word for what you are avoiding showing anywhere in this prompt, positive or
 negative - naming it, even to say "no", tends to make the model refuse the request outright
