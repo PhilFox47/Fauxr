@@ -326,24 +326,23 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
     }
 
     // Offering IS the move (see actor_chat.md's "Sending a photo") - her messages this turn
-    // already say she is sending something. If the tier she just offered is not actually
-    // eligible, chat.ts silently drops the consent card and that promise never arrives.
-    // Catching it here, before her messages are accepted at all, turns that into a normal
-    // rewrite instead of a broken promise the player actually sees.
+    // already say she is sending something. Which tier to offer is her own judgment call, not
+    // something re-checked against the direction here - but a couple of things really would
+    // make the offer silently fail to reach him (images turned off, or a profile picture
+    // already on its way), and catching those here turns that into a normal rewrite instead
+    // of a broken promise the player actually sees.
     if (out.hidden.photo_offer && !photoOfferEligible(ctx.relationship, out.hidden.photo_offer)) {
-      logger.warn('actor', 'rejected: offered a photo tier that is not actually available', {
+      logger.warn('actor', 'rejected: offered a photo that cannot actually be sent right now', {
         character: ctx.character.username,
         attempt,
         offerKind: out.hidden.photo_offer,
-        unlock: ctx.relationship.active_direction?.unlock,
+        imagesEnabled: getSettings().images_enabled,
         messages: out.messages.map((m) => m.text),
       });
       correction = retryHint(
-        'offering a photo your direction has not actually unlocked this turn',
-        'You set photo_offer, but that tier is not available to you right now - the offer would ' +
-          'silently fail to reach him, leaving your messages promising a photo that never arrives. ' +
-          'Write this turn again without offering one: talk about something else, or, if a photo ' +
-          'still fits the moment, offer only a tier you are actually allowed to send.',
+        'offering a photo that cannot actually be sent right now',
+        'You set photo_offer, but that would silently fail to reach him right now, leaving your ' +
+          'messages promising a photo that never arrives. Write this turn again without offering one.',
       );
       continue;
     }

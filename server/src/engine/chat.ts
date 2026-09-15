@@ -330,9 +330,10 @@ async function runActorPhase(
   const offerKind = result.hidden.photo_offer;
   if (offerKind && !pendingPhoto) {
     // Re-verified here rather than trusted from the model: actor.ts already rejects a turn
-    // that offers a tier this would say no to, so this should normally never fire, but it
-    // stays as the actual enforcement point in case the retry budget was spent on something
-    // else first.
+    // whose offer cannot actually be sent, so this should normally never fire, but it stays
+    // as the actual enforcement point in case the retry budget was spent on something else
+    // first. Which tier to offer is otherwise entirely her call - this only catches images
+    // being off, or a profile picture already on its way.
     if (photoOfferEligible(rel, offerKind)) {
       const offerId = randomUUID();
       const offerMsg = addMessage({

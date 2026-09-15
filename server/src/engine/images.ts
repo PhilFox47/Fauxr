@@ -20,38 +20,20 @@ import { describeSeed } from './generator.js';
 import type { Character, CharacterSeed, PendingPhoto, Relationship } from '../types.js';
 
 /**
- * Which unlock permits offering each photo tier. Shared between chat.ts, which enforces this
- * when deciding whether to actually raise a consent card, and actor.ts, which uses it to
- * catch a turn where she announces a photo she is not actually allowed to send before it
- * ever reaches him - see photoOfferEligible() below for why that matters on its own.
- */
-export const PHOTO_UNLOCK_FOR: Record<'profile' | 'chat' | 'spicy', string> = {
-  profile: 'profile_picture',
-  chat: 'personal_photos',
-  spicy: 'spicy_photos',
-};
-
-/**
  * Whether a photo_offer of this kind, right now, would actually raise a consent card.
  *
- * This used to only be checked once, in chat.ts, after the Actor had already written her
- * messages - so a turn where she said "sending you something now~" but the direction had
- * not actually unlocked that tier this turn would just silently drop the card, leaving her
- * having promised a photo that then never arrives. The eligibility rule itself was always
- * fine; the problem was checking it too late to do anything but drop the card. actor.ts now
- * checks the same predicate before her messages are accepted at all, so a mismatch becomes a
- * normal retry-with-correction instead of a broken promise the player actually sees.
+ * This used to also require the direction's "unlock" to match this exact tier this exact
+ * turn, and required a profile picture to already be sent before any other tier - both
+ * enforced in code, on top of whatever the Director's own guidance already told the Actor.
+ * That meant a character who, in her own judgment, wanted to send a photo could get silently
+ * rejected and retried by the code even when nothing about the offer itself was actually
+ * wrong. Deciding whether a photo is really wanted is the player's call, made on the consent
+ * card itself (accept/decline) - not something to pre-empt here. The only things actually
+ * checked now are real constraints: whether images are turned on at all, and not starting a
+ * second profile-picture job while one is already on its way.
  */
 export function photoOfferEligible(rel: Relationship, offerKind: 'profile' | 'chat' | 'spicy'): boolean {
-  return (
-    getSettings().images_enabled &&
-    rel.active_direction?.unlock === PHOTO_UNLOCK_FOR[offerKind] &&
-    !(offerKind === 'profile' && hasProfileImageJob(rel.character_id)) &&
-    // Her profile picture is always the first photo she ever sends. A chat or spicy offer
-    // is not eligible until that one has actually finished generating - not just been
-    // requested, which is what profile_picture_sent tracks.
-    (offerKind === 'profile' || !!rel.flags.state.profile_picture_sent)
-  );
+  return getSettings().images_enabled && !(offerKind === 'profile' && hasProfileImageJob(rel.character_id));
 }
 
 /**

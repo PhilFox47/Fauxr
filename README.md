@@ -1038,6 +1038,17 @@ twice and never leaks that offer to the caller; a model that self-corrects on th
 succeeds cleanly with `photo_offer` cleared; and an eligible offer still passes through in
 one attempt, unchanged - no new false positive on the common case.
 
+**Later relaxed.** The `unlock`-must-match-this-turn part of that eligibility rule, plus the
+profile-picture-first ordering requirement, turned out to be exactly the kind of thing this
+whole check was meant to protect against a different way: a character who, in her own
+judgment, wanted to send a photo could still get silently rejected and retried by the code
+for reasons that had nothing wrong with the offer itself. Which tier to offer is her call now
+- `photoOfferEligible()` (in `images.ts`) only checks whether images are turned on at all and
+whether a profile picture is already generating (the real duplicate-picture guard from the
+fix below, not a tier gate). The actual control over how many photos get generated is the
+player's own accept/decline on the consent card, not a pre-emptive block before it is ever
+raised.
+
 ### She was sometimes writing the app's own system message as her own text
 
 A real log turned up something stranger than the broken promise above: three separate turns
@@ -1078,6 +1089,18 @@ repetitive on the very last try now gets accepted rather than thrown away for a 
 everything else she could still be rejected for stays enforced right up to the end. Verified
 against a mock: a second attempt that still overlaps with an earlier message is now accepted
 and returned as the real reply, not swapped for the fallback.
+
+**Later loosened further.** A single overlapping message was still enough to trip the check
+on its own, and in practice that fired on a lot of ordinary conversation - characters are
+allowed to circle back to something they already said, restate a fact, or pick up an earlier
+thread, and none of that is a stuck record. `selfRepeat()` now requires the same point to
+have already come up `SELF_REPEAT_ALLOWANCE` (3) times in her recent history, not once,
+before flagging it again - she can echo herself a few times over before it counts, only the
+genuinely worn-out repeat gets caught. The overlap threshold itself also moved from `0.6` to
+`0.75`, so only near-identical phrasing counts as the same point at all. Verified against a
+mock: a message that overlaps with exactly one prior message is no longer rejected at all
+(reaches the caller on the first attempt), while a fourth near-identical repeat still gets
+caught and, per the fix above, is accepted on the retry rather than falling back.
 
 ### Voice messages
 ---
@@ -1504,17 +1527,22 @@ Nothing used to stop her offering a spicy photo before he had ever seen her face
 Director's `unlock` field treats every tier as the same fresh, no-schedule judgment call —
 deliberately, so nothing reads as a trust meter — but "no schedule" also meant a forward
 character could jump straight to `spicy_photos` in her first exchange while
-`profile_picture` had never even come up. `director_direction.md` now carries one fixed
-exception on top of that judgment: `unlock` cannot be `personal_photos` or `spicy_photos`
-until the `profile_picture_sent` flag — not just the unlock, actually generated and
-delivered — is already on. It is framed as how a real dating profile works, not as a
-reintroduced trust gate: you see her main photo before anything else, every time.
+`profile_picture` had never even come up. `director_direction.md` carries one fixed
+exception on top of that judgment: it tells the Director not to set `unlock` to
+`personal_photos` or `spicy_photos` until the `profile_picture_sent` flag is already on. It
+is framed as how a real dating profile works, not as a reintroduced trust gate: you see her
+main photo before anything else, in the normal case.
 
-That is also enforced server-side, not just requested in the prompt: `chat.ts`'s photo-offer
-eligibility check now requires `profile_picture_sent` before it will honour a `chat` or
-`spicy` offer at all, regardless of what the model does. A model that ignores the direction
-text produces a silent no-op, not a broken chat — the offer card simply never raises, the
-same failure mode an ordinary ineligible offer already had.
+**No longer enforced in code.** This used to also be a hard server-side check — `chat.ts`
+would refuse to honour a `chat` or `spicy` offer at all until `profile_picture_sent` was set,
+regardless of what the model decided, and `actor.ts` would reject and retry a turn that tried
+it anyway. That turned out to be exactly the kind of artificial barrier the player, not the
+software, should be the one enforcing: a character who genuinely wanted to send a photo out
+of order could get silently blocked for a reason that had nothing to do with whether the
+photo itself was welcome. The ordering above now lives purely as guidance to the Director's
+own judgment, same as every other unlock; nothing in code stops a character from offering a
+different tier first if that is what actually fits the moment. The consent card - and the
+player's own accept/decline on it - is the real control.
 
 ### She could send her profile picture twice
 

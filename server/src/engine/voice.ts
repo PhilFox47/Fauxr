@@ -147,15 +147,26 @@ export function textOverlap(a: string, b: string): number {
 }
 
 /**
- * Catches a specific dig or observation landing twice in one conversation - "your bio
- * just says :)" once as a real line, then again three exchanges later, reworded but
- * clearly the same barb. The prompt already says not to do this; this is the backstop for
- * when it happens anyway. High threshold and a length floor, because short natural
- * repeats ("yeah", "same", "lol no") are not this and must never trip it.
+ * Catches an observation genuinely worn out - the same dig or point landing over and over,
+ * reworded but clearly the same thing, well past the point of being a callback. The prompt
+ * already says not to do this; this is the backstop for when it happens anyway.
+ *
+ * A single echo is not enough to trip it: characters are allowed to circle back to something
+ * they already said - picking up an earlier thread, restating a fact, running a bit - and
+ * that is normal conversation, not a stuck record. Only once the same point has already come
+ * up SELF_REPEAT_ALLOWANCE times in recent history does saying it again get flagged. High
+ * overlap threshold and a length floor (via textOverlap) on top of that, because short
+ * natural repeats ("yeah", "same", "lol no") are not this and must never trip it.
  */
+const SELF_REPEAT_OVERLAP_THRESHOLD = 0.75;
+const SELF_REPEAT_ALLOWANCE = 3;
+
 function selfRepeat(text: string, recentOwnMessages: string[] | undefined): boolean {
   if (!recentOwnMessages?.length) return false;
-  return recentOwnMessages.some((prior) => textOverlap(text, prior) > 0.6);
+  const matches = recentOwnMessages.filter(
+    (prior) => textOverlap(text, prior) > SELF_REPEAT_OVERLAP_THRESHOLD,
+  ).length;
+  return matches >= SELF_REPEAT_ALLOWANCE;
 }
 
 export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
