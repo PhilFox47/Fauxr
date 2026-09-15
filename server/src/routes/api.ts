@@ -24,7 +24,7 @@ import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji } from '../engine
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
-import { profileView } from '../engine/discovery.js';
+import { profileView, spendTraitCredit } from '../engine/discovery.js';
 import type { Character, KinkStance } from '../types.js';
 
 function publicCharacter(c: Character) {
@@ -203,6 +203,33 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       username: character.username,
       display_name: rel.flags.state.real_name_known ? character.real_name : character.username,
       bio: character.bio,
+      trait_credits: rel.flags.state.trait_credits ?? 0,
+      ...profileView(character, rel),
+    };
+  });
+
+  /**
+   * Spends one earned credit (see trackMessageForCredit in discovery.ts) to reveal a random
+   * still-locked trait - a small, guaranteed payoff for showing up that does not depend on
+   * her choosing to say something herself.
+   */
+  app.post<{ Params: { id: string } }>('/api/chats/:id/uncover-trait', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    const rel = getRelationship(req.params.id);
+    if (!character || !rel) return reply.code(404).send({ error: 'not found' });
+    const result = spendTraitCredit(character, rel);
+    if (!result.ok) {
+      const error = result.reason === 'no_credits' ? 'no trait credits available' : 'nothing left to uncover';
+      return reply.code(400).send({ error });
+    }
+    saveRelationship(rel);
+    logger.debug('app', `${character.username}: uncovered ${result.revealed!.key}`, { character_id: character.id });
+    return {
+      revealed_key: result.revealed!.key,
+      username: character.username,
+      display_name: rel.flags.state.real_name_known ? character.real_name : character.username,
+      bio: character.bio,
+      trait_credits: rel.flags.state.trait_credits ?? 0,
       ...profileView(character, rel),
     };
   });

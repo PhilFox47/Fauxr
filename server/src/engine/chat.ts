@@ -14,7 +14,7 @@ import { computePressure, computeReciprocity } from './modifiers.js';
 import { alwaysOnline, isOnline } from './presence.js';
 import { randInt } from './dice.js';
 import { clearExpiredNegativeFlags, hasActiveNegativeFlag, markThreadRaised } from './state.js';
-import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
+import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries, trackMessageForCredit } from './discovery.js';
 import { enqueueImage, photoOfferEligible, hasProfileImageJob } from './images.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
@@ -108,6 +108,15 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
   // match he told last week knows, the one he matched this morning does not.
   const learned = learnAboutHim(rel, input.text);
   if (learned.length) logger.debug('actor', `${character.username} learned his stance on ${learned.join(', ')}`);
+
+  // Showing up earns something concrete, independent of anything she chooses to reveal
+  // herself - see discovery.ts's trackMessageForCredit().
+  if (trackMessageForCredit(rel)) {
+    logger.debug('actor', `${character.username}: earned a trait-uncover credit`, {
+      messages_sent: rel.flags.state.messages_sent_count,
+      trait_credits: rel.flags.state.trait_credits,
+    });
+  }
   saveRelationship(rel);
 
   if (!isOnline(character)) {

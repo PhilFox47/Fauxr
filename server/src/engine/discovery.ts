@@ -217,6 +217,44 @@ export function recordDiscoveries(rel: Relationship, keys: string[], validKeys: 
 }
 
 /**
+ * How many messages he has to send before showing up earns him a credit toward uncovering
+ * one of her hidden traits - a small, guaranteed payoff for showing up at all, independent
+ * of anything she chooses to reveal on her own.
+ */
+export const MESSAGES_PER_TRAIT_CREDIT = 50;
+
+/** Counts one of his messages toward the next credit. Returns true the turn one is earned. */
+export function trackMessageForCredit(rel: Relationship): boolean {
+  const count = (rel.flags.state.messages_sent_count ?? 0) + 1;
+  rel.flags.state.messages_sent_count = count;
+  if (count % MESSAGES_PER_TRAIT_CREDIT !== 0) return false;
+  rel.flags.state.trait_credits = (rel.flags.state.trait_credits ?? 0) + 1;
+  return true;
+}
+
+export interface UncoverResult {
+  ok: boolean;
+  /** Why it failed, when ok is false. */
+  reason?: 'no_credits' | 'nothing_left';
+  revealed?: DiscoverableFact;
+}
+
+/**
+ * Spends one credit to reveal a random currently-locked trait. Both failure cases leave the
+ * credit untouched: no reason to burn one on a request that could not do anything.
+ */
+export function spendTraitCredit(character: Character, rel: Relationship): UncoverResult {
+  const credits = rel.flags.state.trait_credits ?? 0;
+  if (credits <= 0) return { ok: false, reason: 'no_credits' };
+  const locked = undiscoveredKeys(character, rel);
+  if (!locked.length) return { ok: false, reason: 'nothing_left' };
+  const pick = locked[Math.floor(Math.random() * locked.length)];
+  rel.flags.state.trait_credits = credits - 1;
+  recordDiscoveries(rel, [pick.key], new Set(locked.map((f) => f.key)));
+  return { ok: true, revealed: pick };
+}
+
+/**
  * The other half of the exchange: what SHE still wants to know about him. Without this the
  * Director only ever thinks about what she is giving away, and she ends up as an interview
  * subject rather than someone with her own interest in the person she is talking to.

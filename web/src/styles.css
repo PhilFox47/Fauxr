@@ -1076,6 +1076,28 @@ input[type='range'] {
   line-height: 1.6;
 }
 
+.uncover-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  margin: var(--s3) var(--s5) 0;
+  padding: 10px var(--s4);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+.uncover-note { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+.uncover-note strong { color: var(--accent); font-weight: 650; }
+.uncover-row .btn {
+  flex: 0 0 auto;
+  padding: 8px 16px;
+  font-size: 13px;
+  box-shadow: none;
+}
+.uncover-result { margin: var(--s2) var(--s5) 0; font-size: 12.5px; color: var(--accent); }
+.uncover-result.error { color: var(--err); }
+
 .sheet-body { overflow-y: auto; padding: var(--s1) var(--s5) var(--s5); }
 .sheet-body .section-title { padding: var(--s4) 0 var(--s2); }
 
@@ -1135,21 +1157,31 @@ input[type='range'] {
 
 /* ---- per-character gallery, on her profile sheet.
    The sheet has no padding of its own - every child supplies its own gutter - so this has
-   to carry --s5 as well or the grid bleeds off both edges. */
-.gallery { margin: var(--s4) 0 var(--s2); padding: 0 var(--s5); }
+   to carry --s5 as well or the grid bleeds off both edges.
+   A single horizontally-scrolling row, not a wrapping grid: this sheet also has a trait
+   list right underneath it, and a multi-row grid of more than a handful of photos used to
+   push that list down out of view (or off the sheet entirely once it scrolled). One row that
+   scrolls sideways keeps the sheet's height independent of how many photos she has sent. */
+.gallery { margin: var(--s4) 0 var(--s2); }
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: var(--s2);
+  overflow-x: auto;
+  padding: 0 var(--s5) var(--s1);
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
 }
 .gallery-thumb {
   all: unset;
   cursor: pointer;
+  flex: 0 0 auto;
+  width: 96px;
   aspect-ratio: 1;
   border-radius: var(--r-md);
   overflow: hidden;
   background: var(--surface-2);
   border: 1px solid var(--line);
+  scroll-snap-align: start;
   transition: transform var(--fast) var(--ease), border-color var(--fast) var(--ease);
 }
 .gallery-thumb:hover, .gallery-thumb:focus-visible { transform: scale(1.03); border-color: var(--accent); }

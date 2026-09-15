@@ -1759,6 +1759,38 @@ not something to hold back "to keep it classy." The one line that still does not
 nudity of her genitals - get past that one specific point through angle, crop or pose, rather
 than pulling the whole shot back into something demure to stay safely clear of it.
 
+### A guaranteed trickle of progress: trait credits
+
+Her profile sheet fills in from what she actually tells you, on her own schedule - the whole
+point, per its own doc comment, is that nothing is revealed by a threshold. That is also its
+one real weakness: some conversations just do not happen to surface a given fact, and a slow
+one could sit at "12 of 45 things known" indefinitely with no lever the player can pull.
+
+**Every 50 messages you send a character now earns one credit for her**, spendable on
+revealing one random trait from whatever is still locked in her profile - a small,
+guaranteed payoff for showing up that does not depend on her choosing to say anything. It
+sits entirely alongside the organic system, not instead of it: `discovery.ts`'s
+`trackMessageForCredit()` counts every message through `handleUserMessage()`
+(`rel.flags.state.messages_sent_count`, a new field) and awards a credit on every 50th, and
+`spendTraitCredit()` picks uniformly from `undiscoveredKeys()` and commits it through the
+same `recordDiscoveries()` the organic reveals already use - an uncovered trait is
+indistinguishable from one she just told you, because as far as the rest of the app is
+concerned, it is the same event.
+
+A credit spent when nothing is actually locked (profile fully known) or with none available
+fails cleanly and spends nothing - there is no reward for a wasted click, and no credit lost
+to bad timing. The profile sheet shows the count and an "Uncover a trait" button right under
+the progress bar, disabled once credits or locked traits run out, with the just-revealed
+label and value shown inline so it does not require re-reading the whole list to find what
+changed. `GET /api/chats/:id/profile` and the new `POST /api/chats/:id/uncover-trait` both
+carry `trait_credits` in their response.
+
+Verified against the real counting path (not just the pure function): 50 real
+`handleUserMessage()` calls through a mock Actor earns exactly one credit, matching what the
+unit-level checks on `trackMessageForCredit`/`spendTraitCredit` already covered - the count is
+accurate message-by-message, spending never reveals the same trait twice, and a credit
+genuinely survives a failed spend rather than being silently burned.
+
 ### Every photo she sent, kept
 
 A photo used to exist only as a bubble in the chat. Scroll far enough and it was gone —
@@ -1766,9 +1798,20 @@ there was no way back to a picture from three hundred messages ago short of scro
 
 Each character now has a **gallery**, served by `GET /api/chats/:id/gallery` and shown inside
 her profile sheet under a `Photos (n)` heading: every finished image for that character,
-newest first, as a three-column grid of thumbnails. It reads straight from the `images` table
-rather than from the message log, so a picture is in the gallery because it was generated for
-her, not because a bubble survived.
+newest first, as a single row of thumbnails you scroll sideways through. It reads straight
+from the `images` table rather than from the message log, so a picture is in the gallery
+because it was generated for her, not because a bubble survived.
+
+**One row, not a wrapping grid.** It started as a three-column grid, which was fine at three
+or four photos and actively broken past that: the sheet has a trait list directly underneath
+the gallery, and a grid that wraps into more rows as she sends more photos pushed that list
+further down every time, eventually off the sheet's visible area entirely. `.gallery-grid`
+(`web/src/styles.css`) is now a flex row with `overflow-x: auto` instead of a CSS grid, and
+each `.gallery-thumb` gets a fixed width rather than relying on a grid column's `1fr` to size
+it. The trait list's position underneath is now independent of how many photos she has sent -
+verified in a real browser with eight seeded photos: the row scrolls (`scrollWidth` wider than
+`clientWidth`), every thumbnail sits at the same vertical offset (one row, not several), and
+the trait list renders directly below it exactly as before.
 
 The one image it withholds is her **profile shot**, until `photos_exchanged` is set. That
 flag is the whole point of the picture swap, and a gallery that quietly showed her face

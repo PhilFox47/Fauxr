@@ -127,6 +127,12 @@ export interface CharacterProfile {
   known: number;
   total: number;
   categories: { category: string; label: string; known: number; total: number; rows: ProfileRow[] }[];
+  /** Spendable on api.uncoverTrait to reveal one random still-locked trait. */
+  trait_credits: number;
+}
+
+export interface UncoverTraitResult extends CharacterProfile {
+  revealed_key: string;
 }
 
 export interface LogEntry {
@@ -181,6 +187,7 @@ export const api = {
   send: (id: string, text: string) =>
     request<Message>(`/api/chats/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   profile: (id: string) => request<CharacterProfile>(`/api/chats/${id}/profile`),
+  uncoverTrait: (id: string) => request<UncoverTraitResult>(`/api/chats/${id}/uncover-trait`, { method: 'POST' }),
   gallery: (id: string) => request<GalleryImage[]>(`/api/chats/${id}/gallery`),
   markRead: (id: string) => request<any>(`/api/chats/${id}/read`, { method: 'POST' }),
   regenerate: (id: string, messageId: number) =>

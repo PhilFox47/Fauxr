@@ -378,7 +378,9 @@ export default function Chat({
 
       {profileOpen && profile && (
         <ProfileSheet
+          characterId={characterId}
           profile={profile}
+          onProfileChange={setProfile}
           gallery={gallery}
           onOpenImage={(url) => setLightboxAt(allImages.indexOf(url))}
           onClose={() => setProfileOpen(false)}
@@ -625,17 +627,41 @@ export default function Chat({
  * she actually tells him - it is a record of the conversation, not a stat readout.
  */
 function ProfileSheet({
+  characterId,
   profile,
+  onProfileChange,
   gallery,
   onOpenImage,
   onClose,
 }: {
+  characterId: string;
   profile: CharacterProfile;
+  onProfileChange: (p: CharacterProfile) => void;
   gallery: GalleryImage[];
   onOpenImage: (url: string) => void;
   onClose: () => void;
 }) {
+  const [uncovering, setUncovering] = useState(false);
+  const [result, setResult] = useState<{ text: string; error: boolean } | null>(null);
   const pct = profile.total ? Math.round((profile.known / profile.total) * 100) : 0;
+  const nothingLeft = profile.total > 0 && profile.known >= profile.total;
+
+  const uncover = async () => {
+    if (uncovering || profile.trait_credits <= 0 || nothingLeft) return;
+    setUncovering(true);
+    setResult(null);
+    try {
+      const updated = await api.uncoverTrait(characterId);
+      onProfileChange(updated);
+      const revealedRow = updated.categories.flatMap((c) => c.rows).find((r) => r.key === updated.revealed_key);
+      setResult({ text: `Uncovered: ${revealedRow?.label ?? 'a trait'} - ${revealedRow?.value ?? ''}`, error: false });
+    } catch (err) {
+      setResult({ text: String(err instanceof Error ? err.message : err), error: true });
+    } finally {
+      setUncovering(false);
+    }
+  };
+
   return (
     <div className="sheet-backdrop" onClick={onClose}>
       <div className="sheet" onClick={(e) => e.stopPropagation()}>
@@ -652,6 +678,27 @@ function ProfileSheet({
         </div>
 
         <div className="progress"><span style={{ width: `${pct}%` }} /></div>
+
+        <div className="uncover-row">
+          <span className="uncover-note">
+            {nothingLeft ? (
+              <>Everything about her is known.</>
+            ) : (
+              <>
+                <strong>{profile.trait_credits}</strong> trait credit{profile.trait_credits === 1 ? '' : 's'} -
+                earned one every 50 messages you send her.
+              </>
+            )}
+          </span>
+          <button
+            className="btn ghost"
+            onClick={() => void uncover()}
+            disabled={uncovering || profile.trait_credits <= 0 || nothingLeft}
+          >
+            {uncovering ? 'Uncovering…' : 'Uncover a trait'}
+          </button>
+        </div>
+        {result && <p className={`uncover-result${result.error ? ' error' : ''}`}>{result.text}</p>}
 
         <p className="small muted bio-quote">{profile.bio}</p>
 

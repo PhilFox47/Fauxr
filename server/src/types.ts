@@ -126,6 +126,10 @@ export interface StateFlags {
   spicy_photos_allowed?: boolean;
   allows_date_requests?: boolean;
   has_had_first_date?: boolean;
+  /** Total messages he has sent her. See discovery.ts's trackMessageForCredit(). */
+  messages_sent_count?: number;
+  /** Spendable on uncoverTraitCredit() to reveal one random still-locked trait. */
+  trait_credits?: number;
 }
 
 export interface EventFlags {
