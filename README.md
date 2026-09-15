@@ -972,6 +972,36 @@ responding twice to the same offer is rejected; accepting actually runs the imag
 posts a real photo message, and flips `profile_picture_sent` - all checked over plain HTTP,
 then again by driving the built app in a real browser.
 
+### An ineligible offer used to be a broken promise, not a no-op
+
+The eligibility check above (`unlock` has to actually match the tier, images has to be on,
+profile picture has to exist first) was only ever enforced in one place: `chat.ts`, after the
+Actor had already written her messages. That is fine when she never brings it up. It is not
+fine when she does - and per `actor_chat.md`'s own instruction, offering IS the move, so a
+turn where `photo_offer` is set almost always has her saying something like "sending you
+something now~" in the messages right next to it. A real log turned up exactly this: the
+Actor decided to offer a photo tier the direction had not actually unlocked that turn, the
+card silently never appeared (`unlock: null` in the debug log), and her own text was left
+promising something that just never arrived - a visibly broken conversation, not the graceful
+"nothing happens, and that is fine" the design intends for a tier that simply never came up.
+
+The eligibility check itself was always correct; it was only being checked too late.
+`photoOfferEligible()` (now shared out of `images.ts`, alongside `PHOTO_UNLOCK_FOR`, so
+`chat.ts` and `actor.ts` can't drift apart on the rule) is now also checked inside the
+Actor's own retry loop, in the same place voice problems like roleplay prose or self-repeat
+already get caught: if she set `photo_offer` for a tier that is not actually eligible right
+now, that counts as a rejected generation, and she gets asked to write the turn again without
+promising a photo that will not arrive - the same two-attempt budget every other quality
+check already uses, worst case falling back to a canned line rather than ever letting the
+broken promise reach the player. `chat.ts`'s own check stays in place as the actual
+enforcement point (never trust the model alone), but should now essentially never have
+anything left to catch.
+
+Verified against a mock: a model that keeps insisting on an ineligible tier gets rejected
+twice and never leaks that offer to the caller; a model that self-corrects on the retry
+succeeds cleanly with `photo_offer` cleared; and an eligible offer still passes through in
+one attempt, unchanged - no new false positive on the common case.
+
 ### Voice messages
 ---
 

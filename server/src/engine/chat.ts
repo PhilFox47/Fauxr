@@ -15,7 +15,7 @@ import { alwaysOnline, isOnline } from './presence.js';
 import { randInt } from './dice.js';
 import { clearExpiredNegativeFlags, hasActiveNegativeFlag, markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
-import { enqueueImage } from './images.js';
+import { enqueueImage, photoOfferEligible } from './images.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -186,13 +186,6 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   await runActorPhase(character, rel, { startedIn, decrementValidFor: true });
 }
 
-/** Which unlock permits offering each photo tier - the same mapping images.ts's kind uses. */
-const PHOTO_UNLOCK_FOR: Record<'profile' | 'chat' | 'spicy', string> = {
-  profile: 'profile_picture',
-  chat: 'personal_photos',
-  spicy: 'spicy_photos',
-};
-
 /** What she'd be offering, in plain terms, for the consent card the user actually sees. */
 function photoOfferText(name: string, kind: 'profile' | 'chat' | 'spicy'): string {
   switch (kind) {
@@ -327,15 +320,11 @@ async function runActorPhase(
   let pendingPhoto: PendingPhoto | null = (rel.mood as any)?.pending_photo ?? null;
   const offerKind = result.hidden.photo_offer;
   if (offerKind && !pendingPhoto) {
-    const eligible =
-      getSettings().images_enabled &&
-      rel.active_direction?.unlock === PHOTO_UNLOCK_FOR[offerKind] &&
-      !(offerKind === 'profile' && rel.flags.state.profile_picture_sent) &&
-      // Her profile picture is always the first photo she ever sends. A chat or spicy
-      // offer is not eligible until that one has actually finished generating - not just
-      // been requested, which is what profile_picture_sent tracks.
-      (offerKind === 'profile' || !!rel.flags.state.profile_picture_sent);
-    if (eligible) {
+    // Re-verified here rather than trusted from the model: actor.ts already rejects a turn
+    // that offers a tier this would say no to, so this should normally never fire, but it
+    // stays as the actual enforcement point in case the retry budget was spent on something
+    // else first.
+    if (photoOfferEligible(rel, offerKind)) {
       const offerId = randomUUID();
       const offerMsg = addMessage({
         character_id: character.id,

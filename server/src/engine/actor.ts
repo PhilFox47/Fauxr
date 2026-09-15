@@ -16,6 +16,7 @@ import { currentStage } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { pickNudge } from './nudge.js';
 import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty } from './voice.js';
+import { photoOfferEligible } from './images.js';
 
 export { detectRoleplay };
 
@@ -317,6 +318,29 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
         messages: out.messages.map((m) => m.text),
       });
       correction = retryHint(problem.what, problem.fix);
+      continue;
+    }
+
+    // Offering IS the move (see actor_chat.md's "Sending a photo") - her messages this turn
+    // already say she is sending something. If the tier she just offered is not actually
+    // eligible, chat.ts silently drops the consent card and that promise never arrives.
+    // Catching it here, before her messages are accepted at all, turns that into a normal
+    // rewrite instead of a broken promise the player actually sees.
+    if (out.hidden.photo_offer && !photoOfferEligible(ctx.relationship, out.hidden.photo_offer)) {
+      logger.warn('actor', 'rejected: offered a photo tier that is not actually available', {
+        character: ctx.character.username,
+        attempt,
+        offerKind: out.hidden.photo_offer,
+        unlock: ctx.relationship.active_direction?.unlock,
+        messages: out.messages.map((m) => m.text),
+      });
+      correction = retryHint(
+        'offering a photo your direction has not actually unlocked this turn',
+        'You set photo_offer, but that tier is not available to you right now - the offer would ' +
+          'silently fail to reach him, leaving your messages promising a photo that never arrives. ' +
+          'Write this turn again without offering one: talk about something else, or, if a photo ' +
+          'still fits the moment, offer only a tier you are actually allowed to send.',
+      );
       continue;
     }
 
