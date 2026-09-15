@@ -15,7 +15,7 @@ import { alwaysOnline, isOnline } from './presence.js';
 import { randInt } from './dice.js';
 import { clearExpiredNegativeFlags, hasActiveNegativeFlag, markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
-import { enqueueImage, photoOfferEligible } from './images.js';
+import { enqueueImage, photoOfferEligible, hasProfileImageJob } from './images.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -316,7 +316,10 @@ async function runActorPhase(
       // The agreement is what counts, and it is symmetrical: from here she can see his
       // picture whether or not her own image generates successfully afterwards.
       rel.flags.state.photos_exchanged = true;
-      if (getSettings().images_enabled && !rel.flags.state.profile_picture_sent) {
+      // Checked against the images table, not profile_picture_sent - that flag only flips
+      // once generation finishes, well after a same-turn photo_offer could otherwise slip a
+      // second, redundant profile job past it.
+      if (getSettings().images_enabled && !hasProfileImageJob(character.id)) {
         enqueueImage({ characterId: character.id, kind: 'profile', situation: '' });
       }
     }

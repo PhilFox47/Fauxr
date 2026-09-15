@@ -410,4 +410,6 @@ Set "photo_shows_face" to false only when the photo you just described in "photo
 does not show her face - see "Sending a photo" above. Leave it null otherwise; null means
 her face is in frame as normal.
 Set "exchange_response" to "accept" or "decline" ONLY when he has asked to swap profile
-pictures this turn and you are answering him. Null every other time.
+pictures this turn and you are answering him. Null every other time. Accepting already
+covers sending him your profile picture - never also set "photo_offer" to "profile" in
+that same turn, that would be offering it a second time.

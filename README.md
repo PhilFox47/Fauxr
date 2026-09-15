@@ -1516,6 +1516,25 @@ eligibility check now requires `profile_picture_sent` before it will honour a `c
 text produces a silent no-op, not a broken chat — the offer card simply never raises, the
 same failure mode an ordinary ineligible offer already had.
 
+### She could send her profile picture twice
+
+Accepting a pending profile-picture *exchange* and making a fresh profile *offer* are two
+separate code paths that both end up at `enqueueImage`, and nothing stopped the Actor from
+triggering both in the same turn — accepting his swap request while also, in the same
+breath, setting `photo_offer: "profile"`. The exchange-accept path enqueues its job
+synchronously, but `profile_picture_sent` only flips once that job actually finishes
+generating, seconds later — so the offer's own eligibility check, which used to read that
+flag, still saw "no profile picture yet" and raised a second, redundant offer card. Once
+that card was later accepted, a second, independent profile picture got generated and sent.
+
+The fix checks the `images` table itself — `hasProfileImageJob()` — rather than the
+completion flag, at all three places a profile job can start (a fresh offer, an accepted
+offer, an accepted exchange). Because the table insert happens synchronously, whichever path
+gets there first makes every other one ineligible for the rest of that turn, closing the
+race rather than narrowing its window. `actor_chat.md` also now says plainly that accepting
+an exchange already covers sending her profile picture, so the ambiguous case comes up less
+often in the first place — but the server-side check is what actually guarantees it.
+
 ### What else she sends, and in what shape
 
 Two things were still narrower than a real person's camera roll:

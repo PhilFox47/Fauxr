@@ -46,12 +46,30 @@ export function photoOfferEligible(rel: Relationship, offerKind: 'profile' | 'ch
   return (
     getSettings().images_enabled &&
     rel.active_direction?.unlock === PHOTO_UNLOCK_FOR[offerKind] &&
-    !(offerKind === 'profile' && rel.flags.state.profile_picture_sent) &&
+    !(offerKind === 'profile' && hasProfileImageJob(rel.character_id)) &&
     // Her profile picture is always the first photo she ever sends. A chat or spicy offer
     // is not eligible until that one has actually finished generating - not just been
     // requested, which is what profile_picture_sent tracks.
     (offerKind === 'profile' || !!rel.flags.state.profile_picture_sent)
   );
+}
+
+/**
+ * Whether a profile picture already exists or is already on its way - checked against the
+ * `images` table itself, not `profile_picture_sent`, because that flag only flips once
+ * generation actually finishes and enqueueImage's insert happens synchronously well before
+ * that. A real turn once had the Actor both accept a pending profile-picture exchange
+ * (which enqueues one immediately) and, in the same breath, set photo_offer to "profile"
+ * too - and because the flag had not flipped yet, the second offer looked eligible and, once
+ * accepted, generated and sent an entirely separate profile picture. Every place a profile
+ * job can be triggered - a fresh offer, an accepted offer, an accepted exchange - checks
+ * this first, so whichever one gets there first is the only one that actually runs.
+ */
+export function hasProfileImageJob(characterId: string): boolean {
+  const row = db
+    .prepare("SELECT 1 FROM images WHERE character_id = ? AND kind = 'profile' AND status != 'failed' LIMIT 1")
+    .get(characterId);
+  return !!row;
 }
 
 type PromptStyle = 'seedream' | 'z_image_turbo';
@@ -665,6 +683,13 @@ export async function respondToPhotoOffer(
   if (pending.kind === 'profile') {
     rel.flags.state.photos_exchanged = true;
     saveRelationship(rel);
+
+    // If a profile job is already underway - most likely because an exchange was accepted
+    // the same turn this offer was made, or another card resolved first - the agreement
+    // above still stands, but generating a second, unrelated profile picture would not.
+    if (hasProfileImageJob(characterId)) {
+      return { ok: true, enqueued: false };
+    }
   }
 
   enqueueImage({
