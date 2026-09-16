@@ -75,8 +75,13 @@ export async function tick(): Promise<void> {
  * not because he owes her a reply, just because she has more to say or wants to check the
  * message actually landed. This is deliberately separate from maybeBeProactive() below,
  * which reopens a conversation after real distance (hours) has passed: this is the much
- * quicker, much smaller "hey, you still there?" that happens mid-conversation, and it only
- * ever fires once per silence - real double-texting, not a nag every half hour forever.
+ * quicker, much smaller "hey, you still there?" that happens mid-conversation.
+ *
+ * Both this and maybeBeProactive() share one flag (`rel.mood.followed_up_unanswered`) so at
+ * most one unprompted follow-up of EITHER kind goes out per silence, not one of each -
+ * without that, a long enough absence used to let a double-text fire and then, hours later,
+ * a proactive check-in on top of it, and the two together read as exactly the nagging this
+ * was built to avoid. It only clears once he actually replies - see handleUserMessage().
  */
 const DOUBLE_TEXT_AFTER_MS = 30 * 60_000;
 
@@ -85,7 +90,7 @@ export function maybeDoubleText(): void {
     const rel = getRelationship(character.id);
     if (!rel || rel.ghosted_at) continue;
     if (getWakeup(character.id)) continue; // something is already going to wake her
-    if ((rel.mood as any)?.double_texted) continue; // already followed up once on this silence
+    if ((rel.mood as any)?.followed_up_unanswered) continue; // already followed up once on this silence
 
     const last = lastMessage(character.id);
     // Only when SHE is the one waiting on a reply - if he spoke last, a turn is either
@@ -107,7 +112,7 @@ export function maybeDoubleText(): void {
         'guilt-tripping about the silence - people get busy, that is just normal, not a slight.',
       cancel_if_user_writes: true,
     });
-    rel.mood = { ...rel.mood, double_texted: true };
+    rel.mood = { ...rel.mood, followed_up_unanswered: true };
     saveRelationship(rel);
     logger.debug('scheduler', `double-text queued for ${character.username}`, { at: at.toISOString() });
   }
@@ -193,7 +198,7 @@ function decayPass(): void {
  * A character who only ever reacts feels like a chatbot. Frequency scales with investment
  * and social energy, and the whole thing is multiplied by the global activity slider.
  */
-function maybeBeProactive(): void {
+export function maybeBeProactive(): void {
   const settings = getSettings();
   const scheduled = new Set(allWakeups().map((w) => w.character_id));
 
@@ -201,6 +206,9 @@ function maybeBeProactive(): void {
     if (scheduled.has(character.id)) continue;
     const rel = getRelationship(character.id);
     if (!rel || rel.ghosted_at) continue;
+    // See maybeDoubleText() above - shared with it so a long absence cannot rack up a
+    // double-text AND, hours later, a proactive check-in on top of it.
+    if ((rel.mood as any)?.followed_up_unanswered) continue;
 
     const hoursSilent = rel.last_contact_at ? (Date.now() - Date.parse(rel.last_contact_at)) / 3_600_000 : 99;
     if (hoursSilent < 2) continue;
@@ -220,6 +228,8 @@ function maybeBeProactive(): void {
       reason: 'she felt like getting in touch',
       cancel_if_user_writes: true,
     });
+    rel.mood = { ...rel.mood, followed_up_unanswered: true };
+    saveRelationship(rel);
     logger.debug('scheduler', `proactive wakeup queued for ${character.username}`, { at: at.toISOString() });
   }
 }

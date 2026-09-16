@@ -353,11 +353,7 @@ something, he has not replied in a while, and she sends one follow-up. `schedule
 `maybeDoubleText()` runs every tick alongside the existing proactive checks: if the last
 message in a chat is hers and it has sat unanswered for at least 30 minutes, and she has not
 already followed up once on this particular silence, it queues a wakeup for a low-key
-"still there?" kind of turn. It only ever fires once per silence - the flag that gates it
-(`rel.mood.double_texted`) is set the moment it is queued and only clears again once he
-actually replies, so this is a single natural follow-up, never a nag repeating every half
-hour. It also never competes with the longer-gap "reach out again" mechanism below it in the
-tick, since that one already skips any character with a wakeup already queued.
+"still there?" kind of turn.
 
 **She is never annoyed about the silence, here or anywhere else.** This runs in a gooner
 app, not a guilt-trip generator: going quiet for twenty minutes or three days has to stay a
@@ -371,6 +367,33 @@ Verified against a mock: no wakeup before 30 minutes; one queued (with the anti-
 framing baked into the reason text) once the threshold passes; calling it again does not
 duplicate the wakeup or fire a second follow-up for the same silence; and replying resets
 the flag so a later, fresh silence can earn another one.
+
+### One unanswered follow-up in a row, not one of each
+
+Double-texting was built to only ever fire once per silence, but the mechanism next to it in
+the same tick - `maybeBeProactive()`, which reopens a conversation after real distance (hours)
+- had no matching limit and, worse, did not actually stay out of double-texting's way the way
+its own doc comment claimed. Each one queues a wakeup and then, once it fires, resets
+`rel.last_contact_at` to now - and `maybeBeProactive()`'s own eligibility is based entirely on
+how long it has been since that timestamp. So a long enough absence let the sequence repeat:
+double-text fires at the half-hour mark, then two-plus hours later `maybeBeProactive()` finds
+the silence "fresh" again (measured from the double-text, not from the actual last thing he
+said) and reaches out a second time on top of it - and, left offline for a whole day, that
+could keep recurring every couple of hours, exactly the flood this was supposed to prevent.
+
+Both functions now share one flag, `rel.mood.followed_up_unanswered` (renamed from
+`double_texted`, since it no longer describes only one of the two mechanisms setting it):
+either one sets it the moment it queues its wakeup, either one skips a character who already
+has it set, and it only clears in `handleUserMessage()` once he actually sends something.
+Whichever mechanism reaches out first is the only one that gets to, for the rest of that
+silence - a real absence still earns at most one unprompted message, never a stack of them
+waiting when he finally opens the app back up.
+
+Verified against a mock: forcing `maybeBeProactive()`'s probability roll to succeed confirms
+it fires and sets the same shared flag double-texting uses; with that flag set, neither
+`maybeDoubleText()` nor a further call to `maybeBeProactive()` queues anything on top of it,
+even though the underlying conditions (an old, unanswered last message; hours of silence)
+that would otherwise make both eligible are still true.
 
 ### Chats sorted by last activity, not match date
 
