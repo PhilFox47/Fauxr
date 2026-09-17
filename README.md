@@ -1365,10 +1365,30 @@ made nearly every character write in the same voice regardless of her seed.
 With a couple dozen attribute categories now behind every character, a bio that only stated
 what she wanted was leaving almost all of that unused — every profile was, in effect, a
 want-ad with a different noun in it. The prompt now frames the bio as doing two jobs at
-once, not one: it still has to leave no doubt she is here for something physical, but it is
-also, explicitly, a pitch for *her specifically* — the thing that decides a swipe from a
-scroll-past is whether the words sound like a particular woman, not just an appetite with a
-handle attached.
+once, not one: it is still hers to fill however she likes, but it is also, explicitly, a
+pitch for *her specifically* — the thing that decides a swipe from a scroll-past is whether
+the words sound like a particular woman, not just an appetite with a handle attached.
+
+The bigger change sits above that, though: the prompt now opens by explaining what Fauxr
+*is*, rather than assuming one register for everyone on it. It is a judgment-free place to
+meet people — to flirt with, meet up with, do all sorts of naughty stuff with, or anything in
+between — that makes no assumption about what "in between" means for any given woman on it.
+A shy virgin hoping for something more romantic than physical belongs on it exactly as much
+as a frustrated wife chasing one specific unfulfilled fantasy, a sex-positive woman after
+something fun with no strings, or someone who genuinely does not know yet what she wants.
+None of that is the house style; hers is whichever one she actually is. The old framing
+("everyone here wants something physical, leave no doubt about it") pushed every bio toward
+one confident, blunt register regardless of who she actually was — which is exactly the kind
+of sameness the rest of this prompt already fights on the level of structure, just fought on
+the level of tone instead.
+
+What distinguishes a bio now comes from her own profile rather than from a mandated
+declaration of intent: her search motive, her dating experience, her archetype and her
+relationship status already say whether she wants someone tonight or would rather text for a
+while first, whether meeting up matters to her at all, whether there is one specific thing
+she is hoping to finally try, or whether she is quietly hoping for something that turns into
+more than this. A woman who is here for exactly one blunt reason still says so bluntly - that
+was never the problem. The problem was every bio defaulting to it.
 
 Concretely: instead of "the one or two things only she would mention", it now asks for two
 or three, pulled from more than one part of her — what she wants is one line of the bio, not
@@ -1378,12 +1398,15 @@ got a clarifying pass: that rule was about the tidy three-beat *shape* repeating
 cast, not about withholding herself, and the two readings were close enough together in the
 old wording that leaning into "reveal more" risked reading as a contradiction of it. Lopsided
 is a structure, not a way of saying less. The length ceiling moved from 60 to 70 words to
-give two or three real things the room a single one-liner doesn't have.
+give two or three real things the room a single one-liner doesn't have. The fallback pool
+(used only when the API is unreachable) picked up a few genuinely shy or unsure entries
+alongside the existing confident ones, for the same reason — a pool that was uniformly
+blunt would have taught that as the house style right back.
 
-None of this hands over everything. A new bullet ("leave the rest for after the match")
-says outright that her specifics in bed, her history, what she is actually looking for
-underneath the line she gives strangers, all stay unsaid — the bio's job is to make that
-worth finding out, not to have found it out for him.
+None of this hands over everything. A bullet ("leave the rest for after the match") says
+outright that her specifics in bed, her history, what she is actually looking for underneath
+the line she gives strangers, all stay unsaid — the bio's job is to make that worth finding
+out, not to have found it out for him.
 
 **Whatever a bio does reveal is now recognised as known, not re-hidden.** A richer bio that
 happens to state her job in plain words, then have the profile sheet under "What you know

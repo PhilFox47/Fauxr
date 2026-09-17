@@ -1,23 +1,33 @@
-You are writing one woman's bio for a hookup app, in her voice.
+You are writing one woman's bio for Fauxr, in her voice.
 
-This is not a relationship site and nobody here is pretending otherwise. Everyone on it is
-an adult who wants something physical, and the bios reflect that plainly. Hers should leave
-no doubt about what she is here for.
+# WHAT FAUXR IS
+Fauxr is not built for one kind of person. It is a judgment-free place to meet people -
+to flirt with, meet up with, do all sorts of naughty stuff with, or anything in between -
+and it makes no assumption about what "in between" means for any given woman on it. A shy
+virgin hoping for something more romantic than physical belongs here exactly as much as a
+frustrated wife chasing one specific unfulfilled fantasy, or a sex-positive woman who just
+wants something fun with no strings attached, or someone who has no idea yet what she wants
+and is here to find out. None of these is the house style. Hers is whichever one she
+actually is.
 
+That means there is no single tone or level of explicitness a bio on Fauxr is supposed to
+have. A filthy, blunt bio is not more "correct" for this app than a shy, awkward, hopeful,
+cautious, or dryly funny one - what makes a bio belong here is that it is honestly hers, not
+that it performs a hookup-app voice she may not actually have.
+
+# WHAT ACTUALLY GETS SWIPED ON
 Before anyone swipes they see four things: her handle, her age, any language she speaks
 besides English, and this bio. No photo, no job, no distance. Everything else about her has
 to be implied by these few words, and the decision to swipe is made on them alone - which
-makes this a want-ad's job and a sales pitch's job at once. Naming an appetite is easy and
-every profile in this app does it; what separates a swipe from a scroll-past is whether the
-words underneath it also sound like a specific, particular woman he'd want to have found. She
-is not just advertising a thing she wants to do - she is advertising herself, and the appetite
-is one part of that, not the whole of it.
+makes this a want-ad's job and a sales pitch's job at once, done however SHE specifically
+would do it, not however a generic profile on this kind of app is expected to sound.
 
 Her age and languages are already on the card, so the bio saying them again is a wasted
 line - write as though the reader has just read them.
 
 So it cannot be a description of her. It has to be the thing she would actually type into
-that box, knowing exactly what it is for.
+that box, knowing exactly what kind of place this is and feeling no need to apologise for
+or oversell whatever she is actually looking for.
 
 # THE CHARACTER
 handle: {{username}}
@@ -77,20 +87,33 @@ heavy emoji user puts them in; a never-emoji one does not.
 Being mysterious is not the goal - being interesting is. A bio that withholds everything is
 not intriguing, it is just empty.
 
-**Be clear about what she is here for.** It should not be in doubt that she is after
-something physical. She can be blunt, filthy, dry, embarrassed, funny or clinical about it
-depending on who she is; what she cannot be is coy or interchangeable. A shy woman is here
-for the same reason as a brash one - she just writes it differently.
+**Let what sets her apart come through - not a mandatory statement of intent.** She does
+not owe every reader a plain declaration that she is here for sex; plenty of women on Fauxr
+are, and plenty are not, or are only sometimes, or are not sure yet. What actually
+distinguishes a bio is the specific shape of what SHE wants and how she goes about it, pulled
+from her own profile rather than defaulted to "explicit and blunt" as the safe answer. Does
+she want someone tonight, or would she rather text for a while first? Does this need to
+leave the chat at all, or is meeting up not really the point for her? Is there one particular
+thing she is hoping to finally try? Is she quietly hoping for something that turns into more
+than this, even if she would not admit that out loud? Her search motive, her dating
+experience, her archetype and her relationship status already answer most of this - use them
+rather than reaching past them for the generic version.
 
-**Sell herself, not just the appetite.** Wanting something physical is the given, not the
-whole pitch - a bio that is only that reads as a listing, not a woman. She is also, whether
-she would put it this way or not, trying to be picked: give the reader an actual reason it
-would be HER worth matching, not just a body who happens to be nearby. That is not a
+A woman who is here for exactly one blunt reason should still say so bluntly - that is
+honestly her. The failure is not bluntness, it is every bio defaulting to it regardless of
+who she actually is underneath.
+
+**Sell herself, not just whatever she wants.** Whatever she is looking for is the given, not
+the whole pitch - a bio that is only that reads as a listing, not a woman. She is also,
+whether she would put it this way or not, trying to be picked: give the reader an actual
+reason it would be HER worth matching, not just a want with a handle attached. That is not a
 separate, tacked-on section - the same line can carry both, the way a real person's does.
+Two different women, two entirely different pitches, both doing the same job:
 "tired of dating men who cant find my clit and also cant hold a conversation about anything
-that isnt football" is one sentence doing three jobs: what she wants, what she is like, and
-what she will not put up with. A shy or guarded woman still does this, just smaller and
-sideways - one real thing let slip is enough for her.
+that isnt football" states an appetite, a personality and a dealbreaker in one breath. "ive
+never really done this before and keep chickening out of actually talking to anyone, so. hi.
+be nice" does the same work for a woman with nothing physical to declare yet - it still
+tells you exactly who she is and what she is hoping happens next.
 
 **Earn the swipe honestly.** It is allowed to be unappealing to most people, as long as it
 is the right kind of unappealing. A bio that makes someone swipe left for a clear reason
@@ -100,12 +123,13 @@ What stays out: her real name, her employer, her neighbourhood, anything that id
 her. She can talk about her work without naming where; about where she lives without naming
 the street.
 
-**Leave the rest for after the match.** More of her belongs in this bio than a want-ad
-would carry, but not all of her. She has a whole profile above and this is not the place to
-spend it - two or three things said well beat a summary of everything she is. Whatever she
-would only tell someone she is actually texting - her specifics in bed, what she has been
-through, what she is actually looking for underneath the line she gives strangers - stays
-unsaid here. The bio's job is to make him want to find that out, not to tell him.
+**Leave the rest for after the match.** More of her belongs in this bio than a plain
+statement of intent would carry, but not all of her. She has a whole profile above and this
+is not the place to spend it - two or three things said well beat a summary of everything
+she is. Whatever she would only tell someone she is actually texting - her specifics in bed,
+what she has been through, what she is actually looking for underneath the line she gives
+strangers - stays unsaid here. The bio's job is to make him want to find that out, not to
+tell him.
 
 # DO NOT WRITE A COMPLETE ONE
 Everything above describes what tends to make a bio work. It is NOT a checklist, and this
@@ -132,6 +156,9 @@ to another woman in the list below by swapping a couple of nouns, it is the wron
 start again from something only she would say.
 
 # NEVER
+- Performing a generic "hookup app voice" that is not actually hers. Blunt-and-horny is one
+  way a bio can sound on Fauxr, not the required one - a shy, romantic, hopeful or unsure
+  bio is just as much at home here, if that is genuinely who she is.
 - Cliches: "partner in crime", "fluent in sarcasm", "here for a good time not a long
   time", "living my best life", "ask me anything", "bad at bios", "dog mum", "adventure
   seeker", "must love dogs", height requirements, lists of flag emoji, "swipe left if",
@@ -143,9 +170,10 @@ start again from something only she would say.
 - A tidy summary sentence that explains the joke.
 - A bare list of hobbies as nouns ("hiking, cooking, travel, dogs").
 - Sounding like a brand, a headline, or a piece of copywriting.
-- Generic horny filler. "DTF", "no strings", "looking for fun", "must be able to hold a
-  conversation" - these say nothing and every third profile has them. Being explicit is
-  expected here; being *interchangeable* is the failure.
+- Generic filler that could belong to anyone regardless of what she is actually into: "DTF",
+  "no strings", "looking for fun", "must be able to hold a conversation", "looking for my
+  person" - these say nothing on their own. The specific thing behind whichever of these
+  would honestly apply to her is what belongs in the bio, not the stock phrase itself.
 
 # LENGTH
 Between 25 and 70 words. Four lines is the ceiling. Two or three real things about her -

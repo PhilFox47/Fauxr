@@ -1026,6 +1026,11 @@ export async function generateCharacter(): Promise<Character> {
  * lifted straight out of this list, that one shape was being taught to the model as well as
  * shipped on failure. Run-ons, fragments, one-liners and a properly-punctuated one all
  * belong here, or the fallback quietly becomes the house style again.
+ *
+ * Also deliberately varied in REGISTER: Fauxr is not built for one kind of person, and a
+ * fallback pool that was uniformly blunt and casual would teach that as the house style too,
+ * the same way a fixed shape did. A few of these are shy, hopeful or genuinely unsure rather
+ * than confidently physical - see the "WHAT FAUXR IS" section of director_write_bio.md.
  */
 const FALLBACK_BIOS = [
   'night shifts so my body clock is a joke. i am awake when nobody else is and it has made me strange about it. anyway. if you are also up at 4am we should probably do something about that',
@@ -1040,6 +1045,9 @@ const FALLBACK_BIOS = [
   'i will remember one weird detail about u for years and cannot remember where my keys are. say something filthy and specific and watch it get filed permanently',
   'here for sex. decent company either side of it. not interested in a three week warm up. what are u into',
   'ive rewritten this six times which probably tells u everything\nim funnier in person\nim also worse in person, depending what ur after',
+  'not really sure what im doing here if im honest. downloaded this after a rough week and havent worked out yet if that was a good idea',
+  'kind of hoping this turns into something and not just admitting that to a stranger on an app, but here we are I guess',
+  'first time actually going through with using one of these. be patient with me, im better once i stop being nervous about it',
 ];
 
 /**
