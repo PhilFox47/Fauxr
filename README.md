@@ -1012,6 +1012,20 @@ scratch. The Director is not re-run: the original turn already scored and direct
 exchange, and doing that twice would double-apply its stat changes. This is a reroll of her
 words, not a rescore of what happened.
 
+### Deleting a message
+
+A small trash icon sits beside every bubble, yours and hers alike, for typing something and
+wanting it gone again rather than rerolling it. Unlike regenerating, deleting carries none of
+that restriction: any message, anywhere in the history, can go — it does not try to undo
+whatever it already fed into trust, spark or the ledger, it just stops being shown and stops
+being read as context from here on, which is all "let me rewrite that" actually needs.
+
+A single tap arms it — the trash icon turns into a small red check for about two and a half
+seconds — and a second tap is what actually deletes it, so nothing goes missing to a stray
+tap. `DELETE /api/chats/:id/messages/:messageId` is the one thing that can fail: while a turn
+for her is genuinely in flight, deleting is refused rather than pulling a message out from
+under the context that turn is using.
+
 ### Message timing
 
 The first message of a reply is sent the moment it exists. The wait before it is already

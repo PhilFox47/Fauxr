@@ -152,6 +152,10 @@ export default function Chat({
   const [lightboxAt, setLightboxAt] = useState<number | null>(null);
   const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
   const [regeneratingImageId, setRegeneratingImageId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  /** Armed by a first tap, so a second, deliberate tap is what actually deletes. */
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+  const confirmDeleteTimer = useRef<number | null>(null);
   const [respondingOfferId, setRespondingOfferId] = useState<string | null>(null);
   const [swapping, setSwapping] = useState(false);
   /** Non-null while she is out with him. The text chat stays readable, but frozen. */
@@ -198,6 +202,12 @@ export default function Chat({
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    return () => {
+      if (confirmDeleteTimer.current) window.clearTimeout(confirmDeleteTimer.current);
+    };
+  }, []);
 
   /**
    * A date opens itself when it starts, and again if the app is reopened while one is still
@@ -332,6 +342,34 @@ export default function Chat({
     } finally {
       setRegeneratingImageId(null);
     }
+  };
+
+  /** Any message, either side, any position - typing something and wanting it gone again. */
+  const deleteMessage = async (messageId: number) => {
+    setDeletingId(messageId);
+    try {
+      await api.deleteMessage(characterId, messageId);
+      await load();
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+    } finally {
+      setDeletingId(null);
+      setConfirmDeleteId(null);
+    }
+  };
+
+  /** First tap arms it (and auto-disarms after a few seconds); the second tap deletes. */
+  const armOrDeleteMessage = (messageId: number) => {
+    if (confirmDeleteId === messageId) {
+      if (confirmDeleteTimer.current) window.clearTimeout(confirmDeleteTimer.current);
+      void deleteMessage(messageId);
+      return;
+    }
+    setConfirmDeleteId(messageId);
+    if (confirmDeleteTimer.current) window.clearTimeout(confirmDeleteTimer.current);
+    confirmDeleteTimer.current = window.setTimeout(() => {
+      setConfirmDeleteId((id) => (id === messageId ? null : id));
+    }, 2500);
   };
 
   const offerExchange = async () => {
@@ -561,33 +599,53 @@ export default function Chat({
             );
           }
 
+          const confirmingDelete = confirmDeleteId === m.id;
+          const deleteBtn = (
+            <button
+              className={`msg-del${confirmingDelete ? ' confirming' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                armOrDeleteMessage(m.id);
+              }}
+              disabled={deletingId !== null && deletingId !== m.id}
+              aria-label={confirmingDelete ? 'Tap again to delete this message' : 'Delete this message'}
+              title={confirmingDelete ? 'Tap again to delete' : 'Delete this message'}
+            >
+              <Icon name={confirmingDelete ? 'check' : 'trash'} size={13} />
+            </button>
+          );
+
           return (
             <div key={m.id} style={{ display: 'contents' }}>
               {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
-              {m.kind === 'image' ? (
-                <div className={`bubble image ${mine ? 'me' : 'them'}`}>
-                  {m.image_url ? (
-                    <img
-                      src={m.image_url}
-                      alt=""
-                      onClick={() => setLightboxAt(allImages.indexOf(m.image_url!))}
-                    />
-                  ) : (
-                    <span className="tiny">Photo unavailable</span>
-                  )}
-                </div>
-              ) : m.kind === 'voice' ? (
-                <VoiceBubble message={m} mine={mine} />
-              ) : (
-                <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}`}>
-                  {m.text}
-                  {m.meta?.failed && (
-                    <span className="fail-mark" title="Generation failed - this is a placeholder, not a real reply">
-                      <Icon name="alert" size={14} />
-                    </span>
-                  )}
-                </div>
-              )}
+              <div className={`msg-row ${mine ? 'me' : 'them'}`}>
+                {!mine && deleteBtn}
+                {m.kind === 'image' ? (
+                  <div className={`bubble image ${mine ? 'me' : 'them'}`}>
+                    {m.image_url ? (
+                      <img
+                        src={m.image_url}
+                        alt=""
+                        onClick={() => setLightboxAt(allImages.indexOf(m.image_url!))}
+                      />
+                    ) : (
+                      <span className="tiny">Photo unavailable</span>
+                    )}
+                  </div>
+                ) : m.kind === 'voice' ? (
+                  <VoiceBubble message={m} mine={mine} />
+                ) : (
+                  <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}`}>
+                    {m.text}
+                    {m.meta?.failed && (
+                      <span className="fail-mark" title="Generation failed - this is a placeholder, not a real reply">
+                        <Icon name="alert" size={14} />
+                      </span>
+                    )}
+                  </div>
+                )}
+                {mine && deleteBtn}
+              </div>
               {/*
                 An image message's own regen row is included in this condition, not gated by
                 showStamp alone: it is posted as its own standalone entry (once the job

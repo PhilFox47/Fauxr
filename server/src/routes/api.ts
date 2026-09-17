@@ -16,7 +16,7 @@ import {
   saveUserProfile, unreadCount,
 } from '../repo.js';
 import { bus } from '../events.js';
-import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
+import { blockCharacterByUser, deleteMessage, handleUserMessage, isAway, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import {
@@ -290,6 +290,21 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       if (!Number.isFinite(messageId)) return reply.code(400).send({ error: 'message_id is required' });
       try {
         return await regenerateLastTurn(req.params.id, messageId);
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
+
+  /** A plain delete - either side of the conversation, any position, no reroll involved. */
+  app.delete<{ Params: { id: string; messageId: string } }>(
+    '/api/chats/:id/messages/:messageId',
+    async (req, reply) => {
+      const messageId = Number(req.params.messageId);
+      if (!Number.isFinite(messageId)) return reply.code(400).send({ error: 'invalid message id' });
+      try {
+        deleteMessage(req.params.id, messageId);
+        return { ok: true };
       } catch (err) {
         return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
       }

@@ -4,7 +4,7 @@ import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
-  activeDate, addMessage, clearWakeup, deleteMessages, getCharacter, getRelationship, getWakeup,
+  activeDate, addMessage, clearWakeup, deleteMessages, getCharacter, getMessage, getRelationship, getWakeup,
   markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, updateMessageMeta, type StoredMessage,
 } from '../repo.js';
 import type { Character, PendingExchange, PendingPhoto, Relationship } from '../types.js';
@@ -485,6 +485,26 @@ export async function regenerateLastTurn(characterId: string, messageId: number)
     .finally(() => running.delete(characterId));
 
   return { removed_ids: removedIds };
+}
+
+/**
+ * A plain delete, for either side of the conversation - typing something and wanting it gone
+ * again, not a reroll. Unlike regenerateLastTurn this carries no restriction on position: an
+ * older message can be deleted too, since nothing here tries to undo whatever it already fed
+ * into trust/spark/the ledger - it just stops being shown, and stops being read as context
+ * from here on. Blocked only while a turn for her is actually in flight, so it cannot delete
+ * a message out from under the context that turn is using.
+ */
+export function deleteMessage(characterId: string, messageId: number): void {
+  if (running.has(characterId)) {
+    throw new Error('she is already in the middle of replying');
+  }
+  const message = getMessage(messageId);
+  if (!message || message.character_id !== characterId) {
+    throw new Error('message not found');
+  }
+  deleteMessages([messageId]);
+  bus.emitEvent({ type: 'messages_removed', character_id: characterId, message_ids: [messageId] });
 }
 
 function isStaleSession(rel: Relationship): boolean {

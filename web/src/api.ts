@@ -261,6 +261,8 @@ export const api = {
     }),
   block: (id: string) => request<any>(`/api/chats/${id}/block`, { method: 'POST' }),
   deleteChat: (id: string) => request<{ ok: true }>(`/api/chats/${id}`, { method: 'DELETE' }),
+  deleteMessage: (id: string, messageId: number) =>
+    request<{ ok: true }>(`/api/chats/${id}/messages/${messageId}`, { method: 'DELETE' }),
   sendImage: (id: string, file: File) => {
     const fd = new FormData();
     fd.append('file', file);
