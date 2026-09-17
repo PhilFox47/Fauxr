@@ -648,9 +648,20 @@ const FALLBACK_NAMES = [
   'Juno', 'Talia', 'Hana', 'Nina', 'Frida', 'Zoe', 'Maya', 'Alba', 'Nadia', 'Vera',
 ];
 
-function fallbackUsername(name: string): string {
-  const suffixes = ['_xo', '.exe', '404', '_txt', 'hrs', '_jpg', 'ish', '__'];
-  return `${name.toLowerCase()}${pickOne(suffixes)}`.slice(0, 18);
+/**
+ * Never built from her real name - a handle exists precisely so a stranger cannot tell who
+ * she is from it, and this is the path that runs with no model in the loop to catch that if
+ * it were. Two generic parts stitched together instead, so the emergency case is still
+ * varied without ever risking the one thing a handle is not allowed to leak.
+ */
+const FALLBACK_HANDLE_ROOTS = [
+  'moonlit', 'quietstorm', 'nightowl', 'lowkey', 'faded', 'driftwood', 'restless', 'sundry',
+  'lonestar', 'afterglow', 'wildflower', 'hazymorning', 'stray', 'undertow', 'paperplane',
+  'greyscale', 'halflight', 'wanderer', 'saltwater', 'thornbird',
+];
+function fallbackUsername(): string {
+  const suffixes = ['_xo', '.exe', '404', '_txt', 'hrs', '_jpg', 'ish', '__', String(randInt(10, 99))];
+  return `${pickOne(FALLBACK_HANDLE_ROOTS)}${pickOne(suffixes)}`.slice(0, 18);
 }
 
 
@@ -789,7 +800,7 @@ async function writeUsername(
   // sheet, and it is what a total API failure already falls back to a few lines down.
   if (!dossierIsReal) {
     logger.warn('generator', 'no real dossier to work from, using a fallback handle');
-    return fallbackUsername(realName);
+    return fallbackUsername();
   }
 
   let correction: string | null = null;
@@ -814,14 +825,19 @@ async function writeUsername(
         '',
         seed.hints.dossier,
         '',
-        'Work out what SHE would have typed into the box. Some people are obvious and say exactly',
-        'who they are; some pick something nobody else could decode; some are still using a handle',
-        'they made at sixteen; some use a word they like, a mangled surname, an inside joke, a place,',
-        'a number that means something to them. A guarded woman and a loud one do not pick the same',
-        'kind of handle. There is no house style to match and nothing has to be clever.',
+        'Work out what SHE would have typed into the box: some pick something nobody else could',
+        'decode; some are still using a handle they made at sixteen; some use a word they like, a',
+        'mangled surname that is not actually hers, an inside joke, a place, a number that means',
+        'something to them. A guarded woman and a loud one do not pick the same kind of handle.',
+        'There is no house style to match and nothing has to be clever.',
+        '',
+        'One thing every one of them has in common: a dating-app handle is anonymous by design,',
+        'and hers is not the exception. Whoever she is, this cannot be a version of her actual name.',
         '',
         'Rules, and only these: lowercase, 4-18 characters, letters with optional numbers, dots or',
-        `underscores. Not "${realName}" spelled out plainly.`,
+        `underscores. Must not contain her real name "${realName}" in any form - not spelled out, not`,
+        'shortened, not as a prefix or suffix with numbers or symbols around it. It has to read as',
+        'genuinely unconnected to her name, the way an actual anonymous handle is.',
         '',
         'A few that are already taken. Do not reuse a word from one of these or rework it into',
         'something adjacent:',
@@ -851,6 +867,18 @@ async function writeUsername(
         continue;
       }
 
+      // Not a stylistic ask like the near-duplicate check below - a handle that leaks her
+      // real name defeats the entire point of it being anonymous, so this is checked on
+      // every attempt including the last, and never let through the way a near-miss is.
+      if (cleaned.includes(realName.toLowerCase())) {
+        logger.warn('generator', 'handle leaked her real name, re-asking', { cleaned, realName });
+        correction =
+          `"${cleaned}" contains her real name "${realName}" - a dating-app handle has to be anonymous, ` +
+          `which is the one rule that never bends. Pick something with no connection to her name at all. ` +
+          `Same JSON, nothing else.`;
+        continue;
+      }
+
       const clash = nearestHandle(cleaned, taken);
       if (clash && attempt < 2) {
         logger.warn('generator', 'handle reads as a variant of an existing one, re-asking', { cleaned, clash });
@@ -867,7 +895,7 @@ async function writeUsername(
       break;
     }
   }
-  return fallbackUsername(realName);
+  return fallbackUsername();
 }
 
 export async function generateCharacter(): Promise<Character> {

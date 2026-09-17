@@ -1542,6 +1542,39 @@ repetition it was supposed to prevent. Eight handles now, phrased as "not these"
 ten shown rather than thirty, which also stops a thousand tokens of the prompt being a lesson
 in exactly what to sound like.
 
+**A handle is not a name tag.** A dating-app handle told nothing about the person picking it
+except taste, but nothing stopped the model reaching for `saskia_xo` for a woman named Saskia —
+the one construction that defeats the entire point of a handle, since it hands over the thing a
+handle exists to withhold. The `write_username` prompt now says outright that a handle is
+anonymous by design and hers is not the exception, and spells out that the rule covers partial,
+prefixed or suffixed forms too, not just her name spelled out whole. Behind that, a hard
+code-level check runs on every attempt, with no exemption: if the cleaned handle contains her
+real name as a substring, it is rejected and re-asked for in the same call, the same way an
+empty or too-short handle already was. Verified against a mock that deliberately leaks the name
+two different ways (`saskia_xo`, then `xxsaskiaxx`) before landing on a clean handle — both
+leaks were caught and re-asked before the clean one was accepted.
+
+The fallback path had the same bug in a form nothing was checking: `fallbackUsername()`, the
+function that fires when the model exhausts its attempts or the dossier itself failed, built
+its handle out of the real name on purpose (`${name.split(' ')[0].toLowerCase()}${suffix}`) —
+so the one path meant to degrade gracefully was instead the one guaranteed to break the rule
+every single time it ran. It now builds from a pool of generic, personality-blind roots
+(`moonlit`, `driftwood`, `afterglow`, `lowkey`, and so on) with the same separator-and-digit
+suffixes as before, and takes no name as input at all. Verified against a mock that returns
+nothing usable for every field, forcing dossier, name and username all onto their fallback
+paths at once across eight characters — none of the resulting handles contained the character's
+real name.
+
+**Sharing the name is now paced by personality, not guaranteed by pity.** Before her real name
+is known, `identityBlock()` already told the Actor never to deny it or make him guess when he
+asks outright — that stands unchanged. What it didn't do was give any character a reason to
+volunteer it *unprompted* at a particular point rather than another. It now does: an open,
+forward woman might lead with her name in her very first message, while a guarded or anxious
+one keeps to her handle for a while and lets it come up in its own time, paced the same way she
+paces anything else personal. The two rules are kept explicitly distinct in the prompt itself —
+being slow to *offer* the name is not the same thing as *refusing* it once he's actually asked —
+so the existing "never make him earn it" guarantee survives untouched alongside the new pacing.
+
 Separately, there is a small fixed pool of twelve fully hardcoded bios (`FALLBACK_BIOS`) —
 not AI-written at all — used only when the API call fails outright after its retry. If a
 bio looks suspiciously identical to one seen before rather than just structurally similar,

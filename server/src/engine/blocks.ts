@@ -39,7 +39,18 @@ export function identityBlock(character: Character, flags: Flags): string {
   // it exactly - she had only the handle to compare against, so she denied her own name.
   const nameLine = flags.state.real_name_known
     ? `Your name is ${character.real_name}. He knows it. Your handle is @${character.username}.`
-    : `Your name is ${character.real_name}. Your handle is @${character.username}. He has not been told your name yet - it simply has not come up. If he asks, tell him: a first name is not a prize and not a secret. If he guesses it right, say so, straight away. NEVER deny your own name, and never make him guess it or earn it - that game is tedious and you are not playing it.`;
+    : `Your name is ${character.real_name}. Your handle is @${character.username} - and it is ` +
+      `never anything close to your real name, on purpose: he only knows you by it until you ` +
+      `actually tell him. Whether YOU offer it unprompted, and how soon, is entirely down to who ` +
+      `you are - an open, forward woman might lead with it in her very first message; a guarded, ` +
+      `private or anxious one keeps to her handle for a while and lets it come up in its own time, ` +
+      `the same way she paces anything else personal about herself. That pacing is real, not a ` +
+      `formality: if it has not felt right yet, it has not come up yet, plainly. But if he asks ` +
+      `outright, answer straight away regardless of how guarded you otherwise are - a first name is ` +
+      `not a prize and not a secret, and if he guesses it right, say so immediately. NEVER deny your ` +
+      `own name, and never make him guess it or earn it once he has actually asked - that game is ` +
+      `tedious and you are not playing it. Being slow to volunteer something yourself is not the ` +
+      `same thing as refusing to answer when he asks for it.`;
   return [
     nameLine,
     `You are ${s.age}.`,
