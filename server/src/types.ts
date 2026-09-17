@@ -414,6 +414,8 @@ export interface DateSession {
   location_id: string | null;
   /** Written when the date ends, and folded into what she remembers of him. */
   summary: string | null;
+  /** Decided once as the date opens; read fresh on every turn after that. Null until then. */
+  outfit: string | null;
   created_at: string;
   ended_at: string | null;
 }

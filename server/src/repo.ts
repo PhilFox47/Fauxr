@@ -522,6 +522,7 @@ function hydrateDate(row: any): DateSession {
     where_at: row.where_at ?? '',
     location_id: row.location_id ?? null,
     summary: row.summary ?? null,
+    outfit: row.outfit ?? null,
     created_at: row.created_at,
     ended_at: row.ended_at ?? null,
   };
@@ -544,6 +545,11 @@ export function createDate(d: {
 export function getDate(id: string): DateSession | null {
   const row = db.prepare('SELECT * FROM dates WHERE id = ?').get(id) as any;
   return row ? hydrateDate(row) : null;
+}
+
+/** What she decided to wear tonight, set once as the date opens. */
+export function setDateOutfit(id: string, outfit: string): void {
+  db.prepare('UPDATE dates SET outfit = ? WHERE id = ?').run(outfit, id);
 }
 
 /**

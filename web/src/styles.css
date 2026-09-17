@@ -1345,6 +1345,16 @@ input[type='range'] {
    between *asterisks* never reaches this far - renderBeat() strips it before it renders. */
 .date-beat .speech { color: var(--accent-bright); font-weight: 550; }
 
+/* The arrival photo: how he actually sees her, not a bubble she "sent" - so it gets no
+   border or tint, just the picture itself, rounded to match everything else in the room. */
+.date-photo {
+  width: 100%;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--sh-2);
+}
+.date-photo img { display: block; width: 100%; height: auto; }
+
 .date-summary {
   margin-top: var(--s4);
   padding: var(--s4);

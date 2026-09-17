@@ -1087,16 +1087,26 @@ function DateRoom({
           {view?.messages.length === 0 && (
             <div className="empty"><strong>You have just arrived</strong>Give her a moment.</div>
           )}
-          {view?.messages.map((m) => (
-            <div key={m.id} className={`date-beat ${m.sender === 'user' ? 'me' : 'them'}`}>
-              {renderBeat(m.text)}
-              {m.meta?.failed && (
-                <span className="fail-mark" title="Generation failed - this is a placeholder">
-                  <Icon name="alert" size={14} />
-                </span>
-              )}
-            </div>
-          ))}
+          {view?.messages.map((m) =>
+            m.kind === 'image' ? (
+              <div key={m.id} className="date-photo">
+                {m.image_url ? (
+                  <img src={m.image_url} alt="" />
+                ) : (
+                  <span className="tiny muted">Photo unavailable</span>
+                )}
+              </div>
+            ) : (
+              <div key={m.id} className={`date-beat ${m.sender === 'user' ? 'me' : 'them'}`}>
+                {renderBeat(m.text)}
+                {m.meta?.failed && (
+                  <span className="fail-mark" title="Generation failed - this is a placeholder">
+                    <Icon name="alert" size={14} />
+                  </span>
+                )}
+              </div>
+            ),
+          )}
           {view?.typing && <div className="typing"><i /><i /><i /></div>}
           {!live && view?.date.summary && (
             <div className="date-summary">

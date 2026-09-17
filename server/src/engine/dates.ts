@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { getSettings } from '../config.js';
+import { find } from '../db/attributes.js';
 import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { complete, completeJson, extractJson } from '../llm/client.js';
@@ -8,7 +9,7 @@ import { render } from '../prompts/render.js';
 import {
   activeDate, addMessage, clearWakeup, createDate, dateMessages, finishDate, getCharacter,
   getDate, getLocation, getRelationship, getUserProfile, listDates, saveRelationship,
-  type StoredMessage,
+  setDateOutfit, type StoredMessage,
 } from '../repo.js';
 import type { Character, DateSession, Location, Relationship } from '../types.js';
 import {
@@ -17,6 +18,8 @@ import {
 } from './blocks.js';
 import { claimTurn, currentEpoch, releaseTurn } from './chat.js';
 import { describeHim } from './discovery.js';
+import { describeSeed } from './generator.js';
+import { enqueueImage } from './images.js';
 import { describeHerMoment } from './moment.js';
 import { currentStage } from './stage.js';
 import { EVENT_FLAGS, NEGATIVE_FLAG_HOURS, STATE_FLAGS, applyUpdate, type DirectorUpdate } from './state.js';
@@ -112,6 +115,14 @@ function buildDatePrompt(
     // Unconditional here, unlike the chat: he is looking straight at her, so withholding what
     // she looks like until a photo unlocks it makes no sense at all in person.
     appearance_block: appearanceBlock(seed, flags),
+    // Decided once in openDate(), read fresh here on every single turn - so the opening
+    // beat, every later beat and the arrival photo all agree on what she is wearing rather
+    // than three separate guesses.
+    outfit_block: date.outfit
+      ? `What she is wearing tonight: ${date.outfit}\nThis holds for the whole evening unless ` +
+        `the scene itself changes it (a jacket comes off, shoes come off) - never have her in ` +
+        `a different outfit than this without narrating an actual reason for the change.`
+      : '',
     life_block: lifeBlock(seed),
     interests_block: interestsBlock(seed),
     sexual_block: sexualBlock(seed),
@@ -279,6 +290,90 @@ export interface StartDateInput {
   when: string;
 }
 
+/** Sized like a photo idea call - one short, concrete paragraph, not a whole dossier. */
+const OUTFIT_TOKENS = 600;
+
+/** Used only when the outfit call fails outright - close to her usual style, nothing specific. */
+function fallbackOutfit(character: Character): string {
+  const style = find('clothing_style', character.seed.clothing_style)?.image_prompt
+    ?? find('clothing_style', character.seed.clothing_style)?.label
+    ?? 'something she feels good in';
+  return `Something in her usual style tonight - ${style.toLowerCase()}.`;
+}
+
+/**
+ * What she is actually wearing tonight, decided once as the date opens and then read fresh
+ * on every turn after that (see outfit_block in buildDatePrompt) - so the opening beat, every
+ * later beat and the arrival photo all agree on the same outfit instead of each guessing its
+ * own. Mirrors profilePicConcept()/freshPhotoIdea() in images.ts: a small, cheap call asking
+ * her rather than deciding for her, so the answer actually varies with who she is and where
+ * she is going rather than always landing on the same generic "cute outfit".
+ */
+async function decideDateOutfit(character: Character, date: DateSession, location: Location): Promise<string> {
+  try {
+    const out = await completeJson<{ outfit?: string }>({
+      scope: 'image',
+      label: `date_outfit:${character.username}`,
+      config: { ...getSettings().models.actor, max_tokens: OUTFIT_TOKENS },
+      require: ['outfit'],
+      messages: [
+        {
+          role: 'user',
+          content: render('actor_date_outfit', {
+            real_name: character.real_name,
+            dossier: character.seed.hints.dossier || describeSeed(character.seed),
+            location_block: locationBlock(date, location),
+          }),
+        },
+      ],
+    });
+    const outfit = (out.outfit ?? '').trim();
+    if (outfit) return outfit;
+  } catch (err) {
+    logger.warn('actor', 'date outfit call failed, using a generic default', {
+      character: character.username,
+      error: String(err),
+    });
+  }
+  return fallbackOutfit(character);
+}
+
+/** The situation handed to the image assembler for the arrival photo - see images.ts's is_date. */
+function arrivalSituation(character: Character, location: Location, outfit: string): string {
+  return [
+    `He has just arrived and is seeing ${character.real_name} for the first time tonight, at ${location.name}.`,
+    `She is wearing: ${outfit}`,
+    'This is the moment he first spots her, or she first comes into view - whatever framing ' +
+      '(full-length, three-quarter, a look across the room) actually shows the outfit and the place.',
+  ].join(' ');
+}
+
+/**
+ * Decides the outfit and starts the arrival photo before the scene itself opens, so the very
+ * first beat already knows what she is wearing rather than picking its own answer that the
+ * stored outfit then has to disagree with. The photo generates in the background - it does
+ * not block the opening beat, the same way an offered chat photo never blocks the reply that
+ * came with it.
+ */
+async function openDate(character: Character, date: DateSession, location: Location): Promise<void> {
+  const outfit = await decideDateOutfit(character, date, location);
+  setDateOutfit(date.id, outfit);
+
+  if (getSettings().images_enabled) {
+    enqueueImage({
+      characterId: character.id,
+      dateId: date.id,
+      kind: 'date',
+      situation: arrivalSituation(character, location, outfit),
+      aspect: 'portrait',
+      showsFace: true,
+    });
+  }
+
+  // She opens the scene, rather than the two of them staring at each other until he types.
+  await takeDateTurn(date.id);
+}
+
 /**
  * He asks, they go. There is no acceptance roll: she agreed in the chat or she did not, and
  * pressing the button is him acting on that - a button that sometimes silently refuses would
@@ -318,8 +413,7 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
   bus.emitEvent({ type: 'date', character_id: character.id, date });
   logger.info('actor', `date started with ${character.username}`, { where: location.name, when: date.when_at });
 
-  // She opens the scene, rather than the two of them staring at each other until he types.
-  void takeDateTurn(date.id).catch((err) =>
+  void openDate(character, date, location).catch((err) =>
     logger.error('actor', 'opening date beat failed', { error: String(err) }),
   );
   return date;

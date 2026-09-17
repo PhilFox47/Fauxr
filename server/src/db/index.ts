@@ -44,6 +44,10 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'messages', column: 'date_id', definition: 'TEXT' },
   { table: 'dates', column: 'location_id', definition: 'TEXT' },
   { table: 'dates', column: 'ended_at', definition: 'TEXT' },
+  // The date arrival photo: what she decided to wear, and which date's transcript a
+  // 'date'-kind image job posts its result into.
+  { table: 'dates', column: 'outfit', definition: 'TEXT' },
+  { table: 'images', column: 'date_id', definition: 'TEXT' },
 ];
 
 function addMissingColumns(): void {

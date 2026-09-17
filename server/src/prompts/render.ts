@@ -11,6 +11,7 @@ export type TemplateName =
   | 'actor_chat'
   | 'actor_voice'
   | 'actor_date'
+  | 'actor_date_outfit'
   | 'actor_profile_pic'
   | 'actor_photo_idea'
   | 'director_direction'

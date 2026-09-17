@@ -413,7 +413,13 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       character: publicCharacter(character),
       location: location ? publicLocation(location) : null,
       typing: isRunning(character.id),
-      messages: dateMessages(date.id),
+      messages: dateMessages(date.id).map((m) => ({
+        ...m,
+        image_url:
+          m.kind === 'image' && m.meta?.path
+            ? `/media/${m.meta.path}${m.meta.image_v ? `?v=${m.meta.image_v}` : ''}`
+            : null,
+      })),
     };
   });
 

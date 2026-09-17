@@ -2448,6 +2448,51 @@ evening is over, so it fires on a tick afterwards.
 The date turn loop shares the chat's per-character turn lock, so a stray wakeup and a date
 beat can never run at once.
 
+### Seeing her when the date opens
+
+A location backdrop tells you where you are; it says nothing about how she actually looks
+tonight. **Starting a date now also decides an outfit and generates a photo of her arriving
+in it**, so the date opens with something to actually picture rather than a blank scene.
+
+Two things happen before the opening beat, not after: `decideDateOutfit()` asks her, in a
+small dedicated call, what she is actually wearing tonight — fitted to who she is (her usual
+style, whether she'd dress up or down on purpose) and where she's actually going, two or
+three concrete sentences rather than a mood-board adjective. That answer is stored on the
+date itself (`dates.outfit`) and read fresh on every single turn after that, in its own
+`outfit_block` in `actor_date.md` — so the opening beat, every later beat, and the arrival
+photo all agree on the same outfit instead of three separate guesses, and it stays true for
+the whole evening unless the scene itself changes it (a jacket comes off) rather than
+silently drifting.
+
+The photo is generated the moment the outfit is decided, in parallel with the opening beat —
+it does not block the first line arriving, the same way an offered chat photo never blocks
+the reply that came with it. It reuses the same assembler and pipeline as every other
+generated photo (`images.ts`), as a new `'date'` job kind with its own framing: **not a
+selfie and not a phone photo either of you took** — it is simply how he sees her, framed as
+if by an unseen bystander standing there with them, natural social distance, real depth of
+field falling into the actual venue behind her. That distinction matters enough to be its
+own section in `image_prompt_assembler.md` (`is_date`, alongside the existing `is_profile`
+and `is_moment` toggles) rather than reusing the "candid phone photo taken in this exact
+moment" framing every other in-conversation photo gets — a date arrival was never taken on
+anyone's phone, so it does not get styled like one. Portrait, always, and it always shows her
+face — this is the one shot with no reason to ever hide it.
+
+It lands as its own image message inside the **date's own transcript**, not the texting chat
+— threaded through a new `images.date_id` column so a retry from the Settings log still posts
+back to the right place — and its sender is `'system'` rather than `'character'`, the same
+distinction the "you took her to X" marker already makes: this is the scene revealing itself,
+not something she chose to send him. On screen it renders as a plain, borderless photo rather
+than a chat bubble, sitting in the transcript wherever it finishes relative to the beats
+around it.
+
+Verified against a mock: the outfit call's answer showed up unchanged in `dates.outfit`
+after the opening beat *and* after a second turn (confirming it is read fresh rather than
+baked in once); the arrival photo landed in the date transcript as a `'date'`-kind, portrait,
+face-shown job tagged with the right `date_id`, never in the texting chat; and the actual
+prompt handed to the image assembler carried the real outfit text and the `is_date` framing
+("how he actually sees her right now... not a phone selfie") rather than the candid-photo
+instructions every other in-app photo gets.
+
 ### How a beat is written
 
 `actor_date.md` is its own prompt, not the chat prompt with a note attached. It reuses the

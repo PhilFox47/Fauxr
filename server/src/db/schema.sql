@@ -105,6 +105,9 @@ CREATE TABLE IF NOT EXISTS dates (
   proposed_by   TEXT,
   confirmed_by  TEXT,
   summary       TEXT,
+  -- Decided once, right as the date opens, and read fresh on every turn after that - so the
+  -- opening beat, every later beat and the arrival photo all agree on what she is wearing.
+  outfit        TEXT,
   created_at    TEXT NOT NULL,
   ended_at      TEXT
 );
@@ -123,6 +126,9 @@ CREATE TABLE IF NOT EXISTS images (
   aspect        TEXT,
   shows_face    INTEGER NOT NULL DEFAULT 1,
   situation     TEXT,
+  -- Set only for a 'date' kind job: which date's own transcript this photo posts into,
+  -- instead of the texting chat.
+  date_id       TEXT REFERENCES dates(id) ON DELETE CASCADE,
   created_at    TEXT NOT NULL,
   updated_at    TEXT NOT NULL
 );

@@ -160,6 +160,8 @@ export interface DateSession {
   location_id: string | null;
   /** Written when the date ends - what she remembers of the evening. */
   summary: string | null;
+  /** What she decided to wear tonight - set once as the date opens. */
+  outfit: string | null;
   created_at: string;
   ended_at: string | null;
 }

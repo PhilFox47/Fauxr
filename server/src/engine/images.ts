@@ -106,6 +106,25 @@ const CANDID_SUFFIX: Record<PromptStyle, string> = {
 };
 
 /**
+ * The "seen by him, right now" look for a date's arrival photo - added on top of BASE_SUFFIX
+ * instead of CANDID_SUFFIX, for the same reason a date beat's own prose is not written like a
+ * text message: this was never a picture anyone took on a phone, it is simply how she looks
+ * to him in the room. See images.ts's runImageJob for where this replaces CANDID_SUFFIX for a
+ * 'date'-kind job, and image_prompt_assembler.md's is_date section for the matching framing
+ * instructions to the model that writes the rest of the prompt.
+ */
+const DATE_SUFFIX: Record<PromptStyle, string> = {
+  seedream:
+    'Framed as if by an unseen observer standing right there with them - a natural social ' +
+    'distance, eye-level, real depth of field falling off into the actual room behind her - ' +
+    'not a phone selfie and not a posed studio portrait.',
+  z_image_turbo:
+    'Framed as if by an unseen observer standing right there with them, natural eye-level ' +
+    'distance, real depth into the room behind her - not a phone selfie, not a posed studio ' +
+    'portrait.',
+};
+
+/**
  * Sent with every Seedream image regardless of kind - the airbrushed-render look, the
  * opposite over-correction into unflattering, and the usual anatomy rubbish. Kept short and
  * in plain language on purpose: this model's own negative-prompt guidance says a long list
@@ -196,6 +215,8 @@ export interface ImageJob {
   shows_face: number;
   /** The idea the photo is of, resolved (never the blank the Actor may have offered with). */
   situation: string | null;
+  /** Set only for a 'date' kind job: which date's transcript this posts into. */
+  date_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -336,7 +357,9 @@ async function profilePicConcept(character: Character): Promise<string> {
 
 export function enqueueImage(opts: {
   characterId: string;
-  kind: 'profile' | 'chat' | 'spicy';
+  kind: 'profile' | 'chat' | 'spicy' | 'date';
+  /** Only for a 'date' kind job: which date's own transcript the result posts into. */
+  dateId?: string | null;
   situation: string;
   /** Ignored for a profile picture, which is always square. Defaults to portrait. */
   aspect?: 'portrait' | 'landscape' | null;
@@ -347,9 +370,12 @@ export function enqueueImage(opts: {
   const id = randomUUID();
   const aspect = opts.kind === 'profile' ? null : opts.aspect ?? 'portrait';
   db.prepare(
-    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, shows_face, situation, created_at, updated_at)
-     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?, ?, ?)`,
-  ).run(id, opts.characterId, opts.kind, aspect, opts.showsFace === false ? 0 : 1, opts.situation, nowIso(), nowIso());
+    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, shows_face, situation, date_id, created_at, updated_at)
+     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?, ?, ?, ?)`,
+  ).run(
+    id, opts.characterId, opts.kind, aspect, opts.showsFace === false ? 0 : 1, opts.situation,
+    opts.dateId ?? null, nowIso(), nowIso(),
+  );
   const job = getImageJob(id)!;
   void runImageJob(id, opts.situation, opts.postToChat !== false);
   return job;
@@ -375,6 +401,7 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     // ever gave it a situation - it arrived here as ''. Asking her what it actually is
     // happens once, lazily, right where that gap used to go unfilled.
     const isProfile = job.kind === 'profile';
+    const isDate = job.kind === 'date';
     if (isProfile && !situation.trim()) {
       situation = await profilePicConcept(character);
     }
@@ -388,12 +415,15 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     // Candid phone-photo texture only applies to a moment inside the conversation. A
     // profile picture's style - polished headshot or grainy selfie - was already decided
     // by the assembler from her own account of the photo, so forcing the candid suffix on
-    // top would fight a studio shot into looking like a bad phone photo. Computed before the
-    // assembler call, not after, because Z Image Turbo needs to know how much of its own
-    // character budget this suffix is going to eat - see zCharBudget below.
+    // top would fight a studio shot into looking like a bad phone photo. A date's arrival
+    // photo is neither: nobody's phone took it, so it gets DATE_SUFFIX instead of the candid
+    // one. Computed before the assembler call, not after, because Z Image Turbo needs to know
+    // how much of its own character budget this suffix is going to eat - see zCharBudget below.
     const styleSuffix = isProfile
       ? BASE_SUFFIX[promptStyle]
-      : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
+      : isDate
+        ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
+        : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
     // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
     // characters - not a soft quality preference, an actual request error. That leaves the
     // assembler only whatever headroom styleSuffix does not already spend, plus a safety
@@ -419,10 +449,15 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             // Only a profile picture gets to be a professional shot, a repurposed work
             // photo, a posed full-body - anything her own account above says it is. A
             // chat or spicy photo is always a moment inside the conversation, so it keeps
-            // the candid, taken-right-now rules regardless of what image_kind spells out.
+            // the candid, taken-right-now rules regardless of what image_kind spells out. A
+            // date's arrival photo is neither of those - see is_date below.
             is_profile: isProfile ? '1' : '',
-            is_moment: isProfile ? '' : '1',
-            // A profile picture always shows her face by convention; a chat/spicy shot
+            is_moment: !isProfile && !isDate ? '1' : '',
+            // Not a photo either of them took: how he actually sees her, right now, in the
+            // room - see image_prompt_assembler.md's is_date section for the framing this
+            // maps to.
+            is_date: isDate ? '1' : '',
+            // A profile picture always shows her face by convention; a chat/spicy/date shot
             // only when she did not deliberately pick one that hides it.
             hides_face: facesCamera ? '' : '1',
             // The one tier that can plausibly reach nudity at all - see "HOW FAR THIS ONE
@@ -494,11 +529,15 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     if (postToChat) {
       const stored = addMessage({
         character_id: character.id,
-        sender: 'character',
+        // A date's arrival photo is not something she chose to send - it is the scene
+        // itself, the same way the "you took her to X" line at the top of a date is. Every
+        // other kind is genuinely her sending a picture, so it keeps 'character'.
+        sender: isDate ? 'system' : 'character',
         text: '',
         kind: 'image',
         meta: { image_id: id, path: relPath },
         read_at: null,
+        date_id: job.date_id,
       });
       bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
     }
@@ -587,17 +626,22 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
   if (!job) throw new Error('image job not found');
   const character = job.character_id ? getCharacter(job.character_id) : null;
   if (!character) throw new Error('character not found');
-  const kind = job.kind as 'profile' | 'chat' | 'spicy';
+  const kind = job.kind as 'profile' | 'chat' | 'spicy' | 'date';
 
   let situation: string;
   let aspect = job.aspect;
   if (mode === 'new_idea') {
     if (kind === 'profile') {
       situation = await profilePicConcept(character);
-    } else {
+    } else if (kind === 'chat' || kind === 'spicy') {
       const idea = await freshPhotoIdea(character, kind);
       situation = idea.situation;
       aspect = idea.aspect;
+    } else {
+      // A date's arrival photo has no separate "fresh idea" - what she is wearing is
+      // decided once for the whole evening (dates.ts's decideDateOutfit), not per photo, so
+      // "new idea" here just reassembles the same one rather than inventing an unrelated shot.
+      situation = job.situation || DEFAULT_SITUATION.date;
     }
   } else {
     situation = job.situation || DEFAULT_SITUATION[kind];
@@ -625,10 +669,11 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
 }
 
 /** Used only when the Actor left no concrete detail to work from. */
-const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy', string> = {
+const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date', string> = {
   profile: 'a plain, friendly selfie for her profile',
   chat: 'a casual photo of whatever she is doing right now',
   spicy: 'a suggestive, revealing photo, framed and cropped the way she is comfortable sharing',
+  date: 'how she looks as he arrives, whatever she decided to wear tonight',
 };
 
 /**

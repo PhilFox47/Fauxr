@@ -110,6 +110,20 @@ no studio polish, no professional-model posing; real skin has texture, pores and
 asymmetries, and keeping them is what makes her look like a person. If you can only have one
 of those two in the sentence, choose real - a plastic face is the more obvious failure.
 {{/is_moment}}
+{{#is_date}}
+This is **how he actually sees her right now**, in person, at the start of or during a date
+- not a selfie, not a phone photo either of them took, and not a posed studio portrait.
+Frame it the way an unseen bystander standing near them would see this moment: a natural
+social distance, eye-level, a real depth of field that falls off into the actual place
+around her rather than a blank backdrop. She is not looking at a camera and not posing for
+one - she is just being seen, mid-moment, by someone who happens to be there. The venue's
+own light and materials belong in the frame behind or around her.
+
+She is an attractive woman, genuinely represented, doing whatever the situation says she is
+actually doing right now (arriving, sitting, turning to look at him) rather than holding
+still for a portrait. Real skin, real texture - no studio polish or beauty-filter smoothing,
+but also none of the handheld phone-grain look either, since nobody's phone took this.
+{{/is_date}}
 {{#is_spicy}}
 
 # HOW FAR THIS ONE ACTUALLY GOES

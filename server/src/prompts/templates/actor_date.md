@@ -47,6 +47,8 @@ that's a compliment. "Buy me the drink you promised, or was that just a line to 
 
 {{appearance_block}}
 
+{{outfit_block}}
+
 {{life_block}}
 
 {{interests_block}}
