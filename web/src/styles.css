@@ -1309,9 +1309,10 @@ input[type='range'] {
   z-index: -1;
   background-size: cover;
   background-position: center;
-  /* Heavy blur and a dark wash: it has to stay a place without ever competing with text. */
-  filter: blur(18px) saturate(115%) brightness(0.42);
-  transform: scale(1.1);
+  /* Enough blur and wash to stay a place rather than competing with text, not so much the
+     picture stops reading as anything - the whole point of the backdrop is to be visible. */
+  filter: blur(8px) saturate(115%) brightness(0.55);
+  transform: scale(1.04);
 }
 .date-room .topbar,
 .date-room .composer {
@@ -1336,8 +1337,10 @@ input[type='range'] {
   border-color: var(--accent-line);
   background: color-mix(in srgb, var(--accent-soft) 60%, var(--surface-2) 40%);
 }
-/* Asterisked actions are the whole convention of the format, so they get to look like it. */
-.date-beat em, .date-beat i { color: var(--text-dim); }
+/* Spoken lines - "quoted" in the model's own output - get the app's accent colour, the same
+   pink a message bubble uses; narration around them stays the plain text colour. Anything
+   between *asterisks* never reaches this far - renderBeat() strips it before it renders. */
+.date-beat .speech { color: var(--accent-bright); font-weight: 550; }
 
 .date-summary {
   margin-top: var(--s4);

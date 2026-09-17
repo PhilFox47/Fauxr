@@ -42,9 +42,35 @@ const OPENING_NOTE = 'The date has just begun. Open the scene: arrive, or be fou
 /**
  * Used when the model fails twice. Deliberately in register - a canned "sorry, my phone did
  * something weird" would be nonsense from someone sitting in front of him - and flagged so
- * the client can mark it as a failed generation rather than a beat she actually played.
+ * the client can mark it as a failed generation rather than a beat she actually played. Plain
+ * narration, no markup: see actor_date.md for the three-part syntax this has to stay valid
+ * under (plain text narrates, "quotes" speak, *asterisks* are a hidden private thought).
  */
-const FALLBACK_BEAT = "*something catches her attention across the room, and she loses the thread of what she was about to say*";
+const FALLBACK_BEAT = 'Something catches her attention across the room, and she loses the thread of what she was about to say.';
+
+/** How much of a beat is actually enforced to be short - see MAX_VISIBLE_WORDS below. */
+function countWords(text: string): number {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+/**
+ * What the beat leaves behind once her private thoughts - the *asterisk* spans neither he
+ * nor the player ever sees - are stripped back out. Used both to catch a turn that is
+ * nothing but a hidden thought (which would render as a blank bubble) and to measure the
+ * length that actually matters: the visible part is what has to stay short, not the thought
+ * riding along with it.
+ */
+function visibleContent(text: string): string {
+  return text.replace(/\*[^*]*\*/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * A beat with real substance left after her private thoughts are stripped, but too much of
+ * it - more than a player can read and reply to before it feels like being talked at. Only
+ * checked on the first attempt: a slightly-too-long second attempt still beats spending both
+ * retries on wordcount and landing on the fallback line instead.
+ */
+const MAX_VISIBLE_WORDS = 55;
 
 export interface DateTurnResult {
   text: string;
@@ -103,12 +129,16 @@ function buildDatePrompt(
 
 /**
  * The one thing that ruins a roleplay scene faster than bad prose: writing his half of it.
- * Catches the blatant forms - an action beat whose subject is him, or her narrating what he
- * feels - and leaves the rest ("*she takes your hand*") alone, which is the whole point.
+ * Narration is plain text now (see actor_date.md's three-part syntax), so this checks each
+ * narrated sentence - the bits outside quoted speech and hidden thoughts - for one that
+ * opens on him as its subject, plus the blatant "you feel/decide" tell that means the same
+ * thing wherever it lands. Leaves the rest ("she takes your hand") alone, which is the point:
+ * he can be touched, spoken to and reacted to, just never driven.
  */
 export function writesForHim(text: string): boolean {
-  const actions = text.match(/\*[^*]+\*/g) ?? [];
-  if (actions.some((a) => /^\*\s*(you|he)\b/i.test(a))) return true;
+  const narration = text.replace(/"[^"]*"/g, ' ').replace(/\*[^*]*\*/g, ' ');
+  const sentences = narration.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+  if (sentences.some((s) => /^(you|he)\b/i.test(s))) return true;
   return /\byou (feel|felt|find yourself|can't help|couldn't help|decide|realise|realize)\b/i.test(text);
 }
 
@@ -149,8 +179,11 @@ async function runDateActor(
     }
 
     const text = String(parsed?.text ?? '').trim();
-    if (!text) {
-      correction = 'Your reply contained no scene. Write one beat of the date, actions and speech.';
+    if (!text || !visibleContent(text)) {
+      correction =
+        'Your reply contained no visible scene - a hidden thought on its own renders as a blank ' +
+        'message. Write one beat of the date: narration, or speech, or both, with a thought riding ' +
+        'along if it wants to, not a thought standing in for the beat.';
       continue;
     }
     if (writesForHim(text)) {
@@ -158,6 +191,17 @@ async function runDateActor(
       correction =
         'You wrote his actions or his feelings for him. Write only what SHE does, says and notices - ' +
         'describe what she does TO him, and stop there. Write the beat again from scratch, same JSON shape.';
+      continue;
+    }
+    if (attempt === 0 && countWords(visibleContent(text)) > MAX_VISIBLE_WORDS) {
+      logger.warn('actor', 'date beat ran long, re-requesting', {
+        character: character.username,
+        words: countWords(visibleContent(text)),
+      });
+      correction =
+        `That was too long - he needs room to actually reply, not a page to read first. One beat: a ` +
+        `line or two of what she does, plus what she says, ${MAX_VISIBLE_WORDS} words or under not ` +
+        `counting any hidden thought. Write it again, shorter, same JSON shape.`;
       continue;
     }
 

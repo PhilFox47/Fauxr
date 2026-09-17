@@ -27,14 +27,20 @@ function dayLabel(iso: string): string {
 }
 
 /**
- * *Actions* in italics, speech as it is. The asterisks are the convention both sides of the
- * date write in, and leaving them on screen as literal punctuation is what makes a roleplay
- * transcript look like a chat log rather than a scene.
+ * The date's three-part syntax, on both sides of the conversation: plain text narrates,
+ * "quoted text" is spoken aloud and gets the chat's own accent colour, and *asterisked
+ * text* is a private thought - hers or his - that never actually renders. It still reaches
+ * the model on the next turn (the stored text keeps it, only the display strips it), which
+ * is what lets her carry a thought forward, or lets him steer her without her "hearing" it.
  */
 function renderBeat(text: string) {
-  return text.split(/(\*[^*]+\*)/g).filter(Boolean).map((part, i) =>
-    part.startsWith('*') && part.endsWith('*') && part.length > 2
-      ? <em key={i}>{part.slice(1, -1)}</em>
+  // Thoughts are stripped as a string operation first, with the whitespace they leave
+  // behind collapsed - splitting into elements and just omitting the *thought* fragment
+  // would leave the space on either side of it behind as a visible double space.
+  const visible = text.replace(/\*[^*]*\*/g, ' ').replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n').trim();
+  return visible.split(/("[^"]*")/g).filter(Boolean).map((part, i) =>
+    part.startsWith('"') && part.endsWith('"')
+      ? <span key={i} className="speech">{part}</span>
       : <span key={i}>{part}</span>,
   );
 }
@@ -1120,7 +1126,7 @@ function DateRoom({
             ref={inputRef}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder="What you do and say…"
+            placeholder='Narrate freely · "speak" · *private thought*'
             rows={1}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {

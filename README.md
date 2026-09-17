@@ -2421,14 +2421,25 @@ beat can never run at once.
 character blocks (identity, appearance, life, interests, sexual, spice, ledger, mood) and
 replaces everything about texting:
 
-- **Actions in asterisks, speech in plain text**, interleaved. A reply that is only dialogue
-  reads as a phone call; one that is only action reads as stage directions.
+- **Three-part syntax, not asterisk-actions.** Plain text is narration — third person, present
+  tense, a camera's view of what happens. `"Quoted text"` is spoken aloud, and only ever
+  hers; she never voices his lines. `*Asterisked text*` is a private thought, and it is
+  genuinely invisible — stripped before the beat ever renders, for both sides. He can write
+  his own `*thoughts*` too when composing his half; they tell the model what he privately
+  means, never something she perceives — she reacts to what is actually said or done, exactly
+  as he never hears hers. The stored message keeps the full markup either way, so a beat that
+  is nothing but a hidden thought would render as a blank bubble — checked for and rejected
+  before that happens — and so the model can see its own past private thoughts on the next
+  turn for continuity, even though nobody watching ever will.
 - **Write her, never him.** She never narrates his reactions, his lines or his feelings.
-  Enforced in code as well as prose — a beat whose action opens with "you" or that tells him
-  what he feels is rejected and rewritten, while "*she takes your hand*" passes, which is the
-  whole distinction.
-- **One continuous beat**, present tense. Not a whole evening per reply — a reply that skips
-  ahead an hour steals the date from you.
+  Enforced in code as well as prose — narration is plain text now, so a sentence that opens
+  on "he" or "you" as its subject is rejected and rewritten, while "she takes your hand"
+  passes, which is the whole distinction.
+- **Short. One beat, not a scene.** A line or two of narration plus a line she says — that is
+  a whole reply, checked in code (55 words, not counting any hidden thought) and re-requested
+  once if it runs long. A reply that skips ahead an hour, or plays out a whole exchange in one
+  go, steals the date from you as much as writing your half would; it also just leaves no room
+  to answer before the next one arrives.
 - **Physical contact is real and she initiates it.** Her limits and her appetite are exactly
   what they always were; what changed is that she has her whole body available instead of a
   phone. Nothing on her hard-limits list moves for being in the room.
@@ -2440,6 +2451,11 @@ replaces everything about texting:
 
 There is no Director direction during a date. The scene drives itself, which for roleplay is
 the better answer: a per-beat goal and stance would rail-road exactly the thing you came for.
+
+On screen, a spoken line renders in the app's own accent pink, narration stays the ordinary
+text colour, and a `*thought*` — from either of you — simply never appears; the backdrop
+behind it all is a lighter blur than it started at, enough to stay a place without turning
+into an abstract wash.
 
 ### Ending it, and remembering it
 
