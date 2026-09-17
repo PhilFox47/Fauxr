@@ -5,6 +5,25 @@ import Icon from '../components/Icon';
 /** How far the card has to travel before letting go counts as a decision. */
 const COMMIT_PX = 90;
 
+/** How many sparks a tier gets - a small visual escalation on top of the label itself. */
+const RARITY_SPARKS: Record<SwipeProfile['rarity']['tier'], number> = {
+  common: 0,
+  uncommon: 1,
+  rare: 2,
+  very_rare: 3,
+};
+
+/** Spoiler-free: a grade on the dice roll, not a hint about anything she'll actually say. */
+function RarityBadge({ rarity }: { rarity: SwipeProfile['rarity'] }) {
+  const sparks = RARITY_SPARKS[rarity.tier];
+  return (
+    <div className="rarity-badge" data-tier={rarity.tier}>
+      {Array.from({ length: sparks }, (_, i) => <Icon key={i} name="spark" size={11} />)}
+      <span>{rarity.label}</span>
+    </div>
+  );
+}
+
 export default function Swipe({ onMatched }: { onMatched: () => void }) {
   const [profiles, setProfiles] = useState<SwipeProfile[]>([]);
   const [generating, setGenerating] = useState(0);
@@ -141,6 +160,8 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
                   Nope
                 </div>
 
+                <RarityBadge rarity={current.rarity} />
+
                 <div className="swipe-emoji" aria-hidden="true">{current.avatar_emoji}</div>
                 <div className="handle">{current.username}</div>
                 <div className="swipe-meta">
@@ -162,7 +183,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
             </div>
           </>
         )}
-        <div className="stack-count">No photos. Her age, her languages and the bio.</div>
+        <div className="stack-count">No photos. Her age, her languages, the bio, and how unusual she is.</div>
       </div>
     </>
   );

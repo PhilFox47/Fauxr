@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { getSettings } from '../config.js';
 import { db, nowIso } from '../db/index.js';
-import { byCategory, find, type Attribute } from '../db/attributes.js';
+import { byCategory, find, RARITY_WEIGHT, type Attribute } from '../db/attributes.js';
 import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
@@ -450,6 +450,91 @@ export function rollSeed(): RolledSeed {
 
   seed.appearance_prompt = buildAppearancePrompt(seed);
   return { seed, ctx, archetype, fieldIds };
+}
+
+/**
+ * Every (category, id) pair a rolled seed is actually built from, under the same category
+ * names rollSeed() itself rolled them under. Used only to grade how unusual a character is
+ * as a whole (see rarityTier below) - nothing here decides gameplay, so a field this misses
+ * only makes that grade a little less precise, never wrong.
+ */
+function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }[] {
+  const singular: [string, string][] = [
+    ['ethnicity', seed.ethnicity], ['skin_tone', seed.skin_tone], ['height', seed.height],
+    ['body_type', seed.body_type], ['breast_size', seed.breast_size], ['hair_color', seed.hair_color],
+    ['hair_style', seed.hair_style], ['eye_color', seed.eye_color], ['clothing_style', seed.clothing_style],
+    ['grooming', seed.grooming], ['makeup_style', seed.makeup_style], ['distinctive_feature', seed.distinctive_feature],
+    ['archetype', seed.archetype], ['attachment_style', seed.attachment_style], ['humor_type', seed.humor_type],
+    ['conflict_style', seed.conflict_style], ['openness_curve', seed.openness_curve], ['insecurity', seed.insecurity],
+    ['typing_style', seed.typing_style], ['emoji_usage', seed.emoji_usage], ['message_length', seed.message_length],
+    ['response_speed', seed.response_speed], ['voice_msg_tendency', seed.voice_msg_tendency],
+    ['slang_register', seed.slang_register], ['occupation', seed.occupation],
+    ['living_situation', seed.living_situation], ['relationship_status', seed.relationship_status],
+    ['relationship_history', seed.relationship_history], ['dating_experience', seed.dating_experience],
+    ['social_energy', seed.social_energy], ['search_motive', seed.search_motive], ['touchstone', seed.touchstone],
+    ['dealbreaker', seed.dealbreaker], ['orientation', seed.orientation], ['arousal_tell', seed.arousal_tell],
+  ];
+  const plural: [string, string[]][] = [
+    ['quirk', seed.quirks], ['interest', seed.interests], ['hobby', seed.hobbies],
+    ['turn_on', seed.turn_ons], ['turn_off', seed.turn_offs], ['green_flag', seed.green_flags],
+    ['fetish', seed.fetishes], ['hard_limit', seed.hard_limits], ['accessory', seed.accessories],
+    // English says nothing about her - everyone speaks it, and it has no row in the table.
+    ['language', seed.languages.filter((l) => l !== 'english')],
+  ];
+  const out: { category: string; id: string }[] = [];
+  for (const [category, id] of singular) if (id) out.push({ category, id });
+  for (const [category, ids] of plural) for (const id of ids) out.push({ category, id });
+  for (const t of seed.tattoos) {
+    out.push({ category: 'tattoo_motif', id: t.motif });
+    out.push({ category: 'tattoo_position', id: t.position });
+  }
+  for (const p of seed.piercings) {
+    out.push({ category: 'piercing_type', id: p.type });
+    out.push({ category: 'piercing_position', id: p.position });
+  }
+  return out;
+}
+
+/**
+ * How unusual a character is as a whole, from the rarity tags on the attributes she rolled
+ * alone - nothing about what any of them actually mean. That is what makes it safe to show
+ * before a single message is sent: a "Rare" badge on the swipe card is a promise about the
+ * shape of the dice roll, not a spoiler about her.
+ *
+ * Averaged as surprisal (-log2 of the rarity weight) rather than counting how many rare tags
+ * she has: a character with forty common traits and one very rare one should read as mostly
+ * ordinary with one striking thing about her, not get dragged up to "rare" by that one
+ * outlier, and the average stays comparable even though how many traits get counted varies a
+ * little from character to character.
+ */
+export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare';
+
+export function rarityScore(seed: CharacterSeed): number {
+  const ids = seedAttributeIds(seed);
+  if (!ids.length) return 0;
+  const total = ids.reduce((sum, { category, id }) => {
+    const weight = RARITY_WEIGHT[find(category, id)?.rarity ?? 'common'];
+    return sum - Math.log2(weight);
+  }, 0);
+  return total / ids.length;
+}
+
+/**
+ * Thresholds picked empirically (2000 rolled seeds) to land roughly 27% common / 50%
+ * uncommon / 18% rare / 5% very rare - a real minority at the top, not something a third of
+ * the stack claims.
+ */
+const RARITY_LABEL: Record<RarityTier, string> = {
+  common: 'Common',
+  uncommon: 'Uncommon',
+  rare: 'Rare',
+  very_rare: 'Very rare',
+};
+
+export function rarityTier(seed: CharacterSeed): { tier: RarityTier; label: string } {
+  const score = rarityScore(seed);
+  const tier: RarityTier = score >= 0.42 ? 'very_rare' : score >= 0.34 ? 'rare' : score >= 0.24 ? 'uncommon' : 'common';
+  return { tier, label: RARITY_LABEL[tier] };
 }
 
 /** Fixed appearance block assembled from the image_prompt fields of the appearance tags. */

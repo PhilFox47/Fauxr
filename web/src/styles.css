@@ -486,6 +486,46 @@ input[type='range'] {
   font-weight: 600;
 }
 
+/**
+ * A spoiler-free grade on how unusual her rolled traits are as a whole - see rarityTier()
+ * server-side. Common is deliberately understated (grey, no glow) so it reads as the quiet
+ * baseline; each tier up gets a distinct hue and, at the top, a glow - the same visual
+ * language a loot rarity system uses, which is exactly the intuition this is borrowing.
+ */
+.swipe-card .rarity-badge {
+  position: absolute;
+  top: var(--s5);
+  right: var(--s5);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 11px;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+.swipe-card .rarity-badge[data-tier='uncommon'] {
+  color: var(--ok);
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(52, 211, 153, 0.1);
+}
+.swipe-card .rarity-badge[data-tier='rare'] {
+  color: var(--accent-bright);
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+.swipe-card .rarity-badge[data-tier='very_rare'] {
+  color: var(--warn);
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(251, 191, 36, 0.12);
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.3);
+}
+
 /* The verdict stamps that fade in as you drag, so a half-swipe tells you what it will do. */
 .verdict {
   position: absolute;

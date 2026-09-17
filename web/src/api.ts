@@ -53,6 +53,8 @@ export interface AppState {
   api_configured: boolean;
 }
 
+export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare';
+
 export interface SwipeProfile {
   id: string;
   username: string;
@@ -62,6 +64,8 @@ export interface SwipeProfile {
   age: number;
   /** Display labels, already resolved server-side. */
   languages: string[];
+  /** A spoiler-free grade on how unusual her rolled traits are as a whole - see the server. */
+  rarity: { tier: RarityTier; label: string };
 }
 
 /** Which parts of the install a reset should take out. Anything false survives. */

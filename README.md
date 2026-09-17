@@ -1252,6 +1252,28 @@ and the edges are not — the same shape the fixed 18–42 roll had, rescaled. 1
 floor enforced at the profile, at the clamp and again at the roll, and a range saved back to
 front is sorted rather than matching nothing.
 
+### A rarity badge, spoiler-free
+
+Every attribute already carries a `rarity` tag (common / uncommon / rare / very rare) that
+governs how often it gets rolled — see [the attribute tables](#the-attribute-tables) below.
+The swipe card shows a grade built from that alone: a small pill in the corner reading
+Common, Uncommon, Rare or Very rare, with a spark for each step up and a gold glow at the
+top. It says nothing about *what* is unusual about her — no fetish, no job, no personality
+trait leaks through it — only how far from the middle of the dice her whole profile landed,
+which is exactly the kind of thing a real dating app would never tell you and exactly why it
+is fun to know anyway.
+
+The grade is `rarityTier()` in `generator.ts`: every (category, id) pair her seed actually
+rolled — every appearance, personality, life and sexual attribute, tattoos and piercings
+included — gets scored as *surprisal*, `-log2(rarity weight)`, and averaged across all of
+them. Averaging surprisal rather than counting rare tags matters: a character with forty
+common attributes and one very rare one reads as mostly ordinary with one striking thing
+about her, not as "rare" outright, and the score stays comparable across characters even
+though how many attributes get counted varies a little (a hard limit and a hair colour come
+from very differently sized tables). The four thresholds were picked empirically, from 2,000
+rolled seeds, to land roughly 27% common / 50% uncommon / 18% rare / 5% very rare — a real
+top tier, not something a third of the stack claims.
+
 ### Relationship status
 
 Separate from `living_situation`, which is housing (lives alone, flatshare, at her parents'),

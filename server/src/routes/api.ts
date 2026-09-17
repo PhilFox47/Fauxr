@@ -21,7 +21,7 @@ import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import {
   characterGallery, evaluateUserImage, listImageJobs, regenerateImage, respondToPhotoOffer, retryImageJob,
 } from '../engine/images.js';
-import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji } from '../engine/generator.js';
+import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji, rarityTier } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
@@ -146,6 +146,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         languages: c.seed.languages
           .filter((l) => l !== 'english')
           .map((l) => find('language', l)?.label ?? l.charAt(0).toUpperCase() + l.slice(1)),
+        // Spoiler-free: a grade on the dice roll itself, nothing about what she is actually
+        // like. See generator.ts's rarityTier for how it is computed.
+        rarity: rarityTier(c.seed),
       })),
     };
   });
