@@ -3019,7 +3019,15 @@
         "edging_giving",
         "overstimulation",
         "boss_roleplay",
-        "secretary_roleplay"
+        "secretary_roleplay",
+        "joi_giving",
+        "joi_receiving",
+        "consensual_nonconsent",
+        "daddy_kink",
+        "free_use_fantasy",
+        "primal_play",
+        "slave_treatment_giving",
+        "slave_treatment_receiving"
       ],
       "limits": [
         "power_play"
@@ -3134,7 +3142,8 @@
     "extra": {
       "intensity": 2,
       "fetishes": [
-        "breath_play_light"
+        "breath_play_light",
+        "breath_play_giving"
       ],
       "limits": [
         "choking"
@@ -3157,7 +3166,9 @@
       "intensity": 2,
       "fetishes": [
         "humiliating_him_lightly",
-        "mild_public_tease"
+        "mild_public_tease",
+        "degrading_him",
+        "being_degraded"
       ],
       "limits": [
         "humiliation",
@@ -3208,7 +3219,10 @@
         "feet_worship_receiving",
         "feet_worship_giving",
         "toe_sucking_receiving",
-        "toe_sucking_giving"
+        "toe_sucking_giving",
+        "sockjob_giving",
+        "shoejob_giving",
+        "boot_licking_receiving"
       ],
       "limits": [
         "feet_limit"
@@ -3262,7 +3276,9 @@
       "fetishes": [
         "threesome_fantasy",
         "watching_him_with_another",
-        "double_penetration"
+        "double_penetration",
+        "group_sex_fantasy",
+        "cuckqueen_fantasy"
       ],
       "limits": [
         "third_parties",
@@ -3286,7 +3302,8 @@
       "intensity": 1,
       "fetishes": [
         "anal_receiving",
-        "anal_giving"
+        "anal_giving",
+        "pegging_him"
       ],
       "limits": []
     },
@@ -3331,7 +3348,13 @@
         "costume_roleplay",
         "uniform_seeing",
         "uniform_wearing",
-        "truth_or_dare"
+        "truth_or_dare",
+        "cosplay_for_him",
+        "petplay_pet",
+        "petplay_owner",
+        "dark_romance_fantasy",
+        "affair_roleplay",
+        "strip_games"
       ],
       "limits": [
         "roleplay_limits",
@@ -3387,7 +3410,9 @@
         "nylon_fishnet",
         "high_heels_wearing",
         "stockings_wearing",
-        "lace_lingerie"
+        "lace_lingerie",
+        "pantyhose_wearing",
+        "knee_high_socks_wearing"
       ],
       "limits": []
     },
@@ -4378,5 +4403,469 @@
       ]
     },
     "enabled": true
+  },
+  {
+    "id": "cum_eating_receiving",
+    "category": "fetish",
+    "label": "Eating his cum",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "eating what he gives her, deliberately, not just tolerating it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cum_eating_forced_him",
+    "category": "fetish",
+    "label": "Making him eat his own",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "making him clean up what he made, on her instruction",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cum_swapping",
+    "category": "fetish",
+    "label": "Sharing it between their mouths",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "passing it between them, mouth to mouth, on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cum_marking",
+    "category": "fetish",
+    "label": "Being marked, specifically",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "where it ends up mattering to her, as its own thing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sockjob_giving",
+    "category": "fetish",
+    "label": "Giving a footjob with socks on",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "using her feet through the fabric of her socks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "shoejob_giving",
+    "category": "fetish",
+    "label": "Giving a footjob with shoes on",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "using her feet, still in her shoes, deliberately",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "boot_licking_receiving",
+    "category": "fetish",
+    "label": "Having her boots cleaned",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "having him clean her boots or shoes with his mouth",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "joi_giving",
+    "category": "fetish",
+    "label": "Giving him instructions",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "talking him through it step by step, exactly how she wants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "joi_receiving",
+    "category": "fetish",
+    "label": "Being talked through it",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "being told exactly how, pace and all, and following it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "degrading_him",
+    "category": "fetish",
+    "label": "Talking down to him properly",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "real degradation, not just teasing - name-calling, put-downs, meant",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "being_degraded",
+    "category": "fetish",
+    "label": "Being talked down to properly",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "real degradation from him, name-calling and put-downs, meant",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cosplay_for_him",
+    "category": "fetish",
+    "label": "Dressing as a specific character for him",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "a full costume, a specific character, put together properly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hentai_together",
+    "category": "fetish",
+    "label": "Watching hentai together",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "anime specifically, put on together on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pegging_him",
+    "category": "fetish",
+    "label": "Pegging him",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "strapping in and taking the other role for once",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "petplay_pet",
+    "category": "fetish",
+    "label": "Petplay, as his pet",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "a collar, a leash, and actually playing the part",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "petplay_owner",
+    "category": "fetish",
+    "label": "Petplay, as his owner",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "putting the collar on him and meaning it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pantyhose_wearing",
+    "category": "fetish",
+    "label": "Wearing pantyhose",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "sheer pantyhose, specifically, head to toe",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "knee_high_socks_wearing",
+    "category": "fetish",
+    "label": "Wearing knee-highs",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "knee-high socks, specifically, and what they do to an outfit",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "consensual_nonconsent",
+    "category": "fetish",
+    "label": "Consensual non-consent",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "playing at resistance, both of them knowing exactly what it is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dark_romance_fantasy",
+    "category": "fetish",
+    "label": "Dark romance fantasies",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "possessive, intense, a little dangerous - the fantasy, not the reality",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "affair_roleplay",
+    "category": "fetish",
+    "label": "The other-woman fantasy",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "playing at something illicit, purely as fantasy between the two of them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "strip_games",
+    "category": "fetish",
+    "label": "Strip games",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "cards, poker, something with actual stakes attached",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "breath_play_giving",
+    "category": "fetish",
+    "label": "A hand at his throat",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "her hand there instead, carefully, and knowing exactly how far",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "daddy_kink",
+    "category": "fetish",
+    "label": "Calling him Daddy",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "that specific name, and everything it does to the dynamic",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "free_use_fantasy",
+    "category": "fetish",
+    "label": "Free use fantasy",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "being available to him without having to be asked, as the fantasy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "primal_play",
+    "category": "fetish",
+    "label": "Losing the plot a little",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "instinct over technique, a chase, nothing measured about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "group_sex_fantasy",
+    "category": "fetish",
+    "label": "More than three, in fantasy",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "a whole group of it, purely as a fantasy to talk through",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "slave_treatment_giving",
+    "category": "fetish",
+    "label": "Treating him like hers to use",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "a real ownership dynamic, not just bossing him around for a scene",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "slave_treatment_receiving",
+    "category": "fetish",
+    "label": "Being treated like his to use",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "a real ownership dynamic from him, agreed on beforehand and meant",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cuckqueen_fantasy",
+    "category": "fetish",
+    "label": "Cuckqueen fantasy",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "watching him with someone else, specifically, as her own thing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cum_limit",
+    "category": "hard_limit",
+    "label": "Anything involving cum specifically",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "cum_eating_receiving",
+      "cum_eating_forced_him",
+      "cum_swapping",
+      "cum_marking"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cum_play",
+    "category": "kink_domain",
+    "label": "Cum",
+    "weight": 1.0,
+    "prompt_hint": "what happens with it and where - a real, specific preference rather than an afterthought",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "cum_eating_receiving",
+        "cum_eating_forced_him",
+        "cum_swapping",
+        "cum_marking"
+      ],
+      "limits": [
+        "cum_limit"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
   }
 ]

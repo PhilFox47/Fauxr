@@ -9791,5 +9791,19 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "native_language_accent",
+    "category": "quirk",
+    "label": "Texts with a trace of her first language",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "word order or phrasing that slips in from her native language sometimes, not a costume accent, just how it actually comes out",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
   }
 ]

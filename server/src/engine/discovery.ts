@@ -312,21 +312,22 @@ export function fetishProgress(character: Character, rel: Relationship): FetishP
  * signal to the Director, so a false positive is worse than a miss.
  */
 const DOMAIN_TERMS: Record<string, string[]> = {
-  bdsm_power: ['dominant', 'submissive', 'dom ', 'sub ', 'domme', 'in charge', 'boss me', 'obey', 'good girl', 'collar', 'safeword', 'bdsm', 'edging', 'beg'],
+  bdsm_power: ['dominant', 'submissive', 'dom ', 'sub ', 'domme', 'in charge', 'boss me', 'obey', 'good girl', 'collar', 'safeword', 'bdsm', 'edging', 'beg', 'jerk off instructions', 'joi', 'free use', 'primal', 'daddy', 'consensual non-consent', 'slave'],
   bondage: ['tie you', 'tie me', 'tied up', 'rope', 'restrain', 'handcuff', 'cuffs', 'blindfold', 'bondage', 'shibari'],
   impact: ['spank', 'spanking', 'smack', 'paddle', 'flogger', 'riding crop', 'hair pulling', 'pull your hair'],
   pain_intense: ['wax', 'scratch', 'bite you', 'bite me', 'marks', 'bruis'],
   breath_play: ['choke', 'choking', 'hand on your throat', 'breath play'],
   degradation: ['degrade', 'humiliat', 'call you names', 'talk down to'],
   praise: ['good girl', 'so good', 'praise', 'tell you how good'],
-  feet: ['feet', 'foot', 'toes', 'soles'],
+  feet: ['feet', 'foot', 'toes', 'soles', 'sockjob', 'shoejob', 'lick my boots', 'lick your boots'],
   exhibitionism: ['in public', 'somewhere public', 'get caught', 'car park', 'outdoors', 'someone might see'],
-  sharing: ['threesome', 'third person', 'watch you with', 'another guy', 'another girl', 'cuckold', 'share you'],
-  anal: ['anal', 'from behind properly', 'back door'],
+  sharing: ['threesome', 'third person', 'watch you with', 'another guy', 'another girl', 'cuckold', 'cuckquean', 'cuck queen', 'share you', 'orgy', 'group sex'],
+  anal: ['anal', 'from behind properly', 'back door', 'pegging'],
   toys: ['toy', 'vibrator', 'dildo', 'plug'],
-  roleplay: ['roleplay', 'role play', 'pretend to be', 'costume', 'uniform', 'nurse outfit'],
+  roleplay: ['roleplay', 'role play', 'pretend to be', 'costume', 'uniform', 'nurse outfit', 'petplay', 'pet play', 'cosplay', 'hentai', 'affair', 'cheat on'],
   recording: ['film', 'record', 'video', 'send a pic', 'photos of you', 'camera'],
-  fetishwear: ['latex', 'leather', 'lingerie', 'corset', 'stockings', 'fishnet', 'heels'],
+  fetishwear: ['latex', 'leather', 'lingerie', 'corset', 'stockings', 'fishnet', 'heels', 'pantyhose', 'knee highs', 'knee-high'],
+  cum_play: ['cum', 'swallow', 'facial', 'cum play', 'cum in', 'cum on'],
 };
 
 export interface KinkHit {

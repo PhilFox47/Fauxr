@@ -1998,6 +1998,78 @@ permanent orphan still being rolled into new characters alongside its replacemen
 `GET /api/attributes/testroll` rolls ten characters with no LLM calls, for checking
 weights by eye.
 
+### A curated wishlist of fetishes, styles, jobs and hobbies
+
+The user supplied a specific list of ~45 fetishes, ~25 aesthetic styles, ~40 occupations, a
+handful of hobbies/interests and one quirk they wanted available, with a standing preference
+attached: characters should be allowed to look and be more "unusual" and scene-specific
+rather than converging on similar-looking, similarly-employed women — a goth character
+should read as properly goth, not as a normal girl in slightly dark clothing.
+
+Each item on the list was checked against the existing tables first rather than added blind
+- about a third of it (`mutual_masturbation`, `nylon_fishnet` for fishnets, both directions
+of `edging_*`, `threesome_fantasy`, `bondage_shibari`/`tying_him` for shibari, and several
+more) already existed, sometimes under a less literal id. Only the genuine gaps were added:
+
+- **30 new fetishes** in `sexual.json` — cum play (eating, being forced to eat his own,
+  swapping, general fixation), footwear acts (sockjobs, shoejobs, boot licking), JOI both
+  directions, a stronger degradation pair distinct from the existing "light teasing" one,
+  pegging, petplay both directions, pantyhose/knee-highs, consensual non-consent, dark
+  romance, an affair fantasy, strip games, giving breath play (only the receiving side
+  existed), Daddy kink, free use, primal play, group sex, an explicit slave-treatment pair,
+  and a cuckqueen fantasy distinct from the existing generic "watching him with another".
+  Every new fetish was assigned into the `kink_domain` it actually belongs to (see below) -
+  a fetish left unclaimed by any domain is available to everyone regardless of freak level,
+  which is right for `hentai_together` (mild, unclaimed on purpose) and wrong for something
+  like `primal_play`, which should stay gated the same way the rest of `bdsm_power` is.
+- **One new `kink_domain`, `cum_play`** (intensity 1, the same tier as `bdsm_power` and
+  `bondage`), plus a matching **`cum_limit` hard_limit** conflicting with its four fetishes -
+  cum play didn't fit any of the existing 15 domains, and the domain-gating mechanism
+  requires a home for anything that should be freak-conditioned rather than always-available.
+  `discovery.ts`'s `DOMAIN_TERMS` also picked up a `cum_play` entry and a handful of added
+  phrases in existing domains (`petplay`, `pegging`, `daddy`, `free use`, `primal`, `orgy`,
+  `pantyhose`, and others) so the new kinks are actually detectable in chat, not just
+  decorative.
+- **23 new `clothing_style` entries** in `appearance.json` — e-girl, cosplayer, gamer girl,
+  anime girl, a properly-committed goth (distinct from the existing softer `alt_goth`), emo,
+  fantasy costume, alt, rave wear, lolita, punk, sundresses, and eleven of the "-core"
+  aesthetic microtrends (angelcore, devilcore, barbiecore, clowncore, westerncore, craftcore,
+  fairycore, fetishcore, goblincore, kidcore, lovecore). Cottagecore and balletcore were
+  already in the tables under those exact names. Each got a genuinely committed
+  `image_prompt` - "full traditional goth outfit, black lace and velvet, platform boots,
+  dramatic silhouette", not a diluted "slightly dark clothing" version - since
+  `image_prompt` is what actually reaches `buildAppearancePrompt()` and from there the image
+  model; the distinctiveness the user wanted is a property of what these entries actually
+  say, not a separate setting.
+- **40 new `occupation` entries** in `life.json` — influencer/streamer/creator jobs,
+  law enforcement and emergency services, several crime-adjacent ones (dealer, mobster,
+  hitman, secret agent) written in the same matter-of-fact, non-glorifying tone as the
+  existing `crime_scene_cleaner`/`bookie`/`private_investigator`, adult-industry work
+  (sex worker, escort, OnlyFans model, stripper), creative/tech roles, and two openly
+  supernatural ones (witch, vampire) - this app already allows a slight supernatural role,
+  and the existing tables had none.
+- **4 new `hobby` entries** (writing stories, vibe coding, sim racing, casual streaming),
+  **1 new `interest`** (social media / extremely online), and **1 new `quirk`** in
+  `personality.json`'s texting-tic pool - texting with a trace of her native language's word
+  order, a real, non-costume version of an accent showing up in how she types rather than
+  how she'd sound out loud.
+
+**`server/scripts/validate-attributes.mjs`** (new, `npm run validate-attributes` from
+`server/`) is the permanent version of the one-off script an earlier expansion pass used and
+never committed. It checks every `.json` file in `data/attributes/`: no duplicate
+`(category, id)` pairs, every required field present with the right type, every `rarity`
+valid, and no dangling reference in any `affinities`, `conflicts`, `extra.weights`, or
+`kink_domain.extra.fetishes`/`.limits` list — a category this pass's own additions had to
+pass cleanly before shipping, and something future expansions can now run instead of
+re-deriving the same checks from scratch.
+
+Verified: the validator passes clean across all 2516 entries (51 categories, 5 files) with
+zero errors; 400 real `rollSeed()` calls through the actual generation code complete with no
+error and produce characters using the new styles, occupations, hobbies/interests, the new
+quirk, and the new fetishes; a character rolled with the new `goth_girl` style carries the
+new, vivid `image_prompt` text all the way through to her `appearance_prompt`; and the new
+`cum_play` domain and its `cum_limit` hard_limit resolve correctly through `find()`.
+
 ---
 
 ## Settings

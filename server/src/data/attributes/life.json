@@ -173,15 +173,15 @@
   {
     "id": "sob",
     "category": "favorite_emoji",
-    "label": "😭",
+    "label": "\ud83d\ude2d",
     "weight": 1.0,
-    "prompt_hint": "😭",
+    "prompt_hint": "\ud83d\ude2d",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😭"
+      "char": "\ud83d\ude2d"
     },
     "enabled": true,
     "rarity": "common"
@@ -189,15 +189,15 @@
   {
     "id": "skull",
     "category": "favorite_emoji",
-    "label": "💀",
+    "label": "\ud83d\udc80",
     "weight": 1.0,
-    "prompt_hint": "💀",
+    "prompt_hint": "\ud83d\udc80",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "💀"
+      "char": "\ud83d\udc80"
     },
     "enabled": true,
     "rarity": "common"
@@ -205,15 +205,15 @@
   {
     "id": "eyeroll",
     "category": "favorite_emoji",
-    "label": "🙄",
+    "label": "\ud83d\ude44",
     "weight": 1.0,
-    "prompt_hint": "🙄",
+    "prompt_hint": "\ud83d\ude44",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🙄"
+      "char": "\ud83d\ude44"
     },
     "enabled": true,
     "rarity": "common"
@@ -221,15 +221,15 @@
   {
     "id": "relieved",
     "category": "favorite_emoji",
-    "label": "😌",
+    "label": "\ud83d\ude0c",
     "weight": 1.0,
-    "prompt_hint": "😌",
+    "prompt_hint": "\ud83d\ude0c",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😌"
+      "char": "\ud83d\ude0c"
     },
     "enabled": true,
     "rarity": "common"
@@ -237,15 +237,15 @@
   {
     "id": "smiling_tear",
     "category": "favorite_emoji",
-    "label": "🥲",
+    "label": "\ud83e\udd72",
     "weight": 1.0,
-    "prompt_hint": "🥲",
+    "prompt_hint": "\ud83e\udd72",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🥲"
+      "char": "\ud83e\udd72"
     },
     "enabled": true,
     "rarity": "common"
@@ -253,15 +253,15 @@
   {
     "id": "smirk",
     "category": "favorite_emoji",
-    "label": "😏",
+    "label": "\ud83d\ude0f",
     "weight": 1.0,
-    "prompt_hint": "😏",
+    "prompt_hint": "\ud83d\ude0f",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😏"
+      "char": "\ud83d\ude0f"
     },
     "enabled": true,
     "rarity": "common"
@@ -269,15 +269,15 @@
   {
     "id": "melting",
     "category": "favorite_emoji",
-    "label": "🫠",
+    "label": "\ud83e\udee0",
     "weight": 1.0,
-    "prompt_hint": "🫠",
+    "prompt_hint": "\ud83e\udee0",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🫠"
+      "char": "\ud83e\udee0"
     },
     "enabled": true,
     "rarity": "common"
@@ -285,15 +285,15 @@
   {
     "id": "sparkles",
     "category": "favorite_emoji",
-    "label": "✨",
+    "label": "\u2728",
     "weight": 1.0,
-    "prompt_hint": "✨",
+    "prompt_hint": "\u2728",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "✨"
+      "char": "\u2728"
     },
     "enabled": true,
     "rarity": "common"
@@ -301,15 +301,15 @@
   {
     "id": "woozy",
     "category": "favorite_emoji",
-    "label": "🥴",
+    "label": "\ud83e\udd74",
     "weight": 1.0,
-    "prompt_hint": "🥴",
+    "prompt_hint": "\ud83e\udd74",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🥴"
+      "char": "\ud83e\udd74"
     },
     "enabled": true,
     "rarity": "common"
@@ -317,15 +317,15 @@
   {
     "id": "clown",
     "category": "favorite_emoji",
-    "label": "🤡",
+    "label": "\ud83e\udd21",
     "weight": 1.0,
-    "prompt_hint": "🤡",
+    "prompt_hint": "\ud83e\udd21",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🤡"
+      "char": "\ud83e\udd21"
     },
     "enabled": true,
     "rarity": "common"
@@ -333,15 +333,15 @@
   {
     "id": "red_heart",
     "category": "favorite_emoji",
-    "label": "❤️",
+    "label": "\u2764\ufe0f",
     "weight": 1.0,
-    "prompt_hint": "❤️",
+    "prompt_hint": "\u2764\ufe0f",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "❤️"
+      "char": "\u2764\ufe0f"
     },
     "enabled": true,
     "rarity": "common"
@@ -349,15 +349,15 @@
   {
     "id": "black_heart",
     "category": "favorite_emoji",
-    "label": "🖤",
+    "label": "\ud83d\udda4",
     "weight": 1.0,
-    "prompt_hint": "🖤",
+    "prompt_hint": "\ud83d\udda4",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🖤"
+      "char": "\ud83d\udda4"
     },
     "enabled": true,
     "rarity": "common"
@@ -365,15 +365,15 @@
   {
     "id": "sweat_smile",
     "category": "favorite_emoji",
-    "label": "😅",
+    "label": "\ud83d\ude05",
     "weight": 1.0,
-    "prompt_hint": "😅",
+    "prompt_hint": "\ud83d\ude05",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😅"
+      "char": "\ud83d\ude05"
     },
     "enabled": true,
     "rarity": "common"
@@ -381,15 +381,15 @@
   {
     "id": "pinched_fingers",
     "category": "favorite_emoji",
-    "label": "🤌",
+    "label": "\ud83e\udd0c",
     "weight": 1.0,
-    "prompt_hint": "🤌",
+    "prompt_hint": "\ud83e\udd0c",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🤌"
+      "char": "\ud83e\udd0c"
     },
     "enabled": true,
     "rarity": "common"
@@ -397,15 +397,15 @@
   {
     "id": "heart_hands",
     "category": "favorite_emoji",
-    "label": "🫶",
+    "label": "\ud83e\udef6",
     "weight": 1.0,
-    "prompt_hint": "🫶",
+    "prompt_hint": "\ud83e\udef6",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🫶"
+      "char": "\ud83e\udef6"
     },
     "enabled": true,
     "rarity": "common"
@@ -413,15 +413,15 @@
   {
     "id": "weary",
     "category": "favorite_emoji",
-    "label": "😩",
+    "label": "\ud83d\ude29",
     "weight": 1.0,
-    "prompt_hint": "😩",
+    "prompt_hint": "\ud83d\ude29",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😩"
+      "char": "\ud83d\ude29"
     },
     "enabled": true,
     "rarity": "common"
@@ -429,15 +429,15 @@
   {
     "id": "upside_down",
     "category": "favorite_emoji",
-    "label": "🙃",
+    "label": "\ud83d\ude43",
     "weight": 1.0,
-    "prompt_hint": "🙃",
+    "prompt_hint": "\ud83d\ude43",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🙃"
+      "char": "\ud83d\ude43"
     },
     "enabled": true,
     "rarity": "common"
@@ -445,15 +445,15 @@
   {
     "id": "eyes",
     "category": "favorite_emoji",
-    "label": "👀",
+    "label": "\ud83d\udc40",
     "weight": 1.0,
-    "prompt_hint": "👀",
+    "prompt_hint": "\ud83d\udc40",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "👀"
+      "char": "\ud83d\udc40"
     },
     "enabled": true,
     "rarity": "common"
@@ -461,15 +461,15 @@
   {
     "id": "butterfly",
     "category": "favorite_emoji",
-    "label": "🦋",
+    "label": "\ud83e\udd8b",
     "weight": 1.0,
-    "prompt_hint": "🦋",
+    "prompt_hint": "\ud83e\udd8b",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🦋"
+      "char": "\ud83e\udd8b"
     },
     "enabled": true,
     "rarity": "common"
@@ -477,15 +477,15 @@
   {
     "id": "moon",
     "category": "favorite_emoji",
-    "label": "🌙",
+    "label": "\ud83c\udf19",
     "weight": 1.0,
-    "prompt_hint": "🌙",
+    "prompt_hint": "\ud83c\udf19",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🌙"
+      "char": "\ud83c\udf19"
     },
     "enabled": true,
     "rarity": "common"
@@ -6479,320 +6479,320 @@
   {
     "id": "fire",
     "category": "favorite_emoji",
-    "label": "🔥",
+    "label": "\ud83d\udd25",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "🔥",
+    "prompt_hint": "\ud83d\udd25",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🔥"
+      "char": "\ud83d\udd25"
     },
     "enabled": true
   },
   {
     "id": "kissy",
     "category": "favorite_emoji",
-    "label": "😘",
+    "label": "\ud83d\ude18",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "😘",
+    "prompt_hint": "\ud83d\ude18",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😘"
+      "char": "\ud83d\ude18"
     },
     "enabled": true
   },
   {
     "id": "wink",
     "category": "favorite_emoji",
-    "label": "😉",
+    "label": "\ud83d\ude09",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "😉",
+    "prompt_hint": "\ud83d\ude09",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😉"
+      "char": "\ud83d\ude09"
     },
     "enabled": true
   },
   {
     "id": "thinking",
     "category": "favorite_emoji",
-    "label": "🤔",
+    "label": "\ud83e\udd14",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "🤔",
+    "prompt_hint": "\ud83e\udd14",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🤔"
+      "char": "\ud83e\udd14"
     },
     "enabled": true
   },
   {
     "id": "shrug",
     "category": "favorite_emoji",
-    "label": "🤷",
+    "label": "\ud83e\udd37",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "🤷",
+    "prompt_hint": "\ud83e\udd37",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🤷"
+      "char": "\ud83e\udd37"
     },
     "enabled": true
   },
   {
     "id": "saluting",
     "category": "favorite_emoji",
-    "label": "🫡",
+    "label": "\ud83e\udee1",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "🫡",
+    "prompt_hint": "\ud83e\udee1",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🫡"
+      "char": "\ud83e\udee1"
     },
     "enabled": true
   },
   {
     "id": "hand_over_mouth",
     "category": "favorite_emoji",
-    "label": "🤭",
+    "label": "\ud83e\udd2d",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "🤭",
+    "prompt_hint": "\ud83e\udd2d",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🤭"
+      "char": "\ud83e\udd2d"
     },
     "enabled": true
   },
   {
     "id": "peach",
     "category": "favorite_emoji",
-    "label": "🍑",
+    "label": "\ud83c\udf51",
     "weight": 0.8,
     "rarity": "uncommon",
-    "prompt_hint": "🍑",
+    "prompt_hint": "\ud83c\udf51",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🍑"
+      "char": "\ud83c\udf51"
     },
     "enabled": true
   },
   {
     "id": "cherries",
     "category": "favorite_emoji",
-    "label": "🍒",
+    "label": "\ud83c\udf52",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "🍒",
+    "prompt_hint": "\ud83c\udf52",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🍒"
+      "char": "\ud83c\udf52"
     },
     "enabled": true
   },
   {
     "id": "heart_eyes",
     "category": "favorite_emoji",
-    "label": "😍",
+    "label": "\ud83d\ude0d",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "😍",
+    "prompt_hint": "\ud83d\ude0d",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😍"
+      "char": "\ud83d\ude0d"
     },
     "enabled": true
   },
   {
     "id": "cat_face",
     "category": "favorite_emoji",
-    "label": "🐈",
+    "label": "\ud83d\udc08",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "🐈",
+    "prompt_hint": "\ud83d\udc08",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🐈"
+      "char": "\ud83d\udc08"
     },
     "enabled": true
   },
   {
     "id": "holding_back_tears",
     "category": "favorite_emoji",
-    "label": "🥹",
+    "label": "\ud83e\udd79",
     "weight": 0.9,
     "rarity": "common",
-    "prompt_hint": "🥹",
+    "prompt_hint": "\ud83e\udd79",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🥹"
+      "char": "\ud83e\udd79"
     },
     "enabled": true
   },
   {
     "id": "steam",
     "category": "favorite_emoji",
-    "label": "😤",
+    "label": "\ud83d\ude24",
     "weight": 0.8,
     "rarity": "common",
-    "prompt_hint": "😤",
+    "prompt_hint": "\ud83d\ude24",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "😤"
+      "char": "\ud83d\ude24"
     },
     "enabled": true
   },
   {
     "id": "dotted_face",
     "category": "favorite_emoji",
-    "label": "🫥",
+    "label": "\ud83e\udee5",
     "weight": 0.6,
     "rarity": "uncommon",
-    "prompt_hint": "🫥",
+    "prompt_hint": "\ud83e\udee5",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🫥"
+      "char": "\ud83e\udee5"
     },
     "enabled": true
   },
   {
     "id": "raised_eyebrow",
     "category": "favorite_emoji",
-    "label": "🤨",
+    "label": "\ud83e\udd28",
     "weight": 0.9,
     "rarity": "common",
-    "prompt_hint": "🤨",
+    "prompt_hint": "\ud83e\udd28",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🤨"
+      "char": "\ud83e\udd28"
     },
     "enabled": true
   },
   {
     "id": "diagonal_face",
     "category": "favorite_emoji",
-    "label": "🫤",
+    "label": "\ud83e\udee4",
     "weight": 0.6,
     "rarity": "uncommon",
-    "prompt_hint": "🫤",
+    "prompt_hint": "\ud83e\udee4",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🫤"
+      "char": "\ud83e\udee4"
     },
     "enabled": true
   },
   {
     "id": "monkey_eyes",
     "category": "favorite_emoji",
-    "label": "🙈",
+    "label": "\ud83d\ude48",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "🙈",
+    "prompt_hint": "\ud83d\ude48",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🙈"
+      "char": "\ud83d\ude48"
     },
     "enabled": true
   },
   {
     "id": "strawberry",
     "category": "favorite_emoji",
-    "label": "🍓",
+    "label": "\ud83c\udf53",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "🍓",
+    "prompt_hint": "\ud83c\udf53",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🍓"
+      "char": "\ud83c\udf53"
     },
     "enabled": true
   },
   {
     "id": "bubble_tea",
     "category": "favorite_emoji",
-    "label": "🧃",
+    "label": "\ud83e\uddc3",
     "weight": 0.6,
     "rarity": "uncommon",
-    "prompt_hint": "🧃",
+    "prompt_hint": "\ud83e\uddc3",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🧃"
+      "char": "\ud83e\uddc3"
     },
     "enabled": true
   },
   {
     "id": "hot_face",
     "category": "favorite_emoji",
-    "label": "🥵",
+    "label": "\ud83e\udd75",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "🥵",
+    "prompt_hint": "\ud83e\udd75",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "🥵"
+      "char": "\ud83e\udd75"
     },
     "enabled": true
   },
@@ -9388,6 +9388,646 @@
     "prompt_hint": "orders the same modified thing at every new place until she has tried enough to know",
     "image_prompt": null,
     "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cosplayer_professional",
+    "category": "occupation",
+    "label": "Professional cosplayer",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "builds and wears costumes for a living, conventions and commissions",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "instagram_influencer",
+    "category": "occupation",
+    "label": "Instagram influencer",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "her feed is the job, brand deals and all",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "youtuber",
+    "category": "occupation",
+    "label": "YouTuber",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "makes videos for a living, always half-thinking about content",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "prostitute",
+    "category": "occupation",
+    "label": "Sex worker",
+    "weight": 0.4,
+    "rarity": "rare",
+    "prompt_hint": "sex work, in person, and matter-of-fact about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "escort",
+    "category": "occupation",
+    "label": "Escort",
+    "weight": 0.4,
+    "rarity": "rare",
+    "prompt_hint": "paid companionship, professional about the boundaries",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "onlyfans_model",
+    "category": "occupation",
+    "label": "OnlyFans model",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "runs her own page, treats it like the business it is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "twitch_streamer",
+    "category": "occupation",
+    "label": "Twitch streamer",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "streams for a living, chat feels like coworkers at this point",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "unemployed",
+    "category": "occupation",
+    "label": "Unemployed",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "not working right now, in no hurry to explain why",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "police_officer",
+    "category": "occupation",
+    "label": "Police officer",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "shift work, sees a lot, does not talk about most of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "firefighter",
+    "category": "occupation",
+    "label": "Firefighter",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "on-call life, strange hours, does not think of it as brave",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "politician",
+    "category": "occupation",
+    "label": "Politician",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "local politics, more compromise than the job description suggests",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "actor_profession",
+    "category": "occupation",
+    "label": "Actor",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "between roles more often than in one, auditions constantly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "webdesigner",
+    "category": "occupation",
+    "label": "Web designer",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "freelance web work, opinions about other people's fonts",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "night_club_owner",
+    "category": "occupation",
+    "label": "Nightclub owner",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "runs a club, sleeps on a different schedule than everyone else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "drug_dealer",
+    "category": "occupation",
+    "label": "Dealer",
+    "weight": 0.3,
+    "rarity": "rare",
+    "prompt_hint": "moves product, careful about who knows what",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mobster",
+    "category": "occupation",
+    "label": "Made guy",
+    "weight": 0.2,
+    "rarity": "very_rare",
+    "prompt_hint": "connected, vague on purpose about what that actually means",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hitman",
+    "category": "occupation",
+    "label": "Contract killer",
+    "weight": 0.15,
+    "rarity": "very_rare",
+    "prompt_hint": "does work for people, does not discuss the specifics, ever",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "secret_agent",
+    "category": "occupation",
+    "label": "Intelligence operative",
+    "weight": 0.2,
+    "rarity": "very_rare",
+    "prompt_hint": "officially does something boring for the government",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "comic_artist",
+    "category": "occupation",
+    "label": "Comic artist",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "draws a book, deadlines that never actually let up",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fantasy_author",
+    "category": "occupation",
+    "label": "Fantasy author",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "writes fantasy novels, always mid-worldbuilding-tangent",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fashion_model",
+    "category": "occupation",
+    "label": "Model",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "modelling work, castings and gym time built around it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "soldier",
+    "category": "occupation",
+    "label": "Soldier",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "active duty, deployments that reshape how she talks about time",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "lawyer",
+    "category": "occupation",
+    "label": "Lawyer",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "long hours, argues for a living, hard to turn off",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tech_ceo",
+    "category": "occupation",
+    "label": "Tech founder",
+    "weight": 0.4,
+    "rarity": "rare",
+    "prompt_hint": "runs a startup, always slightly mid-crisis about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "show_magician",
+    "category": "occupation",
+    "label": "Magician",
+    "weight": 0.3,
+    "rarity": "rare",
+    "prompt_hint": "stage magic for a living, still practises sleight of hand absentmindedly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "yoga_instructor",
+    "category": "occupation",
+    "label": "Yoga instructor",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "teaches classes, genuinely lives the calm she teaches, mostly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "racing_driver",
+    "category": "occupation",
+    "label": "Racing driver",
+    "weight": 0.3,
+    "rarity": "rare",
+    "prompt_hint": "competitive racing, thinks in lap times",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "record_store_employee",
+    "category": "occupation",
+    "label": "Record store clerk",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "works the counter, has opinions about your taste",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dental_assistant",
+    "category": "occupation",
+    "label": "Dental assistant",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "chairside work, unbothered by things that make other people squeamish",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "doctor_gp",
+    "category": "occupation",
+    "label": "Doctor",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "general practice, tired in the specific way doctors are tired",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "professor",
+    "category": "occupation",
+    "label": "Professor",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "teaches at university level, office hours nobody attends",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "student_general",
+    "category": "occupation",
+    "label": "Student",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "still studying, broke in the specific way students are broke",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stripper",
+    "category": "occupation",
+    "label": "Stripper",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "dances for a living, very clear-eyed about the difference between the job and her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "smut_author",
+    "category": "occupation",
+    "label": "Romance/erotica author",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "writes romance novels, the spicy kind, unbothered discussing it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fast_food_clerk",
+    "category": "occupation",
+    "label": "Fast food worker",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "counter shifts, knows the menu better than she would like",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "park_ranger",
+    "category": "occupation",
+    "label": "Park ranger",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "works outdoors, knows the trails better than the town",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "emt",
+    "category": "occupation",
+    "label": "EMT",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "first on scene, has a dark sense of humour about it now",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "retail_clerk",
+    "category": "occupation",
+    "label": "Retail worker",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "shop floor shifts, could write a book about customers",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "witch",
+    "category": "occupation",
+    "label": "Witch",
+    "weight": 0.3,
+    "rarity": "rare",
+    "prompt_hint": "actually practises witchcraft, not just the aesthetic of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "vampire",
+    "category": "occupation",
+    "label": "Vampire",
+    "weight": 0.15,
+    "rarity": "very_rare",
+    "prompt_hint": "genuinely not human, matter-of-fact about the details when asked",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "writing_stories",
+    "category": "hobby",
+    "label": "Writing stories",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "writes fiction on the side, always has a draft going",
+    "image_prompt": null,
+    "affinities": [
+      "reading"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "vibe_coding",
+    "category": "hobby",
+    "label": "Vibe coding",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "builds little projects with an AI doing most of the typing, for fun",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sim_racing",
+    "category": "hobby",
+    "label": "Sim racing",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "a wheel and pedals set up at home, takes it more seriously than it looks",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "streaming_hobby",
+    "category": "hobby",
+    "label": "Streams casually",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "streams for a handful of regulars, not trying to make it a job",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "social_media",
+    "category": "interest",
+    "label": "Social media",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "extremely online, knows the discourse before it trends",
+    "image_prompt": null,
+    "affinities": [
+      "memes"
+    ],
     "conflicts": [],
     "modifies": {},
     "extra": {},
