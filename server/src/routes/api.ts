@@ -1,15 +1,16 @@
 import { randomUUID } from 'node:crypto';
-import { writeFileSync } from 'node:fs';
+import { unlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import { DATA_DIR, db, nowIso } from '../db/index.js';
 import { allCategories, byCategory, find, invalidateAttributeCache } from '../db/attributes.js';
+import { authEnabled, checkPassword, logIn, logOut } from '../auth.js';
 import { getSettings, saveSettings } from '../config.js';
 import { usageToday } from '../llm/client.js';
 import { logger } from '../log.js';
 import { exportLogs } from '../logexport.js';
 import {
-  activeDate, addMessage, dateMessages, deleteLocation, getCharacter, getDate, getLocation,
+  activeDate, addMessage, dateMessages, deleteCharacter, deleteLocation, getCharacter, getDate, getLocation,
   getRelationship, getUserProfile, getWakeup, lastMessage, listLocations,
   markCharacterMessagesRead, queryLogs, recentMessages, saveLocation, saveRelationship,
   saveUserProfile, unreadCount,
@@ -74,6 +75,21 @@ function publicCharacter(c: Character) {
 }
 
 export async function registerApi(app: FastifyInstance): Promise<void> {
+  // ------------------------------------------------------------- auth
+  app.post<{ Body: { password?: string; remember?: boolean } }>('/api/login', async (req, reply) => {
+    if (!authEnabled()) return { ok: true };
+    if (!checkPassword(String(req.body?.password ?? ''))) {
+      return reply.code(401).send({ error: 'incorrect password' });
+    }
+    logIn(reply, !!req.body?.remember);
+    return { ok: true };
+  });
+
+  app.post('/api/logout', async (_req, reply) => {
+    logOut(reply);
+    return { ok: true };
+  });
+
   app.get('/api/state', async () => {
     const profile = getUserProfile();
     return {
@@ -83,6 +99,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       server_window: getSettings().server_window,
       generating: generatingCount(),
       api_configured: !!getSettings().api.api_key,
+      auth_enabled: authEnabled(),
     };
   });
 
@@ -281,6 +298,24 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
 
   app.post<{ Params: { id: string } }>('/api/chats/:id/block', async (req) => {
     await blockCharacterByUser(req.params.id);
+    return { ok: true };
+  });
+
+  app.delete<{ Params: { id: string } }>('/api/chats/:id', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    if (!character) return reply.code(404).send({ error: 'not found' });
+    if (isRunning(character.id)) {
+      return reply.code(409).send({ error: 'she is mid-reply, try again in a moment' });
+    }
+    const paths = deleteCharacter(character.id);
+    for (const path of paths) {
+      try {
+        unlinkSync(join(DATA_DIR, path));
+      } catch {
+        /* already gone */
+      }
+    }
+    bus.emitEvent({ type: 'match_removed', character_id: character.id });
     return { ok: true };
   });
 

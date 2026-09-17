@@ -245,6 +245,21 @@ export function listActiveMatches(): Character[] {
   return rows.map(hydrateCharacter);
 }
 
+/**
+ * Deletes a character outright, so a cluttered chat list can actually be cleaned up. The
+ * relationship, messages, wakeups, dates and image rows all reference the character with
+ * ON DELETE CASCADE, so one delete here takes the whole thing with it - the caller only
+ * needs to know which image files on disk go with it, which is why this hands them back
+ * before they become unreachable.
+ */
+export function deleteCharacter(id: string): string[] {
+  const rows = db
+    .prepare(`SELECT path FROM images WHERE character_id = ? AND path IS NOT NULL`)
+    .all(id) as { path: string }[];
+  db.prepare('DELETE FROM characters WHERE id = ?').run(id);
+  return rows.map((r) => r.path);
+}
+
 // ---------------------------------------------------------------- relationships
 
 const EMPTY_LEDGER: Ledger = {

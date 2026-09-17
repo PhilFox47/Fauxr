@@ -25,7 +25,9 @@ export type IconName =
   | 'play'
   | 'alert'
   | 'check'
-  | 'camera';
+  | 'camera'
+  | 'search'
+  | 'trash';
 
 /** 24x24 grid, 1.75 stroke, round caps - one consistent drawing style for all of them. */
 const PATHS: Record<IconName, ReactNode> = {
@@ -81,6 +83,18 @@ const PATHS: Record<IconName, ReactNode> = {
     <>
       <path d="M4 8.5h3.2l1.4-2h6.8l1.4 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z" />
       <circle cx="12" cy="13.3" r="3.3" />
+    </>
+  ),
+  search: (
+    <>
+      <circle cx="10.5" cy="10.5" r="6" />
+      <path d="M19 19l-4.3-4.3" />
+    </>
+  ),
+  trash: (
+    <>
+      <path d="M5 7h14M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M8 7l.8 12.1A1 1 0 0 0 9.8 20h4.4a1 1 0 0 0 1-.9L16 7" />
+      <path d="M10.3 11v5.5M13.7 11v5.5" />
     </>
   ),
 };

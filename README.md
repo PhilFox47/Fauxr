@@ -71,6 +71,28 @@ the background — that is intended, not a bug. On every start a catch-up job re
 overdue wakeups, applies elapsed investment decay, drops expired negative flags and lets
 anyone whose investment ran out start ghosting. The window is configurable in Settings.
 
+### A password, optionally
+
+Set `FAUXR_PASSWORD` in `.env` (or the environment directly) and the app asks for it before
+showing anything — leave it unset, the default, and nothing changes from before this existed.
+There is no database row for it and no way to set it from the Settings page on purpose: it is
+meant to live only in the environment, the one place that never gets swept up in an export or
+a reset.
+
+The check is a plain password, compared in constant time so a wrong guess cannot be timed
+character by character, behind a signed, `HttpOnly` cookie holding nothing but an expiry -
+never the password itself, and never readable from the page's own JavaScript. **Remember me**
+on the login screen is the entire difference between the two lifetimes a session can have:
+checked, the cookie carries its own 14-day `Max-Age` and survives the browser closing;
+unchecked, it carries none, so the browser drops it the moment it actually closes, with a
+24-hour expiry baked into the token itself as the backstop for a browser that keeps tabs
+around longer than that anyway. The API, the generated/uploaded media under `/media`, and the
+live event socket are all gated the same way; the built frontend shell (its HTML, JS and CSS)
+is deliberately left reachable with no session, since otherwise there would be nothing left to
+render the login screen with — it carries no data of its own until the API actually answers
+something. An **Account** card at the top of **Settings → Reset** logs out, and only appears
+at all when a password is actually set.
+
 ### Starting over
 
 **Settings → reset → Reset everything.** Wipes your profile, every character, chat, stat,
@@ -427,6 +449,22 @@ is not one yet) descending, the same way every other chat app on earth orders it
 whoever most recently has something new floats up, and a match that has gone quiet sinks
 without needing to be dismissed.
 
+### Searching the chat list, and actually deleting one
+
+A search bar above the list filters on display name, handle and bio as you type — client-side,
+since the whole list is already on screen. And a chat can now be deleted outright: a small
+trash icon on each row (both active matches and the "Ended" section) asks for an inline
+confirmation, then calls `DELETE /api/chats/:id`.
+
+Deleting is real, not a soft flag. `characters`, `relationships`, `messages`, `wakeups`,
+`dates` and `images` all reference the character with `ON DELETE CASCADE`, so one
+`DELETE FROM characters WHERE id = ?` takes her whole history with it in the database; the
+route separately unlinks whatever image files were on disk, since the schema can cascade rows
+but not files. A turn already in flight for her blocks the delete with a 409 rather than
+racing it. The event that announces it (`match_removed`) closes the chat screen automatically
+if you happened to be looking at the one that just got deleted, and refreshes the list
+everywhere else.
+
 ### Spice
 
 How forward a character is comes from her own appetite — libido, sexting readiness and
@@ -508,6 +546,20 @@ interviews you and one who is actually curious about something specific.
 It rides in the existing `discovered` map under a `his:` prefix, so it needed no new column
 and survives a restart like everything else. Leaving a domain unset simply means it never
 comes up.
+
+### "Wait, really? me too"
+
+Discovering what he is into used to only ever run one way: he brings something up, and if it
+happens to be one of hers, she reacts. It said nothing about whether it also happened to be
+one of *his*. The moment a domain he brings up is freshly learned as something he is into
+**and** her own profile independently has it as one of hers too, that overlap gets its own
+line in the Director's prompt — not just "this turns her on" but "this is a thing for both of
+you", with an explicit instruction to let her react to the coincidence itself before letting it
+move things forward.
+
+No new state: it reuses the same one-time `his:` discovery gate as everything else in this
+section, checked against her own `kink_map` stance at the exact moment the overlap first
+becomes knowable.
 
 ### Her tell
 
@@ -2801,6 +2853,30 @@ and `has_had_first_date` gets set.
 
 If the summary call fails, the date still ends with a plain factual line. Losing the stat
 deltas is survivable; leaving her stuck on a date because one call timed out is not.
+
+### A date can genuinely go badly
+
+`director_date_summary.md` already handled a bad evening correctly on its own end - it always
+warned against rewarding a date that plainly did not go well. The gap was upstream of it:
+there is no per-beat Director during a date (see above — the scene drives itself), so the only
+place a bad evening could actually happen was `actor_date.md` itself, and nothing in it ever
+gave the Actor permission to write one. Every guidance line assumed an evening that was
+escalating or at worst neutral.
+
+`actor_date.md` now says so explicitly: when what he actually writes earns it — boring her,
+talking over her, pushing somewhere she has already said no to, being cheap or rude, or the
+two of you simply not clicking in person the way the chat suggested — she is allowed to
+actually feel that, visibly, up to cutting the evening short or counting down until she can
+leave. It is never to be manufactured for its own sake, only earned the same way a good
+evening is earned, and a genuinely good beat is never soured just because the evening as a
+whole is going that way.
+
+A bad enough evening also sets `bad_date_recent`, a new 72-hour entry in the same
+`NEGATIVE_FLAG_HOURS` table every other expiring flag lives in. It needed no template changes
+anywhere: `director_date_summary.md`'s own `{{negative_flags}}` var and every place that
+surfaces an active negative flag to the Director (`flagsBlock()`, read generically by key) both
+already derive from that table's keys, so the very next text conversation after a bad date
+naturally knows about it, exactly like any other negative flag.
 
 ### The screen
 

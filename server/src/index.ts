@@ -7,6 +7,7 @@ import fastifyWebsocket from '@fastify/websocket';
 import fastifyMultipart from '@fastify/multipart';
 import { DATA_DIR, migrate } from './db/index.js';
 import { seedAttributes } from './db/attributes.js';
+import { authEnabled, isAuthedRequest, requiresAuth } from './auth.js';
 import { bus } from './events.js';
 import { logger } from './log.js';
 import { registerApi } from './routes/api.js';
@@ -25,6 +26,14 @@ async function main(): Promise<void> {
   const app = Fastify({ logger: false, bodyLimit: 25 * 1024 * 1024 });
   await app.register(fastifyWebsocket);
   await app.register(fastifyMultipart, { limits: { fileSize: 20 * 1024 * 1024 } });
+
+  if (authEnabled()) {
+    logger.info('app', 'FAUXR_PASSWORD set, login required');
+  }
+  app.addHook('onRequest', async (req, reply) => {
+    if (!authEnabled() || !requiresAuth(req.url) || isAuthedRequest(req)) return;
+    reply.code(401).send({ error: 'unauthorized' });
+  });
 
   await registerApi(app);
 

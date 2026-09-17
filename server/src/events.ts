@@ -7,6 +7,7 @@ export type AppEvent =
   | { type: 'read'; character_id: string; at: string }
   | { type: 'match'; character_id: string }
   | { type: 'character_state'; character_id: string; state: string }
+  | { type: 'match_removed'; character_id: string }
   | { type: 'presence'; character_id: string; online: boolean }
   | { type: 'stack'; count: number }
   | { type: 'generating'; count: number }

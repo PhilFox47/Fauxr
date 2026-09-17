@@ -366,6 +366,8 @@ export interface KinkHit {
   domain: string;
   label: string;
   stance: string;
+  /** True when his own profile independently has this domain as 'into' too. */
+  mutual: boolean;
 }
 
 /**
@@ -377,12 +379,18 @@ export interface KinkHit {
 export function detectKinkHits(character: Character, saidByUser: string): KinkHit[] {
   const text = ` ${saidByUser.toLowerCase()} `;
   const map = character.seed.kink_map ?? {};
+  const his = getUserProfile()?.kink_map ?? {};
   const hits: KinkHit[] = [];
   for (const [domain, terms] of Object.entries(DOMAIN_TERMS)) {
     const stance = map[domain];
     if (!stance) continue;
     if (!terms.some((t) => text.includes(t))) continue;
-    hits.push({ domain, label: find('kink_domain', domain)?.label ?? domain, stance });
+    hits.push({
+      domain,
+      label: find('kink_domain', domain)?.label ?? domain,
+      stance,
+      mutual: stance === 'into' && his[domain] === 'into',
+    });
   }
   return hits;
 }
@@ -391,6 +399,7 @@ export function detectKinkHits(character: Character, saidByUser: string): KinkHi
 export function describeKinkHits(hits: KinkHit[]): string {
   if (!hits.length) return '';
   const lines = hits.map((h) => {
+    if (h.mutual) return `- ${h.label}: he just brought this up, and it is not just one of hers - it is one of HIS too. This is a "wait, really? me too" moment, not just an arousal spike: let her react to the overlap itself, explicitly, before letting it move things forward.`;
     if (h.stance === 'into') return `- ${h.label}: he just brought this up and it is one of HERS. This should move arousal hard, and she does not have to hide that it landed.`;
     if (h.stance === 'curious') return `- ${h.label}: he brought this up and she is curious about it. Interest, not indifference.`;
     if (h.stance === 'hard_no') return `- ${h.label}: he brought this up and it is a hard limit. She says so plainly. This is not arousal, and pushing it costs him.`;

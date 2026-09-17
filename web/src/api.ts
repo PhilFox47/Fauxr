@@ -51,6 +51,7 @@ export interface AppState {
   server_window: { from: string; to: string; timezone: string };
   generating: number;
   api_configured: boolean;
+  auth_enabled: boolean;
 }
 
 export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare' | 'extremely_rare';
@@ -194,6 +195,15 @@ export interface ImageJob {
   created_at: string;
 }
 
+/** Carries the HTTP status along, so a 401 can be told apart from any other failure. */
+export class ApiError extends Error {
+  status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+  }
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   // Only declare a JSON body when there actually is one. Sending
   // `content-type: application/json` with no body makes Fastify reject the request with
@@ -206,12 +216,21 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(body || `${res.status} ${res.statusText}`);
+    let message = body;
+    try {
+      message = JSON.parse(body)?.error ?? body;
+    } catch {
+      /* not JSON - use the raw body */
+    }
+    throw new ApiError(res.status, message || `${res.status} ${res.statusText}`);
   }
   return (await res.json()) as T;
 }
 
 export const api = {
+  login: (password: string, remember: boolean) =>
+    request<{ ok: true }>('/api/login', { method: 'POST', body: JSON.stringify({ password, remember }) }),
+  logout: () => request<{ ok: true }>('/api/logout', { method: 'POST' }),
   state: () => request<AppState>('/api/state'),
   saveProfile: (p: UserProfile) => request<UserProfile>('/api/profile', { method: 'PUT', body: JSON.stringify(p) }),
   stack: () => request<{ generating: number; profiles: SwipeProfile[] }>('/api/stack'),
@@ -241,6 +260,7 @@ export const api = {
       body: JSON.stringify({ message_id: messageId }),
     }),
   block: (id: string) => request<any>(`/api/chats/${id}/block`, { method: 'POST' }),
+  deleteChat: (id: string) => request<{ ok: true }>(`/api/chats/${id}`, { method: 'DELETE' }),
   sendImage: (id: string, file: File) => {
     const fd = new FormData();
     fd.append('file', file);
@@ -312,6 +332,7 @@ export type ServerEvent =
   | { type: 'read'; character_id: string; at: string }
   | { type: 'match'; character_id: string }
   | { type: 'character_state'; character_id: string; state: string }
+  | { type: 'match_removed'; character_id: string }
   | { type: 'presence'; character_id: string; online: boolean }
   | { type: 'stack'; count: number }
   | { type: 'generating'; count: number }

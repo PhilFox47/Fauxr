@@ -16,6 +16,8 @@ services:
       FAUXR_API_KEY: ${FAUXR_API_KEY:-}
       FAUXR_IMAGE_BASE_URL: ${FAUXR_IMAGE_BASE_URL:-https://nano-gpt.com/api/v1}
       FAUXR_IMAGE_API_KEY: ${FAUXR_IMAGE_API_KEY:-}
+      # Leave unset for no login. Set it to require a password before the app opens.
+      FAUXR_PASSWORD: ${FAUXR_PASSWORD:-}
 
 volumes:
   fauxr-data:

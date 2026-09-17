@@ -32,6 +32,7 @@ export const NEGATIVE_FLAG_HOURS: Record<string, number> = {
   caught_in_inconsistency: 96,
   ghosted_by_user: 168,
   dealbreaker_hit: 8760,
+  bad_date_recent: 72,
 };
 
 export interface DirectorUpdate {

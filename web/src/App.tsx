@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { api, connectEvents, type AppState, type MatchSummary, type ServerEvent } from './api';
+import { api, ApiError, connectEvents, type AppState, type MatchSummary, type ServerEvent } from './api';
 import Icon, { type IconName } from './components/Icon';
 import Onboarding from './screens/Onboarding';
+import Login from './screens/Login';
 import Swipe from './screens/Swipe';
 import Matches from './screens/Matches';
 import Chat from './screens/Chat';
@@ -20,6 +21,7 @@ const TYPING_TIMEOUT_MS = 180_000;
 
 export default function App() {
   const [state, setState] = useState<AppState | null>(null);
+  const [needsLogin, setNeedsLogin] = useState(false);
   const [tab, setTab] = useState<Tab>('swipe');
   const [openChat, setOpenChat] = useState<string | null>(null);
   const [matches, setMatches] = useState<MatchSummary[]>([]);
@@ -54,8 +56,13 @@ export default function App() {
   const refreshState = useCallback(async () => {
     try {
       setState(await api.state());
-    } catch {
-      setState((s) => s);
+      setNeedsLogin(false);
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        setNeedsLogin(true);
+      } else {
+        setState((s) => s);
+      }
     }
   }, []);
 
@@ -85,6 +92,10 @@ export default function App() {
         case 'match':
         case 'character_state':
         case 'presence':
+          void refreshMatches();
+          break;
+        case 'match_removed':
+          setOpenChat((id) => (id === event.character_id ? null : id));
           void refreshMatches();
           break;
         case 'reset':
@@ -139,6 +150,20 @@ export default function App() {
 
   const unread = useMemo(() => matches.reduce((n, m) => n + m.unread, 0), [matches]);
 
+  if (needsLogin) {
+    return (
+      <div className="app">
+        <Login
+          onSuccess={() => {
+            setNeedsLogin(false);
+            void refreshState();
+            void refreshMatches();
+          }}
+        />
+      </div>
+    );
+  }
+
   if (!state) {
     return (
       <div className="app">
@@ -185,7 +210,14 @@ export default function App() {
       {tab === 'matches' && (
         <Matches matches={matches} typing={typing} onOpen={setOpenChat} onRefresh={refreshMatches} />
       )}
-      {tab === 'settings' && <Settings profile={state.profile} onProfileSaved={refreshState} />}
+      {tab === 'settings' && (
+        <Settings
+          profile={state.profile}
+          onProfileSaved={refreshState}
+          authEnabled={state.auth_enabled}
+          onLoggedOut={() => setNeedsLogin(true)}
+        />
+      )}
 
       <nav className="tabs">
         {TABS.map((t) => (

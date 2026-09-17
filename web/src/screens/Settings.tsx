@@ -48,9 +48,13 @@ const PARTS: { id: keyof ResetParts; label: string; short: string; detail: strin
 export default function Settings({
   profile,
   onProfileSaved,
+  authEnabled,
+  onLoggedOut,
 }: {
   profile: UserProfile | null;
   onProfileSaved: () => void;
+  authEnabled: boolean;
+  onLoggedOut: () => void;
 }) {
   const [pane, setPane] = useState<Pane>('models');
   const [settings, setSettings] = useState<any>(null);
@@ -123,7 +127,12 @@ export default function Settings({
         {pane === 'locations' && <LocationsPane />}
         {pane === 'logs' && <LogsPane />}
         {pane === 'images' && <ImagesPane />}
-        {pane === 'reset' && <ResetPane />}
+        {pane === 'reset' && (
+          <>
+            {authEnabled && <AccountPane onLoggedOut={onLoggedOut} />}
+            <ResetPane />
+          </>
+        )}
       </div>
     </>
   );
@@ -1102,6 +1111,29 @@ function ImagesPane() {
         </div>
       ))}
     </>
+  );
+}
+
+function AccountPane({ onLoggedOut }: { onLoggedOut: () => void }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="card">
+      <div className="section-title" style={{ padding: '0 0 10px' }}>Account</div>
+      <button
+        className="btn ghost block"
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true);
+          try {
+            await api.logout();
+          } finally {
+            onLoggedOut();
+          }
+        }}
+      >
+        {busy ? 'Logging out…' : 'Log out'}
+      </button>
+    </div>
   );
 }
 
