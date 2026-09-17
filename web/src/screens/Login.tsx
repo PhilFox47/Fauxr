@@ -1,12 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api, ApiError } from '../api';
-import Icon from '../components/Icon';
 
+/**
+ * Deliberately generic: no app name, no icon, no hint of what is actually behind it. Anyone
+ * glancing at the screen - or the browser tab - before the password goes in should see
+ * nothing more than an ordinary login box.
+ */
 export default function Login({ onSuccess }: { onSuccess: () => void }) {
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const prev = document.title;
+    document.title = 'Sign in';
+    return () => {
+      document.title = prev;
+    };
+  }, []);
 
   const submit = async () => {
     if (!password) return;
@@ -16,23 +28,20 @@ export default function Login({ onSuccess }: { onSuccess: () => void }) {
       await api.login(password, remember);
       onSuccess();
     } catch (err) {
-      setError(err instanceof ApiError && err.status === 401 ? 'Wrong password.' : String(err));
+      setError(err instanceof ApiError && err.status === 401 ? 'Incorrect password.' : String(err));
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <div className="screen">
-      <div className="topbar">
-        <span className="brand-mark"><Icon name="spark" size={22} /></span>
-        <div>
-          <h1>Fauxr</h1>
-          <span className="sub">This one's locked</span>
-        </div>
-      </div>
+    <div className="login-wrap">
+      <div className="card login-card">
+        <div className="section-title" style={{ padding: '0 0 4px' }}>Sign in</div>
+        <p className="small muted" style={{ marginTop: 0, marginBottom: 'var(--s4)' }}>
+          Enter your password to continue.
+        </p>
 
-      <div className="card">
         <label className="field">
           <span>Password</span>
           <input
@@ -43,7 +52,7 @@ export default function Login({ onSuccess }: { onSuccess: () => void }) {
             onKeyDown={(e) => {
               if (e.key === 'Enter') void submit();
             }}
-            placeholder="Enter password"
+            placeholder="Password"
           />
         </label>
 
@@ -52,13 +61,13 @@ export default function Login({ onSuccess }: { onSuccess: () => void }) {
             <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
             <span className="track" />
           </span>
-          <span className="small">Remember me on this device for 14 days</span>
+          <span className="small">Remember this device for 14 days</span>
         </label>
 
         {error && <div className="banner warn">{error}</div>}
 
         <button className="btn block" onClick={submit} disabled={busy || !password}>
-          {busy ? 'Checking…' : 'Unlock'}
+          {busy ? 'Signing in…' : 'Sign in'}
         </button>
       </div>
     </div>

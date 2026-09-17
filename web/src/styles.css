@@ -377,6 +377,23 @@ input[type='range'] {
 .splash span { font-size: 17px; font-weight: 650; letter-spacing: 0.4px; color: var(--text-dim); }
 @keyframes breathe { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
 
+/* An ordinary login box, on purpose - no branding, no icon, nothing to glance at. The house
+   accent is a warm pink, which reads as "dating app" all on its own even with every word of
+   copy scrubbed - so this one screen swaps it for a plain neutral slate instead. */
+.login-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s4);
+  --accent: #64748b;
+  --accent-bright: #94a3b8;
+  --accent-deep: #475569;
+  --accent-soft: rgba(100, 116, 139, 0.14);
+  --accent-line: rgba(100, 116, 139, 0.32);
+}
+.login-card { width: 100%; max-width: 340px; margin: 0; }
+
 /* Skeletons, so a slow load looks like the app arriving rather than the app broken. */
 .skeleton {
   background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%);
