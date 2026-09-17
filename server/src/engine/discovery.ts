@@ -72,6 +72,10 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   s.hobbies.forEach((h) => add(`hobby:${h}`, 'interests', 'Does', label('hobby', h), 'Ask what she does with her time.'));
 
   // ---- looks: photos, or meeting her
+  // Species is the one 'looks' fact that can also come out in conversation rather than only
+  // a photo - see the exception for it in detectMentions() below.
+  add('species', 'looks', 'Species', s.species && s.species !== 'human' ? label('species', s.species) : '',
+    'Shows in a photo, or comes up on its own.');
   add('hair', 'looks', 'Hair', `${label('hair_color', s.hair_color)}, ${label('hair_style', s.hair_style)}`, 'Needs a photo.');
   add('eyes', 'looks', 'Eyes', label('eye_color', s.eye_color), 'Needs a photo.');
   add('height', 'looks', 'Height', label('height', s.height), 'Needs a photo, or a date.');
@@ -117,12 +121,28 @@ export type DiscoveredMap = Record<string, string>;
  */
 const ALWAYS_KNOWN = ['age', 'languages'];
 
-/** Flags already record some reveals; keep the profile consistent with them. */
-function impliedByFlags(flags: Flags): string[] {
+/**
+ * Flags already record some reveals; keep the profile consistent with them. Takes the
+ * character too, because whether her species counts as implied depends on ITS OWN
+ * extra.visibility tier, not a single fixed flag the way hair/eyes/height are.
+ */
+function impliedByFlags(character: Character, flags: Flags): string[] {
   const keys: string[] = [...ALWAYS_KNOWN];
   if (flags.state.real_name_known) keys.push('real_name');
   if (flags.state.profile_picture_sent) keys.push('hair', 'eyes', 'style', 'distinctive_feature');
   if (flags.state.has_had_first_date) keys.push('height', 'body_type');
+
+  const s = character.seed;
+  if (s.species && s.species !== 'human') {
+    const vis = find('species', s.species)?.extra?.visibility ?? 'profile';
+    const showPrivate = !!flags.state.spicy_photos_allowed || !!flags.state.has_had_first_date;
+    const showLater = showPrivate || !!flags.state.personal_photos_allowed;
+    const shown =
+      vis === 'profile' ? !!flags.state.profile_picture_sent :
+      vis === 'later' ? showLater :
+      vis === 'private' ? showPrivate : false; // 'chat_only': never implied by a photo at all
+    if (shown) keys.push('species');
+  }
   return keys;
 }
 
@@ -146,7 +166,7 @@ export interface ProfileView {
 export function profileView(character: Character, rel: Relationship): ProfileView {
   const catalogue = buildCatalogue(character);
   const discovered: DiscoveredMap = rel.discovered ?? {};
-  const implied = new Set(impliedByFlags(rel.flags));
+  const implied = new Set(impliedByFlags(character, rel.flags));
 
   const rows: ProfileRow[] = catalogue.map((f) => {
     const known = f.key in discovered || implied.has(f.key);
@@ -181,7 +201,7 @@ export function profileView(character: Character, rel: Relationship): ProfileVie
 /** Keys the Director may still reveal, so its prompt does not list what is already known. */
 export function undiscoveredKeys(character: Character, rel: Relationship): DiscoverableFact[] {
   const discovered = rel.discovered ?? {};
-  const implied = new Set(impliedByFlags(rel.flags));
+  const implied = new Set(impliedByFlags(character, rel.flags));
   return buildCatalogue(character).filter((f) => !(f.key in discovered) && !implied.has(f.key));
 }
 
@@ -193,8 +213,18 @@ export function detectMentions(character: Character, rel: Relationship, saidByHe
   const text = saidByHer.toLowerCase();
   if (!text.trim()) return [];
   const found: string[] = [];
-  for (const fact of undiscoveredKeys(character, rel)) {
-    // Looks need a photo or a meeting; saying "my hair" does not reveal its colour.
+  const undiscovered = undiscoveredKeys(character, rel);
+
+  // Species is the one 'looks' fact that also comes out in words, not just a photo - "I'm a
+  // vampire" reveals it whether or not he has ever seen her. Checked separately from the loop
+  // below rather than by exempting it from the length-5+ word filter that loop uses, since a
+  // real species name can be short ("elf") in a way the generic heuristic was never tuned for.
+  const speciesFact = undiscovered.find((f) => f.key === 'species');
+  if (speciesFact && text.includes(speciesFact.value.toLowerCase())) found.push('species');
+
+  for (const fact of undiscovered) {
+    // Looks need a photo or a meeting; saying "my hair" does not reveal its colour. Species
+    // is handled above instead of here for the reason noted there.
     if (fact.category === 'looks') continue;
     const words = fact.value
       .toLowerCase()

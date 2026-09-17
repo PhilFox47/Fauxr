@@ -180,7 +180,7 @@ function rollKinkMap(freak: number, domains: Attribute[]): Record<string, KinkSt
  * Generation runs as a cascade rather than one flat roll, because the order is what makes a
  * character hold together. Each stage is drawn knowing the ones before it, via ctx.weights:
  *
- *   1. age and languages  - the base, conditioned on nothing
+ *   1. age and species    - the base, conditioned on nothing
  *   2. who she is         - archetype, personality, how she writes, her life
  *   3. what she looks like
  *   4. what she is into   - non-sexual
@@ -190,6 +190,13 @@ function rollKinkMap(freak: number, domains: Attribute[]): Record<string, KinkSt
  * from, which is what later makes a name plausible; age decides which lives are even
  * available to her. Rolling looks before personality, as this used to, meant appearance
  * could never reflect the person underneath - only the archetype could reach it.
+ *
+ * Species is rolled here too, before archetype, on purpose: almost everyone is human and it
+ * changes nothing, but on the very rare roll that lands somewhere else, its own
+ * extra.weights should be able to lean the archetype and everything after it (a dragonkin
+ * leaning possessive, a fairy leaning free-spirited) the same way the archetype leans what
+ * comes after it. Rolling it any later would mean her nature never actually touched who she
+ * turned out to be.
  */
 export function rollSeed(): RolledSeed {
   const ctx = newContext();
@@ -201,9 +208,14 @@ export function rollSeed(): RolledSeed {
     return a;
   };
 
-  // ---- 1. the base: age, conditioned on nothing
+  // ---- 1. the base: age and species, conditioned on nothing
   const age = rollAge();
   ctx.weights = { ...ctx.weights, ...ageWeights(age) };
+
+  // Almost always human - see appearance.json's species entries for the actual calibration
+  // (one heavily-weighted 'human' row against sixteen very_rare/extremely_rare ones). Rolled
+  // with ignoreArchetype since nothing has set a personality yet to lean it.
+  const species = roll('species', ctx, { ignoreArchetype: true })!;
 
   // ---- 2. who she is. The archetype re-weights everything after it; roll() merges its
   // extra.weights into the context on the way past, so nothing has to be applied by hand.
@@ -347,6 +359,7 @@ export function rollSeed(): RolledSeed {
     .map((a) => a.id);
 
   const hints: Record<string, string> = {
+    species: hintOf(species),
     archetype: hintOf(archetype),
     attachment_style: hintOf(attachment_style),
     humor_type: hintOf(humor_type),
@@ -384,6 +397,7 @@ export function rollSeed(): RolledSeed {
 
   const seed: CharacterSeed = {
     age,
+    species: species.id,
     ethnicity: ethnicity!.id,
     skin_tone: skin_tone!.id,
     height: height!.id,
@@ -463,7 +477,7 @@ export function rollSeed(): RolledSeed {
  */
 function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }[] {
   const singular: [string, string][] = [
-    ['ethnicity', seed.ethnicity], ['skin_tone', seed.skin_tone], ['height', seed.height],
+    ['species', seed.species], ['ethnicity', seed.ethnicity], ['skin_tone', seed.skin_tone], ['height', seed.height],
     ['body_type', seed.body_type], ['breast_size', seed.breast_size], ['hair_color', seed.hair_color],
     ['hair_style', seed.hair_style], ['eye_color', seed.eye_color], ['clothing_style', seed.clothing_style],
     ['grooming', seed.grooming], ['makeup_style', seed.makeup_style], ['distinctive_feature', seed.distinctive_feature],
@@ -551,6 +565,18 @@ export function buildAppearancePrompt(seed: CharacterSeed): string {
   const parts: string[] = [];
   const img = (cat: string, id: string) => find(cat, id)?.image_prompt;
   parts.push(`${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`);
+  // A species with a permanent, unhideable tell (cat ears, a giant's actual scale, ...)
+  // belongs in the fixed block like any other constant fact about her - see it early, since
+  // it can dominate framing (a giantess or a fairy). A 'later'/'private'/'chat_only' species
+  // is deliberately left out here: its tell is something she can conceal, or has none at all.
+  // See blocks.ts's appearanceBlock() and images.ts's visibleMarks() for where those get
+  // added only once she has actually chosen to reveal them.
+  if (seed.species && seed.species !== 'human') {
+    const species = find('species', seed.species);
+    if (species?.extra?.visibility === 'profile' && species.image_prompt) {
+      parts.push(species.image_prompt);
+    }
+  }
   for (const [cat, id] of [
     ['skin_tone', seed.skin_tone],
     ['height', seed.height],
@@ -583,6 +609,9 @@ export function describeSeed(seed: CharacterSeed): string {
   const labels = (cat: string, ids: string[]) => ids.map((i) => label(cat, i)).join(', ') || 'none';
   const lines = [
     `age: ${seed.age}`,
+    seed.species && seed.species !== 'human'
+      ? `species: ${label('species', seed.species)} - ${seed.hints.species}`
+      : `species: human`,
     `archetype: ${label('archetype', seed.archetype)} - ${seed.hints.archetype}`,
     `attachment: ${label('attachment_style', seed.attachment_style)} - ${seed.hints.attachment_style}`,
     `humour: ${label('humor_type', seed.humor_type)} - ${seed.hints.humor_type}`,
@@ -816,6 +845,14 @@ async function writeUsername(
    */
   const shown = taken.slice(0, HANDLES_SHOWN);
 
+  // The dossier now freely discusses a 'later'/'private'/'chat_only' species (see
+  // director_generate_character.md's is_fantasy section) - so without an explicit guard here,
+  // the same dossier text this prompt is built from could just as easily leak it into the
+  // handle as into the name. A 'profile'-tier species has nothing to protect: it is visible
+  // in any photo regardless, so a handle referencing it is a stylistic choice, not a leak.
+  const species = seed.species && seed.species !== 'human' ? find('species', seed.species) : null;
+  const hiddenSpecies = species && species.extra?.visibility !== 'profile' ? species.label.toLowerCase() : null;
+
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const prompt = [
@@ -838,6 +875,12 @@ async function writeUsername(
         `underscores. Must not contain her real name "${realName}" in any form - not spelled out, not`,
         'shortened, not as a prefix or suffix with numbers or symbols around it. It has to read as',
         'genuinely unconnected to her name, the way an actual anonymous handle is.',
+        ...(hiddenSpecies ? [
+          '',
+          'She is also secretly not human, and keeps that hidden day to day - the handle must not hint',
+          `at it either, directly or in code (nothing like "${hiddenSpecies}", a pun on it, or a related`,
+          'creature/mythology word). That reveal is hers to make later, not something this handle gives away.',
+        ] : []),
         '',
         'A few that are already taken. Do not reuse a word from one of these or rework it into',
         'something adjacent:',
@@ -878,6 +921,13 @@ async function writeUsername(
           `Same JSON, nothing else.`;
         continue;
       }
+      if (hiddenSpecies && cleaned.includes(hiddenSpecies)) {
+        logger.warn('generator', 'handle leaked her hidden species, re-asking', { cleaned, hiddenSpecies });
+        correction =
+          `"${cleaned}" hints at what she actually is, which she keeps hidden day to day - pick ` +
+          `something with no connection to that at all. Same JSON, nothing else.`;
+        continue;
+      }
 
       const clash = nearestHandle(cleaned, taken);
       if (clash && attempt < 2) {
@@ -909,6 +959,7 @@ export async function generateCharacter(): Promise<Character> {
       role: 'user' as const,
       content: render('director_generate_character', {
         rolled_block: describeSeed(seed),
+        is_fantasy: seed.species && seed.species !== 'human' ? '1' : '',
         age: seed.age,
         server_window: `${settings.server_window.from}-${settings.server_window.to}`,
         allowed_swaps: allowedSwapList(),
@@ -1255,6 +1306,10 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
     return pickFallbackBio(existing);
   }
 
+  const speciesVis = character.seed.species && character.seed.species !== 'human'
+    ? find('species', character.seed.species)?.extra?.visibility
+    : null;
+
   const prompt = render('director_write_bio', {
     username: character.username,
     // The dossier, not the raw tags - written from and covering the same ground, but as
@@ -1266,6 +1321,12 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
     avoid_bios: existing.length
       ? existing.slice(0, BIOS_SHOWN).map((b) => `- ${b}`).join('\n')
       : '(none yet)',
+    // The dossier now knows and can talk freely about a 'later'/'private'/'chat_only'
+    // species (see director_generate_character.md's is_fantasy section) - without this, that
+    // freely-available knowledge would leak the species straight into the bio, discovered via
+    // detectMentions() the moment the character is generated, before anyone has even swiped.
+    // A 'profile'-tier species has nothing to protect: it is visible in any photo anyway.
+    hides_species: speciesVis === 'later' || speciesVis === 'private' || speciesVis === 'chat_only' ? '1' : '',
   });
 
   // A model told to be pithy will happily answer with four words, which is not a bio -

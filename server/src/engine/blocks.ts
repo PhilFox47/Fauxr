@@ -32,6 +32,48 @@ export function userBlock(user: UserProfile | null, flags?: Flags): string {
   ].filter(Boolean).join('\n');
 }
 
+function indefinite(word: string): string {
+  return /^[aeiou]/i.test(word) ? `an ${word}` : `a ${word}`;
+}
+
+/**
+ * Almost always empty - only fires on the very rare non-human roll. What the model always
+ * knows about her own nature is kept separate from what HE has actually been shown or told.
+ * A species with a permanent tell (cat ears, a giant's scale) is simply true and visible in
+ * any photo the moment one exists, no pacing needed. One she can conceal (a succubus's
+ * horns, a tiefling's tail) gets the same pacing philosophy nameLine above already gives her
+ * real name: never denied if he asks outright, but whether and when she shows him herself is
+ * hers to decide. One with no physical tell at all (a witch, a mermaid on land) is pure
+ * roleplay discretion, no different from any other personal fact she discloses in her own
+ * time.
+ */
+function speciesLine(s: CharacterSeed, flags: Flags): string {
+  if (!s.species || s.species === 'human') return '';
+  const species = find('species', s.species);
+  if (!species) return '';
+  const hintText = species.prompt_hint || species.label;
+  const vis = species.extra?.visibility ?? 'profile';
+  if (vis === 'profile') {
+    return `You are not human - ${species.label.toLowerCase()}, in fact - and there is no hiding ` +
+      `it: it shows in any photo of you, the moment there is one. ${hintText}`;
+  }
+  if (vis === 'chat_only') {
+    return `You are secretly ${indefinite(species.label)} - nothing about how you look would ever ` +
+      `give it away, in any photo. Whether and when you ever tell him is entirely your call, paced ` +
+      `the same as anything else personal about yourself. ${hintText}`;
+  }
+  // 'later' or 'private': a real physical tell, but one she can and does keep hidden by default.
+  const shown = vis === 'private'
+    ? !!flags.state.spicy_photos_allowed || !!flags.state.has_had_first_date
+    : !!flags.state.spicy_photos_allowed || !!flags.state.has_had_first_date || !!flags.state.personal_photos_allowed;
+  return shown
+    ? `You are secretly ${indefinite(species.label)}, and he has actually seen it by now. ${hintText}`
+    : `You are secretly ${indefinite(species.label)} - you keep it out of sight day to day (however ` +
+      `your own version of that works) and he has no idea yet. Showing him is a real choice, paced ` +
+      `by who you are, never forced - and, exactly like your name, never denied outright if he ` +
+      `somehow already suspects and asks you directly. ${hintText}`;
+}
+
 export function identityBlock(character: Character, flags: Flags): string {
   const s = character.seed;
   // She is always told her own name. Withholding it used to be done by withholding it from
@@ -51,9 +93,11 @@ export function identityBlock(character: Character, flags: Flags): string {
       `own name, and never make him guess it or earn it once he has actually asked - that game is ` +
       `tedious and you are not playing it. Being slow to volunteer something yourself is not the ` +
       `same thing as refusing to answer when he asks for it.`;
+  const speciesText = speciesLine(s, flags);
   return [
     nameLine,
     `You are ${s.age}.`,
+    ...(speciesText ? [speciesText] : []),
     `Who you are: ${s.hints.one_line ?? hint('archetype', s.archetype)}`,
     '',
     `Core: ${hint('archetype', s.archetype)}`,
@@ -118,6 +162,15 @@ export function appearanceBlock(seed: CharacterSeed, flags: Flags): string {
     .map((p) => `${label('piercing_type', p.type)} ${label('piercing_position', p.position)}`);
   const hiddenPiercings = seed.piercings.length - piercings.length;
 
+  // A 'profile'-visibility species is already baked into seed.appearance_prompt (line one,
+  // below) since it is a permanent, unhideable fact - nothing to add here. 'chat_only' has no
+  // physical description at all, ever. Only 'later'/'private' need a line here, and only once
+  // she has actually shown him: her true nature until then is identityBlock's job, not this
+  // physical-description one, the same split as an as-yet-unseen tattoo.
+  const species = seed.species && seed.species !== 'human' ? find('species', seed.species) : null;
+  const speciesVis = species?.extra?.visibility;
+  const speciesRevealed = speciesVis === 'private' ? showPrivate : speciesVis === 'later' ? showLater : false;
+
   return [
     seed.appearance_prompt,
     `You dress: ${hint('clothing_style', seed.clothing_style)}`,
@@ -127,6 +180,7 @@ export function appearanceBlock(seed: CharacterSeed, flags: Flags): string {
     piercings.length ? `Piercings he could have seen: ${piercings.join('; ')}` : '',
     hiddenPiercings > 0 ? `You have ${hiddenPiercings} more piercing(s) he has not seen. Do not volunteer them.` : '',
     seed.accessories.length ? `You usually wear: ${seed.accessories.map((a) => label('accessory', a)).join(', ')}` : '',
+    speciesRevealed && species?.image_prompt ? `He has now seen the part of you that is not human: ${species.image_prompt}.` : '',
   ].filter(Boolean).join('\n');
 }
 

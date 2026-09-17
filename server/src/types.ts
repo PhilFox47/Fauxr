@@ -15,6 +15,13 @@ export interface OnlineWindow { weekday: number; from: string; to: string }
 export interface CharacterSeed {
   // appearance
   age: number;
+  /**
+   * Almost always 'human'. The rare exception (catgirl, vampire, giantess, ...) is a real
+   * appearance trait, not a lore footnote - it shows in her photos and/or comes out in chat,
+   * gated by the species entry's own extra.visibility ('profile' | 'later' | 'private' |
+   * 'chat_only'), the same way a tattoo's position gates when it is seen.
+   */
+  species: string;
   ethnicity: string;
   skin_tone: string;
   height: string;

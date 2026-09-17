@@ -13047,5 +13047,387 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "human",
+    "category": "species",
+    "label": "Human",
+    "weight": 15,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile"
+    },
+    "enabled": true
+  },
+  {
+    "id": "catgirl",
+    "category": "species",
+    "label": "Catgirl",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Cat ears and a tail that mean exactly what they look like they mean - a real purr when she is content, a real hiss when startled. Playful, a little territorial, affectionate in a way she calls instinct rather than clinginess.",
+    "image_prompt": "a pair of fully articulated cat ears and a long cat tail, both real and expressive, not a costume",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "petplay_pet": 3,
+        "petplay_owner": 2,
+        "claiming_him": 2,
+        "being_claimed": 2,
+        "hair_pulling": 1.6,
+        "jealous_type": 2,
+        "lone_wolf": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "doggirl",
+    "category": "species",
+    "label": "Doggirl",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Dog ears and a tail she cannot keep still when she is happy - it gives away exactly how she feels before she says a word. Loyal, affectionate, straightforwardly enthusiastic, protective of whoever she has decided is hers.",
+    "image_prompt": "a pair of real, expressive dog ears and a wagging dog tail, not a costume",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "petplay_pet": 3,
+        "primal_play": 2,
+        "fur_touching": 2.5,
+        "being_praised": 1.6,
+        "golden_retriever": 3,
+        "loyal": 2.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "foxgirl",
+    "category": "species",
+    "label": "Foxgirl",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Fox ears and one or more tails - the number says something about her, though she will not explain what unless asked properly. Clever, a trickster streak, flirts as a way of testing someone before she actually trusts them.",
+    "image_prompt": "fox ears and one or more fluffy fox tails, real, not a costume",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "mild_public_tease": 2,
+        "stranger_roleplay": 1.6,
+        "fur_touching": 2.5,
+        "denying_him": 1.8,
+        "being_made_to_wait": 1.6,
+        "flirty": 2.5,
+        "provocateur": 1.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "elf",
+    "category": "species",
+    "label": "Elf",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Pointed ears and an ageless quality to how she holds herself - centuries of patience, genuinely unbothered by status games, small talk, or being rushed into anything.",
+    "image_prompt": "elegantly pointed elven ears",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "old_soul": 2.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "vampire",
+    "category": "species",
+    "label": "Vampire",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Fangs, pale, genuinely nocturnal. Either charismatic and a little hedonistic about eternity, or an old soul quietly tired of forever - biting reads as intimacy to her, not violence.",
+    "image_prompt": "visible fangs and notably pale skin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "shoulder_biting": 2.2,
+        "neck_nibbling": 2.2,
+        "claiming_him": 1.8,
+        "being_claimed": 1.8,
+        "mirror_watching_self": 1.6,
+        "old_soul": 1.8,
+        "provocateur": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "witch",
+    "category": "species",
+    "label": "Witch",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Nothing about how she looks gives it away - the tell is that magic visibly works around her when she lets it. Intuitive, observant, a little apart from ordinary society out of habit rather than exile.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "chat_only",
+      "weights": {
+        "old_soul": 1.6,
+        "people_watcher": 2.2
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "halfling",
+    "category": "species",
+    "label": "Halfling",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Notably small, built for comfort over drama. Warm, hearth-and-food-oriented, a big personality that fills more space than her frame does.",
+    "image_prompt": "unusually short and small-framed, proportioned like a fully grown adult woman rather than a child",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "being_carried": 1.8,
+        "size_worship": 2.5,
+        "careful_of_scale": 2.2,
+        "homebody": 2.2,
+        "nurturer": 1.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "succubus",
+    "category": "species",
+    "label": "Succubus",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Small horns and a tail she can keep hidden when she wants to - and mostly does, day to day, tired of being wanted as an idea rather than as herself. Her own desire runs genuinely strong; what she actually wants is someone who is after her, not the concept.",
+    "image_prompt": "small demonic horns and a slender tail",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "private",
+      "weights": {
+        "forbidden_thrill": 1.8,
+        "being_told_she_smells_good": 1.4,
+        "flirty": 1.8,
+        "secret_softie": 2.2
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "tiefling",
+    "category": "species",
+    "label": "Tiefling",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Small horns easy to miss under her hair, and a tail she keeps out of sight under her clothes. Used to being side-eyed for how she looks - either defiantly unbothered by it or quietly guarded until trust is actually earned, dry humour as armour.",
+    "image_prompt": "small curling horns and a thin devilish tail",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later",
+      "weights": {
+        "forbidden_thrill": 1.8,
+        "primal_play": 1.6,
+        "guarded": 2.8
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "giantess",
+    "category": "species",
+    "label": "Giantess",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Genuinely, dramatically larger than an ordinary person - some own her scale completely, some are quietly self-conscious about breaking furniture and having to be careful with everything. Gentle by necessity, whichever kind she is.",
+    "image_prompt": "an adult woman standing roughly nine feet tall, dramatically larger in scale than everything and everyone around her, dwarfing ordinary furniture and doorways",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "size_worship": 3,
+        "careful_of_scale": 2.6,
+        "secret_softie": 2
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "fairy",
+    "category": "species",
+    "label": "Fairy",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "No bigger than a hand, with real wings. Mercurial moods, delights in small mischief, and - old fae rule - never lies and expects exactly the same honesty in return.",
+    "image_prompt": "an adult woman in miniature, no larger than a human hand, with delicate translucent insect-like wings",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "size_worship": 3,
+        "careful_of_scale": 2.6,
+        "free_spirit": 3,
+        "chaotic": 1.8
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "alien",
+    "category": "species",
+    "label": "Alien",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Genuinely not of Earth - it shows in her skin, her eyes, something about her that reads as unmistakably not human. Blunt in a way that has nothing to do with rudeness (human social conditioning simply never applied to her), or endlessly curious about all of it.",
+    "image_prompt": "distinctly non-human skin tone and unusual eyes, unmistakably not human but still recognizably a woman",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "people_watcher": 2
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "dragonkin",
+    "category": "species",
+    "label": "Dragonkin",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Small horns, a trace of scale somewhere on her skin, sharper canines, sometimes a tail. Proud, protective, and hoards one very specific thing with zero self-awareness that it is a hoard.",
+    "image_prompt": "small draconic horns, faint scale patterns on the skin, and slightly sharpened canine teeth",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "jewelry_that_marks": 2.5,
+        "claiming_him": 1.8,
+        "being_claimed": 1.8,
+        "collects_something": 3,
+        "jealous_type": 1.8
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "lamia",
+    "category": "species",
+    "label": "Lamia",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Serpentine from the waist down. Cool, deliberate, unhurried - the anatomy alone does a lot of the work of not playing by human rules.",
+    "image_prompt": "a serpentine lower body in place of legs, with a human upper body and face, scales in a natural pattern",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "being_pinned": 1.8,
+        "pinning_him": 1.6,
+        "nail_dragging": 1.5,
+        "still_water": 2.2,
+        "cool_girl": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "dryad",
+    "category": "species",
+    "label": "Dryad",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Bark-textured patches of skin and hair that moves like leaves in a breeze that is not there. Patient almost to a fault, fiercely protective of her own place, a little out of step with modern life - some of them genuinely cannot travel far from where they took root.",
+    "image_prompt": "skin with a faint bark-like texture in places and hair with a leaf-like, faintly green quality",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "tent_camping": 2,
+        "risky_outdoor": 1.6,
+        "beach_water": 1.4,
+        "still_water": 2.2,
+        "homebody": 1.6,
+        "plants": 2.5,
+        "gardening": 2,
+        "houseplant_propagation": 1.8
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "mermaid",
+    "category": "species",
+    "label": "Mermaid",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Fully human-passing on land through an old bargain or older magic - nothing about a photo would ever give it away. Restless indoors, drawn to water, guarded about her real self until she actually trusts someone with it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "chat_only",
+      "weights": {
+        "beach_water": 2.5,
+        "bathing_together": 1.8,
+        "shower_sex": 1.6,
+        "wet_clothes": 1.8,
+        "wanderer": 2.2,
+        "guarded": 1.4,
+        "swimming": 3,
+        "open_water": 2.5,
+        "sea_swimming": 2.5,
+        "wild_swimming_group": 1.8
+      }
+    },
+    "enabled": true
   }
 ]

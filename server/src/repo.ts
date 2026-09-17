@@ -112,8 +112,30 @@ function backfillBreastSize(characterId: string, seed: CharacterSeed): Character
   return seed;
 }
 
+/**
+ * Characters generated before species existed have none - rolled the same way a fresh
+ * character's is (same table, same weighting), not defaulted to human outright, so an old
+ * character gets exactly the same rare shot at being something else that a new one does
+ * rather than being retroactively excluded from the feature. ignoreArchetype because there is
+ * no meaningful archetype-driven lean for this roll (nothing has been drawn to base one on at
+ * backfill time), the same reasoning rollSeed() itself uses.
+ */
+function backfillSpecies(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.species) return seed;
+  const ctx = newContext();
+  const chosen = roll('species', ctx, { ignoreArchetype: true }) ?? byCategory('species')[0];
+  if (!chosen) return seed; // attribute table not seeded yet - nothing to assign
+  seed.species = chosen.id;
+  if (chosen.extra?.visibility === 'profile' && chosen.image_prompt) {
+    seed.appearance_prompt = [seed.appearance_prompt, chosen.image_prompt].filter(Boolean).join(', ');
+  }
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
-  const seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
+  let seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
+  seed = backfillSpecies(row.id, seed);
   return {
     id: row.id,
     username: row.username,

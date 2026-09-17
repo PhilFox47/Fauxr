@@ -5030,5 +5030,70 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "size_worship",
+    "category": "fetish",
+    "label": "Size worship",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "being genuinely admired for how big or small she is next to him, rather than it being tip-toed around - wants her scale actually appreciated, not politely ignored.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "careful_of_scale",
+    "category": "fetish",
+    "label": "Careful handling",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "the deliberate tenderness a real size difference requires, and finding that carefulness itself affecting - whichever end of the gap she is on.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "size_difference_limit",
+    "category": "hard_limit",
+    "label": "Size difference as a focus",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "does not want her size to be the centerpiece of intimacy, whatever she actually is.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "size_difference",
+    "category": "kink_domain",
+    "label": "Size difference",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "size_worship",
+        "careful_of_scale"
+      ],
+      "limits": [
+        "size_difference_limit"
+      ]
+    },
+    "enabled": true
   }
 ]

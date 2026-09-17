@@ -298,6 +298,16 @@ function visibleMarks(character: Character, kind: string, showsFaceInShot: boole
       parts.push(`${find('piercing_type', p.type)?.image_prompt ?? p.type} ${find('piercing_position', p.position)?.image_prompt ?? ''}`.trim());
     }
   }
+  // A 'profile'-visibility species is already baked into buildAppearancePrompt()'s fixed
+  // block, so it is not repeated here. 'chat_only' has no image tell at all. Only
+  // 'later'/'private' species need adding per shot, exactly like a tattoo at that tier -
+  // species has no "position" to run through vis() above, so this checks the tier directly.
+  if (character.seed.species && character.seed.species !== 'human') {
+    const species = find('species', character.seed.species);
+    const speciesVis = species?.extra?.visibility;
+    const show = speciesVis === 'private' ? showPrivate : speciesVis === 'later' ? showLater : false;
+    if (show && species?.image_prompt) parts.push(species.image_prompt);
+  }
   return parts.join(', ');
 }
 

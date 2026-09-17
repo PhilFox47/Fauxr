@@ -2098,6 +2098,105 @@ always has one baked into her `appearance_prompt`; a character seed with the fie
 out (simulating a pre-existing save) gets one assigned and persisted on first load, and a
 second load neither re-rolls it nor appends the phrase a second time.
 
+### Species: almost always human, very rarely something else entirely
+
+The world Fauxr's characters live in has catgirls, vampires, witches, giantesses and a
+dozen other kinds of not-quite-human woman in it - it just also has them hiding that in
+ordinary life, the way it stays quiet on any real dating app. Fauxr is the one place that is
+not required of them.
+
+`species` is a real category in `appearance.json`, 17 entries: `human` (weight 15, so heavily
+favoured it dwarfs the rest combined) plus sixteen fantasy ids split `very_rare` (catgirl,
+doggirl, foxgirl, elf, vampire, witch, halfling, succubus) and `extremely_rare` (tiefling,
+giantess, fairy, alien, dragonkin, lamia, dryad, mermaid). Rarity tags alone would still have
+put roughly a third of the cast at something other than human - sixteen `very_rare`/
+`extremely_rare` rows against one lone `common` one skews badly once there is only a single
+entry carrying the "normal" case, unlike every other category where dozens of common rows
+share that weight. `human`'s own `weight: 15` is the actual calibration knob, tuned to land
+at roughly 3% non-human overall (confirmed at 2.78% over 20,000 rolls) - genuinely rare, but
+not so rare it never actually shows up in play. It is rolled **first**, right after age and
+before the archetype, rather than down in the looks stage with the rest of appearance: on the
+very rare roll that lands on something else, its own `extra.weights` should get to lean the
+archetype and everything that follows (a dragonkin toward `jealous_type`, a fairy toward
+`free_spirit`) the same way the archetype leans everything after *it* - rolling it any later
+would mean her nature never actually touched who she turned out to be.
+
+**It is an appearance trait, discovered the same way any other one is - not a fact she is
+simply handed.** Each species entry carries its own `extra.visibility`, exactly the tier a
+tattoo or piercing position already uses:
+
+- **`profile`** (eleven of the sixteen: every animal-girl, elf, vampire, halfling, giantess,
+  fairy, alien, dragonkin, lamia, dryad) - a permanent, unhideable physical fact. Baked
+  straight into `buildAppearancePrompt()`'s fixed block alongside hair colour and body type,
+  so it shows in her very first photo the moment one exists, and counted known the same way
+  hair and eyes already are: once `profile_picture_sent`.
+- **`later`** (tiefling) and **`private`** (succubus) - a real physical tell (small horns, a
+  tail) that she can and does keep concealed by default. Left out of the fixed appearance
+  block entirely; `images.ts`'s `visibleMarks()` and `blocks.ts`'s `appearanceBlock()` only
+  add it once the same flags that already gate a `later`/`private` tattoo say it is time
+  (`personal_photos_allowed`/`spicy_photos_allowed`/`has_had_first_date`).
+- **`chat_only`** (witch, mermaid) - no image tell exists, ever. A witch looks like anyone;
+  the tell is that magic visibly works around her. Purely a conversational reveal.
+
+Internally the model always knows what she is - `identityBlock()`'s new `speciesLine()`
+states it plainly for a `profile`-tier species ("there is no hiding it") and, for
+`later`/`private`/`chat_only`, gives her the exact same pacing philosophy `nameLine` already
+gives her real name: never denied outright if he asks directly, but whether and when she
+shows or tells him herself is hers to decide, paced by who she is rather than gated by a
+threshold. `discovery.ts`'s catalogue gets a `Species` row (only for a non-human character -
+`add()` already drops a row with no value) with `detectMentions()` able to catch a chat
+reveal for any tier, including `chat_only` where a photo could never do it. That needed one
+fix of its own: the existing word-match heuristic only counts words over four letters, which
+would have silently never caught "elf".
+
+**The dossier and everything written from it now know too, carefully.** The Director's
+character-writing pass gets a conditional `is_fantasy` section (empty, zero token cost, for
+the 97% of characters this never applies to) telling it to weave her nature into the dossier
+as a lived fact - how it shows day to day, how Fauxr fits into why she can finally be upfront
+about it - and to never write or imply her as anything but a fully grown adult woman,
+whatever her species, scale or form. That dossier then reaches the bio and handle writers
+verbatim, which created a real leak for a `later`/`private`/`chat_only` species: a bio or
+handle that simply said what she was would get caught by the same `detectMentions()` this
+section relies on, the moment she was generated, before anyone had even swiped. Both prompts
+now get a `hides_species` flag for exactly those three tiers: the bio's `NEVER` list gains a
+line banning stating it outright (hinting or writing around it is fine), and the handle
+generator gets the same hard-coded catch-and-retry treatment `write_username` already applies
+to a leaked real name, checked in code, not just asked for in prose.
+
+**Fetish and personality affinities ride the existing cascade, no new plumbing.**
+`roll()` already merges whatever `extra.weights` the chosen tag carries into `ctx.weights` on
+the way past - the exact mechanism the archetype has always used to lean what comes after it.
+Every species entry uses it: a catgirl leans `petplay_pet`/`claiming_him`/`jealous_type`, a
+vampire leans `shoulder_biting`/`neck_nibbling`/`old_soul`, a dragonkin leans the existing
+`collects_something` quirk and `jewelry_that_marks` fetish (a hoarder who lights up over a
+gift), a dryad and a mermaid lean real existing hobby/interest rows (`gardening`,
+`houseplant_propagation` for one; `swimming`, `open_water`, `sea_swimming` for the other). A
+new **`size_difference`** kink domain (`size_worship`, `careful_of_scale` fetishes, a
+`size_difference_limit` hard limit for a giant or fairy who does not want her scale centred)
+gives giantess, fairy and halfling somewhere real to land, rather than the size-fetish
+premise this whole feature was originally asked for having nothing dedicated to actually
+attach to.
+
+**Existing characters get exactly the same rare shot at this as a new one, not zero.**
+`hydrateCharacter()` gained a `backfillSpecies()` alongside its existing breast-size backfill:
+a character generated before this shipped rolls a species on first load, through the same
+weighted table a fresh character uses (so it comes back human ~97% of the time, not defaulted
+to human outright), persisted immediately so it only ever runs once. `seedAttributeIds()` -
+what feeds the swipe-card rarity badge - now includes `species` too, so an extremely-rare
+species meaningfully spikes that badge for exactly the characters it should, without naming
+what she actually is: the whole point of the badge being spoiler-free stands.
+
+Verified: distribution over 20,000 rolls (2.78% non-human, cleanly tiered from ~0.37% down to
+~0.04% per species); the full visibility ladder end to end for one species per tier (a
+`profile` catgirl known the instant a photo exists, a `later` tiefling silent until
+`has_had_first_date` then revealed in both `identityBlock` and `appearanceBlock`, a
+`chat_only` witch never implied by any photo flag but caught the moment she says it in text);
+the `detectMentions` fix confirmed directly against "elf"; a human character confirmed to get
+no `Species` row and nothing species-related in her identity block at all; a real date's
+arrival-photo assembler prompt confirmed to carry a `later`-tier tell; and the backfill path
+confirmed both to assign-and-persist on a stripped seed and to keep the same ~97% human split
+across 500 fresh rolls.
+
 ### Some categories quietly gate real behaviour, not just prompt text
 
 Auditing every table before writing new entries turned up several categories where an

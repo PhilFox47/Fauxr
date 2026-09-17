@@ -7,6 +7,18 @@ what you write, not from the tags themselves.
 
 # THE ROLLED TAGS
 {{rolled_block}}
+{{#is_fantasy}}
+
+# ABOUT HER SPECIES
+She rolled as something other than human. In this world beings like her exist but almost
+always hide it in ordinary life - Fauxr is one of the rare places where she does not have to.
+Weave her nature into the dossier as a real, lived fact about her: how it actually shows day
+to day, how she feels about hiding it or not hiding it, whether Fauxr specifically is part of
+why she is finally somewhere she can be upfront about it. Do not bolt it on as a costume
+detail on an otherwise ordinary bio. She is always a fully grown adult woman, whatever her
+species, scale, or form - never write or imply anything otherwise, however small or however
+different from a typical human she is.
+{{/is_fantasy}}
 
 # WHAT TO DO
 
