@@ -6,7 +6,12 @@ no doubt about what she is here for.
 
 Before anyone swipes they see four things: her handle, her age, any language she speaks
 besides English, and this bio. No photo, no job, no distance. Everything else about her has
-to be implied by these few words, and the decision to swipe is made on them alone.
+to be implied by these few words, and the decision to swipe is made on them alone - which
+makes this a want-ad's job and a sales pitch's job at once. Naming an appetite is easy and
+every profile in this app does it; what separates a swipe from a scroll-past is whether the
+words underneath it also sound like a specific, particular woman he'd want to have found. She
+is not just advertising a thing she wants to do - she is advertising herself, and the appetite
+is one part of that, not the whole of it.
 
 Her age and languages are already on the card, so the bio saying them again is a wasted
 line - write as though the reader has just read them.
@@ -19,7 +24,11 @@ handle: {{username}}
 {{seed_block}}
 
 Everything above is hers to draw on. A bio that could belong to anyone has failed, so find
-the one or two things in that profile that only she would have thought to mention.
+two or three things in that profile that only she would have thought to mention - not one
+lone detail floating with nothing around it, and not the whole dossier either. Draw them
+from more than one part of her: what she wants is one line of a bio, not the whole thing, so
+also reach for a real interest, a way she spends her time, a taste, a trait that shows -
+whatever in her profile is actually the most her.
 
 # FIND HER SHAPE, NOT A SHAPE
 There is no template for this. Do not reach for the first structure that comes to mind -
@@ -73,6 +82,16 @@ something physical. She can be blunt, filthy, dry, embarrassed, funny or clinica
 depending on who she is; what she cannot be is coy or interchangeable. A shy woman is here
 for the same reason as a brash one - she just writes it differently.
 
+**Sell herself, not just the appetite.** Wanting something physical is the given, not the
+whole pitch - a bio that is only that reads as a listing, not a woman. She is also, whether
+she would put it this way or not, trying to be picked: give the reader an actual reason it
+would be HER worth matching, not just a body who happens to be nearby. That is not a
+separate, tacked-on section - the same line can carry both, the way a real person's does.
+"tired of dating men who cant find my clit and also cant hold a conversation about anything
+that isnt football" is one sentence doing three jobs: what she wants, what she is like, and
+what she will not put up with. A shy or guarded woman still does this, just smaller and
+sideways - one real thing let slip is enough for her.
+
 **Earn the swipe honestly.** It is allowed to be unappealing to most people, as long as it
 is the right kind of unappealing. A bio that makes someone swipe left for a clear reason
 is doing its job. A bio nobody has any reaction to is a failure.
@@ -81,24 +100,36 @@ What stays out: her real name, her employer, her neighbourhood, anything that id
 her. She can talk about her work without naming where; about where she lives without naming
 the street.
 
+**Leave the rest for after the match.** More of her belongs in this bio than a want-ad
+would carry, but not all of her. She has a whole profile above and this is not the place to
+spend it - two or three things said well beat a summary of everything she is. Whatever she
+would only tell someone she is actually texting - her specifics in bed, what she has been
+through, what she is actually looking for underneath the line she gives strangers - stays
+unsaid here. The bio's job is to make him want to find that out, not to tell him.
+
 # DO NOT WRITE A COMPLETE ONE
 Everything above describes what tends to make a bio work. It is NOT a checklist, and this
 is the part that matters most:
 
 A bio that dutifully contains a quirky concrete detail, AND a line about what she wants in
 bed, AND a closing hook is the single most recognisable shape there is. Hit all of those
-beats every time and every woman in this app writes the same bio with different nouns in
-it - which is exactly the failure, and it is worse than leaving something out.
+beats every time in the same order and every woman in this app writes the same bio with
+different nouns in it - which is exactly the failure. This is about the SHAPE repeating,
+not about how much of her comes through. Two or three real, specific things about her,
+laid out lopsided rather than in the tidy three-beat order, is not a compromise between
+"revealing" and "varied" - it is what an actual bio looks like.
 
-So leave things out. Most real bios are lopsided. Some are three unrelated fragments with
-no hook at all. Some are one long unbroken run-on that never mentions anything physical
-until the last four words. Some are almost entirely about one object. Some are a complaint.
-Some are a question and nothing else. Some are just badly typed and charming for it.
+Most real bios are lopsided. Some are three unrelated fragments with no hook at all. Some
+are one long unbroken run-on that never mentions anything physical until the last four
+words. Some are almost entirely about one object, worked at from three angles. Some are a
+complaint. Some are a question and nothing else. Some are just badly typed and charming for
+it. All of them can still tell you plenty about her - lopsided is a structure, not a way of
+saying less.
 
-Pick the one or two things THIS woman would actually have bothered to type, and let the
-rest go. If the bio you are about to write could be handed to another woman in the list
-below by swapping a couple of nouns, it is the wrong bio - start again from something only
-she would say.
+Pick the things THIS woman would actually have bothered to type, in whatever order she'd
+actually type them, and let the rest go. If the bio you are about to write could be handed
+to another woman in the list below by swapping a couple of nouns, it is the wrong bio -
+start again from something only she would say.
 
 # NEVER
 - Cliches: "partner in crime", "fluent in sarcasm", "here for a good time not a long
@@ -117,7 +148,9 @@ she would say.
   expected here; being *interchangeable* is the failure.
 
 # LENGTH
-Between 25 and 60 words. Four lines is the ceiling.
+Between 25 and 70 words. Four lines is the ceiling. Two or three real things about her -
+what she wants plus what she is actually like - needs a little more room than a single
+one-liner does; use it.
 
 One clever line is not enough. A single cryptic sentence reads as someone who could not be
 bothered, and it gives a reader nothing to decide on. Give her enough room that a stranger

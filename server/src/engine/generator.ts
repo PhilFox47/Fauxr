@@ -5,9 +5,12 @@ import { byCategory, find, RARITY_WEIGHT, type Attribute } from '../db/attribute
 import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
-import { AGE_FLOOR, createRelationship, getUserProfile, insertCharacter, preferredAgeRange } from '../repo.js';
+import {
+  AGE_FLOOR, createRelationship, getUserProfile, insertCharacter, preferredAgeRange, saveRelationship,
+} from '../repo.js';
 import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
+import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
 
 /** Fields the Director may swap during the coherence pass. */
@@ -985,12 +988,27 @@ export async function generateCharacter(): Promise<Character> {
   character.bio = await writeBio(character, dossierIsReal);
 
   insertCharacter(character);
-  createRelationship(character.id, {
+  const rel = createRelationship(character.id, {
     director_notes: {
       intent: pass.director_intent ?? '',
       plans: pass.opening_plan?.text ? [pass.opening_plan] : [],
     },
   });
+
+  // Whatever she put in her own bio is not a secret to re-extract from her in conversation -
+  // the same reasoning ALWAYS_KNOWN in discovery.ts already applies to age and languages,
+  // which are printed on the card itself. detectMentions only catches the literal, obvious
+  // cases, which is the right amount here too: a bio that gestures at something without
+  // spelling it out has not told him yet, and the profile should still show that as unknown.
+  const bioReveals = detectMentions(character, rel, character.bio);
+  if (bioReveals.length) {
+    const validKeys = new Set(buildCatalogue(character).map((f) => f.key));
+    const added = recordDiscoveries(rel, bioReveals, validKeys);
+    if (added.length) {
+      saveRelationship(rel);
+      logger.debug('generator', `${username}'s bio already revealed: ${added.join(', ')}`);
+    }
+  }
 
   logger.info('generator', `generated ${username} (${realName})`, {
     id: character.id,
@@ -1236,7 +1254,7 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
         logger.warn('generator', `bio too short (${words} words), re-requesting`, { bio });
         correction =
           `That is ${words} words. It reads as cryptic rather than interesting, and nobody can decide ` +
-          `whether to swipe on it. Write a new one, ${BIO_MIN_WORDS}-60 words over two to four lines, ` +
+          `whether to swipe on it. Write a new one, ${BIO_MIN_WORDS}-${BIO_MAX_WORDS} words over two to four lines, ` +
           `that leaves a stranger with a real sense of what she is like and how she spends her time. ` +
           `Same JSON, nothing else.`;
         continue;

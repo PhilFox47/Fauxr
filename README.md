@@ -1360,6 +1360,43 @@ Her typing style now also drives the register outright. It previously said lower
 her style says otherwise, with a properly-punctuated bio framed as "the exception" — which
 made nearly every character write in the same voice regardless of her seed.
 
+### Bios advertise her, not just her appetite
+
+With a couple dozen attribute categories now behind every character, a bio that only stated
+what she wanted was leaving almost all of that unused — every profile was, in effect, a
+want-ad with a different noun in it. The prompt now frames the bio as doing two jobs at
+once, not one: it still has to leave no doubt she is here for something physical, but it is
+also, explicitly, a pitch for *her specifically* — the thing that decides a swipe from a
+scroll-past is whether the words sound like a particular woman, not just an appetite with a
+handle attached.
+
+Concretely: instead of "the one or two things only she would mention", it now asks for two
+or three, pulled from more than one part of her — what she wants is one line of the bio, not
+the whole thing, so a real interest, a way she spends her time, or a trait that shows should
+usually sit alongside it. The existing "do not hit every beat in order" guidance stayed, but
+got a clarifying pass: that rule was about the tidy three-beat *shape* repeating across the
+cast, not about withholding herself, and the two readings were close enough together in the
+old wording that leaning into "reveal more" risked reading as a contradiction of it. Lopsided
+is a structure, not a way of saying less. The length ceiling moved from 60 to 70 words to
+give two or three real things the room a single one-liner doesn't have.
+
+None of this hands over everything. A new bullet ("leave the rest for after the match")
+says outright that her specifics in bed, her history, what she is actually looking for
+underneath the line she gives strangers, all stay unsaid — the bio's job is to make that
+worth finding out, not to have found it out for him.
+
+**Whatever a bio does reveal is now recognised as known, not re-hidden.** A richer bio that
+happens to state her job in plain words, then have the profile sheet under "What you know
+about her" still show `Work: ???`, would have been a straight contradiction — exactly the
+one already avoided for age and languages, which are printed on the swipe card and so are
+in `ALWAYS_KNOWN` from the start (see [Her profile](#her-profile-what-he-has-found-out)
+above). The same `detectMentions()` backstop that already catches her stating something
+outright in chat now also runs once, at generation time, against her own bio text, and
+whatever it catches is recorded into the relationship's `discovered` map before she ever
+appears in the stack. It is deliberately the same literal, conservative matcher used
+everywhere else — a bio that gestures at something without spelling it out has not told him
+yet, and the profile correctly keeps showing that as unknown.
+
 ### Names
 
 Real names were the last field with no protection of any kind: whatever the model returned
