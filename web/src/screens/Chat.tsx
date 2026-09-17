@@ -1047,6 +1047,10 @@ function DateRoom({
   const [sending, setSending] = useState(false);
   const [ending, setEnding] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [regeneratingBeatId, setRegeneratingBeatId] = useState<number | null>(null);
+  const [deletingBeatId, setDeletingBeatId] = useState<number | null>(null);
+  const [confirmDeleteBeatId, setConfirmDeleteBeatId] = useState<number | null>(null);
+  const confirmDeleteBeatTimer = useRef<number | null>(null);
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -1081,6 +1085,12 @@ function DateRoom({
     el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
   }, [draft]);
 
+  useEffect(() => {
+    return () => {
+      if (confirmDeleteBeatTimer.current) window.clearTimeout(confirmDeleteBeatTimer.current);
+    };
+  }, []);
+
   const live = view?.date.status === 'active';
 
   const send = async () => {
@@ -1097,6 +1107,51 @@ function DateRoom({
     } finally {
       setSending(false);
     }
+  };
+
+  /**
+   * Reroll her most recent beat - same idea as the chat screen's regenerate, restricted the
+   * same way: only the true last message in the room, and only while it is hers.
+   */
+  const regenerateBeat = async (messageId: number) => {
+    if (regeneratingBeatId !== null) return;
+    setRegeneratingBeatId(messageId);
+    try {
+      await api.regenerateDateBeat(dateId, messageId);
+      await load();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setRegeneratingBeatId(null);
+    }
+  };
+
+  /** Any line in the room, either side, any position - deleting is not a reroll. */
+  const deleteBeat = async (messageId: number) => {
+    setDeletingBeatId(messageId);
+    try {
+      await api.deleteDateMessage(dateId, messageId);
+      await load();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setDeletingBeatId(null);
+      setConfirmDeleteBeatId(null);
+    }
+  };
+
+  /** First tap arms it (and auto-disarms after a few seconds); the second tap deletes. */
+  const armOrDeleteBeat = (messageId: number) => {
+    if (confirmDeleteBeatId === messageId) {
+      if (confirmDeleteBeatTimer.current) window.clearTimeout(confirmDeleteBeatTimer.current);
+      void deleteBeat(messageId);
+      return;
+    }
+    setConfirmDeleteBeatId(messageId);
+    if (confirmDeleteBeatTimer.current) window.clearTimeout(confirmDeleteBeatTimer.current);
+    confirmDeleteBeatTimer.current = window.setTimeout(() => {
+      setConfirmDeleteBeatId((id) => (id === messageId ? null : id));
+    }, 2500);
   };
 
   const end = async () => {
@@ -1145,26 +1200,61 @@ function DateRoom({
           {view?.messages.length === 0 && (
             <div className="empty"><strong>You have just arrived</strong>Give her a moment.</div>
           )}
-          {view?.messages.map((m) =>
-            m.kind === 'image' ? (
-              <div key={m.id} className="date-photo">
-                {m.image_url ? (
-                  <img src={m.image_url} alt="" />
-                ) : (
-                  <span className="tiny muted">Photo unavailable</span>
-                )}
-              </div>
-            ) : (
-              <div key={m.id} className={`date-beat ${m.sender === 'user' ? 'me' : 'them'}`}>
-                {renderBeat(m.text)}
-                {m.meta?.failed && (
-                  <span className="fail-mark" title="Generation failed - this is a placeholder">
-                    <Icon name="alert" size={14} />
-                  </span>
-                )}
-              </div>
-            ),
-          )}
+          {(() => {
+            const messages = view?.messages ?? [];
+            const lastMessageId = messages[messages.length - 1]?.id;
+            return messages.map((m) => {
+              if (m.kind === 'image') {
+                return (
+                  <div key={m.id} className="date-photo">
+                    {m.image_url ? (
+                      <img src={m.image_url} alt="" />
+                    ) : (
+                      <span className="tiny muted">Photo unavailable</span>
+                    )}
+                  </div>
+                );
+              }
+              const canRegen = live && m.sender === 'character' && m.id === lastMessageId;
+              const confirmingDelete = confirmDeleteBeatId === m.id;
+              return (
+                <div key={m.id} className="date-beat-wrap">
+                  <div className={`date-beat ${m.sender === 'user' ? 'me' : 'them'}`}>
+                    {renderBeat(m.text)}
+                    {m.meta?.failed && (
+                      <span className="fail-mark" title="Generation failed - this is a placeholder">
+                        <Icon name="alert" size={14} />
+                      </span>
+                    )}
+                  </div>
+                  {live && (
+                    <div className="date-beat-actions">
+                      {canRegen && (
+                        <button
+                          className={`regen-btn${regeneratingBeatId === m.id ? ' spinning' : ''}`}
+                          onClick={() => void regenerateBeat(m.id)}
+                          disabled={regeneratingBeatId !== null || !!view?.typing}
+                          aria-label="Regenerate this beat"
+                          title="Regenerate this beat"
+                        >
+                          <Icon name="refresh" size={13} />
+                        </button>
+                      )}
+                      <button
+                        className={`msg-del${confirmingDelete ? ' confirming' : ''}`}
+                        onClick={() => armOrDeleteBeat(m.id)}
+                        disabled={deletingBeatId !== null && deletingBeatId !== m.id}
+                        aria-label={confirmingDelete ? 'Tap again to delete this line' : 'Delete this line'}
+                        title={confirmingDelete ? 'Tap again to delete' : 'Delete this line'}
+                      >
+                        <Icon name={confirmingDelete ? 'check' : 'trash'} size={13} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            });
+          })()}
           {view?.typing && <div className="typing"><i /><i /><i /></div>}
           {!live && view?.date.summary && (
             <div className="date-summary">

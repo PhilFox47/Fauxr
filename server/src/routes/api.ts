@@ -28,7 +28,9 @@ import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
 import { profileView, spendTraitCredit } from '../engine/discovery.js';
 import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
-import { dateHistory, endDate, handleUserDateMessage, startDate } from '../engine/dates.js';
+import {
+  dateHistory, deleteDateMessage, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate,
+} from '../engine/dates.js';
 import type { Character, KinkStance, Location } from '../types.js';
 
 /**
@@ -480,6 +482,35 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       if (!text) return reply.code(400).send({ error: 'text is required' });
       try {
         return await handleUserDateMessage({ dateId: req.params.dateId, text: text.slice(0, 4000) });
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
+
+  /** Reroll her most recent beat - the date-room equivalent of /api/chats/:id/regenerate. */
+  app.post<{ Params: { dateId: string }; Body: { message_id?: number } }>(
+    '/api/dates/:dateId/regenerate',
+    async (req, reply) => {
+      const messageId = Number(req.body?.message_id);
+      if (!Number.isFinite(messageId)) return reply.code(400).send({ error: 'message_id is required' });
+      try {
+        return await regenerateLastDateBeat(req.params.dateId, messageId);
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
+
+  /** A plain delete of one line from the date's own transcript - any position, either side. */
+  app.delete<{ Params: { dateId: string; messageId: string } }>(
+    '/api/dates/:dateId/messages/:messageId',
+    async (req, reply) => {
+      const messageId = Number(req.params.messageId);
+      if (!Number.isFinite(messageId)) return reply.code(400).send({ error: 'invalid message id' });
+      try {
+        deleteDateMessage(req.params.dateId, messageId);
+        return { ok: true };
       } catch (err) {
         return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
       }

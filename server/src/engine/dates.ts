@@ -7,16 +7,16 @@ import { complete, completeJson, extractJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
 import {
-  activeDate, addMessage, clearWakeup, createDate, dateMessages, finishDate, getCharacter,
-  getDate, getLocation, getRelationship, getUserProfile, listDates, saveRelationship,
-  setDateOutfit, type StoredMessage,
+  activeDate, addMessage, clearWakeup, createDate, dateMessages, deleteMessages, finishDate,
+  getCharacter, getDate, getLocation, getMessage, getRelationship, getUserProfile, listDates,
+  saveRelationship, setDateOutfit, type StoredMessage,
 } from '../repo.js';
 import type { Character, DateSession, Location, Relationship } from '../types.js';
 import {
   appearanceBlock, flagsBlock, historyBlock, identityBlock, interestsBlock, languageBlock,
   ledgerBlock, lifeBlock, moodBlock, quirksBlock, seedBlock, sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
-import { claimTurn, currentEpoch, releaseTurn } from './chat.js';
+import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage } from './images.js';
@@ -437,6 +437,55 @@ export async function handleUserDateMessage(input: { dateId: string; text: strin
     logger.error('actor', 'date turn failed', { error: String(err) }),
   );
   return stored;
+}
+
+/**
+ * Reroll her most recent beat - the date-room equivalent of regenerateLastTurn in chat.ts,
+ * for the same reason and with the same restriction: only the trailing run of her messages
+ * can go, since there is no per-beat Director here to redo and anything older has already
+ * played out. claimTurn/isRunning is the same shared lock a live beat uses, so this cannot
+ * race one already in flight.
+ */
+export async function regenerateLastDateBeat(dateId: string, messageId: number): Promise<{ removed_ids: number[] }> {
+  const date = getDate(dateId);
+  if (!date) throw new Error('date not found');
+  if (date.status !== 'active') throw new Error('that date has already ended');
+  const character = getCharacter(date.character_id);
+  if (!character) throw new Error('character not found');
+  if (isRunning(character.id)) throw new Error('she is already in the middle of a beat');
+
+  const all = dateMessages(dateId);
+  const trailing: StoredMessage[] = [];
+  for (let i = all.length - 1; i >= 0; i--) {
+    if (all[i].sender !== 'character') break;
+    trailing.unshift(all[i]);
+  }
+  if (trailing.length === 0) {
+    throw new Error('the last beat is not hers - nothing to regenerate');
+  }
+  if (!trailing.some((m) => m.id === messageId)) {
+    throw new Error('that beat has already been superseded');
+  }
+
+  const removedIds = trailing.map((m) => m.id);
+  deleteMessages(removedIds);
+  bus.emitEvent({ type: 'messages_removed', character_id: character.id, message_ids: removedIds });
+  logger.info('actor', `regenerating last date beat for ${character.username}`, { removed: removedIds });
+
+  void takeDateTurn(dateId).catch((err) =>
+    logger.error('actor', 'regenerate date beat failed', { error: String(err) }),
+  );
+
+  return { removed_ids: removedIds };
+}
+
+/** A plain delete of one line from a date's own transcript - any position, either side. */
+export function deleteDateMessage(dateId: string, messageId: number): void {
+  const date = getDate(dateId);
+  if (!date) throw new Error('date not found');
+  const message = getMessage(messageId);
+  if (!message || message.date_id !== dateId) throw new Error('message not found');
+  deleteMessage(date.character_id, messageId);
 }
 
 function summaryPrompt(character: Character, rel: Relationship, date: DateSession): string {

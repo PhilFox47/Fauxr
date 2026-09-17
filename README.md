@@ -1012,6 +1012,11 @@ scratch. The Director is not re-run: the original turn already scored and direct
 exchange, and doing that twice would double-apply its stat changes. This is a reroll of her
 words, not a rescore of what happened.
 
+The date room gets the same button on the true last beat, for the identical reason and the
+identical restriction: `POST /api/dates/:dateId/regenerate` deletes her trailing beat(s) and
+plays the turn again through `takeDateTurn()` - the same shared turn lock (`claimTurn`/
+`isRunning`) a live beat uses, so it cannot fire while one is already in flight.
+
 ### Deleting a message
 
 A small trash icon sits beside every bubble, yours and hers alike, for typing something and
@@ -1025,6 +1030,11 @@ seconds — and a second tap is what actually deletes it, so nothing goes missin
 tap. `DELETE /api/chats/:id/messages/:messageId` is the one thing that can fail: while a turn
 for her is genuinely in flight, deleting is refused rather than pulling a message out from
 under the context that turn is using.
+
+Every line in the date room gets the same trash icon and the same two-tap confirm, deleting
+through its own `DELETE /api/dates/:dateId/messages/:messageId` - a date's transcript is a
+separate table of messages from the text chat (see "Two histories, never mixed" above), so it
+needed its own route, but the underlying delete is the same one function underneath.
 
 ### Message timing
 

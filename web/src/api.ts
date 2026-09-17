@@ -299,6 +299,13 @@ export const api = {
   sendDateMessage: (dateId: string, text: string) =>
     request<Message>(`/api/dates/${dateId}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   endDate: (dateId: string) => request<DateSession>(`/api/dates/${dateId}/end`, { method: 'POST' }),
+  regenerateDateBeat: (dateId: string, messageId: number) =>
+    request<{ removed_ids: number[] }>(`/api/dates/${dateId}/regenerate`, {
+      method: 'POST',
+      body: JSON.stringify({ message_id: messageId }),
+    }),
+  deleteDateMessage: (dateId: string, messageId: number) =>
+    request<{ ok: true }>(`/api/dates/${dateId}/messages/${messageId}`, { method: 'DELETE' }),
 
   settings: () => request<{ settings: any; usage: any }>('/api/settings'),
   saveSettings: (patch: unknown) => request<any>('/api/settings', { method: 'PUT', body: JSON.stringify(patch) }),
