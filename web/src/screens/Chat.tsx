@@ -769,47 +769,56 @@ function ProfileSheet({
           </button>
         </div>
 
-        <div className="progress"><span style={{ width: `${pct}%` }} /></div>
-
-        <div className="uncover-row">
-          <span className="uncover-note">
-            {nothingLeft ? (
-              <>Everything about her is known.</>
-            ) : (
-              <>
-                <strong>{profile.trait_credits}</strong> trait credit{profile.trait_credits === 1 ? '' : 's'} -
-                earned one every 50 messages you send her.
-              </>
-            )}
-          </span>
-          <button
-            className="btn ghost"
-            onClick={() => void uncover()}
-            disabled={uncovering || profile.trait_credits <= 0 || nothingLeft}
-          >
-            {uncovering ? 'Uncovering…' : 'Uncover a trait'}
-          </button>
-        </div>
-        {result && <p className={`uncover-result${result.error ? ' error' : ''}`}>{result.text}</p>}
-
-        <p className="small muted bio-quote">{profile.bio}</p>
-
-        {gallery.length > 0 && (
-          <div className="gallery">
-            <div className="section-title" style={{ padding: '0 0 var(--s2)' }}>
-              Photos ({gallery.length})
-            </div>
-            <div className="gallery-grid">
-              {gallery.map((g) => (
-                <button key={g.id} className="gallery-thumb" onClick={() => onOpenImage(g.url)}>
-                  <img src={g.url} alt="" loading="lazy" />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
+        {/*
+          Everything below the header lives in one scrolling region - the profile used to
+          split "categories" into their own scrollable sheet-body while the progress bar,
+          bio, gallery and (once dates existed) the whole Dates section sat outside it,
+          unscrollable. That was fine while it all happened to fit inside the sheet's own
+          max-height; the Dates section's invite form was what finally didn't, and on a
+          phone with the keyboard open there was no way to scroll the "when" field into
+          view at all - it was rendered past the edge of a box nothing could scroll.
+        */}
         <div className="sheet-body">
+          <div className="progress"><span style={{ width: `${pct}%` }} /></div>
+
+          <div className="uncover-row">
+            <span className="uncover-note">
+              {nothingLeft ? (
+                <>Everything about her is known.</>
+              ) : (
+                <>
+                  <strong>{profile.trait_credits}</strong> trait credit{profile.trait_credits === 1 ? '' : 's'} -
+                  earned one every 50 messages you send her.
+                </>
+              )}
+            </span>
+            <button
+              className="btn ghost"
+              onClick={() => void uncover()}
+              disabled={uncovering || profile.trait_credits <= 0 || nothingLeft}
+            >
+              {uncovering ? 'Uncovering…' : 'Uncover a trait'}
+            </button>
+          </div>
+          {result && <p className={`uncover-result${result.error ? ' error' : ''}`}>{result.text}</p>}
+
+          <p className="small muted bio-quote">{profile.bio}</p>
+
+          {gallery.length > 0 && (
+            <div className="gallery">
+              <div className="section-title" style={{ padding: '0 0 var(--s2)' }}>
+                Photos ({gallery.length})
+              </div>
+              <div className="gallery-grid">
+                {gallery.map((g) => (
+                  <button key={g.id} className="gallery-thumb" onClick={() => onOpenImage(g.url)}>
+                    <img src={g.url} alt="" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {profile.categories.map((cat) => (
             <section key={cat.category}>
               <div className="section-title">
@@ -827,9 +836,9 @@ function ProfileSheet({
               ))}
             </section>
           ))}
-        </div>
 
-        <DatesSection characterId={characterId} onOpenDate={onOpenDate} />
+          <DatesSection characterId={characterId} onOpenDate={onOpenDate} />
+        </div>
       </div>
     </div>
   );
@@ -916,6 +925,14 @@ function DatesSection({
               value={when}
               placeholder="tonight, 8pm"
               onChange={(e) => setWhen(e.target.value)}
+              // Belt and braces on top of .sheet-body actually being scrollable: a phone
+              // keyboard opening and the sheet reflowing happen at the same time, and a
+              // browser's own "scroll the focused field into view" heuristic doesn't
+              // always win that race. Delayed past the keyboard's own opening animation.
+              onFocus={(e) => {
+                const el = e.currentTarget;
+                setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 250);
+              }}
             />
           </label>
           <div className="row">

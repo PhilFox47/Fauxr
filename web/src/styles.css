@@ -1084,6 +1084,9 @@ input[type='range'] {
 }
 
 .sheet-head {
+  /* Stays put as the header while .sheet-body scrolls beneath it - see the flex/min-height
+     pairing on .sheet-body below for why that only actually happens with both set. */
+  flex: 0 0 auto;
   display: flex;
   align-items: flex-start;
   gap: var(--s3);
@@ -1138,7 +1141,16 @@ input[type='range'] {
 .uncover-result { margin: var(--s2) var(--s5) 0; font-size: 12.5px; color: var(--accent); }
 .uncover-result.error { color: var(--err); }
 
-.sheet-body { overflow-y: auto; padding: var(--s1) var(--s5) var(--s5); }
+/**
+ * The one scrolling region for everything under the header - progress bar, bio, gallery,
+ * her known/unknown facts and the Dates section all live in here now. `flex: 1 1 auto` plus
+ * `min-height: 0` is the actual fix: a flex child's default min-height is `auto` (its
+ * content size), which let this box grow to fit everything and never actually overflow -
+ * .sheet as a whole did instead, past its own max-height, with nothing able to scroll to
+ * whatever that pushed out of view. On a phone with the keyboard open that was the "when"
+ * field in the date invite: rendered below the fold of a box nothing could scroll.
+ */
+.sheet-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: var(--s1) var(--s5) var(--s5); }
 .sheet-body .section-title { padding: var(--s4) 0 var(--s2); }
 
 .fact {
