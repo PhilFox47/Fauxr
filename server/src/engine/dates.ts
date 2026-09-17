@@ -66,11 +66,12 @@ function visibleContent(text: string): string {
 
 /**
  * A beat with real substance left after her private thoughts are stripped, but too much of
- * it - more than a player can read and reply to before it feels like being talked at. Only
- * checked on the first attempt: a slightly-too-long second attempt still beats spending both
- * retries on wordcount and landing on the fallback line instead.
+ * it - more than a couple of full paragraphs, well past the point where it reads as one beat
+ * rather than the model playing out the rest of the evening unprompted. Only checked on the
+ * first attempt: a slightly-too-long second attempt still beats spending both retries on
+ * wordcount and landing on the fallback line instead.
  */
-const MAX_VISIBLE_WORDS = 55;
+const MAX_VISIBLE_WORDS = 220;
 
 export interface DateTurnResult {
   text: string;
@@ -199,9 +200,9 @@ async function runDateActor(
         words: countWords(visibleContent(text)),
       });
       correction =
-        `That was too long - he needs room to actually reply, not a page to read first. One beat: a ` +
-        `line or two of what she does, plus what she says, ${MAX_VISIBLE_WORDS} words or under not ` +
-        `counting any hidden thought. Write it again, shorter, same JSON shape.`;
+        `That ran long even for a full beat - he needs room to actually reply, not a whole scene to ` +
+        `read first. Two or three paragraphs at most, ${MAX_VISIBLE_WORDS} words or under not counting ` +
+        `any hidden thought. Write it again, tighter, same JSON shape.`;
       continue;
     }
 

@@ -2468,11 +2468,13 @@ replaces everything about texting:
   Enforced in code as well as prose — narration is plain text now, so a sentence that opens
   on "he" or "you" as its subject is rejected and rewritten, while "she takes your hand"
   passes, which is the whole distinction.
-- **Short. One beat, not a scene.** A line or two of narration plus a line she says — that is
-  a whole reply, checked in code (55 words, not counting any hidden thought) and re-requested
-  once if it runs long. A reply that skips ahead an hour, or plays out a whole exchange in one
-  go, steals the date from you as much as writing your half would; it also just leaves no room
-  to answer before the next one arrives.
+- **Two or three paragraphs, still one beat.** What she notices, what the room is doing, a
+  thought riding along, what she does, what she says — that is room to actually write the
+  moment rather than a line or two of shorthand for it, checked in code (220 words, not
+  counting any hidden thought) and re-requested once if it runs past even that. The point of
+  the cap was never brevity for its own sake, only ruling out a reply that skips ahead an hour
+  or plays out a whole exchange in one go, which steals the date from you as much as writing
+  your half would and leaves no room to answer before the next one arrives.
 - **Physical contact is real and she initiates it.** Her limits and her appetite are exactly
   what they always were; what changed is that she has her whole body available instead of a
   phone. Nothing on her hard-limits list moves for being in the room.
