@@ -198,12 +198,8 @@ export function rollSeed(): RolledSeed {
     return a;
   };
 
-  // ---- 1. the base: age and languages, conditioned on nothing
+  // ---- 1. the base: age, conditioned on nothing
   const age = rollAge();
-  // Most people here speak English and maybe one other. This used to come from the
-  // archetype, which coupled how many languages she speaks to how she behaves - an odd
-  // pairing now that a language is standing in for background rather than personality.
-  const extraLanguages = rollMany('language', ctx, drawCount([0.55, 0.33, 0.12], 0)).map((a) => a.id);
   ctx.weights = { ...ctx.weights, ...ageWeights(age) };
 
   // ---- 2. who she is. The archetype re-weights everything after it; roll() merges its
@@ -246,6 +242,13 @@ export function rollSeed(): RolledSeed {
 
   // ---- 3. looks, drawn knowing who she is and how old she is
   const ethnicity = one('ethnicity');
+  // Rolled here rather than up front, now that she has an ethnicity to draw from: a German
+  // entry's extra.weights leans this toward german, a Brazilian one toward portuguese, and
+  // so on, so who she is on paper actually shows up in what she speaks - not a hard rule
+  // (english is still always first, and plenty of ids are deliberately left unweighted,
+  // "white_european" and "mixed_race" among them, since no single language fits), just a
+  // real thumb on the scale instead of a roll with no connection to her at all.
+  const extraLanguages = rollMany('language', ctx, drawCount([0.55, 0.33, 0.12], 0)).map((a) => a.id);
   const skin_tone = one('skin_tone');
   const height = one('height');
   const body_type = one('body_type');
@@ -468,6 +471,14 @@ export function buildAppearancePrompt(seed: CharacterSeed): string {
     ['clothing_style', seed.clothing_style],
   ] as const) {
     const v = img(cat, id);
+    if (v) parts.push(v);
+  }
+  // Accessories are a multi-select (glasses, jewellery, a bag she's holding...), unlike
+  // every category above - rolled as an array rather than one id, and previously never
+  // reached the image prompt at all, so a character who rolled glasses would never
+  // actually be drawn wearing them.
+  for (const accessoryId of seed.accessories) {
+    const v = img('accessory', accessoryId);
     if (v) parts.push(v);
   }
   return parts.filter(Boolean).join(', ');

@@ -1,3 +1,4 @@
+import { find } from '../db/attributes.js';
 import type { Character, Relationship } from '../types.js';
 
 /**
@@ -62,20 +63,39 @@ const STAGES: Record<StageId, Stage> = {
   },
 };
 
-export function currentStage(rel: Relationship): Stage {
+/**
+ * How fast this particular woman moves through the arc, not just how she talks along the
+ * way. A `daredevil` and a `shy` character used to hit "warming up" at literally the same
+ * bond number - two very differently-written women progressing on an identical schedule,
+ * which is exactly the sameness this exists to break. `extra.pace` on an archetype (only
+ * set where it clearly should differ from the default) scales the thresholds below: above
+ * 1 reaches each stage sooner, below 1 takes longer. Left undefined, an archetype changes
+ * nothing here - most of them still shouldn't.
+ */
+function pacingFor(character: Character | undefined): number {
+  if (!character) return 1;
+  const p = find('archetype', character.seed.archetype)?.extra?.pace;
+  return typeof p === 'number' && p > 0 ? p : 1;
+}
+
+export function currentStage(rel: Relationship, character?: Character): Stage {
   const f = rel.flags.state;
   const bond = (rel.trust + rel.spark + rel.investment) / 3;
+  const pace = pacingFor(character);
 
   // The flag alone is the signal: the Director sets it when she has actually agreed she
   // wants to meet him. Requiring a trust number on top of her own stated position meant a
-  // character could say yes and the phase would refuse to follow her.
+  // character could say yes and the phase would refuse to follow her. Deliberately not
+  // pace-scaled: agreeing to meet is her own judgment call each turn, the same "no hidden
+  // thresholds" rule the rest of the unlock system already follows, not a race she can run
+  // faster or slower.
   if (f.allows_date_requests) return STAGES.meeting;
   if (f.sexual_topics_allowed) return STAGES.intimate;
   // Attraction carries most of the weight on a hookup app; trust is a much smaller gate
   // here than it would be on a relationship site, because less is being asked of it.
-  if (rel.spark >= 40 && rel.trust >= 20) return STAGES.flirting;
-  if (bond >= 26 || f.real_name_known) return STAGES.warming;
-  if (bond >= 18) return STAGES.curious;
+  if (rel.spark >= 40 / pace && rel.trust >= 20 / pace) return STAGES.flirting;
+  if (bond >= 26 / pace || f.real_name_known) return STAGES.warming;
+  if (bond >= 18 / pace) return STAGES.curious;
   return STAGES.opening;
 }
 

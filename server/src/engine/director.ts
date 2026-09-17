@@ -82,7 +82,7 @@ export async function runDirector(
   const history = since.length ? since : all.slice(-8);
   const offlineAt = onlineUntil(character);
 
-  const stage = currentStage(rel);
+  const stage = currentStage(rel, character);
   const open = undiscoveredKeys(character, rel);
 
   const prompt = render('director_direction', {

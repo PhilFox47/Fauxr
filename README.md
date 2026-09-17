@@ -2138,6 +2138,66 @@ exactly once on a failing dossier call, that `writeUsername()`/`writeBio()` are 
 called when the dossier stays degraded after both attempts (going straight to their fallback
 pools instead), and that a dossier which succeeds on the retry reaches both prompts intact.
 
+### Glasses, a real pace difference between characters, and ethnicity shaping language
+
+Three more pieces of feedback.
+
+**"Wears glasses" wasn't actually missing data - the wiring was.** `accessory:glasses`
+already existed in `appearance.json` (along with four other glasses/sunglasses variants),
+but `accessory` is rolled differently from every other appearance slot: it is a multi-select
+array (`seed.accessories`), and `buildAppearancePrompt()` never included any accessory id in
+what actually reaches the image model - every other rolled category (hair, eyes, clothing
+style...) fed the prompt, accessories never did. A character could roll glasses and simply
+never be drawn wearing them. `buildAppearancePrompt()` now folds every accessory's
+`image_prompt` in alongside the rest, and `discovery.ts`'s `buildCatalogue()` now surfaces
+each one as a discoverable `looks` fact (`accessory:0`, `accessory:1`, ...), the same way
+tattoos and piercings already work - locked until a photo or a date reveals it, not printed
+on the profile up front.
+
+**Personality only changed tone, never the shape of the relationship itself.**
+`stage.ts`'s `currentStage()` - the opening → curious → warming → flirting → intimate →
+meeting arc the Director is told to steer towards - was purely stat/flag-threshold math with
+zero archetype input: a `daredevil` and a `shy` character hit "warming up" at the literal
+same bond number, and while a Director model handed her dossier as prose *could* choose to
+pace things differently, nothing in code ever made it. 34 of the 59 archetypes now carry an
+`extra.pace` multiplier (forward, impulsive ones like `daredevil`, `provocateur`, `flirty` at
+1.2-1.5; guarded, cautious ones like `shy`, `still_water`, `overthinker` at 0.6-0.75; the
+remaining 25 archetypes are untouched, still running the original schedule) that scales the
+`spark`/`trust`/`bond` thresholds `currentStage()` checks - higher reaches each stage sooner,
+lower takes longer. The two flag-gated stages (`intimate`, `meeting`) are deliberately left
+alone: agreeing to sext or meet up stays her own fresh judgment call each turn, the same "no
+hidden thresholds" principle the rest of the unlock system already follows, not a race a fast
+archetype can simply out-pace.
+
+**Ethnicity was already broad (89 entries spanning every major region at reasonable rarity,
+not secretly weighted toward Europe) but had zero connection to what a character speaks** -
+`ethnicity` and `languages` were rolled fully independently, with languages actually drawn
+*first*, before ethnicity even existed yet in the generation cascade. The language roll now
+happens after ethnicity instead, and 48 ethnicity entries carry an `extra.weights` boost
+toward the language(s) that specific background actually implies - `japanese`→`japanese`,
+`german_descent`→`german`, `brazilian`→`portuguese`, `egyptian`/`moroccan`/`syrian`/seven
+more Arabic-speaking-region ids→`arabic`, broad regional ones like `nordic` and
+`mediterranean` split across a few plausible languages at a lighter weight - while
+deliberately leaving broad, genuinely ambiguous ids (`white_european`, `mixed_race`,
+`east_asian`, `black_african`...) unweighted, since no single language is actually a better
+guess than any other for those. English is still always her first language regardless
+(this remains an English-language app); this only shapes which language(s) she picks up
+*on top of* that, and it is a soft nudge, not a guarantee - the underlying mechanism (an
+attribute's `extra.weights` biasing a later roll) is the same one archetypes already use
+everywhere else, not a new system.
+
+Verified against the real generation code: 800 rolled characters confirm every accessory
+with visual `image_prompt` text (not all 82 are - some are behaviour/flavour only) reaches
+`appearance_prompt` intact, and a forced `glasses` accessory shows up as a locked
+`looks`-category fact exactly like a tattoo does; two characters built with identical
+trust/spark/investment numbers land in genuinely different stages depending only on their
+archetype's `pace` (a `shy` character still at "opening" where a `daredevil` at the same
+numbers has already reached "warming"), while an archetype with no `pace` set runs the exact
+original, unscaled thresholds; and across 6000 rolls, `german_descent` characters speak
+German at roughly 4x the rate of the general population (measuring the *rate*, not a raw
+count, since 55% of all characters roll zero extra languages regardless of ethnicity, and a
+single ethnicity id alone is too sparse a sample to trust a bare count from).
+
 ---
 
 ## Settings

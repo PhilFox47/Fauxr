@@ -82,6 +82,8 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
     add(`tattoo:${i}`, 'looks', 'Tattoo', `${label('tattoo_motif', t.motif)}, ${label('tattoo_position', t.position)}`, 'Some are easier to see than others.'));
   s.piercings.forEach((p, i) =>
     add(`piercing:${i}`, 'looks', 'Piercing', `${label('piercing_type', p.type)}, ${label('piercing_position', p.position)}`, 'Some are easier to see than others.'));
+  s.accessories.forEach((a, i) =>
+    add(`accessory:${i}`, 'looks', 'Accessory', label('accessory', a), 'Needs a photo.'));
 
   // ---- intimate: only once that side of the conversation is open
   add('orientation', 'basics', 'Orientation', label('orientation', s.orientation), 'Comes up when it comes up.');

@@ -185,7 +185,7 @@ function buildPrompt(
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     ledger_block: ledgerBlock(relationship.ledger),
     direction_block: directionBlock(direction, somethingLive, photoPending),
-    mood_block: moodBlock(relationship.arousal, currentStage(relationship).label, seed.hints.arousal_tell),
+    mood_block: moodBlock(relationship.arousal, currentStage(relationship, character).label, seed.hints.arousal_tell),
     moment_block: describeHerMoment(character),
     turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),

@@ -23,7 +23,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "polish": 2.6,
+        "ukrainian": 2.6,
+        "romanian": 2.6,
+        "bulgarian": 2.6,
+        "hungarian": 2.4
+      }
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -37,7 +45,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "italian": 3.0,
+        "greek": 3.0
+      }
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -51,7 +64,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "spanish": 5.0
+      }
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -135,7 +152,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 4.0
+      }
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -163,7 +184,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "turkish": 8.0
+      }
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -2663,7 +2688,14 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "swedish": 4.0,
+        "norwegian": 4.0,
+        "danish": 4.0,
+        "finnish": 3.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2677,7 +2709,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "irish_gaelic": 5.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2691,7 +2727,13 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "serbian": 3.0,
+        "croatian": 2.6,
+        "bulgarian": 2.6
+      }
+    },
     "enabled": true
   },
   {
@@ -2705,7 +2747,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 5.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2719,7 +2765,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "amharic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2747,7 +2797,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "japanese": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2761,7 +2815,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "korean": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2775,7 +2833,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "tagalog": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2803,7 +2865,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "indonesian_lang": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2817,7 +2883,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "thai_lang": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2831,7 +2901,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "farsi": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -2915,7 +2989,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "spanish": 5.0,
+        "portuguese": 3.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5314,7 +5393,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "polish": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5328,7 +5411,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "ukrainian": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5342,7 +5429,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "italian": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5356,7 +5447,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "greek": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5384,7 +5479,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "welsh": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5398,7 +5497,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "dutch": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5412,7 +5515,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "german": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5426,7 +5533,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "french": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5440,7 +5551,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "portuguese": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5454,7 +5569,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "portuguese": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5468,7 +5587,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "spanish": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5482,7 +5605,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "spanish": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5496,7 +5623,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "spanish": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5510,7 +5641,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "spanish": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5524,7 +5659,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "spanish": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5538,7 +5677,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "spanish": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5552,7 +5695,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5566,7 +5713,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5580,7 +5731,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5622,7 +5777,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "swahili": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5650,7 +5809,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "mandarin": 6.0,
+        "cantonese": 3.0
+      }
+    },
     "enabled": true
   },
   {
@@ -5664,7 +5828,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "mandarin": 6.0,
+        "cantonese": 2.6
+      }
+    },
     "enabled": true
   },
   {
@@ -11238,7 +11407,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "serbian": 3.0,
+        "croatian": 3.0
+      }
+    },
     "enabled": true
   },
   {
@@ -11266,7 +11440,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "czech": 8.0
+      }
+    },
     "enabled": true
   },
   {
@@ -11406,7 +11584,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -11420,7 +11602,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -11434,7 +11620,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -11448,7 +11638,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -11462,7 +11656,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -11476,7 +11674,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 6.0
+      }
+    },
     "enabled": true
   },
   {
@@ -11490,7 +11692,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "arabic": 5.0
+      }
+    },
     "enabled": true
   },
   {
