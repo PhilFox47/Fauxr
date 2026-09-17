@@ -5,7 +5,7 @@ import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
   allWakeups, clearWakeup, dueWakeups, getCharacter, getRelationship, getWakeup,
-  lastMessage, listActiveMatches, pendingUserMessageCount, saveRelationship, setWakeup,
+  characterIdsOnDate, lastMessage, listActiveMatches, pendingUserMessageCount, saveRelationship, setWakeup,
 } from '../repo.js';
 import type { Character } from '../types.js';
 import { isAway, takeTurn } from './chat.js';
@@ -36,16 +36,30 @@ export function stopScheduler(): void {
   timer = null;
 }
 
+/**
+ * Everyone the scheduler is allowed to make text him. A character who is out on a date is
+ * not one of them - see engine/dates.ts - and leaving her in the sweeps would have her
+ * double-texting him from across the table.
+ */
+function contactableMatches(): Character[] {
+  const onDate = characterIdsOnDate();
+  return listActiveMatches().filter((c) => !onDate.has(c.id));
+}
+
 /** The one table the server polls. One row per character, checked once a minute. */
 export async function tick(): Promise<void> {
   if (!serverWindowOpen()) return;
 
+  const onDate = characterIdsOnDate();
   for (const w of dueWakeups()) {
     const character = getCharacter(w.character_id);
     if (!character || character.state !== 'matched') {
       clearWakeup(w.character_id);
       continue;
     }
+    // Left due rather than cleared: whatever she meant to say is still worth saying once
+    // the evening is over, so it simply fires on a tick after the date ends.
+    if (onDate.has(character.id)) continue;
     if (!isOnline(character)) {
       reschedule(character, w.reason, w.cancel_if_user_writes);
       continue;
@@ -86,7 +100,7 @@ export async function tick(): Promise<void> {
 const DOUBLE_TEXT_AFTER_MS = 30 * 60_000;
 
 export function maybeDoubleText(): void {
-  for (const character of listActiveMatches()) {
+  for (const character of contactableMatches()) {
     const rel = getRelationship(character.id);
     if (!rel || rel.ghosted_at) continue;
     if (getWakeup(character.id)) continue; // something is already going to wake her
@@ -128,7 +142,7 @@ export function maybeDoubleText(): void {
  * answer in the same second her window opens.
  */
 function answerPendingMessages(): void {
-  for (const character of listActiveMatches()) {
+  for (const character of contactableMatches()) {
     if (!isOnline(character)) continue;
     const rel = getRelationship(character.id);
     if (!rel || rel.ghosted_at || isAway(rel)) continue;
@@ -202,7 +216,7 @@ export function maybeBeProactive(): void {
   const settings = getSettings();
   const scheduled = new Set(allWakeups().map((w) => w.character_id));
 
-  for (const character of listActiveMatches()) {
+  for (const character of contactableMatches()) {
     if (scheduled.has(character.id)) continue;
     const rel = getRelationship(character.id);
     if (!rel || rel.ghosted_at) continue;

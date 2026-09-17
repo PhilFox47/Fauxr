@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type CardSpec, type ImageJob, type KinkDomain, type KinkStance, type LogEntry, type ResetParts, type UserProfile } from '../api';
+import { api, type CardSpec, type ImageJob, type KinkDomain, type KinkStance, type Location, type LogEntry, type ResetParts, type UserProfile } from '../api';
 
-type Pane = 'models' | 'behaviour' | 'profile' | 'logs' | 'images' | 'reset';
+type Pane = 'models' | 'behaviour' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
 
 const PANES: { id: Pane; label: string }[] = [
   { id: 'models', label: 'Models' },
   { id: 'behaviour', label: 'Behaviour' },
   { id: 'profile', label: 'Your profile' },
+  { id: 'locations', label: 'Locations' },
   { id: 'logs', label: 'Logs' },
   { id: 'images', label: 'Images' },
   { id: 'reset', label: 'Reset' },
@@ -119,6 +120,7 @@ export default function Settings({
           <BehaviourPane settings={settings} patch={patch} save={save} saved={saved} usage={usage} />
         )}
         {pane === 'profile' && <ProfilePane profile={profile} onSaved={onProfileSaved} />}
+        {pane === 'locations' && <LocationsPane />}
         {pane === 'logs' && <LogsPane />}
         {pane === 'images' && <ImagesPane />}
         {pane === 'reset' && <ResetPane />}
@@ -902,6 +904,132 @@ function LogsPane() {
               </button>
             </>
           )}
+        </div>
+      ))}
+    </>
+  );
+}
+
+/**
+ * The places you can take someone. Written by hand - a name and a description, both yours -
+ * with an optional AI backdrop that becomes the blurred background of the date itself.
+ */
+function LocationsPane() {
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [editing, setEditing] = useState<{ id?: string; name: string; description: string } | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => setLocations(await api.locations()), []);
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const saveDraft = async () => {
+    if (!editing?.name.trim()) return;
+    try {
+      await api.saveLocation({ id: editing.id, name: editing.name, description: editing.description });
+      setEditing(null);
+      await load();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    }
+  };
+
+  const generate = async (id: string) => {
+    setBusyId(id);
+    setError(null);
+    try {
+      await api.generateLocationImage(id);
+      await load();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  return (
+    <>
+      <div className="card">
+        <p className="small muted" style={{ marginTop: 0 }}>
+          Somewhere to take a match. The description is what she actually experiences being
+          there, so write the place rather than a label — the noise, the light, who else is
+          around. The backdrop is optional and only ever shows up blurred behind the date.
+        </p>
+        {editing ? (
+          <>
+            <label className="field">
+              <span>Name</span>
+              <input
+                type="text"
+                value={editing.name}
+                placeholder="The wine bar under the bridge"
+                onChange={(e) => setEditing({ ...editing, name: e.target.value })}
+              />
+            </label>
+            <label className="field">
+              <span>Description</span>
+              <textarea
+                value={editing.description}
+                placeholder="Low ceilings, candles in old bottles, too loud to talk without leaning in."
+                onChange={(e) => setEditing({ ...editing, description: e.target.value })}
+              />
+            </label>
+            <div className="row">
+              <button className="btn ghost grow" onClick={() => setEditing(null)}>Cancel</button>
+              <button className="btn grow" onClick={() => void saveDraft()} disabled={!editing.name.trim()}>
+                Save place
+              </button>
+            </div>
+          </>
+        ) : (
+          <button className="btn block" onClick={() => setEditing({ name: '', description: '' })}>
+            Add a place
+          </button>
+        )}
+        {error && <p className="tiny level-error">{error}</p>}
+      </div>
+
+      {locations.length === 0 && !editing && (
+        <div className="empty">
+          <strong>No places yet</strong>
+          You need at least one before you can invite anyone anywhere.
+        </div>
+      )}
+
+      {locations.map((l) => (
+        <div key={l.id} className="card">
+          {l.image_url && <img className="location-thumb" src={l.image_url} alt="" />}
+          <div className="row">
+            <strong className="grow">{l.name}</strong>
+            <button className="btn ghost" onClick={() => setEditing({ id: l.id, name: l.name, description: l.description })}>
+              Edit
+            </button>
+          </div>
+          {l.description && <p className="small muted">{l.description}</p>}
+          <div className="row">
+            <button className="btn ghost grow" onClick={() => void generate(l.id)} disabled={busyId === l.id}>
+              {busyId === l.id ? 'Generating…' : l.image_url ? 'New backdrop' : 'Generate backdrop'}
+            </button>
+            {confirmId === l.id ? (
+              <button
+                className="btn danger grow"
+                onClick={async () => {
+                  await api.deleteLocation(l.id);
+                  setConfirmId(null);
+                  await load();
+                }}
+              >
+                Really delete
+              </button>
+            ) : (
+              <button className="btn ghost grow" onClick={() => setConfirmId(l.id)}>
+                Delete
+              </button>
+            )}
+          </div>
         </div>
       ))}
     </>

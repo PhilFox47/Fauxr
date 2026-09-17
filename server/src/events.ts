@@ -11,7 +11,9 @@ export type AppEvent =
   | { type: 'stack'; count: number }
   | { type: 'generating'; count: number }
   | { type: 'reset' }
-  | { type: 'messages_removed'; character_id: string; message_ids: number[] };
+  | { type: 'messages_removed'; character_id: string; message_ids: number[] }
+  /** A date started or ended - the chat screen switches register on this. */
+  | { type: 'date'; character_id: string; date: unknown };
 
 class Bus extends EventEmitter {
   emitEvent(e: AppEvent): void {

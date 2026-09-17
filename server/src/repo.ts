@@ -2,8 +2,8 @@ import { db, nowIso } from './db/index.js';
 import { byCategory } from './db/attributes.js';
 import { newContext, roll } from './engine/dice.js';
 import type {
-  Character, CharacterSeed, CharacterState, Direction, Flags, Ledger,
-  Relationship, UserProfile,
+  Character, CharacterSeed, CharacterState, DateSession, Direction, Flags, Ledger,
+  Location, Relationship, UserProfile,
 } from './types.js';
 
 // ---------------------------------------------------------------- user profile
@@ -306,6 +306,8 @@ export interface StoredMessage {
   meta: Record<string, any>;
   sent_at: string;
   read_at: string | null;
+  /** null for the text chat; a dates.id for a line spoken in person during that date. */
+  date_id: string | null;
 }
 
 function hydrateMessage(row: any): StoredMessage {
@@ -321,11 +323,13 @@ export function addMessage(m: {
   sent_at?: string;
   /** Omit to use the default; pass null explicitly to leave a message unread. */
   read_at?: string | null;
+  /** Omit for the text chat. Set to put this line in a date's own transcript instead. */
+  date_id?: string | null;
 }): StoredMessage {
   const info = db
     .prepare(
-      `INSERT INTO messages (character_id, sender, text, kind, meta, sent_at, read_at)
-       VALUES (@character_id, @sender, @text, @kind, @meta, @sent_at, @read_at)`,
+      `INSERT INTO messages (character_id, sender, text, kind, meta, sent_at, read_at, date_id)
+       VALUES (@character_id, @sender, @text, @kind, @meta, @sent_at, @read_at, @date_id)`,
     )
     .run({
       character_id: m.character_id,
@@ -337,6 +341,7 @@ export function addMessage(m: {
       // `null` is a meaningful value here (unread), so only fall back when the
       // caller left it out entirely.
       read_at: 'read_at' in m ? m.read_at ?? null : m.sender === 'character' ? nowIso() : null,
+      date_id: m.date_id ?? null,
     });
   return getMessage(Number(info.lastInsertRowid))!;
 }
@@ -376,30 +381,39 @@ export function deleteMessages(ids: number[]): number {
   return db.prepare(`DELETE FROM messages WHERE id IN (${placeholders})`).run(...ids).changes;
 }
 
+/**
+ * Everything below reads the TEXT chat only - `date_id IS NULL`. What was said in person on
+ * a date is its own transcript (see dateMessages), and letting the two mix would put an
+ * evening of in-person roleplay into the texting history the Actor is shown, which is the
+ * one thing keeping the two registers apart.
+ */
 export function recentMessages(characterId: string, limit = 40): StoredMessage[] {
   const rows = db
-    .prepare('SELECT * FROM messages WHERE character_id = ? ORDER BY id DESC LIMIT ?')
+    .prepare('SELECT * FROM messages WHERE character_id = ? AND date_id IS NULL ORDER BY id DESC LIMIT ?')
     .all(characterId, limit) as any[];
   return rows.reverse().map(hydrateMessage);
 }
 
 export function messagesSince(characterId: string, sinceId: number): StoredMessage[] {
   const rows = db
-    .prepare('SELECT * FROM messages WHERE character_id = ? AND id > ? ORDER BY id ASC')
+    .prepare('SELECT * FROM messages WHERE character_id = ? AND date_id IS NULL AND id > ? ORDER BY id ASC')
     .all(characterId, sinceId) as any[];
   return rows.map(hydrateMessage);
 }
 
 export function lastMessage(characterId: string): StoredMessage | null {
   const row = db
-    .prepare('SELECT * FROM messages WHERE character_id = ? ORDER BY id DESC LIMIT 1')
+    .prepare('SELECT * FROM messages WHERE character_id = ? AND date_id IS NULL ORDER BY id DESC LIMIT 1')
     .get(characterId) as any;
   return row ? hydrateMessage(row) : null;
 }
 
 export function unreadCount(characterId: string): number {
   const row = db
-    .prepare("SELECT COUNT(*) AS n FROM messages WHERE character_id = ? AND sender = 'character' AND read_at IS NULL")
+    .prepare(
+      `SELECT COUNT(*) AS n FROM messages
+       WHERE character_id = ? AND date_id IS NULL AND sender = 'character' AND read_at IS NULL`,
+    )
     .get(characterId) as { n: number };
   return row.n;
 }
@@ -407,7 +421,10 @@ export function unreadCount(characterId: string): number {
 /** Messages he has sent that she has not seen yet, because she was offline. */
 export function pendingUserMessageCount(characterId: string): number {
   const row = db
-    .prepare("SELECT COUNT(*) AS n FROM messages WHERE character_id = ? AND sender = 'user' AND read_at IS NULL")
+    .prepare(
+      `SELECT COUNT(*) AS n FROM messages
+       WHERE character_id = ? AND date_id IS NULL AND sender = 'user' AND read_at IS NULL`,
+    )
     .get(characterId) as { n: number };
   return row.n;
 }
@@ -415,15 +432,149 @@ export function pendingUserMessageCount(characterId: string): number {
 /** Mark the user's messages as seen by her. Only ever called while she is online. */
 export function markUserMessagesRead(characterId: string): number {
   return db
-    .prepare("UPDATE messages SET read_at = ? WHERE character_id = ? AND sender = 'user' AND read_at IS NULL")
+    .prepare(
+      `UPDATE messages SET read_at = ?
+       WHERE character_id = ? AND date_id IS NULL AND sender = 'user' AND read_at IS NULL`,
+    )
     .run(nowIso(), characterId).changes;
 }
 
 /** Returns how many messages this actually marked, so callers can tell a no-op apart. */
 export function markCharacterMessagesRead(characterId: string): number {
   return db
-    .prepare("UPDATE messages SET read_at = ? WHERE character_id = ? AND sender = 'character' AND read_at IS NULL")
+    .prepare(
+      `UPDATE messages SET read_at = ?
+       WHERE character_id = ? AND date_id IS NULL AND sender = 'character' AND read_at IS NULL`,
+    )
     .run(nowIso(), characterId).changes;
+}
+
+/** One date's transcript, oldest first. The texting history never includes any of this. */
+export function dateMessages(dateId: string): StoredMessage[] {
+  const rows = db
+    .prepare('SELECT * FROM messages WHERE date_id = ? ORDER BY id ASC')
+    .all(dateId) as any[];
+  return rows.map(hydrateMessage);
+}
+
+// ---------------------------------------------------------------- locations
+
+function hydrateLocation(row: any): Location {
+  return { ...row, image_path: row.image_path ?? null };
+}
+
+export function listLocations(): Location[] {
+  const rows = db.prepare('SELECT * FROM locations ORDER BY name COLLATE NOCASE ASC').all() as any[];
+  return rows.map(hydrateLocation);
+}
+
+export function getLocation(id: string): Location | null {
+  const row = db.prepare('SELECT * FROM locations WHERE id = ?').get(id) as any;
+  return row ? hydrateLocation(row) : null;
+}
+
+export function saveLocation(l: {
+  id: string;
+  name: string;
+  description: string;
+  image_path?: string | null;
+}): Location {
+  const ts = nowIso();
+  db.prepare(
+    `INSERT INTO locations (id, name, description, image_path, created_at, updated_at)
+     VALUES (@id, @name, @description, @image_path, @ts, @ts)
+     ON CONFLICT(id) DO UPDATE SET name = excluded.name, description = excluded.description,
+       -- Only replaced when a new one is actually supplied, so editing the description of a
+       -- place does not silently drop the backdrop already generated for it.
+       image_path = COALESCE(excluded.image_path, locations.image_path),
+       updated_at = excluded.updated_at`,
+  ).run({
+    id: l.id,
+    name: l.name,
+    description: l.description,
+    image_path: l.image_path ?? null,
+    ts,
+  });
+  return getLocation(l.id)!;
+}
+
+export function deleteLocation(id: string): void {
+  db.prepare('DELETE FROM locations WHERE id = ?').run(id);
+}
+
+/**
+ * The places themselves are his own writing and survive a world reset - but their backdrops
+ * live in the images directory, which that reset empties. Without this the locations come
+ * back pointing at files that are no longer there.
+ */
+export function clearLocationImages(): number {
+  return db.prepare('UPDATE locations SET image_path = NULL WHERE image_path IS NOT NULL').run().changes;
+}
+
+// ---------------------------------------------------------------- dates
+
+function hydrateDate(row: any): DateSession {
+  return {
+    id: row.id,
+    character_id: row.character_id,
+    status: row.status === 'active' ? 'active' : 'ended',
+    when_at: row.when_at ?? '',
+    where_at: row.where_at ?? '',
+    location_id: row.location_id ?? null,
+    summary: row.summary ?? null,
+    created_at: row.created_at,
+    ended_at: row.ended_at ?? null,
+  };
+}
+
+export function createDate(d: {
+  id: string;
+  character_id: string;
+  when_at: string;
+  where_at: string;
+  location_id: string | null;
+}): DateSession {
+  db.prepare(
+    `INSERT INTO dates (id, character_id, status, when_at, where_at, location_id, created_at)
+     VALUES (@id, @character_id, 'active', @when_at, @where_at, @location_id, @created_at)`,
+  ).run({ ...d, created_at: nowIso() });
+  return getDate(d.id)!;
+}
+
+export function getDate(id: string): DateSession | null {
+  const row = db.prepare('SELECT * FROM dates WHERE id = ?').get(id) as any;
+  return row ? hydrateDate(row) : null;
+}
+
+/**
+ * The one date currently running for this character, if any. Everything that has to stand
+ * still while she is out with him - texting, wakeups, the scheduler's proactive passes -
+ * checks this first.
+ */
+export function activeDate(characterId: string): DateSession | null {
+  const row = db
+    .prepare("SELECT * FROM dates WHERE character_id = ? AND status = 'active' ORDER BY created_at DESC LIMIT 1")
+    .get(characterId) as any;
+  return row ? hydrateDate(row) : null;
+}
+
+/** Any character currently mid-date, for the scheduler's per-tick sweep. */
+export function characterIdsOnDate(): Set<string> {
+  const rows = db.prepare("SELECT DISTINCT character_id FROM dates WHERE status = 'active'").all() as any[];
+  return new Set(rows.map((r) => r.character_id as string));
+}
+
+export function listDates(characterId: string): DateSession[] {
+  const rows = db
+    .prepare('SELECT * FROM dates WHERE character_id = ? ORDER BY created_at DESC')
+    .all(characterId) as any[];
+  return rows.map(hydrateDate);
+}
+
+export function finishDate(id: string, summary: string): DateSession | null {
+  db.prepare("UPDATE dates SET status = 'ended', summary = ?, ended_at = ? WHERE id = ?")
+    .run(summary, nowIso(), id);
+  return getDate(id);
 }
 
 // ---------------------------------------------------------------- wakeups

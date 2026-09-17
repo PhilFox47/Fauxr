@@ -2200,13 +2200,134 @@ single ethnicity id alone is too sparse a sample to trust a bare count from).
 
 ---
 
+## Dates
+
+Everything else in Fauxr simulates a phone. A date is the other register: the two of you in
+the same room, written as roleplay — speech in plain text, actions in `*asterisks*` — with
+physical contact that actually happens instead of being described over a text message. It is
+the one part of the app that is not a chat.
+
+**You start them, she doesn't.** She can ask for a date in the texting, and often will, but
+the button is yours. An invitation you could be talked into by the other side is not an
+invitation, and a date that began because a model decided to would take the one lever that
+makes the mechanic worth having.
+
+### Places you write yourself
+
+Settings → **Locations** is a list of places, each one a name and a description you typed.
+The description is what she actually experiences being there — the noise, the light, who else
+is around — so it is worth writing the place rather than labelling it. Nothing about a
+location is rolled or generated; it is your prose, and the date prompt uses it verbatim.
+
+The one generated part is the **backdrop**: an optional AI image, made from the name and the
+description, that becomes the blurred background of the date screen. It is a separate,
+explicit button rather than something that happens on save, because it costs an image
+generation. A place with no backdrop is a perfectly good place to go; the date just has no
+picture behind it.
+
+The prompt for it goes through the Director first (`writeBackdropPrompt`), because "my flat"
+is a reasonable thing to type and a poor thing to hand an image model — the pass fills in the
+light, the materials and the framing you did not. It is rendered at 3072×2048 with a hard
+"no people, ever" negative: this is the room *behind* the two of you, and an image model
+handed "a quiet wine bar" will cheerfully populate it with strangers who then contradict
+whatever the scene says about how busy the place is. Each regeneration writes a new filename
+rather than overwriting in place, since the browser has the old one cached against the old
+path and a regenerate that silently kept showing the previous picture is indistinguishable
+from one that failed.
+
+Locations survive a world reset — they are places you wrote, not part of the cast — but their
+backdrops live in the images directory that reset empties, so the rows let go of them rather
+than coming back as broken thumbnails.
+
+### Two histories, never mixed
+
+A date has its own transcript. Mechanically this is one nullable column, `messages.date_id`:
+`NULL` is the texting history, a `dates.id` is something said in person that evening. Every
+text-chat query filters `date_id IS NULL` — `recentMessages`, `unreadCount`, `lastMessage`,
+the read-marking, all of it — so an evening of in-person roleplay never leaks into the
+texting history the Actor is shown. That separation is the only thing keeping the two
+registers apart: a date in the chat context would have her writing like a novelist over SMS
+the next morning.
+
+One message pipeline serves both, which is why it is a column rather than a second table —
+images, meta, events and the WebSocket all work in a date without being taught about one.
+
+### Frozen, both ways
+
+While a date is running, the text chat is **readable but frozen**. You can open it mid-date
+to reread something; you cannot write in it, and the composer says so rather than being
+silently disabled. She is frozen too, and more thoroughly: `handleUserMessage` refuses,
+`runTurn` returns early, and the scheduler's sweeps (double-text, proactive check-in,
+answering unread messages) skip anyone currently out. A wakeup that comes due mid-date is
+left due rather than cleared — whatever she meant to say is still worth saying once the
+evening is over, so it fires on a tick afterwards.
+
+The date turn loop shares the chat's per-character turn lock, so a stray wakeup and a date
+beat can never run at once.
+
+### How a beat is written
+
+`actor_date.md` is its own prompt, not the chat prompt with a note attached. It reuses the
+character blocks (identity, appearance, life, interests, sexual, spice, ledger, mood) and
+replaces everything about texting:
+
+- **Actions in asterisks, speech in plain text**, interleaved. A reply that is only dialogue
+  reads as a phone call; one that is only action reads as stage directions.
+- **Write her, never him.** She never narrates his reactions, his lines or his feelings.
+  Enforced in code as well as prose — a beat whose action opens with "you" or that tells him
+  what he feels is rejected and rewritten, while "*she takes your hand*" passes, which is the
+  whole distinction.
+- **One continuous beat**, present tense. Not a whole evening per reply — a reply that skips
+  ahead an hour steals the date from you.
+- **Physical contact is real and she initiates it.** Her limits and her appetite are exactly
+  what they always were; what changed is that she has her whole body available instead of a
+  phone. Nothing on her hard-limits list moves for being in the room.
+- **Her typing habits do not apply.** No deliberate typos, no lowercase-everything, no emoji.
+  That was a phone. This is her mouth. The humour and the register survive; only the medium
+  changed.
+- **The place is in the scene** — what the room is doing, how close the noise makes her lean,
+  what she is drinking.
+
+There is no Director direction during a date. The scene drives itself, which for roleplay is
+the better answer: a per-beat goal and stance would rail-road exactly the thing you came for.
+
+### Ending it, and remembering it
+
+**End date** is yours too. Ending runs one Director pass (`director_date_summary.md`) over
+the whole transcript, which writes the paragraph she will remember the evening by, up to
+three highlights of what actually landed, anything new she learned about you, threads left
+hanging, and the stat movement — an evening in person moves more than an evening of texting,
+in whichever direction it went.
+
+The summary is then posted as a system line into the **text chat**, which is the point of the
+whole arrangement: the transcript is not in her context and never will be, so without this
+she would have no idea the two of you had ever met. From the next message onwards she
+remembers the date through that paragraph and nothing else, which is roughly how memory
+works anyway. It also lands in the ledger as an event, the highlights land in `what_landed`,
+and `has_had_first_date` gets set.
+
+If the summary call fails, the date still ends with a plain factual line. Losing the stat
+deltas is survivable; leaving her stuck on a date because one call timed out is not.
+
+### The screen
+
+The date is a different room, not a skin on the chat: one column of prose over the blurred
+backdrop, asterisked actions rendered in italics, your own beats accented. **Invite to a
+date** sits at the bottom of her attribute list, with every previous evening listed under it
+— each one opens read-only, summary at the end, so you can go back through them. Dates also
+leave a tappable marker in the texting history where they happened, which is usually how you
+will find them again.
+
+---
+
 ## Settings
 
 Model endpoints, keys and sampling per role · a global activity multiplier for
 proactivity and wakeup frequency (start low) · the server uptime window · a daily call and
 cost budget with a usage readout · searchable logs filtered by scope, where every LLM call
 is stored with its full prompt, response, duration and token counts, and can be exported as
-Markdown · a separate image log with a per-job retry button · your own profile · a reset.
+Markdown · a separate image log with a per-job retry button · the places you can take someone
+on a date · your own profile · a reset.
 
 The log view is the main tuning tool. Use it.
 

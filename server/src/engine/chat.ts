@@ -4,7 +4,7 @@ import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
-  addMessage, clearWakeup, deleteMessages, getCharacter, getRelationship, getWakeup,
+  activeDate, addMessage, clearWakeup, deleteMessages, getCharacter, getRelationship, getWakeup,
   markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, updateMessageMeta, type StoredMessage,
 } from '../repo.js';
 import type { Character, PendingExchange, PendingPhoto, Relationship } from '../types.js';
@@ -46,6 +46,20 @@ export function abandonRunningTurns(): void {
   running.clear();
 }
 
+/**
+ * The turn lock, shared with engine/dates.ts so a date beat and a texting turn can never run
+ * for the same character at once. Returns false if she is already busy.
+ */
+export function claimTurn(characterId: string): boolean {
+  if (running.has(characterId)) return false;
+  running.add(characterId);
+  return true;
+}
+
+export function releaseTurn(characterId: string): void {
+  running.delete(characterId);
+}
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -79,6 +93,9 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
   const character = getCharacter(input.characterId);
   if (!character) throw new Error('character not found');
   if (character.state !== 'matched') throw new Error(`cannot write to a character in state ${character.state}`);
+  // She is sitting across from him. Texting her from the same table is the one thing the
+  // date mechanic exists to prevent - the text chat stays readable, but it is frozen.
+  if (activeDate(character.id)) throw new Error('you are on a date with her - end it to go back to texting');
   const rel = getRelationship(character.id);
   if (!rel) throw new Error('relationship missing');
 
@@ -141,12 +158,11 @@ export interface TurnOptions {
 }
 
 export async function takeTurn(characterId: string, opts: TurnOptions): Promise<void> {
-  if (running.has(characterId)) return;
-  running.add(characterId);
+  if (!claimTurn(characterId)) return;
   try {
     await runTurn(characterId, opts);
   } finally {
-    running.delete(characterId);
+    releaseTurn(characterId);
   }
 }
 
@@ -156,6 +172,13 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   let rel = getRelationship(characterId);
   if (!character || !rel) return;
   if (character.state !== 'matched') return;
+
+  // She is out with him in person. Whatever queued this turn - a wakeup that survived the
+  // start of the date, a catch-up sweep - she is not going to text him from the table.
+  if (activeDate(characterId)) {
+    logger.debug('actor', `${character.username} is on a date, no text messages`);
+    return;
+  }
 
   // She said she was going. She is actually gone, mid-conversation or not.
   if (isAway(rel) && opts.trigger === 'user_message') {

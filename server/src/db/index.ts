@@ -39,6 +39,11 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'images', column: 'aspect', definition: 'TEXT' },
   { table: 'images', column: 'shows_face', definition: 'INTEGER NOT NULL DEFAULT 1' },
   { table: 'images', column: 'situation', definition: 'TEXT' },
+  // The date mechanic. `dates` existed as an empty stub table long before anything used
+  // it, so an old install has the stub's columns and none of these.
+  { table: 'messages', column: 'date_id', definition: 'TEXT' },
+  { table: 'dates', column: 'location_id', definition: 'TEXT' },
+  { table: 'dates', column: 'ended_at', definition: 'TEXT' },
 ];
 
 function addMissingColumns(): void {

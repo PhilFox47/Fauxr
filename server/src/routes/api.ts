@@ -9,9 +9,10 @@ import { usageToday } from '../llm/client.js';
 import { logger } from '../log.js';
 import { exportLogs } from '../logexport.js';
 import {
-  addMessage, getCharacter, getRelationship, getUserProfile, getWakeup, lastMessage,
-  markCharacterMessagesRead, queryLogs, recentMessages, saveRelationship, saveUserProfile,
-  unreadCount,
+  activeDate, addMessage, dateMessages, deleteLocation, getCharacter, getDate, getLocation,
+  getRelationship, getUserProfile, getWakeup, lastMessage, listLocations,
+  markCharacterMessagesRead, queryLogs, recentMessages, saveLocation, saveRelationship,
+  saveUserProfile, unreadCount,
 } from '../repo.js';
 import { bus } from '../events.js';
 import { blockCharacterByUser, handleUserMessage, isAway, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
@@ -25,7 +26,21 @@ import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
 import { profileView, spendTraitCredit } from '../engine/discovery.js';
-import type { Character, KinkStance } from '../types.js';
+import { generateLocationImage } from '../engine/locations.js';
+import { dateHistory, endDate, handleUserDateMessage, startDate } from '../engine/dates.js';
+import type { Character, KinkStance, Location } from '../types.js';
+
+/**
+ * The backdrop is cache-busted on updated_at: regenerating writes a new file, but an edit
+ * that keeps the old picture must not make the client refetch it, and neither case should
+ * ever show a stale image at a reused path.
+ */
+function publicLocation(l: Location) {
+  return {
+    ...l,
+    image_url: l.image_path ? `/media/${l.image_path}?v=${encodeURIComponent(l.updated_at)}` : null,
+  };
+}
 
 function publicCharacter(c: Character) {
   const rel = getRelationship(c.id);
@@ -172,6 +187,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       // Poll fallback for the typing indicator - see isRunning()'s comment. The WebSocket
       // event is still what makes it appear instantly when the connection actually works.
       typing: isRunning(character.id),
+      // Non-null while she is out with him: the composer locks and the screen offers the
+      // date instead. The text chat itself stays fully readable.
+      active_date: activeDate(character.id),
       messages: recentMessages(character.id, limit).map((m) => ({
         ...m,
         // image_v is bumped on regenerate - same file path, so without a cache-bust query
@@ -301,6 +319,102 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       url: `/media/${i.path}?v=${encodeURIComponent(i.updated_at)}`,
       created_at: i.created_at,
     }));
+  });
+
+  // ------------------------------------------------------------- locations
+  /**
+   * The places he can take someone. Written by hand in Settings; the backdrop is the only
+   * part that involves the image model, and it is a separate, explicit button.
+   */
+  app.get('/api/locations', async () => listLocations().map(publicLocation));
+
+  app.post<{ Body: { id?: string; name?: string; description?: string } }>(
+    '/api/locations',
+    async (req, reply) => {
+      const name = String(req.body?.name ?? '').trim();
+      if (!name) return reply.code(400).send({ error: 'a name is required' });
+      const saved = saveLocation({
+        id: String(req.body?.id ?? '').trim() || randomUUID(),
+        name: name.slice(0, 80),
+        description: String(req.body?.description ?? '').trim().slice(0, 2000),
+      });
+      return publicLocation(saved);
+    },
+  );
+
+  app.delete<{ Params: { id: string } }>('/api/locations/:id', async (req) => {
+    deleteLocation(req.params.id);
+    return { ok: true };
+  });
+
+  /** Renders the backdrop. Slow (a full image generation), so the client shows a spinner. */
+  app.post<{ Params: { id: string } }>('/api/locations/:id/image', async (req, reply) => {
+    try {
+      return publicLocation(await generateLocationImage(req.params.id));
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
+
+  // ------------------------------------------------------------- dates
+  /** The invite menu and the list of evenings already spent, for her chat screen. */
+  app.get<{ Params: { id: string } }>('/api/chats/:id/dates', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    if (!character) return reply.code(404).send({ error: 'not found' });
+    return { ...dateHistory(character.id), locations: listLocations().map(publicLocation) };
+  });
+
+  app.post<{ Params: { id: string }; Body: { location_id?: string; when?: string } }>(
+    '/api/chats/:id/dates',
+    async (req, reply) => {
+      try {
+        return await startDate({
+          characterId: req.params.id,
+          locationId: String(req.body?.location_id ?? ''),
+          when: String(req.body?.when ?? '').slice(0, 120),
+        });
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
+
+  /** One date's own transcript - never mixed into the texting history, by design. */
+  app.get<{ Params: { dateId: string } }>('/api/dates/:dateId', async (req, reply) => {
+    const date = getDate(req.params.dateId);
+    if (!date) return reply.code(404).send({ error: 'not found' });
+    const character = getCharacter(date.character_id);
+    if (!character) return reply.code(404).send({ error: 'not found' });
+    const location = date.location_id ? getLocation(date.location_id) : null;
+    return {
+      date,
+      character: publicCharacter(character),
+      location: location ? publicLocation(location) : null,
+      typing: isRunning(character.id),
+      messages: dateMessages(date.id),
+    };
+  });
+
+  app.post<{ Params: { dateId: string }; Body: { text?: string } }>(
+    '/api/dates/:dateId/messages',
+    async (req, reply) => {
+      const text = String(req.body?.text ?? '').trim();
+      if (!text) return reply.code(400).send({ error: 'text is required' });
+      try {
+        return await handleUserDateMessage({ dateId: req.params.dateId, text: text.slice(0, 4000) });
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
+
+  /** Ends the evening and writes the summary she will remember it by. */
+  app.post<{ Params: { dateId: string } }>('/api/dates/:dateId/end', async (req, reply) => {
+    try {
+      return await endDate(req.params.dateId);
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
   });
 
   app.get('/api/images', async () => listImageJobs(100));

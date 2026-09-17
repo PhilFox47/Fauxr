@@ -5,6 +5,7 @@ import { DATA_DIR, db } from '../db/index.js';
 import { invalidateAttributeCache, seedAttributes } from '../db/attributes.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
+import { clearLocationImages } from '../repo.js';
 import { abandonRunningTurns } from './chat.js';
 import { ensureStack, resetGenerationQueue } from './matching.js';
 import { clearPresenceCache, startScheduler, stopScheduler } from './scheduler.js';
@@ -100,7 +101,13 @@ export async function resetParts(opts: ResetOptions = {}): Promise<ResetResult> 
    * keep the pictures on it, or it comes back with dead thumbnails.
    */
   let filesRemoved = 0;
-  if (world) filesRemoved += emptyMediaDir('images');
+  if (world) {
+    filesRemoved += emptyMediaDir('images');
+    // The locations themselves survive - they are places he wrote, not part of the cast -
+    // but their backdrops were in the directory that just went, so the rows have to let go
+    // of them or the Locations tab comes back full of broken images.
+    clearLocationImages();
+  }
   if (profile) filesRemoved += emptyMediaDir('uploads');
 
   if (world) invalidateAttributeCache();

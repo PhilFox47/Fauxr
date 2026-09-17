@@ -135,6 +135,39 @@ export interface UncoverTraitResult extends CharacterProfile {
   revealed_key: string;
 }
 
+/** A place you wrote in Settings, and can take someone to. */
+export interface Location {
+  id: string;
+  name: string;
+  description: string;
+  image_path: string | null;
+  /** Cache-busted; null until a backdrop has actually been generated. */
+  image_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DateSession {
+  id: string;
+  character_id: string;
+  status: 'active' | 'ended';
+  when_at: string;
+  where_at: string;
+  location_id: string | null;
+  /** Written when the date ends - what she remembers of the evening. */
+  summary: string | null;
+  created_at: string;
+  ended_at: string | null;
+}
+
+export interface DateView {
+  date: DateSession;
+  character: MatchSummary;
+  location: Location | null;
+  typing: boolean;
+  messages: Message[];
+}
+
 export interface LogEntry {
   id: number;
   ts: string;
@@ -183,7 +216,13 @@ export const api = {
   swipe: (id: string, direction: 'left' | 'right') =>
     request<any>(`/api/swipe/${id}`, { method: 'POST', body: JSON.stringify({ direction }) }),
   matches: () => request<MatchSummary[]>('/api/matches'),
-  chat: (id: string) => request<{ character: MatchSummary; messages: Message[]; typing: boolean }>(`/api/chats/${id}`),
+  chat: (id: string) =>
+    request<{
+      character: MatchSummary;
+      messages: Message[];
+      typing: boolean;
+      active_date: DateSession | null;
+    }>(`/api/chats/${id}`),
   send: (id: string, text: string) =>
     request<Message>(`/api/chats/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   profile: (id: string) => request<CharacterProfile>(`/api/chats/${id}/profile`),
@@ -206,6 +245,27 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ accept }),
     }),
+  // ---- locations and dates
+  locations: () => request<Location[]>('/api/locations'),
+  saveLocation: (l: { id?: string; name: string; description: string }) =>
+    request<Location>('/api/locations', { method: 'POST', body: JSON.stringify(l) }),
+  deleteLocation: (id: string) => request<{ ok: true }>(`/api/locations/${id}`, { method: 'DELETE' }),
+  generateLocationImage: (id: string) =>
+    request<Location>(`/api/locations/${id}/image`, { method: 'POST' }),
+  dates: (characterId: string) =>
+    request<{ active: DateSession | null; past: DateSession[]; locations: Location[] }>(
+      `/api/chats/${characterId}/dates`,
+    ),
+  startDate: (characterId: string, locationId: string, when: string) =>
+    request<DateSession>(`/api/chats/${characterId}/dates`, {
+      method: 'POST',
+      body: JSON.stringify({ location_id: locationId, when }),
+    }),
+  date: (dateId: string) => request<DateView>(`/api/dates/${dateId}`),
+  sendDateMessage: (dateId: string, text: string) =>
+    request<Message>(`/api/dates/${dateId}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
+  endDate: (dateId: string) => request<DateSession>(`/api/dates/${dateId}/end`, { method: 'POST' }),
+
   settings: () => request<{ settings: any; usage: any }>('/api/settings'),
   saveSettings: (patch: unknown) => request<any>('/api/settings', { method: 'PUT', body: JSON.stringify(patch) }),
   logs: (params: Record<string, string>) =>
@@ -245,6 +305,7 @@ export type ServerEvent =
   | { type: 'generating'; count: number }
   | { type: 'reset' }
   | { type: 'messages_removed'; character_id: string; message_ids: number[] }
+  | { type: 'date'; character_id: string; date: DateSession }
   | { type: 'hello'; at: string };
 
 /** Reconnecting WebSocket. The server is off between 02:00 and 06:00, so drops are normal. */

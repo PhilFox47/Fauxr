@@ -18,7 +18,7 @@ export type TemplateName =
   | 'director_generate_character'
   | 'director_write_bio'
   | 'director_evaluate_image'
-  | 'director_date_control'
+  | 'director_date_summary'
   | 'image_prompt_assembler';
 
 export function loadTemplate(name: TemplateName): string {

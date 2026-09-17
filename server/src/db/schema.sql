@@ -66,9 +66,13 @@ CREATE TABLE IF NOT EXISTS messages (
   kind          TEXT NOT NULL DEFAULT 'text',-- text | voice | image
   meta          TEXT NOT NULL DEFAULT '{}',
   sent_at       TEXT NOT NULL,
-  read_at       TEXT
+  read_at       TEXT,
+  -- NULL for the text chat. Set to a dates.id for anything said in person during a date,
+  -- which is a separate transcript the texting history never mixes with.
+  date_id       TEXT REFERENCES dates(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_messages_char ON messages(character_id, id);
+CREATE INDEX IF NOT EXISTS idx_messages_date ON messages(date_id, id);
 
 CREATE TABLE IF NOT EXISTS wakeups (
   character_id          TEXT PRIMARY KEY REFERENCES characters(id) ON DELETE CASCADE,
@@ -78,17 +82,34 @@ CREATE TABLE IF NOT EXISTS wakeups (
 );
 CREATE INDEX IF NOT EXISTS idx_wakeups_due ON wakeups(scheduled_at);
 
+-- Places the player writes themselves, in Settings, and can then take someone to.
+CREATE TABLE IF NOT EXISTS locations (
+  id           TEXT PRIMARY KEY,
+  name         TEXT NOT NULL,
+  description  TEXT NOT NULL DEFAULT '',
+  -- Relative to the images directory, same as any generated picture. Optional: a location
+  -- works fine without one, it just has no backdrop behind the date.
+  image_path   TEXT,
+  created_at   TEXT NOT NULL,
+  updated_at   TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS dates (
   id            TEXT PRIMARY KEY,
   character_id  TEXT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
-  status        TEXT NOT NULL DEFAULT 'proposed',
+  status        TEXT NOT NULL DEFAULT 'proposed',  -- active | ended
   when_at       TEXT,
+  -- The location's name copied in at the time, so an old date still reads correctly after
+  -- the place it happened in has been renamed or deleted.
   where_at      TEXT,
+  location_id   TEXT REFERENCES locations(id) ON DELETE SET NULL,
   proposed_by   TEXT,
   confirmed_by  TEXT,
   summary       TEXT,
-  created_at    TEXT NOT NULL
+  created_at    TEXT NOT NULL,
+  ended_at      TEXT
 );
+CREATE INDEX IF NOT EXISTS idx_dates_char ON dates(character_id, created_at);
 
 CREATE TABLE IF NOT EXISTS images (
   id            TEXT PRIMARY KEY,

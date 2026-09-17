@@ -383,3 +383,37 @@ export interface UserProfile {
   /** Everything else about him, same vocabulary the characters are built from. */
   card: UserCard;
 }
+
+/**
+ * A place he wrote himself, in Settings, and can take someone to. Name and description are
+ * his; the backdrop is generated from them on request and is optional - a location with no
+ * picture works, the date just has no image behind it.
+ */
+export interface Location {
+  id: string;
+  name: string;
+  description: string;
+  /** Relative to the images directory, like any other generated picture. */
+  image_path: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * One date: an in-person scene with its own transcript, separate from the texting history.
+ * Only the player starts one. While `status` is 'active' neither side can text.
+ */
+export interface DateSession {
+  id: string;
+  character_id: string;
+  status: 'active' | 'ended';
+  /** When they are meeting, as he wrote it - "tonight, 8pm", not a parsed timestamp. */
+  when_at: string;
+  /** The location's name copied in at the time, so it survives a rename or a delete. */
+  where_at: string;
+  location_id: string | null;
+  /** Written when the date ends, and folded into what she remembers of him. */
+  summary: string | null;
+  created_at: string;
+  ended_at: string | null;
+}

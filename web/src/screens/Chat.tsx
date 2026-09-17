@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { api, type CharacterProfile, type GalleryImage, type MatchSummary, type Message } from '../api';
+import {
+  api, type CharacterProfile, type DateSession, type DateView, type GalleryImage, type Location,
+  type MatchSummary, type Message,
+} from '../api';
 import Avatar from '../components/Avatar';
 import Icon from '../components/Icon';
 import Lightbox from '../components/Lightbox';
@@ -21,6 +24,19 @@ function dayLabel(iso: string): string {
   if (d.toDateString() === today.toDateString()) return 'Today';
   if (d.toDateString() === yesterday.toDateString()) return 'Yesterday';
   return d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'short' });
+}
+
+/**
+ * *Actions* in italics, speech as it is. The asterisks are the convention both sides of the
+ * date write in, and leaving them on screen as literal punctuation is what makes a roleplay
+ * transcript look like a chat log rather than a scene.
+ */
+function renderBeat(text: string) {
+  return text.split(/(\*[^*]+\*)/g).filter(Boolean).map((part, i) =>
+    part.startsWith('*') && part.endsWith('*') && part.length > 2
+      ? <em key={i}>{part.slice(1, -1)}</em>
+      : <span key={i}>{part}</span>,
+  );
 }
 
 function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
@@ -132,6 +148,13 @@ export default function Chat({
   const [regeneratingImageId, setRegeneratingImageId] = useState<number | null>(null);
   const [respondingOfferId, setRespondingOfferId] = useState<string | null>(null);
   const [swapping, setSwapping] = useState(false);
+  /** Non-null while she is out with him. The text chat stays readable, but frozen. */
+  const [activeDate, setActiveDate] = useState<DateSession | null>(null);
+  /**
+   * Which date is on screen. Set to the live one the moment it starts, cleared to step back
+   * into the text chat without ending anything, and also used to re-read a finished one.
+   */
+  const [openDateId, setOpenDateId] = useState<string | null>(null);
   const swapped = !!character?.photos_exchanged;
   // One deduped set that both surfaces index into. A photo she sent in the chat is also in
   // her gallery, so concatenating the two blind would show it twice while paging.
@@ -160,6 +183,7 @@ export default function Chat({
       setCharacter(res.character);
       setMessages(res.messages);
       setPolledTyping(res.typing);
+      setActiveDate(res.active_date);
     } catch {
       /* keep the current view if the server is unreachable */
     }
@@ -168,6 +192,23 @@ export default function Chat({
   useEffect(() => {
     void load();
   }, [load]);
+
+  /**
+   * A date opens itself when it starts, and again if the app is reopened while one is still
+   * running - but only once per date, so stepping back into the text chat to reread
+   * something is not immediately undone by the next poll.
+   */
+  const autoOpenedDate = useRef<string | null>(null);
+  useEffect(() => {
+    autoOpenedDate.current = null;
+    setOpenDateId(null);
+  }, [characterId]);
+  useEffect(() => {
+    if (activeDate && autoOpenedDate.current !== activeDate.id) {
+      autoOpenedDate.current = activeDate.id;
+      setOpenDateId(activeDate.id);
+    }
+  }, [activeDate]);
 
   // Any server event may concern this conversation; reloading is cheap enough.
   useEffect(() => {
@@ -329,6 +370,20 @@ export default function Chat({
   // same restriction the text regen button already applies to her last reply.
   const lastHerImageId = [...messages].reverse().find((m) => m.kind === 'image' && m.sender === 'character')?.id ?? null;
 
+  if (openDateId) {
+    return (
+      <DateRoom
+        dateId={openDateId}
+        eventSeq={eventSeq}
+        onOpenTextChat={() => setOpenDateId(null)}
+        onEnded={async () => {
+          setOpenDateId(null);
+          await load();
+        }}
+      />
+    );
+  }
+
   return (
     <div className="chat">
       <div className="topbar">
@@ -383,6 +438,10 @@ export default function Chat({
           onProfileChange={setProfile}
           gallery={gallery}
           onOpenImage={(url) => setLightboxAt(allImages.indexOf(url))}
+          onOpenDate={(dateId) => {
+            setProfileOpen(false);
+            setOpenDateId(dateId);
+          }}
           onClose={() => setProfileOpen(false)}
         />
       )}
@@ -462,6 +521,21 @@ export default function Chat({
               <div key={m.id} style={{ display: 'contents' }}>
                 {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
                 <ExchangeRequestCard text={m.text} status={m.meta.status ?? 'pending'} />
+              </div>
+            );
+          }
+
+          if (m.sender === 'system' && (m.meta?.type === 'date_started' || m.meta?.type === 'date_ended')) {
+            return (
+              <div key={m.id} style={{ display: 'contents' }}>
+                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                <button className="date-marker" onClick={() => setOpenDateId(m.meta.date_id)}>
+                  <span className="date-marker-head">
+                    <Icon name="spark" size={14} />
+                    {m.meta.type === 'date_started' ? 'Date' : 'Date — how she remembers it'}
+                  </span>
+                  <span className="date-marker-body">{m.text}</span>
+                </button>
               </div>
             );
           }
@@ -588,7 +662,23 @@ export default function Chat({
         </div>
       )}
 
-      {!blocked && (
+      {/*
+        The text chat stays fully readable during a date - that is the point of keeping the
+        two histories apart - but neither of them can text from the table, so the composer
+        is replaced rather than merely disabled.
+      */}
+      {!blocked && activeDate && (
+        <div className="composer date-frozen">
+          <span className="grow small muted">
+            You are out with {character?.display_name} right now.
+          </span>
+          <button className="btn" onClick={() => setOpenDateId(activeDate.id)}>
+            Back to the date
+          </button>
+        </div>
+      )}
+
+      {!blocked && !activeDate && (
         <div className="composer">
           <input
             ref={fileRef}
@@ -632,6 +722,7 @@ function ProfileSheet({
   onProfileChange,
   gallery,
   onOpenImage,
+  onOpenDate,
   onClose,
 }: {
   characterId: string;
@@ -639,6 +730,7 @@ function ProfileSheet({
   onProfileChange: (p: CharacterProfile) => void;
   gallery: GalleryImage[];
   onOpenImage: (url: string) => void;
+  onOpenDate: (dateId: string) => void;
   onClose: () => void;
 }) {
   const [uncovering, setUncovering] = useState(false);
@@ -736,7 +828,300 @@ function ProfileSheet({
             </section>
           ))}
         </div>
+
+        <DatesSection characterId={characterId} onOpenDate={onOpenDate} />
       </div>
+    </div>
+  );
+}
+
+/**
+ * Inviting her somewhere, and everywhere the two of you have already been.
+ *
+ * Only he can start a date. She can ask for one in the chat and often will, but the button
+ * is his - an invitation she could trigger herself would not be an invitation.
+ */
+function DatesSection({
+  characterId,
+  onOpenDate,
+}: {
+  characterId: string;
+  onOpenDate: (dateId: string) => void;
+}) {
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [past, setPast] = useState<DateSession[]>([]);
+  const [active, setActive] = useState<DateSession | null>(null);
+  const [inviting, setInviting] = useState(false);
+  const [locationId, setLocationId] = useState('');
+  const [when, setWhen] = useState('tonight, 8pm');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      const res = await api.dates(characterId);
+      setLocations(res.locations);
+      setPast(res.past);
+      setActive(res.active);
+      setLocationId((id) => id || res.locations[0]?.id || '');
+    } catch {
+      /* the sheet is still useful without this */
+    }
+  }, [characterId]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const start = async () => {
+    if (!locationId || busy) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const date = await api.startDate(characterId, locationId, when.trim());
+      onOpenDate(date.id);
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="dates-section">
+      <div className="section-title">Dates</div>
+
+      {active ? (
+        <button className="btn block" onClick={() => onOpenDate(active.id)}>
+          You are out with her — open the date
+        </button>
+      ) : locations.length === 0 ? (
+        <p className="tiny muted">
+          Nowhere to go yet. Write a place under Settings → Locations first.
+        </p>
+      ) : inviting ? (
+        <>
+          <label className="field">
+            <span>Where</span>
+            <select value={locationId} onChange={(e) => setLocationId(e.target.value)}>
+              {locations.map((l) => (
+                <option key={l.id} value={l.id}>{l.name}</option>
+              ))}
+            </select>
+          </label>
+          <label className="field">
+            <span>When</span>
+            <input
+              type="text"
+              value={when}
+              placeholder="tonight, 8pm"
+              onChange={(e) => setWhen(e.target.value)}
+            />
+          </label>
+          <div className="row">
+            <button className="btn ghost grow" onClick={() => setInviting(false)}>Cancel</button>
+            <button className="btn grow" onClick={() => void start()} disabled={busy || !locationId}>
+              {busy ? 'Going…' : 'Take her out'}
+            </button>
+          </div>
+        </>
+      ) : (
+        <button className="btn block" onClick={() => setInviting(true)}>
+          Invite to a date
+        </button>
+      )}
+      {error && <p className="tiny level-error">{error}</p>}
+
+      {past.length > 0 && (
+        <div className="past-dates">
+          {past.map((d) => (
+            <button key={d.id} className="past-date" onClick={() => onOpenDate(d.id)}>
+              <span className="row">
+                <strong className="grow">{d.where_at || 'Somewhere'}</strong>
+                <span className="tiny muted">
+                  {new Date(d.ended_at ?? d.created_at).toLocaleDateString([], { day: 'numeric', month: 'short' })}
+                </span>
+              </span>
+              {d.summary && <span className="tiny muted past-date-summary">{d.summary}</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The date itself. A different register from the chat entirely - one long roleplay
+ * transcript rather than message bubbles, over the blurred backdrop of wherever they are -
+ * and its own history, which the texting screen never mixes with.
+ */
+function DateRoom({
+  dateId,
+  eventSeq,
+  onOpenTextChat,
+  onEnded,
+}: {
+  dateId: string;
+  eventSeq: number;
+  onOpenTextChat: () => void;
+  onEnded: () => void | Promise<void>;
+}) {
+  const [view, setView] = useState<DateView | null>(null);
+  const [draft, setDraft] = useState('');
+  const [sending, setSending] = useState(false);
+  const [ending, setEnding] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const logRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const load = useCallback(async () => {
+    try {
+      setView(await api.date(dateId));
+    } catch {
+      /* keep what is on screen if the server blinks */
+    }
+  }, [dateId]);
+
+  useEffect(() => {
+    void load();
+  }, [load, eventSeq]);
+
+  // Same safety-net poll as the chat screen: her beats have to arrive even where the
+  // WebSocket cannot reach through a proxy.
+  useEffect(() => {
+    const id = window.setInterval(() => void load(), 3000);
+    return () => window.clearInterval(id);
+  }, [load]);
+
+  useEffect(() => {
+    const el = logRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [view?.messages.length, view?.typing]);
+
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+  }, [draft]);
+
+  const live = view?.date.status === 'active';
+
+  const send = async () => {
+    const text = draft.trim();
+    if (!text || sending || !live) return;
+    setSending(true);
+    setDraft('');
+    try {
+      await api.sendDateMessage(dateId, text);
+      await load();
+    } catch (err) {
+      setDraft(text);
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const end = async () => {
+    if (ending) return;
+    setEnding(true);
+    try {
+      // Slow on purpose - the summary is written before this resolves, so by the time the
+      // text chat comes back she already remembers the evening.
+      await api.endDate(dateId);
+      await onEnded();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+      setEnding(false);
+    }
+  };
+
+  const backdrop = view?.location?.image_url ?? null;
+
+  return (
+    <div className="chat date-room">
+      {backdrop && <div className="date-backdrop" style={{ backgroundImage: `url(${backdrop})` }} />}
+
+      <div className="topbar">
+        <button className="iconbtn" onClick={onOpenTextChat} aria-label="Back to the text chat">
+          <Icon name="back" size={22} />
+        </button>
+        <Avatar match={view?.character ?? null} small presence={false} />
+        <div style={{ minWidth: 0 }}>
+          <h1>{view?.character.display_name ?? '…'}</h1>
+          <span className={`sub${view?.typing ? ' live' : ''}`}>
+            {view?.location?.name ?? view?.date.where_at ?? 'somewhere'}
+            {view?.date.when_at ? ` · ${view.date.when_at}` : ''}
+            {!live ? ' · ended' : ''}
+          </span>
+        </div>
+        <div className="spacer" />
+        {live && (
+          <button className="btn ghost" onClick={() => void end()} disabled={ending}>
+            {ending ? 'Ending…' : 'End date'}
+          </button>
+        )}
+      </div>
+
+      <div className="chat-log date-log" ref={logRef}>
+        <div className="chat-log-inner">
+          {view?.messages.length === 0 && (
+            <div className="empty"><strong>You have just arrived</strong>Give her a moment.</div>
+          )}
+          {view?.messages.map((m) => (
+            <div key={m.id} className={`date-beat ${m.sender === 'user' ? 'me' : 'them'}`}>
+              {renderBeat(m.text)}
+              {m.meta?.failed && (
+                <span className="fail-mark" title="Generation failed - this is a placeholder">
+                  <Icon name="alert" size={14} />
+                </span>
+              )}
+            </div>
+          ))}
+          {view?.typing && <div className="typing"><i /><i /><i /></div>}
+          {!live && view?.date.summary && (
+            <div className="date-summary">
+              <div className="section-title" style={{ padding: '0 0 6px' }}>How she remembers it</div>
+              {view.date.summary}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {error && (
+        <div className="toast err" role="status">
+          <span className="ico"><Icon name="alert" size={16} /></span>
+          <span className="grow">{error}</span>
+        </div>
+      )}
+
+      {live ? (
+        <div className="composer">
+          <textarea
+            ref={inputRef}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder="What you do and say…"
+            rows={1}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                void send();
+              }
+            }}
+          />
+          <button className="send" onClick={() => void send()} disabled={!draft.trim() || sending} aria-label="Send">
+            <Icon name="send" size={19} />
+          </button>
+        </div>
+      ) : (
+        <div className="composer date-frozen">
+          <span className="grow small muted">This date is over.</span>
+          <button className="btn" onClick={onOpenTextChat}>Back to the chat</button>
+        </div>
+      )}
     </div>
   );
 }

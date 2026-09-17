@@ -1236,3 +1236,128 @@ input[type='range'] {
 
 /* Chat photos are tappable now, so they should look it. */
 .bubble.image img { cursor: pointer; }
+
+/* ---------------------------------------------------------------------------- dates ---
+ * A date is deliberately a different room from the chat: one column of prose over the
+ * blurred photo of wherever they are, rather than two columns of bubbles. The two
+ * histories are separate server-side and they should not look alike either.
+ */
+.date-room { position: relative; isolation: isolate; }
+.date-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  /* Heavy blur and a dark wash: it has to stay a place without ever competing with text. */
+  filter: blur(18px) saturate(115%) brightness(0.42);
+  transform: scale(1.1);
+}
+.date-room .topbar,
+.date-room .composer {
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+}
+.date-log .chat-log-inner { gap: var(--s4); }
+
+.date-beat {
+  max-width: 100%;
+  padding: var(--s3) var(--s4);
+  border-radius: var(--r-md);
+  line-height: 1.6;
+  font-size: 15px;
+  white-space: pre-wrap;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+/* His own beats sit slightly forward, the way his bubbles do in the chat. */
+.date-beat.me {
+  border-color: var(--accent-line);
+  background: color-mix(in srgb, var(--accent-soft) 60%, var(--surface-2) 40%);
+}
+/* Asterisked actions are the whole convention of the format, so they get to look like it. */
+.date-beat em, .date-beat i { color: var(--text-dim); }
+
+.date-summary {
+  margin-top: var(--s4);
+  padding: var(--s4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+.composer.date-frozen { align-items: center; gap: var(--s3); }
+
+.dates-section {
+  margin-top: var(--s6);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+}
+.past-dates { display: flex; flex-direction: column; gap: var(--s2); margin-top: var(--s3); }
+.past-date {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  padding: var(--s3);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.past-date:hover { border-color: var(--line-strong); }
+.past-date .row { width: 100%; }
+/* Two lines of the summary is enough to tell one evening from another. */
+.past-date-summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+/* A date in the texting history is a marker, not something she said - so it is centred and
+   its own card, and tapping it opens the evening's own transcript. */
+.date-marker {
+  all: unset;
+  cursor: pointer;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  margin: var(--s2) 0;
+  padding: var(--s3) var(--s4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--accent-line);
+  background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface));
+}
+.date-marker:hover { border-color: var(--accent); }
+.date-marker-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.date-marker-body { font-size: 13.5px; line-height: 1.55; color: var(--text-dim); }
+
+/* The topbar is tight; "End date" must not wrap onto two lines inside it. */
+.date-room .topbar .btn { white-space: nowrap; padding: 8px 14px; font-size: 13px; }
+
+/* Backdrops are rendered 3:2, so the thumbnail reserves that shape rather than jumping
+   when the image loads - or stretching a placeholder into a tall block. */
+.location-thumb {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  margin-bottom: var(--s3);
+  background: var(--surface-2);
+}
