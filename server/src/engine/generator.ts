@@ -672,7 +672,21 @@ async function rerollName(
  * her stats, which meant it was being invented before there was much of a person for it to
  * belong to - and a handle is one of the few things on a profile she actually chose.
  */
-async function writeUsername(seed: CharacterSeed, realName: string, taken: string[]): Promise<string> {
+async function writeUsername(
+  seed: CharacterSeed,
+  realName: string,
+  taken: string[],
+  dossierIsReal: boolean,
+): Promise<string> {
+  // A degraded dossier is nothing but the raw "label - hint" attribute dump - asking a model
+  // to pick a handle from that produces exactly the copied-wording problem this exists to
+  // avoid. The curated fallback pool is a better bet than a handle assembled from a spec
+  // sheet, and it is what a total API failure already falls back to a few lines down.
+  if (!dossierIsReal) {
+    logger.warn('generator', 'no real dossier to work from, using a fallback handle');
+    return fallbackUsername(realName);
+  }
+
   let correction: string | null = null;
   /**
    * Only a sample reaches the prompt, though the whole list still decides the clash below.
@@ -757,33 +771,43 @@ export async function generateCharacter(): Promise<Character> {
   const takenHandles = existingUsernames();
   const takenNames = existingNames();
   let pass: DirectorPass = {};
+  const characterPassMessages = [
+    {
+      role: 'user' as const,
+      content: render('director_generate_character', {
+        rolled_block: describeSeed(seed),
+        age: seed.age,
+        server_window: `${settings.server_window.from}-${settings.server_window.to}`,
+        allowed_swaps: allowedSwapList(),
+        avoid_names: takenNames.length ? takenNames.map((n) => `- ${n}`).join('\n') : '(none yet)',
+      }),
+    },
+  ];
 
-  try {
-    pass = await completeJson<DirectorPass>({
-      scope: 'generator',
-      label: 'generate_character',
-      // Writing a character is a creative job, not an analytical one, so it goes to the
-      // actor model like the bio does. The director model is picked for being cheap and
-      // is typically also the censored one, which makes it a poor choice for something
-      // that has to take a seed full of explicit traits seriously rather than sand them
-      // down. The director still runs the game; it just does not invent the cast.
-      config: { ...settings.models.actor, max_tokens: CHARACTER_TOKENS },
-      require: ['real_name', 'dossier'],
-      messages: [
-        {
-          role: 'user',
-          content: render('director_generate_character', {
-            rolled_block: describeSeed(seed),
-            age: seed.age,
-            server_window: `${settings.server_window.from}-${settings.server_window.to}`,
-            allowed_swaps: allowedSwapList(),
-            avoid_names: takenNames.length ? takenNames.map((n) => `- ${n}`).join('\n') : '(none yet)',
-          }),
-        },
-      ],
-    });
-  } catch (err) {
-    logger.warn('generator', 'director coherence pass failed, using raw roll', { error: String(err) });
+  // A dossier that degrades to the raw attribute dump (see below) is exactly what makes her
+  // bio and handle read like a spec sheet - the whole reason this call exists. A single
+  // retry of the exact same request costs nothing and catches the ordinary transport hiccup
+  // that used to send every character born during it straight to that fallback.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      pass = await completeJson<DirectorPass>({
+        scope: 'generator',
+        label: attempt ? 'generate_character:retry' : 'generate_character',
+        // Writing a character is a creative job, not an analytical one, so it goes to the
+        // actor model like the bio does. The director model is picked for being cheap and
+        // is typically also the censored one, which makes it a poor choice for something
+        // that has to take a seed full of explicit traits seriously rather than sand them
+        // down. The director still runs the game; it just does not invent the cast.
+        config: { ...settings.models.actor, max_tokens: CHARACTER_TOKENS },
+        require: ['real_name', 'dossier'],
+        messages: characterPassMessages,
+      });
+      break;
+    } catch (err) {
+      logger.warn('generator', `director coherence pass failed${attempt ? ', using raw roll' : ', retrying once'}`, {
+        error: String(err),
+      });
+    }
   }
 
   // 3. coherence correction: at most two swaps, only in swappable fields
@@ -831,16 +855,20 @@ export async function generateCharacter(): Promise<Character> {
   if (pass.one_line) seed.hints.one_line = pass.one_line;
 
   // Everything written about her from here on is built from this, not from the raw tags -
-  // that is the entire point of asking for it. If the coherence pass failed outright, or
-  // came back without one despite `require`, describeSeed() is the only fallback that
-  // still lets username/bio generation produce something rather than nothing.
+  // that is the entire point of asking for it. describeSeed() is still the fallback that
+  // keeps the rest of the app (the Actor's core "who is she" context, mainly) working when
+  // the coherence pass failed outright or came back without one despite `require` - but a
+  // dossier that degraded to it is exactly the flat "label - hint" dump that makes a bio or
+  // handle read like a spec sheet, which is why writeUsername/writeBio below are told
+  // whether this is the real thing rather than being handed it blind.
+  const dossierIsReal = !!(pass.dossier ?? '').trim();
   seed.hints.dossier = (pass.dossier ?? '').trim() || describeSeed(seed);
 
   // The handle is picked last, once she is a finished person, so it can actually be hers -
   // an inside joke, a mangled surname, or something completely opaque. The final collision
   // check still happens inside insertCharacter, which is the only place it can be done
   // atomically with the write.
-  const username = await writeUsername(seed, realName, takenHandles);
+  const username = await writeUsername(seed, realName, takenHandles, dossierIsReal);
   // Only stored when the model actually chose one; otherwise avatarEmojiFor() derives it.
   const chosenEmoji = sanitizeEmoji(pass.avatar_emoji);
   if (chosenEmoji) seed.avatar_emoji = chosenEmoji;
@@ -858,7 +886,7 @@ export async function generateCharacter(): Promise<Character> {
     matched_at: null,
   };
 
-  character.bio = await writeBio(character);
+  character.bio = await writeBio(character, dossierIsReal);
 
   insertCharacter(character);
   createRelationship(character.id, {
@@ -1054,15 +1082,29 @@ function bioWordCount(bio: string): number {
   return bio.trim().split(/\s+/).filter(Boolean).length;
 }
 
-async function writeBio(character: Character): Promise<string> {
+function pickFallbackBio(existing: string[]): string {
+  const unused = FALLBACK_BIOS.filter((b) => !existing.includes(b));
+  return pickOne(unused.length ? unused : FALLBACK_BIOS);
+}
+
+async function writeBio(character: Character, dossierIsReal: boolean): Promise<string> {
   const settings = getSettings();
   const existing = recentBios();
+
+  // A degraded dossier is the raw "label - hint" attribute dump, not a person - a bio
+  // written from that reads like it, which is exactly the complaint this avoids. The
+  // curated fallback pool, already used for a total API failure below, is the better bet.
+  if (!dossierIsReal) {
+    logger.warn('generator', 'no real dossier to work from, using a fallback bio');
+    return pickFallbackBio(existing);
+  }
+
   const prompt = render('director_write_bio', {
     username: character.username,
     // The dossier, not the raw tags - written from and covering the same ground, but as
     // an actual person rather than a spec sheet, which is what let two women who rolled
     // three of the same tags come out with suspiciously similar bios.
-    seed_block: character.seed.hints.dossier || describeSeed(character.seed),
+    seed_block: character.seed.hints.dossier,
     // Same reasoning as the handles: the whole list still decides the clash, but showing
     // thirty bios spends a thousand tokens teaching the model exactly what to sound like.
     avoid_bios: existing.length
@@ -1132,6 +1174,5 @@ async function writeBio(character: Character): Promise<string> {
     }
   }
 
-  const unused = FALLBACK_BIOS.filter((b) => !existing.includes(b));
-  return pickOne(unused.length ? unused : FALLBACK_BIOS);
+  return pickFallbackBio(existing);
 }

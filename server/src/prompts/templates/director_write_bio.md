@@ -103,7 +103,10 @@ she would say.
 # NEVER
 - Cliches: "partner in crime", "fluent in sarcasm", "here for a good time not a long
   time", "living my best life", "ask me anything", "bad at bios", "dog mum", "adventure
-  seeker", "must love dogs", height requirements, lists of flag emoji, "swipe left if".
+  seeker", "must love dogs", height requirements, lists of flag emoji, "swipe left if",
+  "heavy hands", "likes to be in control" as a stock phrase - if her dossier is dominant or
+  submissive, show it through something specific she actually said or wants, not a genre
+  tag every third bio in the app also reaches for.
 - Naming her own traits, mood, star sign as a personality summary, or her archetype.
 - Her real name, her employer, her neighbourhood, or anything that identifies her.
 - A tidy summary sentence that explains the joke.

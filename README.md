@@ -2070,6 +2070,74 @@ quirk, and the new fetishes; a character rolled with the new `goth_girl` style c
 new, vivid `image_prompt` text all the way through to her `appearance_prompt`; and the new
 `cum_play` domain and its `cum_limit` hard_limit resolve correctly through `find()`.
 
+### Less vanilla, and bios/handles that stop copying the tag list
+
+Four related pieces of feedback, all about characters converging on similar, generic
+versions of each other.
+
+**Personalities skewed tame.** `personality.json`'s 59 archetypes already had genuinely
+eccentric, "cartoonish but still real in conversation" options - `deadpan_menace`,
+`wild_card`, `provocateur`, `cool_girl`, `instigator` and others - they were just
+structurally starved out: at `uncommon`/`rare` (0.45x/0.16x draw weight against `common`'s
+1.0x), the eccentric tier combined showed up in roughly 10% of rolled characters, while the
+tamer common archetypes (shy, warm, earnest, ambitious...) dominated the rest. 13 of the
+more distinctly expressive archetypes were promoted - 8 from `uncommon` to `common`
+(`deadpan_menace`, `menace`, `cool_girl`, `instigator`, `secret_softie`, `control_freak`,
+`show_off`, `romantic`) and the remaining 5 `rare` archetypes to `uncommon`
+(`provocateur`, `still_water`, `drama_magnet`, `wild_card`, `daredevil`) - roughly doubling
+their combined share to ~20% without touching any archetype's actual writing.
+
+**Dominant/submissive skewed too.** Measuring `dom_sub_leaning`'s authored ranges across
+all 59 archetypes turned up a real, measurable asymmetry: dominant-leaning archetypes were
+authored "pure" (`competitive`, `cool_girl`, `instigator`: `[0,+3]`, never dipping into
+submissive territory at all), while nominally submissive ones kept a slight allowance back
+toward dominant (`shy`, `warm`, `nurturer`: `[-3,+1]`) - a population-level bias toward
+dominant, not a bug in any single archetype's own logic. Rather than touch how any
+dominant-flavoured archetype reads, the 17 submissive-leaning archetypes were each shifted
+down by exactly one point, making them equally "pure" on their own end
+(`shy`/`warm`/`nurturer`/`overthinker`/`golden_retriever`/`romantic`: `[-3,+1]` →
+`[-3, 0]`, and 11 more similarly). The draw-weighted average `dom_sub_leaning` across the
+full population moved from +0.34 to +0.05, on a -3..+3 scale - essentially a real 50/50 now,
+verified directly: 6000 rolled characters landed 39.1% dominant vs 38.5% submissive.
+
+**Bios and handles echoing the raw attribute list.** `writeBio()`/`writeUsername()` were
+already built to work from `seed.hints.dossier` - the Director's prose write-up of the
+character - specifically so two women who rolled the same three tags didn't produce
+suspiciously similar bios (`director_write_bio.md` already forbids naming her own traits
+outright). The gap: if that Director call failed or the response came back without a
+`dossier` field, `seed.hints.dossier` silently fell back to `describeSeed()` - a flat
+`label - hint` dump of the raw tags - and that flat text is exactly what then got fed into
+the bio and handle prompts, producing the copied-wording symptom. Two changes:
+`generateCharacter()`'s dossier call now retries once on failure before giving up, cutting
+how often the fallback is reached at all; and `writeBio()`/`writeUsername()` now check
+whether the dossier is the real thing before ever calling a model with it - if it degraded
+to the flat dump, they skip straight to their own curated fallback pool (already used for a
+total API outage) instead of writing a bio or handle from a spec sheet. Bios and handles now
+genuinely rely on the dossier only, exactly as asked.
+
+**Dossiers were already meant to add invented depth**, not restate tags -
+`director_generate_character.md` already explicitly asks for "what she actually calls her
+cat, the thing she says when she is annoyed, why THIS job and not some other one," and bans
+producing a paragraph "by taking two tags and gluing them together with 'and'" - consistent
+with what was requested, so this pass left that template as-is; the fix above (making the
+dossier more reliable, and making bio/handle generation refuse to work from a degraded one)
+is what actually closes the gap between that instruction and what sometimes shipped.
+
+**"Heavy hands."** No hardcoded source of that specific phrase exists anywhere in the
+codebase - not in any prompt template, not in the `FALLBACK_BIOS` pool, not in any attribute
+`label`, `prompt_hint` or `image_prompt`. It reads as a model-level cliché reached for
+independently rather than something seeded here, so `director_write_bio.md`'s existing
+cliché list (`"partner in crime"`, `"fluent in sarcasm"`, etc.) picked up `"heavy hands"` and
+`"likes to be in control"` as a stock phrase, alongside an explicit instruction to show a
+dominant or submissive lean through something specific rather than a genre tag.
+
+Verified: 6000 real `rollSeed()` calls confirm the promoted archetypes' combined share moved
+from ~10% to ~20.5% and every one of them is actually reachable; the same run measured a
+39.1%/38.5% dominant/submissive split; and a mocked generation run confirms the retry fires
+exactly once on a failing dossier call, that `writeUsername()`/`writeBio()` are never even
+called when the dossier stays degraded after both attempts (going straight to their fallback
+pools instead), and that a dossier which succeeds on the retry reaches both prompts intact.
+
 ---
 
 ## Settings

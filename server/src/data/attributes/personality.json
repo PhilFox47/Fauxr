@@ -116,7 +116,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          1
+          0
         ]
       },
       "photo": "small closed-mouth smile, eyes slightly off-camera, shoulders drawn in a little, arm across her body, photo taken at slight distance"
@@ -462,7 +462,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          1
+          0
         ]
       },
       "photo": "genuine crinkle-eyed smile, head tipped toward the camera, open relaxed posture, soft eye contact"
@@ -1038,7 +1038,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          2
+          1
         ]
       },
       "photo": "open honest expression, full unguarded smile, looking directly at the camera, plain natural posture"
@@ -1153,7 +1153,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          2
+          1
         ]
       },
       "photo": "tired soft smile, slightly heavy eyelids, leaning on one hand, late evening indoor light"
@@ -1380,7 +1380,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          2
+          1
         ]
       },
       "photo": "soft unfocused gaze past the camera, faint absent smile, loose relaxed posture, window light"
@@ -2051,7 +2051,7 @@
     "category": "archetype",
     "label": "Deadpan menace",
     "weight": 1.0,
-    "rarity": "uncommon",
+    "rarity": "common",
     "prompt_hint": "says alarming things in a completely flat tone and enjoys watching people work out whether she is joking. Never clarifies. The warmth is real but you have to earn the decoder ring.",
     "image_prompt": null,
     "affinities": [],
@@ -2259,7 +2259,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          1
+          0
         ]
       },
       "photo": "slightly anxious half-smile, eyes searching the lens, hand fidgeting near her sleeve, several near-identical attempts energy"
@@ -2271,7 +2271,7 @@
     "category": "archetype",
     "label": "Feral gremlin",
     "weight": 1.0,
-    "rarity": "uncommon",
+    "rarity": "common",
     "prompt_hint": "chaotic in a gleeful, deliberate way. Says the unhinged thing on purpose to see what happens. Genuinely delighted when someone keeps up with her.",
     "image_prompt": null,
     "affinities": [],
@@ -2478,7 +2478,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          1
+          0
         ]
       },
       "photo": "warm reassuring smile, soft attentive eyes, slightly leaning in as if listening"
@@ -2806,7 +2806,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          2
+          1
         ]
       },
       "photo": "small private smile, indoors, soft lamp light, cosy layers, photo obviously taken alone at home"
@@ -2916,7 +2916,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          1
+          0
         ]
       },
       "photo": "huge delighted open smile, bright eyes, head slightly tilted, a bit too close to the lens"
@@ -3037,7 +3037,7 @@
     "category": "archetype",
     "label": "Hopeless romantic",
     "weight": 1.0,
-    "rarity": "uncommon",
+    "rarity": "common",
     "prompt_hint": "believes in it completely and has been burned for it repeatedly. Falls fast, admits it, and is braced for the fall. Sentimental without being soft.",
     "image_prompt": null,
     "affinities": [],
@@ -3134,7 +3134,7 @@
         ],
         "dom_sub_leaning": [
           -3,
-          1
+          0
         ]
       },
       "photo": "soft wistful smile, gentle eyes, chin resting on hand, warm golden light"
@@ -3146,7 +3146,7 @@
     "category": "archetype",
     "label": "Provocateur",
     "weight": 1.0,
-    "rarity": "rare",
+    "rarity": "uncommon",
     "prompt_hint": "argues for sport, takes the opposite side on principle, and is testing where his edges are. Respects being pushed back on more than being agreed with.",
     "image_prompt": null,
     "affinities": [],
@@ -3255,7 +3255,7 @@
     "category": "archetype",
     "label": "Very still",
     "weight": 1.0,
-    "rarity": "rare",
+    "rarity": "uncommon",
     "prompt_hint": "says little, and what she says lands. Comfortable with silence to a degree most people find unnerving. Not shy - simply not filling space.",
     "image_prompt": null,
     "affinities": [],
@@ -4217,8 +4217,8 @@
           4
         ],
         "dom_sub_leaning": [
-          -2,
-          1
+          -3,
+          0
         ]
       },
       "photo": "warm accommodating smile, slightly anticipatory, leaning a little toward the camera"
@@ -4230,7 +4230,7 @@
     "category": "archetype",
     "label": "Control freak",
     "weight": 1.0,
-    "rarity": "uncommon",
+    "rarity": "common",
     "prompt_hint": "has a system for most things and a private opinion about everyone else's. Comes undone a little when a plan actually falls apart, and hates that it shows.",
     "image_prompt": null,
     "affinities": [],
@@ -4750,8 +4750,8 @@
           3
         ],
         "dom_sub_leaning": [
-          -2,
-          1
+          -3,
+          0
         ]
       },
       "photo": "gentle attentive smile, head tilted slightly as if listening"
@@ -5282,8 +5282,8 @@
           3
         ],
         "dom_sub_leaning": [
-          -2,
-          1
+          -3,
+          0
         ]
       },
       "photo": "steady warm gaze, small genuine smile, grounded posture"
@@ -5509,7 +5509,7 @@
     "category": "archetype",
     "label": "Drama magnet",
     "weight": 1.0,
-    "rarity": "rare",
+    "rarity": "uncommon",
     "prompt_hint": "chaos finds her with suspicious regularity, and she tells the stories very well. Half aware she is not entirely innocent in how it keeps happening.",
     "image_prompt": null,
     "affinities": [],
@@ -5931,7 +5931,7 @@
     "category": "archetype",
     "label": "Performs effortless",
     "weight": 1.0,
-    "rarity": "uncommon",
+    "rarity": "common",
     "prompt_hint": "has the unbothered thing down to an art and cares a great deal underneath it, which is the whole joke. Rarely lets the second part show on purpose.",
     "image_prompt": null,
     "affinities": [],
@@ -6038,7 +6038,7 @@
     "category": "archetype",
     "label": "Genuinely unpredictable",
     "weight": 1.0,
-    "rarity": "rare",
+    "rarity": "uncommon",
     "prompt_hint": "does not perform spontaneity, she just is - conversations and plans go places nobody scripted, herself included. Impossible to bore.",
     "image_prompt": null,
     "affinities": [],
@@ -6237,8 +6237,8 @@
           3
         ],
         "dom_sub_leaning": [
-          -2,
-          1
+          -3,
+          0
         ]
       },
       "photo": "slightly uncertain smile, eyes searching the lens a little, hands visible and a touch restless"
@@ -6342,8 +6342,8 @@
           3
         ],
         "dom_sub_leaning": [
-          -2,
-          1
+          -3,
+          0
         ]
       },
       "photo": "gentle conciliatory smile, open hands, softened posture"
@@ -6355,7 +6355,7 @@
     "category": "archetype",
     "label": "Stirs things up",
     "weight": 1.0,
-    "rarity": "uncommon",
+    "rarity": "common",
     "prompt_hint": "says the thing that gets a reaction, on purpose, because a flat room bores her. Rarely malicious about it - she just likes it more interesting.",
     "image_prompt": null,
     "affinities": [],
@@ -7088,8 +7088,8 @@
           3
         ],
         "dom_sub_leaning": [
-          -2,
-          1
+          -3,
+          0
         ]
       },
       "photo": "wistful gentle smile, eyes a little distant, soft warm light"
@@ -7206,7 +7206,7 @@
     "category": "archetype",
     "label": "Chases a rush",
     "weight": 1.0,
-    "rarity": "rare",
+    "rarity": "uncommon",
     "prompt_hint": "gets bored of safe fast and goes looking for the version of things with actual stakes. Not reckless for its own sake - she has just recalibrated where the line is.",
     "image_prompt": null,
     "affinities": [],
@@ -7406,8 +7406,8 @@
           2
         ],
         "dom_sub_leaning": [
-          -2,
-          1
+          -3,
+          0
         ]
       },
       "photo": "careful controlled smile, slight tension around the eyes"
@@ -7419,7 +7419,7 @@
     "category": "archetype",
     "label": "Needs to be seen doing it",
     "weight": 1.0,
-    "rarity": "uncommon",
+    "rarity": "common",
     "prompt_hint": "the achievement barely counts unless someone watched it happen. Self-aware about the vanity, unbothered by having it.",
     "image_prompt": null,
     "affinities": [],
@@ -7526,7 +7526,7 @@
     "category": "archetype",
     "label": "Hard shell, soft center",
     "weight": 1.0,
-    "rarity": "uncommon",
+    "rarity": "common",
     "prompt_hint": "leads with dry and unbothered and hates getting caught being sentimental about something small. Will deny it and mean the denial less each time.",
     "image_prompt": null,
     "affinities": [],
