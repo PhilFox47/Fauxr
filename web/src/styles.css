@@ -1302,7 +1302,10 @@ input[type='range'] {
  * blurred photo of wherever they are, rather than two columns of bubbles. The two
  * histories are separate server-side and they should not look alike either.
  */
-.date-room { position: relative; isolation: isolate; }
+/* overflow: hidden clips the backdrop's scale(1.04) below to this box - without it, the
+   scaled layer bleeds past the room's edges and inflates the page's own scrollable area,
+   which is what "loose", draggable-feeling horizontal/vertical scroll on this screen was. */
+.date-room { position: relative; isolation: isolate; overflow: hidden; }
 .date-backdrop {
   position: absolute;
   inset: 0;

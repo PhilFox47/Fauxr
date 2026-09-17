@@ -2517,6 +2517,18 @@ date** sits at the bottom of her attribute list, with every previous evening lis
 leave a tappable marker in the texting history where they happened, which is usually how you
 will find them again.
 
+**The whole screen used to feel "loose."** The backdrop is drawn slightly oversized
+(`transform: scale(1.04)`) so the blur at its edges never shows a hard border, but that scaled
+layer was never clipped to the room it sits in — `.date-room` had no `overflow: hidden` of its
+own. A transformed element's visual overflow inflates the scrollable area of whichever ancestor
+actually scrolls, so the 4% of backdrop bleeding past the edges on every side was quietly adding
+real, draggable slack to the page itself: horizontal and vertical scroll that moved the whole
+screen a few pixels and snapped back, on this screen only, since it is the only one with a
+scaled absolute layer behind it. Confirmed the mechanism directly — before the fix, the page's
+scrollable area measured 8px wider and taller than the viewport and a horizontal wheel input
+actually moved it; after adding `overflow: hidden` to `.date-room`, both numbers match the
+viewport exactly and the page no longer moves.
+
 ---
 
 ## Settings
