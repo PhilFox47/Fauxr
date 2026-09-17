@@ -2683,3 +2683,11 @@ the fallback for browsers that don't support it) on `html, body, #root` in `styl
 plus `interactive-widget=resizes-content` in the viewport meta tag in `index.html`, which
 also gets `.app`'s and `.chat`'s existing `height: 100%` chain to shrink correctly since it
 percentages down from a now-correctly-sized root.
+
+**Enter no longer sends.** Both composers (text chat and the date room) used to treat a bare
+Enter as submit and only `Shift+Enter` as a literal newline — a desktop-messenger convention
+that leaves no way to write a multi-line message on a phone, where the return key on the
+on-screen keyboard just *is* Enter. Both `onKeyDown` handlers are gone; the textarea's default
+behaviour (Enter inserts a newline, same as any other character) is now the only behaviour,
+and the **send** button is the only way to send. Verified in both composers: typing across
+an Enter press produces one multi-line draft and sends nothing until the button is clicked.

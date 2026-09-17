@@ -702,12 +702,6 @@ export default function Chat({
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Message"
             rows={1}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                void send();
-              }
-            }}
           />
           <button className="send" onClick={() => void send()} disabled={!draft.trim() || sending} aria-label="Send">
             <Icon name="send" size={19} />
@@ -1128,12 +1122,6 @@ function DateRoom({
             onChange={(e) => setDraft(e.target.value)}
             placeholder='Narrate freely · "speak" · *private thought*'
             rows={1}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                void send();
-              }
-            }}
           />
           <button className="send" onClick={() => void send()} disabled={!draft.trim() || sending} aria-label="Send">
             <Icon name="send" size={19} />
