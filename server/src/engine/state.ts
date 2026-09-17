@@ -13,6 +13,7 @@ export const STATE_FLAGS: (keyof StateFlags)[] = [
   'spicy_photos_allowed',
   'allows_date_requests',
   'has_had_first_date',
+  'big_secret_known',
 ];
 
 export const EVENT_FLAGS = [

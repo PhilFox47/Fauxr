@@ -167,8 +167,12 @@ function truncateAtWord(text: string, max: number): string {
  * her call between a tall phone-style frame and a wide one, made from what she is actually
  * showing (see photo_aspect on ActorHidden) - a portrait for a selfie or an outfit shot, a
  * landscape for a view or a wider scene.
+ *
+ * Exported because locations.ts's backdrop reuses `portrait` directly: the provider silently
+ * squared off a "1152x2048" request that was never actually on its supported list, and the
+ * one resolution already confirmed working for a tall shot is this one.
  */
-const IMAGE_SIZE: Record<'profile' | 'portrait' | 'landscape', string> = {
+export const IMAGE_SIZE: Record<'profile' | 'portrait' | 'landscape', string> = {
   profile: '2048x2048',
   portrait: '2048x3072',
   landscape: '3072x2048',

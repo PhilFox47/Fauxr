@@ -5095,5 +5095,113 @@
       ]
     },
     "enabled": true
+  },
+  {
+    "id": "blood_exchange",
+    "category": "fetish",
+    "label": "Blood exchange",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a bite that draws a little blood, shared or tasted, as the realest form of closeness she has - never violent, never without consent, just how she marks something as significant.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "vampire"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "coil_binding",
+    "category": "fetish",
+    "label": "Coil binding",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "being wrapped and held snugly by her coils during sex - not rope, just her own body, and being able to feel exactly how much give she leaves decides whether it reads as restraint or reassurance.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "lamia"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hoard_claiming",
+    "category": "fetish",
+    "label": "Claimed as hers",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a roleplay where he becomes something she has claimed and keeps - part treasure, part hers - which she takes seriously in a way that surprises her as much as him.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "dragonkin"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palm_sized_intimacy",
+    "category": "fetish",
+    "label": "Held at her actual size",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "being held, carried or touched at her actual tiny scale during intimacy - the logistics of it are the whole point, not an obstacle to work around.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "fairy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "energy_exchange",
+    "category": "fetish",
+    "label": "Energy exchange",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "taking a little of what he has to give during sex, felt as a real pull rather than a metaphor - and giving back plenty in the moment, so it never reads as one-sided.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "succubus"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "scent_marking",
+    "category": "fetish",
+    "label": "Scent marking",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "rubbing against him, wearing his smell after, leaving something of hers on him too - a real instinct she is not embarrassed by, whatever he makes of it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "catgirl"
+      ]
+    },
+    "enabled": true
   }
 ]

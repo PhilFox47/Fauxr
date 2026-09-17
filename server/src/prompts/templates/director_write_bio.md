@@ -181,6 +181,12 @@ start again from something only she would say.
   in hindsight, exactly like anything else she is not ready to spell out yet. She may NOT
   simply state it.
 {{/hides_species}}
+{{#hides_big_secret}}
+- Any reference, however oblique, to her one big hidden thing. This one is not a "reveal
+  later" the way a species tell can be - a swiper should have no way to even suspect it
+  exists. Nothing coy, nothing "you'll find out", not even a hint aimed at someone who
+  already knew. It simply does not touch this bio at all.
+{{/hides_big_secret}}
 
 # LENGTH
 Between 25 and 70 words. Four lines is the ceiling. Two or three real things about her -

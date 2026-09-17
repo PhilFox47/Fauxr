@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { getSettings } from '../config.js';
 import { DATA_DIR } from '../db/index.js';
 import { completeJson, generateImage } from '../llm/client.js';
+import { IMAGE_SIZE } from './images.js';
 import { logger } from '../log.js';
 import { getLocation, saveLocation } from '../repo.js';
 import type { Location } from '../types.js';
@@ -19,8 +20,14 @@ import type { Location } from '../types.js';
 /**
  * 9:16, because it sits full-bleed behind the date screen - a phone-shaped canvas, not a
  * photo frame - and a landscape image would need real destructive cropping to fill it.
+ *
+ * This used to be its own literal, "1152x2048" - a resolution the provider quietly did not
+ * actually support, so every backdrop came back square instead of the requested tall frame
+ * with no error to say why. Reusing images.ts's own `portrait` size instead of inventing a
+ * second one means it can only ever drift out of sync with a resolution that is proven to
+ * actually work, never on its own.
  */
-const BACKDROP_SIZE = '1152x2048';
+const BACKDROP_SIZE = IMAGE_SIZE.portrait;
 
 /**
  * No people in it, ever. This is the room behind the two of them, and an image model handed

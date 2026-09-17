@@ -395,6 +395,29 @@ it fires and sets the same shared flag double-texting uses; with that flag set, 
 even though the underlying conditions (an old, unanswered last message; hours of silence)
 that would otherwise make both eligible are still true.
 
+### Anniversaries, actually tracked
+
+Nothing used to resurface "it's been a month since your first date" on its own — the ledger
+records events, but nothing proactively acted on a calendar date arriving. `scheduler.ts`'s
+`maybeCelebrateMilestone()` now checks two real timestamps already sitting in the database on
+every tick: `character.matched_at` and the first date's own `created_at` (`firstDateStartedAt`
+in `repo.ts`). At 7, 30, 90, 180 and 365 days since either one — then every whole year after
+that — it queues a wakeup the same way `maybeDoubleText()`/`maybeBeProactive()` already do,
+with a reason describing exactly what today is: *"today marks exactly one month since you two
+matched..."*. The Director reads that reason like any other trigger and decides, in character,
+whether and how she brings it up — a big deal, a passing remark, teasing him for forgetting -
+never mandatory and never guilt-tripping if he does not react the way she might have hoped.
+
+This is what makes it "tracked" rather than "occasionally remembered": the day genuinely
+arrives whether or not he happens to message her on it, the same way `maybeBeProactive()`
+already reopens a stale conversation without waiting to be asked. Already-celebrated
+milestones live in `rel.mood.milestones_celebrated` — a plain array of `anchor:days` keys —
+rather than a new schema field, since `mood` is already the scheduler's own loose scratch
+space for exactly this kind of cross-tick memory (`followed_up_unanswered` lives there for
+the same reason). Verified against a mock: a character matched exactly 30 days ago gets a
+milestone wakeup queued with the correct "one month" / "matched" reason text on the very next
+tick, and running the check again afterward does not requeue the same milestone a second time.
+
 ### Chats sorted by last activity, not match date
 
 The matches list was ordered by `matched_at` - whoever she matched most recently stayed on
@@ -2197,6 +2220,103 @@ arrival-photo assembler prompt confirmed to carry a `later`-tier tell; and the b
 confirmed both to assign-and-persist on a stripped seed and to keep the same ~97% human split
 across 500 fresh rolls.
 
+### Two more species, and the fantasy actually touching the sexual and personality tables
+
+The original sixteen shipped as a roster; this is the follow-up that gives a few of them real
+mechanical texture instead of just a look, plus two additions.
+
+**Angel and Android joined the `extremely_rare` tier.** Angel is `later`-visibility (faint
+iridescent wing-marks, revealed the same way a tiefling's tail is) and is built as the
+deliberate opposite of a succubus: earnest, genuinely trying to be good, and quietly worn out
+from a lifetime of being expected to perform that perfectly - Fauxr is where nobody asks it of
+her. Android is `chat_only`: passes as human in absolutely every way a photo could show,
+with the only tell an unnervingly precise memory and a half-second of composing herself too
+perfectly before she remembers to seem casual. Both lean personality archetypes the same way
+every other species does (`secret_softie`/`forbidden_thrill` for the angel, `deadpan_menace`/
+`still_water`/`people_watcher` for the android) - eighteen species now, the human weight
+recalibrated to keep the same ~3% overall non-human rate (confirmed at 3.10% over 20,000
+rolls with the two new entries in).
+
+**Species-locked fetishes: eligible only for one species, never guaranteed even then.**
+Six new fetish rows carry `extra.species: [...]`, an eligibility tag `generateCharacter()`'s
+fetish-rolling step now checks (`speciesCanHave()`) before a fetish is even in the pool to
+draw from: `blood_exchange` (vampire), `coil_binding` (lamia), `hoard_claiming` (dragonkin),
+`palm_sized_intimacy` (fairy), `energy_exchange` (succubus), `scent_marking` (catgirl). This
+is eligibility, not likelihood - a vampire is not guaranteed to bite, she is simply the only
+one who *can* roll it at all, and whether she actually does is still decided by the ordinary
+weight/rarity roll plus whatever affinity boost that species' own `extra.weights` gives it
+(4.5× for a vampire's bite, 5× for a dragonkin's hoard-claiming - the tendency strength is a
+per-species/fetish choice, not a fixed rule). Verified against 40,000 rolls: zero leaks of a
+locked fetish onto a non-matching species, and a real, partial tendency for the matching one
+(13.7% of rolled vampires actually got `blood_exchange` - present and clearly leaning that
+way, nowhere near universal).
+
+**Fantasy-adjacent quirks for the 97% who are just human.** Ten new `quirk` rows -
+`ex_was_not_human`, `saw_something_in_the_woods`, `half_believes_her_tarot`,
+`apartment_has_a_presence`, `salt_on_the_windowsill`, `no_mirrors_after_midnight`,
+`reads_omens_into_small_things`, `talks_to_her_plants_expecting_answers`,
+`grandmother_might_have_been_a_witch`, `left_offerings_as_a_kid` - at uncommon/rare rarity,
+open to any character regardless of species. These need no wiring at all beyond the JSON
+rows: `quirk` was already a fully general multi-select category, rolled and surfaced for
+every character exactly the same way. The point is scale rather than mechanism - an ordinary
+human cast that occasionally brushes up against the world the fantasy species actually live
+in makes the sixteen (now eighteen) rare exceptions feel like part of one setting instead of
+sixteen isolated die rolls with no connective tissue between them.
+
+### Her big secret: never in the profile, never for sale
+
+Species is a rare, fantastical, *discoverable* fact - a photo or a conversation eventually
+shows it. This is its grounded opposite: a genuinely mundane secret (`big_secret`, a new
+category in `life.json` - almost always `none`, ~7% of characters get one: secretly wealthy,
+secretly struggling, was briefly famous under a different name, ex-military, a former
+convent/monastic life, a serious competitive past she walked away from, an anonymous
+adult-content side income, a distant real connection to nobility) that is not meant to be
+found the way anything else in the discovery system is found. Two requirements made this a
+genuinely different mechanism rather than a species reskin: it must never appear anywhere in
+her profile details, and it must never be something `trait_credits` can buy.
+
+**It has no row in `buildCatalogue()` at all.** Every other discoverable fact - even a
+`chat_only` species with zero visual tell - gets a catalogue entry that shows as a locked
+`???` row until it is uncovered. `big_secret` gets none, on purpose: `undiscoveredKeys()` and
+`spendTraitCredit()` both only ever draw from that catalogue, so a fact that was never entered
+into it cannot be spent a credit on, full stop, regardless of how many credits are sitting
+banked. Verified directly: spending fifty consecutive trait credits against a character who
+has one never once reveals it, and the catalogue itself never contains a `big_secret` key,
+known or not.
+
+**The only two ways it ever comes out are the two the concept implies.** `identityBlock()`
+gets a new `bigSecretLine()`, structurally close to `speciesLine()` but with no visibility
+tier at all - just two states. Hidden: she is told plainly that this is not a
+getting-to-know-you fact and never something she volunteers, and that it surfaces in exactly
+one of two ways - a genuine accidental slip in an unguarded moment (never engineered just to
+create a reveal), or an actual choice made once trust has genuinely been earned over real
+time, never because a message count or a number of days passed. Known: a new
+`big_secret_known` state flag (set only by the Director, only for a turn where the reveal
+genuinely happened - `director_direction.md` is explicit that this is never a threshold to
+cross) switches the line to acknowledging he actually knows now.
+
+**The leak risk this created was the same one species already had, at higher stakes.** The
+dossier writer gets a new conditional `is_big_secret` section (`director_generate_character.md`,
+same zero-cost-when-unused pattern as `is_fantasy`) so the secret reaches her dossier as a
+real, lived fact instead of a footnote - which immediately reopened the exact leak fixed for
+species: a bio or handle built from that same dossier could just say it, discovered by
+`detectMentions()` before anyone had even swiped. Unlike a species tell, there is no
+"`profile`-tier, nothing to protect" exception here - every character who has a secret needs
+the guard, always. The bio's `NEVER` list gained a `hides_big_secret` line stronger than the
+species one: not "hint, don't state it outright" but no reference at all, however oblique -
+a swiper should have no way to even suspect it exists. The handle prompt gets the equivalent
+instruction, though without a hard-coded substring check the way a leaked species name gets
+one: a big secret has no single give-away word the way "vampire" is itself the tell, so there
+is no reliable keyword to check code-side, and the practical leak risk is lower for a short
+handle than a full sentence bio.
+
+Verified: `identityBlock()` says nothing at all for a character with no secret; states the
+hidden framing (the accident-or-earned-trust language, not a countdown) for one who has one;
+switches to the "he actually knows" framing once `big_secret_known` is set; and - the two
+requirements that mattered most - the catalogue never contains a `big_secret` row under any
+flag state, and spending every available trait credit against a character who has one never
+once reveals it.
+
 ### Some categories quietly gate real behaviour, not just prompt text
 
 Auditing every table before writing new entries turned up several categories where an
@@ -2508,14 +2628,22 @@ picture behind it.
 The prompt for it goes through the Director first (`writeBackdropPrompt`), because "my flat"
 is a reasonable thing to type and a poor thing to hand an image model — the pass fills in the
 light, the materials and the framing you did not, and explicitly asks for a tall, vertical
-composition rather than a wide establishing shot. It is rendered at 1152×2048 — 9:16, the
-same shape as the phone screen it sits full-bleed behind — with a hard "no people, ever"
-negative: this is the room *behind* the two of you, and an image model handed "a quiet wine
-bar" will cheerfully populate it with strangers who then contradict whatever the scene says
-about how busy the place is. Each regeneration writes a new filename rather than overwriting
-in place, since the browser has the old one cached against the old
-path and a regenerate that silently kept showing the previous picture is indistinguishable
-from one that failed.
+composition rather than a wide establishing shot. It is rendered tall — 9:16, the same shape
+as the phone screen it sits full-bleed behind — with a hard "no people, ever" negative: this
+is the room *behind* the two of you, and an image model handed "a quiet wine bar" will
+cheerfully populate it with strangers who then contradict whatever the scene says about how
+busy the place is. Each regeneration writes a new filename rather than overwriting in place,
+since the browser has the old one cached against the old path and a regenerate that silently
+kept showing the previous picture is indistinguishable from one that failed.
+
+**Backdrops were coming out square.** `BACKDROP_SIZE` used to be its own literal, `1152x2048`
+— a resolution nobody had actually confirmed the provider supports, as opposed to the
+in-chat portrait size (`2048x3072`), which real generated photos prove works on every
+request. The provider was quietly rejecting the unsupported size and falling back to square
+with no error to say why, so a location's backdrop never matched the tall frame it was
+meant for. `locations.ts` now imports `IMAGE_SIZE.portrait` from `images.ts` directly instead
+of keeping its own separate size constant, so the backdrop can only ever drift out of sync
+with a resolution already proven to work, never invent a new untested one of its own.
 
 Locations survive a world reset — they are places you wrote, not part of the cast — but their
 backdrops live in the images directory that reset empties, so the rows let go of them rather

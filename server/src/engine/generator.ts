@@ -36,6 +36,19 @@ function hintOf(a: Attribute | null | undefined): string {
 }
 
 /**
+ * Most fetishes are open to anyone; a handful (a vampire's bite, a lamia's coils) only make
+ * sense for one specific species and are tagged `extra.species: [...]`. This is eligibility
+ * only, not likelihood - whether a matching-species character actually rolls it is still
+ * decided by her ordinary weight and rarity, plus whatever affinity boost that species'
+ * own extra.weights gives it (see appearance.json's species entries), which is what lets the
+ * same fetish be a strong pull for one species and a faint one for another sharing it.
+ */
+function speciesCanHave(fetish: Attribute, speciesId: string): boolean {
+  const restrictedTo = fetish.extra?.species as string[] | undefined;
+  return !restrictedTo?.length || restrictedTo.includes(speciesId);
+}
+
+/**
  * Her age, drawn inside whatever band he asked for in his profile (18-42 by default).
  * Two draws averaged give a triangular curve rather than a flat one, so the middle of the
  * band is common and its edges are not - the same shape the fixed 18-42 roll had, just
@@ -254,6 +267,10 @@ export function rollSeed(): RolledSeed {
   const relationship_history = one('relationship_history');
   const dating_experience = one('dating_experience');
   const social_energy = one('social_energy');
+  // Almost always 'none'. Rolled ignoreArchetype on purpose - the whole point of a big secret
+  // is that it does not fit the surface she otherwise presents, so it should never be leaned
+  // toward or away from by her personality the way most fields are.
+  const big_secret = roll('big_secret', ctx, { ignoreArchetype: true })!;
 
   // ---- 3. looks, drawn knowing who she is and how old she is
   const ethnicity = one('ethnicity');
@@ -334,7 +351,9 @@ export function rollSeed(): RolledSeed {
   }
   const claimed = new Set<string>(domains.flatMap((d) => (d.extra?.fetishes as string[]) ?? []));
   const allowedFetishes = new Set(
-    byCategory('fetish').map((f) => f.id).filter((id) => openIds.has(id) || !claimed.has(id)),
+    byCategory('fetish')
+      .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) && speciesCanHave(f, species.id))
+      .map((f) => f.id),
   );
   const fetishes = rollMany('fetish', ctx, drawCount(counts.fetishes, 3), { only: allowedFetishes })
     .map((a) => a.id);
@@ -360,6 +379,7 @@ export function rollSeed(): RolledSeed {
 
   const hints: Record<string, string> = {
     species: hintOf(species),
+    big_secret: hintOf(big_secret),
     archetype: hintOf(archetype),
     attachment_style: hintOf(attachment_style),
     humor_type: hintOf(humor_type),
@@ -441,6 +461,7 @@ export function rollSeed(): RolledSeed {
     hobbies,
     languages: ['english', ...extraLanguages],
     online_times: fallbackOnlineTimes(),
+    big_secret: big_secret.id,
 
     search_motive: search_motive.id,
     touchstone: touchstone.id,
@@ -490,6 +511,7 @@ function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }
     ['relationship_history', seed.relationship_history], ['dating_experience', seed.dating_experience],
     ['social_energy', seed.social_energy], ['search_motive', seed.search_motive], ['touchstone', seed.touchstone],
     ['dealbreaker', seed.dealbreaker], ['orientation', seed.orientation], ['arousal_tell', seed.arousal_tell],
+    ['big_secret', seed.big_secret],
   ];
   const plural: [string, string[]][] = [
     ['quirk', seed.quirks], ['interest', seed.interests], ['hobby', seed.hobbies],
@@ -612,6 +634,9 @@ export function describeSeed(seed: CharacterSeed): string {
     seed.species && seed.species !== 'human'
       ? `species: ${label('species', seed.species)} - ${seed.hints.species}`
       : `species: human`,
+    seed.big_secret && seed.big_secret !== 'none'
+      ? `big secret (she keeps this genuinely hidden, never volunteers it, never let it reach the bio or handle): ${label('big_secret', seed.big_secret)} - ${seed.hints.big_secret}`
+      : `big secret: none`,
     `archetype: ${label('archetype', seed.archetype)} - ${seed.hints.archetype}`,
     `attachment: ${label('attachment_style', seed.attachment_style)} - ${seed.hints.attachment_style}`,
     `humour: ${label('humor_type', seed.humor_type)} - ${seed.hints.humor_type}`,
@@ -852,6 +877,7 @@ async function writeUsername(
   // in any photo regardless, so a handle referencing it is a stylistic choice, not a leak.
   const species = seed.species && seed.species !== 'human' ? find('species', seed.species) : null;
   const hiddenSpecies = species && species.extra?.visibility !== 'profile' ? species.label.toLowerCase() : null;
+  const hasBigSecret = !!seed.big_secret && seed.big_secret !== 'none';
 
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
@@ -880,6 +906,13 @@ async function writeUsername(
           'She is also secretly not human, and keeps that hidden day to day - the handle must not hint',
           `at it either, directly or in code (nothing like "${hiddenSpecies}", a pun on it, or a related`,
           'creature/mythology word). That reveal is hers to make later, not something this handle gives away.',
+        ] : []),
+        ...(hasBigSecret ? [
+          '',
+          'She also has one real thing about her life that she keeps genuinely hidden from nearly',
+          'everyone. The handle must give no hint of it whatsoever, however oblique or clever - unlike',
+          'her name, this is not something to work around cleverly, it simply has nothing to do with',
+          'this handle at all.',
         ] : []),
         '',
         'A few that are already taken. Do not reuse a word from one of these or rework it into',
@@ -960,6 +993,7 @@ export async function generateCharacter(): Promise<Character> {
       content: render('director_generate_character', {
         rolled_block: describeSeed(seed),
         is_fantasy: seed.species && seed.species !== 'human' ? '1' : '',
+        is_big_secret: seed.big_secret && seed.big_secret !== 'none' ? '1' : '',
         age: seed.age,
         server_window: `${settings.server_window.from}-${settings.server_window.to}`,
         allowed_swaps: allowedSwapList(),
@@ -1327,6 +1361,10 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
     // detectMentions() the moment the character is generated, before anyone has even swiped.
     // A 'profile'-tier species has nothing to protect: it is visible in any photo anyway.
     hides_species: speciesVis === 'later' || speciesVis === 'private' || speciesVis === 'chat_only' ? '1' : '',
+    // Same leak, higher stakes: a big secret has no visibility tier at all, so unlike species
+    // there is no "fine, it's a profile-tier one" exception here - every character who has
+    // one needs this guard.
+    hides_big_secret: character.seed.big_secret && character.seed.big_secret !== 'none' ? '1' : '',
   });
 
   // A model told to be pithy will happily answer with four words, which is not a bio -

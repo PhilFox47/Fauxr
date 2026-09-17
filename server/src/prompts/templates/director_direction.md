@@ -425,7 +425,7 @@ only ones that genuinely came out in the conversation above:
 
 Valid "set_flags" / "clear_flags": real_name_known, profile_picture_sent,
 personal_photos_allowed, sexual_topics_allowed, spicy_photos_allowed,
-allows_date_requests, has_had_first_date.
+allows_date_requests, has_had_first_date, big_secret_known.
 Only set a flag for something that ACTUALLY HAPPENED in the conversation above. A flag is
 not a threshold being crossed - it is her having said her name, having agreed, the
 conversation having actually turned sexual. If it did not happen yet, leave it and use
@@ -433,6 +433,13 @@ conversation having actually turned sexual. If it did not happen yet, leave it a
 Never set or clear "profile_picture_sent" yourself. Sending a photo now needs his consent,
 so whether one was actually sent is not something you can see from the conversation text -
 the system sets this the moment a photo he accepted is actually generated and delivered.
+
+Only set "big_secret_known" if her seed actually gives her a hidden secret (most do not) AND
+it genuinely came out in the conversation above - either a real accidental slip, said in an
+unguarded moment, or her actually choosing to share it after real trust. This should stay
+rare even among the characters who have one: most turns, for most of them, it never applies.
+Never treat it as a threshold to cross once enough messages or enough trust has accumulated -
+it is earned the same way any real secret is, by an actual moment happening, not by a number.
 
 Valid "event_flags": first_compliment_accepted, first_personal_story_told,
 first_conflict_resolved, first_time_she_initiated, first_rejection_survived,

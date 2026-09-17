@@ -13084,7 +13084,8 @@
         "being_claimed": 2,
         "hair_pulling": 1.6,
         "jealous_type": 2,
-        "lone_wolf": 1.4
+        "lone_wolf": 1.4,
+        "scent_marking": 2.5
       }
     },
     "enabled": true
@@ -13177,7 +13178,8 @@
         "being_claimed": 1.8,
         "mirror_watching_self": 1.6,
         "old_soul": 1.8,
-        "provocateur": 1.4
+        "provocateur": 1.4,
+        "blood_exchange": 4.5
       }
     },
     "enabled": true
@@ -13242,7 +13244,8 @@
         "forbidden_thrill": 1.8,
         "being_told_she_smells_good": 1.4,
         "flirty": 1.8,
-        "secret_softie": 2.2
+        "secret_softie": 2.2,
+        "energy_exchange": 4.0
       }
     },
     "enabled": true
@@ -13306,7 +13309,8 @@
         "size_worship": 3,
         "careful_of_scale": 2.6,
         "free_spirit": 3,
-        "chaotic": 1.8
+        "chaotic": 1.8,
+        "palm_sized_intimacy": 4.0
       }
     },
     "enabled": true
@@ -13348,7 +13352,8 @@
         "claiming_him": 1.8,
         "being_claimed": 1.8,
         "collects_something": 3,
-        "jealous_type": 1.8
+        "jealous_type": 1.8,
+        "hoard_claiming": 5.0
       }
     },
     "enabled": true
@@ -13371,7 +13376,8 @@
         "pinning_him": 1.6,
         "nail_dragging": 1.5,
         "still_water": 2.2,
-        "cool_girl": 1.4
+        "cool_girl": 1.4,
+        "coil_binding": 4.0
       }
     },
     "enabled": true
@@ -13426,6 +13432,50 @@
         "open_water": 2.5,
         "sea_swimming": 2.5,
         "wild_swimming_group": 1.8
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "angel",
+    "category": "species",
+    "label": "Angel",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Faint iridescent wing-marks across her shoulder blades and an almost imperceptible warmth to her that people notice without placing why. Earnest, genuinely trying to be good in a way that has nothing to do with performance - and quietly worn out from a lifetime of being expected to be perfect about it. Fauxr, of all places, is where nobody asks that of her.",
+    "image_prompt": "faint iridescent wing-marks across her shoulder blades and an almost imperceptible warm glow to her skin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later",
+      "weights": {
+        "being_praised": 1.6,
+        "secret_softie": 2,
+        "forbidden_thrill": 2.2,
+        "guarded": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "android",
+    "category": "species",
+    "label": "Android",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "Passes as human in every way that matters, except an unnervingly precise memory for things she was only told once, and a half-second of being composed just a little too perfectly before she remembers to seem casual - most people never notice. She knows exactly what she is and stopped needing anyone else to be comfortable with that before she would be herself.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "chat_only",
+      "weights": {
+        "people_watcher": 2.5,
+        "still_water": 2,
+        "deadpan_menace": 1.6,
+        "old_soul": 1.2
       }
     },
     "enabled": true

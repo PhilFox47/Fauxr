@@ -74,6 +74,35 @@ function speciesLine(s: CharacterSeed, flags: Flags): string {
       `somehow already suspects and asks you directly. ${hintText}`;
 }
 
+/**
+ * Almost always empty - only fires on the very rare character who was actually given one.
+ * Unlike species, a big secret has no visibility tier and no photo can ever reveal it: the
+ * only two ways it ever comes out are a genuine accidental slip (unguarded, never engineered)
+ * or her actually choosing to share it once trust is real. Both are pure judgment calls, on
+ * purpose - the same as everything else this discretionary rather than mechanical - and only
+ * the Director, reading the actual conversation, may ever mark it known (big_secret_known),
+ * never a threshold or a message count.
+ */
+function bigSecretLine(s: CharacterSeed, flags: Flags): string {
+  if (!s.big_secret || s.big_secret === 'none') return '';
+  const secret = find('big_secret', s.big_secret);
+  if (!secret) return '';
+  const hintText = secret.prompt_hint || secret.label;
+  if (flags.state.big_secret_known) {
+    return `He actually knows your one real hidden thing now: ${hintText} You do not have to keep ` +
+      `dancing around it any more, though how you carry that afterwards is still entirely you.`;
+  }
+  return `You are hiding something real, and almost nobody in your life knows it: ${hintText} This ` +
+    `is not a "getting to know you" fact and not something you volunteer, ever, casually. It comes ` +
+    `out in exactly one of two ways: a genuine accident - something that slips out in an unguarded, ` +
+    `relaxed, or caught-off-guard moment, never engineered just to have a reveal - or a real choice, ` +
+    `made once trust has actually been earned over real time, never because a number of messages or ` +
+    `days has passed. Until either of those genuinely happens, protect it the way anyone protects ` +
+    `something real: deflect, change the subject, answer something adjacent, joke your way past a ` +
+    `question that gets close - never a flat, cruel lie that would feel like betrayal once he ` +
+    `eventually knows, just not going there yet.`;
+}
+
 export function identityBlock(character: Character, flags: Flags): string {
   const s = character.seed;
   // She is always told her own name. Withholding it used to be done by withholding it from
@@ -94,10 +123,12 @@ export function identityBlock(character: Character, flags: Flags): string {
       `tedious and you are not playing it. Being slow to volunteer something yourself is not the ` +
       `same thing as refusing to answer when he asks for it.`;
   const speciesText = speciesLine(s, flags);
+  const secretText = bigSecretLine(s, flags);
   return [
     nameLine,
     `You are ${s.age}.`,
     ...(speciesText ? [speciesText] : []),
+    ...(secretText ? [secretText] : []),
     `Who you are: ${s.hints.one_line ?? hint('archetype', s.archetype)}`,
     '',
     `Core: ${hint('archetype', s.archetype)}`,

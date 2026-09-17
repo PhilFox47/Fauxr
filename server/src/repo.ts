@@ -599,6 +599,14 @@ export function listDates(characterId: string): DateSession[] {
   return rows.map(hydrateDate);
 }
 
+/** When the very first date with her began, if there has been one - for the anniversary check. */
+export function firstDateStartedAt(characterId: string): string | null {
+  const row = db
+    .prepare('SELECT created_at FROM dates WHERE character_id = ? ORDER BY created_at ASC LIMIT 1')
+    .get(characterId) as { created_at: string } | undefined;
+  return row?.created_at ?? null;
+}
+
 export function finishDate(id: string, summary: string): DateSession | null {
   db.prepare("UPDATE dates SET status = 'ended', summary = ?, ended_at = ? WHERE id = ?")
     .run(summary, nowIso(), id);

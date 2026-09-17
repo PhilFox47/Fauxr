@@ -19,6 +19,18 @@ detail on an otherwise ordinary bio. She is always a fully grown adult woman, wh
 species, scale, or form - never write or imply anything otherwise, however small or however
 different from a typical human she is.
 {{/is_fantasy}}
+{{#is_big_secret}}
+
+# ABOUT HER BIG SECRET
+She has one real, grounded thing about her that she keeps genuinely hidden - not from you,
+but from almost everyone in her life, him very much included. Weave it into the dossier as a
+true fact underneath the rest of her, the way a real hidden thing actually sits in someone's
+life: it can shape a habit, an old reflex, a thing she deflects around, without ever being
+spelled out as a headline or a twist. It must NOT reach anything he sees before he has
+actually earned it - it belongs in the dossier and nowhere it could leak into her bio, her
+handle, her one_line, or any of the smaller fields below. Nobody swiping on her profile
+should be able to tell it exists.
+{{/is_big_secret}}
 
 # WHAT TO DO
 

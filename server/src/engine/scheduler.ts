@@ -4,7 +4,7 @@ import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
-  allWakeups, clearWakeup, dueWakeups, getCharacter, getRelationship, getWakeup,
+  allWakeups, clearWakeup, dueWakeups, firstDateStartedAt, getCharacter, getRelationship, getWakeup,
   characterIdsOnDate, lastMessage, listActiveMatches, pendingUserMessageCount, saveRelationship, setWakeup,
 } from '../repo.js';
 import type { Character } from '../types.js';
@@ -80,6 +80,7 @@ export async function tick(): Promise<void> {
   decayPass();
   maybeDoubleText();
   maybeBeProactive();
+  maybeCelebrateMilestone();
   void ensureStack();
   emitPresence();
 }
@@ -245,6 +246,77 @@ export function maybeBeProactive(): void {
     rel.mood = { ...rel.mood, followed_up_unanswered: true };
     saveRelationship(rel);
     logger.debug('scheduler', `proactive wakeup queued for ${character.username}`, { at: at.toISOString() });
+  }
+}
+
+/**
+ * Round day-counts worth marking, and the phrase for each - past the first year it just keeps
+ * counting in whole years, so a match that somehow lasts that long is not left with nothing.
+ */
+const MILESTONE_DAYS: [number, string][] = [
+  [7, 'one week'], [30, 'one month'], [90, 'three months'], [180, 'six months'], [365, 'one year'],
+];
+
+function milestoneLabel(days: number): string | null {
+  const exact = MILESTONE_DAYS.find(([d]) => d === days);
+  if (exact) return exact[1];
+  if (days > 365 && days % 365 === 0) return `${days / 365} years`;
+  return null;
+}
+
+/**
+ * Real anniversaries, tracked from real timestamps already sitting in the database -
+ * `character.matched_at` and the first date's own `created_at` - rather than something the
+ * Director has to remember to bring up on its own. This is what makes a milestone "tracked"
+ * instead of just occasionally mentioned: the day actually arrives whether or not he happens
+ * to message her that day, the same way maybeBeProactive() above already reopens a
+ * conversation after real silence rather than waiting to be asked.
+ *
+ * Already-celebrated milestones live in `rel.mood.milestones_celebrated` (a plain array of
+ * "which anchor, which day-count" keys) rather than a new column - mood is already the
+ * scheduler's own loose scratch space for exactly this kind of cross-tick memory (see
+ * `followed_up_unanswered` above), and a milestone flag has no more claim to a real schema
+ * field than that one did.
+ */
+export function maybeCelebrateMilestone(): void {
+  for (const character of contactableMatches()) {
+    const rel = getRelationship(character.id);
+    if (!rel || rel.ghosted_at) continue;
+    if (getWakeup(character.id)) continue; // something is already going to wake her
+
+    const anchors: { key: string; at: string | null; occasion: string }[] = [
+      { key: 'matched', at: character.matched_at, occasion: 'you two matched' },
+      { key: 'first_date', at: firstDateStartedAt(character.id), occasion: 'your first date' },
+    ];
+    const celebrated: string[] = (rel.mood as any)?.milestones_celebrated ?? [];
+
+    for (const anchor of anchors) {
+      if (!anchor.at) continue;
+      const days = Math.floor((Date.now() - Date.parse(anchor.at)) / 86_400_000);
+      const label = milestoneLabel(days);
+      if (!label) continue;
+      const key = `${anchor.key}:${days}`;
+      if (celebrated.includes(key)) continue;
+
+      const at = nextOnlineAt(character, new Date(Date.now() + randInt(1, 45) * 60_000));
+      if (!at) continue;
+      setWakeup({
+        character_id: character.id,
+        scheduled_at: at.toISOString(),
+        reason:
+          `today marks exactly ${label} since ${anchor.occasion} - if it feels like her to ` +
+          `bring it up, she can, in whatever way actually fits who she is: a big deal, a ` +
+          `passing remark, teasing him for probably forgetting. Not mandatory, and never ` +
+          `guilt-tripping if he does not react the way she might have hoped.`,
+        cancel_if_user_writes: true,
+      });
+      rel.mood = { ...rel.mood, milestones_celebrated: [...celebrated, key] };
+      saveRelationship(rel);
+      logger.debug('scheduler', `milestone wakeup queued for ${character.username}`, { milestone: key, at: at.toISOString() });
+      // One milestone per tick is plenty - if both anchors somehow land on the same day, the
+      // other is still uncelebrated and simply queues on the next tick once this wakeup clears.
+      break;
+    }
   }
 }
 

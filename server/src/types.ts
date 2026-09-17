@@ -70,6 +70,14 @@ export interface CharacterSeed {
   hobbies: string[];
   languages: string[];
   online_times: OnlineWindow[];
+  /**
+   * Almost always 'none'. The rare exception is a real, grounded (never fantastical) fact
+   * she keeps genuinely hidden - deliberately absent from the discovery catalogue and from
+   * trait credits, unlike every other seed field: this one is never purchased, only actually
+   * earned, either by a real accidental slip or by trust built over real time. See
+   * blocks.ts's bigSecretLine() and StateFlags.big_secret_known.
+   */
+  big_secret: string;
 
   // gameplay
   search_motive: string;
@@ -137,6 +145,13 @@ export interface StateFlags {
   messages_sent_count?: number;
   /** Spendable on uncoverTraitCredit() to reveal one random still-locked trait. */
   trait_credits?: number;
+  /**
+   * Whether her big_secret (if she has one) has actually come out - set only by the Director,
+   * only for a turn where it genuinely happened (a real accidental slip, or her choosing to
+   * finally share it). Deliberately outside the discovery catalogue: this is never something
+   * trait_credits can buy, unlike everything else that flag spends on.
+   */
+  big_secret_known?: boolean;
 }
 
 export interface EventFlags {
