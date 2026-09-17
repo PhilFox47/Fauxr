@@ -11,6 +11,7 @@ const RARITY_SPARKS: Record<SwipeProfile['rarity']['tier'], number> = {
   uncommon: 1,
   rare: 2,
   very_rare: 3,
+  extremely_rare: 4,
 };
 
 /** Spoiler-free: a grade on the dice roll, not a hint about anything she'll actually say. */

@@ -510,7 +510,7 @@ function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }
  * outlier, and the average stays comparable even though how many traits get counted varies a
  * little from character to character.
  */
-export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare';
+export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare' | 'extremely_rare';
 
 export function rarityScore(seed: CharacterSeed): number {
   const ids = seedAttributeIds(seed);
@@ -523,20 +523,26 @@ export function rarityScore(seed: CharacterSeed): number {
 }
 
 /**
- * Thresholds picked empirically (2000 rolled seeds) to land roughly 27% common / 50%
- * uncommon / 18% rare / 5% very rare - a real minority at the top, not something a third of
- * the stack claims.
+ * Thresholds picked empirically (3000 rolled seeds, after the attribute database's rarity
+ * tags were re-audited for the fifth tier) to land roughly 24% common / 42% uncommon /
+ * 22% rare / 9% very rare / 3% extremely rare - a real, thin top tier, not something a third
+ * of the stack claims.
  */
 const RARITY_LABEL: Record<RarityTier, string> = {
   common: 'Common',
   uncommon: 'Uncommon',
   rare: 'Rare',
   very_rare: 'Very rare',
+  extremely_rare: 'Extremely rare',
 };
 
 export function rarityTier(seed: CharacterSeed): { tier: RarityTier; label: string } {
   const score = rarityScore(seed);
-  const tier: RarityTier = score >= 0.42 ? 'very_rare' : score >= 0.34 ? 'rare' : score >= 0.24 ? 'uncommon' : 'common';
+  const tier: RarityTier =
+    score >= 0.46 ? 'extremely_rare' :
+    score >= 0.40 ? 'very_rare' :
+    score >= 0.33 ? 'rare' :
+    score >= 0.24 ? 'uncommon' : 'common';
   return { tier, label: RARITY_LABEL[tier] };
 }
 

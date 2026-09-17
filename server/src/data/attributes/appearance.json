@@ -13019,5 +13019,33 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "hearing_aid",
+    "category": "distinctive_feature",
+    "label": "Wears a hearing aid",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "wears a hearing aid, unbothered about it being visible",
+    "image_prompt": "a small hearing aid visible at one ear",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "walks_with_a_limp",
+    "category": "distinctive_feature",
+    "label": "Walks with a slight limp, from an old injury",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "walks with a slight limp from an old injury - not something that slows her down much, just there",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
   }
 ]

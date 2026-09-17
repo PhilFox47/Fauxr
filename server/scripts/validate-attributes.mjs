@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 const serverRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dataDir = join(serverRoot, 'src', 'data', 'attributes');
 
-const VALID_RARITY = new Set(['common', 'uncommon', 'rare', 'very_rare']);
+const VALID_RARITY = new Set(['common', 'uncommon', 'rare', 'very_rare', 'extremely_rare']);
 const REQUIRED_FIELDS = {
   id: 'string', category: 'string', label: 'string', weight: 'number', rarity: 'string',
   prompt_hint: 'string', affinities: 'object', conflicts: 'object', modifies: 'object',

@@ -12,13 +12,14 @@ const DATA_DIR = join(here, '..', 'data', 'attributes');
  * coarse dial, so a table of two hundred entries can be tuned by tagging rather than by
  * hand-picking two hundred numbers.
  */
-export type Rarity = 'common' | 'uncommon' | 'rare' | 'very_rare';
+export type Rarity = 'common' | 'uncommon' | 'rare' | 'very_rare' | 'extremely_rare';
 
 export const RARITY_WEIGHT: Record<Rarity, number> = {
   common: 1,
-  uncommon: 0.45,
-  rare: 0.16,
-  very_rare: 0.05,
+  uncommon: 0.4,
+  rare: 0.14,
+  very_rare: 0.045,
+  extremely_rare: 0.012,
 };
 
 export interface Attribute {

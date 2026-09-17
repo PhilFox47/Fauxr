@@ -1254,11 +1254,13 @@ front is sorted rather than matching nothing.
 
 ### A rarity badge, spoiler-free
 
-Every attribute already carries a `rarity` tag (common / uncommon / rare / very rare) that
-governs how often it gets rolled — see [the attribute tables](#the-attribute-tables) below.
-The swipe card shows a grade built from that alone: a small pill in the corner reading
-Common, Uncommon, Rare or Very rare, with a spark for each step up and a gold glow at the
-top. It says nothing about *what* is unusual about her — no fetish, no job, no personality
+Every attribute already carries a `rarity` tag — common / uncommon / rare / very rare /
+**extremely rare** — that governs how often it gets rolled; see
+[the attribute tables](#the-attribute-tables) below. The swipe card shows a grade built from
+that alone: a small pill in the corner, with a spark for each step up and a glow at the top
+two tiers (gold for very rare, violet for extremely rare — a distinct hue rather than a
+brighter gold, so the very top reads as a genuinely different rung, not "very rare but more
+so"). It says nothing about *what* is unusual about her — no fetish, no job, no personality
 trait leaks through it — only how far from the middle of the dice her whole profile landed,
 which is exactly the kind of thing a real dating app would never tell you and exactly why it
 is fun to know anyway.
@@ -1270,9 +1272,64 @@ them. Averaging surprisal rather than counting rare tags matters: a character wi
 common attributes and one very rare one reads as mostly ordinary with one striking thing
 about her, not as "rare" outright, and the score stays comparable across characters even
 though how many attributes get counted varies a little (a hard limit and a hair colour come
-from very differently sized tables). The four thresholds were picked empirically, from 2,000
-rolled seeds, to land roughly 27% common / 50% uncommon / 18% rare / 5% very rare — a real
-top tier, not something a third of the stack claims.
+from very differently sized tables). The five thresholds were picked empirically, from 3,000
+rolled seeds after the fifth tier's rarity re-audit below, to land roughly 24% common /
+42% uncommon / 22% rare / 8% very rare / 3% extremely rare — a real, thin top tier, not
+something a third of the stack claims.
+
+### A fifth rarity tier, and an audit of what earns each one
+
+Adding **extremely rare** (`RARITY_WEIGHT.extremely_rare = 0.012`, one notch below very
+rare's 0.045) was the easy part. The actual work was going back through the roughly 2,500
+entries across all 51 attribute categories and asking, for each one, whether its existing
+tag still made sense now that there was a fifth rung to put things on, and — since Fauxr is
+built for whoever actually shows up on it, not one kind of person — whether the category was
+missing anything real.
+
+**Where extremely rare actually landed.** It is reserved for genuine outliers, not sprinkled
+in everywhere: a handful of the most extreme existing fetishes (`consensual_nonconsent`,
+`free_use_fantasy`, `group_sex_fantasy`, `cuckqueen_fantasy`, both directions of
+`slave_treatment`), a few occupations that were already flavour rather than realism
+(`Made guy`, `Contract killer`, `Intelligence operative`, `Vampire`), and a couple of the new
+additions below where the rarity is the entire point (a fully pre-negotiated
+`somnophilia_fantasy`; `dressing_him_femme`). Most categories did **not** get an extremely
+rare entry, and that is a real finding, not an oversight: `kink_domain`'s rarity tags turned
+out to be inert (`rollKinkMap()` assigns every domain a stance from `extra.intensity` and
+`freak` directly, never through the dice-roll weighting the rarity system feeds), and several
+of the largest, most carefully built categories — `turn_on`, `turn_off`, `green_flag`,
+`dealbreaker`, `search_motive`, `touchstone`, `archetype` — are personal-preference axes
+where a genuine population outlier is not really the right shape of thing; forcing the new
+tier onto them to prove it got used would have diluted it everywhere else.
+
+**What was missing.** A modest, deliberate set of additions rather than an attempt at
+completeness: `voyeurism_watching`, `somnophilia_fantasy`, `teacher_student_roleplay` and
+`doctor_patient_roleplay`, tickling (both directions), `forbidden_thrill`, `dressing_him_femme`
+and `voice_kink` in `fetish`; `no_aftercare` as a hard limit, for a character whose needs
+just run the other way from what aftercare assumes; `in_therapy_and_says_so` as an archetype,
+and `anxiety_is_a_lot` / `still_healing_and_says_so` as insecurities, none of which existed
+as a mental-health-adjacent axis before; `on_disability` and `stay_at_home_partner` as
+occupations; `hearing_aid` and `walks_with_a_limp` as distinctive features — chosen
+specifically because they add real, visible variety without a large ripple into other
+categories (a prosthetic limb or a wheelchair, by contrast, would touch enough other
+appearance and physical-contact assumptions to need its own pass, not a line item here).
+Some real-world territory was deliberately left alone: age-play and anything
+financial/transactional stay out for the same reasons they always were.
+
+**Things that should not coexist, checked and fixed where found.** `no_aftercare` now
+`conflicts` with the two fetishes that are explicitly about lingering afterwards
+(`cuddling_after`, `focusing_on_afterglow`) — a character cannot have both. The new
+`anxiety_is_a_lot` insecurity has an `affinities` link to the `anxious_texter` archetype, so
+the two now turn up together roughly twice as often as chance alone would produce (measured
+at 1.37% vs 0.74% over 20,000 rolls) without ever being forced. Everywhere else, the existing
+web of `affinities`/`conflicts`/`extra.weights` built up over the previous sessions — ethnicity
+shaping language, kink domains owning their fetishes and limits, archetypes re-weighting
+personality and pace — was checked for internal consistency (no dangling references, no
+domain claiming a fetish it shouldn't) rather than rebuilt from scratch.
+
+Everything above was verified with `node scripts/validate-attributes.mjs` after every change,
+a 1,000-roll smoke test confirming the new conflict and affinity actually hold up under real
+generation, and the swipe-card badge checked in a browser for all five tiers including the
+new violet one.
 
 ### Relationship status
 

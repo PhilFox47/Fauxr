@@ -525,6 +525,14 @@ input[type='range'] {
   background: rgba(251, 191, 36, 0.12);
   box-shadow: 0 0 14px rgba(251, 191, 36, 0.3);
 }
+/* The one tier above gold - a distinct hue rather than a brighter gold, so it reads as a
+   genuinely different rung rather than "very rare but more so". */
+.swipe-card .rarity-badge[data-tier='extremely_rare'] {
+  color: #d9a8ff;
+  border-color: rgba(192, 132, 252, 0.5);
+  background: rgba(192, 132, 252, 0.14);
+  box-shadow: 0 0 18px rgba(192, 132, 252, 0.4);
+}
 
 /* The verdict stamps that fade in as you drag, so a half-swipe tells you what it will do. */
 .verdict {

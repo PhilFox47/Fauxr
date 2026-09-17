@@ -53,7 +53,7 @@ export interface AppState {
   api_configured: boolean;
 }
 
-export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare';
+export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare' | 'extremely_rare';
 
 export interface SwipeProfile {
   id: string;

@@ -9839,5 +9839,49 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "in_therapy_and_says_so",
+    "category": "archetype",
+    "label": "Openly working on herself, and says so",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "is in therapy, or has been, and mentions it naturally rather than treating it as a secret - self-aware about her own patterns without being clinical about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "anxiety_is_a_lot",
+    "category": "insecurity",
+    "label": "Worried her anxiety is a lot to be around",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "genuinely worried that how she gets when anxious is exhausting for whoever is on the other end of it",
+    "image_prompt": null,
+    "affinities": [
+      "anxious_texter"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "still_healing_and_says_so",
+    "category": "insecurity",
+    "label": "Knows she is still healing from something and is not always subtle about it",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "aware she brings some unresolved stuff into this, and self-conscious about how visible that is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
   }
 ]
