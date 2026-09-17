@@ -72,7 +72,6 @@ CREATE TABLE IF NOT EXISTS messages (
   date_id       TEXT REFERENCES dates(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_messages_char ON messages(character_id, id);
-CREATE INDEX IF NOT EXISTS idx_messages_date ON messages(date_id, id);
 
 CREATE TABLE IF NOT EXISTS wakeups (
   character_id          TEXT PRIMARY KEY REFERENCES characters(id) ON DELETE CASCADE,

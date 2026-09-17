@@ -60,6 +60,12 @@ export function migrate(): void {
   const sql = readFileSync(join(here, 'schema.sql'), 'utf8');
   db.exec(sql);
   addMissingColumns();
+  // Indexes on a column that ADDED_COLUMNS just introduced can't live in schema.sql itself:
+  // on a fresh install CREATE TABLE IF NOT EXISTS brings the column in with the table, so an
+  // index on it right there is fine, but on an existing install that CREATE TABLE is a no-op
+  // and the column does not exist until addMissingColumns() runs above - so the index has to
+  // be created down here, after that, not up in the schema script.
+  db.exec('CREATE INDEX IF NOT EXISTS idx_messages_date ON messages(date_id, id)');
 }
 
 export function nowIso(): string {
