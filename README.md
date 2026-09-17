@@ -2227,11 +2227,13 @@ picture behind it.
 
 The prompt for it goes through the Director first (`writeBackdropPrompt`), because "my flat"
 is a reasonable thing to type and a poor thing to hand an image model — the pass fills in the
-light, the materials and the framing you did not. It is rendered at 3072×2048 with a hard
-"no people, ever" negative: this is the room *behind* the two of you, and an image model
-handed "a quiet wine bar" will cheerfully populate it with strangers who then contradict
-whatever the scene says about how busy the place is. Each regeneration writes a new filename
-rather than overwriting in place, since the browser has the old one cached against the old
+light, the materials and the framing you did not, and explicitly asks for a tall, vertical
+composition rather than a wide establishing shot. It is rendered at 1152×2048 — 9:16, the
+same shape as the phone screen it sits full-bleed behind — with a hard "no people, ever"
+negative: this is the room *behind* the two of you, and an image model handed "a quiet wine
+bar" will cheerfully populate it with strangers who then contradict whatever the scene says
+about how busy the place is. Each regeneration writes a new filename rather than overwriting
+in place, since the browser has the old one cached against the old
 path and a regenerate that silently kept showing the previous picture is indistinguishable
 from one that failed.
 

@@ -16,8 +16,11 @@ import type { Location } from '../types.js';
  * picture still works as somewhere to go, the date just has no image behind it.
  */
 
-/** Wide, because it sits behind a whole conversation rather than inside a photo frame. */
-const BACKDROP_SIZE = '3072x2048';
+/**
+ * 9:16, because it sits full-bleed behind the date screen - a phone-shaped canvas, not a
+ * photo frame - and a landscape image would need real destructive cropping to fill it.
+ */
+const BACKDROP_SIZE = '1152x2048';
 
 /**
  * No people in it, ever. This is the room behind the two of them, and an image model handed
@@ -33,8 +36,8 @@ function fallbackPrompt(location: Location): string {
   const description = location.description.trim();
   return [
     `A photograph of ${location.name}${description ? `: ${description}` : ''}.`,
-    'Empty of people. Natural light, real materials, shot wide enough to read as a whole place',
-    'rather than a detail.',
+    'Empty of people. Natural light, real materials, framed tall and vertical - a portrait',
+    'shot that reads as a whole place, not a wide panorama cropped down.',
   ].join(' ');
 }
 
@@ -55,14 +58,19 @@ async function writeBackdropPrompt(location: Location): Promise<string> {
           role: 'user',
           content: [
             'You are writing a prompt for an image model. The image is a BACKDROP: the place a',
-            'conversation happens in, shown behind it and blurred, so it needs to read as a whole',
-            'room or view at a glance rather than reward close inspection.',
+            'conversation happens in, shown full-screen behind it and blurred, so it needs to read',
+            'as a whole room or view at a glance rather than reward close inspection.',
+            '',
+            'It is a TALL, PORTRAIT-ORIENTATION photograph (9:16, like a phone screen held',
+            'upright) - compose it that way: verticals that carry the frame (a doorway, a',
+            'window, the run of a bar, a street), not a wide establishing shot that would need',
+            'its sides cut off to fit.',
             '',
             `Place: ${location.name}`,
             location.description.trim() ? `Described as: ${location.description.trim()}` : '',
             '',
             'Write one flowing paragraph describing it as a photograph: what is actually there, what',
-            'the light is doing, what the materials and colours are, how wide the shot is. Fill in',
+            'the light is doing, what the materials and colours are, how the shot is framed. Fill in',
             'whatever the description leaves out, in the spirit of what it does say - a short',
             'description is not a request for an empty image.',
             '',
