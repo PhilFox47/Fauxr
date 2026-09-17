@@ -2487,6 +2487,26 @@ replaces everything about texting:
 There is no Director direction during a date. The scene drives itself, which for roleplay is
 the better answer: a per-beat goal and stance would rail-road exactly the thing you came for.
 
+**Two shared prompt blocks were quietly still talking about texting.** `spiceBlock()` and
+`moodBlock()` (the arousal-driven writing guidance and mood line) are shared between the text
+chat and dates, and until now the date prompt got the texting version verbatim - "Write it the
+way people actually sext on a phone", "STILL FORBIDDEN: asterisk actions, narration... it is a
+script", "it is affecting how you type". That flatly contradicts `actor_date.md`'s own rules
+a few sections earlier in the same prompt, which *require* narration and asterisked thoughts
+and explicitly say typing habits do not apply once she is worked up in person. A model handed
+both halves in one request was being told, simultaneously, that narration is forbidden and
+that narration is the format - and a turn like reaching for his glass and calling it "guessed
+something" reads exactly like a model splitting the difference between two contradictory
+instructions rather than following either one. Both functions now take a `medium` argument
+(`'text'` or `'in_person'`, defaulting to `'text'` so the chat call site in `actor.ts` is
+untouched); dates.ts passes `'in_person'`, which swaps in phrasing that asks for the same
+three-part format as the rest of the date prompt instead of fighting it. Verified two ways:
+unit checks on both functions confirm the `'in_person'` variants drop every texting-only
+line and the default (texting) output is byte-for-byte unchanged, and an end-to-end date
+started with arousal forced to 80 had its actual captured prompt checked directly - no
+"sext on a phone", no "STILL FORBIDDEN", no "affecting how you type" anywhere in it, while
+the format section and its typing-habits-don't-apply line were still there as normal.
+
 On screen, a spoken line renders in the app's own accent pink, narration stays the ordinary
 text colour, and a `*thought*` — from either of you — simply never appears; the backdrop
 behind it all is a lighter blur than it started at, enough to stay a place without turning

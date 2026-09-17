@@ -115,7 +115,10 @@ function buildDatePrompt(
     life_block: lifeBlock(seed),
     interests_block: interestsBlock(seed),
     sexual_block: sexualBlock(seed),
-    spice_block: spiceBlock(seed, rel.arousal, flags),
+    // 'in_person': the texting version of this block forbids narration and asterisk actions
+    // and demands phone-typing habits, which flatly contradicts actor_date.md's own format -
+    // feeding it in unmodified used to hand the model two contradictory rule sets at once.
+    spice_block: spiceBlock(seed, rel.arousal, flags, 'in_person'),
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     user_block: [
       userBlock(user, flags),
@@ -123,7 +126,7 @@ function buildDatePrompt(
       describeHim(rel),
     ].filter(Boolean).join('\n\n'),
     ledger_block: ledgerBlock(rel.ledger),
-    mood_block: moodBlock(rel.arousal, currentStage(rel, character).label, seed.hints.arousal_tell),
+    mood_block: moodBlock(rel.arousal, currentStage(rel, character).label, seed.hints.arousal_tell, 'in_person'),
     moment_block: describeHerMoment(character),
   });
 }

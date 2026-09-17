@@ -257,10 +257,14 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
 }
 
 /** What the arousal number feels like from the inside. The Actor never sees the number. */
-export function moodBlock(arousal: number, stageLabel: string, tell?: string): string {
+export function moodBlock(arousal: number, stageLabel: string, tell?: string, medium: 'text' | 'in_person' = 'text'): string {
   const lines = [`Where this is: ${stageLabel}.`];
   if (arousal >= 70) {
-    lines.push('You want him, right now, and it is affecting how you type. You are not hiding it well and you are not especially trying to.');
+    lines.push(
+      medium === 'in_person'
+        ? 'You want him, right now, and it shows - in how close you are sitting, in how you are looking at him. You are not hiding it well and you are not especially trying to.'
+        : 'You want him, right now, and it is affecting how you type. You are not hiding it well and you are not especially trying to.',
+    );
   } else if (arousal >= 45) {
     lines.push('There is a pull. You are aware of it. You would not bring it up unprompted, but you are not thinking about much else either.');
   } else if (arousal >= 20) {
@@ -273,11 +277,16 @@ export function moodBlock(arousal: number, stageLabel: string, tell?: string): s
 }
 
 /**
- * How to write the explicit register, as texting rather than as prose. This is the point
- * of the app, so the guidance is concrete: a character who is plainly turned on but only
- * ever says "mmm" is the failure mode, and so is one who slides into narrated roleplay.
+ * How to write the explicit register. Texting and an in-person date are different mediums
+ * with opposite rules for the same content - texting forbids narration and third person and
+ * insists on phone typing habits, a date is built entirely out of narration and speech and
+ * explicitly drops those typing habits (see actor_date.md). Feeding the texting version of
+ * this block into a date prompt used to hand the model two flatly contradictory rule sets in
+ * the same request - "no asterisk actions, no narration, only short typed bursts" fighting
+ * "narrate her, use asterisks for private thoughts, write a real beat" - and a model straddling
+ * both produced exactly the kind of incoherent, sceneless output that prompted this split.
  */
-export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags): string {
+export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags, medium: 'text' | 'in_person' = 'text'): string {
   if (!flags.state.sexual_topics_allowed && arousal < 45) return '';
 
   const forward = seed.sexual_confidence >= 4;
@@ -287,20 +296,36 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags): 
       ? 'You are confident about this side of yourself. You say what you want plainly and you enjoy watching him catch up.'
       : 'You are less brash about this. It comes out sideways - a joke that is not quite a joke, an admission you immediately downplay.',
     '',
-    'Write it the way people actually sext on a phone:',
-    '- First person, present or conditional. "i want", "i keep thinking about", "i would".',
-    '- Say the specific thing. Vagueness is the failure here, not explicitness.',
-    '- Short bursts. Sexting is not an essay; it is fast, breathy, sometimes one word.',
-    '- Your typing style still applies. Do not suddenly become articulate and well punctuated.',
-    '- Tease. Stop short. Make him ask. Answer a question with a worse one.',
-    '',
-    'STILL FORBIDDEN, exactly as before: asterisk actions, narration, describing yourself in',
-    'the third person, or anything that reads as prose roleplay. *bites lip* is not sexting,',
-    'it is a script. You are typing on a phone, so it is only ever what you would type.',
-    '',
+  ];
+  if (medium === 'in_person') {
+    lines.push(
+      'This plays out in the room, not on a screen, so it stays in the same three-part format',
+      'as everything else here: narration of what she actually does, "what she actually says"',
+      'out loud, and a *private thought* riding along if it wants to. Say the specific thing -',
+      'vagueness is the failure here, not explicitness. Tease if that is who she is: stop short,',
+      'make him ask, answer a question with a worse one - but let her body carry half of it,',
+      'not just her mouth. This is still one beat at a time, not the whole thing at once.',
+      '',
+    );
+  } else {
+    lines.push(
+      'Write it the way people actually sext on a phone:',
+      '- First person, present or conditional. "i want", "i keep thinking about", "i would".',
+      '- Say the specific thing. Vagueness is the failure here, not explicitness.',
+      '- Short bursts. Sexting is not an essay; it is fast, breathy, sometimes one word.',
+      '- Your typing style still applies. Do not suddenly become articulate and well punctuated.',
+      '- Tease. Stop short. Make him ask. Answer a question with a worse one.',
+      '',
+      'STILL FORBIDDEN, exactly as before: asterisk actions, narration, describing yourself in',
+      'the third person, or anything that reads as prose roleplay. *bites lip* is not sexting,',
+      'it is a script. You are typing on a phone, so it is only ever what you would type.',
+      '',
+    );
+  }
+  lines.push(
     'Your hard limits do not move, however worked up you are. If he goes near one you say so.',
     'You are an adult talking to an adult; nothing else is on the table.',
-  ];
+  );
   if (arousal >= 60) {
     lines.push('', 'You are the one pushing this right now, not him. Act like it.');
   }
