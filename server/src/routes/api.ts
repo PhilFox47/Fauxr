@@ -26,7 +26,7 @@ import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
 import { profileView, spendTraitCredit } from '../engine/discovery.js';
-import { generateLocationImage } from '../engine/locations.js';
+import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
 import { dateHistory, endDate, handleUserDateMessage, startDate } from '../engine/dates.js';
 import type { Character, KinkStance, Location } from '../types.js';
 
@@ -346,6 +346,25 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     deleteLocation(req.params.id);
     return { ok: true };
   });
+
+  /**
+   * Fleshes out a bare name and description into something specific - a proper name and an
+   * atmospheric, detail-rich write-up. Works on the draft straight out of the editor: nothing
+   * has to be saved first, and nothing here touches the database.
+   */
+  app.post<{ Body: { name?: string; description?: string } }>(
+    '/api/locations/expand',
+    async (req, reply) => {
+      try {
+        return await expandLocationDraft({
+          name: String(req.body?.name ?? ''),
+          description: String(req.body?.description ?? ''),
+        });
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
 
   /** Renders the backdrop. Slow (a full image generation), so the client shows a spinner. */
   app.post<{ Params: { id: string } }>('/api/locations/:id/image', async (req, reply) => {

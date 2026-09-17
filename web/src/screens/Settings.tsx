@@ -920,6 +920,7 @@ function LocationsPane() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [expanding, setExpanding] = useState(false);
 
   const load = useCallback(async () => setLocations(await api.locations()), []);
   useEffect(() => {
@@ -934,6 +935,22 @@ function LocationsPane() {
       await load();
     } catch (err) {
       setError(String(err instanceof Error ? err.message : err));
+    }
+  };
+
+  const expand = async () => {
+    if (!editing?.name.trim() || expanding) return;
+    setExpanding(true);
+    setError(null);
+    try {
+      const result = await api.expandLocation(editing.name, editing.description);
+      // Dropped straight back into the same two fields, still fully editable - this is a
+      // starting point to refine, not something accepted blind.
+      setEditing((e) => (e ? { ...e, ...result } : e));
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setExpanding(false);
     }
   };
 
@@ -977,6 +994,17 @@ function LocationsPane() {
                 onChange={(e) => setEditing({ ...editing, description: e.target.value })}
               />
             </label>
+            <button
+              className="btn ghost block"
+              onClick={() => void expand()}
+              disabled={expanding || !editing.name.trim()}
+            >
+              {expanding ? 'Expanding…' : 'Expand description'}
+            </button>
+            <p className="tiny muted" style={{ marginTop: 6 }}>
+              Fills in a proper name and a vivid write-up from whatever you've got so far - a
+              vibe, a specialty, a notable regular. Still yours to edit before saving.
+            </p>
             <div className="row">
               <button className="btn ghost grow" onClick={() => setEditing(null)}>Cancel</button>
               <button className="btn grow" onClick={() => void saveDraft()} disabled={!editing.name.trim()}>

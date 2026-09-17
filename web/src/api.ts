@@ -252,6 +252,12 @@ export const api = {
   deleteLocation: (id: string) => request<{ ok: true }>(`/api/locations/${id}`, { method: 'DELETE' }),
   generateLocationImage: (id: string) =>
     request<Location>(`/api/locations/${id}/image`, { method: 'POST' }),
+  /** Fleshes out a bare name/description into something specific - a draft-only text call. */
+  expandLocation: (name: string, description: string) =>
+    request<{ name: string; description: string }>('/api/locations/expand', {
+      method: 'POST',
+      body: JSON.stringify({ name, description }),
+    }),
   dates: (characterId: string) =>
     request<{ active: DateSession | null; past: DateSession[]; locations: Location[] }>(
       `/api/chats/${characterId}/dates`,

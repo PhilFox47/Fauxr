@@ -92,6 +92,66 @@ async function writeBackdropPrompt(location: Location): Promise<string> {
 }
 
 /**
+ * Turns a bare name and a line or two of description into the real thing: a specific place
+ * with a vibe, a specialty, a character to its staff or its regulars, something that makes
+ * it memorable rather than generic. This works on the draft in the editor, before anything
+ * is saved and independent of the backdrop image - it is pure text, so it is cheap and has
+ * nothing to do with `images_enabled`.
+ *
+ * The result is meant to be edited further, not accepted blind: the caller drops it straight
+ * back into the same two fields the player was already typing in.
+ */
+export async function expandLocationDraft(
+  draft: { name: string; description: string },
+): Promise<{ name: string; description: string }> {
+  const name = draft.name.trim();
+  if (!name) throw new Error('give it a name first');
+  const description = draft.description.trim();
+
+  const out = await completeJson<{ name?: string; description?: string }>({
+    scope: 'generator',
+    label: `expand_location:${name}`,
+    config: getSettings().models.director,
+    require: ['name', 'description'],
+    messages: [
+      {
+        role: 'user',
+        content: [
+          "You are fleshing out a place someone will take a date to. They gave you a quick",
+          "name and a line or two describing it - your job is to turn that into somewhere",
+          "specific and real-feeling, not to write ad copy for it.",
+          '',
+          `Name so far: ${name}`,
+          description ? `Description so far: ${description}` : '(no description yet)',
+          '',
+          'If the name is generic - a type of place rather than an actual establishment',
+          '("wine bar", "the park near me", "a nice restaurant") - invent a fitting, real-sounding',
+          'proper name for it and use that. If it already reads as a specific named place, keep it',
+          'as is or refine it lightly; never discard a real name that was already given.',
+          '',
+          'Rewrite the description as a real, specific place: the atmosphere and how it actually',
+          "feels to be there, plus two or three concrete, memorable details - a specialty drink or",
+          'dish, a notable member of staff or a regular, an architectural quirk, an odd or specific',
+          'location it sits in, what it sounds like, what kind of crowd it draws. Concrete nouns,',
+          'not mood-board adjectives - "the bartender who remembers your order" beats "cozy and',
+          'welcoming". Everything already given has to survive intact; you are adding color and',
+          'specificity to it, never contradicting or replacing what was actually said.',
+          '',
+          'Three to five sentences. Write it as something a regular would say about the place, not',
+          'as a listing.',
+          '',
+          'Reply with exactly one JSON object and nothing else: { "name": "...", "description": "..." }',
+        ].filter(Boolean).join('\n'),
+      },
+    ],
+  });
+
+  const expandedName = (out.name ?? '').trim() || name;
+  const expandedDescription = (out.description ?? '').trim() || description;
+  return { name: expandedName, description: expandedDescription };
+}
+
+/**
  * Renders (or re-renders) the backdrop for a place and stores it on the location. Throws on
  * a generation failure rather than swallowing it: this is an explicit button press, so the
  * one thing worse than no picture is a button that looks like it worked and did nothing.

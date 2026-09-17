@@ -2219,6 +2219,15 @@ The description is what she actually experiences being there — the noise, the 
 is around — so it is worth writing the place rather than labelling it. Nothing about a
 location is rolled or generated; it is your prose, and the date prompt uses it verbatim.
 
+**Expand description** turns a placeholder into the real thing. Type "Wine Bar" and "a wine
+bar near me", hit the button, and it comes back as something like "Wine Bar: Le Chez" with a
+description that actually pictures the place — the vibe, a specialty drink the owner ages
+himself, an ex-sommelier bartender who won't stop talking about it, why the tables being so
+close somehow works in the room's favour. It never contradicts what you already wrote, only
+adds concrete, specific color to it, and it runs on the draft sitting in the editor — nothing
+has to be saved first, and it costs no image generation. The result lands back in the same
+two fields, still fully yours to edit or rewrite before you save.
+
 The one generated part is the **backdrop**: an optional AI image, made from the name and the
 description, that becomes the blurred background of the date screen. It is a separate,
 explicit button rather than something that happens on save, because it costs an image
