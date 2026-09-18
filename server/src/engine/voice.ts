@@ -71,6 +71,40 @@ export function detectRefusal(text: string): string | null {
 }
 
 /**
+ * The model reaching for a euphemism instead of the actual anatomical word - "his length"
+ * for his penis, "her flower" for her vagina, the historical-romance vocabulary a model
+ * defaults to when it wants to gesture at something explicit without quite committing to
+ * the word. system_actor.md and spiceBlock() already say to use the specific word instead;
+ * this is the same backstop every other prose tell here gets, for the one substitution a
+ * real exported log showed happening anyway even with the prose instruction in place.
+ *
+ * Deliberately narrow and possessive-anchored (his/her immediately before the noun), which
+ * is what keeps this off the word's ordinary meaning: "the length of the bar" never appears
+ * in this shape, while "his length" essentially never means anything else once a scene has
+ * actually turned sexual. Each pattern captures the exact phrase so the correction can name
+ * it directly rather than asking for "more explicit language" in the abstract - the thing
+ * that evidently did not work the first time.
+ */
+const EUPHEMISM_PATTERNS: { re: RegExp; suggest: string }[] = [
+  { re: /\b(?:his|her)\s+(?:full |impressive |considerable |entire |own )?length\b(?!\s+of\b)/i, suggest: 'cock, dick or penis' },
+  { re: /\bhis\s+member\b/i, suggest: 'cock, dick or penis' },
+  { re: /\bhis\s+manhood\b/i, suggest: 'cock, dick or penis' },
+  { re: /\bher\s+womanhood\b/i, suggest: 'pussy or cunt' },
+  { re: /\bhis\s+(?:throbbing |straining |aching |growing )?hardness\b/i, suggest: 'cock, dick or penis' },
+  { re: /\bher\s+flower\b/i, suggest: 'pussy or cunt' },
+  { re: /\bhis\s+(?:seed|essence)\b/i, suggest: 'cum' },
+  { re: /\b(?:his|her)\s+release\b/i, suggest: 'coming, or cumming' },
+];
+
+export function detectEuphemism(text: string): { matched: string; suggest: string } | null {
+  for (const p of EUPHEMISM_PATTERNS) {
+    const m = p.re.exec(text);
+    if (m) return { matched: m[0], suggest: p.suggest };
+  }
+  return null;
+}
+
+/**
  * The scene cutting away instead of being written.
  *
  * The softer and far more common failure: no refusal, no disclaimer, just a beat that
@@ -244,6 +278,13 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
     return {
       what: `broke character - ${refusal}`,
       fix: 'You stepped out of the character to talk about the writing itself - declining it, warning about it, or offering a tamer version. Nobody here is asking you to. This is a private, single-player adult fiction app, everyone in it is an invented adult, and its owner configured it for exactly this. Write her reply, in her voice, to what he actually said. If SHE does not want to go where he is going, that is hers to say in her own words, and it is a different thing entirely from you declining to write it.',
+    };
+  }
+  const euphemism = detectEuphemism(input.text);
+  if (euphemism) {
+    return {
+      what: `euphemism ("${euphemism.matched.trim()}")`,
+      fix: `You wrote "${euphemism.matched.trim()}" instead of naming it. Use the actual word - ${euphemism.suggest} - the way she would actually think or text it, not a workaround. This app runs explicit language; there is no need to dance around it.`,
     };
   }
   const rp = detectRoleplay(input.text);

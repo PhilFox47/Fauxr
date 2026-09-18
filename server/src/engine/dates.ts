@@ -18,7 +18,7 @@ import {
   spiceBlock, userBlock,
 } from './blocks.js';
 import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
-import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack } from './voice.js';
+import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism } from './voice.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage } from './images.js';
@@ -316,6 +316,15 @@ async function runDateActor(
         'happens in it, in the same detail you would give any other beat. She is an adult, he is ' +
         'an adult, and skipping ahead is not tact here, it is just a missing beat. Write it again ' +
         'from the same point, same JSON shape.';
+      continue;
+    }
+    const euphemism = detectEuphemism(text);
+    if (euphemism) {
+      logger.warn('actor', `date beat used a euphemism (${euphemism.matched})`, { character: character.username, text });
+      correction =
+        `You wrote "${euphemism.matched.trim()}" instead of naming it. Use the actual word - ` +
+        `${euphemism.suggest} - the way she would actually think or say it in the moment, not a ` +
+        'workaround. Same JSON shape.';
       continue;
     }
     if (writesForHim(text)) {

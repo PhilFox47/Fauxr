@@ -1055,6 +1055,57 @@ If a model still will not play after this, the honest answer is that it is the w
 for the app rather than something to be defeated with a longer prompt — the uncensored
 finetune exists for this reason.
 
+### Naming the thing instead of dancing around it
+
+The system-message fix above stopped the model refusing outright, but stock GLM 5.3 has a
+second, quieter tell: it will happily write an explicit scene and then reach for "his
+length" instead of his cock, "her flower" instead of her pussy — the exact vocabulary a
+period romance novel uses instead of the word. "Be explicit, avoid euphemism" was already in
+`system_actor.md` in the abstract, and it plainly was not enough on its own — the same
+lesson the AI-isms work below already established once: an abstract instruction is easy to
+satisfy technically while still doing the thing it was meant to rule out, and what actually
+moves a model is the concrete list of exact swaps.
+
+So the fix is the same shape three times over, at three different distances from the actual
+generation:
+
+1. **`system_actor.md`** now spells out the real vocabulary - cock, dick, pussy, cunt, tits,
+   ass, cum - and names the specific stand-ins to avoid, "his length" (the literal complaint
+   that prompted this) among them, right next to the existing "vagueness is the failure"
+   line so it reads as the same rule made concrete rather than a new one.
+2. **`spiceBlock()`** repeats the same short list at the point where sexual content actually
+   turns on, in both the text-chat and in-person register - the closest a prompt gets to the
+   moment of generation, and cheap enough to restate rather than trust the system message
+   alone to still be attended to three thousand tokens later.
+3. **`detectEuphemism()`** in `voice.ts` is the code-level backstop, the same shape as
+   `detectRefusal()` and `detectFadeToBlack()` for the same reason: prose instructions are a
+   request, not a guarantee, and this app already has a whole module for catching the
+   specific failures that get through anyway. Eight patterns, each anchored on a possessive
+   pronoun immediately before the euphemistic noun ("his length", "her flower", "his
+   member", "his/her manhood/womanhood", "his hardness", "his seed/essence", "his/her
+   release") - which is what keeps it off the word's ordinary meaning. "The length of the
+   bar" and "his release from work stress" never appear in that exact shape; "his length"
+   essentially never means anything else once a scene has turned sexual. Wired into
+   `findVoiceProblem()` (chat) right after the refusal check, and into the date beat loop
+   right after the fade-to-black check - same position in both, since it is the same kind of
+   problem: not a style nit, but not a broken-frame refusal either, so it costs a normal
+   retry rather than the extra budget those get.
+
+**`system_director.md`** gets the same vocabulary line for consistency, with one explicit
+carve-out: the image prompt assembler already has its own, unrelated reason to avoid naming
+a specific word in a spicy shot - see "Spicy stays suggestive, on purpose" below - because
+naming it there makes the image provider refuse the request outright. That is a stated
+technical constraint for that one call, not squeamishness, and the system prompt says
+plainly that a local instruction like it wins over the general rule for exactly the word it
+names, so the two do not end up fighting each other.
+
+Verified: 19 cases against `detectEuphemism()` directly (nine real euphemisms across all
+eight patterns including the user's own example, ten deliberately adversarial near-misses -
+"the length of the hallway", "she needs a release from work stress", explicit prose that
+must never trip it - all pass with zero false positives); then end to end against a mock
+provider on both paths - a euphemism-laden chat reply and a euphemism-laden date beat each
+forced a real retry, logged by name, and only the corrected version reached storage.
+
 ### A real exported log turned up specific, recurring AI-isms in dates
 
 Reading a player-supplied log export (the exact reason that feature exists) rather than a

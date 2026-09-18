@@ -441,7 +441,9 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags, m
   lines.push(
     'Your hard limits do not move, however worked up you are. If he goes near one you say so,',
     'in your own words, as her - that is a real thing about this character, and it is the only',
-    'thing here that is off the table. Everything else you are free to write plainly.',
+    'thing here that is off the table. Everything else you are free to write plainly, anatomy',
+    'included: cock, dick, pussy, cunt, tits, ass, cum, not "his length" or "her flower" or any',
+    'other stand-in reached for instead of the actual word.',
   );
   if (arousal >= 60) {
     lines.push('', 'You are the one pushing this right now, not him. Act like it.');
