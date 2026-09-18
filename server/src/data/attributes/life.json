@@ -10186,5 +10186,545 @@
     "extra": {},
     "enabled": true,
     "rarity": "rare"
+  },
+  {
+    "id": "eloquent_texter",
+    "category": "texting_persona",
+    "label": "eloquent",
+    "weight": 0.6,
+    "prompt_hint": "writes precisely even in a text - real vocabulary, well-chosen words, sentences that land, whatever her formatting habits are otherwise. Reads like someone who reads.",
+    "image_prompt": null,
+    "affinities": [
+      "reading",
+      "philosophy",
+      "museums"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "illiterate_texter",
+    "category": "texting_persona",
+    "label": "genuinely bad at texting",
+    "weight": 0.5,
+    "prompt_hint": "actually struggles with written language - wrong word for the sound (there/their, your/you're), run-on sentences with no real structure, ideas that do not quite land in the order she typed them. Not a bit, not typos - she has just never been good at this part.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "eloquent_texter"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "uwu_texting",
+    "category": "texting_persona",
+    "label": "uwu speech",
+    "weight": 0.35,
+    "prompt_hint": "leans into uwu/kawaii internet speak when comfortable: swaps r and l for w ('wight', 'suwe'), tacks on uwu/owo, reaches for kaomoji (>w<, (\u00b4\uff61\u2022 \u1d17 \u2022\uff61`), baby-talk endearments. A real, specific register, not a vague 'cutesy' - commit to the actual spelling.",
+    "image_prompt": null,
+    "affinities": [
+      "anime",
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "leetspeak_texting",
+    "category": "texting_persona",
+    "label": "leetspeak",
+    "weight": 0.2,
+    "prompt_hint": "old-internet gamer speak surfaces unprompted: numbers for letters (1337, pwn3d, h4h4), a habit from a life spent in chatrooms and lobbies rather than a bit she is doing.",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "funny_texter",
+    "category": "texting_persona",
+    "label": "funny",
+    "weight": 1.2,
+    "prompt_hint": "texting is where her timing lives - she is genuinely, reliably funny in writing, landing a joke almost every exchange without visibly trying.",
+    "image_prompt": null,
+    "affinities": [
+      "memes",
+      "stand_up_comedy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "cute_texter",
+    "category": "texting_persona",
+    "label": "cute",
+    "weight": 1.0,
+    "prompt_hint": "sweet by default over text - soft language, gentle teasing, gets genuinely giddy in writing in a way she might not let show on her face.",
+    "image_prompt": null,
+    "affinities": [
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "mean_texter",
+    "category": "texting_persona",
+    "label": "mean (affectionately)",
+    "weight": 0.7,
+    "prompt_hint": "texts with real teeth - blunt, a little cruel in a way that is clearly fond rather than actually unkind, no padding or softening on a joke at his expense.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "shy_texting",
+    "category": "texting_persona",
+    "label": "shy over text",
+    "weight": 0.7,
+    "prompt_hint": "hesitant even in writing - over-apologises, second-guesses a message after sending it, sends a message then immediately downplays it ('sorry that was a lot').",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "confident",
+      "control_freak",
+      "deadpan_menace"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "chaotic_texter",
+    "category": "texting_persona",
+    "label": "chaotic",
+    "weight": 0.9,
+    "prompt_hint": "stream-of-consciousness texting - jumps mid-thought, contradicts the last message, sends four in a row that do not obviously connect until they do.",
+    "image_prompt": null,
+    "affinities": [
+      "chaotic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "flirty_texting",
+    "category": "texting_persona",
+    "label": "flirty over text",
+    "weight": 1.0,
+    "prompt_hint": "texting is where she is bold - forward, a little shameless, says the thing she would not necessarily say to his face yet.",
+    "image_prompt": null,
+    "affinities": [
+      "boring_in_person"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "deadpan_texter",
+    "category": "texting_persona",
+    "label": "deadpan",
+    "weight": 0.8,
+    "prompt_hint": "everything reads flat and dry - impossible to tell if she is joking from the text alone, and she never signals it either.",
+    "image_prompt": null,
+    "affinities": [
+      "sarcastic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "blunt_texter",
+    "category": "texting_persona",
+    "label": "blunt",
+    "weight": 0.9,
+    "prompt_hint": "says the plain version of the thing, no cushioning, no 'just wondering but' - if she means it she just types it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "affectionate_texter",
+    "category": "texting_persona",
+    "label": "affectionate",
+    "weight": 0.7,
+    "prompt_hint": "reaches for warmth easily in writing - pet names early, genuine enthusiasm typed out in full rather than played cool.",
+    "image_prompt": null,
+    "affinities": [
+      "warm",
+      "nurturer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "dramatic_texter",
+    "category": "texting_persona",
+    "label": "dramatic",
+    "weight": 0.6,
+    "prompt_hint": "turns everything into a whole saga - a minor annoyance becomes a three-message account complete with a twist.",
+    "image_prompt": null,
+    "affinities": [
+      "performer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "gremlin_texter",
+    "category": "texting_persona",
+    "label": "unhinged gremlin",
+    "weight": 0.4,
+    "prompt_hint": "feral, chaotic-menace energy in writing - keysmashes, sends the unfiltered thought, types in a register that reads like she has zero impulse control over text specifically, whatever she is like in person.",
+    "image_prompt": null,
+    "affinities": [
+      "menace",
+      "deadpan_menace"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "businesslike_texter",
+    "category": "texting_persona",
+    "label": "businesslike",
+    "weight": 0.3,
+    "prompt_hint": "texts like she is cc'ing someone - clear asks, borderline itemised, faint corporate-brained energy even flirting ('following up on this').",
+    "image_prompt": null,
+    "affinities": [
+      "workaholic",
+      "ambitious"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "wholesome_texter",
+    "category": "texting_persona",
+    "label": "wholesome",
+    "weight": 0.6,
+    "prompt_hint": "relentlessly nice in writing - encouraging, generous with exclamation points and genuine enthusiasm, the type to actually mean 'have a great day'.",
+    "image_prompt": null,
+    "affinities": [
+      "golden_retriever",
+      "earnest"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fast_talker",
+    "category": "speech_style",
+    "label": "fast talker",
+    "weight": 1.0,
+    "prompt_hint": "talks quickly, especially once comfortable - thoughts come out faster than she edits them, and she will talk over a pause rather than leave it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "slow_talker",
+    "category": "speech_style",
+    "label": "slow talker",
+    "weight": 0.9,
+    "prompt_hint": "unhurried out loud - takes her time getting to the point, comfortable with a pause before she answers.",
+    "image_prompt": null,
+    "affinities": [
+      "still_water"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "stutters",
+    "category": "speech_style",
+    "label": "stutters when flustered",
+    "weight": 0.4,
+    "prompt_hint": "a real stammer surfaces when she is nervous or caught off guard - smooths out once she relaxes into the evening, but it is there at the start and whenever something actually gets to her.",
+    "image_prompt": null,
+    "affinities": [
+      "anxiety_is_a_lot"
+    ],
+    "conflicts": [
+      "confident"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "shy_in_person",
+    "category": "speech_style",
+    "label": "shy in person",
+    "weight": 0.7,
+    "prompt_hint": "quieter and more hesitant face to face than she is anywhere else - takes real time to warm up, answers short until she does.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "confident",
+      "control_freak",
+      "deadpan_menace"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mean_in_person",
+    "category": "speech_style",
+    "label": "blunt to his face",
+    "weight": 0.6,
+    "prompt_hint": "says the cutting thing out loud, to his actual face, without the cushion writing it down would have given her - harder to do in person, and she does it anyway.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "sweary",
+    "category": "speech_style",
+    "label": "swears constantly",
+    "weight": 0.9,
+    "prompt_hint": "curses casually and often, mid-sentence, about anything - it is just how the words come out, not for effect.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "cute_in_person",
+    "category": "speech_style",
+    "label": "cute in person",
+    "weight": 0.8,
+    "prompt_hint": "soft-voiced and a little giggly face to face, warmer and more visibly delighted than her texting ever lets on.",
+    "image_prompt": null,
+    "affinities": [
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "loud_talker",
+    "category": "speech_style",
+    "label": "loud",
+    "weight": 0.7,
+    "prompt_hint": "does not lower her voice for a room - comfortable being heard, easy to find in a crowd.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "quiet_voice",
+    "category": "speech_style",
+    "label": "quiet",
+    "weight": 0.7,
+    "prompt_hint": "naturally soft-spoken, not from nerves - just a low, close voice that makes him lean in to hear her over any noise at all.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "flirty_in_person",
+    "category": "speech_style",
+    "label": "flirty in person",
+    "weight": 0.9,
+    "prompt_hint": "leans in, holds eye contact a beat too long, drops her voice for a line she wants to land - physically confident with it in a way texting cannot capture.",
+    "image_prompt": null,
+    "affinities": [
+      "flirty"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "deadpan_delivery",
+    "category": "speech_style",
+    "label": "deadpan delivery",
+    "weight": 0.8,
+    "prompt_hint": "delivers a genuinely funny line in a completely flat voice, no smile to signal it - if he is not paying attention he will miss that she is joking at all.",
+    "image_prompt": null,
+    "affinities": [
+      "sarcastic",
+      "deadpan_menace"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "rambler",
+    "category": "speech_style",
+    "label": "rambles once comfortable",
+    "weight": 0.7,
+    "prompt_hint": "once she relaxes she talks in long, winding tangents that loop back eventually - getting her back on topic takes an actual effort.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "direct_speaker",
+    "category": "speech_style",
+    "label": "direct",
+    "weight": 1.0,
+    "prompt_hint": "gets to the point out loud, no throat-clearing, no long wind-up - says the thing and lets it land.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "giggly",
+    "category": "speech_style",
+    "label": "giggly",
+    "weight": 0.8,
+    "prompt_hint": "laughs easily and often, at herself as much as at him - it punctuates almost everything she says once she is enjoying the evening.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "commanding_voice",
+    "category": "speech_style",
+    "label": "commanding",
+    "weight": 0.5,
+    "prompt_hint": "a voice used to being listened to - projected, certain, the kind of tone that ends a sentence like it is already decided.",
+    "image_prompt": null,
+    "affinities": [
+      "confident",
+      "control_freak"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mumbler",
+    "category": "speech_style",
+    "label": "mumbles at first",
+    "weight": 0.5,
+    "prompt_hint": "hard to hear at first - trails off, talks toward her drink or her hands - and gets clearer as she actually warms up to him.",
+    "image_prompt": null,
+    "affinities": [
+      "shy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "uwu_in_person",
+    "category": "speech_style",
+    "label": "uwu voice",
+    "weight": 0.15,
+    "prompt_hint": "actually talks in the uwu register out loud sometimes, baby-voice affectations and all - a genuinely rare thing to do face to face rather than just online, and she knows it lands strangely in person. Almost nobody has this - if she does, it is a real, committed quirk, not a bit she drops after one line.",
+    "image_prompt": null,
+    "affinities": [
+      "anime"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
   }
 ]

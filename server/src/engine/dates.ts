@@ -14,7 +14,8 @@ import {
 import type { Character, DateSession, Location, Relationship } from '../types.js';
 import {
   appearanceBlock, flagsBlock, historyBlock, identityBlock, interestsBlock, languageBlock,
-  ledgerBlock, lifeBlock, moodBlock, quirksBlock, seedBlock, sexualBlock, spiceBlock, userBlock,
+  ledgerBlock, lifeBlock, moodBlock, quirksBlock, seedBlock, sexualBlock, speechStyleBlock,
+  spiceBlock, userBlock,
 } from './blocks.js';
 import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
 import { WRITER_PUNCTUATION } from './voice.js';
@@ -112,6 +113,7 @@ function buildDatePrompt(
       ? historyBlock(transcript, character, user)
       : OPENING_NOTE,
     identity_block: identityBlock(character, flags),
+    speech_style_block: speechStyleBlock(seed),
     quirks_block: quirksBlock(seed),
     // Unconditional here, unlike the chat: he is looking straight at her, so withholding what
     // she looks like until a photo unlocks it makes no sense at all in person.

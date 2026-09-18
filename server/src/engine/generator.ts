@@ -63,12 +63,16 @@ function rollAge(): number {
   return lo + Math.round((randInt(0, span) + randInt(0, span)) / 2);
 }
 
-function rollTypoRate(typingStyle: string, archetype: string): number {
+function rollTypoRate(typingStyle: string, archetype: string, textingPersona: string): number {
   let base = Math.random() * 0.14;
   if (typingStyle === 'lowercase_no_punct' || typingStyle === 'no_apostrophes') base += 0.07;
   if (typingStyle === 'proper') base = Math.random() * 0.03;
   if (archetype === 'chaotic' || archetype === 'burnt_out') base += 0.06;
   if (archetype === 'intellectual') base *= 0.5;
+  // A genuinely bad texter and a genuinely precise one are the two ends of this same axis -
+  // let the persona actually show up in the mechanic, not just the label.
+  if (textingPersona === 'illiterate_texter') base += 0.1;
+  if (textingPersona === 'eloquent_texter') base *= 0.4;
   return Math.round(Math.min(0.35, base) * 100) / 100;
 }
 
@@ -259,6 +263,11 @@ export function rollSeed(): RolledSeed {
   const response_speed = speedFromArchetype ?? roll('response_speed', ctx)!.id;
   const voice_msg_tendency = one('voice_msg_tendency');
   const slang_register = one('slang_register');
+  // Rolled independently of each other on purpose - see CharacterSeed's own comment on why
+  // her texting tone and her in-person one are allowed to land anywhere relative to each
+  // other, archetype-confident-conflicts-shy aside.
+  const texting_persona = one('texting_persona');
+  const speech_style = one('speech_style');
 
   // her life
   const occupation = one('occupation');
@@ -392,6 +401,8 @@ export function rollSeed(): RolledSeed {
     response_speed: hintOf(find('response_speed', response_speed)),
     voice_msg_tendency: hintOf(voice_msg_tendency),
     slang_register: hintOf(slang_register),
+    texting_persona: hintOf(texting_persona),
+    speech_style: hintOf(speech_style),
     occupation: hintOf(occupation),
     living_situation: hintOf(living_situation),
     relationship_status: hintOf(relationship_status),
@@ -443,13 +454,15 @@ export function rollSeed(): RolledSeed {
     quirks,
 
     typing_style: typing_style!.id,
-    typo_rate: rollTypoRate(typing_style!.id, archetype.id),
+    typo_rate: rollTypoRate(typing_style!.id, archetype.id, texting_persona!.id),
     emoji_usage: emoji_usage!.id,
     favorite_emojis,
     message_length: message_length!.id,
     response_speed,
     voice_msg_tendency: voice_msg_tendency!.id,
     slang_register: slang_register!.id,
+    texting_persona: texting_persona!.id,
+    speech_style: speech_style!.id,
 
     occupation: occupation!.id,
     living_situation: living_situation!.id,
@@ -652,6 +665,8 @@ export function describeSeed(seed: CharacterSeed): string {
     `response speed: ${seed.response_speed}`,
     `voice messages: ${seed.voice_msg_tendency}`,
     `register: ${seed.slang_register}`,
+    `texting persona: ${label('texting_persona', seed.texting_persona)} - ${seed.hints.texting_persona}`,
+    `how she actually talks out loud, in person (can differ from how she texts): ${label('speech_style', seed.speech_style)} - ${seed.hints.speech_style}`,
     '',
     `appearance: ${seed.appearance_prompt}`,
     `tattoos: ${seed.tattoos.map((t) => `${label('tattoo_motif', t.motif)} ${label('tattoo_position', t.position)}`).join('; ') || 'none'}`,

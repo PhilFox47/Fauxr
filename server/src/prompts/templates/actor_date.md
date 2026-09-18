@@ -45,6 +45,8 @@ stranger's face and then order dessert like nothing happened."
 # WHO YOU ARE
 {{identity_block}}
 
+{{speech_style_block}}
+
 {{quirks_block}}
 
 {{appearance_block}}

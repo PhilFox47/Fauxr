@@ -56,6 +56,16 @@ export interface CharacterSeed {
   response_speed: string;
   voice_msg_tendency: string;
   slang_register: string;
+  /**
+   * How she comes across over text specifically - tone and persona (funny, mean, uwu,
+   * illiterate...), not the mechanics of punctuation/slang density above. Independent of
+   * speech_style below on purpose: a character can be a bold, flirty texter and go quiet
+   * and shy the moment she is actually in the room with him, or the other way round.
+   */
+  texting_persona: string;
+  /** The same tone/persona axis as texting_persona, but for how she actually talks out loud
+   * on a date - allowed, and expected, to differ from how she texts. */
+  speech_style: string;
 
   // life
   occupation: string;

@@ -133,9 +133,37 @@ function backfillSpecies(characterId: string, seed: CharacterSeed): CharacterSee
   return seed;
 }
 
+/**
+ * Characters generated before texting_persona/speech_style existed have neither - rolled in
+ * now, on first load, the same way breast_size was. Seeded with her existing archetype,
+ * insecurity, hobbies and interests so the affinities and conflicts these two categories
+ * actually declare (a confident archetype excluding a shy texting or speech style, an
+ * anime/gaming hobby leaning toward uwu or leetspeak) still apply here rather than landing
+ * as a flat random pick disconnected from who she already is.
+ */
+function backfillCommStyles(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.texting_persona && seed.speech_style) return seed;
+  const ctx = newContext();
+  for (const id of [seed.archetype, seed.insecurity, ...(seed.hobbies ?? []), ...(seed.interests ?? [])]) {
+    if (id) ctx.drawn.add(id);
+  }
+  let changed = false;
+  if (!seed.texting_persona) {
+    const chosen = roll('texting_persona', ctx) ?? byCategory('texting_persona')[0];
+    if (chosen) { seed.texting_persona = chosen.id; changed = true; }
+  }
+  if (!seed.speech_style) {
+    const chosen = roll('speech_style', ctx) ?? byCategory('speech_style')[0];
+    if (chosen) { seed.speech_style = chosen.id; changed = true; }
+  }
+  if (changed) db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
   let seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
   seed = backfillSpecies(row.id, seed);
+  seed = backfillCommStyles(row.id, seed);
   return {
     id: row.id,
     username: row.username,

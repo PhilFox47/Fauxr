@@ -2246,6 +2246,69 @@ always has one baked into her `appearance_prompt`; a character seed with the fie
 out (simulating a pre-existing save) gets one assigned and persisted on first load, and a
 second load neither re-rolls it nor appends the phrase a second time.
 
+### Two more independent traits: how she texts, and how she actually talks
+
+Every communication attribute that already existed - `typing_style`, `emoji_usage`,
+`slang_register`, `response_speed` - was mechanics: punctuation habits, shorthand density,
+how fast she answers. None of it was tone, and none of it said anything about what she is
+like out loud, on a date, as opposed to on a phone.
+
+**`texting_persona`** (17 entries) is the tone layer that sits on top of those mechanics -
+funny, cute, mean, shy, chaotic, flirty, deadpan, eloquent, genuinely bad at texting, uwu,
+leetspeak, and a handful more. It rides alongside `typing_style` rather than replacing it: a
+character's punctuation habits are still their own separate roll, this is just what she
+actually sounds like once the punctuation is applied.
+
+**`speech_style`** (17 entries) is the same tone axis, but for how she talks in person on a
+date - fast, slow, stutters when flustered, shy in person, blunt to his face, swears
+constantly, cute, loud, commanding, and so on. It is rolled completely independently of
+`texting_persona`, which is the entire point: a character can be a bold, forward texter who
+goes quiet the moment she is actually across the table from him, or the reverse, or carry
+the same energy into both. `speechStyleBlock()` in `blocks.ts` feeds this to `actor_date.md`
+with an explicit line that it is not a repeat of her texting voice and the two are allowed to
+differ - without that, a model reading her established texting personality all evening would
+just default to replaying it instead of trusting the separate roll.
+
+**Some entries deliberately exist in both categories at wildly different rarities.** uwu
+speech is `rare` as a texting persona and `extremely_rare` as a speech style (0.7% of
+characters texted this way in a 20k-sample check, versus 2 out of 20,000 for talking that way
+out loud) - the same idea, the same words even, but genuinely uncommon to actually do out
+loud rather than type, which the two separate rolls let the rarity tables say honestly
+instead of forcing one number to cover both.
+
+**Conflicts make the personality-level implications real, not just flavour text.** Both
+`shy_texting` and `shy_in_person` conflict with the `confident` and `control_freak`
+archetypes and `deadpan_menace` - a woman who already rolled as confidently dominant cannot
+also roll as a shy texter or a shy date, the same `roll()` exclusion mechanism that keeps a
+confident archetype from also being shy already uses. Verified directly: across 20,000 rolls,
+437 characters landed the `confident` archetype, and not one of them got `shy_texting` or
+`shy_in_person` - while the "bold texter, quiet in person" contrast the whole feature exists
+for showed up on its own in about 2.4% of characters with no archetype conflict blocking it.
+Affinities run the other way for natural pairings: `chaotic_texter` leans toward the
+`chaotic` archetype, `stutters` leans toward the `anxiety_is_a_lot` insecurity, `uwu_texting`
+and `leetspeak_texting` lean toward `anime`/`gaming` hobbies, and so on - the same
+cross-category affinity mechanism as everywhere else in the attribute tables, not a bespoke
+rule for these two.
+
+**`texting_persona` also feeds `typo_rate` directly**, on top of the existing `typing_style`/
+`archetype` inputs: `illiterate_texter` pushes it up, `eloquent_texter` pulls it down, so the
+mechanic actually agrees with the label rather than the two living side by side unconnected.
+
+**`speech_style` is a genuine discoverable fact, `texting_persona` is not.** Her texting
+persona is visible in her very first message, so - like `typing_style` before it - it was
+never something to uncover. Her speech style genuinely is not knowable until he has actually
+heard her talk: it now sits in `buildCatalogue()` under `personality`, implied the moment
+`has_had_first_date` is set (the same flag that already implies `height` and `body_type`),
+and purchasable with a trait credit before that like everything else in the catalogue.
+
+**Existing characters get both backfilled the same way `breast_size` was.** `hydrateCharacter()`
+now also runs `backfillCommStyles()`: a character loaded with either field missing gets it
+rolled on the spot, seeded with her actual `archetype`, `insecurity`, `hobbies` and `interests`
+so the same conflicts and affinities apply to the backfill as to normal generation, written
+back once and never re-rolled on a later load. Verified against a simulated pre-existing
+character (a `confident` archetype with the two new fields stripped out): loading her filled
+in both, correctly avoided every shy variant, and left the result unchanged on a second load.
+
 ### Species: almost always human, very rarely something else entirely
 
 The world Fauxr's characters live in has catgirls, vampires, witches, giantesses and a

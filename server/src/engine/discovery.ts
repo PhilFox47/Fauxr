@@ -65,6 +65,10 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   add('conflict_style', 'personality', 'In an argument', label('conflict_style', s.conflict_style), 'Shows when something goes wrong.');
   add('insecurity', 'personality', 'Soft spot', s.hints.insecurity || label('insecurity', s.insecurity), 'Only if she trusts you with it.');
   add('search_motive', 'personality', 'Why she is here', s.hints.search_motive || label('search_motive', s.search_motive), 'Ask her, honestly.');
+  // Deliberately not texting_style - that one is visible in her very first message and was
+  // never a fact to uncover. This one genuinely is not knowable until you have actually
+  // heard her talk.
+  add('speech_style', 'personality', 'How she talks in person', label('speech_style', s.speech_style), 'Needs a date.');
   s.quirks.forEach((q) => add(`quirk:${q}`, 'personality', 'Quirk', label('quirk', q), 'You will notice eventually.'));
 
   // ---- interests
@@ -130,7 +134,7 @@ function impliedByFlags(character: Character, flags: Flags): string[] {
   const keys: string[] = [...ALWAYS_KNOWN];
   if (flags.state.real_name_known) keys.push('real_name');
   if (flags.state.profile_picture_sent) keys.push('hair', 'eyes', 'style', 'distinctive_feature');
-  if (flags.state.has_had_first_date) keys.push('height', 'body_type');
+  if (flags.state.has_had_first_date) keys.push('height', 'body_type', 'speech_style');
 
   const s = character.seed;
   if (s.species && s.species !== 'human') {

@@ -163,6 +163,22 @@ export function communicationBlock(seed: CharacterSeed): string {
     `Message length: ${hint('message_length', seed.message_length)}`,
     `Register: ${hint('slang_register', seed.slang_register)}`,
     `Pace: ${hint('response_speed', seed.response_speed)}`,
+    `Texting persona: ${hint('texting_persona', seed.texting_persona)}`,
+  ].join('\n');
+}
+
+/**
+ * How she actually talks, out loud - the date-room counterpart to communicationBlock()'s
+ * texting persona above, and deliberately not the same field. A woman who is bold and
+ * flirty over text can walk into a date quiet and unsure, or the other way round; this is
+ * what tells the Actor which one is true right now, in the room, rather than defaulting to
+ * whatever her texting voice already established.
+ */
+export function speechStyleBlock(seed: CharacterSeed): string {
+  return [
+    `How she actually talks out loud: ${hint('speech_style', seed.speech_style)}`,
+    `This is who she is in person, not a repeat of her texting voice (${hint('texting_persona', seed.texting_persona)}) ` +
+      `- the two are allowed to differ, and often do. Trust this one now that he is actually in the room with her.`,
   ].join('\n');
 }
 

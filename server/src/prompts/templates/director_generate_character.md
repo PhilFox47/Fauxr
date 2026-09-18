@@ -73,10 +73,17 @@ should be able to tell it exists.
      handles conflict, her quirks - as a person you are describing, not a list of her
      tags with their hints pasted in.
    - How she actually texts: her typing habits, typo rate, emoji use, message length,
-     how fast she replies, whether she sends voice notes. Be concrete enough that someone
-     reading only this paragraph could write a message in her exact voice - this is the
-     one part that has to survive as usable fact, not just flavour, because it is the only
-     place that information will still exist once this call returns.
+     how fast she replies, whether she sends voice notes, and her texting persona (the
+     tone she reaches for over text - funny, cute, mean, shy, whatever it rolled). Be
+     concrete enough that someone reading only this paragraph could write a message in her
+     exact voice - this is the one part that has to survive as usable fact, not just
+     flavour, because it is the only place that information will still exist once this
+     call returns.
+   - How she actually talks, in person: her speech style is a separate roll from her
+     texting persona and is allowed to land anywhere relative to it - bold over text and
+     quiet in person, or the reverse, or the same energy either way. If the two genuinely
+     contrast, that contrast is worth a line: it is a real, specific thing about her, not a
+     contradiction to smooth over.
    - Her life: work, where and how she lives, her relationship history and status, why
      she's dating right now, what she has picked up from time on apps before this one.
    - What she is like when things turn physical: her general temperament here (confidence,
