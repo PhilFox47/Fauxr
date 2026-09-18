@@ -2998,7 +2998,7 @@ instructions every other in-app photo gets.
 character blocks (identity, appearance, life, interests, sexual, spice, ledger, mood) and
 replaces everything about texting:
 
-- **Three-part syntax, not asterisk-actions.** Plain text is narration — third person, present
+- **Four-part syntax, not asterisk-actions.** Plain text is narration — third person, present
   tense, a camera's view of what happens. `"Quoted text"` is spoken aloud, and only ever
   hers; she never voices his lines. `*Asterisked text*` is a private thought, and it is
   genuinely invisible — stripped before the beat ever renders, for both sides. He can write
@@ -3097,6 +3097,68 @@ anywhere: `director_date_summary.md`'s own `{{negative_flags}}` var and every pl
 surfaces an active negative flag to the Director (`flagsBlock()`, read generically by key) both
 already derive from that table's keys, so the very next text conversation after a bad date
 naturally knows about it, exactly like any other negative flag.
+
+### Steering a date from outside it: (directions)
+
+A date has no per-beat Director, which is what makes the scene drive itself — and also what
+left no way to tell it where to go. The specific failure that motivated this: an evening that
+would not *end*. You can write "that was a great evening" and hug her goodbye as plainly as
+you like, and she will keep the scene alive, because every instruction in `actor_date.md`
+points at playing the moment in front of her rather than winding the night down.
+
+So the date syntax grows a fourth kind, and it is the only one that is yours alone:
+
+```
+"Wow, that was a great evening!"
+I say, as I give her a warm hug
+(The Date comes to a close)
+```
+
+`(Text in round brackets)` is an **out-of-character direction**. Nobody said it, nobody heard
+it, and nothing about it happened in the room. She never reacts to it, never answers it and
+never acknowledges it exists — but it steers where the scene goes from the next beat onward.
+
+**A direction stands until you write another.** "Wind this evening down" is not something a
+character can act on inside one beat, and making you retype it every turn would defeat the
+point, so `standingDirection()` scans back to the most recent message that carries one rather
+than reading only your last message. A newer direction simply supersedes it.
+
+**It is hoisted, not just left in the transcript.** The direction is already in the scene
+history verbatim — nothing strips it there, and it should stay for continuity. But buried
+mid-scene it reads as one more line among many, which is exactly the failure this exists to
+fix. `directionBlock()` pulls the standing one out and places it as the last section of the
+prompt, immediately before `# OUTPUT`: the last thing read before she writes. It says plainly
+that nobody spoke it, that she must not answer or paraphrase it, and that the way to obey it
+is through things that actually happen — what she says, what she does, what she decides —
+never by narrating that the evening has changed direction. For a wind-down specifically it
+spells out the shape: stop opening new threads, start closing the open ones, let her check the
+time, settle up, gather her things. And it draws the line a direction cannot cross: it changes
+where this is heading, never who she is — no hard limit moves, and no feeling appears that the
+evening has given her no reason to feel.
+
+**Round brackets in her output are a format violation**, caught in code. The one failure that
+would make the whole mechanic useless is her echoing your direction back at you, so a beat
+containing `(...)` is rejected and re-requested with a correction naming the syntax. Like the
+word-count check it only fires on the first attempt — a second offence is not worth spending
+the retry and landing on the fallback line.
+
+**The end-of-date summary never sees them.** The Actor is told at length that a direction is
+not part of the scene; the summary Director is not, and has no reason to be — it is writing
+the one paragraph she keeps of the night, and "(the date comes to a close)" is not something
+she could remember. `withoutDirections()` strips them out of the transcript that reaches
+`director_date_summary.md`, and drops any message that was *only* a direction, so it reads as
+a turn that never existed rather than as him saying nothing at all.
+
+In the date room, a direction renders — you wrote it deliberately and need to see what is
+currently in force — but set apart: dimmed, italic, behind a rule, so a glance down the
+transcript never mistakes it for something said in the room. The composer hint now reads
+`Narrate · "speak" · *thought* · (direction)`.
+
+Verified against a mock provider: the direction reaches the beat prompt as its own block
+immediately before `# OUTPUT`, quoted exactly; it survives two of her beats with no new note
+and is superseded by a newer one; a beat that used round brackets triggered a real retry and
+only the clean version was stored; and both summary calls saw what he actually said with the
+direction gone.
 
 ### The screen
 

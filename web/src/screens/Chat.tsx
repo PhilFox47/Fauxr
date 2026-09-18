@@ -27,22 +27,35 @@ function dayLabel(iso: string): string {
 }
 
 /**
- * The date's three-part syntax, on both sides of the conversation: plain text narrates,
- * "quoted text" is spoken aloud and gets the chat's own accent colour, and *asterisked
- * text* is a private thought - hers or his - that never actually renders. It still reaches
- * the model on the next turn (the stored text keeps it, only the display strips it), which
- * is what lets her carry a thought forward, or lets him steer her without her "hearing" it.
+ * The date's four-part syntax, on both sides of the conversation: plain text narrates,
+ * "quoted text" is spoken aloud and gets the chat's own accent colour, *asterisked text* is
+ * a private thought - hers or his - that never actually renders, and (a round-bracketed
+ * note) is his out-of-character direction for where the evening should go.
+ *
+ * Thoughts still reach the model on the next turn (the stored text keeps them, only the
+ * display strips them), which is what lets her carry a thought forward, or lets him steer her
+ * without her "hearing" it. A direction does render, because he wrote it deliberately and
+ * needs to see what is currently in force - just set apart, so a glance down the transcript
+ * never mistakes it for something that was said in the room.
  */
 function renderBeat(text: string) {
   // Thoughts are stripped as a string operation first, with the whitespace they leave
   // behind collapsed - splitting into elements and just omitting the *thought* fragment
   // would leave the space on either side of it behind as a visible double space.
-  const visible = text.replace(/\*[^*]*\*/g, ' ').replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n').trim();
-  return visible.split(/("[^"]*")/g).filter(Boolean).map((part, i) =>
-    part.startsWith('"') && part.endsWith('"')
-      ? <span key={i} className="speech">{part}</span>
-      : <span key={i}>{part}</span>,
-  );
+  // The final collapse of 3+ newlines to 2 matters: a thought written as its own paragraph
+  // leaves the blank lines that surrounded it behind, which rendered as a conspicuous empty
+  // gap in the middle of her beat - the one place the invisible markup was still visible.
+  const visible = text
+    .replace(/\*[^*]*\*/g, ' ')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/ *\n */g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+  return visible.split(/("[^"]*"|\([^()]*\))/g).filter(Boolean).map((part, i) => {
+    if (part.startsWith('"') && part.endsWith('"')) return <span key={i} className="speech">{part}</span>;
+    if (part.startsWith('(') && part.endsWith(')')) return <span key={i} className="direction">{part}</span>;
+    return <span key={i}>{part}</span>;
+  });
 }
 
 function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
@@ -1269,11 +1282,13 @@ function DateRoom({
 
       {live ? (
         <div className="composer">
+          {/* Four hints where there used to be three, so the wording tightens to keep the
+              placeholder on one line - a clipped second row is worse than a shorter word. */}
           <textarea
             ref={inputRef}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder='Narrate freely · "speak" · *private thought*'
+            placeholder='Narrate · "speak" · *thought* · (direction)'
             rows={1}
           />
           <button className="send" onClick={() => void send()} disabled={!draft.trim() || sending} aria-label="Send">

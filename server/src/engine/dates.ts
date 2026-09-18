@@ -78,6 +78,82 @@ function visibleContent(text: string): string {
  */
 const MAX_VISIBLE_WORDS = 220;
 
+/**
+ * The date's fourth syntax, and the only one that is his alone: a note in round brackets,
+ * written out of character, saying where he wants the evening to go. Not a line anyone
+ * spoke and not something that happened in the room - see actor_date.md's THE FORMAT.
+ *
+ * Nested brackets are deliberately not handled: `[^()]*` stops at the first closing bracket,
+ * which is the right read of "(...)" in something a person typed by hand.
+ */
+const DIRECTION_SPAN = /\(([^()]*)\)/g;
+
+/**
+ * The same shape without /g, for the one-shot check in runDateActor. `.test()` on a global
+ * regex advances lastIndex between calls, so sharing DIRECTION_SPAN there would make the
+ * guard fire on alternate beats and nothing else.
+ */
+const HAS_DIRECTION = /\([^()]*\)/;
+
+/** Every direction in one message, in the order he wrote them, blanks dropped. */
+export function extractDirections(text: string): string[] {
+  return [...text.matchAll(DIRECTION_SPAN)].map((m) => m[1].trim()).filter(Boolean);
+}
+
+/**
+ * The direction currently in force, or '' if he has never written one.
+ *
+ * A direction stands until he writes another - "wind this evening down" is not a thing she
+ * can act on inside a single beat, and making him retype it every turn would defeat the
+ * point. Scanning back to the most recent message that carries one, rather than reading only
+ * the last message, is what makes it durable; a newer one simply supersedes it.
+ */
+export function standingDirection(transcript: StoredMessage[]): string {
+  for (let i = transcript.length - 1; i >= 0; i--) {
+    if (transcript[i].sender !== 'user') continue;
+    const found = extractDirections(transcript[i].text);
+    if (found.length) return found.join(' ');
+  }
+  return '';
+}
+
+/**
+ * Where the standing direction reaches the Actor.
+ *
+ * It is already in the transcript verbatim - historyBlock does not strip it - but buried in
+ * the middle of a long scene it reads as one more line among many, which is exactly the
+ * failure this is here to fix: a date that would not end however plainly he asked. Hoisting
+ * it out and putting it immediately before OUTPUT makes it the last thing read before she
+ * writes, without ever letting her treat it as something said in the room.
+ */
+export function directionBlock(direction: string): string {
+  if (!direction) return '';
+  return [
+    '# WHERE HE WANTS THIS TO GO',
+    `Out of character, in round brackets, he has written: (${direction})`,
+    '',
+    'Nobody spoke this and nothing about it happened in the room. She does not know it ' +
+      'exists. Do not answer it, quote it, paraphrase it back, or let her react to it, and ' +
+      'do not write round brackets of your own anywhere in your reply.',
+    '',
+    'Do steer the scene towards it, starting with this beat. It stands until he writes a ' +
+      'different one, so keep playing towards it for as many beats as it honestly takes - ' +
+      'and get there through things that actually happen, what she says and does and ' +
+      'decides, never by narrating that the evening has changed direction.',
+    '',
+    'If it asks for the evening to wind down or end, that means stop opening new threads ' +
+      'and start closing the ones already open: let her check the time, settle up, gather ' +
+      'her things, say the thing people actually say when they are about to leave. Do not ' +
+      'sour a good evening to end it, and do not manufacture a reason - she can simply be ' +
+      'ready to go.',
+    '',
+    'A direction changes where this is heading, never who she is. It does not override her ' +
+      'hard limits, does not make her feel something the evening has given her no reason to ' +
+      'feel, and does not survive being flatly contradicted by what he then actually does ' +
+      'in the scene.',
+  ].join('\n');
+}
+
 export interface DateTurnResult {
   text: string;
   hidden: { thoughts: string; mood: string; wants: string };
@@ -142,6 +218,9 @@ function buildDatePrompt(
     ledger_block: ledgerBlock(rel.ledger),
     mood_block: moodBlock(rel.arousal, currentStage(rel, character).label, seed.hints.arousal_tell, 'in_person'),
     moment_block: describeHerMoment(character),
+    // Empty unless he has actually written one. Deliberately the last block in the template,
+    // immediately before OUTPUT - see directionBlock for why position matters here.
+    direction_block: directionBlock(standingDirection(transcript)),
   });
 }
 
@@ -217,6 +296,19 @@ async function runDateActor(
         'You used an em-dash or a semicolon. Both are one of the single most recognisable tells that ' +
         'this was generated rather than actually written - use a comma, a full stop, or trail off with ' +
         '"..." instead. Write the beat again, same JSON shape.';
+      continue;
+    }
+    // Round brackets are his syntax alone, so anything she writes in them is either her
+    // echoing a direction back at him - the one failure that would make the whole mechanic
+    // useless - or a stage direction in the wrong markup. Attempt-0 only, for the same
+    // reason as the wordcount check below: a second offence is not worth the fallback line.
+    if (attempt === 0 && HAS_DIRECTION.test(text)) {
+      logger.warn('actor', 'date beat wrote in the player\'s direction syntax', { character: character.username, text });
+      correction =
+        'You wrote text in (round brackets). That syntax belongs to him alone - it is how he ' +
+        'gives directions from outside the scene, and she cannot see or answer one. Write the ' +
+        'beat again with no round brackets anywhere: narration plain, speech in "quotes", any ' +
+        'private thought of hers in *asterisks*. Same JSON shape.';
       continue;
     }
     if (attempt === 0 && countWords(visibleContent(text)) > MAX_VISIBLE_WORDS) {
@@ -501,6 +593,27 @@ export function deleteDateMessage(dateId: string, messageId: number): void {
   deleteMessage(date.character_id, messageId);
 }
 
+/**
+ * The transcript as the evening actually happened, with his out-of-character directions
+ * taken back out.
+ *
+ * The Actor is told at length that a direction is not part of the scene; the summary Director
+ * is not, and it has no reason to be - it is writing the one paragraph she keeps of the
+ * night, and "(the date comes to a close)" is not a thing she could remember. Left in, it
+ * reads as dialogue and lands in her memory as something he said.
+ */
+function withoutDirections(messages: StoredMessage[]): StoredMessage[] {
+  return messages
+    .map((m) =>
+      m.sender === 'user' && HAS_DIRECTION.test(m.text)
+        ? { ...m, text: m.text.replace(DIRECTION_SPAN, ' ').replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n').trim() }
+        : m,
+    )
+    // A message that was nothing but a direction leaves an empty line behind, which reads as
+    // him having said nothing at all rather than as a turn that never existed.
+    .filter((m) => m.text.trim().length > 0);
+}
+
 function summaryPrompt(character: Character, rel: Relationship, date: DateSession): string {
   const user = getUserProfile();
   return render('director_date_summary', {
@@ -512,7 +625,7 @@ function summaryPrompt(character: Character, rel: Relationship, date: DateSessio
     investment: rel.investment,
     arousal: rel.arousal,
     flags_block: flagsBlock(rel.flags),
-    history_block: historyBlock(dateMessages(date.id), character, user),
+    history_block: historyBlock(withoutDirections(dateMessages(date.id)), character, user),
     state_flags: STATE_FLAGS.join(', '),
     event_flags: EVENT_FLAGS.join(', '),
     negative_flags: Object.keys(NEGATIVE_FLAG_HOURS).join(', '),
