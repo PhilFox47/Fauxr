@@ -1019,11 +1019,14 @@ plays the turn again through `takeDateTurn()` - the same shared turn lock (`clai
 
 ### Deleting a message
 
-A small trash icon sits beside every bubble, yours and hers alike, for typing something and
-wanting it gone again rather than rerolling it. Unlike regenerating, deleting carries none of
-that restriction: any message, anywhere in the history, can go — it does not try to undo
-whatever it already fed into trust, spark or the ledger, it just stops being shown and stops
-being read as context from here on, which is all "let me rewrite that" actually needs.
+A small trash icon sits next to the timestamp, right beside the regenerate button — one per
+message block, the same place regenerate already lived, not one on every single bubble. A
+run of consecutive messages from the same person only ever gets the one timestamp, so it only
+ever gets the one delete icon too, on the last message of that run. Unlike regenerating,
+deleting carries none of its restriction on position: whichever message that icon belongs to,
+yours or hers, anywhere in the history, can go — it does not try to undo whatever it already
+fed into trust, spark or the ledger, it just stops being shown and stops being read as context
+from here on, which is all "let me rewrite that" actually needs.
 
 A single tap arms it — the trash icon turns into a small red check for about two and a half
 seconds — and a second tap is what actually deletes it, so nothing goes missing to a stray

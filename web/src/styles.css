@@ -707,15 +707,6 @@ input[type='range'] {
   font-weight: 550;
   letter-spacing: 0.2px;
 }
-/* Pairs a bubble with its delete handle on the outer side, so the handle is reachable on
-   every message rather than only the last one in a run (where the stamp row already lives). */
-.msg-row { display: flex; align-items: flex-end; gap: 4px; max-width: 100%; }
-.msg-row.me { align-self: flex-end; }
-.msg-row.them { align-self: flex-start; }
-/* .bubble's own align-self used to place it left/right in a column; nested in .msg-row that
-   would instead move it up/down a row, so pin both back to the bottom explicitly. */
-.msg-row .bubble.me, .msg-row .bubble.them { align-self: flex-end; }
-
 .bubble {
   max-width: 78%;
   padding: 9px 14px;
@@ -792,20 +783,18 @@ input[type='range'] {
 .msg-del {
   background: none;
   border: 0;
-  padding: 5px;
-  margin-bottom: 3px;
+  padding: 0;
+  margin: 0;
   flex: 0 0 auto;
   color: var(--faint);
   display: inline-flex;
   line-height: 1;
-  border-radius: var(--r-full);
-  opacity: 0.55;
-  transition: color var(--fast) var(--ease), background var(--fast) var(--ease), opacity var(--fast) var(--ease);
+  transition: color var(--fast) var(--ease), transform var(--fast) var(--ease);
 }
-.msg-del:hover { color: var(--text-dim); background: var(--surface-2); opacity: 1; }
-.msg-del:active { transform: scale(0.9); }
-.msg-del:disabled { opacity: 0.25; }
-.msg-del.confirming { color: var(--err); opacity: 1; }
+.msg-del:hover { color: var(--text-dim); }
+.msg-del:active { transform: scale(0.85); }
+.msg-del:disabled { opacity: 0.35; }
+.msg-del.confirming { color: var(--err); }
 
 .typing {
   align-self: flex-start;

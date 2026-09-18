@@ -600,61 +600,47 @@ export default function Chat({
           }
 
           const confirmingDelete = confirmDeleteId === m.id;
-          const deleteBtn = (
-            <button
-              className={`msg-del${confirmingDelete ? ' confirming' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                armOrDeleteMessage(m.id);
-              }}
-              disabled={deletingId !== null && deletingId !== m.id}
-              aria-label={confirmingDelete ? 'Tap again to delete this message' : 'Delete this message'}
-              title={confirmingDelete ? 'Tap again to delete' : 'Delete this message'}
-            >
-              <Icon name={confirmingDelete ? 'check' : 'trash'} size={13} />
-            </button>
-          );
+          const showActions = showStamp || (!mine && !blocked && m.kind === 'image' && m.id === lastHerImageId);
 
           return (
             <div key={m.id} style={{ display: 'contents' }}>
               {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
-              <div className={`msg-row ${mine ? 'me' : 'them'}`}>
-                {!mine && deleteBtn}
-                {m.kind === 'image' ? (
-                  <div className={`bubble image ${mine ? 'me' : 'them'}`}>
-                    {m.image_url ? (
-                      <img
-                        src={m.image_url}
-                        alt=""
-                        onClick={() => setLightboxAt(allImages.indexOf(m.image_url!))}
-                      />
-                    ) : (
-                      <span className="tiny">Photo unavailable</span>
-                    )}
-                  </div>
-                ) : m.kind === 'voice' ? (
-                  <VoiceBubble message={m} mine={mine} />
-                ) : (
-                  <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}`}>
-                    {m.text}
-                    {m.meta?.failed && (
-                      <span className="fail-mark" title="Generation failed - this is a placeholder, not a real reply">
-                        <Icon name="alert" size={14} />
-                      </span>
-                    )}
-                  </div>
-                )}
-                {mine && deleteBtn}
-              </div>
+              {m.kind === 'image' ? (
+                <div className={`bubble image ${mine ? 'me' : 'them'}`}>
+                  {m.image_url ? (
+                    <img
+                      src={m.image_url}
+                      alt=""
+                      onClick={() => setLightboxAt(allImages.indexOf(m.image_url!))}
+                    />
+                  ) : (
+                    <span className="tiny">Photo unavailable</span>
+                  )}
+                </div>
+              ) : m.kind === 'voice' ? (
+                <VoiceBubble message={m} mine={mine} />
+              ) : (
+                <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}`}>
+                  {m.text}
+                  {m.meta?.failed && (
+                    <span className="fail-mark" title="Generation failed - this is a placeholder, not a real reply">
+                      <Icon name="alert" size={14} />
+                    </span>
+                  )}
+                </div>
+              )}
               {/*
                 An image message's own regen row is included in this condition, not gated by
                 showStamp alone: it is posted as its own standalone entry (once the job
                 finishes, never batched with her text), so "is this her most recent photo"
                 and "is this the end of a run of her messages" are different questions - a
                 later reply from her in a following turn would otherwise hide this row even
-                though the photo is still the one worth regenerating.
+                though the photo is still the one worth regenerating. Delete rides along on
+                the same row for the same reason: one action row per message block, not one
+                per bubble, with everything - timestamp, regen, delete - living together to
+                its right.
               */}
-              {(showStamp || (!mine && !blocked && m.kind === 'image' && m.id === lastHerImageId)) && (
+              {showActions && (
                 <div className={`stamp ${mine ? 'me' : 'them'}`}>
                   {showStamp && (
                     <span>
@@ -695,6 +681,15 @@ export default function Chat({
                       </button>
                     </span>
                   )}
+                  <button
+                    className={`msg-del${confirmingDelete ? ' confirming' : ''}`}
+                    onClick={() => armOrDeleteMessage(m.id)}
+                    disabled={deletingId !== null && deletingId !== m.id}
+                    aria-label={confirmingDelete ? 'Tap again to delete this message' : 'Delete this message'}
+                    title={confirmingDelete ? 'Tap again to delete' : 'Delete this message'}
+                  >
+                    <Icon name={confirmingDelete ? 'check' : 'trash'} size={13} />
+                  </button>
                 </div>
               )}
             </div>
