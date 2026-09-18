@@ -16,6 +16,7 @@ import {
 } from '../repo.js';
 import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
+import { randInt } from './dice.js';
 import { describeSeed } from './generator.js';
 import type { Character, CharacterSeed, PendingPhoto, Relationship } from '../types.js';
 
@@ -145,6 +146,36 @@ const BASE_NEGATIVE =
 const CANDID_NEGATIVE = 'No studio lighting or posed professional-model styling.';
 
 /**
+ * Sent only when a reference image actually rides along.
+ *
+ * Seedream reads a reference as "make this the same person", and left at that it brings the
+ * whole photo with the face: the same expression, the same head angle, the same crop as the
+ * profile picture it was handed. That is most of why a character's shots came back looking
+ * like small edits of her profile picture rather than different photos of her. There is no
+ * API knob for "identity only" - saying so in the prompt is the only lever there is.
+ */
+const REF_NOTE =
+  'The attached reference photo fixes WHO she is - same face, same bone structure, same hair ' +
+  'and colouring. It does not fix this photo: her expression, head angle, pose, framing and ' +
+  'surroundings all come from the description above, not from the reference.';
+
+/**
+ * Her profile picture is the identity anchor - same character, same seed, so the face every
+ * later reference image locks onto is the one she was generated with. Every shot after it
+ * gets a fresh seed instead.
+ *
+ * One fixed seed used to be reused for every single image of a character, which stacked with
+ * the reference image and a demeanour line that never changes to leave the prompt doing
+ * almost all of the differing on its own - so her photos came back with the same expression
+ * and the same head angle over and over. Nothing reads this value back (it is persisted for
+ * the image log and nothing else), so a fresh seed per run also gives "regenerate" something
+ * real to change: re-running the same job used to hand back a near-identical picture.
+ */
+function seedFor(characterSeed: CharacterSeed, isProfile: boolean): number {
+  return isProfile ? characterSeed.image_seed : randInt(1, 2_000_000_000);
+}
+
+/**
  * The provider this goes through hard-rejects a Z Image Turbo prompt over this length -
  * confirmed from actual request errors, not from the model's own published guidance (which
  * says the opposite: that it prefers long, detailed prompts). Whatever the model itself
@@ -184,24 +215,50 @@ export const IMAGE_SIZE: Record<'profile' | 'portrait' | 'landscape', string> = 
  * Appearance alone produced twelve women with the same blank catalogue expression. The
  * archetype carries a written demeanour (see personality.json), and social energy and humour
  * bend it - the same face is a different photo on someone who hates being photographed.
+ *
+ * Emitted as labelled lines rather than one comma-joined string. Joined flat, the three
+ * sources read as one description of a single face and routinely contradicted each other -
+ * a real case was "wide social smile, clearly mid-conversation, lively energy, relaxed,
+ * unbothered by the camera, deliberately undersold expression", which asks for a beaming
+ * grin and an underplayed one at once. Separated and named, they read as three true things
+ * about a person that the assembler can weigh, which is what they actually are.
+ *
+ * The archetype's line is written as the picture she would choose of herself - it names a
+ * crop and a camera distance as well as a manner. That is exactly right for her profile
+ * picture and wrong for everything after it, so a non-profile shot is told to take the
+ * manner out of it and leave the framing behind.
  */
-function demeanourFor(seed: CharacterSeed): string {
-  const parts: string[] = [];
+function demeanourFor(seed: CharacterSeed, isProfile: boolean): string {
+  const lines: string[] = [];
   const arch = find('archetype', seed.archetype);
-  if (arch?.extra?.photo) parts.push(String(arch.extra.photo));
+  if (arch?.extra?.photo) {
+    const photo = String(arch.extra.photo);
+    lines.push(
+      isProfile
+        ? `Left to choose her own photo, she picks one like this: ${photo}.`
+        : `Left to choose her own photo she picks one like this: ${photo}. That is a photo she ` +
+          `composed; this one she did not. Take the manner in it - what her face and her ` +
+          `posture default to - and leave the crop, the camera distance and the specific ` +
+          `expression behind.`,
+    );
+  }
 
   // Off the attribute row, not a literal id switch. This used to check `seed.social_energy`
   // against a fixed { low, medium, high } map and `seed.humor_type` against two hardcoded id
   // lists - lists that named ids ("deadpan", "silly", "goofy", "playful") which do not
   // actually exist in personality.json, so neither humour branch had ever fired.
   const energy = find('social_energy', seed.social_energy)?.extra?.demeanour;
-  if (energy) parts.push(String(energy));
+  if (energy) lines.push(`Being looked at, or photographed, she is ${String(energy)}.`);
 
   const humourDemeanour = find('humor_type', seed.humor_type)?.extra?.demeanour;
-  if (humourDemeanour === 'undersold') parts.push('deliberately undersold expression');
-  if (humourDemeanour === 'playful') parts.push('playful, mid-expression rather than posed');
+  if (humourDemeanour === 'undersold') {
+    lines.push('When something amuses her it barely surfaces - she underplays rather than beams.');
+  }
+  if (humourDemeanour === 'playful') {
+    lines.push('When something amuses her it shows immediately and visibly, halfway into an expression rather than settled in one.');
+  }
 
-  return parts.join(', ');
+  return lines.join('\n');
 }
 
 export interface ImageJob {
@@ -459,7 +516,7 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             image_kind: job.kind,
             situation,
             visible_marks: visibleMarks(character, job.kind, facesCamera),
-            demeanour: demeanourFor(character.seed),
+            demeanour: demeanourFor(character.seed, isProfile),
             // Only a profile picture gets to be a professional shot, a repurposed work
             // photo, a posed full-body - anything her own account above says it is. A
             // chat or spicy photo is always a moment inside the conversation, so it keeps
@@ -521,20 +578,29 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     // supposed to show her face at all - it just makes one appear anyway. Skip the
     // reference whenever this shot does not put her face in frame.
     const ref = isProfile || !facesCamera ? null : referenceImage(character.id);
+    // Only when one is actually attached - see REF_NOTE for why the reference needs telling
+    // what it is for. Appended after styleSuffix so it is the last thing read, and left off
+    // the Z Image Turbo budget maths above on purpose: that mode never sends a reference at
+    // all unless a profile picture exists, and the same trim still protects the ceiling.
+    const finalPrompt = ref ? `${prompt} ${REF_NOTE}` : prompt;
     const size = isProfile ? IMAGE_SIZE.profile : IMAGE_SIZE[job.aspect === 'landscape' ? 'landscape' : 'portrait'];
+    const imageSeed = seedFor(character.seed, isProfile);
     const b64 = await generateImage({
-      prompt,
+      prompt: finalPrompt,
       negativePrompt: negative,
-      seed: character.seed.image_seed,
+      seed: imageSeed,
       refImage: ref ?? undefined,
       size,
     });
 
     const relPath = join('images', `${id}.png`);
     writeFileSync(join(DATA_DIR, relPath), Buffer.from(b64, 'base64'));
+    // The log records what was actually sent, reference note and per-shot seed included -
+    // otherwise two shots that came out identical would show identical log rows for no
+    // visible reason.
     db.prepare('UPDATE images SET prompt = ?, seed = ?, ref_image = ? WHERE id = ?').run(
-      prompt,
-      character.seed.image_seed,
+      finalPrompt,
+      imageSeed,
       ref ? 'profile' : null,
       id,
     );

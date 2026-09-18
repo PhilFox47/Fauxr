@@ -32,18 +32,43 @@ uncanny-valley mess rather than picking one. Short and well-chosen beats long an
 # HOW SHE CARRIES HERSELF (this is who she is, not what she looks like)
 {{demeanour}}
 
-This is the half that makes the photo hers rather than a stock portrait. The appearance
-block decides what she looks like; this decides her expression, where her eyes go, how she
-holds herself, and how the shot itself was taken - unless the situation below already
-settles that, which for a profile picture it usually will. Both her looks and her demeanour
-must still reach the prompt, woven into the sentence rather than pasted on the end. A shy
-woman and a provocateur with identical faces should not produce the same picture.
+This is her baseline - the manner she returns to between things, how she is around a camera
+in general, what her face does when nothing in particular is happening. It is NOT the
+expression for this photo, and it is not a phrase to copy into the prompt. Every picture of
+one woman would look like the same picture if it were, which is exactly the failure this
+section exists to prevent.
+
+The expression in THIS shot comes from the situation below: what she is doing in this exact
+second, who she is doing it with or for, and what has just happened. Someone mid-laugh,
+someone caught off guard, someone concentrating on something out of frame, someone who has
+just been asked to hold still, someone genuinely annoyed - these are different faces, and
+the situation says which one this is. Read her baseline as the accent it is said in, not the
+sentence. A woman whose baseline is guarded still laughs; she just laughs like someone
+guarded.
+
+So: work out what her face and eyes are actually doing in this moment, say that specifically
+- where she is looking, what her mouth is doing, whether it is a held expression or one
+caught halfway - and let the baseline colour it. A vague "smiling" or a recycled stock phrase
+is the one thing that will not do. The appearance block decides what she looks like; this
+half plus the situation decides everything else, including how the shot was taken. A shy
+woman and a provocateur with identical faces should not produce the same picture, and two
+photos of the same woman should not either.
 
 # WHAT THE IMAGE SHOULD BE
 Kind: {{image_kind}}
 Situation: {{situation}}
 {{#visible_marks}}
-Visible on her in this shot: {{visible_marks}}
+Marks on her body that this stage of things allows you to show: {{visible_marks}}
+
+This is a permission list, not a checklist, and it knows nothing about what she is wearing
+or how this shot is framed. Before you write any of these into the prompt, work out from the
+situation what she actually has on and what the camera actually sees, then include only the
+ones that specific outfit and that specific crop would genuinely expose. A shirt with sleeves
+covers a forearm tattoo. A buttoned collar covers a collarbone. A waist-up shot does not show
+a thigh. Where the clothing or the framing covers a mark, leave it out entirely and say
+nothing about it - do not tuck it in at an edge, do not have it peek out from under a hem or
+a sleeve, do not mention it as hidden. An unmentioned tattoo is simply not in the picture,
+which is correct; a tattoo described through fabric is the failure.
 {{/visible_marks}}
 
 # IS SHE EVEN IN THIS SHOT

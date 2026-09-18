@@ -1822,6 +1822,81 @@ flash and sickly tones on the other, plus the usual renders, anatomy errors and 
 a **glamour-shot/studio-lighting ban** used to ride along too, universally, until it started
 actively fighting the one case it should not: see below.
 
+### Why every photo of one woman used to look like the same photo
+
+The demeanour above fixed twelve women looking alike. It did nothing about one woman's
+twelve photos looking alike, which turned out to be four separate causes stacking on top of
+each other — each one individually small, together enough to make a regenerate hand back
+what looked like a light edit of the picture it replaced.
+
+**The demeanour string never changed.** It is computed once from her archetype, social
+energy and humour, and those never move, so every prompt for her whole life carried the
+exact same sentence — and that sentence names an expression outright. A real one, from the
+logs: `wide social smile, clearly mid-conversation, lively energy, relaxed, unbothered by
+the camera, deliberately undersold expression`. Three sources comma-joined into one blob
+that asks for a beaming grin and an underplayed one in the same breath, handed to the
+assembler as if it described a single face. They are now emitted as **three labelled
+lines** instead — what she picks when she chooses her own photo, how she is around a camera,
+how amusement surfaces on her — because separated and named they read as three true things
+about a person the assembler can weigh, which is what they actually are.
+
+**And the archetype's line describes a photo she composed.** It names a crop and a camera
+distance (`arm-length selfie held high and steady`, `tight centred crop`, `photo taken at
+slight distance`) as well as a manner. That is exactly right for her profile picture, which
+she did pose for, and wrong for every shot after it. A non-profile shot now gets the same
+line plus an explicit instruction to take the manner out of it and leave the framing behind.
+
+**The template stopped treating it as the expression at all.** It is now labelled her
+*baseline* — the manner she returns to between things, what her face does when nothing in
+particular is happening — with the expression for this shot required to come from the
+situation instead: what she is doing this second, who with, what just happened. "Read her
+baseline as the accent it is said in, not the sentence. A woman whose baseline is guarded
+still laughs; she just laughs like someone guarded."
+
+**One seed was reused for every image she ever generated.** `character.seed.image_seed` went
+into every call — profile, chat, spicy, date, and every regenerate of any of them. Same
+seed, same reference image, same demeanour string left the prompt doing all the differing on
+its own. Her profile picture keeps the fixed seed, because it is the identity anchor every
+later reference image locks onto; everything after it gets a fresh one. Nothing reads the
+value back (it is persisted for the image log and nothing else), so this also gives
+"regenerate" something real to change.
+
+**The reference image was sent without being told what it was for.** Seedream reads an
+attached reference as "make this the same person", and left at that it brings the whole
+photo along with the face: the same expression, the same head angle, the same crop as the
+profile picture. There is no API knob for identity-only, so the only lever is saying so in
+the prompt — a short note, appended only when a reference is actually attached, that the
+reference fixes who she is and nothing about *this* photo.
+
+Verified against a mock provider: the profile shot uses her stored `image_seed` and sends no
+reference note; three successive chat shots of the same character get three distinct seeds,
+none of them the profile's, each with the reference note attached; and the profile and
+non-profile demeanour blocks render differently for the same character.
+
+### Tattoos stopped phasing through her clothes
+
+`visibleMarks()` decides which tattoos and piercings this shot is allowed to show, and it
+reasons purely about **relationship progression** — a tattoo on her ribs is not something a
+stranger has seen yet, a face piercing is. What it knows nothing about is what she is
+wearing or how the shot is framed, and it never claimed to.
+
+The template did claim to. `Visible on her in this shot: {{visible_marks}}` is an
+assertion, so the assembler took it as one and contorted the description until every listed
+mark appeared. From a real log: an oversized buttoned shirt, and `roman numerals just
+visible on the front of her shoulder where the shirt edge sits`. It found a gap for it,
+because the prompt told it the mark was visible and it is obliged not to contradict input.
+
+It is now framed as what it is — a **permission list, not a checklist** — with the framing
+work handed to the assembler, which is the only thing in the pipeline that actually knows
+both the outfit (it is in the fixed appearance block) and the crop (it decides it). A shirt
+with sleeves covers a forearm tattoo. A waist-up shot does not show a thigh. Where the
+clothing or the framing covers a mark it is left out entirely, and explicitly not tucked in
+at an edge or mentioned as hidden: an unmentioned tattoo is simply not in the picture, which
+is correct, while a tattoo described through fabric is the failure. This mirrors the
+principle the file already applied to the fixed appearance block — "leaving out something
+the shot genuinely does not show is correct, not an omission" — which had never been
+extended to the marks list.
+
 ### Her profile picture is her choice of photo, not a house style
 
 Every image used to get the same forced style suffix - `candid amateur phone photo`,
