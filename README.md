@@ -2783,6 +2783,15 @@ moment" framing every other in-conversation photo gets — a date arrival was ne
 anyone's phone, so it does not get styled like one. Portrait, always, and it always shows her
 face — this is the one shot with no reason to ever hide it.
 
+**Full-length, always.** `arrivalSituation()` used to offer the assembler a choice between
+"full-length, three-quarter, a look across the room" - whatever framing "actually shows the
+outfit", which sounds reasonable but in practice let the model reach for a three-quarter or
+waist-up crop for this shot specifically, the one photo whose entire point is the outfit
+`decideDateOutfit()` just spent a call deciding. That choice is gone: the situation now states
+plainly that this is a full-length shot, head to shoes with real margin on both ends, not a
+waist-up or three-quarter one, because nothing about the outfit is allowed to be cropped off
+or guessed at.
+
 It lands as its own image message inside the **date's own transcript**, not the texting chat
 — threaded through a new `images.date_id` column so a retry from the Settings log still posts
 back to the right place — and its sender is `'system'` rather than `'character'`, the same

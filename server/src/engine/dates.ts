@@ -343,8 +343,10 @@ function arrivalSituation(character: Character, location: Location, outfit: stri
   return [
     `He has just arrived and is seeing ${character.real_name} for the first time tonight, at ${location.name}.`,
     `She is wearing: ${outfit}`,
-    'This is the moment he first spots her, or she first comes into view - whatever framing ' +
-      '(full-length, three-quarter, a look across the room) actually shows the outfit and the place.',
+    'This is the moment he first spots her, or she first comes into view - a full-length shot, ' +
+      'framed from well above her head down to her shoes with real margin on both ends so nothing ' +
+      'is cropped off, not a waist-up or three-quarter shot. The whole outfit is the point of this ' +
+      'photo, so nothing about it may be cut off or guessed at.',
   ].join(' ');
 }
 
