@@ -255,8 +255,13 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
 
   let correction: string | null = null;
 
-  // Two attempts: the first is the ask, the second names whatever went wrong with it.
-  for (let attempt = 0; attempt < 2; attempt++) {
+  // Two attempts: the first is the ask, the second names whatever went wrong with it. A
+  // reply that broke frame - the model declining or hedging rather than being her - buys one
+  // extra, capped at three, for the same reason dates.ts does it: that correction is the one
+  // most likely to work, and burning the last attempt on it lands the player on a canned
+  // fallback line at exactly the wrong moment. Style problems still cost two.
+  let budget = 2;
+  for (let attempt = 0; attempt < budget; attempt++) {
     let text: string;
     try {
       text = await complete({
@@ -321,6 +326,8 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
         attempt,
         messages: out.messages.map((m) => m.text),
       });
+      // See the budget note above the loop: only a break in frame earns the extra attempt.
+      if (problem.what.startsWith('broke character')) budget = Math.min(3, budget + 1);
       correction = retryHint(problem.what, problem.fix);
       continue;
     }

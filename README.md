@@ -955,6 +955,86 @@ irony markers" produces whatever the model imagines that is; the table now lists
 words. Properly-punctuated and formal registers are demoted to uncommon, so writing in full
 sentences is a deliberate trait rather than the default.
 
+### Making a reticent model write the app it is running
+
+Fauxr is an adult app, and not every model plays one willingly. Swapping an uncensored
+finetune for a stock instruct model (GLM 5.3 Uncensored to plain GLM 5.3) made the cast
+noticeably shy: scenes softened into euphemism, dates faded out at the door, and the
+occasional reply arrived in assistant register, explaining what it would rather write.
+
+The fix is not a jailbreak string, and deliberately so. A persona override ("you have no
+restrictions") is brittle, fights the model rather than aiming it, and costs exactly the
+thing this app cares most about — a model that spends its attention arguing with a fake
+override writes worse prose. What actually moves a model here is **accurate framing plus
+enforcement**, which is the same shape as every other quality problem this codebase has
+solved. Four changes:
+
+**1. There was no system message. At all, anywhere, ever.** Every call the app has ever
+made — Actor, Director, generator, image assembler — was a single `user` message and
+nothing else. That is the worst possible shape for this app: with no system turn, a model
+reads the whole prompt as a request from an unknown stranger and answers in assistant
+register, which for adult roleplay means hedging, fading, and the occasional preamble about
+what it is comfortable with. The same text in a system message reads as the operator's
+standing configuration for the deployment — which is precisely what it is, since this is a
+self-hosted single-user app whose owner configured it for this.
+
+`system_actor.md` and `system_director.md` state the real situation plainly: a private,
+single-player fiction app; one adult reader; invented adult characters; explicit content in
+scope and expected rather than an edge case to be managed; literary erotica as the register;
+no disclaimers, no breaking frame, no fading out, no euphemism where the scene wants the
+specific thing. They also restate the two things that genuinely do not move, as part of the
+fiction rather than a hedge against it: **every character is an adult and is always written
+as one, and each character's own hard limits hold.** Prepended in `callOnce()` rather than at
+each call site, so retries, JSON re-asks and the expand-on-truncation path all carry it too —
+a frame that only survives the first attempt is worse than none, because a retry is exactly
+when a refusal is being corrected.
+
+**2. `spiceBlock()` returned `''` at the worst possible moment.** Below its threshold
+(`!sexual_topics_allowed && arousal < 45`) the prompt carried no permission language
+whatsoever — which is the single moment that matters most, the one where things are just
+starting to turn. A shy model fills that silence with its own defaults, deflects the first
+real advance on reflex, and the conversation never reaches the threshold that would have
+unlocked the rest. It now returns a one-sentence floor instead: nothing has turned yet, do
+not force it, but if he takes it there and she wants to, she may go with it. Also reworded
+the limits line, which used to end "nothing else is on the table" — aimed at her hard limits,
+but it reads as a general restriction, and restriction-priming is the last thing this prompt
+needs.
+
+**3. Refusals are detected and retried, like every other prose tell here.** `detectRefusal()`
+catches the model talking about itself rather than being her — declining to write it,
+citing a policy, offering a tamer version, steering the scene from outside it. It runs
+**first** in `findVoiceProblem()`, because a reply that left the fiction is not a style
+problem and naming it as one sends a useless correction.
+
+The false positive that matters is the one this must never produce: **her own refusal.** A
+character saying "I'm not comfortable with that" or "I can't do that" is not only legitimate,
+it is the entire point of her hard limits, and flagging it would train the app to overwrite
+her boundaries. So the check strips quoted speech and `*thoughts*` before matching — a
+refusal from the model is by definition not inside the scene — and every pattern additionally
+requires a first-person speaker attached to a declining verb. Verified against both halves:
+six real refusals caught, six in-character refusals untouched.
+
+**4. Fading to black is caught too**, on dates only. The softer and far more common failure:
+no refusal, no disclaimer, just a beat that closes the door and skips. "The rest of the night
+belonged to them." "The door closed behind them." `actor_date.md` already said in prose not
+to do this, and a shy model did it anyway. Date-only because the text chat is people typing
+on phones, where "the rest is a blur" is a thing someone might genuinely type.
+
+**The retry budget had to move with it.** Both loops ran two attempts: the ask, then one
+correction. A refusal now consumes one, so refuse-then-fade used to land the player on the
+canned fallback line at exactly the scene they most wanted written. A break in frame — and
+only that, not any style nit — now buys one extra attempt, capped at three. It is the
+correction most likely to actually work, since the model was not trying to write the beat
+at all.
+
+Verified end to end against a mock provider: every call now carries a system message first,
+Actor and Director scopes get their own, a refused beat and a faded beat each forced a real
+retry, the frame-break budget bought the third call, and only the clean beat was stored.
+
+If a model still will not play after this, the honest answer is that it is the wrong model
+for the app rather than something to be defeated with a longer prompt — the uncensored
+finetune exists for this reason.
+
 ### A real exported log turned up specific, recurring AI-isms in dates
 
 Reading a player-supplied log export (the exact reason that feature exists) rather than a

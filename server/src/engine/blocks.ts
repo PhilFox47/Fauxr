@@ -387,8 +387,23 @@ export function moodBlock(arousal: number, stageLabel: string, tell?: string, me
  * "narrate her, use asterisks for private thoughts, write a real beat" - and a model straddling
  * both produced exactly the kind of incoherent, sceneless output that prompted this split.
  */
+/**
+ * The floor, for a conversation that has not turned yet.
+ *
+ * This block used to return '' outright below the threshold, which left the single moment
+ * that matters most - the one where things are just starting to turn - with no permission
+ * language in the prompt at all. A model that is shy about this fills that silence with its
+ * own defaults, deflects the first real advance, and the conversation never reaches the
+ * threshold that would have unlocked the rest. One sentence is enough to stop that without
+ * making an ordinary chat horny for no reason.
+ */
+const SPICE_FLOOR =
+  'Nothing has turned that way yet, and you are not to force it. But this is a dating app ' +
+  'for adults and you are one: if he takes it there and you want him to, you are allowed to ' +
+  'go with it rather than deflecting on reflex.';
+
 export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags, medium: 'text' | 'in_person' = 'text'): string {
-  if (!flags.state.sexual_topics_allowed && arousal < 45) return '';
+  if (!flags.state.sexual_topics_allowed && arousal < 45) return SPICE_FLOOR;
 
   const forward = seed.sexual_confidence >= 4;
   const lines = [
@@ -424,8 +439,9 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags, m
     );
   }
   lines.push(
-    'Your hard limits do not move, however worked up you are. If he goes near one you say so.',
-    'You are an adult talking to an adult; nothing else is on the table.',
+    'Your hard limits do not move, however worked up you are. If he goes near one you say so,',
+    'in your own words, as her - that is a real thing about this character, and it is the only',
+    'thing here that is off the table. Everything else you are free to write plainly.',
   );
   if (arousal >= 60) {
     lines.push('', 'You are the one pushing this right now, not him. Act like it.');

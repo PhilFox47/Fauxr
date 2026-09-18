@@ -20,7 +20,9 @@ export type TemplateName =
   | 'director_write_bio'
   | 'director_evaluate_image'
   | 'director_date_summary'
-  | 'image_prompt_assembler';
+  | 'image_prompt_assembler'
+  | 'system_actor'
+  | 'system_director';
 
 export function loadTemplate(name: TemplateName): string {
   const cached = cache.get(name);

@@ -1,6 +1,7 @@
 import { db, nowIso } from '../db/index.js';
 import { getSettings, type ModelConfig } from '../config.js';
 import { logger } from '../log.js';
+import { loadTemplate } from '../prompts/render.js';
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
@@ -165,13 +166,39 @@ export async function complete(opts: CompletionOptions): Promise<string> {
   }
 }
 
+/**
+ * The standing frame every call is made inside, as an actual system message.
+ *
+ * Until this existed the app sent exactly one `user` message and nothing else, for every
+ * call it ever made. That is the worst possible shape for this app: with no system turn, a
+ * model reads the whole prompt as a request from an unknown stranger and answers it in
+ * assistant register, which for an adult roleplay means hedging, fading out of a scene,
+ * and the occasional preamble about what it is comfortable writing. The same text in a
+ * system message reads as the operator's standing configuration for the deployment, which
+ * is exactly what it is - this is a self-hosted, single-user app and its owner configured
+ * it for this.
+ *
+ * Scope picks the register: the Actor is writing prose in character, the Director is
+ * writing structured direction about it. 'image' runs on the director model and is doing
+ * the same kind of job, so it shares that one.
+ */
+function systemMessage(scope: CompletionOptions['scope']): ChatMessage {
+  return { role: 'system', content: loadTemplate(scope === 'actor' ? 'system_actor' : 'system_director') };
+}
+
 async function callOnce(opts: CompletionOptions): Promise<string> {
   assertBudget();
   const settings = getSettings();
   const url = `${settings.api.base_url.replace(/\/$/, '')}/chat/completions`;
+  // Prepended here rather than at each call site so retries, JSON re-asks and the
+  // expand-on-truncation path all carry it too - a frame that only survives the first
+  // attempt is worse than none, since a retry is exactly when a refusal is being corrected.
+  const messages = opts.messages[0]?.role === 'system'
+    ? opts.messages
+    : [systemMessage(opts.scope), ...opts.messages];
   const body: Record<string, unknown> = {
     model: opts.config.model,
-    messages: opts.messages,
+    messages,
     temperature: opts.config.temperature,
     top_p: opts.config.top_p,
     max_tokens: opts.config.max_tokens,
