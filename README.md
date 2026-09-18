@@ -955,6 +955,52 @@ irony markers" produces whatever the model imagines that is; the table now lists
 words. Properly-punctuated and formal registers are demoted to uncommon, so writing in full
 sentences is a deliberate trait rather than the default.
 
+### A real exported log turned up specific, recurring AI-isms in dates
+
+Reading a player-supplied log export (the exact reason that feature exists) rather than a
+synthetic test turned up a cluster of tells that "sounds like AI" actually breaks down into,
+concentrated almost entirely in the date room rather than the text chat:
+
+- **The em-dash, heavily.** Ten occurrences across six regenerations of the same beat, and
+  zero in the text chat over the same log - because `actor_chat.md` bans it outright and
+  `voice.ts` backs that up in code (see above), while `actor_date.md` never banned it at all.
+  It is one of the single most recognisable "a model wrote this" tells there is, in prose
+  every bit as much as in a text message.
+- **One worked example, imitated almost verbatim, over and over.** `actor_date.md` carried
+  exactly one illustrative beat - a first-sight, "you're taller than your photos" arrival -
+  and across six independently generated regenerations of an actual arrival beat, the model
+  reproduced its shape closely enough to be recognisable as the same beat with the nouns
+  changed: "*Taller than his photos. Good start.*" became "*Photos undersold. Rude of him,
+  honestly.*", "*The profile said very tall. The profile undersold.*", and so on - the same
+  clipped two-fragment internal thought, the same tall/photos comparison, sometimes the exact
+  same follow-up line ("Annoyingly good") twice. A single example is not a category, it is a
+  template with one example in it, and a model with nothing else to go on will treat it as
+  one. `writesFormally`/`message_length` variance and the whole rest of this section exist
+  because the same failure mode already happened once, for texting; this was it happening
+  again, for dates, through a different mechanism.
+- **A handful of specific stock constructions**, also concentrated in the imitated example's
+  gravity well: "she turns a slow half-circle, taking in the room" as the default way to
+  establish a setting, "I had a whole [joke/bit/list] prepared, and now it doesn't land" as
+  the default way to write being disarmed, and analytical asides about what a line "is doing"
+  rhetorically ("even better than your profile pic' is doing a lot of work") instead of
+  actually reacting to it - a critic's read on the moment, not a person's.
+
+Three fixes, matching how the equivalent chat problem was fixed: `actor_date.md`'s example
+beat was swapped for a materially different one (mid-laugh, several dates in, rather than a
+first-sight arrival) with an explicit note that it demonstrates the three-part FORMAT only,
+never a beat to reach for by content; a new "The thing that gives you away" section lists
+the specific constructions above as BAD examples, the same way `actor_chat.md` already does
+for its own tells; and `voice.ts`'s `WRITER_PUNCTUATION` check - previously wired into
+`actor.ts`'s retry loop only - is now exported and checked in `runDateActor`'s retry loop
+too, so an em-dash in a date beat gets rejected and re-requested by code, not just discouraged
+by prompt text the way it already was and mostly didn't work.
+
+`actor_chat.md` picked up two more named tells while auditing the same log: "honest answer:"
+and "so heres the thing" / "heres the deal" as sentence-openers (a language model clearing
+its throat before answering, not how a person texts one), and standing outside a compliment
+to note what it "is doing" rhetorically, the same critic's-read failure found in the dates
+log. Both now have BAD/GOOD pairs in the existing "thing that gives you away" list.
+
 ### Terse by default was a real gap, not just seed variance
 
 `message_length` is a seed trait (one-liner / medium / paragraphs) and is meant to produce

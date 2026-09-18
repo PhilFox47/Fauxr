@@ -93,9 +93,12 @@ function isEcho(text: string, lastUserMessage: string): boolean {
 
 /**
  * Writer's punctuation. Nobody reaches for an em-dash or a semicolon on a phone, and both
- * are strong tells that prose came out instead of a text.
+ * are strong tells that prose came out instead of a text. Exported because dates.ts's own
+ * beats are actual prose (narration, not texting) and still hit this constantly - the
+ * em-dash specifically is one of the single most reliable "a language model wrote this"
+ * tells there is, in narration every bit as much as in a text message.
  */
-const WRITER_PUNCTUATION = /[—;]|\s-{2}\s/;
+export const WRITER_PUNCTUATION = /[—;]|\s-{2}\s/;
 
 /** Formal constructions where a texting register would contract. */
 const UNCONTRACTED =

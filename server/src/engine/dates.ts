@@ -17,6 +17,7 @@ import {
   ledgerBlock, lifeBlock, moodBlock, quirksBlock, seedBlock, sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
 import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
+import { WRITER_PUNCTUATION } from './voice.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage } from './images.js';
@@ -206,6 +207,14 @@ async function runDateActor(
       correction =
         'You wrote his actions or his feelings for him. Write only what SHE does, says and notices - ' +
         'describe what she does TO him, and stop there. Write the beat again from scratch, same JSON shape.';
+      continue;
+    }
+    if (WRITER_PUNCTUATION.test(text)) {
+      logger.warn('actor', 'date beat used writer\'s punctuation', { character: character.username, text });
+      correction =
+        'You used an em-dash or a semicolon. Both are one of the single most recognisable tells that ' +
+        'this was generated rather than actually written - use a comma, a full stop, or trail off with ' +
+        '"..." instead. Write the beat again, same JSON shape.';
       continue;
     }
     if (attempt === 0 && countWords(visibleContent(text)) > MAX_VISIBLE_WORDS) {
