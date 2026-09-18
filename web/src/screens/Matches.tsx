@@ -61,7 +61,7 @@ export default function Matches({
     if (confirmId === m.id) {
       return (
         <div key={m.id} className="match-row" style={opts.archived ? { opacity: 0.5 } : undefined}>
-          <Avatar match={m} presence={!opts.archived} />
+          <Avatar match={m} presence={!opts.archived} onDate={!opts.archived && m.on_date} />
           <div style={{ minWidth: 0, flex: 1 }}>
             <div className="name">{m.display_name}</div>
             <div className="preview" style={{ color: 'var(--err)' }}>
@@ -93,17 +93,19 @@ export default function Matches({
         onClick={() => onOpen(m.id)}
         style={opts.archived ? { opacity: 0.5 } : undefined}
       >
-        <Avatar match={m} presence={!opts.archived} />
+        <Avatar match={m} presence={!opts.archived} onDate={!opts.archived && m.on_date} />
         <div style={{ minWidth: 0, flex: 1 }}>
           <div className="name">{m.display_name}</div>
           <div className={`preview${typing[m.id] ? ' typing-now' : ''}`}>
-            {typing[m.id]
-              ? 'typing…'
-              : opts.archived
-                ? m.state === 'blocked_by_char' ? 'She blocked you' : 'You blocked her'
-                : m.last_message
-                  ? `${m.last_message.sender === 'user' ? 'You: ' : ''}${m.last_message.text}`
-                  : m.bio.replace(/\s*\n\s*/g, ' ')}
+            {m.on_date && !opts.archived
+              ? 'On a date right now'
+              : typing[m.id]
+                ? 'typing…'
+                : opts.archived
+                  ? m.state === 'blocked_by_char' ? 'She blocked you' : 'You blocked her'
+                  : m.last_message
+                    ? `${m.last_message.sender === 'user' ? 'You: ' : ''}${m.last_message.text}`
+                    : m.bio.replace(/\s*\n\s*/g, ' ')}
           </div>
         </div>
         <div className="meta">

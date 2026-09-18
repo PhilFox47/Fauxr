@@ -465,6 +465,26 @@ racing it. The event that announces it (`match_removed`) closes the chat screen 
 if you happened to be looking at the one that just got deleted, and refreshes the list
 everywhere else.
 
+### A pulsing heart for "she's out with him right now"
+
+The chat list gave no sign that a match was mid-date rather than just quiet - you would tap
+in, find the composer frozen, and only then remember why. `GET /api/matches` now returns
+`on_date` per character, computed from `characterIdsOnDate()` (the same set the scheduler
+already builds each tick to skip texting anyone currently on a date) rather than an
+`activeDate()` lookup per row, so the list stays one query regardless of how many matches
+there are.
+
+`Avatar` takes a new `onDate` prop, deliberately separate from a field it reads off `match`
+itself: not every screen that renders an avatar has fetched date state, and a caller that
+never passes it means false, not a caller silently lying about it. It takes the same corner
+the online dot occupies and takes priority over it — "online" is not a meaningful thing to
+say about someone currently sitting across a table from him — as a small filled heart on a
+slow two-second pulse, distinct from a status dot because a date in progress is a specific
+fact worth naming, not a generic indicator. The row's preview line swaps to "On a date right
+now" for the same reason the composer already freezes on the chat screen itself: consistent
+with what tapping in is about to show him. Neither shows on an archived (blocked) row, which
+can't be mid-date and already renders muted for an unrelated reason.
+
 ### Spice
 
 How forward a character is comes from her own appetite — libido, sexting readiness and

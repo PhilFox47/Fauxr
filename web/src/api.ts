@@ -94,6 +94,8 @@ export interface MatchSummary {
   unread: number;
   last_message: { text: string; sender: string; sent_at: string } | null;
   last_activity: string | null;
+  /** She is out with him right now - the chat is frozen and there is somewhere better to look. */
+  on_date: boolean;
 }
 
 export interface Message {

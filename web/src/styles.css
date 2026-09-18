@@ -658,6 +658,27 @@ input[type='range'] {
   background: var(--ok); border: 2.5px solid var(--bg);
 }
 .avatar.sm .dot-online { width: 10px; height: 10px; border-width: 2px; }
+/* Same corner as the online dot, and mutually exclusive with it - see Avatar.tsx's onDate
+   prop. A small filled heart rather than a coloured dot, since "she's on a date" is a
+   specific, nameable thing rather than a generic status light, and a slow pulse (not a
+   blink) reads as "in progress" without being distracting in a list of several rows. */
+.dot-date {
+  position: absolute; right: -1px; bottom: -1px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); border: 2.5px solid var(--bg);
+  display: grid; place-items: center;
+  animation: date-pulse 1.8s ease-in-out infinite;
+}
+.dot-date svg { width: 9px; height: 9px; color: var(--bg); }
+.avatar.sm .dot-date { width: 13px; height: 13px; border-width: 2px; }
+.avatar.sm .dot-date svg { width: 7px; height: 7px; }
+@keyframes date-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.18); opacity: 0.78; }
+}
+/* No reduced-motion override needed here - the root :root block already neutralises every
+   animation's duration and iteration count app-wide. */
+
 .match-row .name { font-weight: 600; letter-spacing: -0.1px; }
 .match-row .preview {
   font-size: 13px; color: var(--muted);

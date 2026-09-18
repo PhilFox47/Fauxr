@@ -10,8 +10,8 @@ import { usageToday } from '../llm/client.js';
 import { logger } from '../log.js';
 import { exportLogs } from '../logexport.js';
 import {
-  activeDate, addMessage, dateMessages, deleteCharacter, deleteLocation, getCharacter, getDate, getLocation,
-  getRelationship, getUserProfile, getWakeup, lastMessage, listLocations,
+  activeDate, addMessage, characterIdsOnDate, dateMessages, deleteCharacter, deleteLocation, getCharacter, getDate,
+  getLocation, getRelationship, getUserProfile, getWakeup, lastMessage, listLocations,
   markCharacterMessagesRead, queryLogs, recentMessages, saveLocation, saveRelationship,
   saveUserProfile, unreadCount,
 } from '../repo.js';
@@ -181,6 +181,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
 
   // ------------------------------------------------------------- matches & chat
   app.get('/api/matches', async () => {
+    // One query for the whole list rather than an activeDate() lookup per row - the same
+    // set the scheduler already uses to skip texting characters who are mid-date.
+    const onDate = characterIdsOnDate();
     // visibleMatches() itself is ordered by matched_at - the right order for a fresh cast,
     // wrong for a chat list. Re-sorted here by last_activity (a real message if there is
     // one, else when they matched) so whoever most recently said something floats to the
@@ -195,6 +198,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
             ? { text: last.kind === 'image' ? 'Photo' : last.kind === 'voice' ? 'Voice message' : last.text, sender: last.sender, sent_at: last.sent_at }
             : null,
           last_activity: last?.sent_at ?? c.matched_at,
+          on_date: onDate.has(c.id),
         };
       })
       .sort((a, b) => Date.parse(b.last_activity ?? '') - Date.parse(a.last_activity ?? ''));
