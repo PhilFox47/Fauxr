@@ -417,6 +417,33 @@ it fires and sets the same shared flag double-texting uses; with that flag set, 
 even though the underlying conditions (an old, unanswered last message; hours of silence)
 that would otherwise make both eligible are still true.
 
+### And no more than one of those in a day, even across a reply
+
+`followed_up_unanswered` only guarantees one unprompted ping per silence, and it clears the
+moment he replies - by design, so a real new silence can always earn its own follow-up
+later. The gap: a day with a few natural back-and-forth lulls could still rack up a
+double-text in the morning, a reply from him at lunch clearing the flag, and a proactive
+check-in that evening - each individually a fine, earned message, and together exactly the
+kind of texting-a-lot that reads as spam from the other side of it.
+
+The fix is a second, independent ceiling that a reply in between does not reset:
+`rel.mood.last_unprompted_at`, a real timestamp rather than a flag, stamped by both
+`maybeDoubleText()` and `maybeBeProactive()` alongside `followed_up_unanswered` every time
+either one actually queues a wakeup. A shared `unpromptedOnCooldown()` check now guards both
+functions - true while `followed_up_unanswered` is still set (the existing per-silence rule)
+**or** while less than 24 hours have passed since `last_unprompted_at`, whichever is longer.
+Unlike the flag, nothing before the 24 hours are up clears it early - not a reply, not the
+Director, not another silence starting - so the two mechanisms together can genuinely never
+exceed one unprompted message toward him in any rolling day, however many natural
+conversational gaps and replies happen to fall inside it.
+
+Verified against a mock: a double-text fires as normal on genuine silence and stamps both
+fields; simulating him replying (clearing `followed_up_unanswered` exactly the way
+`handleUserMessage()` does, then a fresh silence beginning the same day) leaves both
+`maybeDoubleText()` and `maybeBeProactive()` correctly suppressed by the surviving
+timestamp; and setting `last_unprompted_at` back more than 24 hours makes the character
+eligible again.
+
 ### Anniversaries, actually tracked
 
 Nothing used to resurface "it's been a month since your first date" on its own — the ledger

@@ -96,16 +96,36 @@ export async function tick(): Promise<void> {
  * most one unprompted follow-up of EITHER kind goes out per silence, not one of each -
  * without that, a long enough absence used to let a double-text fire and then, hours later,
  * a proactive check-in on top of it, and the two together read as exactly the nagging this
- * was built to avoid. It only clears once he actually replies - see handleUserMessage().
+ * was built to avoid. It only clears once he actually replies - see handleUserMessage() -
+ * which is why it alone is not enough: see `UNPROMPTED_COOLDOWN_MS` below for the daily
+ * ceiling that holds even across a reply in between.
  */
 const DOUBLE_TEXT_AFTER_MS = 30 * 60_000;
+
+/**
+ * The hard daily ceiling on top of `followed_up_unanswered`. That flag only guarantees at
+ * most one unprompted ping per silence, but it clears the moment he replies - see
+ * handleUserMessage() - so a day with several natural back-and-forth gaps could still rack
+ * up a double-text in the morning, a reply from him at lunch, and a proactive check-in that
+ * evening, each individually fine and together reading as exactly the spam this exists to
+ * stop. `rel.mood.last_unprompted_at` is a real timestamp rather than a boolean precisely
+ * so it survives a reply in between - it only ever moves forward in time, never resets.
+ */
+const UNPROMPTED_COOLDOWN_MS = 24 * 3_600_000;
+
+/** True while either an unanswered follow-up is still open or today's one has already gone out. */
+function unpromptedOnCooldown(rel: { mood: Record<string, unknown> }): boolean {
+  if ((rel.mood as any)?.followed_up_unanswered) return true;
+  const last = (rel.mood as any)?.last_unprompted_at;
+  return typeof last === 'string' && Date.now() - Date.parse(last) < UNPROMPTED_COOLDOWN_MS;
+}
 
 export function maybeDoubleText(): void {
   for (const character of contactableMatches()) {
     const rel = getRelationship(character.id);
     if (!rel || rel.ghosted_at) continue;
     if (getWakeup(character.id)) continue; // something is already going to wake her
-    if ((rel.mood as any)?.followed_up_unanswered) continue; // already followed up once on this silence
+    if (unpromptedOnCooldown(rel)) continue; // already followed up on this silence, or already sent one today
 
     const last = lastMessage(character.id);
     // Only when SHE is the one waiting on a reply - if he spoke last, a turn is either
@@ -127,7 +147,7 @@ export function maybeDoubleText(): void {
         'guilt-tripping about the silence - people get busy, that is just normal, not a slight.',
       cancel_if_user_writes: true,
     });
-    rel.mood = { ...rel.mood, followed_up_unanswered: true };
+    rel.mood = { ...rel.mood, followed_up_unanswered: true, last_unprompted_at: nowIso() };
     saveRelationship(rel);
     logger.debug('scheduler', `double-text queued for ${character.username}`, { at: at.toISOString() });
   }
@@ -222,8 +242,9 @@ export function maybeBeProactive(): void {
     const rel = getRelationship(character.id);
     if (!rel || rel.ghosted_at) continue;
     // See maybeDoubleText() above - shared with it so a long absence cannot rack up a
-    // double-text AND, hours later, a proactive check-in on top of it.
-    if ((rel.mood as any)?.followed_up_unanswered) continue;
+    // double-text AND, hours later, a proactive check-in on top of it, and so the two
+    // together still cannot exceed one unprompted ping in any rolling 24 hours.
+    if (unpromptedOnCooldown(rel)) continue;
 
     const hoursSilent = rel.last_contact_at ? (Date.now() - Date.parse(rel.last_contact_at)) / 3_600_000 : 99;
     if (hoursSilent < 2) continue;
@@ -243,7 +264,7 @@ export function maybeBeProactive(): void {
       reason: 'she felt like getting in touch',
       cancel_if_user_writes: true,
     });
-    rel.mood = { ...rel.mood, followed_up_unanswered: true };
+    rel.mood = { ...rel.mood, followed_up_unanswered: true, last_unprompted_at: nowIso() };
     saveRelationship(rel);
     logger.debug('scheduler', `proactive wakeup queued for ${character.username}`, { at: at.toISOString() });
   }
