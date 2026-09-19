@@ -33,6 +33,13 @@ export const NEGATIVE_FLAG_HOURS: Record<string, number> = {
   ghosted_by_user: 168,
   dealbreaker_hit: 8760,
   bad_date_recent: 72,
+  // Set deterministically in code the instant any date ends (see dates.ts's endDate()),
+  // never left to the Director's own judgment the way bad_date_recent is - a pacing cap
+  // has to actually hold even when a model would rather escalate, which is exactly the
+  // failure mode this exists to close off. 144h covers most of the following week on
+  // purpose: director_direction.md treats it as the default reason to say no to another
+  // date with this character, not a hard lock the Director can never see past.
+  date_recent: 144,
 };
 
 export interface DirectorUpdate {

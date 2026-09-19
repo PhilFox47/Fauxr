@@ -3557,3 +3557,56 @@ correctly contributes nothing to the fixed appearance block rather than throwing
 `very_rare` big secrets came back consistently rarer than the `rare` ones in the sample, and
 a handful of full appearance prompts for the new species were read back by hand to confirm
 each one reads as a real sentence, not a tag dump.
+
+### Dates are meant to punctuate the relationship, not drive it
+
+Meeting up had no pacing floor at all. `"unlock": "allow_date"` was governed by exactly the
+same "no hidden thresholds, fresh judgment every turn" rule as every other unlock -
+deliberately so, per the design note in `stage.ts`'s own history: "agreeing to sext or meet
+up stays her own fresh judgment call each turn... not a race a fast archetype can simply
+out-pace." That rule is right for photos and for turning a chat sexual, where the model
+naturally has plenty of texture to reason from. It was the wrong rule for a first date,
+which needs an actual conversation to have happened first far more reliably than the model
+was applying on its own - characters were agreeing to meet, and re-inviting themselves,
+much faster than a texting-first dating sim should read.
+
+**Before the first date**, `director_direction.md`'s unlock section now carves `allow_date`
+out as a named exception to the "no schedule" framing everything else there still gets: most
+characters need real back-and-forth first, not just an early spark, with an explicit note
+that a handful of exchanged messages is not a relationship yet, whoever she is. A genuinely
+forward character, or an exceptional exchange right out of the gate, can still reasonably get
+there fast - that stays her call, same as every other unlock - but the prompt is now explicit
+that this is the deliberate exception being made for who she specifically is, not the default
+read for the cast as a whole.
+
+**After a date ends**, wanting another one with the same character inside roughly the same
+week needed to become the rare case, not the default - and a rule that only lives in prose
+is exactly the kind of thing a model quietly stops applying once other pressure builds in the
+conversation (the same lesson the refusal and euphemism detectors already needed). So this
+half is a genuine, deterministic backstop rather than pure prompt guidance: a new
+`date_recent` entry in `NEGATIVE_FLAG_HOURS` (144 hours, covering most of the following
+week) that `endDate()` now sets on every single date, unconditionally, in the same
+unconditional block that already sets `has_had_first_date` - not left to the Director's own
+end-of-date judgment the way `bad_date_recent` is, specifically because a pacing cap has to
+actually hold even on the run where the model would rather keep escalating. It reaches the
+Director for free through the existing generic `flagsBlock()` surfacing, backed by an
+explicit named paragraph in the unlock section: while `date_recent` is active, agreeing to
+`allow_date` again should be a genuinely rare, deliberate exception earned by something
+specific and real (he's only in town briefly, a real, immediate follow-up to something from
+the date itself) - not because the conversation is going well or she'd enjoy it. "No, not
+again this soon" is stated as the correct default answer, not a failure to escalate.
+
+**She also stopped angling for the next one herself.** Two closing gaps, both prompt-level:
+the same unlock paragraph now says plainly that she should not be the one bringing up or
+angling for a next date in the text chat that resumes right after one ends - if it happens,
+it comes from him. And `actor_date.md`'s `NEVER` list picked up a matching line banning her
+from proposing or naming a next date as the evening itself closes ("same time next week?"),
+distinct from her genuinely feeling good about the evening and letting that show.
+
+Verified end to end against a mock provider: `date_recent` is set with a ~144h expiry the
+moment a date ends whether the summary call succeeds or fails outright (the actual reliability
+requirement, proven by forcing the summary call to 500 and confirming the flag still landed);
+a real subsequent Director call was driven through `runDirector()` and the assembled prompt
+was read back to confirm it actually carries `date_recent` in the rendered flags block, both
+new unlock paragraphs, and the "not hers to bring up" line; `clearExpiredNegativeFlags()`
+correctly keeps the flag while time remains and correctly drops it once the window passes.
