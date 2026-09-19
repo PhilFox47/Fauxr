@@ -3494,3 +3494,66 @@ on-screen keyboard just *is* Enter. Both `onKeyDown` handlers are gone; the text
 behaviour (Enter inserts a newline, same as any other character) is now the only behaviour,
 and the **send** button is the only way to send. Verified in both composers: typing across
 an Enter press produces one multi-line draft and sends nothing until the button is clicked.
+
+### A second, focused pass at the attribute library: rarer, stranger, more fantastical
+
+The earlier ~3x expansion (see "A curated wishlist" above) went broad across every category.
+This pass went narrow and deep on the categories that actually make one character read as
+genuinely different from the next, rather than padding ones that were already saturated -
+`occupation` (226 entries, already covering everything from forensic entomologist to
+lighthouse keeper) and `hobby` (113, already covering dowsing and scrimshaw) got nothing
+added here on purpose, since more entries there would mostly have been near-duplicates.
+
+**`species` (appearance.json) grew from 19 to 37** - the headline addition, since the
+request specifically named the fantasy roll as underused. 18 new species split across the
+existing `very_rare` tier (bunnygirl, wolfgirl, dwarf, orc - alongside catgirl/doggirl/
+elf/vampire) and `extremely_rare` (kitsune, selkie, banshee, valkyrie, genie, oni, harpy,
+satyr, gorgon, ghost, golem, phoenixkin, frostfae, and a shadow-touched `umbra` entry -
+alongside giantess/mermaid/angel/dragonkin). Each got the same treatment the existing roster
+has: a real personality hook tied to the physical tell rather than a costume description, a
+`visibility` tier that decides when it actually reaches a photo (`profile` for anything
+permanent and visible, `later` for something she keeps covered until it's earned - valkyrie's
+battle-marking, genie's smoke-touched eyes, kitsune's true ears and tails, a ghost's
+faintly-off quality that a photo would never catch but time together eventually would -
+`chat_only` for a trait with no visual tell at all, and one `private` entry, `umbra`, for a
+shadow that only stops behaving once real trust is there). Deliberately avoided reskinning
+what already existed rather than adding genuine new territory - no second serpent-bodied
+species next to lamia, no second "built, not born" species that would just restate android
+with a fantasy coat of paint (golem differentiates on purpose: still working out what she
+wants now that the purpose she was built for isn't the whole of her, where android is
+already settled into what she is).
+
+**`big_secret` (life.json) grew from 9 to 25** - the other standout, since a category whose
+entire design purpose is character-defining uniqueness had only 8 real options in it, flat
+at one rarity tier. 16 new secrets, all "real, grounded" the way the category's own generation
+prompt asks for rather than fantastical (species is already the mechanism for that side of
+things) - an identical twin nobody in his life has met, a whistleblower past, a pen name with
+a genuine following, a child she does not raise day to day, having been in a cult, having
+been given a hard timeline and beaten it. Four of the heaviest (the cult, the child, the
+stranger's life saved, the timeline beaten) sit at `very_rare` rather than the flat `rare`
+every existing entry used, so the biggest reveals are also now genuinely the rarest.
+
+**Smaller, still-deliberate top-ups** to the categories with real remaining headroom:
+`touchstone` (44 → 56, what she's actually measuring him against - does he ask how she feels
+rather than assumes, is he kind to service staff, can he be the less impressive one in the
+room without it curdling), `search_motive` (53 → 63, why she's actually here - practising
+being vulnerable again, matched on a dare, tired of everyone she knows pairing off),
+`insecurity` (82 → 94, specific rather than generic - her own handwriting, never being
+anyone's first call, a poker face that has never once worked), `openness_curve` (7 → 12, how
+she paces trust - opens faster in person than over text, needs specific moments rather than
+elapsed time), and `quirk` (105 → 121 across both files, split between a folk-superstition
+cluster in the same vein as the existing "grandmother might have been a witch" - knocking on
+wood, never finishing a toast's last line, a reflection that swears it lags half a second -
+and a handful of purely eccentric ones with no supernatural edge at all, like ranking every
+public bathroom she's ever used).
+
+89 new entries total, all append-only, all through `validate-attributes.mjs` (2705 entries
+across 55 categories, zero errors - no duplicate ids, no dangling affinity/conflict/weights
+references, every `kink_domain` untouched and still consistent). Verified live: 30,000 rolls
+through `rollSeed()` reached all 37 species ids and every new `big_secret`,
+`buildAppearancePrompt()` and `describeSeed()` ran clean on every single one (the real risk
+case - a `null` `image_prompt` on a `chat_only`/`private` species like banshee or umbra
+correctly contributes nothing to the fixed appearance block rather than throwing), the
+`very_rare` big secrets came back consistently rarer than the `rare` ones in the sample, and
+a handful of full appearance prompts for the new species were read back by hand to confirm
+each one reads as a real sentence, not a tag dump.
