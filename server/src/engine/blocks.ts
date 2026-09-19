@@ -1,6 +1,6 @@
 import { find } from '../db/attributes.js';
 import type { StoredMessage } from '../repo.js';
-import type { Character, CharacterSeed, Direction, Flags, Ledger, UserProfile } from '../types.js';
+import type { Character, CharacterSeed, DateSession, Direction, Flags, Ledger, UserProfile } from '../types.js';
 import { describeSeed } from './generator.js';
 import { freshThreads, pruneThreads } from './state.js';
 
@@ -546,6 +546,27 @@ export function spiceDirective(spice: number): string {
     return 'House pacing: hot. This world runs forward - characters are quick to flirt, quick to want, and comfortable taking things sexual early when it fits them at all. This leans the whole cast; it does not turn a genuinely reserved character into a forward one.';
   }
   return 'House pacing: default. Go by who she is and what has actually happened, with no particular lean in either direction.';
+}
+
+/**
+ * The real facts about dates with him so far - not a flag, not a cooldown, nothing stored
+ * for this purpose specifically. How many there have been and how long ago the last one
+ * ended, so the Director can weigh a repeat invitation the same way it weighs everything
+ * else here: a fresh judgment call made from what has actually happened, not a gate it
+ * either passes or does not. Deliberately vague about what to do with the number - that is
+ * the Director's call, made in director_direction.md's own unlock guidance, not something
+ * decided for it here.
+ */
+export function dateHistoryFact(dates: DateSession[]): string {
+  const ended = dates.filter((d) => d.status === 'ended').sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+  if (ended.length === 0) return 'You have never actually met up with him in person.';
+  const last = ended[0];
+  const hours = (Date.now() - Date.parse(last.ended_at ?? last.created_at)) / 3_600_000;
+  const ago =
+    hours < 1 ? 'less than an hour ago'
+      : hours < 36 ? `${Math.round(hours)} hour${Math.round(hours) === 1 ? '' : 's'} ago`
+        : `${Math.round(hours / 24)} day${Math.round(hours / 24) === 1 ? '' : 's'} ago`;
+  return `You have been on ${ended.length} date${ended.length === 1 ? '' : 's'} with him so far. The most recent one ended ${ago}.`;
 }
 
 export function flagsBlock(flags: Flags): string {

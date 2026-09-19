@@ -3561,52 +3561,54 @@ each one reads as a real sentence, not a tag dump.
 ### Dates are meant to punctuate the relationship, not drive it
 
 Meeting up had no pacing floor at all. `"unlock": "allow_date"` was governed by exactly the
-same "no hidden thresholds, fresh judgment every turn" rule as every other unlock -
-deliberately so, per the design note in `stage.ts`'s own history: "agreeing to sext or meet
-up stays her own fresh judgment call each turn... not a race a fast archetype can simply
-out-pace." That rule is right for photos and for turning a chat sexual, where the model
-naturally has plenty of texture to reason from. It was the wrong rule for a first date,
-which needs an actual conversation to have happened first far more reliably than the model
-was applying on its own - characters were agreeing to meet, and re-inviting themselves,
-much faster than a texting-first dating sim should read.
+same "no hidden thresholds, fresh judgment every turn" rule as every other unlock, and
+characters were agreeing to meet - and re-inviting themselves - much faster than a
+texting-first dating sim should read.
 
-**Before the first date**, `director_direction.md`'s unlock section now carves `allow_date`
-out as a named exception to the "no schedule" framing everything else there still gets: most
-characters need real back-and-forth first, not just an early spark, with an explicit note
-that a handful of exchanged messages is not a relationship yet, whoever she is. A genuinely
-forward character, or an exceptional exchange right out of the gate, can still reasonably get
-there fast - that stays her call, same as every other unlock - but the prompt is now explicit
-that this is the deliberate exception being made for who she specifically is, not the default
-read for the cast as a whole.
+The first fix here used a stored value: a `date_recent` negative flag, set deterministically
+by `endDate()` the moment any date finished, that made a repeat invitation mechanically
+blocked-by-default for about a week. That is the wrong shape for this app on principle, not
+just for dates - every other unlock in `director_direction.md` is explicit that there are
+"NO hidden thresholds... no minimum number of exchanges... no schedule," and a flag the
+Director cannot see past is exactly that, just renamed. Reverted outright: `date_recent` is
+gone from `NEGATIVE_FLAG_HOURS`, and `endDate()` no longer sets anything beyond the existing
+`has_had_first_date`.
 
-**After a date ends**, wanting another one with the same character inside roughly the same
-week needed to become the rare case, not the default - and a rule that only lives in prose
-is exactly the kind of thing a model quietly stops applying once other pressure builds in the
-conversation (the same lesson the refusal and euphemism detectors already needed). So this
-half is a genuine, deterministic backstop rather than pure prompt guidance: a new
-`date_recent` entry in `NEGATIVE_FLAG_HOURS` (144 hours, covering most of the following
-week) that `endDate()` now sets on every single date, unconditionally, in the same
-unconditional block that already sets `has_had_first_date` - not left to the Director's own
-end-of-date judgment the way `bad_date_recent` is, specifically because a pacing cap has to
-actually hold even on the run where the model would rather keep escalating. It reaches the
-Director for free through the existing generic `flagsBlock()` surfacing, backed by an
-explicit named paragraph in the unlock section: while `date_recent` is active, agreeing to
-`allow_date` again should be a genuinely rare, deliberate exception earned by something
-specific and real (he's only in town briefly, a real, immediate follow-up to something from
-the date itself) - not because the conversation is going well or she'd enjoy it. "No, not
-again this soon" is stated as the correct default answer, not a failure to escalate.
+**In its place, the Director gets a real fact instead of a gate.** `dateHistoryFact()` in
+`blocks.ts` reads her actual date history off `listDates()` - how many dates have happened,
+and how long ago the most recent one ended ("You have been on 1 date with him so far. The
+most recent one ended 6 hours ago.", or "You have never actually met up with him in
+person.") - rendered into `director_direction.md` as a plain `dates with him:` line
+alongside `last contact` and the rest of her real state. No number in it means anything on
+its own; the unlock section spells out explicitly that this is "a fact to weigh, not a
+gate," judged the same fresh way as everything else here. It does still say plainly what
+weighing it well looks like - a second date with the same character inside roughly the same
+week should be a genuine, deliberate exception she is choosing to make, not the normal
+outcome of a conversation going well, and "not again this soon" should be the more common
+answer - but the decision is entirely the Director's judgment call against a real fact, not
+a value the code sets and the model works around.
 
-**She also stopped angling for the next one herself.** Two closing gaps, both prompt-level:
-the same unlock paragraph now says plainly that she should not be the one bringing up or
-angling for a next date in the text chat that resumes right after one ends - if it happens,
-it comes from him. And `actor_date.md`'s `NEVER` list picked up a matching line banning her
-from proposing or naming a next date as the evening itself closes ("same time next week?"),
+**Before the first date**, the same unlock section still carves `allow_date` out as a named
+exception to the "no schedule" framing everything else there gets: most characters need real
+back-and-forth first, not just an early spark, with an explicit note that a handful of
+exchanged messages is not a relationship yet, whoever she is. A genuinely forward character,
+or an exceptional exchange right out of the gate, can still reasonably get there fast - that
+stays her call, same as every other unlock - but the prompt is explicit that this is the
+deliberate exception being made for who she specifically is, not the default read for the
+cast. This half was already pure prompt guidance with no stored value behind it and did not
+need to change.
+
+**She also does not angle for the next one herself.** The unlock section says she should not
+be the one bringing up or angling for a next date in the text chat that resumes right after
+one ends - if it happens, it comes from him. `actor_date.md`'s `NEVER` list bans her from
+proposing or naming a next date as the evening itself closes ("same time next week?"),
 distinct from her genuinely feeling good about the evening and letting that show.
 
-Verified end to end against a mock provider: `date_recent` is set with a ~144h expiry the
-moment a date ends whether the summary call succeeds or fails outright (the actual reliability
-requirement, proven by forcing the summary call to 500 and confirming the flag still landed);
-a real subsequent Director call was driven through `runDirector()` and the assembled prompt
-was read back to confirm it actually carries `date_recent` in the rendered flags block, both
-new unlock paragraphs, and the "not hers to bring up" line; `clearExpiredNegativeFlags()`
-correctly keeps the flag while time remains and correctly drops it once the window passes.
+Verified end to end against a mock provider: after a date ends, `rel.flags.negative` is
+completely empty (nothing stored for this purpose at all) while `has_had_first_date` still
+sets correctly; `dateHistoryFact()` correctly reads "never met up" before any date and the
+real count plus elapsed time after one; a real subsequent Director call was driven through
+`runDirector()` and the assembled prompt was read back to confirm it carries the real `dates
+with him:` line, both unlock paragraphs, the "fact to weigh, not a gate" framing, the "not
+hers to bring up" line, and that `date_recent` no longer appears anywhere in the rendered
+prompt at all; and `NEGATIVE_FLAG_HOURS` no longer carries the key.

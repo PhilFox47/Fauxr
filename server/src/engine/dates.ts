@@ -731,11 +731,6 @@ export async function endDate(dateId: string): Promise<DateSession> {
     events: [...(update.ledger?.events ?? []), `Date at ${date.where_at || 'a place he chose'}: ${summary}`],
   };
   update.set_flags = [...new Set([...(update.set_flags ?? []), 'has_had_first_date'])];
-  // Deterministic, not left to the Director's own call the way bad_date_recent is: a real
-  // pacing cap on repeat dates has to hold even when a model would rather keep escalating.
-  // See NEGATIVE_FLAG_HOURS's date_recent entry for the window and director_direction.md's
-  // unlock section for what the Director is told to do with it.
-  update.negative_flags = [...new Set([...(update.negative_flags ?? []), 'date_recent'])];
   applyUpdate(character, rel, update);
 
   const ended = finishDate(date.id, summary)!;

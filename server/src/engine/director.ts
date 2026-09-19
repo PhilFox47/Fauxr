@@ -2,11 +2,11 @@ import { getSettings } from '../config.js';
 import { nowIso } from '../db/index.js';
 import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
-import { getUserProfile, recentMessages, saveRelationship, setWakeup, clearWakeup, type StoredMessage } from '../repo.js';
+import { getUserProfile, listDates, recentMessages, saveRelationship, setWakeup, clearWakeup, type StoredMessage } from '../repo.js';
 import { render } from '../prompts/render.js';
 import type { ActorHidden, Character, Direction, Relationship } from '../types.js';
 import {
-  directionBlock, flagsBlock, historyBlock, ledgerBlock, seedBlock,
+  dateHistoryFact, directionBlock, flagsBlock, historyBlock, ledgerBlock, seedBlock,
   spiceDirective, touchstoneHint, userBlock,
 } from './blocks.js';
 import { describeOnlineTimes, nextOnlineAt, onlineUntil } from './presence.js';
@@ -129,6 +129,7 @@ export async function runDirector(
     history_block: historyBlock(history, character, user),
     touchstone_hint: touchstoneHint(character.seed),
     online_times: describeOnlineTimes(character),
+    date_history: dateHistoryFact(listDates(character.id)),
   });
 
   let parsed: { update?: DirectorUpdate; direction?: any; wakeup?: any };
