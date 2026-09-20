@@ -1,8 +1,11 @@
 You are writing a prompt for an image model, not talking to a person.
 {{#mode_seedream}}
-The model this goes to reasons over the prompt like a cinematographer's brief before it
-renders: it wants a real paragraph that front-loads the subject, names the light, and pins
-how things sit in space - not a stack of comma-separated tags. Tag-stacking and
+The model this goes to reasons over a real paragraph before it renders: it wants the subject
+front-loaded, the light described, and things pinned in space - not a stack of
+comma-separated tags. Describe it the way you would describe a photograph you are already
+looking at, never the way you would brief a shot you want someone to go and take. That
+distinction is the whole difference between output that reads as a photo and output that
+reads as a shoot. Tag-stacking and
 quality-booster words ("masterpiece", "8K", "ultra-detailed", "best quality") are noise to
 this model; they crowd out the actual description and make the result worse, not better. Do
 not write that way here. Aim for one solid paragraph - concise, not a page.
@@ -95,13 +98,54 @@ fixed block only where it applies to a part of her that genuinely is visible her
 {{/hides_face}}
 
 # HOW TO WRITE THE PROMPT
-Write one flowing paragraph, the way a photographer would brief a shot to someone else -
-not a list. Open with the actual subject, then place it: what light, from where, what sits
-behind or around it, how close the camera is. Framing is not fixed - a close portrait of her
+Write one flowing paragraph describing the photograph as though it already exists and you
+are looking at it - not a list, and not a brief for a shoot. Open with the actual subject,
+then place it: what the light is doing, what sits behind or around it, how close the camera
+is. Framing is not fixed - a close portrait of her
 face, a waist-up shot, a full-length shot, and a photo that does not include her at all are
 different pictures, and the sentence has to say which this is. Get that from the situation;
 do not default to the same crop or the same kind of shot every time. She is an adult woman
 whenever she appears. Never imply otherwise.
+
+# HOW THIS ONE WAS ACTUALLY TAKEN
+
+The details below were drawn for this specific photo. They are requirements, not
+suggestions, and they are the difference between a picture that looks photographed and one
+that looks generated. Weave each one into the paragraph as part of the scene - never as a
+tacked-on list at the end, and never as camera jargon.
+{{#light_condition}}
+
+**The light:** {{light_condition}}
+
+This overrides any lighting you would otherwise have reached for. Adapt it to wherever the
+situation actually puts her - the same hard overhead source behaves differently in a kitchen
+and on a night bus - but do not soften it, do not add a second flattering source to rescue
+it, and do not quietly turn it back into warm window light. The one thing to hold on to is
+that the light has to come from something that could really be there in that place: a
+subject lit by a source with no visible cause in the room is the single most obvious tell
+that a photo was assembled rather than taken.
+{{/light_condition}}
+{{#capture_flaw}}
+
+**How the camera failed:** {{capture_flaw}}
+
+Nobody sets out to take an imperfect photo; they just take one. Include this plainly, as a
+property of the picture, not as something anyone intended.
+{{/capture_flaw}}
+{{#lived_in_detail}}
+
+**Somewhere real:** work in {{lived_in_detail}}, or the honest equivalent for wherever she
+actually is if the situation puts her somewhere this makes no sense. Rooms in photographs
+are almost never tidied first. A space with nothing out of place reads as a set, and that
+alone can make an otherwise convincing photo look staged.
+{{/lived_in_detail}}
+
+**The photo is the imperfect thing here, not her.** Bad light, a missed focus and a messy
+room do not mean an unflattering woman - it is the picture that is ordinary, never the
+person in it. She still looks like herself and like someone worth looking at; she is simply
+not being lit, posed or retouched to prove it. If you find yourself writing her as tired,
+unwell, awkwardly caught or unattractive to satisfy any of the above, that is the wrong
+correction - put the imperfection back in the camera and the room where it belongs.
 
 # WHAT KIND OF PHOTO THIS ACTUALLY IS
 {{#is_profile}}

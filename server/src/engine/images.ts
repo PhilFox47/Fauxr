@@ -16,7 +16,7 @@ import {
 } from '../repo.js';
 import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
-import { randInt } from './dice.js';
+import { pickOne, randInt } from './dice.js';
 import { describeSeed } from './generator.js';
 import type { Character, CharacterSeed, PendingPhoto, Relationship } from '../types.js';
 
@@ -82,12 +82,26 @@ type PromptStyle = 'seedream' | 'z_image_turbo';
 const BASE_SUFFIX: Record<PromptStyle, string> = {
   seedream:
     'Rendered as a photorealistic photograph, not an illustration or a render, with real ' +
-    'unretouched skin texture and a naturally attractive, flattering angle.',
+    'unretouched skin texture.',
   z_image_turbo:
     'Rendered as a photorealistic photograph, not an illustration, cgi render or anime ' +
-    'style - real, unretouched skin with natural texture and pores, anatomically correct ' +
-    'hands and limbs, and a naturally attractive, flattering angle.',
+    'style - real, unretouched skin with natural texture and pores, and anatomically ' +
+    'correct hands and limbs.',
 };
+
+/**
+ * The "flattering angle" clause, which used to live in BASE_SUFFIX and therefore rode along
+ * with every single image.
+ *
+ * On her profile picture that is right - it is the one photo she chose precisely because it
+ * came out well. On a snapshot from inside the conversation it is the single most
+ * glamourising instruction in the whole prompt, and it arrived last, after everything asking
+ * for a candid. A photo of someone that happens to catch a good angle is a photo; a photo
+ * composed to catch a good angle is a shoot, and the difference is most of what reads as
+ * fake. The candid and date paths carry their own, milder "she is an attractive woman,
+ * photographed honestly" language in the assembler template instead.
+ */
+const FLATTERING_SUFFIX = 'Shot from a naturally attractive, flattering angle.';
 
 /**
  * The "taken on her phone, right now" look - added on top of BASE_SUFFIX for a chat or
@@ -143,7 +157,108 @@ const BASE_NEGATIVE =
  * headshot or a posed professional-looking shot, so banning that look outright would
  * contradict the one case it is meant to happen. Seedream-only, same reason as above.
  */
-const CANDID_NEGATIVE = 'No studio lighting or posed professional-model styling.';
+const CANDID_NEGATIVE =
+  'No studio lighting or posed professional-model styling. No golden-hour rim light, no ' +
+  'lens flare, no halo of backlit hair, no perfectly tidy staged room.';
+
+/**
+ * The three pools below are the fix for "technically good, somehow fake".
+ *
+ * Every other lever in this pipeline pushed toward a *good photograph*: the assembler was
+ * told to write like a cinematographer naming the light, the suffix asked for a flattering
+ * angle, and nothing anywhere ever asked for the specific, nameable defects that make a real
+ * photo read as real. With nothing anchoring it, a model asked to invent lighting converges
+ * on its favourite lighting every single time - warm window light, golden hour, a soft rim
+ * on the hair - and a model asked to invent a room converges on a show home.
+ *
+ * So the condition is drawn here, in code, per shot, and handed to the assembler as a
+ * requirement rather than left to its taste. Exactly the same reasoning as seedFor() above
+ * and demeanourFor()'s labelled lines: the failure was never that the model wrote badly, it
+ * was that nothing varied, so it wrote its one favourite answer over and over.
+ *
+ * Written to be place-agnostic on purpose - each one describes what the light is *doing*,
+ * not where it is, so the assembler can apply it to whatever room or street the situation
+ * already established rather than fighting it.
+ */
+const LIGHT_CONDITIONS = [
+  'One bare source almost directly above her: short hard shadows under her brows, nose and chin, and a dull fall-off everywhere it does not reach.',
+  'Direct on-camera phone flash - flat and harsh, the nearest surfaces blown too bright, everything more than a couple of metres behind her dropping away to near-black.',
+  'Two light sources that do not match: something warm and yellow on one side, something cold and blue on the other, and the white balance resolving neither - one side of her skin running warm, the other faintly blue.',
+  'Lit from behind by something far brighter than she is - a window, a doorway, a screen - so that blows out to featureless white and her face sits a stop under, lifted only by what bounces back off the room.',
+  'Hard high sun: sharp-edged shadows, real contrast, a bright hotspot where it lands on her, and her eyes narrowed very slightly against it.',
+  'Flat grey overcast light with almost no shadow at all - even, a little dull, faintly blue, nothing sculpting her face.',
+  'A single lamp off to one side doing all the work while the rest of the room falls into genuine dark, the fall-off steep rather than gentle.',
+  'Overhead strip lighting with a faint green cast to it, even and unflattering, the kind of light nobody would ever choose.',
+  'Not quite enough light: a dim room at night with the sensor pushed hard, colour slightly muddy, noise sitting visibly in the shadows.',
+  'A screen as the main light source - phone, laptop, television - cool and uneven, brightest on whatever happens to be closest to it.',
+];
+
+/**
+ * Capture defects, for a moment shot only. A date image is not a photograph anybody took
+ * (see DATE_SUFFIX), so motion blur and compression artefacts would be nonsense there, and a
+ * profile picture is the one shot she specifically chose because it came out sharp.
+ */
+const CAPTURE_FLAWS = [
+  'slight motion blur on her hands or hair, because she moved while the shutter was open',
+  'focus landing slightly behind her, so something in the background is crisper than her face is',
+  'visible sensor noise through the shadows and the flat areas',
+  'the brightest areas clipped to flat white with no detail left in them at all',
+  'the horizon a couple of degrees off level, and never corrected',
+  'carelessly framed - too much dead space on one side, her head close to the top edge',
+  'part of something else intruding into one corner of the frame, unnoticed at the time',
+  'a faint haze over the bright parts, the way a lens looks when it has not been wiped',
+  'slightly over-sharpened and over-compressed, the way a photo looks once a messaging app has had it',
+];
+
+/**
+ * The room being genuinely lived in rather than staged. The single biggest "fake" tell after
+ * lighting: real homes have a charger on the floor and a mug someone forgot, and a model
+ * inventing a room never puts one there.
+ */
+const LIVED_IN_DETAILS = [
+  'a charging cable trailing across a surface or the floor',
+  'a mug or glass left where it does not belong, with a ring under it',
+  'clothes slung over the back of a chair or the end of a bed',
+  'a bed or sofa nobody has straightened',
+  'shoes kicked off and left exactly where they landed',
+  'a cardboard parcel that has not been broken down yet',
+  'a drying rack or a radiator with washing on it',
+  'a plate or a wrapper not cleared away',
+  'too many cables around an overloaded socket',
+  'a bin that could do with going out',
+];
+
+/**
+ * The date equivalent of LIVED_IN_DETAILS: a venue that is genuinely open and occupied
+ * rather than a set dressed to look like one.
+ */
+const VENUE_TRUTH = [
+  'other customers genuinely occupying the place, at their own tables, mid-conversation, none of them arranged to suit the composition',
+  'the table actually in use: glasses with rings under them, a crumpled napkin, a menu pushed off to one side',
+  'real wear on the floor and the furniture, for somewhere that is open every night',
+  'staff moving through the background, caught mid-task rather than posed',
+  'coats, bags and a phone taking up exactly the space people really leave them in',
+];
+
+export interface ShootingConditions {
+  light: string;
+  flaw: string;
+  lived_in: string;
+}
+
+/**
+ * One drawn condition per shot, weighted by what the shot actually is.
+ *
+ * A profile picture deliberately gets no harsh light and no capture defect: she picked that
+ * photo precisely because it came out well, and forcing a green fluorescent cast and a
+ * crooked horizon onto her own lead image would be the wrong correction entirely. What it
+ * does get is the room - even her best photo was taken somewhere real.
+ */
+function shootingConditions(kind: 'profile' | 'moment' | 'date'): ShootingConditions {
+  if (kind === 'profile') return { light: '', flaw: '', lived_in: pickOne(LIVED_IN_DETAILS) };
+  if (kind === 'date') return { light: pickOne(LIGHT_CONDITIONS), flaw: '', lived_in: pickOne(VENUE_TRUTH) };
+  return { light: pickOne(LIGHT_CONDITIONS), flaw: pickOne(CAPTURE_FLAWS), lived_in: pickOne(LIVED_IN_DETAILS) };
+}
 
 /**
  * Sent only when a reference image actually rides along.
@@ -490,11 +605,16 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     // photo is neither: nobody's phone took it, so it gets DATE_SUFFIX instead of the candid
     // one. Computed before the assembler call, not after, because Z Image Turbo needs to know
     // how much of its own character budget this suffix is going to eat - see zCharBudget below.
+    // FLATTERING_SUFFIX rides with the profile picture only - see its own comment for why
+    // asking every candid for a flattering angle was most of what made them read as shot
+    // rather than taken.
     const styleSuffix = isProfile
-      ? BASE_SUFFIX[promptStyle]
+      ? `${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`
       : isDate
         ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
         : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
+    // Drawn per shot rather than left to the assembler's taste - see LIGHT_CONDITIONS.
+    const conditions = shootingConditions(isProfile ? 'profile' : isDate ? 'date' : 'moment');
     // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
     // characters - not a soft quality preference, an actual request error. That leaves the
     // assembler only whatever headroom styleSuffix does not already spend, plus a safety
@@ -517,6 +637,9 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             situation,
             visible_marks: visibleMarks(character, job.kind, facesCamera),
             demeanour: demeanourFor(character.seed, isProfile),
+            light_condition: conditions.light,
+            capture_flaw: conditions.flaw,
+            lived_in_detail: conditions.lived_in,
             // Only a profile picture gets to be a professional shot, a repurposed work
             // photo, a posed full-body - anything her own account above says it is. A
             // chat or spicy photo is always a moment inside the conversation, so it keeps

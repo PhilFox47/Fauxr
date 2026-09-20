@@ -2051,6 +2051,70 @@ reference note; three successive chat shots of the same character get three dist
 none of them the profile's, each with the reference note attached; and the profile and
 non-profile demeanour blocks render differently for the same character.
 
+### Everything in the pipeline was asking for a good photograph
+
+The images were technically good and still read as fake, in a way that was hard to name. The
+cause turned out to be that every single lever pointed the same way - at a *photograph*,
+composed and lit on purpose, rather than a *snapshot* somebody happened to take:
+
+- The assembler was told the model "reasons over the prompt like a cinematographer's brief"
+  and to write "the way a photographer would brief a shot to someone else". A brief produces
+  designed light. That one phrase was doing more damage than anything else in the file.
+- `BASE_SUFFIX` asked for "a naturally attractive, flattering angle" on **every** image,
+  candids included - and it arrived last, after everything else asking for a candid.
+- Nothing, anywhere, ever asked for the specific defects that make a real photo read as real.
+  The anti-airbrush language was all abstract ("real skin has texture") - the same shape of
+  instruction that the AI-isms and euphemism work already proved gets satisfied technically
+  while the actual problem survives.
+- And with nothing anchoring it, a model asked to invent lighting converges on its favourite
+  lighting every time: warm window light, golden hour, a soft rim on the hair. A model asked
+  to invent a room converges on a show home. Both were visible across the sample - four
+  photos, four beautiful lights, four immaculate rooms.
+
+**The condition is now drawn in code, per shot, and handed over as a requirement.** Three
+pools in `images.ts` - `LIGHT_CONDITIONS` (10), `CAPTURE_FLAWS` (9), `LIVED_IN_DETAILS` (10)
+plus `VENUE_TRUTH` (5) for dates - each entry concrete and nameable rather than a general
+plea for imperfection: one bare overhead source with short hard shadows; direct on-camera
+flash with everything behind her falling to black; two mismatched sources with the white
+balance resolving neither; focus landing slightly behind her; the horizon a couple of degrees
+off; a charging cable across the floor; a bed nobody straightened. The light entries are
+written place-agnostically on purpose, describing what the light is *doing* rather than where
+it is, so the assembler can apply one to whatever room the situation already established
+instead of fighting it. Same reasoning as `seedFor()` and `demeanourFor()`'s labelled lines:
+the failure was never that the model wrote badly, it was that nothing varied.
+
+**Weighted by what the shot actually is**, via `shootingConditions()`:
+
+- **Profile picture**: the room only. No harsh light, no capture defect - she picked that
+  photo precisely because it came out well, and forcing a green fluorescent cast and a
+  crooked horizon onto her own lead image would be the wrong correction entirely. It also
+  keeps the flattering-angle clause, now split out into `FLATTERING_SUFFIX` and applied to
+  this one path rather than all three.
+- **Moment (chat/spicy)**: all three. This is the shot that should read as a snapshot.
+- **Date**: light and venue truth, but no capture defect - a date image is not a photograph
+  anyone took (see `DATE_SUFFIX`), so motion blur and compression artefacts would be nonsense.
+
+Two supporting changes. `CANDID_NEGATIVE` now bans the stock-photography clichés by name -
+golden-hour rim light, lens flare, a halo of backlit hair, a perfectly tidy staged room -
+since naming them concretely is what works. And the light instruction carries a consistency
+requirement that turned out to matter: the light has to come from something that could really
+be there in that room, because a subject lit by a source with no visible cause is one of the
+most obvious tells that a picture was assembled rather than taken.
+
+**The guard that keeps this from swinging too far**: the section ends by stating plainly that
+the *photo* is the imperfect thing, never her. Bad light, a missed focus and a messy room do
+not mean an unflattering woman - if the model finds itself writing her as tired, unwell or
+awkwardly caught to satisfy any of it, that is the wrong correction, and the imperfection
+belongs back in the camera and the room. Without that, "make it imperfect" reliably becomes
+"make her worse", which is a different failure rather than a fix.
+
+Verified: the new section gates correctly for all three kinds (profile renders the room and
+the guard but no light or flaw; date renders light and venue but no capture defect; a moment
+renders all three); and eight consecutive moment shots driven through the real
+`enqueueImage()` path against a mock provider drew 7 distinct lights, 7 distinct rooms and 4
+distinct capture flaws, confirming the variety actually reaches the assembled prompt rather
+than collapsing to one favourite.
+
 ### Tattoos stopped phasing through her clothes
 
 `visibleMarks()` decides which tattoos and piercings this shot is allowed to show, and it
