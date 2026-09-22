@@ -6,6 +6,7 @@ import {
 import Avatar from '../components/Avatar';
 import Icon from '../components/Icon';
 import Lightbox from '../components/Lightbox';
+import { closeView, openView, replaceTopView } from '../nav';
 
 function clock(iso: string): string {
   return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -235,6 +236,7 @@ export default function Chat({
   useEffect(() => {
     if (activeDate && autoOpenedDate.current !== activeDate.id) {
       autoOpenedDate.current = activeDate.id;
+      openView(() => setOpenDateId(null));
       setOpenDateId(activeDate.id);
     }
   }, [activeDate]);
@@ -432,9 +434,9 @@ export default function Chat({
       <DateRoom
         dateId={openDateId}
         eventSeq={eventSeq}
-        onOpenTextChat={() => setOpenDateId(null)}
+        onOpenTextChat={closeView}
         onEnded={async () => {
-          setOpenDateId(null);
+          closeView();
           await load();
         }}
       />
@@ -475,7 +477,10 @@ export default function Chat({
         {profile && (
           <button
             className="iconbtn known-count"
-            onClick={() => setProfileOpen(true)}
+            onClick={() => {
+              openView(() => setProfileOpen(false));
+              setProfileOpen(true);
+            }}
             aria-label={`What you know about her: ${profile.known} of ${profile.total}`}
             title="What you know about her"
           >
@@ -494,12 +499,18 @@ export default function Chat({
           profile={profile}
           onProfileChange={setProfile}
           gallery={gallery}
-          onOpenImage={(url) => setLightboxAt(allImages.indexOf(url))}
+          onOpenImage={(url) => {
+            openView(() => setLightboxAt(null));
+            setLightboxAt(allImages.indexOf(url));
+          }}
           onOpenDate={(dateId) => {
+            // Replaces the profile sheet rather than stacking on top of it - back from the
+            // date should land on the chat, not reopen the sheet she navigated away from.
+            replaceTopView(() => setOpenDateId(null));
             setProfileOpen(false);
             setOpenDateId(dateId);
           }}
-          onClose={() => setProfileOpen(false)}
+          onClose={closeView}
         />
       )}
 
@@ -508,7 +519,7 @@ export default function Chat({
           images={allImages}
           index={lightboxAt}
           onIndex={setLightboxAt}
-          onClose={() => setLightboxAt(null)}
+          onClose={closeView}
         />
       )}
 
@@ -624,7 +635,10 @@ export default function Chat({
                     <img
                       src={m.image_url}
                       alt=""
-                      onClick={() => setLightboxAt(allImages.indexOf(m.image_url!))}
+                      onClick={() => {
+                        openView(() => setLightboxAt(null));
+                        setLightboxAt(allImages.indexOf(m.image_url!));
+                      }}
                     />
                   ) : (
                     <span className="tiny">Photo unavailable</span>

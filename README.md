@@ -3819,3 +3819,95 @@ background-only instruction), and a partial set (only renders the fields actuall
 `npx tsc --noEmit` and a full build both clean; `chat.ts`'s persistence block traced to
 confirm the empty-string-falls-back-to-stored-value logic reads from the same `rel.mood`
 object `continuityBlock()` renders from next turn.
+
+## Feeling like an app, not a tab
+
+Two complaints from actually using this on a phone: home-screen install opened a plain
+browser page instead of a standalone app, and the phone's own back button/gesture closed
+the whole thing instead of stepping out of whatever was open.
+
+### Installable, for real
+
+The manifest, service worker and `apple-mobile-web-app-capable` meta tag were already all
+there - this had clearly been set up once already - but the icon was a single SVG declared
+`"sizes": "any", "purpose": "any maskable"`. That combination is the actual failure: Chrome's
+installability check wants an explicitly-sized PNG or WebP icon (192 and 512 are the two it
+looks for), and an SVG-only icon list quietly fails that check on a lot of real Android/Chrome
+versions - not loudly, just by declining to treat the site as an installable app, so "Add to
+Home Screen" falls back to an ordinary bookmark shortcut that opens like any other tab. That
+matches the symptom exactly.
+
+Fixed by actually rasterizing the mark instead of hoping SVG support would cover it: headless
+Chrome (already on this box for other work) screenshotting the existing `icon.svg` at 192 and
+512 gives `icon-192.png`/`icon-512.png` for `purpose: "any"`. A `maskable` icon needs its own
+separate art, not the same square reused - Android's own shape mask crops a full-bleed "any"
+icon hard, and this one's heart sits close enough to the edge that a circular mask would clip
+it - so `icon-maskable-512.png` is the same heart rendered at 65% scale, centered on the same
+background, the standard safe-zone padding maskable icons need. `manifest.webmanifest` lists
+all four (the original SVG kept for anything that actually does use scalable icons, now
+correctly declared `purpose: "any"` alone rather than claiming maskable support it does not
+have), plus an explicit `id` so Chrome treats reinstalls as the same app rather than duplicating
+the home-screen icon. iOS never reads the web manifest for its own home-screen icon - it wants
+`<link rel="apple-touch-icon">` specifically - which index.html did not have either, so that
+and an `apple-mobile-web-app-title` meta (the name iOS shows under the icon; without it, iOS
+falls back to the page title or the URL) were added too. `sw.js`'s cached shell list and cache
+version both bumped so already-installed clients actually pick up the new icons instead of
+serving the stale SVG-only shell forever.
+
+Verified by rendering each PNG and reading it back as an image to confirm the artwork is
+actually there (not a blank or corrupt file) rather than trusting file sizes; `npm run build`
+confirmed the new files land in `server/public` through Vite's normal public-dir copy with no
+manual step; manifest JSON validated by hand against the icon files that now exist on disk.
+
+### The back button now steps out, not off the app
+
+Nothing in the frontend ever touched `history` - `tab`, `openChat` and every sheet/overlay in
+`Chat.tsx` were plain React state, so the browser's own history stack stayed exactly one entry
+long the entire time the app was open. On a phone, that one entry is the app itself: the first
+back press had nowhere else to go and exited.
+
+**`web/src/nav.ts`** is a small, dependency-free stack that keeps a JS-side list of close
+callbacks in lockstep with a same-length run of real `history.pushState` entries - not a
+router, since this app has no URLs to route between, just a record of "what does back close
+right now." Four operations:
+- `openView(onClose)` - a real drill-down (opening a chat, a date room, a full-screen sheet).
+  Pushes one history entry and remembers `onClose`, which is exactly the same state change the
+  view's own on-screen back/close button already runs.
+- `closeView()` - what that on-screen button now calls instead of running the change directly:
+  it triggers `history.back()`, and the resulting `popstate` event runs the matching `onClose`.
+  Routing both the hardware back button and the on-screen one through the same call means there
+  is exactly one place that defines what "close" means for a given view, not two that can drift.
+- `replaceTopView(onClose)` - for a view that replaces another one in place rather than stacking
+  on top of it, without adding a history level. The one real case in this app: the profile sheet
+  opening a date over itself (`setProfileOpen(false); setOpenDateId(id)`, already existing code).
+  A plain push here would leave the profile sheet's own close callback still on the stack one
+  level down, and since the code that opens the date never puts `profileOpen` back to `true`,
+  back from the date would pop the stack correctly but change nothing on screen - the sheet
+  never actually reappears - silently costing the player an extra, seemingly dead back press
+  before the second one finally left chat. Caught by testing this exact transition, not by
+  reasoning about it in the abstract - see verification below.
+- `forceClose()` - for a view that closes itself for a reason that was not a back press (a
+  match getting deleted out from under an open chat, via the `match_removed` event). Pops the
+  JS stack and calls `history.back()` without re-running the close callback, since the caller
+  already changed the state itself; without this the history entry would sit there unclosed and
+  the player's next real back press would silently do nothing.
+
+Wired into the app's actual drill-downs: `App.tsx`'s matches -> chat (`openChat`), and inside
+`Chat.tsx`, chat -> date room (`openDateId`, both how it opens - manually from the profile
+sheet's Dates section, and automatically the moment a date starts) and chat -> profile sheet ->
+image lightbox. Left deliberately unwired: the top-level Discover/Chats/Settings tab bar
+(switching tabs is not a drill-down, and back cycling through tab history would be worse than
+the current behaviour), the small contextual menu sheet (a lightweight dropdown dismissible by
+its own toggle, not something back button presses are aimed at), and Settings' own internal
+tabs and editors (out of scope for this pass - the complaint was specifically about chat/date
+navigation).
+
+Verified against a real Chrome instance (not a mock) driven over the DevTools protocol, since
+this is exactly the kind of history/event-timing behaviour that is easy to get subtly wrong by
+reasoning alone: opening two levels (`openView` x2) then pressing hardware back twice closes
+them in the correct order and lands back at depth 0 with no crash on a third, superfluous back
+press; the profile -> date `replaceTopView` case specifically confirmed to fire only the date's
+close callback on the next back press (never the profile sheet's), landing directly on chat -
+the exact desync described above, caught by testing before it shipped rather than after; and
+`forceClose()` confirmed to resync history and the JS stack without re-invoking the close
+callback, leaving a subsequent back press safely inert instead of erroring.

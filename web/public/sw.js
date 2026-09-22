@@ -1,7 +1,10 @@
 // Minimal service worker: makes the app installable and serves the shell offline.
 // The API is deliberately never cached - a stale chat would be worse than none.
-const SHELL = 'fauxr-shell-v1';
-const ASSETS = ['/', '/index.html', '/icon.svg', '/manifest.webmanifest'];
+const SHELL = 'fauxr-shell-v2';
+const ASSETS = [
+  '/', '/index.html', '/icon.svg', '/manifest.webmanifest',
+  '/icon-192.png', '/icon-512.png', '/icon-maskable-512.png', '/apple-touch-icon.png',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(SHELL).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));

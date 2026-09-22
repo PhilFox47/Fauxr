@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, ApiError, connectEvents, type AppState, type MatchSummary, type ServerEvent } from './api';
 import Icon, { type IconName } from './components/Icon';
+import { closeView, forceClose, openView } from './nav';
 import Onboarding from './screens/Onboarding';
 import Login from './screens/Login';
 import Swipe from './screens/Swipe';
@@ -74,6 +75,18 @@ export default function App() {
     }
   }, []);
 
+  /** Opening a chat is a real drill-down - his back button should be able to step out of it. */
+  const openChatFor = useCallback(
+    (id: string) => {
+      openView(() => {
+        setOpenChat(null);
+        void refreshMatches();
+      });
+      setOpenChat(id);
+    },
+    [refreshMatches],
+  );
+
   useEffect(() => {
     void refreshState();
     void refreshMatches();
@@ -95,7 +108,12 @@ export default function App() {
           void refreshMatches();
           break;
         case 'match_removed':
-          setOpenChat((id) => (id === event.character_id ? null : id));
+          setOpenChat((id) => {
+            // Closing for a reason that was not him pressing back - keep the back-stack in
+            // sync so the next real back press still does something.
+            if (id === event.character_id) forceClose();
+            return id === event.character_id ? null : id;
+          });
           void refreshMatches();
           break;
         case 'reset':
@@ -195,10 +213,7 @@ export default function App() {
           characterId={openChat}
           typing={!!typing[openChat]}
           eventSeq={eventSeq}
-          onBack={() => {
-            setOpenChat(null);
-            void refreshMatches();
-          }}
+          onBack={closeView}
         />
       </div>
     );
@@ -208,7 +223,7 @@ export default function App() {
     <div className="app">
       {tab === 'swipe' && <Swipe onMatched={refreshMatches} />}
       {tab === 'matches' && (
-        <Matches matches={matches} typing={typing} onOpen={setOpenChat} onRefresh={refreshMatches} />
+        <Matches matches={matches} typing={typing} onOpen={openChatFor} onRefresh={refreshMatches} />
       )}
       {tab === 'settings' && (
         <Settings
