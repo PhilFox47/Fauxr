@@ -3703,3 +3703,62 @@ real count plus elapsed time after one; a real subsequent Director call was driv
 with him:` line, both unlock paragraphs, the "fact to weigh, not a gate" framing, the "not
 hers to bring up" line, and that `date_recent` no longer appears anywhere in the rendered
 prompt at all; and `NEGATIVE_FLAG_HOURS` no longer carries the key.
+
+### Her own bookkeeping was leaking into her voice
+
+A player-supplied log export of a date with Saskia showed her narrating an ordinary,
+affectionate morning like a performance review: `"Compliance confirmed," she says... And
+he's all soft and half-asleep.` A shirt-check became `"I'm verifying the shirt with my own
+eyes"`, breakfast became `"Official review... Breakfast passes inspection,"` a good raid
+story got `Filing that away.` The complaint was that this reads as robotic no matter what
+personality actually rolled, and the log backs that up directly: a completely unrelated
+character's `mood`/`stance` from a plain text chat, found in the same export, described a
+man's late-night text as amusement "at the consistency of the archetype" and said the photo
+"does nothing for her tonight except complete the file," because "she priced this pattern
+long ago and it is playing out on schedule." Same failure, different character, different
+pipeline (chat, not a date) - which rules out this being Saskia's bit or a date-room-only
+problem.
+
+**The root cause is vocabulary proximity, not any one broken line.** The Director reasons in
+archetypes, touchstones, and numeric trust/spark deltas all day - `director_direction.md` has
+a whole section headed `HOW TO SCORE` - and that is correct, it is the job. But nothing
+before this drew a line between that internal bookkeeping and the natural-language
+`mood`/`energy`/`goal`/`stance` fields it writes every turn, so the closest vocabulary at
+hand leaked straight into them, and the Actor - which has no way to know a line like
+"completes the file" was meant as an internal note rather than genuine feeling - performed it
+literally, as dialogue. `SCOREKEEPING`, the existing section nearest this, already named a
+related but narrower failure (an open-ended tally goal turning into her grading him out loud
+- "0 for 2"); it did not cover an ordinary warm moment getting the analyst treatment.
+
+**The fix is the same two-layer shape as the euphemism work above**, for the same reason -
+prose guidance moves the median case, a code backstop catches what gets through anyway:
+
+1. A new section in `director_direction.md`, placed right before `HOW TO SCORE` where the
+   scoring vocabulary is introduced: `HER PAPERWORK IS NOT HER VOICE`. It says plainly that
+   the archetype/touchstone/score vocabulary is correct to reason in but must never surface in
+   the four written fields, gives the actual tell to watch for ("if the sentence could appear
+   in an audit report with the names changed, it is wrong"), and lists the real phrases from
+   the log verbatim as worked examples, so this reads as a concrete rule rather than an
+   abstract one - the same lesson the AI-isms and euphemism fixes already established: an
+   abstract instruction is easy to satisfy technically while still doing the thing it was
+   meant to rule out.
+2. **`detectCaseFileVoice()`** in `voice.ts`, the same shape as `detectEuphemism()`: seven
+   patterns, each a distinctive multi-word construction essentially unique to the case-file
+   register - "compliance verified/confirmed", "passes/passed inspection", "official review",
+   "full marks", "completes/complete the file", "priced this/that/the pattern", and "the
+   archetype" used to label him specifically (the game's own internal field name, not
+   something a person calls another person). Deliberately excludes common idioms a real
+   person would actually say that were tempting but too broad - "verdict", "case closed",
+   "filing that away", "on schedule" - and excludes "pass the vibe check" specifically because
+   `SCOREKEEPING` already sanctions it as a legitimate one-off test-and-payoff bit. Wired into
+   `findVoiceProblem()` (chat) right after the euphemism check, and into the date beat retry
+   loop in the same position - a style nit, so it costs a normal retry rather than the extra
+   budget a broken-frame failure gets.
+
+Verified: 10 positive cases pulled directly from the log (all seven patterns, both the date
+beats and the cross-context chat `mood`/`stance` evidence) all detected; 10 adversarial
+negatives - the excluded idioms above, "pass the vibe check", "archetype" used in a sentence
+that doesn't match the exact game-label shape, ordinary praise ("you passed, with flying
+colors") - all pass clean; `npx tsc --noEmit` and a full build both clean; the wiring in both
+`findVoiceProblem()` and `dates.ts`'s date-beat loop confirmed to mirror the existing
+`detectEuphemism()` call sites exactly, including the retry-budget treatment.

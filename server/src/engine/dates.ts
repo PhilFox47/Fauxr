@@ -18,7 +18,7 @@ import {
   spiceBlock, userBlock,
 } from './blocks.js';
 import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
-import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism } from './voice.js';
+import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice } from './voice.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage } from './images.js';
@@ -325,6 +325,16 @@ async function runDateActor(
         `You wrote "${euphemism.matched.trim()}" instead of naming it. Use the actual word - ` +
         `${euphemism.suggest} - the way she would actually think or say it in the moment, not a ` +
         'workaround. Same JSON shape.';
+      continue;
+    }
+    const caseFile = detectCaseFileVoice(text);
+    if (caseFile) {
+      logger.warn('actor', `date beat used case-file voice (${caseFile})`, { character: character.username, text });
+      correction =
+        `You wrote ${caseFile} - narrating him, or the moment, like an inspection or a ` +
+        `performance review instead of something she actually feels. Say what she is genuinely ` +
+        `feeling instead - warm, amused, annoyed, whatever it actually is - not a verdict. ` +
+        'Same JSON shape.';
       continue;
     }
     if (writesForHim(text)) {

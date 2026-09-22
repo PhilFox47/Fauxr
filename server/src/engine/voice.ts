@@ -132,6 +132,44 @@ export function detectFadeToBlack(text: string): string | null {
 }
 
 /**
+ * Her turning a warm, ordinary moment into a performance review - narrating him, or the
+ * morning, or an object, as something being inspected, scored and filed rather than
+ * something she is having feelings about.
+ *
+ * The likely source is not any one prompt line but the vocabulary this whole app reasons in
+ * around her: "archetype", "touchstone", numeric trust/spark deltas, a whole section headed
+ * "HOW TO SCORE". None of that is meant to reach her voice - it is the Director's own
+ * bookkeeping - but a Director that thinks in that vocabulary writes "mood"/"stance"/"goal"
+ * in it too ("the consistency of the archetype", "completes the file", "priced this
+ * pattern"), and the Actor performing that direction plays it exactly as written: an actual
+ * audit, delivered as dialogue ("compliance verified", "official review... full marks",
+ * "passes inspection"). A real exported log showed this happening turn after turn, across
+ * an entire date, regardless of what the character's own rolled personality actually was -
+ * which is what marks it as a house-style leak rather than one character's bit.
+ *
+ * Deliberately narrow: each phrase is a distinctive, multi-word construction essentially
+ * unique to the case-file register, not a single common word ("verdict", "case closed",
+ * "filing that away" are all things a real person might actually say and are left alone on
+ * purpose) or an already-sanctioned bit (director_direction.md's own SCOREKEEPING section
+ * explicitly allows "pass the vibe check" as a one-off test that pays off, so that phrase is
+ * never flagged here).
+ */
+const CASE_FILE_PATTERNS: { re: RegExp; what: string }[] = [
+  { re: /\bcompliance (?:verified|confirmed)\b/i, what: '"compliance verified/confirmed"' },
+  { re: /\b(?:passes?|passed) inspection\b/i, what: '"passes inspection"' },
+  { re: /\bofficial review\b/i, what: '"official review"' },
+  { re: /\bfull marks\b/i, what: '"full marks"' },
+  { re: /\bcompletes? the file\b/i, what: '"completes the file"' },
+  { re: /\bpriced (?:this|that|the) pattern\b/i, what: '"priced this pattern"' },
+  { re: /\bthe archetype\b/i, what: '"the archetype" (that word is the game\'s own internal label, not something a person calls another person)' },
+];
+
+export function detectCaseFileVoice(text: string): string | null {
+  for (const p of CASE_FILE_PATTERNS) if (p.re.test(text)) return p.what;
+  return null;
+}
+
+/**
  * Narrating back what he just did. "you opened with a greeting and a question about my
  * wellbeing" is an assistant restating the input, not a person replying to it.
  */
@@ -285,6 +323,13 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
     return {
       what: `euphemism ("${euphemism.matched.trim()}")`,
       fix: `You wrote "${euphemism.matched.trim()}" instead of naming it. Use the actual word - ${euphemism.suggest} - the way she would actually think or text it, not a workaround. This app runs explicit language; there is no need to dance around it.`,
+    };
+  }
+  const caseFile = detectCaseFileVoice(input.text);
+  if (caseFile) {
+    return {
+      what: `case-file voice (${caseFile})`,
+      fix: `You wrote ${caseFile} - narrating him, or the moment, like an inspection or a performance review instead of something she actually feels. Say what she is genuinely feeling in her own words instead - warm, amused, annoyed, whatever it actually is - not a verdict.`,
     };
   }
   const rp = detectRoleplay(input.text);
