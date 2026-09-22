@@ -170,6 +170,32 @@ export function detectCaseFileVoice(text: string): string | null {
 }
 
 /**
+ * Literal scorekeeping showing up in the words themselves, not just in a goal shaped like a
+ * running tally - the two are different failures with the same fix. `director_direction.md`
+ * and `actor_chat.md` already ban this outright, by name, with these same example phrases -
+ * "no '0 for 2', no 'that one doesn't count'" - and a real exported log still produced "thats
+ * twice now" and "two in a row" turn after turn, on a conversation whose actual Director goal
+ * was not a tally at all. That gap between an explicit prose ban and what still shipped is
+ * exactly the situation the other detectors in this file exist for.
+ *
+ * Anchored to a second-person accusatory frame ("you've", "u've", "ur") wherever the bare
+ * phrase would otherwise be too ordinary to safely flag - "two in a row" alone is something
+ * a person might say about their own bad luck, "two in a row you've" said at him is
+ * specifically tallying his behavior and is not a sentence people build any other way.
+ */
+const SCOREKEEPING_PATTERNS: { re: RegExp; what: string }[] = [
+  { re: /\bthat'?s (?:twice|three times|four times|five times|\d+ times) now\b/i, what: '"that\'s twice now"' },
+  { re: /\b(?:two|three|four|five|\d+) in a row (?:u'?ve?|you'?ve?|you have)\b/i, what: '"two in a row you\'ve..."' },
+  { re: /\b(?:you'?re|ur|u) (?:0|1|2|3|4|zero|one|two|three|four) (?:for|out of) (?:1|2|3|4|5|one|two|three|four|five)\b/i, what: '"ur 1 for 3"-style grading' },
+  { re: /\bthat one doesn'?t count\b/i, what: '"that one doesn\'t count"' },
+];
+
+export function detectScorekeepingTell(text: string): string | null {
+  for (const p of SCOREKEEPING_PATTERNS) if (p.re.test(text)) return p.what;
+  return null;
+}
+
+/**
  * Narrating back what he just did. "you opened with a greeting and a question about my
  * wellbeing" is an assistant restating the input, not a person replying to it.
  */
@@ -330,6 +356,13 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
     return {
       what: `case-file voice (${caseFile})`,
       fix: `You wrote ${caseFile} - narrating him, or the moment, like an inspection or a performance review instead of something she actually feels. Say what she is genuinely feeling in her own words instead - warm, amused, annoyed, whatever it actually is - not a verdict.`,
+    };
+  }
+  const scorekeeping = detectScorekeepingTell(input.text);
+  if (scorekeeping) {
+    return {
+      what: `scorekeeping (${scorekeeping})`,
+      fix: `You wrote ${scorekeeping} - literally tallying his performance. That is banter shaped like an exam. React to what he actually did or said, in your own words, without counting it against a running score.`,
     };
   }
   const rp = detectRoleplay(input.text);

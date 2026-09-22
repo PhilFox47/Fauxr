@@ -4132,3 +4132,53 @@ Verified: `spiceDirective()` called directly across the full range (0.3 through 
 each boundary lands in the correct tier, including that 1.25 genuinely produces the
 "default" text today and 1.8 is exactly where "maximum" begins; `npx tsc --noEmit` and a full
 build both clean.
+
+### A real ban that was still losing, and a bug from three fixes ago
+
+Next complaint: characters holding a strong, rigid opinion about what they wanted to hear
+and rejecting anything else, reading as unnatural and repetitive. A real log made the shape
+of it obvious once laid out message by message: "thats not an actual thing phil, thats a
+brochure line," almost the same line again two exchanges later, "u did it again phil, thats
+twice now," "thats two in a row u've made me go first tho phil," and - the one that closes
+the arc - her asking outright to be put over his knee, him answering "we get there," and her
+response: *"'we get there' is a raincheck not an answer phil... you dont get to say we get
+there and think it settles it."*
+
+That last one is the actual mechanism, not just another example. He did not clearly pass or
+fail the ask - he hedged. Nothing anywhere told the Director or the Actor what a hedge is
+supposed to count as, so it got treated as grounds to reject and relitigate rather than as a
+real, if unsatisfying, answer - the same "test with no finish line" `director_direction.md`
+already names as a failure, just triggered by an answer landing wrong instead of no answer
+arriving at all. Added a paragraph to that exact section, and a matching bullet in
+`actor_chat.md` ("A hedge is still an answer"), saying so explicitly: react honestly, push
+once more in her own voice if that is who she is, then let it go - turning one unsatisfying
+reply into a standing grievance is the same stuck test in different clothes.
+
+The counting language ("thats twice now," "two in a row") is a second failure already named
+in prose, in both files, by these almost-exact example phrases - `actor_chat.md` already
+says outright "no '0 for 2', no 'that one doesn't count'" - and it still happened anyway.
+That gap between an explicit, specific, already-shipped ban and what the log actually showed
+is the same situation every other detector in `voice.ts` exists for, so this got the same
+treatment: `detectScorekeepingTell()`, four patterns anchored to a second-person accusatory
+frame where the bare phrase would otherwise be too ordinary to flag safely ("two in a row"
+alone is something a person says about their own bad luck; "two in a row you've" aimed at
+him is specifically tallying his behavior and is not a sentence people build any other way).
+Wired into `findVoiceProblem()` and the date-beat retry loop, same position as
+`detectCaseFileVoice()`, same normal-retry cost rather than the broken-frame budget.
+
+**Also found and fixed along the way**: the "SHE CARRIES HALF THE SCENE" section added a few
+fixes ago had a real bug - an edit had accidentally deleted the "WHAT THIS IS FOR." header
+line, leaving its own continuation text run on as if it were the new section's closing
+sentence. Fixed the same edit, and added the connective tissue that section was actually
+missing: "carrying half the scene is not the same as grading his half of it" - since pushing
+her to bring her own specific demands to a scene, without ever saying what happens once he
+attempts one, is exactly the gap the hedge-is-still-an-answer fix above closes.
+
+Verified: the restored "WHAT THIS IS FOR" header confirmed present in a fresh render, along
+with both new paragraphs; `detectScorekeepingTell()` tested against all five real/adversarial
+phrasings from the log (four catch, "0 for 2" with no pronoun attached does not - a
+deliberate precision tradeoff, since a bare "0 for 2" is real sports vocabulary a character
+with that hobby might genuinely use) and six adversarial negatives including "two in a row"
+about the character's own bad luck and "you did it again" as genuine praise, all passing
+clean; `findVoiceProblem()` confirmed to actually return the scorekeeping problem end to end
+for a real captured line; `npx tsc --noEmit` and a full build both clean.

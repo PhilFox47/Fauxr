@@ -18,7 +18,7 @@ import {
   spiceBlock, userBlock,
 } from './blocks.js';
 import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
-import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice } from './voice.js';
+import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice, detectScorekeepingTell } from './voice.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage } from './images.js';
@@ -335,6 +335,15 @@ async function runDateActor(
         `performance review instead of something she actually feels. Say what she is genuinely ` +
         `feeling instead - warm, amused, annoyed, whatever it actually is - not a verdict. ` +
         'Same JSON shape.';
+      continue;
+    }
+    const scorekeeping = detectScorekeepingTell(text);
+    if (scorekeeping) {
+      logger.warn('actor', `date beat used scorekeeping (${scorekeeping})`, { character: character.username, text });
+      correction =
+        `You wrote ${scorekeeping} - literally tallying his performance. That is banter ` +
+        `shaped like an exam. React to what he actually did, in your own words, without ` +
+        'counting it against a running score. Same JSON shape.';
       continue;
     }
     if (writesForHim(text)) {
