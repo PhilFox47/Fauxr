@@ -3911,3 +3911,49 @@ close callback on the next back press (never the profile sheet's), landing direc
 the exact desync described above, caught by testing before it shipped rather than after; and
 `forceClose()` confirmed to resync history and the JS stack without re-invoking the close
 callback, leaving a subsequent back press safely inert instead of erroring.
+
+### The Director's best ideas were stranding themselves in its own notes
+
+A player report: sexting with a character felt oddly tame - she never dodged or refused
+anything, but whatever she actually admitted to was barely worth mentioning. Reading a real
+log export (Xiaomi/mimo-v2.6-flash, but the mechanism below has nothing to do with the
+model) found the exact moment this breaks, repeated across the whole conversation.
+
+Before one particular reply, `director_notes.plans` (the Director's own scratch space)
+read: *"circle the costume thing as a joke she can take back ('worn exactly once and it
+wasnt for the shops')."* Specific, in character, genuinely hot. What she actually sent was
+*"i've been thinking about your hands since that desk pic and it wasnt about the cables"* -
+nothing about the costume at all. This was not a one-off: a few turns earlier the Director
+had planned circling that "a hand alone won't be enough" (an impact-play callback), and what
+arrived instead was a throwaway line about there being six people in the room.
+
+**The cause is structural, not a bad roll.** `ledgerBlock()` in `blocks.ts` only renders
+`director_notes.plans` when called with `{ full: true }` - which `director.ts` passes for
+the Director's own next prompt, and `actor.ts` never does for the Actor's. So the specific
+idea the Director had already worked out literally never reaches the model writing her
+messages. All the Actor gets is the more abstract `direction.goal` field ("give him one
+admission she'd normally keep hold of"), and left to invent the actual content itself, it
+reliably invents something blander than what the Director had already planned - not because
+the model is being cautious about NSFW content, but because it was never told what to say.
+
+This also answers the model question directly: switching models would not have fixed this,
+since the concrete idea is architecturally invisible to whichever model is playing the
+Actor. (Her `texting persona: shy over text` and `clipped` message length do add real
+terseness on top of this by design - that part is working as intended - but it is not what
+was flattening the specific content.)
+
+**Fixed at the two places the Director actually writes these fields**, in
+`director_direction.md`: the existing `"goal"` guidance ("PRIVATE... write it as an
+intention, not a line she could deliver") now says plainly that private is not the same as
+vague, names the exact failure ("give him an admission" with the actual admission left only
+in a plan), and gives a worked example of folding the specific content into `"goal"` while
+keeping it phrased as an intention rather than a script line. The `"director_notes.plans"`
+guidance gets the matching cross-reference: it is read back into the Director's own next
+call and never reaches the Actor, so whatever part of a plan needs to actually happen this
+turn belongs in `"goal"` too.
+
+Verified: the rendered template contains both additions at the right locations; `npx tsc
+--noEmit` and a full server build both clean; `render('director_direction', ...)` run
+directly against representative template variables to confirm it still renders without
+error - a `{{ }}`-syntax mistake in a prose edit like this would otherwise only surface at
+the next live Director call.

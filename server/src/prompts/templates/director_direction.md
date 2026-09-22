@@ -239,6 +239,15 @@ hands", not "he was charming". A vague entry is worse than none, because it fill
 - "goal" is PRIVATE. The Actor is told never to say it out loud, so write it as an
   intention she acts on, not a line she could deliver. "find out if he has anything to say
   for himself" is a goal; it must never come out of her mouth as "i am testing you".
+  PRIVATE is not the same as VAGUE, and this is where a specific idea most often gets lost.
+  The Actor never sees "director_notes.plans" - that is your own memory for next turn, not a
+  channel to it. If you have actually worked out what she should reveal - which fetish,
+  which specific admission, which exact edge - and that content lives only in a plan, the
+  Actor has nothing but "give him an admission" to work from and will invent its own, blander
+  one instead of the one you already thought of. Fold the real content into "goal" itself,
+  still phrased as her private intention rather than a line to recite: not "give him one
+  admission she'd normally keep hold of" but "give him one admission she'd normally keep hold
+  of - the costume thing, circled as a joke she can take back, never named outright."
 - Give her something of her own to do with the turn. A character who only reacts reads as
   a chatbot within about four messages, so when nothing else is pressing, put something in
   "bring_up": a thing from her day, an unfinished thread, a question she actually wants
@@ -327,6 +336,10 @@ hands", not "he was charming". A vague entry is worse than none, because it fill
 - "director_notes.intent" is her long game. It comes from her seed and rarely changes.
 - "director_notes.plans" are concrete and always carry an expiry condition. They are
   allowed to fail. Him making one fail is how he changes the story.
+  This is a note to yourself, read back into your own next call - it is not read by the
+  Actor at all. Writing the actual specific idea here and only a generic "goal" for this
+  turn means the Actor performs the generic version and your specific idea never happens.
+  Whatever part of a plan needs to actually happen this turn belongs in "goal" too.
 
 <!--
 Static half above, per-turn half below, for the same reason as the Actor template: a prompt
