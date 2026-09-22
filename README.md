@@ -3762,3 +3762,60 @@ that doesn't match the exact game-label shape, ordinary praise ("you passed, wit
 colors") - all pass clean; `npx tsc --noEmit` and a full build both clean; the wiring in both
 `findVoiceProblem()` and `dates.ts`'s date-beat loop confirmed to mirror the existing
 `detectEuphemism()` call sites exactly, including the retry-budget treatment.
+
+### Real physical continuity while texting, kept out of the text itself
+
+The case-file fix above was about analytical vocabulary leaking into her voice. The
+follow-up idea was the opposite direction: let the Actor track more about her than what is
+in the visible message - where she physically is, what she has on, what she is actually
+doing - specifically so that stuff can live entirely in the background and never has to be
+spoken out loud to still shape how she writes.
+
+**`hidden.location`, `hidden.outfit` and `hidden.activity`** join `hidden.mood`/`thoughts`
+in `actor_chat.md`'s output schema. The difference from those two matters: `actor_mood` and
+`thoughts` have been written to `rel.mood` every turn since the double-texting work, but
+nothing ever reads them back - they are pure write-only state today. These three are read
+back, by a new `continuityBlock()` in `blocks.ts`, rendered right under `moment_block` in
+`actor_chat.md` (`WHERE YOU ARE RIGHT NOW`, the section that already gives her the day, the
+hour and her job). It states her stored situation plainly as fact and is explicit that it is
+background, not a line to deliver - it only surfaces when it is genuinely the reason for
+something (a slow reply, a short one, him asking what she's up to), the same way
+`hidden.thoughts` already shapes what she says without ever being said.
+
+Persistence follows the pattern `dateHistoryFact()` already established for a different
+kind of continuity: `rel.mood.location/outfit/activity` are set from `result.hidden.*` on
+every turn in `chat.ts`, but an empty string (her reporting "unchanged") falls back to
+whatever was already stored rather than wiping it - the schema instructs her to report the
+same thing back far more often than actually changing it, and the persistence has to agree
+or a single quiet turn would erase it. First-ever turn has nothing to fall back to, so
+`continuityBlock()` returns a different message asking her to pick something concrete and
+ordinary rather than presenting three empty facts as if they meant something.
+
+**Dates and voice notes deliberately did not change.** A date already tracks outfit
+per-session (`decideDateOutfit()`/`setDateOutfit()`, fed back every beat via `outfit_block`)
+and location for the whole evening via its `Location`, and "activity" is simply whatever the
+beat is narrating that instant - there is no hidden version of any of it to add, the visible
+prose already is it. Voice notes reuse the same `ActorHidden` shape and the same persistence
+in `chat.ts`, but `actor_voice.md` was not given the new schema fields or a continuity block,
+so a voice turn reports them empty and the fallback-to-stored-value logic leaves whatever
+texting last set untouched - correct, since a single voice note is not the moment to reinvent
+her physical situation.
+
+**One suggestion from this design discussion was deliberately left out: a persisted "opinion
+of him" field.** Two reasons. First, it is largely already covered - `previous_direction`
+already feeds the Director its own last-set goal back every turn, and `directionBlock()`
+already hands that same goal to the Actor as "what you privately want"; a second, Actor-owned
+goal field would just be a competing source of truth. Second, and more directly tied to the
+fix right above this one: a field literally named "opinion" invites exactly the analyst
+register `detectCaseFileVoice()` exists to catch - "assessment: reliable but guarded" is the
+natural shape for a field with that name, and the risk is not just that it leaks into
+dialogue directly, but that a field she is trained to fill in that register nudges the
+vocabulary of everything else she writes back toward it. Not worth it for what location,
+outfit and activity already deliver on their own.
+
+Verified: `continuityBlock()` checked directly against three states - nothing stored yet
+(returns the "pick something" prompt), all three fields set (returns them formatted with the
+background-only instruction), and a partial set (only renders the fields actually present);
+`npx tsc --noEmit` and a full build both clean; `chat.ts`'s persistence block traced to
+confirm the empty-string-falls-back-to-stored-value logic reads from the same `rel.mood`
+object `continuityBlock()` renders from next turn.

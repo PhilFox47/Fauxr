@@ -410,6 +410,12 @@ async function runActorPhase(
     thoughts: result.hidden.thoughts,
     // Carried to the next turn so nothing opens a second topic on top of a live one.
     unresolved: result.hidden.unresolved,
+    // Real continuity, read back by continuityBlock() next turn - an empty string means she
+    // reported no change, not that she has nowhere/nothing/no plans, so it falls back to
+    // whatever was already stored rather than wiping it.
+    location: result.hidden.location || (rel.mood as any)?.location || '',
+    outfit: result.hidden.outfit || (rel.mood as any)?.outfit || '',
+    activity: result.hidden.activity || (rel.mood as any)?.activity || '',
     pending_photo: pendingPhoto,
     pending_exchange: exchangeLeft,
   };

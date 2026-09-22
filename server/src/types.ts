@@ -246,6 +246,17 @@ export interface ActorHidden {
    */
   unresolved: string | null;
   mood: string;
+  /**
+   * Her physical situation right now: where she is, what she has on, what she is actually
+   * doing. Carried forward on `Relationship.mood` the same way `mood`/`thoughts` are, but
+   * unlike those two this is actually read back next turn (see `continuityBlock`) - the
+   * point is real continuity between messages, not a value that gets written and never used.
+   * Empty string means "unchanged from last time" and is filled in from the stored value,
+   * never wiped.
+   */
+  location: string;
+  outfit: string;
+  activity: string;
   goal_fulfilled: boolean;
   boundary_touched: boolean;
   new_fact: string | null;

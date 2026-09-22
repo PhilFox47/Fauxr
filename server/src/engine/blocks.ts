@@ -378,6 +378,43 @@ export function moodBlock(arousal: number, stageLabel: string, tell?: string, me
 }
 
 /**
+ * Her physical situation while texting, carried forward turn to turn instead of reinvented
+ * fresh each time. This is what makes "sorry, hands full" or a reply arriving slow actually
+ * mean something instead of being a line with nothing behind it, and it is why she does not
+ * contradict herself about where she is three messages apart.
+ *
+ * Deliberately background: the point is that this can shape HOW she writes - short and
+ * distracted while carrying groceries, unhurried in bed - without her ever having to say any
+ * of it out loud unless he asks or it is actually the reason for something. Stated plainly
+ * for exactly this reason: a field she is instructed to keep private is one she can act from
+ * without narrating, the same relationship "hidden.thoughts" already has to what she says.
+ */
+export function continuityBlock(mood: Record<string, unknown>): string {
+  const location = String(mood?.location ?? '').trim();
+  const outfit = String(mood?.outfit ?? '').trim();
+  const activity = String(mood?.activity ?? '').trim();
+  if (!location && !outfit && !activity) {
+    return (
+      'You have not settled where you physically are, what you are wearing, or what you are ' +
+      'doing right now. Pick something concrete and ordinary for the moment - not a blank ' +
+      'backdrop - and report it in "hidden" so it holds for next time.'
+    );
+  }
+  return [
+    'Your actual physical situation right now, unless something below has clearly moved on ' +
+      'since:',
+    location ? `- Where you are: ${location}` : '',
+    outfit ? `- What you have on: ${outfit}` : '',
+    activity ? `- What you are actually doing: ${activity}` : '',
+    'This is background, not a line to deliver - do not announce it or work it into every ' +
+      'reply. It only surfaces when it is genuinely the reason for something: a slow reply, a ' +
+      'short one, him asking what you are up to. Keep it consistent turn to turn and update ' +
+      '"hidden" only when something real actually changed it - time passing, you saying you ' +
+      'are heading somewhere, tidying up for bed. Otherwise report the same thing back unchanged.',
+  ].filter(Boolean).join('\n');
+}
+
+/**
  * How to write the explicit register. Texting and an in-person date are different mediums
  * with opposite rules for the same content - texting forbids narration and third person and
  * insists on phone typing habits, a date is built entirely out of narration and speech and

@@ -6,8 +6,8 @@ import { getUserProfile, recentMessages } from '../repo.js';
 import { render } from '../prompts/render.js';
 import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Relationship } from '../types.js';
 import {
-  appearanceBlock, communicationBlock, directionBlock, exchangeRequestBlock, historyBlock, identityBlock,
-  interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
+  appearanceBlock, communicationBlock, continuityBlock, directionBlock, exchangeRequestBlock, historyBlock,
+  identityBlock, interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
   sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
 import { describeHim } from './discovery.js';
@@ -56,6 +56,9 @@ function fallbackOutput(): ActorOutput {
       thoughts: 'fallback message, the model failed',
       unresolved: null,
       mood: 'neutral',
+      location: '',
+      outfit: '',
+      activity: '',
       goal_fulfilled: false,
       boundary_touched: false,
       new_fact: null,
@@ -79,6 +82,9 @@ function normalizeHidden(raw: any): ActorHidden {
     thoughts: String(raw?.thoughts ?? ''),
     unresolved: raw?.unresolved ? String(raw.unresolved) : null,
     mood: String(raw?.mood ?? ''),
+    location: String(raw?.location ?? '').trim().slice(0, 200),
+    outfit: String(raw?.outfit ?? '').trim().slice(0, 200),
+    activity: String(raw?.activity ?? '').trim().slice(0, 200),
     goal_fulfilled: !!raw?.goal_fulfilled,
     boundary_touched: !!raw?.boundary_touched,
     new_fact: raw?.new_fact ? String(raw.new_fact) : null,
@@ -187,6 +193,7 @@ function buildPrompt(
     direction_block: directionBlock(direction, somethingLive, photoPending),
     mood_block: moodBlock(relationship.arousal, currentStage(relationship, character).label, seed.hints.arousal_tell),
     moment_block: describeHerMoment(character),
+    continuity_block: continuityBlock(relationship.mood),
     turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),
     max_messages: settings.chat.max_messages_per_turn,
