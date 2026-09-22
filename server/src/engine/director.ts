@@ -139,6 +139,7 @@ export async function runDirector(
       label: `direction:${character.username}:${opts.reason}`,
       config: settings.models.director,
       messages: [{ role: 'user', content: prompt }],
+      require: ['direction', 'update'],
     });
   } catch (err) {
     // Keep playing with the last valid direction rather than stalling the chat.
@@ -152,6 +153,44 @@ export async function runDirector(
   }
 
   const result = applyUpdate(character, rel, parsed.update ?? {});
+
+  /**
+   * "direction" being present is not the same as it being usable. `require` above catches
+   * the key missing outright and earns a corrective retry; it does not catch `direction: {}`,
+   * which parses as present and passes that check anyway. A well-formed direction always has
+   * a "goal" - every unlock, forbidden line and mood description in this file is written
+   * around it - so its absence here means the call technically succeeded but handed back
+   * nothing to actually act on. sanitizeDirection() would silently fill every field with its
+   * own bland, new-match defaults ("find out whether he is interesting", forbidden "go
+   * anywhere sexual") and that would become her real direction with no error anywhere - which
+   * is exactly what happened to a character mid-sexting, for an entire stretch of turns, with
+   * nothing in the logs to flag it. Falling back to the previous direction, same as a hard
+   * exception above, keeps her in character instead of quietly resetting her.
+   */
+  if (!parsed.direction?.goal) {
+    logger.error('director', `direction came back empty for ${character.username}`, {
+      reason: opts.reason,
+      raw: JSON.stringify(parsed.direction ?? null).slice(0, 300),
+    });
+    // Unlike the exception path above, the call itself did not fail - nothing here suggests
+    // the provider is struggling, so there is no reason to back off. Force a retry on the
+    // very next turn instead of extending valid_for: a repeat of this exact failure is one
+    // bad turn, but stretching a stale direction out for several more (what actually
+    // happened in the log this was found from) is the visible symptom that gets reported
+    // as "worse than before".
+    const fallback = rel.active_direction ?? DEFAULT_DIRECTION;
+    fallback.valid_for = Math.min(fallback.valid_for, 1);
+    rel.active_direction = fallback;
+    rel.direction_set_at = nowIso();
+    saveRelationship(rel);
+    if (result.escalation === 'block' || result.escalation === 'ghost') {
+      clearWakeup(character.id);
+    } else {
+      scheduleWakeup(character, rel, parsed.wakeup);
+    }
+    return { direction: fallback, escalation: result.escalation };
+  }
+
   const direction = sanitizeDirection(parsed.direction);
 
   rel.active_direction = direction;

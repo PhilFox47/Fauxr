@@ -3957,3 +3957,58 @@ Verified: the rendered template contains both additions at the right locations; 
 directly against representative template variables to confirm it still renders without
 error - a `{{ }}`-syntax mistake in a prose edit like this would otherwise only surface at
 the next live Director call.
+
+### The previous fix wasn't enough, because it wasn't the only bug
+
+A follow-up log from the same session, same character, showed the tameness getting worse,
+not better, and holding even against a direct challenge. That ruled out the goal-specificity
+fix above as the whole story, so the right move was to go back to the new log rather than
+assume the diagnosis still held.
+
+**The direction actually in effect for the player's entire final stretch of messages was
+the app's own hardcoded new-match default** - not anything the Director wrote for this
+conversation. `directionBlock()` in `blocks.ts` renders whatever `Direction` object it is
+handed; fed the rich, specific direction the Director had genuinely produced a few calls
+earlier ("Take the lead he just handed her..."), it renders that correctly - confirmed by
+calling the real function directly with that exact object. But every actor call in the
+log's final stretch instead rendered `mood: "neutral, a bit distracted"`, `goal: "find out
+whether he is interesting"`, `stance: "polite but not warm yet"` - word for word
+`DEFAULT_DIRECTION` in `director.ts`, the object this app falls back to when a Director call
+cannot be trusted. No exception was logged anywhere in the export.
+
+The mechanism: `sanitizeDirection(parsed.direction)` in `director.ts` ran unconditionally on
+every successful call, and it fills each field independently - `raw?.goal ?? DEFAULT_DIRECTION.goal`
+and so on. If `parsed.direction` comes back missing or empty (the call parsed as valid JSON,
+so nothing threw), every field silently resolves to its bland default at once, with nothing
+distinguishing that result from a real one. This is the same class of failure the codebase
+already has a named fix for - `completeJson()`'s `require` option exists precisely because
+"`{}` parses perfectly well and is a useless answer" - but the Director's own call, arguably
+the single most consequential one in the app, was the one place that never passed it.
+
+Two changes to `runDirector()` in `director.ts`:
+1. `require: ['direction', 'update']` added to the call, so a response missing either key
+   outright earns a corrective retry instead of silently passing.
+2. A direct check afterward: a well-formed direction always has a `goal`, so
+   `!parsed.direction?.goal` catches the shape `require` cannot - a `direction: {}` that is
+   present but empty. On that shape, the call is treated the same as a hard exception:
+   keep the previous direction rather than accept `sanitizeDirection()`'s bland stand-in.
+
+One deliberate difference from the exception-path fallback it otherwise mirrors: the
+exception path extends `valid_for` (`+1`, capped at 6), reasonable when the provider itself
+is struggling and hammering it again immediately would not help. This path does not extend
+it - the call itself succeeded, so there is no reason to expect a retry to fail, and
+extending it is what turned one bad call into an entire stretch of turns stuck on the bland
+direction in the original report ("even worse now" was this compounding, not a new
+regression). It is capped down to 1 instead, forcing a fresh attempt on the very next turn.
+
+This is a genuine answer to "can prompting even fix this": no - this specific failure has
+nothing to do with what the Director was asked to write, and no amount of rewording
+`director_direction.md` would have touched it. The previous fix (folding specific content
+into `goal`) still stands and still matters for the normal case; it was just being silently
+defeated by this separate bug whenever it fired.
+
+Verified: `directionBlock()` called directly with the real captured JSON from the log
+confirms the rendering pipeline handles it correctly, isolating the bug to the gap between
+`sanitizeDirection` and validation rather than the render step; `!parsed.direction?.goal`
+checked directly against `{}`, `undefined`, `null`, `{goal: ""}` (all true) and a real
+direction object (false); `npx tsc --noEmit` and a full build both clean.
