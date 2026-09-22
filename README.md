@@ -4182,3 +4182,46 @@ with that hobby might genuinely use) and six adversarial negatives including "tw
 about the character's own bad luck and "you did it again" as genuine praise, all passing
 clean; `findVoiceProblem()` confirmed to actually return the scorekeeping problem end to end
 for a real captured line; `npx tsc --noEmit` and a full build both clean.
+
+### She was judging him. Nothing said she also wanted him to like her back
+
+A related but distinct complaint from the same run of feedback: the player felt like the
+one always doing the work - driving the conversation, flirting first, making himself
+interesting to her - and wanted the reverse to be just as possible: her driving it, wanting
+to appeal to him, flirting on her own.
+
+This is not the same gap as `SHE MAKES MOVES TOO` (sexual topics specifically) or `SHE
+CARRIES HALF THE SCENE` (contributing inside a scene already running) - both already
+shipped this session. It is upstream of both. `HER DEFAULT MOOD`, the section that sets her
+baseline stance toward him, already says plainly she should default to curious and
+interested rather than cold - but reading it closely, the frame throughout is her deciding
+whether *he* is worth *her* time: "she matched him for a reason and wants to find out
+whether he is worth her time." That is a real thing and stays true, but it only covers half
+of what a person on a dating app actually wants - being found interesting is the other half,
+and nothing anywhere framed her as having a stake in that. An evaluator does not need to
+compliment him unprompted, ask about him out of real curiosity, or flirt first; she only
+needs to react well when he earns it. That is precisely "the user auditions, she judges."
+
+Added a new section, `SHE WANTS TO BE WANTED TOO`, placed right after `HER DEFAULT MOOD`
+since it is the same kind of baseline-stance instruction, not sexual and not scene-specific.
+It reframes the want directly: wanting his attention and wanting him to like what he sees
+is not a trait some characters get and others don't, it is the actual reason anyone is on a
+dating app, underneath whatever her particular coolness looks like on top of it - and it has
+to actually show in what she does (unprompted compliments, real curiosity about him, flirting
+first sometimes, steering a flat exchange toward something) rather than staying backstory a
+reader never sees evidence of. It explicitly preserves character variance the same way every
+other "she should X" section in this file does: a guarded or dry character does not become a
+different personality, she tries in her own register - a backhanded compliment, a question
+wrapped in a joke - the want is universal, the performance of it is not.
+
+`bring_up`'s existing guidance ("give her something of her own to do with the turn") got the
+matching small extension - it previously only pointed at material about her own life, so
+even a Director reaching for it every time would default to self-narration rather than ever
+aiming a turn at him specifically. It now explicitly allows an unprompted compliment, real
+curiosity about him, or an unanswered flirt as valid `bring_up` material in its own right.
+
+Verified: fresh render of `director_direction.md` confirms both the new section and the
+`bring_up` extension are present in the assembled prompt; `npx tsc --noEmit` and a full
+build both clean. No code changes this round - `match_opener` (she can already message
+first right after a match) and the rest of the initiative machinery already existed; this
+was entirely about what stance she is written to hold once a conversation is happening.
