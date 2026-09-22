@@ -21,14 +21,24 @@ export interface DirectorResult {
   escalation: string;
 }
 
+/**
+ * Used when a real Director call fails or comes back hollow (see the two fallbacks below),
+ * and per-field whenever a call succeeds but forgets one specific field. Deliberately
+ * un-opinionated rather than cautious: this app has no hidden thresholds or "not yet" gates
+ * on anything, including sexual content, and a fallback that quietly imposes one - the
+ * previous version banned "go anywhere sexual" and "give out your real name" outright, both
+ * directly contradicting how this app is designed everywhere else - is itself the bug, not
+ * a safe default. She still has her own seed, her own arousal, her own limits; this just
+ * declines to override them with anything extra.
+ */
 const DEFAULT_DIRECTION: Direction = {
   valid_for: 2,
   expires_on: [],
-  mood: 'neutral, a bit distracted',
+  mood: 'curious, giving him a fair shot',
   energy: 'normal',
   goal: 'find out whether he is interesting',
-  stance: 'polite but not warm yet',
-  forbidden: ['give out your real name', 'agree to meet', 'go anywhere sexual'],
+  stance: 'warm and curious, herself - not holding back to make him work for it',
+  forbidden: [],
   bring_up: null,
   unlock: null,
   offline_in_minutes: null,

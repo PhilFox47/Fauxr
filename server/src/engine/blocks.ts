@@ -515,11 +515,14 @@ const PHOTO_UNLOCKS = new Set(['profile_picture', 'personal_photos', 'spicy_phot
  */
 export function directionBlock(d: Direction | null, somethingLive = false, photoPending = false): string {
   if (!d) {
+    // No hidden thresholds here either, same as a real direction - her own seed and this
+    // exact conversation decide what she is open to, not a blanket ban baked into having no
+    // direction yet. If she is built forward and he opens well, that can go anywhere
+    // immediately; nothing here should be quietly stopping it.
     return [
       'Mood: good - genuinely curious about this new match, nothing has soured it.',
       'What you privately want (never say it out loud): find out if he is actually interesting.',
       'Stance: warm and curious, actively interested rather than making him prove himself first.',
-      'You will NOT: give out your real name, agree to meet up yet.',
       'Length: short.',
     ].join('\n');
   }

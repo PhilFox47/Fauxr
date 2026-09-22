@@ -4012,3 +4012,31 @@ confirms the rendering pipeline handles it correctly, isolating the bug to the g
 `sanitizeDirection` and validation rather than the render step; `!parsed.direction?.goal`
 checked directly against `{}`, `undefined`, `null`, `{goal: ""}` (all true) and a real
 direction object (false); `npx tsc --noEmit` and a full build both clean.
+
+### The fallback itself was one of the artificial barriers this app is built to not have
+
+Fixing the hollow-response bug above made `DEFAULT_DIRECTION` in `director.ts` a rare
+recovery path instead of an entire stretch of a real conversation - but its actual content
+was still wrong, on inspection. It read `stance: "polite but not warm yet"` and
+`forbidden: ["give out your real name", "agree to meet", "go anywhere sexual"]`. Both of
+those directly contradict how this app is designed to work everywhere else:
+`director_direction.md` is explicit that her real name "is NOT on this list and never needs
+unlocking," and that sexual topics have "no hidden thresholds... no schedule" - a forward
+character can take things there in the first message if that is genuinely who she is. The
+fallback was quietly overriding both with a blanket "not yet," and because `sanitizeDirection()`
+pulls each field from `DEFAULT_DIRECTION` independently whenever the Director's own response
+is missing just that one field, this was not purely a rare-failure path - a single omitted
+`stance` or `forbidden` on an otherwise-normal call would have injected the same artificial
+caution into a conversation that had earned none of it.
+
+`DEFAULT_DIRECTION` now reads `stance: "warm and curious, herself - not holding back to make
+him work for it"` and `forbidden: []`. It does not force anything sexual either - that would
+be its own kind of artificial override, just pointed the other way - it simply stops
+overriding her own seed, arousal and the conversation itself with a restriction nobody
+actually decided. `directionBlock()`'s own separate fallback in `blocks.ts` - the text used
+before any Director call has ever run for a brand-new match - had the identical problem
+("You will NOT: give out your real name, agree to meet up yet.") and got the same fix.
+
+Verified: `directionBlock()` called directly with both fallback shapes (no direction at all,
+and the new `DEFAULT_DIRECTION`) confirms neither renders a "You will NOT" section at all
+now, since `forbidden` is empty in both; `npx tsc --noEmit` and a full build both clean.
