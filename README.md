@@ -4040,3 +4040,48 @@ before any Director call has ever run for a brand-new match - had the identical 
 Verified: `directionBlock()` called directly with both fallback shapes (no direction at all,
 and the new `DEFAULT_DIRECTION`) confirms neither renders a "You will NOT" section at all
 now, since `forbidden` is empty in both; `npx tsc --noEmit` and a full build both clean.
+
+### She was still only ever reacting, not making anything happen herself
+
+With the artificial barriers gone, the next complaint was sharper: even in an explicit,
+already-running scene, she was narrating reactions to what he did rather than contributing
+anything of her own - "the user trying to get the girls horny" instead of the other way
+round. A real log showed it plainly: the player wrote an entire schoolgirl-tutor scene move
+by physical move (hand under the skirt, further, fingering her), and her replies the whole
+way through were confirmations and one-line encouragements ("oh. ok. thats... yeah. right
+there", "keep going tho, dont ask, just keep going") - never a beat she introduced herself.
+
+Two places encode how she writes sexual content, and neither asked her to contribute:
+
+**`spiceBlock()` in `blocks.ts`**, the Actor-facing block that governs sexting register
+directly, had one relevant line and it was arousal-gated: `if (arousal >= 60) "You are the
+one pushing this right now, not him."` - absent below that threshold, and even above it,
+one generic line saying she is "pushing this" doesn't say how: it never asked her to add a
+new action, a demand, a detail he did not say, or one of her own fetishes worked in, and it
+said nothing about matching how explicit he was being rather than consistently landing a
+notch softer. A new unconditional paragraph (not gated on arousal, since the floor above it
+already handles "is this the moment for sexual content at all") now says exactly that:
+confirming his move landed is half the job, adding the next beat herself is the other half,
+and her hard limits - not shyness, not her usual register, not waiting to be asked - are the
+only real ceiling. `spiceBlock()` is shared between text and in-person dates via its
+`medium` parameter, so this reaches both pipelines from one change.
+
+**`director_direction.md`** got the matching root-cause fix: a new `SHE CARRIES HALF THE
+SCENE` section, placed right after the existing pacing guidance ("WHEN IT ACTUALLY GOES
+THERE"), naming the mechanism directly - a `goal` that only ever points at his last message
+trains exactly the reactive pattern in, because the Actor follows `goal` closely turn after
+turn. It tells the Director to write goals where she brings something of her own to the
+turn - pulling from "WHAT SHE IS INTO" above it in the same file - and to have her at least
+match what he has been explicit about rather than softening it, going further when it is
+genuinely hers to.
+
+Deliberately left alone: the existing `forward`/non-forward split in `spiceBlock()`, which
+governs how she voices wanting something (plainly, versus sideways and downplayed) - that is
+real character texture, not the bug. The fix is additive precisely because the problem was
+never her voice, it was that nothing asked her to bring content of her own regardless of it.
+
+Verified: `spiceBlock()` called directly for a non-forward character (matching the log's
+sexual_confidence 3/5) at arousal 50 confirms the new paragraph renders unconditionally,
+underneath the existing register split, with the existing high-arousal line layering on top
+of it at 70 rather than replacing it; `render('director_direction', ...)` confirms the new
+section renders; `npx tsc --noEmit` and a full build both clean.
