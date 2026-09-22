@@ -4085,3 +4085,50 @@ sexual_confidence 3/5) at arousal 50 confirms the new paragraph renders uncondit
 underneath the existing register split, with the existing high-arousal line layering on top
 of it at 70 rather than replacing it; `render('director_direction', ...)` confirms the new
 section renders; `npx tsc --noEmit` and a full build both clean.
+
+### The Spice dial topped out well below where the player was already turning it
+
+A follow-up ask this time wasn't about one bug: the player wants the whole app leaned
+harder toward sex, sexting and fetish exploration as the normal mode, not an occasional
+peak - more unprompted horniness, more of the cast making the first move, faster escalation
+when it fits - and said plainly not to hold any of that back out of caution, since this is a
+single-user, self-hosted instance with no one else to protect from it.
+
+The house-wide lever for exactly this already exists - `spiceDirective()` in `blocks.ts`,
+driven by the Spice slider in Settings - but checking it against the player's own settings
+(visible in the log header, `spice 1.25`) turned up two real gaps rather than one prompt
+tweak to make:
+
+1. **The dial had a hard ceiling nothing above it could see.** `spiceDirective()` was three
+   buckets: cooler at ≤0.75, hotter at ≥1.4, default in between. `1.4` and `10.0` rendered
+   the *identical* "hot" text - so someone who wanted more than "hot" had a slider that kept
+   moving but stopped doing anything past 1.4, with nothing telling them so.
+2. **1.25 - what the player already had it set to - sits in the "default, no lean" middle
+   bucket**, not even in the old "hot" tier. The house pacing they were actually getting was
+   explicitly "no particular lean in either direction," the opposite of what the rest of
+   their settings and their message both wanted.
+
+Added a fourth tier at `spice >= 1.8` (the slider's own range in `Settings.tsx` already
+runs to 2.0, so this is real, reachable headroom, not a dead zone past the control's own
+max). Its text is a direct translation of the ask: this app is built around sex, sexting and
+exploring what turns people on, running through the whole conversation rather than confined
+to the parts after an unlock; characters come onto him unprompted, and that now explicitly
+includes characters who are not the most forward on paper - extending the existing "SHE
+MAKES MOVES TOO" initiation guidance in `director_direction.md` past just the already-
+confident cast at this pacing specifically; and once something is actually happening, fast
+escalation is the default rather than a slow burn nobody chose. It keeps the one guardrail
+the existing tiers already had and the player's own message asked to keep: this leans
+judgment, not a script, and never overrides an actual hard limit or a trait a character's
+seed genuinely calls for - a shy or guarded character is still shy or guarded, just living
+in a much hornier house pacing than before.
+
+**Action needed on the player's side, not just this fix**: their Spice setting needs to
+actually move past 1.8 to reach the new tier - 1.25 was already short of the old ceiling, so
+raising it is the other half of this, not optional. Worth knowing separately: `activity`
+(currently a global chattiness setting, unrelated to sexual content specifically) governs
+how often a character reaches out unprompted at all, for anyone who also wants that up.
+
+Verified: `spiceDirective()` called directly across the full range (0.3 through 2.0) confirms
+each boundary lands in the correct tier, including that 1.25 genuinely produces the
+"default" text today and 1.8 is exactly where "maximum" begins; `npx tsc --noEmit` and a full
+build both clean.

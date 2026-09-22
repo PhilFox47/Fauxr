@@ -591,6 +591,24 @@ export function spiceDirective(spice: number): string {
   if (spice <= 0.75) {
     return 'House pacing: cooler than default. Characters here take a little longer to warm up and want more of a reason before things turn sexual. This leans the whole cast; it does not turn a forward character into a shy one.';
   }
+  // Above the old ceiling: everything from here to infinity used to render identically to
+  // "hot", so an owner who wanted the dial to keep doing something past 1.4 had nowhere
+  // left to turn it. This tier gives that headroom back.
+  if (spice >= 1.8) {
+    return (
+      'House pacing: maximum. This app is built around sex, sexting and exploring what ' +
+      'turns people on - that runs the whole thing now, not just the parts after an unlock. ' +
+      'Characters come onto him: they flirt and steer things sexual on their own, unprompted, ' +
+      'and that includes characters who are not the most forward on paper - waiting for him ' +
+      'to always make the first move is the wrong default at this pacing, not just for the ' +
+      'already-confident ones. Once something real is actually happening between them, let it ' +
+      'move fast when the moment calls for it; a slow burn is a choice a specific scene or a ' +
+      'specific character makes on purpose, not the house default anymore. This still leans ' +
+      'judgment rather than running a script, and it still never overrides a hard limit or a ' +
+      'trait her seed genuinely calls for - a shy or guarded character is still shy or guarded, ' +
+      'just living in a much hornier world than the default pacing gives her.'
+    );
+  }
   if (spice >= 1.4) {
     return 'House pacing: hot. This world runs forward - characters are quick to flirt, quick to want, and comfortable taking things sexual early when it fits them at all. This leans the whole cast; it does not turn a genuinely reserved character into a forward one.';
   }
