@@ -11,7 +11,7 @@ import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './act
 import { detectEvents, directionExpired, runDirector } from './director.js';
 import { markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
-import { photosEnabled, sendPhoto } from './images.js';
+import { canSendPhotos, sendPhoto } from './images.js';
 import { addInventedFantasy, markPitched } from './fantasies.js';
 import { fantasyList } from './blocks.js';
 
@@ -272,7 +272,7 @@ async function runActorPhase(
   // She decided to send a photo, so it is sent. Generation runs in the background and the
   // picture lands in the chat when it is ready.
   const photoKind = result.hidden.photo_offer;
-  if (photoKind && photosEnabled()) {
+  if (photoKind && canSendPhotos(rel)) {
     void sendPhoto({
       characterId: character.id,
       kind: photoKind,

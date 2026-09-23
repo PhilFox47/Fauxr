@@ -8,7 +8,6 @@ import {
 import type { Character } from '../types.js';
 import { generateCharacter } from './generator.js';
 import { randInt } from './dice.js';
-import { ensureProfilePicture } from './images.js';
 
 export const STACK_SIZE = 10;
 
@@ -100,12 +99,6 @@ export function swipeRight(characterId: string): MatchResult {
     rel.last_decay_at = nowIso();
     saveRelationship(rel);
   }
-
-  // Her profile picture is made as soon as she is matched, so it is there on her profile and
-  // ready to be the reference for anything she sends later.
-  void ensureProfilePicture(characterId).catch((err) =>
-    logger.error('image', 'profile picture failed', { error: String(err) }),
-  );
 
   logger.info('app', `matched ${character.username} (${instant ? 'instant' : `delayed ${delayMinutes}min`})`);
   if (instant) bus.emitEvent({ type: 'match', character_id: characterId });

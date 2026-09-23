@@ -430,7 +430,14 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
             />
             <span className="track" />
           </span>
-          <span className="small">Image generation</span>
+          <span className="small">
+            Image generation
+            <br />
+            <span className="tiny muted">
+              Nothing is generated for a character until you swap profile pictures with her
+              (the camera button in her chat). Her photos, and her profile picture, start then.
+            </span>
+          </span>
         </label>
       </div>
 
@@ -632,8 +639,8 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
           onChange={(e) => setForm({ ...form, avatar_emoji: e.target.value })}
         />
         <span className="tiny muted">
-          Shown instead of your photo when you have not uploaded one. Characters see your real
-          photo if you have one.
+          What characters see of you until you swap profile pictures with them (the camera
+          button in a chat). After the swap they see your real photo, if you have one.
         </span>
       </label>
       <label className="field">

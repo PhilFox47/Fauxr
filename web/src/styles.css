@@ -1481,6 +1481,9 @@ input[type='range'] {
 }
 .date-marker-body { font-size: 13.5px; line-height: 1.55; color: var(--text-dim); }
 
+/* The armed state of the swap button: one word, so the topbar does not reflow much. */
+.topbar .swap-confirm { white-space: nowrap; padding: 7px 12px; font-size: 12.5px; box-shadow: none; }
+
 /* One of her fantasies on the profile sheet. */
 .fantasy-row {
   display: flex;

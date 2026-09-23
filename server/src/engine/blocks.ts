@@ -7,11 +7,13 @@ import { freshThreads, pruneThreads } from './state.js';
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
 
-export function userBlock(user: UserProfile | null): string {
+export function userBlock(user: UserProfile | null, swapped = true): string {
   if (!user) return 'Unknown - he has not filled in his profile.';
-  const pictureLine = user.photos.length
-    ? 'You have seen his profile picture. You can refer to it.'
-    : `He has no real photo up, just an emoji: ${user.avatar_emoji || '(none set)'}.`;
+  const pictureLine = !swapped
+    ? `You have not seen a picture of him yet - you have not swapped. All you have is his emoji: ${user.avatar_emoji || '(none set)'}.`
+    : user.photos.length
+      ? 'You have seen his profile picture - you swapped. You can refer to it.'
+      : `You swapped pictures, but he has no real photo up, just an emoji: ${user.avatar_emoji || '(none set)'}.`;
   return [
     `Name: ${user.display_name}`,
     `Age: ${user.age}`,

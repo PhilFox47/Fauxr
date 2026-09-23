@@ -84,8 +84,8 @@ function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
 }
 
 /**
- * A card left in older chats from when photos needed his consent and profile pictures were a
- * swap. Both are gone; the cards stay readable as history, with nothing left to press.
+ * A system line with a camera on it: "you swapped profile pictures", and the photo-offer and
+ * swap-request cards left in older chats, which have nothing left to press.
  */
 function LegacyCard({ text }: { text: string }) {
   return (
@@ -130,6 +130,9 @@ export default function Chat({
    * into the text chat without ending anything, and also used to re-read a finished one.
    */
   const [openDateId, setOpenDateId] = useState<string | null>(null);
+  /** First tap arms the swap, second tap does it - it starts a paid image generation. */
+  const [confirmSwap, setConfirmSwap] = useState(false);
+  const [swapping, setSwapping] = useState(false);
   // One deduped set that both surfaces index into. A photo she sent in the chat is also in
   // her gallery, so concatenating the two blind would show it twice while paging.
   const allImages = [
@@ -337,6 +340,26 @@ export default function Chat({
     }, 2500);
   };
 
+  const swapPhotos = async () => {
+    if (swapping) return;
+    if (!confirmSwap) {
+      setConfirmSwap(true);
+      window.setTimeout(() => setConfirmSwap(false), 4000);
+      return;
+    }
+    setSwapping(true);
+    try {
+      const res = await api.swapPhotos(characterId);
+      if (!res.images_enabled) flashToast('Swapped. Image generation is off, so she keeps her emoji for now.');
+      await load();
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+    } finally {
+      setSwapping(false);
+      setConfirmSwap(false);
+    }
+  };
+
   const attach = async (file: File | undefined) => {
     if (!file) return;
     try {
@@ -380,6 +403,17 @@ export default function Chat({
           </span>
         </div>
         <div className="spacer" />
+        {character && !character.photos_exchanged && !blocked && (
+          <button
+            className={confirmSwap ? 'btn swap-confirm' : 'iconbtn'}
+            onClick={() => void swapPhotos()}
+            disabled={swapping}
+            aria-label="Swap profile pictures"
+            title="Swap profile pictures - generates hers, and she gets to see yours"
+          >
+            {confirmSwap ? (swapping ? 'Swapping…' : 'Swap pics?') : <Icon name="camera" size={20} />}
+          </button>
+        )}
         {profile && (
           <button
             className="iconbtn known-count"
@@ -503,6 +537,15 @@ export default function Chat({
 
           // Cards from a short-lived "Play it out" button. Nothing to press any more.
           if (m.sender === 'system' && m.meta?.type === 'fantasy_pitch') return null;
+
+          if (m.sender === 'system' && m.meta?.type === 'photos_swapped') {
+            return (
+              <div key={m.id} style={{ display: 'contents' }}>
+                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                <LegacyCard text={m.text} />
+              </div>
+            );
+          }
 
           if (m.sender === 'system' && (m.meta?.type === 'date_started' || m.meta?.type === 'date_ended')) {
             return (

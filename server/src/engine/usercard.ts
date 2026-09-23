@@ -34,7 +34,7 @@ export const CARD_SECTIONS: CardSection[] = [
   {
     id: 'looks',
     label: 'What you look like',
-    note: 'On your profile, alongside your photo.',
+    note: 'Seen by a character once the two of you have swapped profile pictures.',
     fields: [
       { key: 'ethnicity', category: 'ethnicity', label: 'Background' },
       { key: 'skin_tone', category: 'skin_tone', label: 'Skin tone' },
@@ -179,7 +179,7 @@ function section(id: CardSection['id']): CardField[] {
  * His profile and looks are readable, the same as anyone's before swiping; the intimate half
  * is discovered in conversation.
  */
-export function userCardBlock(user: UserProfile): string {
+export function userCardBlock(user: UserProfile, swapped = true): string {
   const card = user.card ?? {};
   const out: string[] = [];
 
@@ -198,9 +198,10 @@ export function userCardBlock(user: UserProfile): string {
     );
   }
 
-  const looks = lines(card, section('looks'), g);
+  // What he looks like comes with his picture, so only after the swap.
+  const looks = swapped ? lines(card, section('looks'), g) : [];
   if (looks.length) {
-    out.push('WHAT HE LOOKS LIKE:\n' + looks.map((l) => `- ${l}`).join('\n'));
+    out.push('WHAT HE LOOKS LIKE (you have seen his picture):\n' + looks.map((l) => `- ${l}`).join('\n'));
   }
 
   // His limits are never a discovery. Finding one by crossing it is not a game.

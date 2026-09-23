@@ -144,6 +144,12 @@ export interface CharacterSeed {
 export interface StateFlags {
   /** Her profile picture has finished generating. It is used as the reference for later photos. */
   profile_picture_sent?: boolean;
+  /**
+   * He pressed "swap profile pictures". Nothing about her is generated before this - image
+   * generation is expensive, so her profile picture (and any photo she sends) waits until he
+   * has chatted with her and decided he wants to see her. It also lets her see his picture.
+   */
+  photos_exchanged?: boolean;
   has_had_first_date?: boolean;
   /**
    * Whether her big_secret (if she has one) has actually come out. Set only by the Director,

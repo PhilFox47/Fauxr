@@ -16,6 +16,7 @@ import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
 import { ensureFantasies } from './generator.js';
 import { fantasyLog } from './fantasies.js';
+import { hasSwapped } from './images.js';
 
 export interface DirectorResult {
   direction: Direction;
@@ -96,7 +97,11 @@ export async function runDirector(
       : '(he knows everything intimate there is to know)',
     char_real_name: character.real_name,
     char_username: character.username,
-    user_block: [userBlock(user), user ? userCardFullBlock(user) : '']
+    user_block: [
+      userBlock(user, hasSwapped(rel)),
+      hasSwapped(rel) ? '' : 'They have not swapped profile pictures yet, so she cannot send photos until he does. Do not plan photos; teasing about the swap is fine.',
+      user ? userCardFullBlock(user) : '',
+    ]
       .filter(Boolean)
       .join('\n\n'),
     seed_block: seedBlock(character),

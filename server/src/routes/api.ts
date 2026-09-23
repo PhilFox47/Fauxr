@@ -19,7 +19,7 @@ import { bus } from '../events.js';
 import { blockCharacterByUser, deleteMessage, handleUserMessage, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import {
-  characterGallery, ensureProfilePicture, evaluateUserImage, listImageJobs, regenerateImage, retryImageJob,
+  characterGallery, ensureProfilePicture, evaluateUserImage, hasSwapped, listImageJobs, regenerateImage, retryImageJob,
 } from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji, rarityTier } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
@@ -46,6 +46,7 @@ function publicLocation(l: Location) {
 }
 
 function publicCharacter(c: Character) {
+  const rel = getRelationship(c.id);
   const picture = db
     .prepare("SELECT path FROM images WHERE character_id = ? AND kind = 'profile' AND status = 'done' ORDER BY rowid ASC LIMIT 1")
     .get(c.id) as { path: string } | undefined;
@@ -59,6 +60,7 @@ function publicCharacter(c: Character) {
     // Stands in for her photo until it has been generated.
     avatar_emoji: avatarEmojiFor(c),
     profile_picture: picture ? `/media/${picture.path}` : null,
+    photos_exchanged: hasSwapped(rel),
   };
 }
 
@@ -227,19 +229,45 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     const character = getCharacter(req.params.id);
     const rel = getRelationship(req.params.id);
     if (!character || !rel) return reply.code(404).send({ error: 'not found' });
-    // Characters matched before profile pictures were made on match get theirs the first
-    // time he opens her profile.
-    if (character.state === 'matched') {
-      void ensureProfilePicture(character.id).catch((err) =>
-        logger.error('image', 'profile picture failed', { error: String(err) }),
-      );
-    }
     return {
       username: character.username,
       display_name: character.real_name,
       bio: character.bio,
       ...profileView(character, rel),
     };
+  });
+
+  /**
+   * He swaps profile pictures with her. This is the one thing that starts image generation for
+   * a character: her profile picture is made now (in the background) and she gets to see his.
+   * Nothing is generated before it, so he can chat first and decide she is worth the cost.
+   */
+  app.post<{ Params: { id: string } }>('/api/chats/:id/swap-photos', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    const rel = getRelationship(req.params.id);
+    if (!character || !rel) return reply.code(404).send({ error: 'not found' });
+    if (character.state !== 'matched') return reply.code(400).send({ error: 'you are not matched with her' });
+    if (hasSwapped(rel)) return reply.code(400).send({ error: 'you have already swapped pictures' });
+
+    rel.flags.state.photos_exchanged = true;
+    saveRelationship(rel);
+    const msg = addMessage({
+      character_id: character.id,
+      sender: 'system',
+      text: `You swapped profile pictures with ${character.real_name}.`,
+      meta: { type: 'photos_swapped' },
+    });
+    bus.emitEvent({ type: 'message', character_id: character.id, message: msg });
+    void ensureProfilePicture(character.id).catch((err) =>
+      logger.error('image', 'profile picture failed', { error: String(err) }),
+    );
+    // She has just seen his picture; let her react, unless she is out with him right now.
+    if (!activeDate(character.id)) {
+      void takeTurn(character.id, { trigger: 'user_message' }).catch((err) =>
+        logger.error('actor', 'turn failed', { error: String(err) }),
+      );
+    }
+    return { ok: true, images_enabled: getSettings().images_enabled };
   });
 
   app.post<{ Params: { id: string } }>('/api/chats/:id/read', async (req) => {

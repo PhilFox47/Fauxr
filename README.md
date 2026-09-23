@@ -234,7 +234,7 @@ The rebuild keeps the parts that made characters feel like people and removes th
 | Her memory of you: the ledger, what landed, open threads | Touchstone judging and dealbreakers |
 | Kink discovery, both ways | Cooling off, ghosting, and her blocking you |
 | Her hard limits | Online windows, absences, the uptime window |
-| Dates | The photo consent card and the profile-picture swap |
+| Dates | The photo consent card (the profile-picture swap is back, as a plain button) |
 | | Trait credits and "uncover a trait" |
 
 What was added:
@@ -247,10 +247,13 @@ What was added:
   this get theirs written lazily, the first time the Director runs for them
   (`ensureFantasies()`). The Director, the Actor and dates all see them, and a
   `pitch_fantasy` nudge has her pitch one - set the scene, say what she wants, ask if he is in.
-- **Photos just get sent.** When she decides to send a photo it is generated straight away
-  and lands in the chat. Her profile picture is generated when you match (or the first time
-  you open her profile, for older matches) and is always visible; if she sends a photo before
-  it exists, it is generated first so later photos can match her face.
+- **Photos start with a swap.** Image generation is expensive, so nothing is generated for a
+  character until you press the camera button in her chat to swap profile pictures. Until then
+  she is an emoji to you and you are one to her, and she cannot send photos (she can tease you
+  about it). The swap generates her profile picture and lets her see yours, and she reacts to
+  it. From then on, when she decides to send a photo it is generated straight away with no
+  consent card, using her profile picture as the reference for her face. Characters whose
+  picture was already generated count as swapped.
 - **She sees what you send.** A photo you upload is described by the vision model before she
   replies, and the description goes into the conversation history, so her answer is about
   what is actually in it.

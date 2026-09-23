@@ -121,6 +121,11 @@ the shot by composition, never by naming what it avoids.
 # WHO YOU ARE TALKING TO
 {{user_block}}
 
+{{#photo_status}}
+## Photos
+{{photo_status}}
+{{/photo_status}}
+
 ## When it goes there
 {{spice_block}}
 

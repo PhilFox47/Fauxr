@@ -84,6 +84,8 @@ export interface MatchSummary {
   /** Her stand-in avatar until her profile picture has been generated. */
   avatar_emoji: string;
   profile_picture: string | null;
+  /** You have swapped profile pictures - the only thing that starts image generation for her. */
+  photos_exchanged: boolean;
   unread: number;
   last_message: { text: string; sender: string; sent_at: string } | null;
   last_activity: string | null;
@@ -244,6 +246,8 @@ export const api = {
   send: (id: string, text: string) =>
     request<Message>(`/api/chats/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   profile: (id: string) => request<CharacterProfile>(`/api/chats/${id}/profile`),
+  swapPhotos: (id: string) =>
+    request<{ ok: true; images_enabled: boolean }>(`/api/chats/${id}/swap-photos`, { method: 'POST' }),
   gallery: (id: string) => request<GalleryImage[]>(`/api/chats/${id}/gallery`),
   markRead: (id: string) => request<any>(`/api/chats/${id}/read`, { method: 'POST' }),
   regenerate: (id: string, messageId: number) =>

@@ -18,11 +18,27 @@ import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
 import { pickOne, randInt } from './dice.js';
 import { describeSeed } from './generator.js';
-import type { Character, CharacterSeed } from '../types.js';
+import type { Character, CharacterSeed, Relationship } from '../types.js';
 
-/** Whether she can send photos at all. Which photo, and when, is entirely her call. */
+/** Whether image generation is switched on at all. */
 export function photosEnabled(): boolean {
   return getSettings().images_enabled;
+}
+
+/**
+ * Whether the two of them have swapped profile pictures. A character whose picture already
+ * exists (generated before the swap existed) counts as swapped - the cost is already paid.
+ */
+export function hasSwapped(rel: Relationship | null | undefined): boolean {
+  return !!rel?.flags.state.photos_exchanged || !!rel?.flags.state.profile_picture_sent;
+}
+
+/**
+ * Whether she can send him a photo right now: images on, and the pictures swapped. Before the
+ * swap nothing about her is generated - that is his call, made with the swap button.
+ */
+export function canSendPhotos(rel: Relationship | null | undefined): boolean {
+  return photosEnabled() && hasSwapped(rel);
 }
 
 /**

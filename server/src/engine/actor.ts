@@ -16,7 +16,7 @@ import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { pickNudge } from './nudge.js';
 import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty } from './voice.js';
-import { photosEnabled } from './images.js';
+import { canSendPhotos, hasSwapped } from './images.js';
 import { fantasyLog } from './fantasies.js';
 
 export { detectRoleplay };
@@ -165,10 +165,15 @@ function buildPrompt(
     char_display_name: character.real_name,
     user_name: user?.display_name ?? 'him',
     user_block: [
-      userBlock(user),
-      user ? userCardBlock(user) : '',
+      userBlock(user, hasSwapped(relationship)),
+      user ? userCardBlock(user, hasSwapped(relationship)) : '',
       describeHim(relationship),
     ].filter(Boolean).join('\n\n'),
+    photo_status: hasSwapped(relationship)
+      ? ''
+      : 'You two have not swapped profile pictures yet - he only sees your emoji, and you only ' +
+        'see his. Until he swaps, you cannot send photos: leave "photo_offer" null. You can tease ' +
+        'him about what he is missing, describe it instead, or nudge him to swap.',
     identity_block: identityBlock(character, flags),
     communication_block: communicationBlock(seed),
     quirks_block: quirksBlock(seed),
@@ -331,10 +336,10 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       continue;
     }
 
-    // Sending IS the move - her messages this turn already say a photo is coming. With images
-    // turned off it would silently never arrive, so that becomes a normal rewrite instead of a
-    // broken promise the player actually sees.
-    if (out.hidden.photo_offer && !photosEnabled()) {
+    // Sending IS the move - her messages this turn already say a photo is coming. Before the
+    // swap, or with images off, it would silently never arrive, so that becomes a normal
+    // rewrite instead of a broken promise the player actually sees.
+    if (out.hidden.photo_offer && !canSendPhotos(ctx.relationship)) {
       logger.warn('actor', 'rejected: offered a photo that cannot actually be sent right now', {
         character: ctx.character.username,
         attempt,
@@ -343,7 +348,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
         messages: out.messages.map((m) => m.text),
       });
       correction = retryHint(
-        'sending a photo while photos are turned off',
+        'sending a photo before you have swapped profile pictures (or with photos turned off)',
         'You set photo_offer, but that would silently fail to reach him right now, leaving your ' +
           'messages promising a photo that never arrives. Write this turn again without offering one.',
       );
