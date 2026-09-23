@@ -147,6 +147,11 @@ export function seedAttributes(): number {
       }
     });
     pruneRun();
+    // Whole categories that are no longer shipped at all (touchstone, dealbreaker and the rest
+    // of the old game tables) have no live ids to compare against above, so they go here.
+    removed += db
+      .prepare('DELETE FROM attribute_db WHERE category NOT IN (SELECT value FROM json_each(?))')
+      .run(JSON.stringify([...liveIdsByCategory.keys()])).changes;
     if (removed) console.log(`[db] removed ${removed} attribute row(s) no longer shipped`);
 
     db.prepare(

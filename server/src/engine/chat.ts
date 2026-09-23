@@ -12,6 +12,8 @@ import { detectEvents, directionExpired, runDirector } from './director.js';
 import { markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
 import { photosEnabled, sendPhoto } from './images.js';
+import { addInventedFantasy, markPitched } from './fantasies.js';
+import { fantasyList } from './blocks.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -258,6 +260,23 @@ async function runActorPhase(
   // A thread she was told to raise is now spent, whether or not he engaged with it.
   if (result.raisedThreadId) markThreadRaised(rel, result.raisedThreadId);
 
+  // She pitched a fantasy: log it so it shows on her profile, and put a "Play it out" card in
+  // the chat so he can go straight into it. A brand-new one she made up joins her list.
+  const pitched = pitchedFantasy(character, result);
+  if (pitched) {
+    const firstTime = markPitched(rel, pitched);
+    if (firstTime || !recentPitchCard(character.id, pitched)) {
+      const card = addMessage({
+        character_id: character.id,
+        sender: 'system',
+        text: pitched,
+        meta: { type: 'fantasy_pitch', fantasy: pitched },
+      });
+      bus.emitEvent({ type: 'message', character_id: character.id, message: card });
+    }
+    logger.debug('actor', `${character.username} pitched a fantasy`, { fantasy: pitched, firstTime });
+  }
+
   // She decided to send a photo, so it is sent. Generation runs in the background and the
   // picture lands in the chat when it is ready.
   const photoKind = result.hidden.photo_offer;
@@ -296,6 +315,29 @@ async function runActorPhase(
       actorReport: result.hidden,
     });
   }
+}
+
+/**
+ * Which fantasy, if any, she pitched this turn. Her own report wins; a brand-new one is added
+ * to her list first. The nudge that told her to pitch one is the fallback when she did not say.
+ */
+function pitchedFantasy(character: Character, result: ActorRun): string | null {
+  if (result.hidden.new_fantasy) {
+    const added = addInventedFantasy(character, result.hidden.new_fantasy);
+    if (added) return added;
+  }
+  const list = fantasyList(character.seed);
+  const n = result.hidden.fantasy_pitched;
+  if (n && list[n - 1]) return list[n - 1];
+  if (result.nudgedFantasy && list.includes(result.nudgedFantasy)) return result.nudgedFantasy;
+  return null;
+}
+
+/** Whether a Play-it-out card for this fantasy is already in the last stretch of chat. */
+function recentPitchCard(characterId: string, fantasy: string): boolean {
+  return recentMessages(characterId, 30).some(
+    (m) => m.sender === 'system' && m.meta?.type === 'fantasy_pitch' && m.meta?.fantasy === fantasy,
+  );
 }
 
 /**

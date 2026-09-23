@@ -48,6 +48,10 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   // 'date'-kind image job posts its result into.
   { table: 'dates', column: 'outfit', definition: 'TEXT' },
   { table: 'images', column: 'date_id', definition: 'TEXT' },
+  // Scenes: a date-room session that plays out a fantasy instead of a trip to a location.
+  { table: 'dates', column: 'kind', definition: "TEXT NOT NULL DEFAULT 'date'" },
+  { table: 'dates', column: 'premise', definition: 'TEXT' },
+  { table: 'dates', column: 'fantasy', definition: 'TEXT' },
 ];
 
 function addMissingColumns(): void {

@@ -144,6 +144,12 @@ export interface Location {
 export interface DateSession {
   id: string;
   character_id: string;
+  /** 'scene' plays out a fantasy instead of going somewhere. */
+  kind: 'date' | 'scene';
+  /** For a scene: what is being played out. */
+  premise: string | null;
+  /** For a scene started from one of her fantasies: that fantasy. */
+  fantasy: string | null;
   status: 'active' | 'ended';
   when_at: string;
   where_at: string;
@@ -162,6 +168,12 @@ export interface DateView {
   location: Location | null;
   typing: boolean;
   messages: Message[];
+}
+
+/** Her fantasies as he knows them: the ones she has shared, and a count of the rest. */
+export interface FantasyList {
+  known: { text: string; status: 'pitched' | 'played'; played: number }[];
+  hidden: number;
 }
 
 export interface LogEntry {
@@ -277,6 +289,10 @@ export const api = {
       body: JSON.stringify({ location_id: locationId, when }),
     }),
   date: (dateId: string) => request<DateView>(`/api/dates/${dateId}`),
+  fantasies: (characterId: string) => request<FantasyList>(`/api/chats/${characterId}/fantasies`),
+  /** Play it out: one of her fantasies (by its exact text) or a premise of his own. */
+  startScene: (characterId: string, body: { fantasy?: string; premise?: string }) =>
+    request<DateSession>(`/api/chats/${characterId}/scenes`, { method: 'POST', body: JSON.stringify(body) }),
   sendDateMessage: (dateId: string, text: string) =>
     request<Message>(`/api/dates/${dateId}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   endDate: (dateId: string) => request<DateSession>(`/api/dates/${dateId}/end`, { method: 'POST' }),

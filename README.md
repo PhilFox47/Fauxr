@@ -263,6 +263,67 @@ Much of the history below this section describes the old design - trust/spark sc
 unlocks, consent cards, the swap, ghosting, trait credits, online schedules. That code is
 gone; those sections are kept as a record of how the app got here.
 
+## Who she is in bed
+
+Characters used to vary a lot in who they were and very little in how they were sexual:
+sixty archetypes and two hundred jobs, but only four numbers (libido, confidence, dom/sub,
+sexting readiness) for the part the app is actually about. Two women with similar numbers
+flirted and sexted the same way.
+
+**Sexual personas.** Every character now rolls one of 94 named personas
+(`sexual_persona` in `sexual.json`). Together they cover the range from protocol mistress
+to obedient sub, from insatiable to rare-but-intense, from romantic to primal to deadpan, from
+eager beginner to seasoned, plus specific focuses (scenario player, exhibitionist, rope bunny,
+toy enthusiast, dirty-talk artist, smut reader, voyeur and more). Each persona:
+
+- has a prompt hint that says how she flirts, starts things, sexts and what she wants;
+- sets the ranges her sexual stats are drawn from (replacing the archetype's for those four);
+- leans her kink map (`kink_bias`), her fetishes, her dirty talk and her signature move;
+- can carry its own pace (for "all in" versus "slow burn") and initiative (how often she
+  starts things).
+
+It is leaned by her everyday archetype, through `affinities`, but not decided by it: a quiet
+archivist can still roll a commanding domme, and the dossier is told to make that contrast
+land. Across 2,000 rolls every persona appears and none takes more than about 3%.
+
+**New sexual tables, replacing the dead game ones.** The game's leftover tables are retired:
+touchstone, dealbreaker, green flags, insecurity, attachment and conflict style, openness
+curve, relationship history and dating experience. `search_motive` is rewritten as what she
+is on the app for, sexually ("exploring a kink", "bored of vanilla", "wants to let go"). Four
+tables are new:
+
+- `dirty_talk`: how she talks dirty (24 styles);
+- `sexual_experience`: from eager beginner to kink-scene regular;
+- `body_pride`: what she is proudest of and wants noticed;
+- `signature_move`: the thing she keeps coming back to.
+
+All of these appear in her sexual block, are discoverable on her profile, and feed the dossier
+and her fantasies. Existing characters get a persona on first load, picked from the personas
+that fit the dom/sub leaning and libido they already have, and the other fields are filled in
+the same way. Retired tables are deleted from existing databases on upgrade. The asset copy
+step now also clears `dist/data` first: a stale `signature.json` from an attribute removed
+long ago had been getting seeded into fresh databases.
+
+## Play it out: scenes from fantasies
+
+When she pitches one of her fantasies, the chat gets a card with the fantasy and a
+**Play it out** button. Pressing it starts a *scene*: the same in-person room as a date
+(narration, "speech", *hidden thoughts*, his (directions)), but set up from the fantasy
+rather than one of his locations. She opens it herself, straight into the premise, and leads
+it because it is hers.
+
+- The Actor reports which fantasy she pitched (`fantasy_pitched`, by number) or a brand-new
+  one she made up (`new_fantasy`). A new one joins her list for good, capped at 12, with
+  near-duplicates dropped.
+- `rel.mood.fantasy_log` records what he knows: pitched or played, and how many times.
+  Played ones are marked in her prompt so she builds on them rather than repeating them.
+- Her profile sheet has a **Her fantasies** section: the ones she has pitched, each with a
+  Play button, a count of the ones she has not told him yet, and **Play out your own idea**
+  for a premise he writes.
+- Scenes are stored as dates with `kind = 'scene'` (plus `premise` and `fantasy`). They get
+  the same summary at the end, which goes into her memory, and they appear in the past-sessions
+  list tagged "Scene". A scene does not count as a date.
+
 ## How a turn works
 
 ```

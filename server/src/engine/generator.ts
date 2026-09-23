@@ -171,13 +171,14 @@ function rollFreak(libido: number, confidence: number, sexting: number, archetyp
  * marked intense is mostly off the table for someone who is not built for it, rather than
  * being impossible for anyone.
  */
-function rollKinkMap(freak: number, domains: Attribute[]): Record<string, KinkStance> {
+function rollKinkMap(freak: number, domains: Attribute[], bias: Record<string, number> = {}): Record<string, KinkStance> {
   const map: Record<string, KinkStance> = {};
   for (const d of domains) {
     const intensity = Number(d.extra?.intensity ?? 0);
     // Roughly: freak 0 says yes to almost nothing, freak 5 says yes to most of the
-    // mainstream and a fair bit of the rest.
-    const reach = freak - intensity * 1.7;
+    // mainstream and a fair bit of the rest. Her persona leans specific domains on top -
+    // a rope bunny is far more likely to be into bondage than her freak alone would make her.
+    const reach = freak - intensity * 1.7 + Number(bias[d.id] ?? 0);
     const intoChance = Math.max(0.02, Math.min(0.6, 0.05 + reach * 0.115));
     const curiousChance = Math.max(0.05, Math.min(0.4, 0.12 + reach * 0.07));
     const r = Math.random();
@@ -240,14 +241,8 @@ export function rollSeed(): RolledSeed {
   const counts = extra.counts ?? {};
   const ranges = extra.ranges ?? {};
 
-  const attachment_style = one('attachment_style');
   const humor_type = one('humor_type');
-  const conflict_style = one('conflict_style');
-  const insecurity = one('insecurity');
   const quirks = rollMany('quirk', ctx, drawCount(counts.quirks, 2)).map((a) => a.id);
-
-  const opennessFromArchetype = (archetype.modifies as any)?.openness_curve as string | undefined;
-  const openness_curve = opennessFromArchetype ?? roll('openness_curve', ctx)!.id;
 
   // how she writes
   const typing_style = one('typing_style');
@@ -272,8 +267,6 @@ export function rollSeed(): RolledSeed {
   const occupation = one('occupation');
   const living_situation = one('living_situation');
   const relationship_status = one('relationship_status');
-  const relationship_history = one('relationship_history');
-  const dating_experience = one('dating_experience');
   const social_energy = one('social_energy');
   // Almost always 'none'. Rolled ignoreArchetype on purpose - the whole point of a big secret
   // is that it does not fit the surface she otherwise presents, so it should never be leaned
@@ -322,30 +315,35 @@ export function rollSeed(): RolledSeed {
 
   const accessories = rollMany('accessory', ctx, drawCount(counts.accessories, 1)).map((a) => a.id);
 
-  // ---- 4. what she is into, the non-sexual half. search_motive, touchstone and the
-  // turn-ons deliberately skip the archetype filter so she can still surprise.
+  // ---- 4. what she is into, the non-sexual half. The turn-ons deliberately skip the
+  // archetype filter so she can still surprise.
   const interests = rollMany('interest', ctx, drawCount(counts.interests, 3)).map((a) => a.id);
   const hobbies = rollMany('hobby', ctx, drawCount(counts.hobbies, 2)).map((a) => a.id);
-  const search_motive = roll('search_motive', ctx, { ignoreArchetype: true })!;
-  const touchstone = roll('touchstone', ctx, { ignoreArchetype: true })!;
   const turn_ons = rollMany('turn_on', ctx, randInt(2, 4), { ignoreArchetype: true }).map((a) => a.id);
   const turn_offs = rollMany('turn_off', ctx, drawCount(counts.turn_offs, 2), { ignoreArchetype: true }).map((a) => a.id);
-  const green_flags = rollMany('green_flag', ctx, drawCount(counts.green_flags, 2)).map((a) => a.id);
-  const dealbreaker = roll('dealbreaker', ctx)!;
 
-  // ---- 5. the intimate half, last, knowing everything above
-  const libido = rollRange(ranges.libido, 1, 5);
-  const sexual_confidence = rollRange(ranges.sexual_confidence, 1, 5);
-  const dom_sub_leaning = rollRange(ranges.dom_sub_leaning, -3, 3);
-  const sextingMod = Number((archetype.modifies as any)?.sexting_readiness ?? 0);
-  const sexting_readiness = Math.max(1, Math.min(5, rollRange(ranges.sexting_readiness, 1, 5) + sextingMod));
+  // ---- 5. the intimate half, last, knowing everything above.
+  // Her sexual persona comes first and leads everything sexual after it. It is leaned by her
+  // archetype (a persona lists the archetypes it tends to go with as affinities) but not
+  // decided by it, so a quiet archivist can still turn out to be a commanding domme. Its
+  // ranges replace the archetype's for the sexual stats, its kink_bias leans the kink map,
+  // and its extra.weights lean the fetishes, dirty talk and signature rolled below.
+  const persona = one('sexual_persona')!;
+  const pr = (persona.extra?.ranges ?? {}) as Record<string, number[]>;
+  const search_motive = roll('search_motive', ctx, { ignoreArchetype: true })!;
+  const libido = rollRange(pr.libido ?? ranges.libido, 1, 5);
+  const sexual_confidence = rollRange(pr.sexual_confidence ?? ranges.sexual_confidence, 1, 5);
+  const dom_sub_leaning = rollRange(pr.dom_sub_leaning ?? ranges.dom_sub_leaning, -3, 3);
+  const sextingMod = pr.sexting_readiness ? 0 : Number((archetype.modifies as any)?.sexting_readiness ?? 0);
+  const sexting_readiness = Math.max(1, Math.min(5, rollRange(pr.sexting_readiness ?? ranges.sexting_readiness, 1, 5) + sextingMod));
   const orientation = roll('orientation', ctx, {
     only: new Set(compatibleOrientations().map((o) => o.id)),
   })!;
-  const freak = rollFreak(libido, sexual_confidence, sexting_readiness, archetype.id);
+  const freakShift = Number(persona.extra?.freak_shift ?? 0);
+  const freak = Math.max(0, Math.min(5, rollFreak(libido, sexual_confidence, sexting_readiness, archetype.id) + freakShift));
   const arousal_tell = one('arousal_tell')!;
   const domains = byCategory('kink_domain');
-  const kink_map = rollKinkMap(freak, domains);
+  const kink_map = rollKinkMap(freak, domains, (persona.extra?.kink_bias ?? {}) as Record<string, number>);
 
   // Her named fetishes are drawn only from domains she is actually open to, and the
   // unmapped ones (kissing, massage, mornings - most of the table) stay available to
@@ -385,15 +383,22 @@ export function rollSeed(): RolledSeed {
   const hard_limits = rollMany('hard_limit', ctx, drawCount(counts.hard_limits, 2), { only: limitIds })
     .map((a) => a.id);
 
+  // How she talks dirty, how much she has done, what she is proudest of and her signature
+  // move. The persona's own weights (already in ctx) lean all four; her body leans the pride.
+  const dirty_talk = one('dirty_talk')!;
+  const sexual_experience = one('sexual_experience')!;
+  if (tattoos.length >= 2) ctx.weights.her_tattoos = (ctx.weights.her_tattoos ?? 1) * 3;
+  if (piercings.length >= 3) ctx.weights.her_piercings = (ctx.weights.her_piercings ?? 1) * 2;
+  if (/tall|statuesque/.test(height!.id)) ctx.weights.her_height = (ctx.weights.her_height ?? 1) * 3;
+  if (/petite|short|tiny/.test(height!.id)) ctx.weights.being_petite = (ctx.weights.being_petite ?? 1) * 3;
+  const body_pride = one('body_pride')!;
+  const signature = one('signature_move')!;
+
   const hints: Record<string, string> = {
     species: hintOf(species),
     big_secret: hintOf(big_secret),
     archetype: hintOf(archetype),
-    attachment_style: hintOf(attachment_style),
     humor_type: hintOf(humor_type),
-    conflict_style: hintOf(conflict_style),
-    insecurity: hintOf(insecurity),
-    openness_curve: hintOf(find('openness_curve', openness_curve)),
     typing_style: hintOf(typing_style),
     emoji_usage: hintOf(emoji_usage),
     message_length: hintOf(message_length),
@@ -405,14 +410,15 @@ export function rollSeed(): RolledSeed {
     occupation: hintOf(occupation),
     living_situation: hintOf(living_situation),
     relationship_status: hintOf(relationship_status),
-    relationship_history: hintOf(relationship_history),
-    dating_experience: hintOf(dating_experience),
     social_energy: hintOf(social_energy),
     clothing_style: hintOf(clothing_style),
     grooming: hintOf(grooming),
     search_motive: hintOf(search_motive),
-    touchstone: hintOf(touchstone),
-    dealbreaker: hintOf(dealbreaker),
+    sexual_persona: hintOf(persona),
+    dirty_talk: hintOf(dirty_talk),
+    sexual_experience: hintOf(sexual_experience),
+    body_pride: hintOf(body_pride),
+    signature_move: hintOf(signature),
     orientation: hintOf(orientation),
     arousal_tell: hintOf(arousal_tell),
   };
@@ -421,7 +427,6 @@ export function rollSeed(): RolledSeed {
   for (const id of hobbies) hints[`hobby:${id}`] = hintOf(find('hobby', id));
   for (const id of turn_ons) hints[`turn_on:${id}`] = hintOf(find('turn_on', id));
   for (const id of turn_offs) hints[`turn_off:${id}`] = hintOf(find('turn_off', id));
-  for (const id of green_flags) hints[`green_flag:${id}`] = hintOf(find('green_flag', id));
   for (const id of fetishes) hints[`fetish:${id}`] = hintOf(find('fetish', id));
   for (const id of extraLanguages) hints[`language:${id}`] = hintOf(find('language', id));
 
@@ -445,11 +450,7 @@ export function rollSeed(): RolledSeed {
     accessories,
 
     archetype: archetype.id,
-    attachment_style: attachment_style!.id,
     humor_type: humor_type!.id,
-    conflict_style: conflict_style!.id,
-    openness_curve,
-    insecurity: insecurity!.id,
     quirks,
 
     typing_style: typing_style!.id,
@@ -466,8 +467,6 @@ export function rollSeed(): RolledSeed {
     occupation: occupation!.id,
     living_situation: living_situation!.id,
     relationship_status: relationship_status!.id,
-    relationship_history: relationship_history!.id,
-    dating_experience: dating_experience!.id,
     social_energy: social_energy!.id,
     interests,
     hobbies,
@@ -476,12 +475,14 @@ export function rollSeed(): RolledSeed {
     big_secret: big_secret.id,
 
     search_motive: search_motive.id,
-    touchstone: touchstone.id,
     turn_ons,
     turn_offs,
-    green_flags,
-    dealbreaker: dealbreaker.id,
 
+    sexual_persona: persona.id,
+    dirty_talk: dirty_talk.id,
+    sexual_experience: sexual_experience.id,
+    body_pride: body_pride.id,
+    signature_move: signature.id,
     orientation: orientation.id,
     arousal_tell: arousal_tell.id,
     libido,
@@ -514,20 +515,20 @@ function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }
     ['body_type', seed.body_type], ['breast_size', seed.breast_size], ['hair_color', seed.hair_color],
     ['hair_style', seed.hair_style], ['eye_color', seed.eye_color], ['clothing_style', seed.clothing_style],
     ['grooming', seed.grooming], ['makeup_style', seed.makeup_style], ['distinctive_feature', seed.distinctive_feature],
-    ['archetype', seed.archetype], ['attachment_style', seed.attachment_style], ['humor_type', seed.humor_type],
-    ['conflict_style', seed.conflict_style], ['openness_curve', seed.openness_curve], ['insecurity', seed.insecurity],
+    ['archetype', seed.archetype], ['humor_type', seed.humor_type],
     ['typing_style', seed.typing_style], ['emoji_usage', seed.emoji_usage], ['message_length', seed.message_length],
     ['response_speed', seed.response_speed], ['voice_msg_tendency', seed.voice_msg_tendency],
     ['slang_register', seed.slang_register], ['occupation', seed.occupation],
     ['living_situation', seed.living_situation], ['relationship_status', seed.relationship_status],
-    ['relationship_history', seed.relationship_history], ['dating_experience', seed.dating_experience],
-    ['social_energy', seed.social_energy], ['search_motive', seed.search_motive], ['touchstone', seed.touchstone],
-    ['dealbreaker', seed.dealbreaker], ['orientation', seed.orientation], ['arousal_tell', seed.arousal_tell],
+    ['social_energy', seed.social_energy], ['search_motive', seed.search_motive],
+    ['sexual_persona', seed.sexual_persona], ['dirty_talk', seed.dirty_talk],
+    ['sexual_experience', seed.sexual_experience], ['body_pride', seed.body_pride], ['signature_move', seed.signature_move],
+    ['orientation', seed.orientation], ['arousal_tell', seed.arousal_tell],
     ['big_secret', seed.big_secret],
   ];
   const plural: [string, string[]][] = [
     ['quirk', seed.quirks], ['interest', seed.interests], ['hobby', seed.hobbies],
-    ['turn_on', seed.turn_ons], ['turn_off', seed.turn_offs], ['green_flag', seed.green_flags],
+    ['turn_on', seed.turn_ons], ['turn_off', seed.turn_offs],
     ['fetish', seed.fetishes], ['hard_limit', seed.hard_limits], ['accessory', seed.accessories],
     // English says nothing about her - everyone speaks it, and it has no row in the table.
     ['language', seed.languages.filter((l) => l !== 'english')],
@@ -638,6 +639,12 @@ export function buildAppearancePrompt(seed: CharacterSeed): string {
   return parts.filter(Boolean).join(', ');
 }
 
+/** A stored hint, or the attribute's own prompt_hint for a field rolled before hints existed. */
+function hintFor(seed: CharacterSeed, category: keyof CharacterSeed & string): string {
+  const id = String(seed[category] ?? '');
+  return seed.hints?.[category] || find(category, id)?.prompt_hint || '';
+}
+
 export function describeSeed(seed: CharacterSeed): string {
   const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
   const labels = (cat: string, ids: string[]) => ids.map((i) => label(cat, i)).join(', ') || 'none';
@@ -676,6 +683,12 @@ export function describeSeed(seed: CharacterSeed): string {
     `hobbies: ${labels('hobby', seed.hobbies)}`,
     `languages: ${seed.languages.join(', ')}`,
     '',
+    `IN BED - her sexual persona: ${label('sexual_persona', seed.sexual_persona)} - ${hintFor(seed, 'sexual_persona')}`,
+    `why she is on the app: ${label('search_motive', seed.search_motive)} - ${hintFor(seed, 'search_motive')}`,
+    `how she talks dirty: ${label('dirty_talk', seed.dirty_talk)} - ${hintFor(seed, 'dirty_talk')}`,
+    `experience: ${label('sexual_experience', seed.sexual_experience)} - ${hintFor(seed, 'sexual_experience')}`,
+    `proudest of: ${label('body_pride', seed.body_pride)} - ${hintFor(seed, 'body_pride')}`,
+    `signature: ${label('signature_move', seed.signature_move)} - ${hintFor(seed, 'signature_move')}`,
     `orientation: ${label('orientation', seed.orientation)} - ${seed.hints.orientation ?? ''}`,
     `how far she goes in general (0-5): ${seed.freak}`,
     `how it shows when she is turned on: ${label('arousal_tell', seed.arousal_tell)} - ${seed.hints.arousal_tell ?? ''}`,
@@ -1447,12 +1460,13 @@ export function ensureFantasies(character: Character): Promise<void> {
             '',
             character.seed.hints.dossier || describeSeed(character.seed),
             '',
+            `Who she is in bed: ${find('sexual_persona', character.seed.sexual_persona)?.label ?? 'not set'} - ${find('sexual_persona', character.seed.sexual_persona)?.prompt_hint ?? ''}`,
             `Her kinks: ${character.seed.fetishes.map((f) => find('fetish', f)?.label ?? f).join(', ') || 'none listed'}.`,
             `Her hard limits (never include these): ${character.seed.hard_limits.map((h) => find('hard_limit', h)?.label ?? h).join(', ') || 'none listed'}.`,
             '',
             'Write 3 to 5 sexual fantasies she genuinely wants to play out with a man she is into. Each one a',
-            'concrete scenario in one or two sentences - a setting, a situation, what happens - drawn from her',
-            'kinks and her personality, varied from each other, explicit where it needs to be, nothing that',
+            'concrete scenario in one or two sentences - a setting, a situation, what happens - drawn from who',
+            'she is in bed, her kinks and her personality, varied from each other, explicit where it needs to be, nothing that',
             'touches her hard limits. Written in third person about her.',
             '',
             'Reply with exactly one JSON object: { "fantasies": ["...", "..."] }',

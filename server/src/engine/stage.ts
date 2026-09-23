@@ -10,6 +10,10 @@ import type { Character } from '../types.js';
  * it describes her taste, never a gate he has to get past.
  */
 function pacingFor(character: Character): number {
+  // Her sexual persona decides this when it says anything; her everyday archetype is the
+  // fallback. An insatiable persona runs hot whatever her day-to-day temperament is.
+  const persona = find('sexual_persona', character.seed.sexual_persona)?.extra?.pace;
+  if (typeof persona === 'number' && persona > 0) return persona;
   const p = find('archetype', character.seed.archetype)?.extra?.pace;
   return typeof p === 'number' && p > 0 ? p : 1;
 }

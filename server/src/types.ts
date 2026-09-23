@@ -39,11 +39,7 @@ export interface CharacterSeed {
 
   // personality
   archetype: string;
-  attachment_style: string;
   humor_type: string;
-  conflict_style: string;
-  openness_curve: string;
-  insecurity: string;
   quirks: string[];
 
   // communication
@@ -72,8 +68,6 @@ export interface CharacterSeed {
   living_situation: string;
   /** Who she is currently attached to, if anyone: single, a partner, a polycule. */
   relationship_status: string;
-  relationship_history: string;
-  dating_experience: string;
   social_energy: string;
   interests: string[];
   hobbies: string[];
@@ -83,20 +77,32 @@ export interface CharacterSeed {
    * Almost always 'none'. The rare exception is a real, grounded (never fantastical) fact
    * she keeps genuinely hidden - deliberately absent from the discovery catalogue and from
    * trait credits, unlike every other seed field: this one is never purchased, only actually
-   * earned, either by a real accidental slip or by trust built over real time. See
+   * revealed, either by a real accidental slip or by her choosing to share it. See
    * blocks.ts's bigSecretLine() and StateFlags.big_secret_known.
    */
   big_secret: string;
 
-  // gameplay
+  /** What she is on the app for, sexually - "exploring a kink", "bored of vanilla". */
   search_motive: string;
-  touchstone: string;
   turn_ons: string[];
   turn_offs: string[];
-  green_flags: string[];
-  dealbreaker: string;
 
   // sexual
+  /**
+   * Who she is in bed, as one named persona - bratty sub, commanding domme, shy but filthy,
+   * scenario player... Rolled separately from her everyday archetype (leaned by it, never
+   * decided by it), and it sets the ranges her sexual stats are drawn from. This is what makes
+   * two women with similar numbers flirt and sext completely differently.
+   */
+  sexual_persona: string;
+  /** How she talks dirty: crude, poetic, commanding, giggly, deadpan... */
+  dirty_talk: string;
+  /** How much she has done, from eager beginner to kink-scene regular. */
+  sexual_experience: string;
+  /** The part of her body she is proudest of and wants noticed. */
+  body_pride: string;
+  /** Her signature move or setting - the thing she keeps coming back to. */
+  signature_move: string;
   /** Who she is attracted to. Decides whether she can appear for this user at all. */
   orientation: string;
   /** How it shows when she is turned on, so warming up is not identical for everyone. */
@@ -243,6 +249,10 @@ export interface ActorHidden {
    * omitted means her face is in the shot as normal, which is by far the common case.
    */
   photo_shows_face: boolean | null;
+  /** 1-based number of the fantasy from her list that she pitched in these messages, or null. */
+  fantasy_pitched: number | null;
+  /** A brand-new fantasy she came up with and pitched in these messages, or null. */
+  new_fantasy: string | null;
 }
 
 export interface ActorOutput {
@@ -298,8 +308,6 @@ export interface UserCard {
   occupation?: string;
   living_situation?: string;
   relationship_status?: string;
-  relationship_history?: string;
-  dating_experience?: string;
   social_energy?: string;
   languages?: string[];
 
@@ -310,7 +318,6 @@ export interface UserCard {
   search_motive?: string;
   turn_ons?: string[];
   turn_offs?: string[];
-  dealbreaker?: string;
 
   fetishes?: string[];
   hard_limits?: string[];
@@ -367,6 +374,15 @@ export interface Location {
 export interface DateSession {
   id: string;
   character_id: string;
+  /**
+   * 'date' is a trip to one of his locations. 'scene' plays out a fantasy - one of hers
+   * ("Play it out") or a premise he wrote - in the same in-person format, with no location.
+   */
+  kind: 'date' | 'scene';
+  /** For a scene: the setup being played out. Null for a date. */
+  premise: string | null;
+  /** For a scene started from one of her fantasies: that fantasy's exact text, for tracking. */
+  fantasy: string | null;
   status: 'active' | 'ended';
   /** When they are meeting, as he wrote it - "tonight, 8pm", not a parsed timestamp. */
   when_at: string;

@@ -34,7 +34,7 @@ export const CARD_SECTIONS: CardSection[] = [
   {
     id: 'looks',
     label: 'What you look like',
-    note: 'Only shown to someone once the two of you have swapped profile pictures.',
+    note: 'On your profile, alongside your photo.',
     fields: [
       { key: 'ethnicity', category: 'ethnicity', label: 'Background' },
       { key: 'skin_tone', category: 'skin_tone', label: 'Skin tone' },
@@ -57,8 +57,6 @@ export const CARD_SECTIONS: CardSection[] = [
       { key: 'occupation', category: 'occupation', label: 'Work' },
       { key: 'living_situation', category: 'living_situation', label: 'Living' },
       { key: 'relationship_status', category: 'relationship_status', label: 'Status' },
-      { key: 'relationship_history', category: 'relationship_history', label: 'History' },
-      { key: 'dating_experience', category: 'dating_experience', label: 'On apps' },
       { key: 'social_energy', category: 'social_energy', label: 'Social battery' },
       { key: 'languages', category: 'language', label: 'Languages besides English', multi: true, max: 4 },
     ],
@@ -76,12 +74,11 @@ export const CARD_SECTIONS: CardSection[] = [
   {
     id: 'wants',
     label: 'What you want',
-    note: 'What you are here for, and what puts you off. The Director scores against this.',
+    note: 'What you are here for, and what does and does not do it for you.',
     fields: [
       { key: 'search_motive', category: 'search_motive', label: 'Why you are here' },
       { key: 'turn_ons', category: 'turn_on', label: 'Does it for you', multi: true, max: 5 },
       { key: 'turn_offs', category: 'turn_off', label: 'Puts you off', multi: true, max: 5 },
-      { key: 'dealbreaker', category: 'dealbreaker', label: 'Dealbreaker' },
     ],
   },
   {

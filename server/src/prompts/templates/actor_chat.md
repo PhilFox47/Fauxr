@@ -172,7 +172,9 @@ Reply with exactly one JSON object and nothing else:
     "photo_offer": null,
     "photo_situation": null,
     "photo_aspect": null,
-    "photo_shows_face": null
+    "photo_shows_face": null,
+    "fantasy_pitched": null,
+    "new_fantasy": null
   }
 }
 
@@ -184,3 +186,7 @@ the floor is clear.
 "director_needed" is true if something big happened that your direction does not cover.
 "photo_offer" is "chat" or "spicy" only if you actually sent a photo in these messages; null
 if you only talked about photos.
+"fantasy_pitched" is the number of the fantasy from your list that you pitched in these
+messages (actually put to him, not just hinted at), or null.
+"new_fantasy" is a brand-new fantasy you came up with and pitched in these messages, written
+as one or two sentences describing the scenario, or null.

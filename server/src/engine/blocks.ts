@@ -189,7 +189,21 @@ export function sexualBlock(seed: CharacterSeed): string {
     : freak >= 2.5 ? 'You are fairly open, within reason.'
     : freak >= 1.2 ? 'You are open to a point, and you know where that point is.'
     : 'You like what you like and you are not especially adventurous about it.';
+  const persona = find('sexual_persona', seed.sexual_persona);
+  const line = (cat: string, id: string, lead: string) => {
+    const a = find(cat, id);
+    return a ? `${lead}: ${a.label} - ${a.prompt_hint}` : '';
+  };
   return [
+    persona
+      ? `WHO YOU ARE IN BED: ${persona.label}. ${persona.prompt_hint}\nThis is the core of how you flirt, sext and have sex. Let it lead - it matters more than your everyday personality here.`
+      : '',
+    line('search_motive', seed.search_motive, 'Why you are on the app'),
+    line('dirty_talk', seed.dirty_talk, 'How you talk dirty'),
+    line('sexual_experience', seed.sexual_experience, 'Experience'),
+    line('body_pride', seed.body_pride, 'What you are proudest of'),
+    line('signature_move', seed.signature_move, 'Your signature'),
+    '',
     `Libido ${seed.libido}/5. Sexual confidence ${seed.sexual_confidence}/5. These are separate: you can want a lot and still be shy about saying so, or the other way round.`,
     domLine,
     `Readiness to sext: ${seed.sexting_readiness}/5.`,
@@ -201,7 +215,7 @@ export function sexualBlock(seed: CharacterSeed): string {
     `The specific things that really do it for you: ${seed.fetishes.map((f) => label('fetish', f)).join(', ')}`,
     `What you will not do: ${seed.hard_limits.map((h) => label('hard_limit', h)).join(', ')}`,
     'Never break a hard limit, no matter how the conversation is going.',
-  ].filter((l) => l !== undefined).join('\n');
+  ].filter((l, i, all) => l !== '' || (i > 0 && all[i - 1] !== '')).join('\n');
 }
 
 export function languageBlock(seed: CharacterSeed): string {
@@ -360,13 +374,22 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, medium: 'text' 
  * Her own fantasies: concrete scenarios she wants to live out, written by the generator from
  * her kinks. She brings these up herself - this app is a playground, and she has ideas.
  */
-export function fantasiesBlock(seed: CharacterSeed): string {
+export function fantasiesBlock(
+  seed: CharacterSeed,
+  log: Record<string, { status: string; played?: number }> = {},
+): string {
   const items = fantasyList(seed);
   if (!items.length) return '';
+  const note = (f: string) => {
+    const e = log[f];
+    if (!e) return '';
+    if (e.status === 'played') return ` (you have played this one out with him${(e.played ?? 1) > 1 ? ` ${e.played} times` : ''} - build on it, take it further, or riff on it)`;
+    return ' (you have already told him about this one)';
+  };
   return [
     'Fantasies you have and want to actually play out with someone. Pitch them - describe one, ask',
     'if he is in, start it. Adapt them to what you learn about him; invent new ones too.',
-    ...items.map((f) => `- ${f}`),
+    ...items.map((f, i) => `${i + 1}. ${f}${note(f)}`),
   ].join('\n');
 }
 

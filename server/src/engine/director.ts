@@ -15,6 +15,7 @@ import { userCardFullBlock } from './usercard.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
 import { ensureFantasies } from './generator.js';
+import { fantasyLog } from './fantasies.js';
 
 export interface DirectorResult {
   direction: Direction;
@@ -77,7 +78,7 @@ export async function runDirector(
 
   const prompt = render('director_direction', {
     pace: describePace(character),
-    fantasies_block: fantasiesBlock(character.seed) || '(none written yet - she makes them up as she goes, from her kinks)',
+    fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel)) || '(none written yet - she makes them up as she goes, from her kinks)',
     her_curiosity: herCuriosity(rel),
     fetish_block: describeFetishProgress(character, rel),
     his_side: describeHim(rel),

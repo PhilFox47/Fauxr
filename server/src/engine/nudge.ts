@@ -19,6 +19,8 @@ export interface Nudge {
   text: string;
   /** Set when the nudge points at a specific open thread, so it can be burned down. */
   threadId?: string;
+  /** Set by pitch_fantasy: the exact fantasy she was told to pitch. */
+  fantasy?: string;
 }
 
 function chance(p: number): boolean {
@@ -36,14 +38,14 @@ export function pickNudge(
   ctx: NudgeContext = { somethingLive: false },
 ): Nudge | null {
   const seed = character.seed;
-  // Read off the attribute row rather than switching on the id, so a new social_energy or
-  // openness_curve entry actually pulls its own weight instead of silently defaulting to 0 -
-  // this used to be a literal id lookup that only ever recognised the three shipped values.
+  // Read off the attribute rows rather than switching on ids, so a new social_energy or
+  // sexual_persona entry pulls its own weight: an insatiable or digital-tease persona starts
+  // things far more often than a slow-burner does.
   const energy = Number(find('social_energy', seed.social_energy)?.extra?.initiative ?? 0);
-  const opennessBonus = Number(find('openness_curve', seed.openness_curve)?.extra?.initiative_bonus ?? 0);
+  const personaBonus = Number(find('sexual_persona', seed.sexual_persona)?.extra?.initiative ?? 0);
 
   // How likely she is to bring her own material rather than only answering.
-  const initiative = 0.4 + energy + opennessBonus;
+  const initiative = 0.4 + energy + personaBonus;
 
   // Only threads she has not just been on about, so a callback cannot become a fixation.
   const openThreads: OpenThread[] = freshThreads(rel.ledger?.open_threads ?? []);
@@ -53,7 +55,7 @@ export function pickNudge(
    * comes onto him in the first message, a slow-burn one teases, and arousal lowers the bar
    * for everyone.
    */
-  const boldness = (seed.sexual_confidence - 2) * 0.06;
+  const boldness = (seed.sexual_confidence - 2) * 0.06 + personaBonus / 2;
   const forward = seed.sexual_confidence >= 4 || seed.libido >= 4;
 
   if ((rel.arousal >= 55 || (forward && rel.arousal >= 25)) && chance(0.45 + boldness)) {
@@ -72,6 +74,7 @@ export function pickNudge(
     const pick = fantasies[Math.floor(Math.random() * fantasies.length)];
     return {
       id: 'pitch_fantasy',
+      fantasy: pick,
       text:
         `Pitch him one of your fantasies this turn: ${pick}. Make it concrete and yours - set the ` +
         'scene in a line or two, tell him what you would want him to do, and ask if he is in. Tweak ' +

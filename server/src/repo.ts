@@ -1,5 +1,5 @@
 import { db, nowIso } from './db/index.js';
-import { byCategory } from './db/attributes.js';
+import { byCategory, find } from './db/attributes.js';
 import { newContext, roll } from './engine/dice.js';
 import type {
   Character, CharacterSeed, CharacterState, DateSession, Direction, Flags, Ledger,
@@ -136,7 +136,7 @@ function backfillSpecies(characterId: string, seed: CharacterSeed): CharacterSee
 /**
  * Characters generated before texting_persona/speech_style existed have neither - rolled in
  * now, on first load, the same way breast_size was. Seeded with her existing archetype,
- * insecurity, hobbies and interests so the affinities and conflicts these two categories
+ * hobbies and interests so the affinities and conflicts these two categories
  * actually declare (a confident archetype excluding a shy texting or speech style, an
  * anime/gaming hobby leaning toward uwu or leetspeak) still apply here rather than landing
  * as a flat random pick disconnected from who she already is.
@@ -144,7 +144,7 @@ function backfillSpecies(characterId: string, seed: CharacterSeed): CharacterSee
 function backfillCommStyles(characterId: string, seed: CharacterSeed): CharacterSeed {
   if (seed.texting_persona && seed.speech_style) return seed;
   const ctx = newContext();
-  for (const id of [seed.archetype, seed.insecurity, ...(seed.hobbies ?? []), ...(seed.interests ?? [])]) {
+  for (const id of [seed.archetype, ...(seed.hobbies ?? []), ...(seed.interests ?? [])]) {
     if (id) ctx.drawn.add(id);
   }
   let changed = false;
@@ -160,10 +160,58 @@ function backfillCommStyles(characterId: string, seed: CharacterSeed): Character
   return seed;
 }
 
+/**
+ * Characters made before sexual personas existed get one on first load, picked to fit the
+ * stats they already have: only personas whose dom/sub range contains her leaning and whose
+ * libido range is within one point of hers are eligible, leaned by her archetype the same way
+ * a fresh roll is. The persona's own weights then lean her dirty talk and signature. Her
+ * search_motive is rerolled too if it points at the old, retired table.
+ */
+function backfillSexualProfile(characterId: string, seed: CharacterSeed): CharacterSeed {
+  const motiveOk = !!seed.search_motive && byCategory('search_motive').some((a) => a.id === seed.search_motive);
+  if (seed.sexual_persona && seed.dirty_talk && seed.sexual_experience && seed.body_pride && seed.signature_move && motiveOk) {
+    return seed;
+  }
+  if (!byCategory('sexual_persona').length) return seed; // attribute table not seeded yet
+  const ctx = newContext();
+  for (const id of [seed.archetype, ...(seed.fetishes ?? [])]) if (id) ctx.drawn.add(id);
+  const hints = (seed.hints = seed.hints ?? {});
+  const within = (range: number[] | undefined, v: number, slack = 0) =>
+    !range || (v >= range[0] - slack && v <= range[1] + slack);
+
+  if (!seed.sexual_persona || !find('sexual_persona', seed.sexual_persona)) {
+    const fits = byCategory('sexual_persona').filter((p) => {
+      const r = (p.extra?.ranges ?? {}) as Record<string, number[]>;
+      return within(r.dom_sub_leaning, seed.dom_sub_leaning ?? 0) && within(r.libido, seed.libido ?? 3, 1);
+    });
+    const persona = roll('sexual_persona', ctx, fits.length ? { only: new Set(fits.map((p) => p.id)) } : {});
+    if (persona) { seed.sexual_persona = persona.id; hints.sexual_persona = persona.prompt_hint; }
+  } else {
+    // Re-apply the stored persona's leans so the rolls below still follow it.
+    for (const [id, m] of Object.entries(find('sexual_persona', seed.sexual_persona)?.extra?.weights ?? {})) {
+      ctx.weights[id] = (ctx.weights[id] ?? 1) * Number(m);
+    }
+  }
+  const fill = (field: 'dirty_talk' | 'sexual_experience' | 'body_pride' | 'signature_move' | 'search_motive') => {
+    const current = seed[field];
+    if (current && find(field, current)) return;
+    const a = roll(field, ctx, field === 'search_motive' ? { ignoreArchetype: true } : {});
+    if (a) { seed[field] = a.id; hints[field] = a.prompt_hint; }
+  };
+  fill('search_motive');
+  fill('dirty_talk');
+  fill('sexual_experience');
+  fill('body_pride');
+  fill('signature_move');
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
   let seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
   seed = backfillSpecies(row.id, seed);
   seed = backfillCommStyles(row.id, seed);
+  seed = backfillSexualProfile(row.id, seed);
   return {
     id: row.id,
     username: row.username,
@@ -579,6 +627,9 @@ function hydrateDate(row: any): DateSession {
   return {
     id: row.id,
     character_id: row.character_id,
+    kind: row.kind === 'scene' ? 'scene' : 'date',
+    premise: row.premise ?? null,
+    fantasy: row.fantasy ?? null,
     status: row.status === 'active' ? 'active' : 'ended',
     when_at: row.when_at ?? '',
     where_at: row.where_at ?? '',
@@ -596,11 +647,14 @@ export function createDate(d: {
   when_at: string;
   where_at: string;
   location_id: string | null;
+  kind?: 'date' | 'scene';
+  premise?: string | null;
+  fantasy?: string | null;
 }): DateSession {
   db.prepare(
-    `INSERT INTO dates (id, character_id, status, when_at, where_at, location_id, created_at)
-     VALUES (@id, @character_id, 'active', @when_at, @where_at, @location_id, @created_at)`,
-  ).run({ ...d, created_at: nowIso() });
+    `INSERT INTO dates (id, character_id, status, when_at, where_at, location_id, kind, premise, fantasy, created_at)
+     VALUES (@id, @character_id, 'active', @when_at, @where_at, @location_id, @kind, @premise, @fantasy, @created_at)`,
+  ).run({ kind: 'date', premise: null, fantasy: null, ...d, created_at: nowIso() });
   return getDate(d.id)!;
 }
 

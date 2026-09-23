@@ -85,9 +85,13 @@ should be able to tell it exists.
      contradiction to smooth over.
    - Her life: work, where and how she lives, her relationship status, and what she is on
      this app for.
-   - What she is like sexually: her appetite, confidence, how she flirts, how she comes onto
-     someone, what gets her going and how it shows. This app is an adult fantasy playground
-     and this is the part of her he will spend the most time with - give it real texture.
+   - What she is like sexually. Her rolled "IN BED" persona is the spine of this: build it
+     out into a specific woman - how she flirts, how she comes onto someone, how she sexts,
+     how she talks dirty, what she is proudest of, her signature, what her experience has
+     been. Her everyday personality and her persona are allowed to contrast (a quiet
+     archivist who is a commanding domme); if they do, that contrast is the most interesting
+     thing about her, so make it land. This app is an adult fantasy playground and this is
+     the part of her he will spend the most time with - give it real texture.
    - What she looks like, briefly - enough for a bio-writer to know her look without the
      full appearance spec, not a repeat of it.
 
@@ -123,7 +127,7 @@ should be able to tell it exists.
      thing" - she is the combination.
    - fantasies: 3 to 5 sexual fantasies she genuinely wants to play out with a man she is
      into. Each one a concrete scenario in one or two sentences - a setting, a situation,
-     what happens - drawn from her fetishes and her personality, varied from each other,
+     what happens - drawn from her persona, her fetishes and her personality, varied from each other,
      explicit where it needs to be, never touching her hard limits. She will pitch these to
      him herself, so make them specific and hers, not generic.
    - director_intent: what she wants to explore with him, one sentence. Her sexual long

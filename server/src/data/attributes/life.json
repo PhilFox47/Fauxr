@@ -173,15 +173,15 @@
   {
     "id": "sob",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude2d",
+    "label": "😭",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\ude2d",
+    "prompt_hint": "😭",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude2d"
+      "char": "😭"
     },
     "enabled": true,
     "rarity": "common"
@@ -189,15 +189,15 @@
   {
     "id": "skull",
     "category": "favorite_emoji",
-    "label": "\ud83d\udc80",
+    "label": "💀",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\udc80",
+    "prompt_hint": "💀",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\udc80"
+      "char": "💀"
     },
     "enabled": true,
     "rarity": "common"
@@ -205,15 +205,15 @@
   {
     "id": "eyeroll",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude44",
+    "label": "🙄",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\ude44",
+    "prompt_hint": "🙄",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude44"
+      "char": "🙄"
     },
     "enabled": true,
     "rarity": "common"
@@ -221,15 +221,15 @@
   {
     "id": "relieved",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude0c",
+    "label": "😌",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\ude0c",
+    "prompt_hint": "😌",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude0c"
+      "char": "😌"
     },
     "enabled": true,
     "rarity": "common"
@@ -237,15 +237,15 @@
   {
     "id": "smiling_tear",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd72",
+    "label": "🥲",
     "weight": 1.0,
-    "prompt_hint": "\ud83e\udd72",
+    "prompt_hint": "🥲",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd72"
+      "char": "🥲"
     },
     "enabled": true,
     "rarity": "common"
@@ -253,15 +253,15 @@
   {
     "id": "smirk",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude0f",
+    "label": "😏",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\ude0f",
+    "prompt_hint": "😏",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude0f"
+      "char": "😏"
     },
     "enabled": true,
     "rarity": "common"
@@ -269,15 +269,15 @@
   {
     "id": "melting",
     "category": "favorite_emoji",
-    "label": "\ud83e\udee0",
+    "label": "🫠",
     "weight": 1.0,
-    "prompt_hint": "\ud83e\udee0",
+    "prompt_hint": "🫠",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udee0"
+      "char": "🫠"
     },
     "enabled": true,
     "rarity": "common"
@@ -285,15 +285,15 @@
   {
     "id": "sparkles",
     "category": "favorite_emoji",
-    "label": "\u2728",
+    "label": "✨",
     "weight": 1.0,
-    "prompt_hint": "\u2728",
+    "prompt_hint": "✨",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\u2728"
+      "char": "✨"
     },
     "enabled": true,
     "rarity": "common"
@@ -301,15 +301,15 @@
   {
     "id": "woozy",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd74",
+    "label": "🥴",
     "weight": 1.0,
-    "prompt_hint": "\ud83e\udd74",
+    "prompt_hint": "🥴",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd74"
+      "char": "🥴"
     },
     "enabled": true,
     "rarity": "common"
@@ -317,15 +317,15 @@
   {
     "id": "clown",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd21",
+    "label": "🤡",
     "weight": 1.0,
-    "prompt_hint": "\ud83e\udd21",
+    "prompt_hint": "🤡",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd21"
+      "char": "🤡"
     },
     "enabled": true,
     "rarity": "common"
@@ -333,15 +333,15 @@
   {
     "id": "red_heart",
     "category": "favorite_emoji",
-    "label": "\u2764\ufe0f",
+    "label": "❤️",
     "weight": 1.0,
-    "prompt_hint": "\u2764\ufe0f",
+    "prompt_hint": "❤️",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\u2764\ufe0f"
+      "char": "❤️"
     },
     "enabled": true,
     "rarity": "common"
@@ -349,15 +349,15 @@
   {
     "id": "black_heart",
     "category": "favorite_emoji",
-    "label": "\ud83d\udda4",
+    "label": "🖤",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\udda4",
+    "prompt_hint": "🖤",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\udda4"
+      "char": "🖤"
     },
     "enabled": true,
     "rarity": "common"
@@ -365,15 +365,15 @@
   {
     "id": "sweat_smile",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude05",
+    "label": "😅",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\ude05",
+    "prompt_hint": "😅",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude05"
+      "char": "😅"
     },
     "enabled": true,
     "rarity": "common"
@@ -381,15 +381,15 @@
   {
     "id": "pinched_fingers",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd0c",
+    "label": "🤌",
     "weight": 1.0,
-    "prompt_hint": "\ud83e\udd0c",
+    "prompt_hint": "🤌",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd0c"
+      "char": "🤌"
     },
     "enabled": true,
     "rarity": "common"
@@ -397,15 +397,15 @@
   {
     "id": "heart_hands",
     "category": "favorite_emoji",
-    "label": "\ud83e\udef6",
+    "label": "🫶",
     "weight": 1.0,
-    "prompt_hint": "\ud83e\udef6",
+    "prompt_hint": "🫶",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udef6"
+      "char": "🫶"
     },
     "enabled": true,
     "rarity": "common"
@@ -413,15 +413,15 @@
   {
     "id": "weary",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude29",
+    "label": "😩",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\ude29",
+    "prompt_hint": "😩",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude29"
+      "char": "😩"
     },
     "enabled": true,
     "rarity": "common"
@@ -429,15 +429,15 @@
   {
     "id": "upside_down",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude43",
+    "label": "🙃",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\ude43",
+    "prompt_hint": "🙃",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude43"
+      "char": "🙃"
     },
     "enabled": true,
     "rarity": "common"
@@ -445,15 +445,15 @@
   {
     "id": "eyes",
     "category": "favorite_emoji",
-    "label": "\ud83d\udc40",
+    "label": "👀",
     "weight": 1.0,
-    "prompt_hint": "\ud83d\udc40",
+    "prompt_hint": "👀",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\udc40"
+      "char": "👀"
     },
     "enabled": true,
     "rarity": "common"
@@ -461,15 +461,15 @@
   {
     "id": "butterfly",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd8b",
+    "label": "🦋",
     "weight": 1.0,
-    "prompt_hint": "\ud83e\udd8b",
+    "prompt_hint": "🦋",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd8b"
+      "char": "🦋"
     },
     "enabled": true,
     "rarity": "common"
@@ -477,15 +477,15 @@
   {
     "id": "moon",
     "category": "favorite_emoji",
-    "label": "\ud83c\udf19",
+    "label": "🌙",
     "weight": 1.0,
-    "prompt_hint": "\ud83c\udf19",
+    "prompt_hint": "🌙",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83c\udf19"
+      "char": "🌙"
     },
     "enabled": true,
     "rarity": "common"
@@ -1056,202 +1056,6 @@
     "label": "Temporary sublet",
     "weight": 0.6,
     "prompt_hint": "everything is half-packed, nothing feels permanent",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "long_ended",
-    "category": "relationship_history",
-    "label": "Long relationship ended a year ago",
-    "weight": 1.0,
-    "prompt_hint": "was with someone for years, took a long time to be ready for this",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "recent_breakup",
-    "category": "relationship_history",
-    "label": "Recent breakup",
-    "weight": 1.0,
-    "prompt_hint": "it ended a few months ago and it still comes up",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "never_serious",
-    "category": "relationship_history",
-    "label": "Never had a serious one",
-    "weight": 0.9,
-    "prompt_hint": "has dated but never long, unsure what that says about her",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "serial_short",
-    "category": "relationship_history",
-    "label": "A string of short ones",
-    "weight": 1.0,
-    "prompt_hint": "several three-month relationships, aware of the pattern",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "cheated_on",
-    "category": "relationship_history",
-    "label": "Was cheated on",
-    "weight": 0.9,
-    "prompt_hint": "trust is the thing she is slowest to give",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "was_the_one_who_left",
-    "category": "relationship_history",
-    "label": "She ended the last one",
-    "weight": 0.8,
-    "prompt_hint": "left someone who did not deserve it, still carries guilt",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "divorced_young",
-    "category": "relationship_history",
-    "label": "Married and divorced young",
-    "weight": 0.4,
-    "prompt_hint": "married at 22, divorced at 25, rarely mentions it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "long_distance_failed",
-    "category": "relationship_history",
-    "label": "Long distance that failed",
-    "weight": 0.7,
-    "prompt_hint": "tried it, will not try it again",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "app_veteran",
-    "category": "dating_experience",
-    "label": "App veteran",
-    "weight": 1.0,
-    "prompt_hint": "has been on these apps for years, cynical, fast to spot scripts",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "first_time",
-    "category": "dating_experience",
-    "label": "First time on an app",
-    "weight": 0.9,
-    "prompt_hint": "new to this, does not know the conventions, refreshingly unpolished",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "returning",
-    "category": "dating_experience",
-    "label": "Returning after a long break",
-    "weight": 1.0,
-    "prompt_hint": "deleted it once, reinstalled last week",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "rarely_matches",
-    "category": "dating_experience",
-    "label": "Rarely matches",
-    "weight": 0.8,
-    "prompt_hint": "few matches, so this one gets real attention",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "lots_of_attention",
-    "category": "dating_experience",
-    "label": "Gets a lot of attention",
-    "weight": 0.9,
-    "prompt_hint": "inbox is full, unimpressed by effort that is merely present",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "burned",
-    "category": "dating_experience",
-    "label": "Burned recently",
-    "weight": 0.9,
-    "prompt_hint": "last app date went badly, guarded about repeating it",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -3543,104 +3347,6 @@
     "enabled": true
   },
   {
-    "id": "widowed",
-    "category": "relationship_history",
-    "label": "Widowed young",
-    "weight": 1.0,
-    "rarity": "rare",
-    "prompt_hint": "does not bring it up, and it explains a great deal",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "long_situationship",
-    "category": "relationship_history",
-    "label": "Two years of something undefined",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "never had a label for it, and that was the problem",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "engaged_called_off",
-    "category": "relationship_history",
-    "label": "Called off an engagement",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "did it herself, close to the date, and stands by it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "just_out_of_ldr",
-    "category": "relationship_history",
-    "label": "Out of a long distance one",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "ended it, still grieving the version she imagined",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "first_love_still",
-    "category": "relationship_history",
-    "label": "Never got over the first one",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "measures everyone against someone from a decade ago",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "open_before",
-    "category": "relationship_history",
-    "label": "Was in an open relationship",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "knows what she does and does not want from that now",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "married_briefly",
-    "category": "relationship_history",
-    "label": "Married for eleven months",
-    "weight": 1.0,
-    "rarity": "rare",
-    "prompt_hint": "a short, decisive mistake she can now laugh about",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "run_on",
     "category": "typing_style",
     "label": "no punctuation, one breath",
@@ -3777,9 +3483,7 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "weights": {
-        "open_before": 2.0
-      }
+      "weights": {}
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -3795,9 +3499,7 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "weights": {
-        "open_before": 2.0
-      }
+      "weights": {}
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -6253,546 +5955,322 @@
     "enabled": true
   },
   {
-    "id": "long_situationship_recent",
-    "category": "relationship_history",
-    "label": "Just came out of an undefined thing",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "months of something with no label, ended without ever being named",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "dated_a_friend_badly",
-    "category": "relationship_history",
-    "label": "Dated a friend, it went badly",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "lost a friendship trying it, wary about repeating that particular mistake",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_first_real_relationship",
-    "category": "relationship_history",
-    "label": "Currently in her first real relationship's aftermath",
-    "weight": 0.9,
-    "rarity": "common",
-    "prompt_hint": "the first one that actually mattered, still working out what she learned",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "long_online_only",
-    "category": "relationship_history",
-    "label": "A long relationship that stayed online",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "years of it, never actually met in person, complicated to explain",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "dated_someone_much_older",
-    "category": "relationship_history",
-    "label": "Dated someone significantly older once",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "learned things from it she is not always eager to unpack on a first conversation",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "on_off_for_years",
-    "category": "relationship_history",
-    "label": "On-and-off with the same person for years",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "finally actually over, though she has said that before",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "proposed_and_said_no",
-    "category": "relationship_history",
-    "label": "Was proposed to and said no",
-    "weight": 0.4,
-    "rarity": "rare",
-    "prompt_hint": "turned down a proposal, does not regret it, still occasionally has to explain it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_person_moved_away",
-    "category": "relationship_history",
-    "label": "A relationship ended by distance, not by choice",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "it was working until the geography stopped being survivable",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "healed_from_it_mostly",
-    "category": "relationship_history",
-    "label": "Mostly healed from something significant",
-    "weight": 0.9,
-    "rarity": "common",
-    "prompt_hint": "did the work after something that really knocked her, genuinely in a better place now",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "never_had_the_talk",
-    "category": "relationship_history",
-    "label": "A relationship that just faded rather than ended",
-    "weight": 0.8,
-    "rarity": "common",
-    "prompt_hint": "it never had a clean ending, just quietly stopped, which still bothers her a little",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "selective_swiper",
-    "category": "dating_experience",
-    "label": "Swipes rarely, on purpose",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "barely swipes at all, treats a match as a real decision rather than a reflex",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "match_hoarder",
-    "category": "dating_experience",
-    "label": "Matches and then goes quiet a lot",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "collects matches and does not always follow through, aware it is a habit worth breaking",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "apps_as_backup",
-    "category": "dating_experience",
-    "label": "Uses apps as a backup to meeting people in real life",
-    "weight": 0.9,
-    "rarity": "common",
-    "prompt_hint": "prefers meeting people offline, only really on here when that has not worked lately",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "just_verified",
-    "category": "dating_experience",
-    "label": "Just went through profile verification",
-    "weight": 0.8,
-    "rarity": "common",
-    "prompt_hint": "newly verified, takes the safety side of this seriously",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "deleted_reinstalled_many_times",
-    "category": "dating_experience",
-    "label": "Has deleted and reinstalled more times than she will admit",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "on a cycle of quitting and coming back that she finds a bit funny by now",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "good_at_the_apps",
-    "category": "dating_experience",
-    "label": "Genuinely good at making this work",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "has actually met people worth meeting from here before, unusually positive about the whole thing",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "fire",
     "category": "favorite_emoji",
-    "label": "\ud83d\udd25",
+    "label": "🔥",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "\ud83d\udd25",
+    "prompt_hint": "🔥",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\udd25"
+      "char": "🔥"
     },
     "enabled": true
   },
   {
     "id": "kissy",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude18",
+    "label": "😘",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "\ud83d\ude18",
+    "prompt_hint": "😘",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude18"
+      "char": "😘"
     },
     "enabled": true
   },
   {
     "id": "wink",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude09",
+    "label": "😉",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "\ud83d\ude09",
+    "prompt_hint": "😉",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude09"
+      "char": "😉"
     },
     "enabled": true
   },
   {
     "id": "thinking",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd14",
+    "label": "🤔",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "\ud83e\udd14",
+    "prompt_hint": "🤔",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd14"
+      "char": "🤔"
     },
     "enabled": true
   },
   {
     "id": "shrug",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd37",
+    "label": "🤷",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "\ud83e\udd37",
+    "prompt_hint": "🤷",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd37"
+      "char": "🤷"
     },
     "enabled": true
   },
   {
     "id": "saluting",
     "category": "favorite_emoji",
-    "label": "\ud83e\udee1",
+    "label": "🫡",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "\ud83e\udee1",
+    "prompt_hint": "🫡",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udee1"
+      "char": "🫡"
     },
     "enabled": true
   },
   {
     "id": "hand_over_mouth",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd2d",
+    "label": "🤭",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "\ud83e\udd2d",
+    "prompt_hint": "🤭",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd2d"
+      "char": "🤭"
     },
     "enabled": true
   },
   {
     "id": "peach",
     "category": "favorite_emoji",
-    "label": "\ud83c\udf51",
+    "label": "🍑",
     "weight": 0.8,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83c\udf51",
+    "prompt_hint": "🍑",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83c\udf51"
+      "char": "🍑"
     },
     "enabled": true
   },
   {
     "id": "cherries",
     "category": "favorite_emoji",
-    "label": "\ud83c\udf52",
+    "label": "🍒",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83c\udf52",
+    "prompt_hint": "🍒",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83c\udf52"
+      "char": "🍒"
     },
     "enabled": true
   },
   {
     "id": "heart_eyes",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude0d",
+    "label": "😍",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "\ud83d\ude0d",
+    "prompt_hint": "😍",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude0d"
+      "char": "😍"
     },
     "enabled": true
   },
   {
     "id": "cat_face",
     "category": "favorite_emoji",
-    "label": "\ud83d\udc08",
+    "label": "🐈",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83d\udc08",
+    "prompt_hint": "🐈",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\udc08"
+      "char": "🐈"
     },
     "enabled": true
   },
   {
     "id": "holding_back_tears",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd79",
+    "label": "🥹",
     "weight": 0.9,
     "rarity": "common",
-    "prompt_hint": "\ud83e\udd79",
+    "prompt_hint": "🥹",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd79"
+      "char": "🥹"
     },
     "enabled": true
   },
   {
     "id": "steam",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude24",
+    "label": "😤",
     "weight": 0.8,
     "rarity": "common",
-    "prompt_hint": "\ud83d\ude24",
+    "prompt_hint": "😤",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude24"
+      "char": "😤"
     },
     "enabled": true
   },
   {
     "id": "dotted_face",
     "category": "favorite_emoji",
-    "label": "\ud83e\udee5",
+    "label": "🫥",
     "weight": 0.6,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83e\udee5",
+    "prompt_hint": "🫥",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udee5"
+      "char": "🫥"
     },
     "enabled": true
   },
   {
     "id": "raised_eyebrow",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd28",
+    "label": "🤨",
     "weight": 0.9,
     "rarity": "common",
-    "prompt_hint": "\ud83e\udd28",
+    "prompt_hint": "🤨",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd28"
+      "char": "🤨"
     },
     "enabled": true
   },
   {
     "id": "diagonal_face",
     "category": "favorite_emoji",
-    "label": "\ud83e\udee4",
+    "label": "🫤",
     "weight": 0.6,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83e\udee4",
+    "prompt_hint": "🫤",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udee4"
+      "char": "🫤"
     },
     "enabled": true
   },
   {
     "id": "monkey_eyes",
     "category": "favorite_emoji",
-    "label": "\ud83d\ude48",
+    "label": "🙈",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83d\ude48",
+    "prompt_hint": "🙈",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83d\ude48"
+      "char": "🙈"
     },
     "enabled": true
   },
   {
     "id": "strawberry",
     "category": "favorite_emoji",
-    "label": "\ud83c\udf53",
+    "label": "🍓",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83c\udf53",
+    "prompt_hint": "🍓",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83c\udf53"
+      "char": "🍓"
     },
     "enabled": true
   },
   {
     "id": "bubble_tea",
     "category": "favorite_emoji",
-    "label": "\ud83e\uddc3",
+    "label": "🧃",
     "weight": 0.6,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83e\uddc3",
+    "prompt_hint": "🧃",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\uddc3"
+      "char": "🧃"
     },
     "enabled": true
   },
   {
     "id": "hot_face",
     "category": "favorite_emoji",
-    "label": "\ud83e\udd75",
+    "label": "🥵",
     "weight": 0.7,
     "rarity": "uncommon",
-    "prompt_hint": "\ud83e\udd75",
+    "prompt_hint": "🥵",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "char": "\ud83e\udd75"
+      "char": "🥵"
     },
     "enabled": true
   },
@@ -9184,48 +8662,6 @@
     "enabled": true
   },
   {
-    "id": "her_longest_was_long_distance",
-    "category": "relationship_history",
-    "label": "Her longest relationship was long-distance",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "made it work for years across a distance most people would not have tried",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "engaged_twice",
-    "category": "relationship_history",
-    "label": "Engaged more than once",
-    "weight": 0.4,
-    "rarity": "rare",
-    "prompt_hint": "has been engaged twice, neither made it to the wedding, rarely brings it up first",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "first_proper_love_recently",
-    "category": "relationship_history",
-    "label": "Just had her first proper serious relationship",
-    "weight": 0.9,
-    "rarity": "common",
-    "prompt_hint": "the first one that actually meant something, ended recently, still processing what she learned",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "interpreter_court",
     "category": "occupation",
     "label": "Court interpreter",
@@ -10226,7 +9662,7 @@
     "category": "texting_persona",
     "label": "uwu speech",
     "weight": 0.35,
-    "prompt_hint": "leans into uwu/kawaii internet speak when comfortable: swaps r and l for w ('wight', 'suwe'), tacks on uwu/owo, reaches for kaomoji (>w<, (\u00b4\uff61\u2022 \u1d17 \u2022\uff61`), baby-talk endearments. A real, specific register, not a vague 'cutesy' - commit to the actual spelling.",
+    "prompt_hint": "leans into uwu/kawaii internet speak when comfortable: swaps r and l for w ('wight', 'suwe'), tacks on uwu/owo, reaches for kaomoji (>w<, (´｡• ᴗ •｡`), baby-talk endearments. A real, specific register, not a vague 'cutesy' - commit to the actual spelling.",
     "image_prompt": null,
     "affinities": [
       "anime",
@@ -10342,9 +9778,7 @@
     "weight": 1.0,
     "prompt_hint": "texting is where she is bold - forward, a little shameless, says the thing she would not necessarily say to his face yet.",
     "image_prompt": null,
-    "affinities": [
-      "boring_in_person"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {},
@@ -10502,9 +9936,7 @@
     "weight": 0.4,
     "prompt_hint": "a real stammer surfaces when she is nervous or caught off guard - smooths out once she relaxes into the evening, but it is there at the start and whenever something actually gets to her.",
     "image_prompt": null,
-    "affinities": [
-      "anxiety_is_a_lot"
-    ],
+    "affinities": [],
     "conflicts": [
       "confident"
     ],

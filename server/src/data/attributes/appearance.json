@@ -13537,7 +13537,6 @@
     "extra": {
       "visibility": "profile",
       "weights": {
-        "does_he_follow_through": 1.8,
         "pragmatist": 2.2,
         "workaholic": 1.6
       }
@@ -13622,7 +13621,6 @@
       "visibility": "chat_only",
       "weights": {
         "loyal": 1.8,
-        "does_he_respect_her_no_immediately": 1.4,
         "control_freak": 1.4
       }
     },
@@ -13643,7 +13641,6 @@
       "visibility": "later",
       "weights": {
         "loyal": 2.0,
-        "does_he_respect_her_time": 1.4,
         "competitive": 1.6
       }
     },

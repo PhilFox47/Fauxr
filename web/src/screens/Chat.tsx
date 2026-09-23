@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  api, type CharacterProfile, type DateSession, type DateView, type GalleryImage, type Location,
+  api, type CharacterProfile, type DateSession, type DateView, type FantasyList, type GalleryImage, type Location,
   type MatchSummary, type Message,
 } from '../api';
 import Avatar from '../components/Avatar';
@@ -96,6 +96,36 @@ function LegacyCard({ text }: { text: string }) {
   );
 }
 
+/**
+ * She just pitched a fantasy. The card keeps it in view with a button that goes straight into
+ * playing it out as a scene.
+ */
+function FantasyCard({
+  name,
+  text,
+  busy,
+  disabled,
+  onPlay,
+}: {
+  name: string;
+  text: string;
+  busy: boolean;
+  disabled: boolean;
+  onPlay: () => void;
+}) {
+  return (
+    <div className="fantasy-card">
+      <span className="fantasy-card-head">
+        <Icon name="spark" size={14} /> {name} pitched a fantasy
+      </span>
+      <span className="fantasy-card-body">{text}</span>
+      <button className="btn" disabled={busy || disabled} onClick={onPlay}>
+        {busy ? 'Starting…' : 'Play it out'}
+      </button>
+    </div>
+  );
+}
+
 export default function Chat({
   characterId,
   typing,
@@ -130,6 +160,7 @@ export default function Chat({
    * into the text chat without ending anything, and also used to re-read a finished one.
    */
   const [openDateId, setOpenDateId] = useState<string | null>(null);
+  const [startingScene, setStartingScene] = useState<string | null>(null);
   // One deduped set that both surfaces index into. A photo she sent in the chat is also in
   // her gallery, so concatenating the two blind would show it twice while paging.
   const allImages = [
@@ -337,6 +368,20 @@ export default function Chat({
     }, 2500);
   };
 
+  /** Straight from a pitch card into the scene. The room opens itself once the chat reloads. */
+  const playFantasy = async (fantasy: string) => {
+    if (startingScene) return;
+    setStartingScene(fantasy);
+    try {
+      await api.startScene(characterId, { fantasy });
+      await load();
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+    } finally {
+      setStartingScene(null);
+    }
+  };
+
   const attach = async (file: File | undefined) => {
     if (!file) return;
     try {
@@ -501,14 +546,32 @@ export default function Chat({
             );
           }
 
+          if (m.sender === 'system' && m.meta?.type === 'fantasy_pitch') {
+            return (
+              <div key={m.id} style={{ display: 'contents' }}>
+                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                <FantasyCard
+                  name={character?.display_name ?? 'She'}
+                  text={m.meta.fantasy ?? m.text}
+                  busy={startingScene === (m.meta.fantasy ?? m.text)}
+                  disabled={blocked || !!activeDate}
+                  onPlay={() => void playFantasy(m.meta.fantasy ?? m.text)}
+                />
+              </div>
+            );
+          }
+
           if (m.sender === 'system' && (m.meta?.type === 'date_started' || m.meta?.type === 'date_ended')) {
+            const scene = m.meta.kind === 'scene';
             return (
               <div key={m.id} style={{ display: 'contents' }}>
                 {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
                 <button className="date-marker" onClick={() => setOpenDateId(m.meta.date_id)}>
                   <span className="date-marker-head">
                     <Icon name="spark" size={14} />
-                    {m.meta.type === 'date_started' ? 'Date' : 'Date — how she remembers it'}
+                    {m.meta.type === 'date_started'
+                      ? scene ? 'Scene' : 'Date'
+                      : `${scene ? 'Scene' : 'Date'} — how she remembers it`}
                   </span>
                   <span className="date-marker-body">{m.text}</span>
                 </button>
@@ -653,10 +716,12 @@ export default function Chat({
       {!blocked && activeDate && (
         <div className="composer date-frozen">
           <span className="grow small muted">
-            You are out with {character?.display_name} right now.
+            {activeDate.kind === 'scene'
+              ? `You are in a scene with ${character?.display_name} right now.`
+              : `You are out with ${character?.display_name} right now.`}
           </span>
           <button className="btn" onClick={() => setOpenDateId(activeDate.id)}>
-            Back to the date
+            {activeDate.kind === 'scene' ? 'Back to the scene' : 'Back to the date'}
           </button>
         </div>
       )}
@@ -776,9 +841,102 @@ function ProfileSheet({
             </section>
           ))}
 
+          <FantasiesSection characterId={characterId} onOpenDate={onOpenDate} />
+
           <DatesSection characterId={characterId} onOpenDate={onOpenDate} />
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Her fantasies, as far as he knows them. Each one she has pitched can be played out as a
+ * scene; the ones she has not told him about yet show only as a count. He can also write his
+ * own premise and play that instead.
+ */
+function FantasiesSection({
+  characterId,
+  onOpenDate,
+}: {
+  characterId: string;
+  onOpenDate: (dateId: string) => void;
+}) {
+  const [list, setList] = useState<FantasyList | null>(null);
+  const [writing, setWriting] = useState(false);
+  const [premise, setPremise] = useState('');
+  const [busy, setBusy] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    api.fantasies(characterId).then(setList).catch(() => setList(null));
+  }, [characterId]);
+
+  const play = async (body: { fantasy?: string; premise?: string }, key: string) => {
+    if (busy) return;
+    setBusy(key);
+    setError(null);
+    try {
+      const scene = await api.startScene(characterId, body);
+      onOpenDate(scene.id);
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <div className="dates-section">
+      <div className="section-title">Her fantasies</div>
+      {list && list.known.length === 0 && (
+        <p className="tiny muted">She has not pitched you one yet. She will.</p>
+      )}
+      {list?.known.map((f) => (
+        <div key={f.text} className="fantasy-row">
+          <span className="grow small">
+            {f.text}
+            {f.played > 0 && <span className="tiny muted"> · played {f.played === 1 ? 'once' : `${f.played}×`}</span>}
+          </span>
+          <button className="btn ghost" disabled={!!busy} onClick={() => void play({ fantasy: f.text }, f.text)}>
+            {busy === f.text ? 'Starting…' : f.played > 0 ? 'Again' : 'Play it out'}
+          </button>
+        </div>
+      ))}
+      {list && list.hidden > 0 && (
+        <p className="tiny muted">{list.hidden} more she has not told you about yet.</p>
+      )}
+      {writing ? (
+        <>
+          <label className="field">
+            <span>Your idea</span>
+            <textarea
+              value={premise}
+              placeholder="She is the new neighbour who keeps knocking to borrow things…"
+              onChange={(e) => setPremise(e.target.value)}
+              onFocus={(e) => {
+                const el = e.currentTarget;
+                setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 250);
+              }}
+            />
+          </label>
+          <div className="row">
+            <button className="btn ghost grow" onClick={() => setWriting(false)}>Cancel</button>
+            <button
+              className="btn grow"
+              disabled={!!busy || premise.trim().length < 8}
+              onClick={() => void play({ premise: premise.trim() }, 'custom')}
+            >
+              {busy === 'custom' ? 'Starting…' : 'Play it out'}
+            </button>
+          </div>
+        </>
+      ) : (
+        <button className="btn ghost block" onClick={() => setWriting(true)}>
+          Play out your own idea
+        </button>
+      )}
+      {error && <p className="tiny level-error">{error}</p>}
     </div>
   );
 }
@@ -841,7 +999,7 @@ function DatesSection({
 
       {active ? (
         <button className="btn block" onClick={() => onOpenDate(active.id)}>
-          You are out with her — open the date
+          {active.kind === 'scene' ? 'You are in a scene with her — open it' : 'You are out with her — open the date'}
         </button>
       ) : locations.length === 0 ? (
         <p className="tiny muted">
@@ -893,7 +1051,10 @@ function DatesSection({
           {past.map((d) => (
             <button key={d.id} className="past-date" onClick={() => onOpenDate(d.id)}>
               <span className="row">
-                <strong className="grow">{d.where_at || 'Somewhere'}</strong>
+                <strong className="grow">
+                  {d.kind === 'scene' && <span className="scene-tag">Scene</span>}
+                  {d.where_at || 'Somewhere'}
+                </strong>
                 <span className="tiny muted">
                   {new Date(d.ended_at ?? d.created_at).toLocaleDateString([], { day: 'numeric', month: 'short' })}
                 </span>
@@ -1063,6 +1224,7 @@ function DateRoom({
         <div style={{ minWidth: 0 }}>
           <h1>{view?.character.display_name ?? '…'}</h1>
           <span className={`sub${view?.typing ? ' live' : ''}`}>
+            {view?.date.kind === 'scene' ? 'Scene · ' : ''}
             {view?.location?.name ?? view?.date.where_at ?? 'somewhere'}
             {view?.date.when_at ? ` · ${view.date.when_at}` : ''}
             {!live ? ' · ended' : ''}
@@ -1071,7 +1233,7 @@ function DateRoom({
         <div className="spacer" />
         {live && (
           <button className="btn ghost" onClick={() => void end()} disabled={ending}>
-            {ending ? 'Ending…' : 'End date'}
+            {ending ? 'Ending…' : view?.date.kind === 'scene' ? 'End scene' : 'End date'}
           </button>
         )}
       </div>

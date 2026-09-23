@@ -28,8 +28,9 @@ import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
 import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
 import {
-  dateHistory, deleteDateMessage, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate,
+  dateHistory, deleteDateMessage, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate, startScene,
 } from '../engine/dates.js';
+import { fantasyView } from '../engine/fantasies.js';
 import type { Character, KinkStance, Location } from '../types.js';
 
 /**
@@ -423,6 +424,41 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
           characterId: req.params.id,
           locationId: String(req.body?.location_id ?? ''),
           when: String(req.body?.when ?? '').slice(0, 120),
+        });
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
+
+  // ------------------------------------------------------------- fantasies & scenes
+  /** The fantasies she has shared with him (with how often they have played each), and how many she has not. */
+  app.get<{ Params: { id: string } }>('/api/chats/:id/fantasies', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    const rel = getRelationship(req.params.id);
+    if (!character || !rel) return reply.code(404).send({ error: 'not found' });
+    return fantasyView(character, rel);
+  });
+
+  /**
+   * "Play it out": start a scene. Either one of her fantasies (which has to be one she has
+   * actually shared with him) or a premise he wrote himself.
+   */
+  app.post<{ Params: { id: string }; Body: { premise?: string; fantasy?: string } }>(
+    '/api/chats/:id/scenes',
+    async (req, reply) => {
+      const character = getCharacter(req.params.id);
+      const rel = getRelationship(req.params.id);
+      if (!character || !rel) return reply.code(404).send({ error: 'not found' });
+      const fantasy = String(req.body?.fantasy ?? '').trim();
+      if (fantasy && !fantasyView(character, rel).known.some((f) => f.text === fantasy)) {
+        return reply.code(400).send({ error: 'she has not told you about that fantasy yet' });
+      }
+      try {
+        return await startScene({
+          characterId: character.id,
+          premise: fantasy || String(req.body?.premise ?? ''),
+          fantasy: fantasy || null,
         });
       } catch (err) {
         return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });

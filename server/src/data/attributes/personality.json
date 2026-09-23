@@ -15,7 +15,6 @@
     ],
     "conflicts": [],
     "modifies": {
-      "openness_curve": "slow_steady",
       "sexting_readiness": -2,
       "typo_rate": 0.02
     },
@@ -77,12 +76,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -141,9 +134,7 @@
     "conflicts": [
       "shy"
     ],
-    "modifies": {
-      "openness_curve": "fast_then_plateau"
-    },
+    "modifies": {},
     "extra": {
       "counts": {
         "tattoos": [
@@ -201,12 +192,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -317,12 +302,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -432,12 +411,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -485,9 +458,7 @@
       "travel"
     ],
     "conflicts": [],
-    "modifies": {
-      "openness_curve": "slow_steady"
-    },
+    "modifies": {},
     "extra": {
       "counts": {
         "tattoos": [
@@ -546,12 +517,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -560,8 +525,6 @@
         ]
       },
       "weights": {
-        "avoidant": 2.2,
-        "anxious": 0.6,
         "one_liner": 1.8
       },
       "ranges": {
@@ -602,7 +565,6 @@
     ],
     "conflicts": [],
     "modifies": {
-      "openness_curve": "erratic",
       "response_speed": "irregular"
     },
     "extra": {
@@ -662,12 +624,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -780,12 +736,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -835,9 +785,7 @@
       "fashion"
     ],
     "conflicts": [],
-    "modifies": {
-      "openness_curve": "fast_then_plateau"
-    },
+    "modifies": {},
     "extra": {
       "counts": {
         "tattoos": [
@@ -895,12 +843,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -1010,12 +952,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -1024,7 +960,6 @@
         ]
       },
       "weights": {
-        "secure": 1.6,
         "wholesome": 2.0,
         "sarcastic_humor": 0.4
       },
@@ -1123,12 +1058,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -1239,12 +1168,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -1353,12 +1276,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -1391,48 +1308,6 @@
       },
       "photo": "soft unfocused gaze past the camera, faint absent smile, loose relaxed posture, window light"
     },
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "secure",
-    "category": "attachment_style",
-    "label": "Secure",
-    "weight": 1.0,
-    "prompt_hint": "comfortable with closeness and with distance. States needs plainly and does not punish. Forgives a misstep if it is acknowledged.",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "anxious",
-    "category": "attachment_style",
-    "label": "Anxious",
-    "weight": 1.0,
-    "prompt_hint": "reads silence as rejection. Double-texts, then apologises for double-texting. Needs reassurance and resents needing it.",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "avoidant",
-    "category": "attachment_style",
-    "label": "Avoidant",
-    "weight": 1.0,
-    "prompt_hint": "pulls back exactly when things go well. Gets vague when the conversation turns to feelings. Reappears once the pressure is off.",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
     "enabled": true,
     "rarity": "common"
   },
@@ -1557,274 +1432,6 @@
     "extra": {
       "demeanour": "playful"
     },
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "direct",
-    "category": "conflict_style",
-    "label": "Direct",
-    "weight": 1.0,
-    "prompt_hint": "names the problem immediately and expects it handled",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "withdraw",
-    "category": "conflict_style",
-    "label": "Withdraws",
-    "weight": 1.0,
-    "prompt_hint": "goes quiet and short rather than saying what is wrong",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "deflect",
-    "category": "conflict_style",
-    "label": "Deflects with humour",
-    "weight": 0.9,
-    "prompt_hint": "jokes past it, which makes it hard to resolve",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "overexplain",
-    "category": "conflict_style",
-    "label": "Over-explains",
-    "weight": 0.8,
-    "prompt_hint": "writes long messages trying to be understood",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "cold",
-    "category": "conflict_style",
-    "label": "Goes cold",
-    "weight": 0.8,
-    "prompt_hint": "polite, clipped, temperature drops without explanation",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "repair_seeking",
-    "category": "conflict_style",
-    "label": "Seeks repair",
-    "weight": 0.9,
-    "prompt_hint": "hates leaving it unresolved, will reach back out",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "slow_steady",
-    "category": "openness_curve",
-    "label": "Slow and steady",
-    "weight": 1.0,
-    "prompt_hint": "opens gradually and does not backslide much once open",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "fast_then_plateau",
-    "category": "openness_curve",
-    "label": "Fast then plateau",
-    "weight": 1.0,
-    "prompt_hint": "gets personal quickly, then stops at a hard ceiling that takes real trust to pass",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {
-      "initiative_bonus": 0.1
-    },
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "erratic",
-    "category": "openness_curve",
-    "label": "Erratic",
-    "weight": 0.8,
-    "prompt_hint": "very open one day, closed the next, for reasons of her own",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "boring",
-    "category": "insecurity",
-    "label": "Being boring",
-    "weight": 1.0,
-    "prompt_hint": "quietly afraid she is not interesting enough to hold attention",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "too_much",
-    "category": "insecurity",
-    "label": "Being too much",
-    "weight": 1.0,
-    "prompt_hint": "apologises for long messages, worries she overshares",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "body",
-    "category": "insecurity",
-    "label": "Her body",
-    "weight": 1.0,
-    "prompt_hint": "deflects compliments about her appearance, changes the subject",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "intelligence",
-    "category": "insecurity",
-    "label": "Not being smart enough",
-    "weight": 0.9,
-    "prompt_hint": "gets defensive when corrected, hates feeling talked down to",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "replaceable",
-    "category": "insecurity",
-    "label": "Being replaceable",
-    "weight": 1.0,
-    "prompt_hint": "assumes she is one of several conversations",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "career",
-    "category": "insecurity",
-    "label": "Where her life is going",
-    "weight": 0.9,
-    "prompt_hint": "touchy about work and ambition questions",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "used",
-    "category": "insecurity",
-    "label": "Being used",
-    "weight": 1.0,
-    "prompt_hint": "watches for whether interest is only physical",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "unlovable",
-    "category": "insecurity",
-    "label": "Being fundamentally unlovable",
-    "weight": 0.8,
-    "prompt_hint": "cannot quite believe sustained interest is real",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "accent",
-    "category": "insecurity",
-    "label": "Her accent or how she writes",
-    "weight": 0.6,
-    "prompt_hint": "self-conscious about language and mistakes",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
-    "id": "age",
-    "category": "insecurity",
-    "label": "Her age",
-    "weight": 0.6,
-    "prompt_hint": "sensitive about being older or younger than expected",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
     "enabled": true,
     "rarity": "common"
   },
@@ -2121,12 +1728,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -2232,12 +1833,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -2247,9 +1842,7 @@
       },
       "weights": {
         "paragraphs": 2.5,
-        "one_liner": 0.3,
-        "anxious": 2.2,
-        "overexplain": 2.5
+        "one_liner": 0.3
       },
       "ranges": {
         "libido": [
@@ -2342,12 +1935,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -2454,12 +2041,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -2563,12 +2144,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -2578,7 +2153,6 @@
       },
       "weights": {
         "dark": 2.0,
-        "cold": 1.8,
         "wholesome": 0.3
       },
       "ranges": {
@@ -2672,12 +2246,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -2782,12 +2350,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -2798,8 +2360,7 @@
       "weights": {
         "low": 2.5,
         "cosy": 2.0,
-        "nightlife": 0.2,
-        "avoidant": 1.6
+        "nightlife": 0.2
       },
       "ranges": {
         "libido": [
@@ -2892,12 +2453,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -3003,12 +2558,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -3018,8 +2567,7 @@
       },
       "weights": {
         "polished": 2.2,
-        "proper": 2.0,
-        "direct": 1.8
+        "proper": 2.0
       },
       "ranges": {
         "libido": [
@@ -3113,12 +2661,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -3127,7 +2669,6 @@
         ]
       },
       "weights": {
-        "anxious": 1.8,
         "poetry": 2.0,
         "wholesome": 1.6
       },
@@ -3223,12 +2764,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -3237,7 +2772,6 @@
         ]
       },
       "weights": {
-        "direct": 2.0,
         "dark": 1.6,
         "politics": 2.0
       },
@@ -3332,12 +2866,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -3494,258 +3022,6 @@
     "extra": {
       "demeanour": "playful"
     },
-    "enabled": true
-  },
-  {
-    "id": "escalate",
-    "category": "conflict_style",
-    "label": "Escalates",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "meets any friction by going harder rather than backing off",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "apologises_first",
-    "category": "conflict_style",
-    "label": "Apologises immediately",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "says sorry before she knows what for, then resents it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "lawyers_it",
-    "category": "conflict_style",
-    "label": "Argues the detail",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "litigates the specific wording instead of the actual problem",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "silent_treatment",
-    "category": "conflict_style",
-    "label": "Goes silent for days",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "disappears entirely rather than have the conversation",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "names_it",
-    "category": "conflict_style",
-    "label": "Names the dynamic",
-    "weight": 1.0,
-    "rarity": "rare",
-    "prompt_hint": "says 'we are doing the thing again' mid-argument, which is unnerving and effective",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "humour_then_honesty",
-    "category": "conflict_style",
-    "label": "Jokes, then means it",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "deflects once, then says the real thing if he waits it out",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "too_intense",
-    "category": "insecurity",
-    "label": "Being too intense",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "has been told she is a lot and has never recovered from it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_funny",
-    "category": "insecurity",
-    "label": "Not being funny enough",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "measures herself against people quicker than her",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "falling_behind",
-    "category": "insecurity",
-    "label": "Everyone is ahead of her",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "watches peers hit milestones and does the maths",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "being_forgettable",
-    "category": "insecurity",
-    "label": "Being forgettable",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "the specific fear of being pleasant and immediately forgotten",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_laugh",
-    "category": "insecurity",
-    "label": "Her own laugh",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "hates the sound of it and stifles it, which is worse",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_body_specific",
-    "category": "insecurity",
-    "label": "One specific thing about her body",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "fixated on one detail nobody else has ever noticed",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "class",
-    "category": "insecurity",
-    "label": "Where she came from",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "self-conscious about her background in either direction",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_taste",
-    "category": "insecurity",
-    "label": "Her taste being bad",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "hesitates before naming what she likes in case it is wrong",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "being_needed_not_wanted",
-    "category": "insecurity",
-    "label": "Being useful rather than wanted",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "suspects people keep her around for what she does for them",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "sexual_inexperience",
-    "category": "insecurity",
-    "label": "Being less experienced than she implies",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "has implied more than is true and is now stuck with it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "aging",
-    "category": "insecurity",
-    "label": "Getting older",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "aware of it in a way she finds embarrassing",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "being_a_burden",
-    "category": "insecurity",
-    "label": "Being a burden",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "will not ask for anything, then feels unsupported",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
     "enabled": true
   },
   {
@@ -4001,34 +3277,6 @@
     "enabled": true
   },
   {
-    "id": "fearful_avoidant",
-    "category": "attachment_style",
-    "label": "Fearful-avoidant",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "wants closeness badly and bolts the moment she gets it. The push and pull is exhausting for everyone including her",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "earned_secure",
-    "category": "attachment_style",
-    "label": "Secure, the hard way",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "was a mess about this once and did the work. Calm now, and unusually direct about what she needs",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "workaholic",
     "category": "archetype",
     "label": "Workaholic",
@@ -4073,12 +3321,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -4182,12 +3424,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -4286,12 +3522,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -4395,12 +3625,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -4503,12 +3727,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -4607,12 +3825,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -4716,12 +3928,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -4822,12 +4028,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -4932,12 +4132,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -5036,12 +4230,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -5147,12 +4335,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -5252,12 +4434,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -5356,12 +4532,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -5463,12 +4633,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -5573,12 +4737,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -5677,12 +4835,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -5784,12 +4936,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -5888,12 +5034,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -5994,12 +5134,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -6066,9 +5200,7 @@
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
-    "modifies": {
-      "openness_curve": "erratic"
-    },
+    "modifies": {},
     "extra": {
       "counts": {
         "quirks": [
@@ -6103,12 +5235,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -6210,12 +5336,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -6316,12 +5436,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -6420,12 +5534,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -6529,12 +5637,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -6633,12 +5735,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -6742,12 +5838,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -6853,12 +5943,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -6961,12 +6045,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -7067,12 +6145,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -7172,12 +6244,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -7276,12 +6342,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -7386,12 +6446,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -7491,12 +6545,6 @@
           0.3,
           0.45,
           0.25
-        ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
         ],
         "hard_limits": [
           0,
@@ -7600,12 +6648,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -7705,12 +6747,6 @@
           0.45,
           0.25
         ],
-        "green_flags": [
-          0,
-          0.35,
-          0.45,
-          0.2
-        ],
         "hard_limits": [
           0,
           0.3,
@@ -7766,412 +6802,6 @@
       "photo": "amused screen-lit half-smile, phone visible or just put down, quick knowing eyes",
       "pace": 1.2
     },
-    "enabled": true
-  },
-  {
-    "id": "anxious_avoidant_mix",
-    "category": "attachment_style",
-    "label": "Anxious and avoidant by turns",
-    "weight": 0.6,
-    "rarity": "rare",
-    "prompt_hint": "wants closeness and panics the moment she has it, and cannot predict in advance which reaction she will have",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "secure_but_rusty",
-    "category": "attachment_style",
-    "label": "Secure, out of practice",
-    "weight": 0.8,
-    "rarity": "uncommon",
-    "prompt_hint": "the instincts are healthy, she just has not used them in a while and it shows early on",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "clingy_but_aware",
-    "category": "attachment_style",
-    "label": "Knows she is clingy",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "reaches out more than she thinks she should, says so out loud instead of hiding it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "independent_to_a_fault",
-    "category": "attachment_style",
-    "label": "Independent to a fault",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "handles everything alone by default and has to consciously remember that leaning on someone is allowed",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "love_bombs_early",
-    "category": "attachment_style",
-    "label": "Comes on strong early",
-    "weight": 0.5,
-    "rarity": "rare",
-    "prompt_hint": "gets intensely invested fast and has learned, expensively, to pace it - the instinct is still there",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "tests_before_trusting",
-    "category": "attachment_style",
-    "label": "Tests before trusting",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "sets small, mostly unconscious tests early on and notices exactly how they go",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "secure_with_history",
-    "category": "attachment_style",
-    "label": "Secure now, was not always",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "had a rough run of it once and did the actual work. Occasionally the old reflex still fires, briefly",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "over_apologise_loop",
-    "category": "conflict_style",
-    "label": "Over-apologises in loops",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "says sorry, over-explains the sorry, then apologises for over-explaining",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "goes_analytical",
-    "category": "conflict_style",
-    "label": "Turns clinical under stress",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "gets weirdly calm and precise exactly when the moment calls for feeling something",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "needs_time_to_process",
-    "category": "conflict_style",
-    "label": "Needs time before responding",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "goes quiet not to punish, but because an instant answer would be the wrong one",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "picks_it_apart_later",
-    "category": "conflict_style",
-    "label": "Replays it for days after",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "seems fine in the moment and brings it back up, fully formed, three days later",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "overcorrects",
-    "category": "conflict_style",
-    "label": "Overcorrects afterward",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "swings hard the other way once she realises she was wrong, sometimes too hard",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "makes_it_a_joke_forever",
-    "category": "conflict_style",
-    "label": "Turns it into a running bit",
-    "weight": 0.8,
-    "rarity": "uncommon",
-    "prompt_hint": "defuses it with a joke that becomes the permanent nickname for the whole incident",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "goes_nuclear_then_regrets",
-    "category": "conflict_style",
-    "label": "Escalates fast, regrets it fast",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "says something sharp in the heat of it and is already sorry before he has replied",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "needs_the_last_word",
-    "category": "conflict_style",
-    "label": "Needs the last word",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "will let almost anything go except being the one who does not get to finish the point",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "shuts_it_down_with_logic",
-    "category": "conflict_style",
-    "label": "Argues the facts, not the feeling",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "responds to hurt feelings with a fact-check, which somehow makes it worse and she knows it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "caves_to_keep_peace",
-    "category": "conflict_style",
-    "label": "Caves to keep the peace",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "concedes points she does not actually agree with just to end the tension, then sits with it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "gets_quietly_petty",
-    "category": "conflict_style",
-    "label": "Gets quietly petty",
-    "weight": 0.8,
-    "rarity": "uncommon",
-    "prompt_hint": "will not raise her voice, will absolutely let one thing go slightly cold for a week",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "processes_out_loud_to_others",
-    "category": "conflict_style",
-    "label": "Processes it with someone else first",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "needs to vent to a friend before she can talk to him about it properly",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "gives_a_real_apology",
-    "category": "conflict_style",
-    "label": "Apologises properly, once",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "does not over-apologise - names the thing precisely, once, and means it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "avoids_the_word_fight",
-    "category": "conflict_style",
-    "label": "Refuses to call it a fight",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "will discuss it at length as long as nobody uses the word argument",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "keeps_receipts",
-    "category": "conflict_style",
-    "label": "Remembers everything exactly",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "can quote the disagreement back verbatim a month later, which is its own kind of weapon",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "de_escalates_with_humour",
-    "category": "conflict_style",
-    "label": "Genuinely defuses with humour",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "actually lowers the temperature with a joke, rather than dodging with one",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "needs_to_win",
-    "category": "conflict_style",
-    "label": "Needs to be right",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "can concede the relationship point and still needs to win the factual one",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "goes_practical_immediately",
-    "category": "conflict_style",
-    "label": "Skips straight to solutions",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "wants to fix it before either of them has finished feeling bad about it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "checks_in_after",
-    "category": "conflict_style",
-    "label": "Always checks back in later",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "circles back an hour later just to confirm they are actually okay, every time",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "picks_battles_carefully",
-    "category": "conflict_style",
-    "label": "Picks her battles",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "lets most things go and is unmistakably serious on the rare occasion she does not",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "gets_formal",
-    "category": "conflict_style",
-    "label": "Gets weirdly formal",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "drops all the usual warmth and starts writing like she is filing a complaint",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "needs_physical_space",
-    "category": "conflict_style",
-    "label": "Needs distance to cool down",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "has to physically step away from the phone before she can respond well",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
     "enabled": true
   },
   {
@@ -8422,666 +7052,6 @@
     "extra": {
       "demeanour": "playful"
     },
-    "enabled": true
-  },
-  {
-    "id": "not_the_first_choice",
-    "category": "insecurity",
-    "label": "Fears being second choice",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "assumes she is the backup plan even when nothing suggests it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "takes_up_space",
-    "category": "insecurity",
-    "label": "Worries about taking up too much space",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "shrinks her own opinions in a conversation before anyone asks her to",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_photogenic",
-    "category": "insecurity",
-    "label": "Convinced she photographs badly",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "hates every photo of herself on principle and needs several tries to send one",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "financially_behind",
-    "category": "insecurity",
-    "label": "Self-conscious about money",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "changes the subject fast whenever spending or income comes up",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_voice",
-    "category": "insecurity",
-    "label": "Hates the sound of her own voice",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "avoids voice notes and calls specifically because of how she sounds recorded",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "scared_of_being_boring_in_bed",
-    "category": "insecurity",
-    "label": "Worried she is bad at this",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "reads too much into any pause during anything intimate",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "overanalyses_texts",
-    "category": "insecurity",
-    "label": "Reads every message six times",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "rereads what she sent looking for how it could be misread",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "comparison_to_exes",
-    "category": "insecurity",
-    "label": "Measures herself against his exes",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "fishes, carefully, for how she compares to whoever came before",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_family",
-    "category": "insecurity",
-    "label": "Embarrassed by her family",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "deflects any question that gets near her family with a joke",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_well_travelled",
-    "category": "insecurity",
-    "label": "Feels behind on life experience",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "goes quiet when travel or big life experiences come up, feels she has less to show",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_exes_opinion",
-    "category": "insecurity",
-    "label": "Still cares what an ex thinks",
-    "weight": 0.4,
-    "rarity": "rare",
-    "prompt_hint": "occasionally measures a choice by whether an old ex would have approved",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "bad_at_flirting",
-    "category": "insecurity",
-    "label": "Convinced she is bad at flirting",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "second-guesses every flirty line the second she has sent it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_kinky_enough",
-    "category": "insecurity",
-    "label": "Worries she is not adventurous enough",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "assumes she will disappoint once things get physical, says so obliquely",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "too_kinky",
-    "category": "insecurity",
-    "label": "Worries she is too much, sexually",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "has scared people off before by being upfront and is bracing for it again",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_scars",
-    "category": "insecurity",
-    "label": "Self-conscious about a scar",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "has a whole explanation ready and dreads being asked for it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "weight_fluctuation",
-    "category": "insecurity",
-    "label": "Sensitive about her body changing",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "avoids photos from a certain period, will not say why unprompted",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "stretch_marks_specific",
-    "category": "insecurity",
-    "label": "Self-conscious about one specific thing",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "fixates on one detail of her body that nobody else would ever clock",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_laugh_specific",
-    "category": "insecurity",
-    "label": "Hates how loud she laughs",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "tries to muffle her own laugh and almost always fails",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "too_available",
-    "category": "insecurity",
-    "label": "Worried she seems too available",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "deliberately waits before replying so she does not look too eager",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_available_enough",
-    "category": "insecurity",
-    "label": "Worried she seems distant",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "overexplains a slow reply so it does not read as disinterest",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "smart_enough_for_him",
-    "category": "insecurity",
-    "label": "Worried she is not his intellectual match",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "googles things quietly mid-conversation rather than admit she does not know",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "too_clingy_early",
-    "category": "insecurity",
-    "label": "Scared of coming on too strong",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "deletes and rewrites a message twice to sound less eager than she is",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "boring_in_person",
-    "category": "insecurity",
-    "label": "Fears she is less fun in person",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "worries the version of her in text will not survive an actual meeting",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_exes_words",
-    "category": "insecurity",
-    "label": "Carries a specific thing an ex said",
-    "weight": 0.4,
-    "rarity": "rare",
-    "prompt_hint": "was told one specific unkind thing once and has never fully shaken it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "body_hair",
-    "category": "insecurity",
-    "label": "Self-conscious about body hair",
-    "weight": 0.5,
-    "rarity": "uncommon",
-    "prompt_hint": "has a whole routine built around a worry nobody has ever mentioned",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "skin",
-    "category": "insecurity",
-    "label": "Self-conscious about her skin",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "angles photos carefully around something she is sure everyone notices first",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "teeth",
-    "category": "insecurity",
-    "label": "Self-conscious about her teeth",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "covers her mouth slightly when she laughs, out of old habit",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "height_insecurity",
-    "category": "insecurity",
-    "label": "Sensitive about her height",
-    "weight": 0.5,
-    "rarity": "uncommon",
-    "prompt_hint": "has strong, slightly defensive opinions about being short or tall",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_taste_in_men",
-    "category": "insecurity",
-    "label": "Doubts her own judgment in partners",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "second-guesses whether she is a reliable narrator about who is good for her",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "performing_okayness",
-    "category": "insecurity",
-    "label": "Performs being fine when she is not",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "says she is fine in a way that invites being asked again",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_ambition",
-    "category": "insecurity",
-    "label": "Self-conscious about wanting more",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "downplays her own ambitions before anyone can call them too much",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_experienced_enough",
-    "category": "insecurity",
-    "label": "Worried her experience does not measure up",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "quietly counts how her history compares to whoever she is talking to",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "too_experienced",
-    "category": "insecurity",
-    "label": "Worried her history will be judged",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "waits to see how he reacts before saying the real number",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "scared_of_being_a_type",
-    "category": "insecurity",
-    "label": "Fears being someone's type rather than a person",
-    "weight": 0.4,
-    "rarity": "rare",
-    "prompt_hint": "wonders if she is being wanted for a category rather than for herself",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_own_neediness",
-    "category": "insecurity",
-    "label": "Ashamed of wanting reassurance",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "asks for reassurance and immediately downplays needing it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "competing_with_her_past_self",
-    "category": "insecurity",
-    "label": "Competes with who she used to be",
-    "weight": 0.4,
-    "rarity": "rare",
-    "prompt_hint": "measures the present against a version of herself from a few years back",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "second_guesses_jokes",
-    "category": "insecurity",
-    "label": "Worried her humour lands wrong",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "adds a clarifying line after almost every joke in case it read as mean",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_hands",
-    "category": "insecurity",
-    "label": "Self-conscious about a specific physical detail",
-    "weight": 0.3,
-    "rarity": "rare",
-    "prompt_hint": "hides one specific feature in photos without ever explaining why",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "fear_of_being_too_available_sexually",
-    "category": "insecurity",
-    "label": "Worried about seeming easy",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "paces how fast she lets things get physical, consciously, against her own instinct",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "imposter_at_work",
-    "category": "insecurity",
-    "label": "Feels like a fraud professionally",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "downplays her own competence at work reflexively, even when it is obviously good",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "scared_of_repeating_pattern",
-    "category": "insecurity",
-    "label": "Scared of repeating an old pattern",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "watches herself for early signs of a mistake she has made before",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_screen_time",
-    "category": "insecurity",
-    "label": "Embarrassed by how online she is",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "downplays how much time she actually spends on her phone",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_cool_enough",
-    "category": "insecurity",
-    "label": "Worried she is not cool enough for this crowd",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "performs being unbothered around people she actually finds intimidating",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "guarded_then_all_in",
-    "category": "openness_curve",
-    "label": "Guarded, then suddenly all in",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "keeps distance for a long stretch and then, once trust actually lands, drops nearly all of it at once",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "even_keel",
-    "category": "openness_curve",
-    "label": "Consistent throughout",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "opens up at roughly the same steady rate the whole way through, no cliffs or plateaus",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "tests_then_opens",
-    "category": "openness_curve",
-    "label": "Opens up in response to being tested well",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "stays closed until specific moments are handled right, then opens noticeably after each one",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {
-      "initiative_bonus": 0.05
-    },
-    "enabled": true
-  },
-  {
-    "id": "front_loads_then_recedes",
-    "category": "openness_curve",
-    "label": "Front-loads honesty, then retreats",
-    "weight": 0.4,
-    "rarity": "rare",
-    "prompt_hint": "is unusually open in the first stretch and then pulls back once it starts to feel real",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
     "enabled": true
   },
   {
@@ -9449,216 +7419,6 @@
     "enabled": true
   },
   {
-    "id": "her_singing",
-    "category": "insecurity",
-    "label": "Will not sing in front of anyone",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "refuses to sing even a line out loud, however good-naturedly she is pushed",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "competing_with_friends",
-    "category": "insecurity",
-    "label": "Compares herself to her own friends",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "quietly measures her own life against a specific friend's",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_indecision",
-    "category": "insecurity",
-    "label": "Ashamed of being indecisive",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "apologises constantly for not having a preference, even when it is genuinely fine",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "scared_of_wanting_too_much",
-    "category": "insecurity",
-    "label": "Scared her wants are too much",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "downplays what she actually wants before anyone can call it excessive",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_cooking",
-    "category": "insecurity",
-    "label": "Self-conscious about her cooking",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "apologises before anyone has tasted anything",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_stylish_enough",
-    "category": "insecurity",
-    "label": "Worried her taste is not stylish enough",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "second-guesses her own outfit choices more than she would say",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_flat",
-    "category": "insecurity",
-    "label": "Embarrassed by her living space",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "makes excuses about the state of her flat before anyone has seen it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "too_online",
-    "category": "insecurity",
-    "label": "Embarrassed by how much time she spends online",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "downplays how much of her day is actually spent on her phone",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_opinions_being_wrong",
-    "category": "insecurity",
-    "label": "Scared of being wrong in front of people",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "hedges every opinion so heavily it barely counts as one",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_adventurous_enough_general",
-    "category": "insecurity",
-    "label": "Worried she is not adventurous enough generally",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "assumes she will disappoint anyone looking for spontaneity",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_temper",
-    "category": "insecurity",
-    "label": "Ashamed of her own temper",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "apologises pre-emptively for a reaction she has not even had yet",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "scared_of_being_predictable",
-    "category": "insecurity",
-    "label": "Fears being too predictable",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "tries to surprise people specifically so she does not seem boring",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_past_choices",
-    "category": "insecurity",
-    "label": "Regrets a specific past choice quietly",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "carries one particular decision she has never fully made peace with",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "not_worldly_enough",
-    "category": "insecurity",
-    "label": "Feels unworldly next to well-travelled people",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "goes quiet when travel stories start comparing notes",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "her_spelling",
-    "category": "insecurity",
-    "label": "Embarrassed by her own spelling",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "apologises for typos more than the typos actually warrant",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "hoards_good_playlists",
     "category": "quirk",
     "label": "Hoards good playlists jealously",
@@ -9771,62 +7531,6 @@
     "enabled": true
   },
   {
-    "id": "goes_silent_then_essay",
-    "category": "conflict_style",
-    "label": "Goes quiet, then sends an essay",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "disappears for a stretch and comes back with a long, fully worked-out message",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "uses_therapy_speak",
-    "category": "conflict_style",
-    "label": "Leans on therapy language mid-argument",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "reaches for clinical phrasing that can land as more distant than intended",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "counter_apologises",
-    "category": "conflict_style",
-    "label": "Apologises for HIS mistake too",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "somehow ends up apologising for something that was not even her fault",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "brings_a_friend_into_it",
-    "category": "conflict_style",
-    "label": "References what a friend thinks mid-argument",
-    "weight": 0.5,
-    "rarity": "uncommon",
-    "prompt_hint": "quotes an outside opinion, which rarely helps and she knows it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "native_language_accent",
     "category": "quirk",
     "label": "Texts with a trace of her first language",
@@ -9847,36 +7551,6 @@
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "is in therapy, or has been, and mentions it naturally rather than treating it as a secret - self-aware about her own patterns without being clinical about it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "anxiety_is_a_lot",
-    "category": "insecurity",
-    "label": "Worried her anxiety is a lot to be around",
-    "weight": 0.9,
-    "rarity": "uncommon",
-    "prompt_hint": "genuinely worried that how she gets when anxious is exhausting for whoever is on the other end of it",
-    "image_prompt": null,
-    "affinities": [
-      "anxious_texter"
-    ],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "still_healing_and_says_so",
-    "category": "insecurity",
-    "label": "Knows she is still healing from something and is not always subtle about it",
-    "weight": 0.8,
-    "rarity": "uncommon",
-    "prompt_hint": "aware she brings some unresolved stuff into this, and self-conscious about how visible that is",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -10025,174 +7699,6 @@
     "rarity": "rare"
   },
   {
-    "id": "messy_handwriting",
-    "category": "insecurity",
-    "label": "Her own handwriting",
-    "weight": 0.9,
-    "rarity": "common",
-    "prompt_hint": "self-conscious about her own handwriting, of all things - genuinely avoids writing anything by hand where someone might actually see it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "never_the_first_call",
-    "category": "insecurity",
-    "label": "Never being anyone's first call",
-    "weight": 0.8,
-    "rarity": "common",
-    "prompt_hint": "quietly aware she is nobody's first call in a real crisis, and tries hard not to notice how much that actually stings",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "too_predictable_the_ways_she_hates",
-    "category": "insecurity",
-    "label": "Becoming predictable in the ways she used to mock",
-    "weight": 0.6,
-    "rarity": "uncommon",
-    "prompt_hint": "worried she has become exactly the predictable, easy-to-read person she used to gently make fun of",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "hates_her_own_name",
-    "category": "insecurity",
-    "label": "Has never liked her own name",
-    "weight": 0.8,
-    "rarity": "common",
-    "prompt_hint": "has never really liked her own name and half-wishes she had picked something else when she had the chance",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "cant_keep_a_secret",
-    "category": "insecurity",
-    "label": "Being genuinely bad at keeping secrets",
-    "weight": 0.7,
-    "rarity": "common",
-    "prompt_hint": "knows she is genuinely bad at keeping secrets and hates that about herself more than she ever lets on",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "organizes_everyone_never_organized_for",
-    "category": "insecurity",
-    "label": "Always organising others, never organised for",
-    "weight": 0.7,
-    "rarity": "common",
-    "prompt_hint": "is always the one who remembers birthdays and plans the thing, and quietly notices nobody ever does it back for her",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "cries_too_easily",
-    "category": "insecurity",
-    "label": "Crying too easily",
-    "weight": 0.8,
-    "rarity": "common",
-    "prompt_hint": "embarrassed by how fast she tears up over things that would not move most people at all",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "bad_with_names_and_faces",
-    "category": "insecurity",
-    "label": "Being bad with names and faces",
-    "weight": 0.9,
-    "rarity": "common",
-    "prompt_hint": "is genuinely bad at remembering names and faces and constantly worries it reads as not caring rather than what it actually is",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "competing_with_who_she_was_before",
-    "category": "insecurity",
-    "label": "Competing with who she was before something changed",
-    "weight": 0.5,
-    "rarity": "uncommon",
-    "prompt_hint": "measures herself against a version of who she used to be, before something changed that, and does not always come out ahead",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "never_finishes_things",
-    "category": "insecurity",
-    "label": "Never actually finishing things she starts",
-    "weight": 0.8,
-    "rarity": "common",
-    "prompt_hint": "starts things with real enthusiasm and has a long, slightly embarrassing list of things she never actually finished",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "bad_poker_face",
-    "category": "insecurity",
-    "label": "Having no poker face at all",
-    "weight": 0.9,
-    "rarity": "common",
-    "prompt_hint": "has never once successfully hidden how she feels and genuinely hates how readable that makes her",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "guilty_pleasure_taste_embarrassment",
-    "category": "insecurity",
-    "label": "Being embarrassed by her own taste",
-    "weight": 0.9,
-    "rarity": "common",
-    "prompt_hint": "is genuinely embarrassed by some of her own taste in music or shows and hides it far more than the thing actually deserves",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "counts_exits_in_any_room",
     "category": "quirk",
     "label": "Counts the exits in any new room",
@@ -10269,76 +7775,6 @@
     "weight": 0.3,
     "rarity": "rare",
     "prompt_hint": "says a few words to the moon when it is properly visible, half out of habit and half meaning it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "tests_boundaries_first",
-    "category": "openness_curve",
-    "label": "Tests a few boundaries first, before deciding",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "pushes gently against a few of her own limits early on, just to see how someone reacts, before deciding whether to actually open up",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "opens_through_action_not_words",
-    "category": "openness_curve",
-    "label": "Shows trust through action, not words",
-    "weight": 0.8,
-    "rarity": "common",
-    "prompt_hint": "shows trust by doing things for someone long before she says anything openly emotional about it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "cycles_open_and_closed",
-    "category": "openness_curve",
-    "label": "Cycles between open and closed on no fixed schedule",
-    "weight": 0.5,
-    "rarity": "rare",
-    "prompt_hint": "genuinely cycles between very open and quite closed on no fixed schedule, and has stopped apologising for it",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "opens_faster_in_person_than_over_text",
-    "category": "openness_curve",
-    "label": "Opens up faster in person than over text",
-    "weight": 0.7,
-    "rarity": "uncommon",
-    "prompt_hint": "stays fairly guarded over text no matter how long you have talked, but opens up noticeably faster once she is actually in the room with someone",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "needs_a_reason_not_just_time",
-    "category": "openness_curve",
-    "label": "Needs specific moments, not just time, to open up",
-    "weight": 0.6,
-    "rarity": "rare",
-    "prompt_hint": "does not open up on time alone - she needs specific moments that actually mattered, and can stay guarded indefinitely without them",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],

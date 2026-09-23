@@ -17,6 +17,7 @@ import { describeHerMoment } from './moment.js';
 import { pickNudge } from './nudge.js';
 import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty } from './voice.js';
 import { photosEnabled } from './images.js';
+import { fantasyLog } from './fantasies.js';
 
 export { detectRoleplay };
 
@@ -67,6 +68,8 @@ function fallbackOutput(): ActorOutput {
       photo_situation: null,
       photo_aspect: null,
       photo_shows_face: null,
+      fantasy_pitched: null,
+      new_fantasy: null,
     },
   };
 }
@@ -92,6 +95,8 @@ function normalizeHidden(raw: any): ActorHidden {
     photo_situation: raw?.photo_situation ? String(raw.photo_situation).slice(0, 300) : null,
     photo_aspect: PHOTO_ASPECTS.has(raw?.photo_aspect) ? raw.photo_aspect : null,
     photo_shows_face: typeof raw?.photo_shows_face === 'boolean' ? raw.photo_shows_face : null,
+    fantasy_pitched: Number.isInteger(raw?.fantasy_pitched) && raw.fantasy_pitched > 0 ? raw.fantasy_pitched : null,
+    new_fantasy: raw?.new_fantasy ? String(raw.new_fantasy).slice(0, 400) : null,
   };
 }
 
@@ -138,6 +143,8 @@ export interface ActorContext {
 /** Set by runActor so the caller can burn down a thread she was told to raise. */
 export interface ActorRun extends ActorOutput {
   raisedThreadId?: string;
+  /** The fantasy the pitch_fantasy nudge told her to pitch this turn, if it fired. */
+  nudgedFantasy?: string;
 }
 
 function buildPrompt(
@@ -170,7 +177,7 @@ function buildPrompt(
     life_block: lifeBlock(seed),
     interests_block: interestsBlock(seed),
     sexual_block: sexualBlock(seed),
-    fantasies_block: fantasiesBlock(seed),
+    fantasies_block: fantasiesBlock(seed, fantasyLog(relationship)),
     pace: describePace(character),
     spice_block: spiceBlock(seed, relationship.arousal),
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
@@ -357,7 +364,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
     }
 
     if (nudge) logger.debug('actor', `nudge applied: ${nudge.id}`, { character: ctx.character.username });
-    return { ...out, raisedThreadId: nudge?.threadId };
+    return { ...out, raisedThreadId: nudge?.threadId, nudgedFantasy: nudge?.fantasy };
   }
 
   logger.error('actor', `actor failed twice for ${ctx.character.username}, using fallback`);

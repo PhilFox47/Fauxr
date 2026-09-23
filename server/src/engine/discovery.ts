@@ -81,6 +81,12 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
     add(`accessory:${i}`, 'looks', 'Accessory', label('accessory', a), 'Needs a photo.'));
 
   // ---- intimate: the part that is actually discovered
+  add('sexual_persona', 'intimate', 'In bed', label('sexual_persona', s.sexual_persona), 'Becomes obvious once things get going.');
+  add('search_motive', 'intimate', 'Why she is here', label('search_motive', s.search_motive), 'Ask her what she is looking for.');
+  add('dirty_talk', 'intimate', 'Dirty talk', label('dirty_talk', s.dirty_talk), 'Get her talking.');
+  add('sexual_experience', 'intimate', 'Experience', label('sexual_experience', s.sexual_experience), 'Ask what she has done.');
+  add('body_pride', 'intimate', 'Proudest of', label('body_pride', s.body_pride), 'Compliment her and see what lands.');
+  add('signature_move', 'intimate', 'Her signature', label('signature_move', s.signature_move), 'She will come back to it.');
   add('orientation', 'basics', 'Orientation', label('orientation', s.orientation), '');
   add('freak', 'intimate', 'How far she goes',
     s.freak >= 4 ? 'Very little fazes her' : s.freak >= 2.5 ? 'Fairly open' : s.freak >= 1.2 ? 'Open to a point' : 'Knows what she likes',
