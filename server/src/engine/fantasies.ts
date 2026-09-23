@@ -9,7 +9,8 @@ import { fantasyList } from './blocks.js';
  * The list itself lives on her seed (seed.hints.fantasies, one per line) because it is part of
  * who she is, and it can grow: she invents new ones in conversation. What he knows about them
  * lives on the relationship, in rel.mood.fantasy_log, keyed by the fantasy's exact text -
- * pitched once she has actually put it to him, played once they have acted it out as a scene.
+ * pitched once she has actually put it to him, played once they have actually acted it out,
+ * over text or on a date (the Director and the date summary report that).
  * Unpitched ones stay hidden from his side, the same as her undiscovered kinks.
  */
 

@@ -260,20 +260,12 @@ async function runActorPhase(
   // A thread she was told to raise is now spent, whether or not he engaged with it.
   if (result.raisedThreadId) markThreadRaised(rel, result.raisedThreadId);
 
-  // She pitched a fantasy: log it so it shows on her profile, and put a "Play it out" card in
-  // the chat so he can go straight into it. A brand-new one she made up joins her list.
+  // She pitched a fantasy: log it, so it shows on her profile and she knows he has heard it. A
+  // brand-new one she made up joins her list. Playing it out happens in the conversation itself
+  // (or on a date) - there is no separate mode for it.
   const pitched = pitchedFantasy(character, result);
   if (pitched) {
     const firstTime = markPitched(rel, pitched);
-    if (firstTime || !recentPitchCard(character.id, pitched)) {
-      const card = addMessage({
-        character_id: character.id,
-        sender: 'system',
-        text: pitched,
-        meta: { type: 'fantasy_pitch', fantasy: pitched },
-      });
-      bus.emitEvent({ type: 'message', character_id: character.id, message: card });
-    }
     logger.debug('actor', `${character.username} pitched a fantasy`, { fantasy: pitched, firstTime });
   }
 
@@ -331,13 +323,6 @@ function pitchedFantasy(character: Character, result: ActorRun): string | null {
   if (n && list[n - 1]) return list[n - 1];
   if (result.nudgedFantasy && list.includes(result.nudgedFantasy)) return result.nudgedFantasy;
   return null;
-}
-
-/** Whether a Play-it-out card for this fantasy is already in the last stretch of chat. */
-function recentPitchCard(characterId: string, fantasy: string): boolean {
-  return recentMessages(characterId, 30).some(
-    (m) => m.sender === 'system' && m.meta?.type === 'fantasy_pitch' && m.meta?.fantasy === fantasy,
-  );
 }
 
 /**

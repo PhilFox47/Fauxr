@@ -117,6 +117,7 @@ Reply with exactly one JSON object and nothing else:
     "reason": "one sentence on what happened",
     "discovered": [],
     "big_secret_revealed": false,
+    "fantasies_played": [],
     "ledger": {
       "facts_about_user": ["what he told her about himself this turn"],
       "facts_about_her": ["what she told him about herself this turn"],
@@ -145,6 +146,10 @@ Reply with exactly one JSON object and nothing else:
 told or showed him. Be generous: if she said it, he knows it. Use the exact keys from this
 list, only for things that genuinely came out:
 {{undiscovered_keys}}
+
+"fantasies_played" lists the numbers of her fantasies (from HER FANTASIES above) that the two
+of them actually acted out in this exchange - sexted all the way through, not just mentioned.
+Usually empty.
 
 "big_secret_revealed" is true only on the turn her hidden secret (if her seed has one - most
 do not) actually came out.

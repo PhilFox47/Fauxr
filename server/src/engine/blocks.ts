@@ -460,6 +460,8 @@ export function historyBlock(
   const her = character.real_name;
   const him = user?.display_name ?? 'him';
   return messages
+    // Leftover cards from the short-lived "Play it out" button carry nothing she said.
+    .filter((m) => m.meta?.type !== 'fantasy_pitch')
     .map((m) => {
       const who = m.sender === 'user' ? him : m.sender === 'character' ? her : 'system';
       const time = new Date(m.sent_at).toLocaleString('en-GB', {

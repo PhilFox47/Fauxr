@@ -374,15 +374,6 @@ export interface Location {
 export interface DateSession {
   id: string;
   character_id: string;
-  /**
-   * 'date' is a trip to one of his locations. 'scene' plays out a fantasy - one of hers
-   * ("Play it out") or a premise he wrote - in the same in-person format, with no location.
-   */
-  kind: 'date' | 'scene';
-  /** For a scene: the setup being played out. Null for a date. */
-  premise: string | null;
-  /** For a scene started from one of her fantasies: that fantasy's exact text, for tracking. */
-  fantasy: string | null;
   status: 'active' | 'ended';
   /** When they are meeting, as he wrote it - "tonight, 8pm", not a parsed timestamp. */
   when_at: string;

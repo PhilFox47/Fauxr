@@ -627,9 +627,6 @@ function hydrateDate(row: any): DateSession {
   return {
     id: row.id,
     character_id: row.character_id,
-    kind: row.kind === 'scene' ? 'scene' : 'date',
-    premise: row.premise ?? null,
-    fantasy: row.fantasy ?? null,
     status: row.status === 'active' ? 'active' : 'ended',
     when_at: row.when_at ?? '',
     where_at: row.where_at ?? '',
@@ -647,14 +644,11 @@ export function createDate(d: {
   when_at: string;
   where_at: string;
   location_id: string | null;
-  kind?: 'date' | 'scene';
-  premise?: string | null;
-  fantasy?: string | null;
 }): DateSession {
   db.prepare(
-    `INSERT INTO dates (id, character_id, status, when_at, where_at, location_id, kind, premise, fantasy, created_at)
-     VALUES (@id, @character_id, 'active', @when_at, @where_at, @location_id, @kind, @premise, @fantasy, @created_at)`,
-  ).run({ kind: 'date', premise: null, fantasy: null, ...d, created_at: nowIso() });
+    `INSERT INTO dates (id, character_id, status, when_at, where_at, location_id, created_at)
+     VALUES (@id, @character_id, 'active', @when_at, @where_at, @location_id, @created_at)`,
+  ).run({ ...d, created_at: nowIso() });
   return getDate(d.id)!;
 }
 

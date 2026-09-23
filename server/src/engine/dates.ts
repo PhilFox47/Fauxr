@@ -24,7 +24,7 @@ import { describeSeed } from './generator.js';
 import { enqueueImage } from './images.js';
 import { describeHerMoment } from './moment.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
-import { markPlayed } from './fantasies.js';
+import { fantasyLog } from './fantasies.js';
 import { userCardBlock } from './usercard.js';
 
 /**
@@ -43,8 +43,6 @@ import { userCardBlock } from './usercard.js';
 
 /** Her opening beat is generated from an empty transcript, so the scene starts already moving. */
 const OPENING_NOTE = 'The date has just begun. Open the scene: arrive, or be found already there.';
-const SCENE_OPENING_NOTE =
-  'The scene has just begun. Open it: set it up from the premise - where you are, what is happening - and start playing your part straight away.';
 
 /**
  * Used when the model fails twice. Deliberately in register - a canned "sorry, my phone did
@@ -164,33 +162,6 @@ export interface DateTurnResult {
 // ------------------------------------------------------------------ prompt blocks
 
 /** Where they are, as she experiences it. His own description of the place, plus the time. */
-/**
- * A scene has no location of his: the premise is the whole setup. Played in person in the same
- * format as a date, but it is a fantasy the two of them agreed to act out, not an evening out.
- */
-export function sceneBlock(date: DateSession): string {
-  return [
-    'This is not a date. The two of you are playing out a fantasy together, in person, and you have',
-    'both agreed to it. The premise:',
-    '',
-    date.premise || date.where_at || 'something you both wanted to try',
-    '',
-    date.fantasy
-      ? 'This one is yours - you pitched it to him. Lead it: you know how you want it to go.'
-      : 'This one is his idea. Throw yourself into it and make it yours - add details, push it further.',
-    'Play your part fully and in character for the scenario, including any role it gives you. Set the',
-    'scene through what happens, not by summarising it. It can go anywhere the two of you take it,',
-    'within your hard limits.',
-  ].join('\n');
-}
-
-/** The setup block for either kind of session. */
-export function settingBlock(date: DateSession): string {
-  return date.kind === 'scene'
-    ? sceneBlock(date)
-    : locationBlock(date, date.location_id ? getLocation(date.location_id) : null);
-}
-
 export function locationBlock(date: DateSession, location: Location | null): string {
   const lines = [`Place: ${location?.name || date.where_at || 'somewhere the two of you agreed on'}`];
   const description = location?.description?.trim();
@@ -212,16 +183,11 @@ function buildDatePrompt(
   return render('actor_date', {
     char_display_name: character.real_name,
     user_name: user?.display_name ?? 'him',
-    scene_intro: date.kind === 'scene'
-      ? `You are ${character.real_name}, in person with ${user?.display_name ?? 'him'}, right now, playing out a fantasy together.`
-      : `You are ${character.real_name}. You are on a date with ${user?.display_name ?? 'him'}, in person, right now.`,
-    is_scene: date.kind === 'scene' ? '1' : '',
-    is_date: date.kind === 'scene' ? '' : '1',
-    location_block: settingBlock(date),
-    // Empty on the opening beat, which is what the opening note replaces.
+    location_block: locationBlock(date, date.location_id ? getLocation(date.location_id) : null),
+    // Empty on the opening beat, which is what OPENING_NOTE replaces.
     history_block: transcript.length
       ? historyBlock(transcript, character, user)
-      : date.kind === 'scene' ? SCENE_OPENING_NOTE : OPENING_NOTE,
+      : OPENING_NOTE,
     identity_block: identityBlock(character, flags),
     speech_style_block: speechStyleBlock(seed),
     quirks_block: quirksBlock(seed),
@@ -237,7 +203,7 @@ function buildDatePrompt(
     life_block: lifeBlock(seed),
     interests_block: interestsBlock(seed),
     sexual_block: sexualBlock(seed),
-    fantasies_block: fantasiesBlock(seed),
+    fantasies_block: fantasiesBlock(seed, fantasyLog(rel)),
     // 'in_person': the texting version of this block forbids narration and asterisk actions
     // and demands phone-typing habits, which flatly contradicts actor_date.md's own format -
     // feeding it in unmodified used to hand the model two contradictory rule sets at once.
@@ -620,61 +586,6 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
   return date;
 }
 
-export interface StartSceneInput {
-  characterId: string;
-  /** What they are playing out. For one of her fantasies, its text; otherwise his own idea. */
-  premise: string;
-  /** Set when the premise is one of her fantasies, so it can be marked played afterwards. */
-  fantasy?: string | null;
-}
-
-/** A short title for the scene, used in the past-sessions list and chat markers. */
-function sceneTitle(premise: string): string {
-  const first = premise.split(/(?<=[.!?])\s/)[0].trim();
-  return first.length > 70 ? `${first.slice(0, 67).trimEnd()}...` : first;
-}
-
-/**
- * "Play it out": the same in-person room as a date, set up from a fantasy instead of one of
- * his locations. She opens it herself, straight into the premise.
- */
-export async function startScene(input: StartSceneInput): Promise<DateSession> {
-  const character = getCharacter(input.characterId);
-  if (!character) throw new Error('character not found');
-  if (character.state !== 'matched') throw new Error('you are not matched with her');
-  if (!getRelationship(character.id)) throw new Error('relationship missing');
-  if (activeDate(character.id)) throw new Error('you are already in a scene or on a date with her');
-  const premise = input.premise.replace(/\s+/g, ' ').trim().slice(0, 1200);
-  if (premise.length < 8) throw new Error('describe the scene in a few words at least');
-
-  const date = createDate({
-    id: randomUUID(),
-    character_id: character.id,
-    when_at: '',
-    where_at: sceneTitle(premise),
-    location_id: null,
-    kind: 'scene',
-    premise,
-    fantasy: input.fantasy ?? null,
-  });
-  clearWakeup(character.id);
-
-  const marker = addMessage({
-    character_id: character.id,
-    sender: 'system',
-    text: `You and ${character.real_name} started playing out: ${date.where_at}`,
-    meta: { type: 'date_started', date_id: date.id, kind: 'scene' },
-  });
-  bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
-  bus.emitEvent({ type: 'date', character_id: character.id, date });
-  logger.info('actor', `scene started with ${character.username}`, { premise: date.where_at, fantasy: !!date.fantasy });
-
-  void takeDateTurn(date.id).catch((err) =>
-    logger.error('actor', 'opening scene beat failed', { error: String(err) }),
-  );
-  return date;
-}
-
 /** His half of a beat. Same shape as handleUserMessage, into the date transcript instead. */
 export async function handleUserDateMessage(input: { dateId: string; text: string }): Promise<StoredMessage> {
   const date = getDate(input.dateId);
@@ -770,9 +681,9 @@ function summaryPrompt(character: Character, rel: Relationship, date: DateSessio
   return render('director_date_summary', {
     user_block: userBlock(user),
     seed_block: seedBlock(character),
-    location_block: settingBlock(date),
-    what_ended: date.kind === 'scene' ? 'A fantasy scene the two of them played out in person has just ended' : 'An in-person date has just ended',
+    location_block: locationBlock(date, date.location_id ? getLocation(date.location_id) : null),
     arousal: rel.arousal,
+    fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel)) || '(none)',
     history_block: historyBlock(withoutDirections(dateMessages(date.id)), character, user),
   });
 }
@@ -820,28 +731,18 @@ export async function endDate(dateId: string): Promise<DateSession> {
     }
   }
 
-  const isScene = date.kind === 'scene';
   if (!summary) {
-    summary = isScene
-      ? `You and ${character.real_name} played out: ${date.premise ?? date.where_at}.`
-      : `You met ${character.real_name} at ${date.where_at || 'the place you had agreed on'}${
-        date.when_at ? ` (${date.when_at})` : ''
-      }.`;
+    summary = `You met ${character.real_name} at ${date.where_at || 'the place you had agreed on'}${
+      date.when_at ? ` (${date.when_at})` : ''
+    }.`;
   }
 
   // Recorded as the evening itself, so it reads as a memory in the ledger rather than a note.
   update.ledger = {
     ...update.ledger,
-    events: [
-      ...(update.ledger?.events ?? []),
-      isScene ? `Played out a fantasy together (${date.where_at}): ${summary}` : `Date at ${date.where_at || 'a place he chose'}: ${summary}`,
-    ],
+    events: [...(update.ledger?.events ?? []), `Date at ${date.where_at || 'a place he chose'}: ${summary}`],
   };
-  if (isScene) {
-    if (date.fantasy) markPlayed(rel, date.fantasy);
-  } else {
-    rel.flags.state.has_had_first_date = true;
-  }
+  rel.flags.state.has_had_first_date = true;
   applyUpdate(character, rel, update);
 
   const ended = finishDate(date.id, summary)!;
@@ -849,10 +750,8 @@ export async function endDate(dateId: string): Promise<DateSession> {
   const marker = addMessage({
     character_id: character.id,
     sender: 'system',
-    text: isScene
-      ? `The scene is over. ${summary}`
-      : `The date at ${ended.where_at || 'the place you chose'} is over. ${summary}`,
-    meta: { type: 'date_ended', date_id: ended.id, kind: ended.kind },
+    text: `The date at ${ended.where_at || 'the place you chose'} is over. ${summary}`,
+    meta: { type: 'date_ended', date_id: ended.id },
   });
   bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
   bus.emitEvent({ type: 'date', character_id: character.id, date: ended });

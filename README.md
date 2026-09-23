@@ -304,25 +304,24 @@ the same way. Retired tables are deleted from existing databases on upgrade. The
 step now also clears `dist/data` first: a stale `signature.json` from an attribute removed
 long ago had been getting seeded into fresh databases.
 
-## Play it out: scenes from fantasies
+## Her fantasies, pitched and played naturally
 
-When she pitches one of her fantasies, the chat gets a card with the fantasy and a
-**Play it out** button. Pressing it starts a *scene*: the same in-person room as a date
-(narration, "speech", *hidden thoughts*, his (directions)), but set up from the fantasy
-rather than one of his locations. She opens it herself, straight into the premise, and leads
-it because it is hers.
+Fantasies have no mode or button of their own. She pitches them in the chat, and the two of
+you play them out there over text or on a date, the same way anything else happens.
 
-- The Actor reports which fantasy she pitched (`fantasy_pitched`, by number) or a brand-new
-  one she made up (`new_fantasy`). A new one joins her list for good, capped at 12, with
-  near-duplicates dropped.
-- `rel.mood.fantasy_log` records what he knows: pitched or played, and how many times.
-  Played ones are marked in her prompt so she builds on them rather than repeating them.
-- Her profile sheet has a **Her fantasies** section: the ones she has pitched, each with a
-  Play button, a count of the ones she has not told him yet, and **Play out your own idea**
-  for a premise he writes.
-- Scenes are stored as dates with `kind = 'scene'` (plus `premise` and `fantasy`). They get
-  the same summary at the end, which goes into her memory, and they appear in the past-sessions
-  list tagged "Scene". A scene does not count as a date.
+- The Actor reports which fantasy she pitched (`fantasy_pitched`, by its number in her list)
+  or a brand-new one she made up (`new_fantasy`). A new one joins her list for good, capped at
+  12, with near-duplicates dropped.
+- The Director (for texting) and the date summary (for dates) report which fantasies were
+  actually acted out (`fantasies_played`).
+- `rel.mood.fantasy_log` records both: pitched, played, and how many times. Her prompt marks
+  the ones he has already heard and the ones they have already done, so she builds on them
+  rather than repeating them.
+- Her profile sheet lists the fantasies she has told him about, how often they have done each,
+  and a count of the ones she has not shared yet. It is read-only.
+
+(A "Play it out" button that turned a fantasy into a separate scene mode existed briefly. It
+was taken out for being intrusive. Any cards it left in a chat's history are hidden.)
 
 ## How a turn works
 

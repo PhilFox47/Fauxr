@@ -3,6 +3,8 @@ import { logger } from '../log.js';
 import { saveRelationship } from '../repo.js';
 import type { Character, Ledger, OpenThread, Relationship } from '../types.js';
 import { buildCatalogue, recordDiscoveries } from './discovery.js';
+import { fantasyList } from './blocks.js';
+import { markPlayed } from './fantasies.js';
 
 /**
  * What the Director can change after a turn. There is nothing here to win or lose: no
@@ -15,6 +17,8 @@ export interface DirectorUpdate {
   discovered?: string[];
   /** True on the turn her big secret (if she has one) actually came out. */
   big_secret_revealed?: boolean;
+  /** 1-based numbers of her fantasies they actually acted out - sexting it through or on a date. */
+  fantasies_played?: number[];
   reason?: string;
   ledger?: {
     facts_about_user?: string[];
@@ -149,6 +153,14 @@ export function applyUpdate(character: Character, rel: Relationship, update: Dir
   }
   if (update.big_secret_revealed && character.seed.big_secret && character.seed.big_secret !== 'none') {
     rel.flags.state.big_secret_known = true;
+  }
+
+  if (Array.isArray(update.fantasies_played)) {
+    const list = fantasyList(character.seed);
+    for (const n of update.fantasies_played) {
+      const text = list[Number(n) - 1];
+      if (text) markPlayed(rel, text);
+    }
   }
 
   rel.ledger = mergeLedger(rel.ledger, update.ledger);
