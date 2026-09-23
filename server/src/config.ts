@@ -40,7 +40,6 @@ export interface Settings {
   };
   /** Global multiplier for proactivity and wakeup frequency. Conservative by default. */
   activity: number;
-  server_window: { from: string; to: string; timezone: string };
   budget: { max_calls_per_day: number; max_cost_per_day: number };
   chat: {
     context_messages: number;
@@ -63,12 +62,6 @@ export interface Settings {
    * attributes more often, lower keeps characters closer to the common set.
    */
   rarity_bias: number;
-  /**
-   * Testing override: every character counts as online at all times, the server uptime
-   * window is ignored, and nobody stays away after announcing they are leaving. Turn it
-   * off to get the real pacing back.
-   */
-  always_online: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -92,14 +85,12 @@ export const DEFAULT_SETTINGS: Settings = {
     image: { model: 'seedream-v4', size: '1024x1024', prompt_style: 'seedream' },
   },
   activity: 0.6,
-  server_window: { from: '06:00', to: '02:00', timezone: 'local' },
   budget: { max_calls_per_day: 1500, max_cost_per_day: 0 },
   chat: { context_messages: 40, max_messages_per_turn: 5, max_delay_seconds: 10 },
   images_enabled: false,
   voice_enabled: false,
   spice: 1.15,
   rarity_bias: 1,
-  always_online: true,
 };
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {

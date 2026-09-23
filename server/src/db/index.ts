@@ -70,6 +70,10 @@ export function migrate(): void {
   // and the column does not exist until addMissingColumns() runs above - so the index has to
   // be created down here, after that, not up in the schema script.
   db.exec('CREATE INDEX IF NOT EXISTS idx_messages_date ON messages(date_id, id)');
+  // She can no longer block or ghost him. Anyone who did under the old rules comes back.
+  // Idempotent: a no-op once nobody is left in either state.
+  db.exec(`UPDATE characters SET state = 'matched' WHERE state = 'blocked_by_char'`);
+  db.exec(`UPDATE relationships SET ghosted_at = NULL WHERE ghosted_at IS NOT NULL`);
 }
 
 export function nowIso(): string {

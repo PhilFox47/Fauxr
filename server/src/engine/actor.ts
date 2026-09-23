@@ -6,17 +6,17 @@ import { getUserProfile, recentMessages } from '../repo.js';
 import { render } from '../prompts/render.js';
 import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Relationship } from '../types.js';
 import {
-  appearanceBlock, communicationBlock, continuityBlock, directionBlock, exchangeRequestBlock, historyBlock,
+  appearanceBlock, communicationBlock, continuityBlock, directionBlock, fantasiesBlock, historyBlock,
   identityBlock, interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
   sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
 import { describeHim } from './discovery.js';
 import { userCardBlock } from './usercard.js';
-import { currentStage } from './stage.js';
+import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { pickNudge } from './nudge.js';
 import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty } from './voice.js';
-import { photoOfferEligible } from './images.js';
+import { photosEnabled } from './images.js';
 
 export { detectRoleplay };
 
@@ -60,21 +60,18 @@ function fallbackOutput(): ActorOutput {
       outfit: '',
       activity: '',
       goal_fulfilled: false,
-      boundary_touched: false,
       new_fact: null,
       open_thread: null,
-      going_offline_in: null,
       director_needed: true,
       photo_offer: null,
       photo_situation: null,
       photo_aspect: null,
       photo_shows_face: null,
-      exchange_response: null,
     },
   };
 }
 
-const PHOTO_OFFER_KINDS = new Set(['profile', 'chat', 'spicy']);
+const PHOTO_OFFER_KINDS = new Set(['chat', 'spicy']);
 const PHOTO_ASPECTS = new Set(['portrait', 'landscape']);
 
 function normalizeHidden(raw: any): ActorHidden {
@@ -86,22 +83,15 @@ function normalizeHidden(raw: any): ActorHidden {
     outfit: String(raw?.outfit ?? '').trim().slice(0, 200),
     activity: String(raw?.activity ?? '').trim().slice(0, 200),
     goal_fulfilled: !!raw?.goal_fulfilled,
-    boundary_touched: !!raw?.boundary_touched,
     new_fact: raw?.new_fact ? String(raw.new_fact) : null,
     open_thread: raw?.open_thread ? String(raw.open_thread) : null,
-    going_offline_in:
-      typeof raw?.going_offline_in === 'number' && raw.going_offline_in > 0
-        ? Math.min(600, Math.round(raw.going_offline_in))
-        : null,
     director_needed: !!raw?.director_needed,
-    photo_offer: PHOTO_OFFER_KINDS.has(raw?.photo_offer) ? raw.photo_offer : null,
+    // An old-style "profile" offer is read as an ordinary photo: her profile picture already
+    // exists (or is made first), so what she means is "here's a pic of me".
+    photo_offer: raw?.photo_offer === 'profile' ? 'chat' : PHOTO_OFFER_KINDS.has(raw?.photo_offer) ? raw.photo_offer : null,
     photo_situation: raw?.photo_situation ? String(raw.photo_situation).slice(0, 300) : null,
     photo_aspect: PHOTO_ASPECTS.has(raw?.photo_aspect) ? raw.photo_aspect : null,
     photo_shows_face: typeof raw?.photo_shows_face === 'boolean' ? raw.photo_shows_face : null,
-    exchange_response:
-      raw?.exchange_response === 'accept' || raw?.exchange_response === 'decline'
-        ? raw.exchange_response
-        : null,
   };
 }
 
@@ -160,38 +150,33 @@ function buildPrompt(
   const settings = getSettings();
   const user = getUserProfile();
   const seed = character.seed;
-  const wanted = new Set(direction?.context_blocks ?? []);
   const flags = relationship.flags;
-  const photoPending = !!(relationship.mood as any)?.pending_photo;
 
   const messages = recentMessages(character.id, settings.chat.context_messages);
 
   return render(template, {
-    char_display_name: flags.state.real_name_known ? character.real_name : `@${character.username}`,
+    char_display_name: character.real_name,
     user_name: user?.display_name ?? 'him',
     user_block: [
-      userBlock(user, flags),
-      user ? userCardBlock(user, flags) : '',
+      userBlock(user),
+      user ? userCardBlock(user) : '',
       describeHim(relationship),
-      exchangeRequestBlock(
-        !!(relationship.mood as any)?.pending_exchange,
-        !!flags.state.photos_exchanged,
-      ),
     ].filter(Boolean).join('\n\n'),
     identity_block: identityBlock(character, flags),
     communication_block: communicationBlock(seed),
     quirks_block: quirksBlock(seed),
-    appearance_block: wanted.has('appearance') || flags.state.profile_picture_sent ? appearanceBlock(seed, flags) : '',
-    life_block: wanted.has('life') ? lifeBlock(seed) : '',
-    interests_block: wanted.has('interests') ? interestsBlock(seed) : '',
-    // The sexual block used to need the director to request it, which meant she could be
-    // fully unlocked and still have no idea what she likes. If that door is open, she knows.
-    sexual_block: flags.state.sexual_topics_allowed || relationship.arousal >= 45 ? sexualBlock(seed) : '',
-    spice_block: spiceBlock(seed, relationship.arousal, flags),
+    // She always knows all of herself. Nothing here is gated on how far things have got.
+    appearance_block: appearanceBlock(seed),
+    life_block: lifeBlock(seed),
+    interests_block: interestsBlock(seed),
+    sexual_block: sexualBlock(seed),
+    fantasies_block: fantasiesBlock(seed),
+    pace: describePace(character),
+    spice_block: spiceBlock(seed, relationship.arousal),
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     ledger_block: ledgerBlock(relationship.ledger),
-    direction_block: directionBlock(direction, somethingLive, photoPending),
-    mood_block: moodBlock(relationship.arousal, currentStage(relationship, character).label, seed.hints.arousal_tell),
+    direction_block: directionBlock(direction, somethingLive),
+    mood_block: moodBlock(relationship.arousal, seed.hints.arousal_tell),
     moment_block: describeHerMoment(character),
     continuity_block: continuityBlock(relationship.mood),
     turn_nudge: nudge,
@@ -339,13 +324,10 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       continue;
     }
 
-    // Offering IS the move (see actor_chat.md's "Sending a photo") - her messages this turn
-    // already say she is sending something. Which tier to offer is her own judgment call, not
-    // something re-checked against the direction here - but a couple of things really would
-    // make the offer silently fail to reach him (images turned off, or a profile picture
-    // already on its way), and catching those here turns that into a normal rewrite instead
-    // of a broken promise the player actually sees.
-    if (out.hidden.photo_offer && !photoOfferEligible(ctx.relationship, out.hidden.photo_offer)) {
+    // Sending IS the move - her messages this turn already say a photo is coming. With images
+    // turned off it would silently never arrive, so that becomes a normal rewrite instead of a
+    // broken promise the player actually sees.
+    if (out.hidden.photo_offer && !photosEnabled()) {
       logger.warn('actor', 'rejected: offered a photo that cannot actually be sent right now', {
         character: ctx.character.username,
         attempt,
@@ -354,7 +336,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
         messages: out.messages.map((m) => m.text),
       });
       correction = retryHint(
-        'offering a photo that cannot actually be sent right now',
+        'sending a photo while photos are turned off',
         'You set photo_offer, but that would silently fail to reach him right now, leaving your ' +
           'messages promising a photo that never arrives. Write this turn again without offering one.',
       );

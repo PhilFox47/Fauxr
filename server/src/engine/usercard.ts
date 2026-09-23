@@ -1,5 +1,5 @@
 import { byCategory, find } from '../db/attributes.js';
-import type { Flags, UserCard, UserProfile } from '../types.js';
+import type { UserCard, UserProfile } from '../types.js';
 
 /**
  * His own character card, built from exactly the same attribute tables the generated
@@ -179,11 +179,10 @@ function section(id: CardSection['id']): CardField[] {
 /**
  * What a character can see of his card right now.
  *
- * Three tiers, matching how the rest of the app already works rather than inventing a
- * fourth rule: his profile is readable, his appearance needs the picture swap he just built,
- * and the intimate half is discovered in conversation like everything else.
+ * His profile and looks are readable, the same as anyone's before swiping; the intimate half
+ * is discovered in conversation.
  */
-export function userCardBlock(user: UserProfile, flags?: Flags): string {
+export function userCardBlock(user: UserProfile): string {
   const card = user.card ?? {};
   const out: string[] = [];
 
@@ -202,11 +201,9 @@ export function userCardBlock(user: UserProfile, flags?: Flags): string {
     );
   }
 
-  if (flags?.state.photos_exchanged) {
-    const looks = lines(card, section('looks'), g);
-    if (looks.length) {
-      out.push('WHAT HE LOOKS LIKE (you have seen his picture):\n' + looks.map((l) => `- ${l}`).join('\n'));
-    }
+  const looks = lines(card, section('looks'), g);
+  if (looks.length) {
+    out.push('WHAT HE LOOKS LIKE:\n' + looks.map((l) => `- ${l}`).join('\n'));
   }
 
   // His limits are never a discovery. Finding one by crossing it is not a game.
@@ -222,7 +219,7 @@ export function userCardBlock(user: UserProfile, flags?: Flags): string {
   return out.join('\n\n');
 }
 
-/** The Director sees the lot, including what he reacts badly to, because it scores him. */
+/** The Director sees the lot, including his intimate side, so it can steer her towards it. */
 export function userCardFullBlock(user: UserProfile): string {
   const card = user.card ?? {};
   const out: string[] = [];

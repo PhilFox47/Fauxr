@@ -1,21 +1,22 @@
 # Fauxr
 
-A self-hosted, single-user adult hookup-app simulator. Think MeChat or Choices without the
-hardcoded stories, without the purchases, and considerably more explicit — you swipe, match,
-chat, flirt, get flirted at, and find out what someone is actually into.
+A self-hosted, single-user adult fantasy playground dressed as a hookup app. You swipe,
+match and chat with generated women who are into you, and explore sexual fantasies with
+them - theirs as much as yours.
 
-It is not a relationship site and the characters do not pretend it is. Everyone on it is an
-adult who wants something physical, their bios say so, and the conversation starts from
-that rather than working its way towards it over weeks.
+There is nothing to win. Nobody has to be won over, tested or unlocked. Every character
+matched with you because she wants you; what differs is how she goes about it. Some are all
+in from the first message, some love a slow, teasing build. They drive as much as you do:
+they pitch their own fantasies, ask what you are into, send photos when they feel like it,
+and take things where they want them to go.
 
-Characters are generated, not written. They have their own goals, their own schedules,
-their own hidden thresholds and their own fetishes to be discovered. Nothing happens
-because a number crossed a line; numbers only decide what the Director *considers*. What
-actually happens, happens in the conversation.
+Characters are generated, not written, each with her own personality, texting voice, kinks,
+hard limits and a handful of concrete fantasies she wants to play out. Finding out what she
+is into - and her finding out what you are into - is the one thing that is actually
+discovered over time.
 
-Everyone in it is an adult — `age` has a hard minimum of 18, validated at generation — and
-refusal is real: characters say no, have limits they do not cross, and pushing costs you.
-That is what makes the yes worth anything.
+Everyone in it is an adult (`age` has a hard minimum of 18, validated at generation). Each
+character's hard limits are real and hold whatever the mood; everything else is on the table.
 
 The UI and all model prompts are in English.
 
@@ -53,23 +54,11 @@ The SQLite database, uploads and generated images all live in one place:
 
 Nothing else on disk is state. See **Starting over** below.
 
-### Testing mode
+### Always reachable
 
-**Settings → behaviour → "Everyone is always online"**, on by default. Characters reply
-whenever you write, whatever the hour: their own schedules, the server uptime window and
-any "I'm heading off" absence are all ignored. Ghosting and blocking still work, and the
-schedules themselves are kept rather than overwritten, so turning it off puts the real
-pacing straight back.
-
-Turn it off before you judge how the game feels. Waiting for someone to come online is a
-large part of what makes them read as people rather than as a chatbot.
-
-### Uptime window
-
-The app is built for a machine that is up 06:00–02:00. Outside that window nothing runs in
-the background — that is intended, not a bug. On every start a catch-up job re-spreads
-overdue wakeups, applies elapsed investment decay, drops expired negative flags and lets
-anyone whose investment ran out start ghosting. The window is configurable in Settings.
+Characters answer whenever you write, at any hour. There are no online windows, no "I'm
+heading off" absences and no server uptime window any more. On every start a catch-up job
+spreads out any overdue wakeups and decays arousal for the time the server was off.
 
 ### A password, optionally
 
@@ -228,27 +217,71 @@ Models in Settings (or resetting API keys and settings), not automatically on up
 
 ---
 
+## The rebuild: a playground, not a game
+
+Fauxr started as a dating *game*: characters had trust, spark and investment scores, things
+were locked behind them, she judged what you said against a hidden "touchstone", and she
+could cool off, ghost you or block you. Every recurring complaint about how it felt - tame,
+reactive, judgmental, keeping score, setting tests, making you do all the work - traced back
+to that frame, and the prompts had grown to 11-14k tokens of rules fighting it.
+
+The rebuild keeps the parts that made characters feel like people and removes the game:
+
+| Kept | Removed |
+|---|---|
+| Her texting voice, her life, her quirks, what she is wearing and doing | Trust, spark, investment, reciprocity and pressure |
+| Arousal (how turned on she is right now, fades over hours) | Relationship stages and "unlocks" |
+| Her memory of you: the ledger, what landed, open threads | Touchstone judging and dealbreakers |
+| Kink discovery, both ways | Cooling off, ghosting, and her blocking you |
+| Her hard limits | Online windows, absences, the uptime window |
+| Dates | The photo consent card and the profile-picture swap |
+| | Trait credits and "uncover a trait" |
+
+What was added:
+
+- **Per-character pace.** `describePace()` (engine/stage.ts) turns her libido, sexting
+  readiness, sexual confidence and archetype pace into one of four tastes, from "all in from
+  the start" to "a slow burn". It describes how she likes it, never a gate.
+- **Her fantasies.** The character generator now writes 3-5 concrete sexual scenarios per
+  character from her kinks and personality (`seed.hints.fantasies`). Characters made before
+  this get theirs written lazily, the first time the Director runs for them
+  (`ensureFantasies()`). The Director, the Actor and dates all see them, and a
+  `pitch_fantasy` nudge has her pitch one - set the scene, say what she wants, ask if he is in.
+- **Photos just get sent.** When she decides to send a photo it is generated straight away
+  and lands in the chat. Her profile picture is generated when you match (or the first time
+  you open her profile, for older matches) and is always visible; if she sends a photo before
+  it exists, it is generated first so later photos can match her face.
+- **She sees what you send.** A photo you upload is described by the vision model before she
+  replies, and the description goes into the conversation history, so her answer is about
+  what is actually in it.
+
+Existing saves carry over. A one-time migration un-blocks anyone who had blocked you and
+clears ghosting; old stat columns stay in the database but nothing reads them; old consent
+and swap cards remain in chat history as plain, unclickable lines.
+
+Much of the history below this section describes the old design - trust/spark scoring,
+unlocks, consent cards, the swap, ghosting, trait credits, online schedules. That code is
+gone; those sections are kept as a record of how the app got here.
+
 ## How a turn works
 
 ```
 user message
    │
-   ├─ code: reciprocity + pressure recomputed (never the LLM)
-   ├─ she is offline?  → message waits, unread. Nothing else happens.
-   │
    ├─ Director runs only when needed:
    │     valid_for spent · actor asked for it · an expires_on condition fired
-   │     · a wakeup is due · the session went stale · a boundary was touched (immediately)
-   │     → scores against her touchstone, updates stats/flags/ledger,
+   │     · a wakeup is due · the session went stale
+   │     → updates arousal, discoveries and the ledger,
    │       writes the next direction, schedules her one wakeup
    │
    └─ Actor runs every turn
          sees the direction, never the numbers
          segments its own messages; the server does the timing
-         reports back through a hidden channel
+         reports back through a hidden channel (mood, situation, photo, ...)
 ```
 
-Target ratio is roughly one Director call per three to five Actor calls.
+Target ratio is roughly one Director call per three to five Actor calls. The Director
+prompt is about 2.5k tokens before history, the Actor's about 3.5k.
 
 ### Both prompts are ordered static-first
 
@@ -290,37 +323,20 @@ it; and anything he said about himself goes in `facts_about_user`.
 
 ### Stats
 
-`trust`, `spark` and `investment` are 0–100. The Director proposes deltas; the code then
-applies two modifiers it computes itself:
-
-- **reciprocity** — questions asked of her versus statements about himself, over the last
-  ~20 messages. Both extremes are punished; a balanced conversation earns full value.
-- **pressure** — how often he pushed after a dodge or a refusal, with a 12-hour half-life.
-  High pressure damps gains and amplifies losses.
-
-That is the anti-simp and anti-push mechanism, and it is deliberately not an LLM judgement.
+There is one: **arousal**, 0-100, how turned on she is right now. The Director moves it each
+pass (big jumps when you land on one of her kinks or go along with one of her fantasies) and
+it halves every three hours on its own. Nothing is gated on it; it colours how she writes.
 
 ### Her profile: what he has found out
 
-Every character carries a catalogue of facts built from her seed — name, age, job, where
-she lives, her humour, her soft spot, her interests, what she looks like, and once that
-part of the conversation is open, what she is into. Roughly forty rows. All of them start
-as `???`.
+Every character carries a catalogue of facts built from her seed. Her everyday profile - job,
+where she lives, humour, interests, looks - is simply known from the start; there is nothing
+to extract. The intimate side is what gets discovered: her kinks and hard nos, fetishes, hard
+limits, drive, confidence, whether she leans dominant or submissive. Those start as `???`
+and fill in when she actually lets them out - the Director reports what came out, and a
+deterministic backstop in code catches the obvious ones.
 
-Two rows start filled in: **age** and **languages**. They are printed on her card before
-you swipe, so making someone extract them in conversation was never a game — and the
-Director being told to "reveal" her age produced chats that opened by stating it. Everything
-else starts as `???`.
-
-A row fills in when she actually tells him. Never when a stat crosses a line. The Director
-reports what came out in each exchange, and a deterministic backstop in code catches the
-obvious ones — if she names her job, he knows it, whether or not the Director thought to
-mention it. Looks are excluded from that backstop: saying "my hair" does not reveal its
-colour, that needs a photo or a date.
-
-This is deliberately the progression the game was missing. Stats are invisible by design,
-so without something like this there is nothing to work towards and no sense of getting
-anywhere. A counter in the chat header (`12/40`) opens the profile sheet.
+The counter in the chat header shows how much of her intimate side you have found.
 
 ### One topic at a time
 
@@ -921,16 +937,8 @@ you already have instead of only to new ones.
 
 ### Flags
 
-Flags are set by events, not by thresholds. `real_name_known` goes true because she said
-her name, not because trust hit 40. The stat only decides whether the Director may offer
-the `unlock` at all. State flags can be taken back; milestones cannot; negative flags
-expire on their own.
-
-### Failing
-
-Three stages, all reachable: cooling off (reversible with effort), ghosting (one
-reactivation attempt), and a block (a dealbreaker, or pushing past a clear no). You can
-block her too.
+Only three remain, all records of things that happened rather than permissions:
+`profile_picture_sent`, `has_had_first_date` and `big_secret_known`.
 
 ---
 

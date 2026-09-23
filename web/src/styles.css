@@ -652,13 +652,7 @@ input[type='range'] {
 .avatar .emoji { font-size: 25px; line-height: 1; transform: translateY(1px); }
 .avatar.sm { width: 36px; height: 36px; font-size: 14px; }
 .avatar.sm .emoji { font-size: 18px; }
-.dot-online {
-  position: absolute; right: 0; bottom: 1px;
-  width: 13px; height: 13px; border-radius: 50%;
-  background: var(--ok); border: 2.5px solid var(--bg);
-}
-.avatar.sm .dot-online { width: 10px; height: 10px; border-width: 2px; }
-/* Same corner as the online dot, and mutually exclusive with it - see Avatar.tsx's onDate
+/* See Avatar.tsx's onDate
    prop. A small filled heart rather than a coloured dot, since "she's on a date" is a
    specific, nameable thing rather than a generic status light, and a slow pulse (not a
    blink) reads as "in progress" without being distracting in a list of several rows. */
@@ -857,21 +851,6 @@ input[type='range'] {
   display: flex;
   flex: 0 0 auto;
   color: var(--accent);
-}
-.photo-offer-actions {
-  display: flex;
-  gap: 6px;
-  flex: 0 0 auto;
-}
-.photo-offer-actions .btn {
-  padding: 7px 13px;
-  font-size: 12.5px;
-  border-radius: var(--r-sm);
-  box-shadow: none;
-}
-.photo-offer-resolved {
-  flex: 0 0 auto;
-  white-space: nowrap;
 }
 
 /* Jump-to-latest, so reading history does not get yanked away by an incoming message. */
@@ -1205,28 +1184,6 @@ input[type='range'] {
   color: var(--text-dim);
   line-height: 1.6;
 }
-
-.uncover-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s3);
-  margin: var(--s3) var(--s5) 0;
-  padding: 10px var(--s4);
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-}
-.uncover-note { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
-.uncover-note strong { color: var(--accent); font-weight: 650; }
-.uncover-row .btn {
-  flex: 0 0 auto;
-  padding: 8px 16px;
-  font-size: 13px;
-  box-shadow: none;
-}
-.uncover-result { margin: var(--s2) var(--s5) 0; font-size: 12.5px; color: var(--accent); }
-.uncover-result.error { color: var(--err); }
 
 /**
  * The one scrolling region for everything under the header - progress bar, bio, gallery,

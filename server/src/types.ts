@@ -2,7 +2,6 @@ export type CharacterState =
   | 'pool'
   | 'swiped_left'
   | 'matched'
-  | 'blocked_by_char'
   | 'blocked_by_user';
 
 /** Her standing position on a whole kink domain, not one specific act. */
@@ -137,49 +136,18 @@ export interface CharacterSeed {
 }
 
 export interface StateFlags {
-  real_name_known?: boolean;
+  /** Her profile picture has finished generating. It is used as the reference for later photos. */
   profile_picture_sent?: boolean;
-  /**
-   * The two of them have actually swapped profile pictures. Seeing a real picture goes both
-   * ways by design: she cannot see his until he has seen hers, and the reverse. Separate
-   * from `profile_picture_sent`, which records that her image finished generating - the
-   * agreement stands even if generation later fails.
-   */
-  photos_exchanged?: boolean;
-  personal_photos_allowed?: boolean;
-  sexual_topics_allowed?: boolean;
-  spicy_photos_allowed?: boolean;
-  allows_date_requests?: boolean;
   has_had_first_date?: boolean;
-  /** Total messages he has sent her. See discovery.ts's trackMessageForCredit(). */
-  messages_sent_count?: number;
-  /** Spendable on uncoverTraitCredit() to reveal one random still-locked trait. */
-  trait_credits?: number;
   /**
-   * Whether her big_secret (if she has one) has actually come out - set only by the Director,
-   * only for a turn where it genuinely happened (a real accidental slip, or her choosing to
-   * finally share it). Deliberately outside the discovery catalogue: this is never something
-   * trait_credits can buy, unlike everything else that flag spends on.
+   * Whether her big_secret (if she has one) has actually come out. Set only by the Director,
+   * for a turn where it really happened.
    */
   big_secret_known?: boolean;
 }
 
-export interface EventFlags {
-  first_compliment_accepted?: string;
-  first_personal_story_told?: string;
-  first_conflict_resolved?: string;
-  first_time_she_initiated?: string;
-  first_rejection_survived?: string;
-  first_voice_message?: string;
-}
-
-/** Negative flags carry an expiry timestamp; the catch-up job clears expired ones. */
-export type NegativeFlags = Record<string, string>;
-
 export interface Flags {
   state: StateFlags;
-  events: EventFlags;
-  negative: NegativeFlags;
 }
 
 export interface OpenThread {
@@ -221,11 +189,7 @@ export interface Direction {
   stance: string;
   forbidden: string[];
   bring_up: string | null;
-  unlock: string | null;
-  offline_in_minutes: number | null;
   length: string;
-  /** Which optional prompt blocks the actor needs next turn. */
-  context_blocks?: string[];
 }
 
 export interface ActorMessage {
@@ -258,23 +222,19 @@ export interface ActorHidden {
   outfit: string;
   activity: string;
   goal_fulfilled: boolean;
-  boundary_touched: boolean;
   new_fact: string | null;
   open_thread: string | null;
-  going_offline_in: number | null;
   director_needed: boolean;
   /**
-   * Set when, in these very messages, she decided to actually send him a photo - not just
-   * talk about maybe sending one later. Generation never runs off this alone: it only
-   * raises a consent card in the chat, and the image is not made until he accepts it.
+   * Set when, in these very messages, she actually sends him a photo - not just talks about
+   * maybe sending one later. The image is generated straight away; there is no consent step.
    */
-  photo_offer: 'profile' | 'chat' | 'spicy' | null;
+  photo_offer: 'chat' | 'spicy' | null;
   /** A short concrete description of what the offered photo would show, for continuity. */
   photo_situation: string | null;
   /**
-   * Her call on the shot's orientation - only meaningful for "chat" or "spicy"; a profile
-   * picture is always square. "portrait" is the tall phone-style frame, "landscape" the
-   * wide one. Null when photo_offer is null or the kind is "profile".
+   * Her call on the shot's orientation. "portrait" is the tall phone-style frame,
+   * "landscape" the wide one. Null when photo_offer is null.
    */
   photo_aspect: 'portrait' | 'landscape' | null;
   /**
@@ -283,11 +243,6 @@ export interface ActorHidden {
    * omitted means her face is in the shot as normal, which is by far the common case.
    */
   photo_shows_face: boolean | null;
-  /**
-   * Her answer when he has asked to swap profile pictures. Genuinely her call - a refusal
-   * is a real outcome, not a failure state, and it should come with a reason in her voice.
-   */
-  exchange_response: 'accept' | 'decline' | null;
 }
 
 export interface ActorOutput {
@@ -295,46 +250,10 @@ export interface ActorOutput {
   hidden: ActorHidden;
 }
 
-/**
- * An offer to send a photo, awaiting his accept/decline. Lives on `Relationship.mood`
- * (a loosely-typed blob already used for session-only state like `leaves_at`) rather than
- * its own column - it is exactly the same shape of thing, and did not need a migration.
- */
-/**
- * A profile-picture swap he offered and she has not answered yet. Deliberately the mirror
- * of PendingPhoto: either side can propose, and the other side gets to say no.
- */
-export interface PendingExchange {
-  request_id: string;
-  /** The system message carrying the request card, so the answer can resolve it. */
-  message_id: number;
-  requested_at: string;
-}
-
-export interface PendingPhoto {
-  offer_id: string;
-  kind: 'profile' | 'chat' | 'spicy';
-  situation: string;
-  /** Null for a profile picture, which is always square. See ActorHidden.photo_aspect. */
-  aspect: 'portrait' | 'landscape' | null;
-  /** Resolved, non-null: true unless she deliberately offered a shot that omits her face. */
-  showsFace: boolean;
-  /** The system message carrying the offer card, so the response can resolve it. */
-  message_id: number;
-  offered_at: string;
-}
-
 export interface Relationship {
   character_id: string;
-  trust: number;
-  spark: number;
-  investment: number;
-  reciprocity: number;
-  pressure: number;
   mood: Record<string, unknown>;
-  her_tension: number;
-  user_tension: number;
-  /** Session-level "in the mood right now", distinct from spark. Decays fast. */
+  /** Session-level "in the mood right now". Decays fast. */
   arousal: number;
   /** Fact key -> when the player learned it. See engine/discovery.ts. */
   discovered: Record<string, string>;
@@ -344,7 +263,6 @@ export interface Relationship {
   ledger: Ledger;
   active_direction: Direction | null;
   direction_set_at: string | null;
-  ghosted_at: string | null;
 }
 
 export interface Character {

@@ -8,17 +8,12 @@ import {
   characterIdsOnDate, lastMessage, listActiveMatches, pendingUserMessageCount, saveRelationship, setWakeup,
 } from '../repo.js';
 import type { Character } from '../types.js';
-import { isAway, takeTurn } from './chat.js';
+import { takeTurn } from './chat.js';
 import { randInt } from './dice.js';
 import { ensureStack } from './matching.js';
-import { isOnline, nextOnlineAt, serverWindowOpen } from './presence.js';
-import { clampStat } from './modifiers.js';
 import { decayArousal } from './stage.js';
-import { clearExpiredNegativeFlags } from './state.js';
 
 const TICK_MS = 60_000;
-/** Investment bleeds away when nothing happens. Roughly this much per day of silence. */
-const INVESTMENT_DECAY_PER_DAY = 6;
 
 let timer: NodeJS.Timeout | null = null;
 
@@ -48,8 +43,6 @@ function contactableMatches(): Character[] {
 
 /** The one table the server polls. One row per character, checked once a minute. */
 export async function tick(): Promise<void> {
-  if (!serverWindowOpen()) return;
-
   const onDate = characterIdsOnDate();
   for (const w of dueWakeups()) {
     const character = getCharacter(w.character_id);
@@ -60,10 +53,6 @@ export async function tick(): Promise<void> {
     // Left due rather than cleared: whatever she meant to say is still worth saying once
     // the evening is over, so it simply fires on a tick after the date ends.
     if (onDate.has(character.id)) continue;
-    if (!isOnline(character)) {
-      reschedule(character, w.reason, w.cancel_if_user_writes);
-      continue;
-    }
     clearWakeup(character.id);
     if (w.reason === 'match_opener') {
       bus.emitEvent({ type: 'match', character_id: character.id });
@@ -82,7 +71,6 @@ export async function tick(): Promise<void> {
   maybeBeProactive();
   maybeCelebrateMilestone();
   void ensureStack();
-  emitPresence();
 }
 
 /**
@@ -123,7 +111,7 @@ function unpromptedOnCooldown(rel: { mood: Record<string, unknown> }): boolean {
 export function maybeDoubleText(): void {
   for (const character of contactableMatches()) {
     const rel = getRelationship(character.id);
-    if (!rel || rel.ghosted_at) continue;
+    if (!rel) continue;
     if (getWakeup(character.id)) continue; // something is already going to wake her
     if (unpromptedOnCooldown(rel)) continue; // already followed up on this silence, or already sent one today
 
@@ -154,84 +142,45 @@ export function maybeDoubleText(): void {
 }
 
 /**
- * Messages sent while she was offline are read and answered once she is back. Without
- * this nothing ever picks them up: a turn only starts from a due wakeup or from a message
- * arriving while she is already online, so anything written into an empty window sat
- * there until an unrelated wakeup happened to fire.
- *
- * It queues a wakeup a few minutes out rather than replying on the spot, so she does not
- * answer in the same second her window opens.
+ * A safety net: a message of his that somehow never got a reply (a failed turn, a restart
+ * mid-turn) gets picked up a few minutes later instead of sitting there forever.
  */
 function answerPendingMessages(): void {
   for (const character of contactableMatches()) {
-    if (!isOnline(character)) continue;
-    const rel = getRelationship(character.id);
-    if (!rel || rel.ghosted_at || isAway(rel)) continue;
     if (getWakeup(character.id)) continue; // a wakeup is already going to wake her
     if (pendingUserMessageCount(character.id) === 0) continue;
+    const last = lastMessage(character.id);
+    // Give a normal turn time to finish before treating the message as missed.
+    if (!last || last.sender !== 'user' || Date.now() - Date.parse(last.sent_at) < 3 * 60_000) continue;
 
     setWakeup({
       character_id: character.id,
-      scheduled_at: new Date(Date.now() + randInt(1, 10) * 60_000).toISOString(),
-      reason: 'she is back and has unread messages',
+      scheduled_at: new Date(Date.now() + randInt(0, 2) * 60_000).toISOString(),
+      reason: 'she has unread messages from him',
       cancel_if_user_writes: true,
     });
-    logger.debug('scheduler', `${character.username} is back with unread messages`);
+    logger.debug('scheduler', `${character.username} has unanswered messages`);
   }
 }
 
-function reschedule(character: Character, reason: string, cancelIfUserWrites: boolean): void {
-  const next = nextOnlineAt(character, new Date());
-  if (!next) {
-    clearWakeup(character.id);
-    return;
-  }
-  // Random offset so the whole cast does not message the moment the window opens.
-  const at = new Date(next.getTime() + randInt(2, 90) * 60_000);
-  const settled = nextOnlineAt(character, at) ?? next;
-  setWakeup({
-    character_id: character.id,
-    scheduled_at: settled.toISOString(),
-    reason,
-    cancel_if_user_writes: cancelIfUserWrites,
-  });
-}
-
-/** Investment decays with time. Trust and spark do not - they need events to move. */
+/** Arousal is a session mood, not a trait: it fades in hours. Nothing else decays. */
 function decayPass(): void {
   const now = Date.now();
   for (const character of listActiveMatches()) {
     const rel = getRelationship(character.id);
     if (!rel) continue;
     const since = Date.parse(rel.last_decay_at ?? rel.last_contact_at ?? nowIso());
-    const days = (now - since) / 86_400_000;
-    if (days < 0.25) continue;
-
-    const silenceDays = rel.last_contact_at ? (now - Date.parse(rel.last_contact_at)) / 86_400_000 : 0;
-    // Decay accelerates the longer the silence lasts.
-    const rate = INVESTMENT_DECAY_PER_DAY * (1 + Math.min(2, silenceDays / 3));
-    const before = rel.investment;
-    rel.investment = clampStat(rel.investment - rate * days);
-    // Arousal is a session mood, not a trait: it is gone in hours, not days.
-    rel.arousal = decayArousal(rel.arousal, days * 24);
+    const hours = (now - since) / 3_600_000;
+    if (hours < 1) continue;
+    rel.arousal = decayArousal(rel.arousal, hours);
     rel.last_decay_at = nowIso();
-    if (clearExpiredNegativeFlags(rel)) logger.debug('scheduler', `negative flags expired for ${character.username}`);
-
-    if (rel.investment <= 0 && !rel.ghosted_at) {
-      rel.ghosted_at = nowIso();
-      clearWakeup(character.id);
-      logger.info('scheduler', `${character.username} lost interest and is ghosting`);
-    }
     saveRelationship(rel);
-    if (before !== rel.investment) {
-      logger.debug('scheduler', `investment decay ${character.username}: ${before} -> ${rel.investment}`);
-    }
   }
 }
 
 /**
- * A character who only ever reacts feels like a chatbot. Frequency scales with investment
- * and social energy, and the whole thing is multiplied by the global activity slider.
+ * A character who only ever reacts feels like a chatbot. Frequency scales with her social
+ * energy and libido, and the whole thing is multiplied by the global activity slider.
  */
 export function maybeBeProactive(): void {
   const settings = getSettings();
@@ -240,7 +189,7 @@ export function maybeBeProactive(): void {
   for (const character of contactableMatches()) {
     if (scheduled.has(character.id)) continue;
     const rel = getRelationship(character.id);
-    if (!rel || rel.ghosted_at) continue;
+    if (!rel) continue;
     // See maybeDoubleText() above - shared with it so a long absence cannot rack up a
     // double-text AND, hours later, a proactive check-in on top of it, and so the two
     // together still cannot exceed one unprompted ping in any rolling 24 hours.
@@ -252,16 +201,15 @@ export function maybeBeProactive(): void {
     // Off the attribute row, not a literal id switch - see nudge.ts for why.
     const energy = Number(find('social_energy', character.seed.social_energy)?.extra?.pace ?? 1);
     // Per-minute probability; deliberately small, the slider is what opens the tap.
-    const p =
-      0.0025 * settings.activity * energy * (0.3 + rel.investment / 100) * Math.min(3, hoursSilent / 4);
+    const appetite = 0.5 + character.seed.libido / 5;
+    const p = 0.0025 * settings.activity * energy * appetite * Math.min(3, hoursSilent / 4);
     if (Math.random() > p) continue;
 
-    const at = nextOnlineAt(character, new Date(Date.now() + randInt(1, 45) * 60_000));
-    if (!at) continue;
+    const at = new Date(Date.now() + randInt(1, 45) * 60_000);
     setWakeup({
       character_id: character.id,
       scheduled_at: at.toISOString(),
-      reason: 'she felt like getting in touch',
+      reason: 'she felt like getting in touch - something on her mind, maybe one of her fantasies, maybe a photo',
       cancel_if_user_writes: true,
     });
     rel.mood = { ...rel.mood, followed_up_unanswered: true, last_unprompted_at: nowIso() };
@@ -302,7 +250,7 @@ function milestoneLabel(days: number): string | null {
 export function maybeCelebrateMilestone(): void {
   for (const character of contactableMatches()) {
     const rel = getRelationship(character.id);
-    if (!rel || rel.ghosted_at) continue;
+    if (!rel) continue;
     if (getWakeup(character.id)) continue; // something is already going to wake her
 
     const anchors: { key: string; at: string | null; occasion: string }[] = [
@@ -319,8 +267,7 @@ export function maybeCelebrateMilestone(): void {
       const key = `${anchor.key}:${days}`;
       if (celebrated.includes(key)) continue;
 
-      const at = nextOnlineAt(character, new Date(Date.now() + randInt(1, 45) * 60_000));
-      if (!at) continue;
+      const at = new Date(Date.now() + randInt(1, 45) * 60_000);
       setWakeup({
         character_id: character.id,
         scheduled_at: at.toISOString(),
@@ -341,29 +288,9 @@ export function maybeCelebrateMilestone(): void {
   }
 }
 
-let lastPresence = new Map<string, boolean>();
-
-export function clearPresenceCache(): void {
-  lastPresence = new Map();
-}
-
-function emitPresence(): void {
-  const next = new Map<string, boolean>();
-  for (const character of listActiveMatches()) {
-    const online = isOnline(character);
-    next.set(character.id, online);
-    if (lastPresence.get(character.id) !== online) {
-      bus.emitEvent({ type: 'presence', character_id: character.id, online });
-    }
-  }
-  lastPresence = next;
-}
-
 /**
- * Runs on every server start. The machine is off between 02:00 and 06:00, so on boot the
- * world has to be brought forward: overdue wakeups get spread out instead of all firing,
- * time-based decay is applied, stale negative flags are dropped and anyone whose
- * investment ran out starts ghosting.
+ * Runs on every server start: overdue wakeups get spread out instead of all firing at once,
+ * and arousal is decayed for the time the server was off.
  */
 export async function catchUp(): Promise<void> {
   const overdue = dueWakeups();
@@ -375,12 +302,8 @@ export async function catchUp(): Promise<void> {
       clearWakeup(w.character_id);
       continue;
     }
-    // Never fire a backlog at once: everyone gets pushed into the next window, staggered.
-    const base = nextOnlineAt(character, new Date(Date.now() + randInt(3, 120) * 60_000));
-    if (!base) {
-      clearWakeup(character.id);
-      continue;
-    }
+    // Never fire a backlog at once: stagger it over the next half hour.
+    const base = new Date(Date.now() + randInt(1, 30) * 60_000);
     setWakeup({
       character_id: character.id,
       scheduled_at: base.toISOString(),

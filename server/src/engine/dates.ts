@@ -13,7 +13,7 @@ import {
 } from '../repo.js';
 import type { Character, DateSession, Location, Relationship } from '../types.js';
 import {
-  appearanceBlock, flagsBlock, historyBlock, identityBlock, interestsBlock, languageBlock,
+  appearanceBlock, fantasiesBlock, historyBlock, identityBlock, interestsBlock, languageBlock,
   ledgerBlock, lifeBlock, moodBlock, quirksBlock, seedBlock, sexualBlock, speechStyleBlock,
   spiceBlock, userBlock,
 } from './blocks.js';
@@ -23,8 +23,7 @@ import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage } from './images.js';
 import { describeHerMoment } from './moment.js';
-import { currentStage } from './stage.js';
-import { EVENT_FLAGS, NEGATIVE_FLAG_HOURS, STATE_FLAGS, applyUpdate, type DirectorUpdate } from './state.js';
+import { applyUpdate, type DirectorUpdate } from './state.js';
 import { userCardBlock } from './usercard.js';
 
 /**
@@ -181,7 +180,7 @@ function buildDatePrompt(
   const flags = rel.flags;
 
   return render('actor_date', {
-    char_display_name: flags.state.real_name_known ? character.real_name : `@${character.username}`,
+    char_display_name: character.real_name,
     user_name: user?.display_name ?? 'him',
     location_block: locationBlock(date, date.location_id ? getLocation(date.location_id) : null),
     // Empty on the opening beat, which is what OPENING_NOTE replaces.
@@ -191,9 +190,7 @@ function buildDatePrompt(
     identity_block: identityBlock(character, flags),
     speech_style_block: speechStyleBlock(seed),
     quirks_block: quirksBlock(seed),
-    // Unconditional here, unlike the chat: he is looking straight at her, so withholding what
-    // she looks like until a photo unlocks it makes no sense at all in person.
-    appearance_block: appearanceBlock(seed, flags),
+    appearance_block: appearanceBlock(seed),
     // Decided once in openDate(), read fresh here on every single turn - so the opening
     // beat, every later beat and the arrival photo all agree on what she is wearing rather
     // than three separate guesses.
@@ -205,18 +202,19 @@ function buildDatePrompt(
     life_block: lifeBlock(seed),
     interests_block: interestsBlock(seed),
     sexual_block: sexualBlock(seed),
+    fantasies_block: fantasiesBlock(seed),
     // 'in_person': the texting version of this block forbids narration and asterisk actions
     // and demands phone-typing habits, which flatly contradicts actor_date.md's own format -
     // feeding it in unmodified used to hand the model two contradictory rule sets at once.
-    spice_block: spiceBlock(seed, rel.arousal, flags, 'in_person'),
+    spice_block: spiceBlock(seed, rel.arousal, 'in_person'),
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     user_block: [
-      userBlock(user, flags),
-      user ? userCardBlock(user, flags) : '',
+      userBlock(user),
+      user ? userCardBlock(user) : '',
       describeHim(rel),
     ].filter(Boolean).join('\n\n'),
     ledger_block: ledgerBlock(rel.ledger),
-    mood_block: moodBlock(rel.arousal, currentStage(rel, character).label, seed.hints.arousal_tell, 'in_person'),
+    mood_block: moodBlock(rel.arousal, seed.hints.arousal_tell, 'in_person'),
     moment_block: describeHerMoment(character),
     // Empty unless he has actually written one. Deliberately the last block in the template,
     // immediately before OUTPUT - see directionBlock for why position matters here.
@@ -680,18 +678,11 @@ function withoutDirections(messages: StoredMessage[]): StoredMessage[] {
 function summaryPrompt(character: Character, rel: Relationship, date: DateSession): string {
   const user = getUserProfile();
   return render('director_date_summary', {
-    user_block: userBlock(user, rel.flags),
+    user_block: userBlock(user),
     seed_block: seedBlock(character),
     location_block: locationBlock(date, date.location_id ? getLocation(date.location_id) : null),
-    trust: rel.trust,
-    spark: rel.spark,
-    investment: rel.investment,
     arousal: rel.arousal,
-    flags_block: flagsBlock(rel.flags),
     history_block: historyBlock(withoutDirections(dateMessages(date.id)), character, user),
-    state_flags: STATE_FLAGS.join(', '),
-    event_flags: EVENT_FLAGS.join(', '),
-    negative_flags: Object.keys(NEGATIVE_FLAG_HOURS).join(', '),
   });
 }
 
@@ -715,7 +706,7 @@ export async function endDate(dateId: string): Promise<DateSession> {
   let summary = '';
   let update: DirectorUpdate = {};
 
-  // A date with nothing in it is not worth an LLM call, and definitely not worth stat deltas.
+  // A date with nothing in it is not worth an LLM call.
   if (transcript.some((m) => m.sender === 'user')) {
     try {
       const out = await completeJson<{ summary?: string; highlights?: string[]; update?: DirectorUpdate }>({
@@ -732,7 +723,7 @@ export async function endDate(dateId: string): Promise<DateSession> {
         update.ledger = { ...update.ledger, what_landed: [...(update.ledger?.what_landed ?? []), ...highlights] };
       }
     } catch (err) {
-      // The date still ended. Losing the stat deltas is survivable; leaving her stuck on a
+      // The date still ended. Losing the summary is survivable; leaving her stuck on a
       // date because one call failed is not.
       logger.error('director', `date summary failed for ${character.username}`, { error: String(err) });
     }
@@ -749,7 +740,7 @@ export async function endDate(dateId: string): Promise<DateSession> {
     ...update.ledger,
     events: [...(update.ledger?.events ?? []), `Date at ${date.where_at || 'a place he chose'}: ${summary}`],
   };
-  update.set_flags = [...new Set([...(update.set_flags ?? []), 'has_had_first_date'])];
+  rel.flags.state.has_had_first_date = true;
   applyUpdate(character, rel, update);
 
   const ended = finishDate(date.id, summary)!;

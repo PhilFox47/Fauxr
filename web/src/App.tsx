@@ -104,7 +104,6 @@ export default function App() {
           break;
         case 'match':
         case 'character_state':
-        case 'presence':
           void refreshMatches();
           break;
         case 'match_removed':
@@ -130,7 +129,7 @@ export default function App() {
   }, [refreshMatches, setTypingFor, clearAllTyping]);
 
   /**
-   * Also the fallback for match list, presence and unread badges when the WebSocket above
+   * Also the fallback for match list and unread badges when the WebSocket above
    * cannot connect at all - a reverse proxy that does not forward the Upgrade handshake
    * breaks it silently, with no error the app can react to. Frequent enough to feel live
    * on its own; the socket is still what makes it instant when it actually works.

@@ -1,6 +1,7 @@
 import { find } from '../db/attributes.js';
 import type { Character, OpenThread, Relationship } from '../types.js';
 import { freshThreads } from './state.js';
+import { fantasyList } from './blocks.js';
 
 /**
  * A per-turn push on the shape of her reply.
@@ -39,68 +40,62 @@ export function pickNudge(
   // openness_curve entry actually pulls its own weight instead of silently defaulting to 0 -
   // this used to be a literal id lookup that only ever recognised the three shipped values.
   const energy = Number(find('social_energy', seed.social_energy)?.extra?.initiative ?? 0);
-  const warmth = rel.investment / 100;
   const opennessBonus = Number(find('openness_curve', seed.openness_curve)?.extra?.initiative_bonus ?? 0);
 
   // How likely she is to bring her own material rather than only answering.
-  const initiative = 0.3 + energy + warmth * 0.25 + opennessBonus;
+  const initiative = 0.4 + energy + opennessBonus;
 
   // Only threads she has not just been on about, so a callback cannot become a fixation.
   const openThreads: OpenThread[] = freshThreads(rel.ledger?.open_threads ?? []);
 
   /**
-   * She has to make moves too. "Getting flirted at" does not happen if every advance has
-   * to come from him first, and a character who is visibly keen but never acts on it is
-   * the most common way this kind of app falls flat.
+   * She makes moves too. Nothing gates this on how far things have got: a forward character
+   * comes onto him in the first message, a slow-burn one teases, and arousal lowers the bar
+   * for everyone.
    */
-  const open = rel.flags?.state?.sexual_topics_allowed;
   const boldness = (seed.sexual_confidence - 2) * 0.06;
-  /**
-   * Gating her first move behind arousal alone was a chicken-and-egg problem: arousal is a
-   * transient, reactive stat that mostly climbs once something sexual has already happened,
-   * so a character waiting on it could never be the one to start it - everything had to
-   * come from the user first. A character built forward on her seed (confident, high
-   * libido) does not need permission from her own mood stat to act like herself; arousal
-   * still lowers the bar further once it exists, it just stops being the only way in.
-   */
   const forward = seed.sexual_confidence >= 4 || seed.libido >= 4;
 
-  if (
-    open &&
-    (rel.arousal >= 60 || (forward && seed.sexting_readiness >= 4 && rel.arousal >= 30)) &&
-    chance(0.45 + boldness)
-  ) {
+  if ((rel.arousal >= 55 || (forward && rel.arousal >= 25)) && chance(0.45 + boldness)) {
     return {
       id: 'escalate',
       text:
         'You are the one pushing this turn. Do not wait for him to take it somewhere - take it there ' +
-        'yourself, say the specific thing you have been thinking about, or ask him something you ' +
-        'genuinely want the answer to. Be direct. You are past being coy about it.',
+        'yourself: say the specific thing you have been thinking about, tell him what you want, or ' +
+        'ask him something filthy you genuinely want the answer to.',
     };
   }
 
-  if (
-    (rel.arousal >= 35 || rel.spark >= 30 || (forward && rel.spark >= 25)) &&
-    chance(0.3 + boldness + (forward ? 0.1 : 0))
-  ) {
+  // Her own fantasies are the heart of this. She pitches one, or picks one back up.
+  const fantasies = fantasyList(seed);
+  if (fantasies.length && (!ctx.somethingLive || rel.arousal >= 45) && chance(0.14 + boldness / 2 + (forward ? 0.05 : 0))) {
+    const pick = fantasies[Math.floor(Math.random() * fantasies.length)];
+    return {
+      id: 'pitch_fantasy',
+      text:
+        `Pitch him one of your fantasies this turn: ${pick}. Make it concrete and yours - set the ` +
+        'scene in a line or two, tell him what you would want him to do, and ask if he is in. Tweak ' +
+        'it to what you know about him. If you already pitched this one, move it forward instead.',
+    };
+  }
+
+  if (chance(0.3 + boldness + (forward ? 0.1 : 0))) {
     return {
       id: 'flirt',
       text:
         'Flirt with him this turn, and mean it. Not a polite compliment - something with an edge, ' +
-        'a double meaning, a line that makes him work out whether you meant it. You are interested ' +
-        'and you are allowed to let that show.',
+        'a double meaning, something that makes him picture it. You are into him and it shows.',
     };
   }
 
-  // She hints at something she is into without naming it, and waits to see if he catches it.
+  // She lets out something she is into that he has not found yet.
   const hiddenFetishes = (seed.fetishes ?? []).filter((f) => !(rel.discovered ?? {})[`fetish:${f}`]);
-  if (open && hiddenFetishes.length && (rel.arousal >= 45 || (forward && rel.arousal >= 30)) && chance(0.3)) {
+  if (hiddenFetishes.length && (rel.arousal >= 35 || forward) && chance(0.3)) {
     return {
       id: 'hint_fetish',
       text:
-        'Steer towards something you are into that he has not worked out yet. Do not announce it - ' +
-        'circle it. A leading question, a detail you did not have to include, a joke you could take ' +
-        'back if he does not pick it up. See whether he notices.',
+        'Let him in on something you are into that he has not found out yet. Hint, suggest, or just ' +
+        'say it - whichever is more you - and see what he does with it.',
     };
   }
 

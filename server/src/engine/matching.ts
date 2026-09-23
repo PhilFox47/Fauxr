@@ -8,7 +8,7 @@ import {
 import type { Character } from '../types.js';
 import { generateCharacter } from './generator.js';
 import { randInt } from './dice.js';
-import { nextOnlineAt } from './presence.js';
+import { ensureProfilePicture } from './images.js';
 
 export const STACK_SIZE = 10;
 
@@ -85,11 +85,10 @@ export function swipeRight(characterId: string): MatchResult {
   setCharacterState(characterId, 'matched', { matched_at: at.toISOString(), reappear_at: null });
 
   if (!instant) {
-    // She writes first, once the match lands and she is online.
-    const online = nextOnlineAt(character, at) ?? at;
+    // She writes first, once the match lands.
     setWakeup({
       character_id: characterId,
-      scheduled_at: online.toISOString(),
+      scheduled_at: at.toISOString(),
       reason: 'match_opener',
       cancel_if_user_writes: false,
     });
@@ -101,6 +100,12 @@ export function swipeRight(characterId: string): MatchResult {
     rel.last_decay_at = nowIso();
     saveRelationship(rel);
   }
+
+  // Her profile picture is made as soon as she is matched, so it is there on her profile and
+  // ready to be the reference for anything she sends later.
+  void ensureProfilePicture(characterId).catch((err) =>
+    logger.error('image', 'profile picture failed', { error: String(err) }),
+  );
 
   logger.info('app', `matched ${character.username} (${instant ? 'instant' : `delayed ${delayMinutes}min`})`);
   if (instant) bus.emitEvent({ type: 'match', character_id: characterId });
@@ -137,7 +142,7 @@ export function visibleMatches(): Character[] {
   const rows = db
     .prepare(
       `SELECT id FROM characters
-       WHERE state IN ('matched','blocked_by_char','blocked_by_user')
+       WHERE state IN ('matched','blocked_by_user')
          AND (matched_at IS NULL OR matched_at <= ?)
        ORDER BY matched_at DESC`,
     )

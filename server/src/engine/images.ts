@@ -18,41 +18,72 @@ import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
 import { pickOne, randInt } from './dice.js';
 import { describeSeed } from './generator.js';
-import type { Character, CharacterSeed, PendingPhoto, Relationship } from '../types.js';
+import type { Character, CharacterSeed } from '../types.js';
 
-/**
- * Whether a photo_offer of this kind, right now, would actually raise a consent card.
- *
- * This used to also require the direction's "unlock" to match this exact tier this exact
- * turn, and required a profile picture to already be sent before any other tier - both
- * enforced in code, on top of whatever the Director's own guidance already told the Actor.
- * That meant a character who, in her own judgment, wanted to send a photo could get silently
- * rejected and retried by the code even when nothing about the offer itself was actually
- * wrong. Deciding whether a photo is really wanted is the player's call, made on the consent
- * card itself (accept/decline) - not something to pre-empt here. The only things actually
- * checked now are real constraints: whether images are turned on at all, and not starting a
- * second profile-picture job while one is already on its way.
- */
-export function photoOfferEligible(rel: Relationship, offerKind: 'profile' | 'chat' | 'spicy'): boolean {
-  return getSettings().images_enabled && !(offerKind === 'profile' && hasProfileImageJob(rel.character_id));
+/** Whether she can send photos at all. Which photo, and when, is entirely her call. */
+export function photosEnabled(): boolean {
+  return getSettings().images_enabled;
 }
 
 /**
  * Whether a profile picture already exists or is already on its way - checked against the
  * `images` table itself, not `profile_picture_sent`, because that flag only flips once
- * generation actually finishes and enqueueImage's insert happens synchronously well before
- * that. A real turn once had the Actor both accept a pending profile-picture exchange
- * (which enqueues one immediately) and, in the same breath, set photo_offer to "profile"
- * too - and because the flag had not flipped yet, the second offer looked eligible and, once
- * accepted, generated and sent an entirely separate profile picture. Every place a profile
- * job can be triggered - a fresh offer, an accepted offer, an accepted exchange - checks
- * this first, so whichever one gets there first is the only one that actually runs.
+ * generation actually finishes, so two callers in quick succession would otherwise both
+ * start one.
  */
 export function hasProfileImageJob(characterId: string): boolean {
   const row = db
     .prepare("SELECT 1 FROM images WHERE character_id = ? AND kind = 'profile' AND status != 'failed' LIMIT 1")
     .get(characterId);
   return !!row;
+}
+
+/**
+ * Makes sure her profile picture exists, generating it if needed, and resolves once it is
+ * done (or has failed). Every later photo uses it as the reference for her face, so a photo
+ * she sends before one exists waits on this first. The profile picture lives on her profile;
+ * it is not posted into the chat.
+ */
+export async function ensureProfilePicture(characterId: string): Promise<void> {
+  if (!photosEnabled()) return;
+  const existing = db
+    .prepare("SELECT id, status FROM images WHERE character_id = ? AND kind = 'profile' AND status != 'failed' ORDER BY rowid ASC LIMIT 1")
+    .get(characterId) as { id: string; status: string } | undefined;
+  if (!existing) {
+    const job = insertImageJob({ characterId, kind: 'profile', situation: '' });
+    await runImageJob(job.id, '', false);
+    return;
+  }
+  // Already queued or running from another caller: wait for it rather than starting a second.
+  const deadline = Date.now() + 10 * 60_000;
+  let status = existing.status;
+  while ((status === 'queued' || status === 'running') && Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 2000));
+    status = getImageJob(existing.id)?.status ?? 'failed';
+  }
+}
+
+/**
+ * She sends him a photo. No consent card, no unlock: she decided to, so it happens. If she has
+ * no profile picture yet, that is generated first so this one can match her face.
+ */
+export async function sendPhoto(opts: {
+  characterId: string;
+  kind: 'chat' | 'spicy';
+  situation: string;
+  aspect: 'portrait' | 'landscape' | null;
+  showsFace: boolean;
+}): Promise<void> {
+  if (!photosEnabled()) return;
+  await ensureProfilePicture(opts.characterId);
+  const job = insertImageJob({
+    characterId: opts.characterId,
+    kind: opts.kind,
+    situation: opts.situation || DEFAULT_SITUATION[opts.kind],
+    aspect: opts.aspect,
+    showsFace: opts.showsFace,
+  });
+  await runImageJob(job.id, job.situation ?? '', true);
 }
 
 type PromptStyle = 'seedream' | 'z_image_turbo';
@@ -406,15 +437,8 @@ export function listImageJobs(limit = 50): ImageJob[] {
   return db.prepare('SELECT * FROM images ORDER BY rowid DESC LIMIT ?').all(limit) as ImageJob[];
 }
 
-/**
- * Every finished picture of one character, newest first.
- *
- * Her profile shot is held back until the two of them have actually swapped, for the same
- * reason her avatar is: an image existing on disk is not the same as him being allowed to
- * look at it. In practice generation only starts from an accepted swap anyway, so this is
- * a guard for saves made before that existed rather than a live gate.
- */
-export function characterGallery(characterId: string, swapped: boolean): ImageJob[] {
+/** Every finished picture of one character, newest first. */
+export function characterGallery(characterId: string): ImageJob[] {
   const rows = db
     .prepare(
       `SELECT * FROM images
@@ -422,7 +446,7 @@ export function characterGallery(characterId: string, swapped: boolean): ImageJo
        ORDER BY rowid DESC`,
     )
     .all(characterId) as ImageJob[];
-  return swapped ? rows : rows.filter((r) => r.kind !== 'profile');
+  return rows;
 }
 
 export function getImageJob(id: string): ImageJob | null {
@@ -541,7 +565,7 @@ async function profilePicConcept(character: Character): Promise<string> {
   return DEFAULT_SITUATION.profile;
 }
 
-export function enqueueImage(opts: {
+type ImageJobOptions = {
   characterId: string;
   kind: 'profile' | 'chat' | 'spicy' | 'date';
   /** Only for a 'date' kind job: which date's own transcript the result posts into. */
@@ -552,7 +576,9 @@ export function enqueueImage(opts: {
   /** False only for a shot that deliberately does not put her face in frame. Defaults true. */
   showsFace?: boolean;
   postToChat?: boolean;
-}): ImageJob {
+};
+
+function insertImageJob(opts: ImageJobOptions): ImageJob {
   const id = randomUUID();
   const aspect = opts.kind === 'profile' ? null : opts.aspect ?? 'portrait';
   db.prepare(
@@ -562,8 +588,12 @@ export function enqueueImage(opts: {
     id, opts.characterId, opts.kind, aspect, opts.showsFace === false ? 0 : 1, opts.situation,
     opts.dateId ?? null, nowIso(), nowIso(),
   );
-  const job = getImageJob(id)!;
-  void runImageJob(id, opts.situation, opts.postToChat !== false);
+  return getImageJob(id)!;
+}
+
+export function enqueueImage(opts: ImageJobOptions): ImageJob {
+  const job = insertImageJob(opts);
+  void runImageJob(job.id, opts.situation, opts.postToChat !== false);
   return job;
 }
 
@@ -738,7 +768,8 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
         sender: isDate ? 'system' : 'character',
         text: '',
         kind: 'image',
-        meta: { image_id: id, path: relPath },
+        // What the photo shows, so later prompts know what she actually sent.
+        meta: { image_id: id, path: relPath, description: situation },
         read_at: null,
         date_id: job.date_id,
       });
@@ -880,89 +911,36 @@ const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date', string> =
 };
 
 /**
- * His answer to a pending photo offer, from the consent card in the chat. Accepting is the
- * only thing that ever starts real generation - offering one, on the Actor's side, only
- * ever raises the card. See ActorHidden.photo_offer for why the two are kept apart.
+ * The Director has vision: it looks at what he sent so she can react to what is actually in
+ * it. The description is stored on his message so every later prompt can see it too.
  */
-export async function respondToPhotoOffer(
-  characterId: string,
-  offerId: string,
-  accept: boolean,
-): Promise<{ ok: true; enqueued: boolean }> {
-  const rel = getRelationship(characterId);
-  if (!rel) throw new Error('character not found');
-  const pending = (rel.mood as any)?.pending_photo as PendingPhoto | undefined;
-  if (!pending || pending.offer_id !== offerId) {
-    throw new Error('that offer is no longer open');
-  }
-
-  rel.mood = { ...rel.mood, pending_photo: null };
-  saveRelationship(rel);
-
-  // The card itself resolves in place - accepted or declined - rather than vanishing, so
-  // scrolling back through history still makes sense.
-  const updated = updateMessageMeta(pending.message_id, { status: accept ? 'accepted' : 'declined' });
-  if (updated) {
-    bus.emitEvent({ type: 'message_updated', character_id: characterId, message: updated });
-  }
-
-  if (!accept) return { ok: true, enqueued: false };
-
-  // Seeing a real picture goes both ways: saying yes to hers shows her his at the same
-  // time, which is the whole reason a character has any reason to offer one.
-  if (pending.kind === 'profile') {
-    rel.flags.state.photos_exchanged = true;
-    saveRelationship(rel);
-
-    // If a profile job is already underway - most likely because an exchange was accepted
-    // the same turn this offer was made, or another card resolved first - the agreement
-    // above still stands, but generating a second, unrelated profile picture would not.
-    if (hasProfileImageJob(characterId)) {
-      return { ok: true, enqueued: false };
-    }
-  }
-
-  enqueueImage({
-    characterId,
-    kind: pending.kind,
-    // A blank profile situation is generated lazily inside runImageJob, from the character
-    // herself, rather than papered over with the same generic default every time.
-    situation: pending.kind === 'profile' ? pending.situation ?? '' : pending.situation || DEFAULT_SITUATION[pending.kind],
-    aspect: pending.aspect,
-    showsFace: pending.showsFace,
-  });
-  return { ok: true, enqueued: true };
-}
-
-/** The Director has vision: it judges what the user sent and what that does to her. */
 export async function evaluateUserImage(
   characterId: string,
+  messageId: number,
   base64: string,
   mimeType: string,
-): Promise<any> {
+): Promise<void> {
   const character = getCharacter(characterId);
   const rel = getRelationship(characterId);
   if (!character || !rel) throw new Error('character not found');
   const settings = getSettings();
-  const { flagsBlock, historyBlock, seedBlock, touchstoneHint } = await import('./blocks.js');
+  const { historyBlock, seedBlock } = await import('./blocks.js');
   const { recentMessages, getUserProfile } = await import('../repo.js');
 
   const text = render('director_evaluate_image', {
     char_real_name: character.real_name,
     seed_block: seedBlock(character),
-    trust: rel.trust,
-    spark: rel.spark,
-    investment: rel.investment,
-    pressure: rel.pressure.toFixed(2),
-    flags_block: flagsBlock(rel.flags),
+    arousal: rel.arousal,
     history_block: historyBlock(recentMessages(characterId, 12), character, getUserProfile()),
-    touchstone_hint: touchstoneHint(character.seed),
   });
 
-  return completeJson({
+  const result = await completeJson<{
+    description?: string; arousal_delta?: number; ledger_fact?: string | null; reaction_hint?: string;
+  }>({
     scope: 'director',
     label: `evaluate_image:${character.username}`,
     config: settings.models.director,
+    require: ['description'],
     messages: [
       {
         role: 'user',
@@ -973,4 +951,16 @@ export async function evaluateUserImage(
       },
     ],
   });
+  logger.info('director', 'image evaluated', result);
+
+  const description = String(result.description ?? '').trim();
+  if (description) updateMessageMeta(messageId, { description, reaction_hint: result.reaction_hint ?? null });
+  const fresh = getRelationship(characterId);
+  if (!fresh) return;
+  const delta = Math.max(-20, Math.min(30, Number(result.arousal_delta ?? 0) || 0));
+  fresh.arousal = Math.max(0, Math.min(100, fresh.arousal + delta));
+  if (result.ledger_fact) {
+    fresh.ledger.facts.about_user = [...new Set([...(fresh.ledger.facts.about_user ?? []), String(result.ledger_fact)])].slice(-60);
+  }
+  saveRelationship(fresh);
 }

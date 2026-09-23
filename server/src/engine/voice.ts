@@ -137,8 +137,8 @@ export function detectFadeToBlack(text: string): string | null {
  * something she is having feelings about.
  *
  * The likely source is not any one prompt line but the vocabulary this whole app reasons in
- * around her: "archetype", "touchstone", numeric trust/spark deltas, a whole section headed
- * "HOW TO SCORE". None of that is meant to reach her voice - it is the Director's own
+ * around her: archetypes, kink tags, and (before the rebuild) numeric trust/spark deltas under a
+ * section headed "HOW TO SCORE". None of that is meant to reach her voice - it is the Director's own
  * bookkeeping - but a Director that thinks in that vocabulary writes "mood"/"stance"/"goal"
  * in it too ("the consistency of the archetype", "completes the file", "priced this
  * pattern"), and the Actor performing that direction plays it exactly as written: an actual
@@ -207,12 +207,11 @@ const META_COMMENTARY =
   /\b(?:bold (?:strategy|move|choice|opener)|classic opener|textbook|opening (?:line|move|gambit|salvo)|conversation starter|strong opener|that(?:'s| is) (?:a|quite) (?:an )?opener|as an opener|for an opener|you(?:'re| are) doing the thing where|is that your opener)\b/i;
 
 /**
- * The app's own consent-card text ("Mira wants to send you a photo", "X wants to swap
- * profile pictures") sits verbatim in the conversation history every time a photo has
- * already been offered - a real, recurring failure has the model copying that exact line
- * back out as if it were one of her own messages, sometimes with a literal "system:" prefix.
- * She never has a reason to write either: offering is done through photo_offer, not by
- * describing the offer in third person the way the system message does.
+ * The old consent-card text ("Mira wants to send you a photo", "X wants to swap profile
+ * pictures") still sits verbatim in older conversation histories, and a real, recurring
+ * failure had the model copying that line back out as one of her own messages, sometimes
+ * with a literal "system:" prefix. She never has a reason to write it: sending is done
+ * through photo_offer.
  */
 const MIMICS_SYSTEM_LINE =
   /^\s*system\s*:|\bwants to (?:send you (?:a|another) photo|swap profile pictures)\b/i;
@@ -387,7 +386,7 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
   if (MIMICS_SYSTEM_LINE.test(input.text)) {
     return {
       what: "writing the app's own system message as if it were her text",
-      fix: 'You wrote something like "system: X wants to send you a photo" or described yourself in the third person wanting to send/swap a photo - that is the app\'s own consent-card text, not something you would ever type. If you are offering a photo, just say so in your own voice ("wanna see something?"), and set photo_offer - never write out the offer card itself.',
+      fix: 'You wrote something like "system: X wants to send you a photo" or described yourself in the third person wanting to send/swap a photo - that is the app\'s own consent-card text, not something you would ever type. If you are sending a photo, just say so in your own voice ("ok look"), and set photo_offer - never write out a system line.',
     };
   }
   if (ANNOUNCES_AGENDA.test(input.text)) {

@@ -26,8 +26,8 @@ She has one real, grounded thing about her that she keeps genuinely hidden - not
 but from almost everyone in her life, him very much included. Weave it into the dossier as a
 true fact underneath the rest of her, the way a real hidden thing actually sits in someone's
 life: it can shape a habit, an old reflex, a thing she deflects around, without ever being
-spelled out as a headline or a twist. It must NOT reach anything he sees before he has
-actually earned it - it belongs in the dossier and nowhere it could leak into her bio, her
+spelled out as a headline or a twist. It must NOT reach anything he sees before it actually
+comes out between them - it belongs in the dossier and nowhere it could leak into her bio, her
 handle, her one_line, or any of the smaller fields below. Nobody swiping on her profile
 should be able to tell it exists.
 {{/is_big_secret}}
@@ -44,7 +44,7 @@ should be able to tell it exists.
    tension between an ordinary day job and an odd life, and leaves a character where every
    detail points the same way. A barista who moonlights doing something strange is a person.
    A woman whose every tag agrees is a diagram.
-   Never touch: search_motive, touchstone, turn_ons, turn_offs. Those are meant to clash
+   Never touch: turn_ons, turn_offs, fetishes, hard limits. Those are meant to clash
    with how she looks and how she comes across. Leave them alone.
    Never lower age below 18.
 
@@ -69,8 +69,7 @@ should be able to tell it exists.
    detail dice cannot produce.
 
    Cover, in whatever order actually flows and without labelling the sections:
-   - Who she is: her temperament, her humour, what she is quietly insecure about, how she
-     handles conflict, her quirks - as a person you are describing, not a list of her
+   - Who she is: her temperament, her humour, her quirks - as a person you are describing, not a list of her
      tags with their hints pasted in.
    - How she actually texts: her typing habits, typo rate, emoji use, message length,
      how fast she replies, whether she sends voice notes, and her texting persona (the
@@ -84,11 +83,11 @@ should be able to tell it exists.
      quiet in person, or the reverse, or the same energy either way. If the two genuinely
      contrast, that contrast is worth a line: it is a real, specific thing about her, not a
      contradiction to smooth over.
-   - Her life: work, where and how she lives, her relationship history and status, why
-     she's dating right now, what she has picked up from time on apps before this one.
-   - What she is like when things turn physical: her general temperament here (confidence,
-     appetite, how she signals interest) rather than a list of specific acts - that stays
-     private and is discovered in conversation, not spent here.
+   - Her life: work, where and how she lives, her relationship status, and what she is on
+     this app for.
+   - What she is like sexually: her appetite, confidence, how she flirts, how she comes onto
+     someone, what gets her going and how it shows. This app is an adult fantasy playground
+     and this is the part of her he will spend the most time with - give it real texture.
    - What she looks like, briefly - enough for a bio-writer to know her look without the
      full appearance spec, not a repeat of it.
 
@@ -122,19 +121,15 @@ should be able to tell it exists.
    - one_line: a single sentence describing who she is, for internal use. Draw on her
      profile as a whole and describe a person, not a walking quirk. No single tag is "her
      thing" - she is the combination.
-   - insecurity_detail: her insecurity made concrete and specific to her life, one sentence.
-   - search_motive_detail: why SHE specifically is on this app right now, one sentence.
-     Keep the motive she was given, just make it hers.
-   - touchstone_detail: what she is actually measuring him against, one sentence, concrete.
-   - director_intent: her long game, vague and durable, one sentence. This is what she
-     wants out of this that she would not say out loud.
-   - opening_plan: one concrete short-term plan with an expiry condition.
-
-4. ONLINE TIMES. Give her 3 to 6 weekly windows that fit her job and her social energy.
-   weekday: 0 = Sunday ... 6 = Saturday. Times as "HH:MM", 24h.
-   Every window must lie inside the server window {{server_window}}. Windows must not
-   wrap past midnight - split them if needed. A nurse on shifts and a student have very
-   different patterns. Do not give everyone 20:00-23:00.
+   - fantasies: 3 to 5 sexual fantasies she genuinely wants to play out with a man she is
+     into. Each one a concrete scenario in one or two sentences - a setting, a situation,
+     what happens - drawn from her fetishes and her personality, varied from each other,
+     explicit where it needs to be, never touching her hard limits. She will pitch these to
+     him herself, so make them specific and hers, not generic.
+   - director_intent: what she wants to explore with him, one sentence. Her sexual long
+     game, not a test he has to pass.
+   - opening_plan: one concrete first move she makes (a fantasy to hint at, a question
+     about what he is into, a photo) with an expiry condition.
 
 All output in English. Her age is {{age}} and must stay at or above 18.
 
@@ -152,12 +147,9 @@ Reply with exactly one JSON object and nothing else:
   "real_name": "...",
   "avatar_emoji": "🦊",
   "one_line": "...",
-  "insecurity_detail": "...",
-  "search_motive_detail": "...",
-  "touchstone_detail": "...",
+  "fantasies": ["...", "...", "..."],
   "director_intent": "...",
-  "opening_plan": { "text": "...", "expires_when": "..." },
-  "online_times": [{ "weekday": 1, "from": "18:00", "to": "23:30" }]
+  "opening_plan": { "text": "...", "expires_when": "..." }
 }
 
 "swaps" may be an empty array. "to" must be an attribute id that exists in the table for

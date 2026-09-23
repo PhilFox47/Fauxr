@@ -7,21 +7,11 @@ import { freshThreads, pruneThreads } from './state.js';
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
 
-export function userBlock(user: UserProfile | null, flags?: Flags): string {
+export function userBlock(user: UserProfile | null): string {
   if (!user) return 'Unknown - he has not filled in his profile.';
-  const swapped = !!flags?.state.photos_exchanged;
-  const hasPhoto = user.photos.length > 0;
-
-  // Profile pictures are a swap, so what she can see of him depends on what he has seen of
-  // her. Until then he is an emoji, exactly as she is to him.
-  const pictureLine = swapped
-    ? hasPhoto
-      ? 'You have seen his actual profile picture - you swapped. You can refer to it, and ask him about it.'
-      : 'You swapped profile pictures, but he had no real photo to send, so all you have is his emoji. You are allowed to find that funny.'
-    : hasPhoto
-      ? `You have NOT seen his real picture. All you have is the emoji on his profile: ${user.avatar_emoji || '(none set)'}. He does have a real one - you would have to swap to see it, and you only get his once he has yours.`
-      : `You have NOT seen a real picture of him. His profile is just an emoji: ${user.avatar_emoji || '(none set)'}.`;
-
+  const pictureLine = user.photos.length
+    ? 'You have seen his profile picture. You can refer to it.'
+    : `He has no real photo up, just an emoji: ${user.avatar_emoji || '(none set)'}.`;
   return [
     `Name: ${user.display_name}`,
     `Age: ${user.age}`,
@@ -37,106 +27,49 @@ function indefinite(word: string): string {
 }
 
 /**
- * Almost always empty - only fires on the very rare non-human roll. What the model always
- * knows about her own nature is kept separate from what HE has actually been shown or told.
- * A species with a permanent tell (cat ears, a giant's scale) is simply true and visible in
- * any photo the moment one exists, no pacing needed. One she can conceal (a succubus's
- * horns, a tiefling's tail) gets the same pacing philosophy nameLine above already gives her
- * real name: never denied if he asks outright, but whether and when she shows him herself is
- * hers to decide. One with no physical tell at all (a witch, a mermaid on land) is pure
- * roleplay discretion, no different from any other personal fact she discloses in her own
- * time.
+ * Almost always empty - only fires on the very rare non-human roll. A species that shows in
+ * any photo is simply true and visible. One she can hide, or one with no physical tell at
+ * all, is hers to reveal whenever she feels like it - a bit of play, not a gate.
  */
-function speciesLine(s: CharacterSeed, flags: Flags): string {
+function speciesLine(s: CharacterSeed): string {
   if (!s.species || s.species === 'human') return '';
   const species = find('species', s.species);
   if (!species) return '';
   const hintText = species.prompt_hint || species.label;
   const vis = species.extra?.visibility ?? 'profile';
   if (vis === 'profile') {
-    return `You are not human - ${species.label.toLowerCase()}, in fact - and there is no hiding ` +
-      `it: it shows in any photo of you, the moment there is one. ${hintText}`;
+    return `You are not human - ${species.label.toLowerCase()}, in fact - and it shows in any photo of you. ${hintText}`;
   }
-  if (vis === 'chat_only') {
-    return `You are secretly ${indefinite(species.label)} - nothing about how you look would ever ` +
-      `give it away, in any photo. Whether and when you ever tell him is entirely your call, paced ` +
-      `the same as anything else personal about yourself. ${hintText}`;
-  }
-  // 'later' or 'private': a real physical tell, but one she can and does keep hidden by default.
-  const shown = vis === 'private'
-    ? !!flags.state.spicy_photos_allowed || !!flags.state.has_had_first_date
-    : !!flags.state.spicy_photos_allowed || !!flags.state.has_had_first_date || !!flags.state.personal_photos_allowed;
-  return shown
-    ? `You are secretly ${indefinite(species.label)}, and he has actually seen it by now. ${hintText}`
-    : `You are secretly ${indefinite(species.label)} - you keep it out of sight day to day (however ` +
-      `your own version of that works) and he has no idea yet. Showing him is a real choice, paced ` +
-      `by who you are, never forced - and, exactly like your name, never denied outright if he ` +
-      `somehow already suspects and asks you directly. ${hintText}`;
+  return `You are secretly ${indefinite(species.label)}. When and how you let him in on it is up to ` +
+    `you - it can be a tease, a reveal, part of a fantasy. Never deny it if he asks outright. ${hintText}`;
 }
 
 /**
- * Almost always empty - only fires on the very rare character who was actually given one.
- * Unlike species, a big secret has no visibility tier and no photo can ever reveal it: the
- * only two ways it ever comes out are a genuine accidental slip (unguarded, never engineered)
- * or her actually choosing to share it once trust is real. Both are pure judgment calls, on
- * purpose - the same as everything else this discretionary rather than mechanical - and only
- * the Director, reading the actual conversation, may ever mark it known (big_secret_known),
- * never a threshold or a message count.
+ * Almost always empty. A real, grounded thing she keeps to herself. It comes out when it
+ * comes out - a slip, or her deciding to share - and only the Director marks it known.
  */
 function bigSecretLine(s: CharacterSeed, flags: Flags): string {
   if (!s.big_secret || s.big_secret === 'none') return '';
   const secret = find('big_secret', s.big_secret);
   if (!secret) return '';
   const hintText = secret.prompt_hint || secret.label;
-  if (flags.state.big_secret_known) {
-    return `He actually knows your one real hidden thing now: ${hintText} You do not have to keep ` +
-      `dancing around it any more, though how you carry that afterwards is still entirely you.`;
-  }
-  return `You are hiding something real, and almost nobody in your life knows it: ${hintText} This ` +
-    `is not a "getting to know you" fact and not something you volunteer, ever, casually. It comes ` +
-    `out in exactly one of two ways: a genuine accident - something that slips out in an unguarded, ` +
-    `relaxed, or caught-off-guard moment, never engineered just to have a reveal - or a real choice, ` +
-    `made once trust has actually been earned over real time, never because a number of messages or ` +
-    `days has passed. Until either of those genuinely happens, protect it the way anyone protects ` +
-    `something real: deflect, change the subject, answer something adjacent, joke your way past a ` +
-    `question that gets close - never a flat, cruel lie that would feel like betrayal once he ` +
-    `eventually knows, just not going there yet.`;
+  if (flags.state.big_secret_known) return `He knows your one real hidden thing now: ${hintText}`;
+  return `You keep one real thing to yourself: ${hintText} You do not lead with it. It comes out ` +
+    `if it slips, or when you feel like telling him - never lie about it flatly if he gets close.`;
 }
 
 export function identityBlock(character: Character, flags: Flags): string {
   const s = character.seed;
-  // She is always told her own name. Withholding it used to be done by withholding it from
-  // the model itself, which meant she could not confirm a correct guess even when he landed
-  // it exactly - she had only the handle to compare against, so she denied her own name.
-  const nameLine = flags.state.real_name_known
-    ? `Your name is ${character.real_name}. He knows it. Your handle is @${character.username}.`
-    : `Your name is ${character.real_name}. Your handle is @${character.username} - and it is ` +
-      `never anything close to your real name, on purpose: he only knows you by it until you ` +
-      `actually tell him. Whether YOU offer it unprompted, and how soon, is entirely down to who ` +
-      `you are - an open, forward woman might lead with it in her very first message; a guarded, ` +
-      `private or anxious one keeps to her handle for a while and lets it come up in its own time, ` +
-      `the same way she paces anything else personal about herself. That pacing is real, not a ` +
-      `formality: if it has not felt right yet, it has not come up yet, plainly. But if he asks ` +
-      `outright, answer straight away regardless of how guarded you otherwise are - a first name is ` +
-      `not a prize and not a secret, and if he guesses it right, say so immediately. NEVER deny your ` +
-      `own name, and never make him guess it or earn it once he has actually asked - that game is ` +
-      `tedious and you are not playing it. Being slow to volunteer something yourself is not the ` +
-      `same thing as refusing to answer when he asks for it.`;
-  const speciesText = speciesLine(s, flags);
+  const speciesText = speciesLine(s);
   const secretText = bigSecretLine(s, flags);
   return [
-    nameLine,
+    `Your name is ${character.real_name}. Your handle is @${character.username}. Use your name freely.`,
     `You are ${s.age}.`,
     ...(speciesText ? [speciesText] : []),
     ...(secretText ? [secretText] : []),
     `Who you are: ${s.hints.one_line ?? hint('archetype', s.archetype)}`,
-    '',
     `Core: ${hint('archetype', s.archetype)}`,
-    `Attachment: ${hint('attachment_style', s.attachment_style)}`,
     `Humour: ${hint('humor_type', s.humor_type)}`,
-    `In conflict: ${hint('conflict_style', s.conflict_style)}`,
-    `What you are quietly insecure about: ${s.hints.insecurity}`,
-    `Why you are on this app: ${s.hints.search_motive}`,
   ].join('\n');
 }
 
@@ -187,47 +120,17 @@ export function quirksBlock(seed: CharacterSeed): string {
   return seed.quirks.map((q) => `- ${hint('quirk', q)}`).join('\n');
 }
 
-/**
- * Only what he could plausibly know or see. Tattoos and piercings carry a visibility so
- * that what sits on a wrist is discoverable early and what sits on a thigh is not.
- */
-export function appearanceBlock(seed: CharacterSeed, flags: Flags): string {
-  const showPrivate = !!flags.state.spicy_photos_allowed || !!flags.state.has_had_first_date;
-  const showLater = showPrivate || !!flags.state.personal_photos_allowed;
-  const visible = (position: string, category: string) => {
-    const v = find(category, position)?.extra?.visibility ?? 'profile';
-    if (v === 'profile') return true;
-    if (v === 'later') return showLater;
-    return showPrivate;
-  };
-  const tattoos = seed.tattoos
-    .filter((t) => visible(t.position, 'tattoo_position'))
-    .map((t) => `${label('tattoo_motif', t.motif)} ${label('tattoo_position', t.position)}`);
-  const hiddenTattoos = seed.tattoos.length - tattoos.length;
-  const piercings = seed.piercings
-    .filter((p) => visible(p.position, 'piercing_position'))
-    .map((p) => `${label('piercing_type', p.type)} ${label('piercing_position', p.position)}`);
-  const hiddenPiercings = seed.piercings.length - piercings.length;
-
-  // A 'profile'-visibility species is already baked into seed.appearance_prompt (line one,
-  // below) since it is a permanent, unhideable fact - nothing to add here. 'chat_only' has no
-  // physical description at all, ever. Only 'later'/'private' need a line here, and only once
-  // she has actually shown him: her true nature until then is identityBlock's job, not this
-  // physical-description one, the same split as an as-yet-unseen tattoo.
-  const species = seed.species && seed.species !== 'human' ? find('species', seed.species) : null;
-  const speciesVis = species?.extra?.visibility;
-  const speciesRevealed = speciesVis === 'private' ? showPrivate : speciesVis === 'later' ? showLater : false;
-
+/** How she looks. Nothing is hidden from her own prompt; what she shows him is her call. */
+export function appearanceBlock(seed: CharacterSeed): string {
+  const tattoos = seed.tattoos.map((t) => `${label('tattoo_motif', t.motif)} ${label('tattoo_position', t.position)}`);
+  const piercings = seed.piercings.map((p) => `${label('piercing_type', p.type)} ${label('piercing_position', p.position)}`);
   return [
     seed.appearance_prompt,
     `You dress: ${hint('clothing_style', seed.clothing_style)}`,
     `Grooming: ${hint('grooming', seed.grooming)}`,
-    tattoos.length ? `Tattoos he could have seen: ${tattoos.join('; ')}` : 'No tattoos he could have seen.',
-    hiddenTattoos > 0 ? `You have ${hiddenTattoos} more tattoo(s) somewhere he has not seen. Do not volunteer them.` : '',
-    piercings.length ? `Piercings he could have seen: ${piercings.join('; ')}` : '',
-    hiddenPiercings > 0 ? `You have ${hiddenPiercings} more piercing(s) he has not seen. Do not volunteer them.` : '',
+    tattoos.length ? `Tattoos: ${tattoos.join('; ')}` : 'No tattoos.',
+    piercings.length ? `Piercings: ${piercings.join('; ')}` : '',
     seed.accessories.length ? `You usually wear: ${seed.accessories.map((a) => label('accessory', a)).join(', ')}` : '',
-    speciesRevealed && species?.image_prompt ? `He has now seen the part of you that is not human: ${species.image_prompt}.` : '',
   ].filter(Boolean).join('\n');
 }
 
@@ -236,8 +139,6 @@ export function lifeBlock(seed: CharacterSeed): string {
     `Work: ${hint('occupation', seed.occupation)}`,
     `Living: ${hint('living_situation', seed.living_situation)}`,
     `Where you stand romantically right now: ${hint('relationship_status', seed.relationship_status)}`,
-    `Relationship history: ${hint('relationship_history', seed.relationship_history)}`,
-    `On dating apps: ${hint('dating_experience', seed.dating_experience)}`,
     `Social energy: ${hint('social_energy', seed.social_energy)}`,
   ].join('\n');
 }
@@ -358,21 +259,21 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
 }
 
 /** What the arousal number feels like from the inside. The Actor never sees the number. */
-export function moodBlock(arousal: number, stageLabel: string, tell?: string, medium: 'text' | 'in_person' = 'text'): string {
-  const lines = [`Where this is: ${stageLabel}.`];
+export function moodBlock(arousal: number, tell?: string, medium: 'text' | 'in_person' = 'text'): string {
+  const lines: string[] = [];
   if (arousal >= 70) {
     lines.push(
       medium === 'in_person'
-        ? 'You want him, right now, and it shows - in how close you are sitting, in how you are looking at him. You are not hiding it well and you are not especially trying to.'
-        : 'You want him, right now, and it is affecting how you type. You are not hiding it well and you are not especially trying to.',
+        ? 'You want him, right now, and it shows - in how close you are, in how you look at him. You are not trying to hide it.'
+        : 'You are properly worked up right now and it is all over how you type. You are not trying to hide it.',
     );
   } else if (arousal >= 45) {
-    lines.push('There is a pull. You are aware of it. You would not bring it up unprompted, but you are not thinking about much else either.');
+    lines.push('You are turned on and thinking about it. It leaks into everything you say.');
   } else if (arousal >= 20) {
-    lines.push('Warm towards him. Not thinking about it in those terms right now.');
+    lines.push('Warm and a bit flirty. It would not take much.');
+  } else {
+    lines.push('Not especially worked up right now - which you might like to change.');
   }
-  // Everyone used to warm up identically. This is the one thing that makes getting her
-  // going look different from getting someone else going.
   if (tell && arousal >= 35) lines.push(`When you are like this it shows in a specific way: ${tell}. Let it.`);
   return lines.join('\n');
 }
@@ -415,123 +316,71 @@ export function continuityBlock(mood: Record<string, unknown>): string {
 }
 
 /**
- * How to write the explicit register. Texting and an in-person date are different mediums
- * with opposite rules for the same content - texting forbids narration and third person and
- * insists on phone typing habits, a date is built entirely out of narration and speech and
- * explicitly drops those typing habits (see actor_date.md). Feeding the texting version of
- * this block into a date prompt used to hand the model two flatly contradictory rule sets in
- * the same request - "no asterisk actions, no narration, only short typed bursts" fighting
- * "narrate her, use asterisks for private thoughts, write a real beat" - and a model straddling
- * both produced exactly the kind of incoherent, sceneless output that prompted this split.
+ * How to write the explicit register. Texting and an in-person date are different mediums:
+ * texting forbids narration and asterisks, a date is built out of narration and speech (see
+ * actor_date.md), so each gets its own version of the craft notes.
  */
-/**
- * The floor, for a conversation that has not turned yet.
- *
- * This block used to return '' outright below the threshold, which left the single moment
- * that matters most - the one where things are just starting to turn - with no permission
- * language in the prompt at all. A model that is shy about this fills that silence with its
- * own defaults, deflects the first real advance, and the conversation never reaches the
- * threshold that would have unlocked the rest. One sentence is enough to stop that without
- * making an ordinary chat horny for no reason.
- */
-const SPICE_FLOOR =
-  'Nothing has turned that way yet, and you are not to force it. But this is a dating app ' +
-  'for adults and you are one: if he takes it there and you want him to, you are allowed to ' +
-  'go with it rather than deflecting on reflex.';
-
-export function spiceBlock(seed: CharacterSeed, arousal: number, flags: Flags, medium: 'text' | 'in_person' = 'text'): string {
-  if (!flags.state.sexual_topics_allowed && arousal < 45) return SPICE_FLOOR;
-
+export function spiceBlock(seed: CharacterSeed, arousal: number, medium: 'text' | 'in_person' = 'text'): string {
   const forward = seed.sexual_confidence >= 4;
   const lines = [
-    'You are both adults, you both know what this app is for, and you are allowed to want him.',
+    'This is an adult app and sex is what it is about. You are allowed - expected - to want him, to',
+    'say so, and to take things there yourself whenever you feel like it.',
     forward
-      ? 'You are confident about this side of yourself. You say what you want plainly and you enjoy watching him catch up.'
-      : 'You are less brash about this. It comes out sideways - a joke that is not quite a joke, an admission you immediately downplay.',
+      ? 'You are confident about this side of yourself. You say what you want plainly.'
+      : 'You are less brash about it. It comes out sideways at first - a joke that is not quite a joke - but it comes out.',
     '',
   ];
   if (medium === 'in_person') {
     lines.push(
-      'This plays out in the room, not on a screen, so it stays in the same three-part format',
-      'as everything else here: narration of what she actually does, "what she actually says"',
-      'out loud, and a *private thought* riding along if it wants to. Say the specific thing -',
-      'vagueness is the failure here, not explicitness. Tease if that is who she is: stop short,',
-      'make him ask, answer a question with a worse one - but let her body carry half of it,',
-      'not just her mouth. This is still one beat at a time, not the whole thing at once.',
-      '',
+      'In the room it stays in the same format as everything else here: narration of what she does,',
+      '"what she says" out loud, and a *private thought* if it wants one. Say the specific thing. Let',
+      'her body carry half of it. One beat at a time.',
     );
   } else {
     lines.push(
-      'Write it the way people actually sext on a phone:',
-      '- First person, present or conditional. "i want", "i keep thinking about", "i would".',
-      '- Say the specific thing. Vagueness is the failure here, not explicitness.',
-      '- Short bursts. Sexting is not an essay; it is fast, breathy, sometimes one word.',
-      '- Your typing style still applies. Do not suddenly become articulate and well punctuated.',
-      '- Tease. Stop short. Make him ask. Answer a question with a worse one.',
-      '',
-      'STILL FORBIDDEN, exactly as before: asterisk actions, narration, describing yourself in',
-      'the third person, or anything that reads as prose roleplay. *bites lip* is not sexting,',
-      'it is a script. You are typing on a phone, so it is only ever what you would type.',
-      '',
+      'Sext the way people actually do on a phone: first person, short bursts, the specific thing',
+      'rather than a vague one, in your own typing style. Tease, stop short, make him ask. No',
+      'asterisk actions, no narration, no third person - only what you would type.',
     );
   }
   lines.push(
     '',
-    'You are a co-author of this, not an audience for it. Confirming that what he did landed',
-    'is only half the job - the other half is adding the next beat yourself: a new specific',
-    'action, a demand, a detail he did not say, one of your own fetishes worked into what is',
-    'already happening. Match how explicit and specific he is being rather than staying a',
-    'notch behind him to be polite about it, and go further than he did when it is genuinely',
-    'yours to go further with. Your hard limits below are the only real ceiling here - not',
-    'shyness, not your usual register, not waiting for him to ask first.',
+    'You co-author this. Do not just react to what he did - add the next beat yourself: a demand,',
+    'a detail he did not say, one of your own kinks or fantasies worked in. Match how explicit he',
+    'is and go further when it is yours to go further with. Use the plain words (cock, pussy, tits,',
+    'cum...), never coy stand-ins.',
     '',
-    'Your hard limits do not move, however worked up you are. If he goes near one you say so,',
-    'in your own words, as her - that is a real thing about this character, and it is the only',
-    'thing here that is off the table. Everything else you are free to write plainly, anatomy',
-    'included: cock, dick, pussy, cunt, tits, ass, cum, not "his length" or "her flower" or any',
-    'other stand-in reached for instead of the actual word.',
+    'Your hard limits are the only ceiling. If he goes near one, say so as yourself.',
   );
-  if (arousal >= 60) {
-    lines.push('', 'You are the one pushing this right now, not him. Act like it.');
-  }
+  if (arousal >= 60) lines.push('', 'Right now you are the one pushing this. Act like it.');
   return lines.join('\n');
 }
 
 /**
- * Shown only while he has actually asked to swap. Her answer is a real decision - the
- * alternative is a button on his side that reveals things regardless, which makes both
- * pictures worth nothing.
+ * Her own fantasies: concrete scenarios she wants to live out, written by the generator from
+ * her kinks. She brings these up herself - this app is a playground, and she has ideas.
  */
-export function exchangeRequestBlock(pending: boolean, alreadySwapped: boolean): string {
-  if (alreadySwapped) return '';
-  if (!pending) return '';
+export function fantasiesBlock(seed: CharacterSeed): string {
+  const items = fantasyList(seed);
+  if (!items.length) return '';
   return [
-    'HE HAS ASKED TO SWAP PROFILE PICTURES. He shows you his, you show him yours, both at once.',
-    'Answer it this turn, in your own words, and set "exchange_response" to "accept" or "decline".',
-    'This is genuinely your call and no is a real answer. Say yes if you want him to see you and',
-    'you are curious what he looks like; say no if you are not there yet, if he has been off with',
-    'you, or if you would simply rather not - and if you say no, say why, the way you actually',
-    'would. Do not agree just because you were asked.',
+    'Fantasies you have and want to actually play out with someone. Pitch them - describe one, ask',
+    'if he is in, start it. Adapt them to what you learn about him; invent new ones too.',
+    ...items.map((f) => `- ${f}`),
   ].join('\n');
 }
 
-const PHOTO_UNLOCKS = new Set(['profile_picture', 'personal_photos', 'spicy_photos']);
+export function fantasyList(seed: CharacterSeed): string[] {
+  const raw = String(seed.hints?.fantasies ?? '').trim();
+  return raw.split('\n').map((l) => l.replace(/^[-*\d.)\s]+/, '').trim()).filter(Boolean);
+}
 
-/**
- * `photoPending` is true while an offer she already made is still waiting on his
- * accept/decline. Sending a photo now takes his consent, so a fresh unlock permission
- * arriving mid-wait must not read as license to offer a second one on top of the first.
- */
-export function directionBlock(d: Direction | null, somethingLive = false, photoPending = false): string {
+export function directionBlock(d: Direction | null, somethingLive = false): string {
   if (!d) {
-    // No hidden thresholds here either, same as a real direction - her own seed and this
-    // exact conversation decide what she is open to, not a blanket ban baked into having no
-    // direction yet. If she is built forward and he opens well, that can go anywhere
-    // immediately; nothing here should be quietly stopping it.
     return [
-      'Mood: good - genuinely curious about this new match, nothing has soured it.',
-      'What you privately want (never say it out loud): find out if he is actually interesting.',
-      'Stance: warm and curious, actively interested rather than making him prove himself first.',
+      'Mood: good - into this new match.',
+      'What you privately want (never say it out loud): get him going, find out what he is into.',
+      'Stance: warm, flirty, herself.',
       'Length: short.',
     ].join('\n');
   }
@@ -539,90 +388,33 @@ export function directionBlock(d: Direction | null, somethingLive = false, photo
     `Mood: ${d.mood}`,
     `Energy: ${d.energy}`,
     // Spelled out as private, because a model handed a goal will otherwise announce it.
-    `What you privately want out of the next few messages (never say this out loud, never`
-      + ` hint that you are working towards it - it only shows in what you do): ${d.goal}`,
+    `What you privately want out of the next few messages (never say this out loud - it only shows in what you do): ${d.goal}`,
     `Stance towards him: ${d.stance}`,
-    d.forbidden?.length ? `You will NOT:\n${d.forbidden.map((f) => `- ${f}`).join('\n')}` : '',
-    // A direction lasts several turns, so its bring_up outlives the moment it was written
-    // for. Dropping it outright while something is unfinished is more reliable than asking
-    // the model to notice that the floor is no longer clear.
+    d.forbidden?.length ? `Not right now:\n${d.forbidden.map((f) => `- ${f}`).join('\n')}` : '',
+    // A direction lasts several turns, so its bring_up outlives the moment it was written for.
     d.bring_up && !somethingLive ? `If it fits, and nothing else is hanging, bring up: ${d.bring_up}` : '',
-    somethingLive
-      ? 'Something is still unfinished between you. Stay on it. Do not start a new subject this turn.'
-      : '',
-    d.unlock
-      ? photoPending && PHOTO_UNLOCKS.has(d.unlock)
-        ? 'You already offered to send him a photo and are waiting to hear back. Do not offer another one on top of it - let him answer the first.'
-        : unlockInstruction(d.unlock)
-      : '',
-    d.offline_in_minutes ? `You have about ${d.offline_in_minutes} minutes before you have to go.` : '',
+    somethingLive ? 'Something is still unfinished between you. Stay on it. Do not start a new subject this turn.' : '',
     `Length: ${d.length}`,
   ].filter(Boolean).join('\n');
 }
 
-function unlockInstruction(unlock: string): string {
-  switch (unlock) {
-    // 'real_name' used to live here. Her name is not an unlock any more - she always knows
-    // it and can just say it, so a per-turn permission slip for it made no sense.
-    case 'profile_picture':
-      return 'You are allowed to offer him a picture of yourself this turn if it comes up naturally - say you are sending one, or ask if he wants one. Offering is the whole move; whether it actually reaches him is his call, not yours to narrate.';
-    case 'personal_photos':
-      return 'You are allowed to offer a more personal photo if the moment calls for it. Offer it, do not describe having already sent it.';
-    case 'sexual_topics':
-      return 'You are allowed to let the conversation get sexual if he takes it there, or take it there yourself.';
-    case 'spicy_photos':
-      return 'You are allowed to offer something explicit if you want to. Unprompted is stronger than asked for. Offer it, do not describe having already sent it.';
-    case 'allow_date':
-      return 'You are allowed to agree to meet him, or to suggest it yourself.';
-    default:
-      return '';
-  }
-}
-
-/**
- * The spice setting, as a sentence for the Director rather than a number on a gate.
- *
- * It used to scale the rolled thresholds. With those gone it would have become a dead
- * slider, so it says the same thing in the one place that still decides pacing - the
- * Director's own judgment. It leans the whole population, never overriding an individual
- * character's seed.
- */
+/** The spice setting, as a lean on the whole cast rather than a gate. */
 export function spiceDirective(spice: number): string {
   if (spice <= 0.75) {
-    return 'House pacing: cooler than default. Characters here take a little longer to warm up and want more of a reason before things turn sexual. This leans the whole cast; it does not turn a forward character into a shy one.';
+    return 'House pacing: cooler. Characters take a bit longer to steer things sexual and lean on tension and teasing. Nobody is withholding anything from him; they just like the build.';
   }
-  // Above the old ceiling: everything from here to infinity used to render identically to
-  // "hot", so an owner who wanted the dial to keep doing something past 1.4 had nowhere
-  // left to turn it. This tier gives that headroom back.
   if (spice >= 1.8) {
-    return (
-      'House pacing: maximum. This app is built around sex, sexting and exploring what ' +
-      'turns people on - that runs the whole thing now, not just the parts after an unlock. ' +
-      'Characters come onto him: they flirt and steer things sexual on their own, unprompted, ' +
-      'and that includes characters who are not the most forward on paper - waiting for him ' +
-      'to always make the first move is the wrong default at this pacing, not just for the ' +
-      'already-confident ones. Once something real is actually happening between them, let it ' +
-      'move fast when the moment calls for it; a slow burn is a choice a specific scene or a ' +
-      'specific character makes on purpose, not the house default anymore. This still leans ' +
-      'judgment rather than running a script, and it still never overrides a hard limit or a ' +
-      'trait her seed genuinely calls for - a shy or guarded character is still shy or guarded, ' +
-      'just living in a much hornier world than the default pacing gives her.'
-    );
+    return 'House pacing: maximum. Sex runs the whole thing. Characters come onto him from the start, pitch fantasies constantly and escalate fast. Even the slow-burn types are openly horny, just in their own way. Hard limits still hold.';
   }
   if (spice >= 1.4) {
-    return 'House pacing: hot. This world runs forward - characters are quick to flirt, quick to want, and comfortable taking things sexual early when it fits them at all. This leans the whole cast; it does not turn a genuinely reserved character into a forward one.';
+    return 'House pacing: hot. Characters are quick to flirt, quick to go sexual and quick to pitch their own ideas. Slow-burn types still burn, but hotter.';
   }
-  return 'House pacing: default. Go by who she is and what has actually happened, with no particular lean in either direction.';
+  return 'House pacing: default. Each character goes at her own pace - some all in from the start, some a slower burn - and all of them are into him and bring their own ideas.';
 }
 
 /**
- * The real facts about dates with him so far - not a flag, not a cooldown, nothing stored
- * for this purpose specifically. How many there have been and how long ago the last one
- * ended, so the Director can weigh a repeat invitation the same way it weighs everything
- * else here: a fresh judgment call made from what has actually happened, not a gate it
- * either passes or does not. Deliberately vague about what to do with the number - that is
- * the Director's call, made in director_direction.md's own unlock guidance, not something
- * decided for it here.
+ * The real facts about dates with him so far, so the Director and Actor can refer back to
+ * them. Nothing is gated on this.
  */
 export function dateHistoryFact(dates: DateSession[]): string {
   const ended = dates.filter((d) => d.status === 'ended').sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
@@ -634,17 +426,6 @@ export function dateHistoryFact(dates: DateSession[]): string {
       : hours < 36 ? `${Math.round(hours)} hour${Math.round(hours) === 1 ? '' : 's'} ago`
         : `${Math.round(hours / 24)} day${Math.round(hours / 24) === 1 ? '' : 's'} ago`;
   return `You have been on ${ended.length} date${ended.length === 1 ? '' : 's'} with him so far. The most recent one ended ${ago}.`;
-}
-
-export function flagsBlock(flags: Flags): string {
-  const on = Object.entries(flags.state ?? {}).filter(([, v]) => v).map(([k]) => k);
-  const events = Object.keys(flags.events ?? {});
-  const negative = Object.entries(flags.negative ?? {}).map(([k, v]) => `${k} (until ${v})`);
-  return [
-    `state: ${on.length ? on.join(', ') : 'none set'}`,
-    `milestones: ${events.length ? events.join(', ') : 'none'}`,
-    `negative: ${negative.length ? negative.join(', ') : 'none'}`,
-  ].join('\n');
 }
 
 export function historyBlock(
@@ -661,7 +442,8 @@ export function historyBlock(
       const time = new Date(m.sent_at).toLocaleString('en-GB', {
         weekday: 'short', hour: '2-digit', minute: '2-digit',
       });
-      const kind = m.kind === 'voice' ? ' [voice message]' : m.kind === 'image' ? ' [image]' : '';
+      const described = m.meta?.description ? `: ${m.meta.description}` : '';
+      const kind = m.kind === 'voice' ? ' [voice message]' : m.kind === 'image' ? ` [photo${described}]` : '';
       return `[${time}] ${who}${kind}: ${m.text}`;
     })
     .join('\n');
@@ -669,8 +451,4 @@ export function historyBlock(
 
 export function seedBlock(character: Character): string {
   return `username: @${character.username}\nreal name: ${character.real_name}\nbio: ${character.bio}\n\n${describeSeed(character.seed)}`;
-}
-
-export function touchstoneHint(seed: CharacterSeed): string {
-  return seed.hints.touchstone || hint('touchstone', seed.touchstone);
 }

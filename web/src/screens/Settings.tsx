@@ -299,36 +299,6 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
   return (
     <>
       <div className="card">
-        <div className="section-title" style={{ padding: '0 0 10px' }}>Testing</div>
-        <label className="switch-row">
-          <span className="switch">
-            <input
-              type="checkbox"
-              checked={settings.always_online}
-              onChange={(e) => patch(['always_online'], e.target.checked)}
-            />
-            <span className="track" />
-          </span>
-          <span className="small">
-            Everyone is always online
-            <br />
-            <span className="tiny muted">
-              Characters reply whenever you write, whatever time it is. Ignores their own
-              schedules, the server uptime window, and anyone who said they were heading off.
-              Turn this off for real pacing — waiting for someone to come online is most of
-              what makes them feel like people.
-            </span>
-          </span>
-        </label>
-        {settings.always_online && (
-          <p className="tiny muted" style={{ marginBottom: 0 }}>
-            Ghosting and blocking still work. Their schedules are kept, not overwritten, so
-            turning this off restores them.
-          </p>
-        )}
-      </div>
-
-      <div className="card">
         <label className="field">
           <div className="slider-head">
             <span className="label">Spice</span>
@@ -340,11 +310,10 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
             onChange={(e) => patch(['spice'], Number(e.target.value))}
           />
           <span className="tiny muted">
-            How forward the cast runs. This is guidance the Director reads every turn, not a
-            gate — nothing is locked behind a number any more — so it leans how readily
-            characters flirt and take things further, and applies immediately to matches you
-            already have. Each character's own appetite still applies on top, so a forward one
-            stays ahead of a reserved one.
+            How hot the whole cast runs: how quickly characters go sexual and how often they
+            pitch their own fantasies. It is guidance the Director reads every turn, so it
+            applies immediately to matches you already have. Each character's own pace still
+            applies on top, so an all-in one stays ahead of a slow burn.
           </span>
         </label>
       </div>
@@ -382,32 +351,6 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
           />
         </label>
         <p className="tiny muted">Start low. Turn it up once the pacing feels too quiet.</p>
-      </div>
-
-      <div className="card">
-        <div className="section-title" style={{ padding: '0 0 10px' }}>Server window</div>
-        <div className="row">
-          <label className="field grow">
-            <span>From</span>
-            <input
-              type="text"
-              value={settings.server_window.from}
-              onChange={(e) => patch(['server_window', 'from'], e.target.value)}
-            />
-          </label>
-          <label className="field grow">
-            <span>To</span>
-            <input
-              type="text"
-              value={settings.server_window.to}
-              onChange={(e) => patch(['server_window', 'to'], e.target.value)}
-            />
-          </label>
-        </div>
-        <p className="tiny muted">
-          Nothing happens outside this window. That is by design, not a bug.
-          {settings.always_online && ' Currently ignored, because everyone is always online.'}
-        </p>
       </div>
 
       <div className="card">
@@ -689,8 +632,8 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
           onChange={(e) => setForm({ ...form, avatar_emoji: e.target.value })}
         />
         <span className="tiny muted">
-          What characters see instead of your photo. They only get the real one once you have
-          swapped — and a swap goes both ways, so you see hers at the same moment.
+          Shown instead of your photo when you have not uploaded one. Characters see your real
+          photo if you have one.
         </span>
       </label>
       <label className="field">

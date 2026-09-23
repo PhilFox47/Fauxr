@@ -1,17 +1,13 @@
 import { find } from '../db/attributes.js';
 import { getUserProfile } from '../repo.js';
-import type { Character, Flags, Relationship } from '../types.js';
+import type { Character, Relationship } from '../types.js';
 
 /**
  * Everything a player can learn about a character, and whether they have learned it yet.
  *
- * This is the progression the chat was missing. Stats are invisible by design, so without
- * something like this there is nothing to work towards and no sense of getting anywhere -
- * every message feels like the same message. A profile that fills in as she actually tells
- * you things turns "chat with her" into "find out who she is", which is what a dating app
- * is for.
- *
- * Nothing here is revealed by a threshold. A fact becomes known because she said it.
+ * Her ordinary profile - job, looks, personality, interests - is simply known from the start:
+ * there is nothing to extract. What is still worth discovering is the intimate side: her
+ * kinks, fetishes, limits, drive. Those fill in as she actually lets them out.
  */
 
 export type DiscoveryCategory = 'basics' | 'life' | 'personality' | 'interests' | 'looks' | 'intimate';
@@ -48,26 +44,17 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   };
 
   // ---- basics
-  add('real_name', 'basics', 'Name', character.real_name, 'She has to want to tell you.');
+  add('real_name', 'basics', 'Name', character.real_name, '');
   add('age', 'basics', 'Age', String(s.age), 'On her profile from the start.');
   add('languages', 'basics', 'Languages', s.languages.map(langLabel).join(', '), 'On her profile from the start.');
   add('occupation', 'life', 'Work', label('occupation', s.occupation), 'Ask what she does. Or notice when she says it.');
   add('living_situation', 'life', 'Living', label('living_situation', s.living_situation), 'Where she is when she texts you.');
   add('social_energy', 'life', 'Social battery', label('social_energy', s.social_energy), 'Watch how she talks about her weekends.');
   add('relationship_status', 'life', 'Status', label('relationship_status', s.relationship_status), 'Whether anyone else is in the picture. She will say if it comes up.');
-  add('relationship_history', 'life', 'History', label('relationship_history', s.relationship_history), 'Not a first-week question.');
-  add('dating_experience', 'life', 'On apps', label('dating_experience', s.dating_experience), 'How she talks about this place.');
 
   // ---- personality
   add('archetype', 'personality', 'Character', label('archetype', s.archetype), 'Becomes obvious over time.');
   add('humor_type', 'personality', 'Humour', label('humor_type', s.humor_type), 'Make her laugh and find out.');
-  add('attachment_style', 'personality', 'In a relationship', label('attachment_style', s.attachment_style), 'Shows when things get close.');
-  add('conflict_style', 'personality', 'In an argument', label('conflict_style', s.conflict_style), 'Shows when something goes wrong.');
-  add('insecurity', 'personality', 'Soft spot', s.hints.insecurity || label('insecurity', s.insecurity), 'Only if she trusts you with it.');
-  add('search_motive', 'personality', 'Why she is here', s.hints.search_motive || label('search_motive', s.search_motive), 'Ask her, honestly.');
-  // Deliberately not texting_style - that one is visible in her very first message and was
-  // never a fact to uncover. This one genuinely is not knowable until you have actually
-  // heard her talk.
   add('speech_style', 'personality', 'How she talks in person', label('speech_style', s.speech_style), 'Needs a date.');
   s.quirks.forEach((q) => add(`quirk:${q}`, 'personality', 'Quirk', label('quirk', q), 'You will notice eventually.'));
 
@@ -93,8 +80,8 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   s.accessories.forEach((a, i) =>
     add(`accessory:${i}`, 'looks', 'Accessory', label('accessory', a), 'Needs a photo.'));
 
-  // ---- intimate: only once that side of the conversation is open
-  add('orientation', 'basics', 'Orientation', label('orientation', s.orientation), 'Comes up when it comes up.');
+  // ---- intimate: the part that is actually discovered
+  add('orientation', 'basics', 'Orientation', label('orientation', s.orientation), '');
   add('freak', 'intimate', 'How far she goes',
     s.freak >= 4 ? 'Very little fazes her' : s.freak >= 2.5 ? 'Fairly open' : s.freak >= 1.2 ? 'Open to a point' : 'Knows what she likes',
     'You will get a sense of it.');
@@ -105,12 +92,12 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
     add(`kink:${domain}`, 'intimate', stance === 'into' ? 'Into' : 'Not for her', d.label,
       stance === 'into' ? 'She will let you know, one way or another.' : 'She will say so if it comes up.');
   }
-  add('libido', 'intimate', 'Drive', `${s.libido}/5`, 'She has to be comfortable first.');
-  add('sexual_confidence', 'intimate', 'Confidence', `${s.sexual_confidence}/5`, 'She has to be comfortable first.');
+  add('libido', 'intimate', 'Drive', `${s.libido}/5`, 'Shows in how often she goes there.');
+  add('sexual_confidence', 'intimate', 'Confidence', `${s.sexual_confidence}/5`, 'Shows in how she talks about it.');
   add('dom_sub_leaning', 'intimate', 'Leaning',
     s.dom_sub_leaning <= -2 ? 'Submissive' : s.dom_sub_leaning >= 2 ? 'Dominant' : 'Switch / neither',
-    'She has to be comfortable first.');
-  s.fetishes.forEach((f) => add(`fetish:${f}`, 'intimate', 'Into', label('fetish', f), 'She has to want to tell you.'));
+    'Find out who takes charge.');
+  s.fetishes.forEach((f) => add(`fetish:${f}`, 'intimate', 'Into', label('fetish', f), 'Get her talking about what she wants.'));
   s.hard_limits.forEach((h) => add(`limit:${h}`, 'intimate', 'Hard limit', label('hard_limit', h), 'She will say so if it comes up.'));
 
   return facts;
@@ -119,35 +106,11 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
 export type DiscoveredMap = Record<string, string>;
 
 /**
- * Known from the moment she appears, because they are on her card before you swipe. Nothing
- * is gained by making someone extract a number that was printed on the profile, and the
- * Director being told to "reveal" her age produced conversations that opened by stating it.
+ * Everything except the intimate side is known from the start. The profile is not a thing to
+ * extract; the fun is finding out what she is into.
  */
-const ALWAYS_KNOWN = ['age', 'languages'];
-
-/**
- * Flags already record some reveals; keep the profile consistent with them. Takes the
- * character too, because whether her species counts as implied depends on ITS OWN
- * extra.visibility tier, not a single fixed flag the way hair/eyes/height are.
- */
-function impliedByFlags(character: Character, flags: Flags): string[] {
-  const keys: string[] = [...ALWAYS_KNOWN];
-  if (flags.state.real_name_known) keys.push('real_name');
-  if (flags.state.profile_picture_sent) keys.push('hair', 'eyes', 'style', 'distinctive_feature');
-  if (flags.state.has_had_first_date) keys.push('height', 'body_type', 'speech_style');
-
-  const s = character.seed;
-  if (s.species && s.species !== 'human') {
-    const vis = find('species', s.species)?.extra?.visibility ?? 'profile';
-    const showPrivate = !!flags.state.spicy_photos_allowed || !!flags.state.has_had_first_date;
-    const showLater = showPrivate || !!flags.state.personal_photos_allowed;
-    const shown =
-      vis === 'profile' ? !!flags.state.profile_picture_sent :
-      vis === 'later' ? showLater :
-      vis === 'private' ? showPrivate : false; // 'chat_only': never implied by a photo at all
-    if (shown) keys.push('species');
-  }
-  return keys;
+function knownFromStart(catalogue: DiscoverableFact[]): Set<string> {
+  return new Set(catalogue.filter((f) => f.category !== 'intimate').map((f) => f.key));
 }
 
 export interface ProfileRow {
@@ -170,7 +133,7 @@ export interface ProfileView {
 export function profileView(character: Character, rel: Relationship): ProfileView {
   const catalogue = buildCatalogue(character);
   const discovered: DiscoveredMap = rel.discovered ?? {};
-  const implied = new Set(impliedByFlags(character, rel.flags));
+  const implied = knownFromStart(catalogue);
 
   const rows: ProfileRow[] = catalogue.map((f) => {
     const known = f.key in discovered || implied.has(f.key);
@@ -205,8 +168,9 @@ export function profileView(character: Character, rel: Relationship): ProfileVie
 /** Keys the Director may still reveal, so its prompt does not list what is already known. */
 export function undiscoveredKeys(character: Character, rel: Relationship): DiscoverableFact[] {
   const discovered = rel.discovered ?? {};
-  const implied = new Set(impliedByFlags(character, rel.flags));
-  return buildCatalogue(character).filter((f) => !(f.key in discovered) && !implied.has(f.key));
+  const catalogue = buildCatalogue(character);
+  const implied = knownFromStart(catalogue);
+  return catalogue.filter((f) => !(f.key in discovered) && !implied.has(f.key));
 }
 
 /**
@@ -219,17 +183,7 @@ export function detectMentions(character: Character, rel: Relationship, saidByHe
   const found: string[] = [];
   const undiscovered = undiscoveredKeys(character, rel);
 
-  // Species is the one 'looks' fact that also comes out in words, not just a photo - "I'm a
-  // vampire" reveals it whether or not he has ever seen her. Checked separately from the loop
-  // below rather than by exempting it from the length-5+ word filter that loop uses, since a
-  // real species name can be short ("elf") in a way the generic heuristic was never tuned for.
-  const speciesFact = undiscovered.find((f) => f.key === 'species');
-  if (speciesFact && text.includes(speciesFact.value.toLowerCase())) found.push('species');
-
   for (const fact of undiscovered) {
-    // Looks need a photo or a meeting; saying "my hair" does not reveal its colour. Species
-    // is handled above instead of here for the reason noted there.
-    if (fact.category === 'looks') continue;
     const words = fact.value
       .toLowerCase()
       .split(/[,/]/)[0]
@@ -253,64 +207,25 @@ export function recordDiscoveries(rel: Relationship, keys: string[], validKeys: 
 }
 
 /**
- * How many messages he has to send before showing up earns him a credit toward uncovering
- * one of her hidden traits - a small, guaranteed payoff for showing up at all, independent
- * of anything she chooses to reveal on her own.
- */
-export const MESSAGES_PER_TRAIT_CREDIT = 50;
-
-/** Counts one of his messages toward the next credit. Returns true the turn one is earned. */
-export function trackMessageForCredit(rel: Relationship): boolean {
-  const count = (rel.flags.state.messages_sent_count ?? 0) + 1;
-  rel.flags.state.messages_sent_count = count;
-  if (count % MESSAGES_PER_TRAIT_CREDIT !== 0) return false;
-  rel.flags.state.trait_credits = (rel.flags.state.trait_credits ?? 0) + 1;
-  return true;
-}
-
-export interface UncoverResult {
-  ok: boolean;
-  /** Why it failed, when ok is false. */
-  reason?: 'no_credits' | 'nothing_left';
-  revealed?: DiscoverableFact;
-}
-
-/**
- * Spends one credit to reveal a random currently-locked trait. Both failure cases leave the
- * credit untouched: no reason to burn one on a request that could not do anything.
- */
-export function spendTraitCredit(character: Character, rel: Relationship): UncoverResult {
-  const credits = rel.flags.state.trait_credits ?? 0;
-  if (credits <= 0) return { ok: false, reason: 'no_credits' };
-  const locked = undiscoveredKeys(character, rel);
-  if (!locked.length) return { ok: false, reason: 'nothing_left' };
-  const pick = locked[Math.floor(Math.random() * locked.length)];
-  rel.flags.state.trait_credits = credits - 1;
-  recordDiscoveries(rel, [pick.key], new Set(locked.map((f) => f.key)));
-  return { ok: true, revealed: pick };
-}
-
-/**
  * The other half of the exchange: what SHE still wants to know about him. Without this the
  * Director only ever thinks about what she is giving away, and she ends up as an interview
  * subject rather than someone with her own interest in the person she is talking to.
  */
 const HER_QUESTIONS: { topic: string; keywords: string[] }[] = [
-  { topic: 'what he actually does for work, and whether he likes it', keywords: ['work', 'job', 'career', 'office', 'shift', 'employ'] },
-  { topic: 'how he spends time when nobody is watching', keywords: ['hobby', 'hobbies', 'weekend', 'free time', 'plays', 'reads', 'watches'] },
-  { topic: 'why he is on this app, honestly', keywords: ['app', 'looking for', 'why he', 'dating', 'wants'] },
-  { topic: 'whether he is talking to other people here', keywords: ['other', 'matches', 'exclusive', 'seeing anyone'] },
-  { topic: 'what went wrong in his last relationship', keywords: ['ex', 'relationship', 'breakup', 'broke up', 'single'] },
-  { topic: 'where he lives, roughly, and who with', keywords: ['lives', 'flat', 'apartment', 'house', 'flatmate', 'city'] },
-  { topic: 'who he is close to - friends, family', keywords: ['friend', 'family', 'brother', 'sister', 'mum', 'dad', 'parents'] },
-  { topic: 'what he is actually like when he is not typing', keywords: ['in person', 'nervous', 'shy', 'confident', 'meet'] },
-  { topic: 'something he cares about more than he lets on', keywords: ['cares', 'passionate', 'loves', 'obsessed'] },
+  { topic: 'the filthiest thing he has always wanted to try', keywords: ['always wanted', 'never tried', 'want to try', 'bucket list'] },
+  { topic: 'what he thinks about when he gets himself off', keywords: ['think about', 'jerk', 'wank', 'get off', 'touch myself', 'fantasi'] },
+  { topic: 'whether he likes to take charge or be told what to do', keywords: ['dominant', 'submissive', 'in charge', 'take control', 'told what', 'dom', 'sub'] },
+  { topic: 'what he would do to her first if she were there right now', keywords: ['first thing', 'if you were here', 'if i were there', 'right now i would'] },
+  { topic: 'what about her specifically turns him on', keywords: ['your body', 'your lips', 'your ass', 'your tits', 'turns me on about you', 'love your'] },
+  { topic: 'the best sex he has ever had and what made it', keywords: ['best sex', 'best time', 'hottest', 'ever had'] },
+  { topic: 'something he has never told anyone he is into', keywords: ['never told', 'secret', 'embarrass', 'confess'] },
+  { topic: 'what he likes to hear in bed', keywords: ['dirty talk', 'say to me', 'talk dirty', 'hear you say', 'moan'] },
 ];
 
 export function herCuriosity(rel: Relationship, limit = 4): string {
   const known = (rel.ledger?.facts?.about_user ?? []).join(' ').toLowerCase();
   const open = HER_QUESTIONS.filter((q) => !q.keywords.some((k) => known.includes(k)));
-  if (!open.length) return 'She knows a fair amount about him by now. Find something more specific she would want.';
+  if (!open.length) return 'She knows a lot about what he likes by now. Dig for something more specific.';
   return open.slice(0, limit).map((q) => `- ${q.topic}`).join('\n');
 }
 
@@ -404,9 +319,9 @@ export function describeKinkHits(hits: KinkHit[]): string {
   if (!hits.length) return '';
   const lines = hits.map((h) => {
     if (h.mutual) return `- ${h.label}: he just brought this up, and it is not just one of hers - it is one of HIS too. This is a "wait, really? me too" moment, not just an arousal spike: let her react to the overlap itself, explicitly, before letting it move things forward.`;
-    if (h.stance === 'into') return `- ${h.label}: he just brought this up and it is one of HERS. This should move arousal hard, and she does not have to hide that it landed.`;
+    if (h.stance === 'into') return `- ${h.label}: he just brought this up and it is one of HERS. This moves arousal hard, and she lets it show and runs with it.`;
     if (h.stance === 'curious') return `- ${h.label}: he brought this up and she is curious about it. Interest, not indifference.`;
-    if (h.stance === 'hard_no') return `- ${h.label}: he brought this up and it is a hard limit. She says so plainly. This is not arousal, and pushing it costs him.`;
+    if (h.stance === 'hard_no') return `- ${h.label}: he brought this up and it is a hard limit. She says so plainly and steers to something she does want.`;
     return `- ${h.label}: he brought this up and it does nothing for her. Not offended, just not interested.`;
   });
   return 'WHAT HE JUST WALKED INTO:\n' + lines.join('\n');
@@ -488,8 +403,8 @@ export function describeFetishProgress(character: Character, rel: Relationship):
   }
   if (hidden.length) {
     lines.push('Still hidden: ' + hidden.map((f) => `${f.label} (${f.hint || 'no detail'})`).join('; ') +
-      '. She does not announce these. When she is worked up she circles them, hints, tests whether he picks it up. ' +
-      'If he lands on one himself, that is a large spark and arousal jump and she should react like it.');
+      '. She lets these out when it suits her - hints, suggestions, or just saying it when she is worked up. ' +
+      'If he lands on one himself, that is a big arousal jump and she reacts like it.');
   }
   const limits = character.seed.hard_limits.map((h) => find('hard_limit', h)?.label ?? h);
   if (limits.length) lines.push('Absolute limits, never crossed whatever the mood: ' + limits.join(', ') + '.');

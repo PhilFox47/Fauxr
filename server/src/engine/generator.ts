@@ -6,7 +6,8 @@ import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
 import {
-  AGE_FLOOR, createRelationship, getUserProfile, insertCharacter, preferredAgeRange, saveRelationship,
+  AGE_FLOOR, createRelationship, getCharacter, getUserProfile, insertCharacter, preferredAgeRange, saveRelationship,
+  updateCharacterSeed,
 } from '../repo.js';
 import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
@@ -76,8 +77,8 @@ function rollTypoRate(typingStyle: string, archetype: string, textingPersona: st
   return Math.round(Math.min(0.35, base) * 100) / 100;
 }
 
+/** Still rolled so the stored seed keeps its shape; nothing reads it since she is always reachable. */
 function fallbackOnlineTimes(): OnlineWindow[] {
-  const { from, to } = getSettings().server_window;
   const windows: OnlineWindow[] = [];
   const days = [1, 2, 3, 4, 5, 6, 0].filter(() => Math.random() < 0.6);
   const pool = days.length ? days : [1, 3, 5, 6];
@@ -86,8 +87,6 @@ function fallbackOnlineTimes(): OnlineWindow[] {
     const endHour = Math.min(23, startHour + randInt(2, 4));
     windows.push({ weekday, from: `${String(startHour).padStart(2, '0')}:00`, to: `${String(endHour).padStart(2, '0')}:30` });
   }
-  void from;
-  void to;
   return windows;
 }
 
@@ -651,11 +650,7 @@ export function describeSeed(seed: CharacterSeed): string {
       ? `big secret (she keeps this genuinely hidden, never volunteers it, never let it reach the bio or handle): ${label('big_secret', seed.big_secret)} - ${seed.hints.big_secret}`
       : `big secret: none`,
     `archetype: ${label('archetype', seed.archetype)} - ${seed.hints.archetype}`,
-    `attachment: ${label('attachment_style', seed.attachment_style)} - ${seed.hints.attachment_style}`,
     `humour: ${label('humor_type', seed.humor_type)} - ${seed.hints.humor_type}`,
-    `conflict style: ${label('conflict_style', seed.conflict_style)} - ${seed.hints.conflict_style}`,
-    `openness curve: ${seed.openness_curve} - ${seed.hints.openness_curve}`,
-    `insecurity: ${label('insecurity', seed.insecurity)} - ${seed.hints.insecurity}`,
     `quirks: ${labels('quirk', seed.quirks)}`,
     '',
     `typing style: ${label('typing_style', seed.typing_style)} (${seed.hints.typing_style})`,
@@ -676,15 +671,11 @@ export function describeSeed(seed: CharacterSeed): string {
     `occupation: ${label('occupation', seed.occupation)} - ${seed.hints.occupation}`,
     `lives: ${label('living_situation', seed.living_situation)} - ${seed.hints.living_situation}`,
     `relationship status: ${label('relationship_status', seed.relationship_status)} - ${seed.hints.relationship_status}`,
-    `history: ${label('relationship_history', seed.relationship_history)} - ${seed.hints.relationship_history}`,
-    `dating experience: ${label('dating_experience', seed.dating_experience)} - ${seed.hints.dating_experience}`,
     `social energy: ${seed.social_energy}`,
     `interests: ${labels('interest', seed.interests)}`,
     `hobbies: ${labels('hobby', seed.hobbies)}`,
     `languages: ${seed.languages.join(', ')}`,
     '',
-    `search motive: ${label('search_motive', seed.search_motive)} - ${seed.hints.search_motive}`,
-    `touchstone: ${label('touchstone', seed.touchstone)} - ${seed.hints.touchstone}`,
     `orientation: ${label('orientation', seed.orientation)} - ${seed.hints.orientation ?? ''}`,
     `how far she goes in general (0-5): ${seed.freak}`,
     `how it shows when she is turned on: ${label('arousal_tell', seed.arousal_tell)} - ${seed.hints.arousal_tell ?? ''}`,
@@ -696,8 +687,6 @@ export function describeSeed(seed: CharacterSeed): string {
     }`,
     `turn ons: ${labels('turn_on', seed.turn_ons)}`,
     `turn offs: ${labels('turn_off', seed.turn_offs)}`,
-    `green flags: ${labels('green_flag', seed.green_flags)}`,
-    `DEALBREAKER: ${label('dealbreaker', seed.dealbreaker)} - ${seed.hints.dealbreaker}`,
     '',
     `libido ${seed.libido}/5, sexual confidence ${seed.sexual_confidence}/5, dom-sub ${seed.dom_sub_leaning}, sexting readiness ${seed.sexting_readiness}/5`,
     `fetishes: ${labels('fetish', seed.fetishes)}`,
@@ -790,24 +779,10 @@ interface DirectorPass {
    * two women who rolled the same three tags produced suspiciously similar ones.
    */
   dossier?: string;
-  insecurity_detail?: string;
-  search_motive_detail?: string;
-  touchstone_detail?: string;
+  /** 3-5 concrete sexual scenarios she wants to live out. Stored in seed.hints.fantasies. */
+  fantasies?: string[];
   director_intent?: string;
   opening_plan?: { text: string; expires_when: string };
-  online_times?: OnlineWindow[];
-}
-
-function sanitizeOnlineTimes(windows: OnlineWindow[] | undefined): OnlineWindow[] | null {
-  if (!Array.isArray(windows) || windows.length === 0) return null;
-  const { from, to } = getSettings().server_window;
-  const clean = windows
-    .filter((w) => typeof w?.weekday === 'number' && /^\d{2}:\d{2}$/.test(w.from) && /^\d{2}:\d{2}$/.test(w.to))
-    .map((w) => ({ weekday: ((w.weekday % 7) + 7) % 7, from: w.from, to: w.to }))
-    .filter((w) => w.from < w.to)
-    // keep windows inside the server uptime window; the simple case is from < to
-    .filter((w) => (from <= to ? w.from >= from && w.to <= to : w.from >= from || w.to <= to));
-  return clean.length ? clean : null;
 }
 
 /** One cheap, targeted re-ask for a name that landed on one already in the cast. */
@@ -1010,7 +985,6 @@ export async function generateCharacter(): Promise<Character> {
         is_fantasy: seed.species && seed.species !== 'human' ? '1' : '',
         is_big_secret: seed.big_secret && seed.big_secret !== 'none' ? '1' : '',
         age: seed.age,
-        server_window: `${settings.server_window.from}-${settings.server_window.to}`,
         allowed_swaps: allowedSwapList(),
         avoid_names: takenNames.length ? takenNames.map((n) => `- ${n}`).join('\n') : '(none yet)',
       }),
@@ -1056,9 +1030,6 @@ export async function generateCharacter(): Promise<Character> {
   }
   seed.appearance_prompt = buildAppearancePrompt(seed);
 
-  const online = sanitizeOnlineTimes(pass.online_times);
-  if (online) seed.online_times = online;
-
   // The fallback pool is only reached when the API is down, but it can repeat just as
   // easily as the model can, so it gets the same avoid-list treatment.
   const freshFallbacks = FALLBACK_NAMES.filter((n) => !nearestName(n, takenNames));
@@ -1082,9 +1053,8 @@ export async function generateCharacter(): Promise<Character> {
     }
   }
 
-  if (pass.insecurity_detail) seed.hints.insecurity = pass.insecurity_detail;
-  if (pass.search_motive_detail) seed.hints.search_motive = pass.search_motive_detail;
-  if (pass.touchstone_detail) seed.hints.touchstone = pass.touchstone_detail;
+  const fantasies = cleanFantasies(pass.fantasies);
+  if (fantasies.length) seed.hints.fantasies = fantasies.join('\n');
   if (pass.one_line) seed.hints.one_line = pass.one_line;
 
   // Everything written about her from here on is built from this, not from the raw tags -
@@ -1445,4 +1415,64 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
   }
 
   return pickFallbackBio(existing);
+}
+
+function cleanFantasies(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((f) => String(f ?? '').replace(/\s+/g, ' ').trim()).filter(Boolean).slice(0, 6);
+}
+
+const fantasyBackfills = new Map<string, Promise<void>>();
+
+/**
+ * Characters generated before fantasies existed get theirs written the first time the
+ * Director needs them - one small call from her dossier and kinks, stored on her seed.
+ * Concurrent callers share the one in-flight call.
+ */
+export function ensureFantasies(character: Character): Promise<void> {
+  if (character.seed.hints?.fantasies) return Promise.resolve();
+  const running = fantasyBackfills.get(character.id);
+  if (running) return running;
+  const job = (async () => {
+    try {
+      const out = await completeJson<{ fantasies?: string[] }>({
+        scope: 'director',
+        label: `fantasies:${character.username}`,
+        config: getSettings().models.director,
+        require: ['fantasies'],
+        messages: [{
+          role: 'user',
+          content: [
+            `Here is ${character.real_name}, a character in an adult fantasy app:`,
+            '',
+            character.seed.hints.dossier || describeSeed(character.seed),
+            '',
+            `Her kinks: ${character.seed.fetishes.map((f) => find('fetish', f)?.label ?? f).join(', ') || 'none listed'}.`,
+            `Her hard limits (never include these): ${character.seed.hard_limits.map((h) => find('hard_limit', h)?.label ?? h).join(', ') || 'none listed'}.`,
+            '',
+            'Write 3 to 5 sexual fantasies she genuinely wants to play out with a man she is into. Each one a',
+            'concrete scenario in one or two sentences - a setting, a situation, what happens - drawn from her',
+            'kinks and her personality, varied from each other, explicit where it needs to be, nothing that',
+            'touches her hard limits. Written in third person about her.',
+            '',
+            'Reply with exactly one JSON object: { "fantasies": ["...", "..."] }',
+          ].join('\n'),
+        }],
+      });
+      const list = cleanFantasies(out.fantasies);
+      if (!list.length) return;
+      const fresh = getCharacter(character.id);
+      if (!fresh) return;
+      fresh.seed.hints = { ...fresh.seed.hints, fantasies: list.join('\n') };
+      updateCharacterSeed(fresh.id, fresh.seed);
+      character.seed.hints = fresh.seed.hints;
+      logger.info('generator', `wrote fantasies for ${character.username}`, { count: list.length });
+    } catch (err) {
+      logger.warn('generator', `fantasy backfill failed for ${character.username}`, { error: String(err) });
+    } finally {
+      fantasyBackfills.delete(character.id);
+    }
+  })();
+  fantasyBackfills.set(character.id, job);
+  return job;
 }

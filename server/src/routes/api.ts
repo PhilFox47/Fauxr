@@ -16,17 +16,16 @@ import {
   saveUserProfile, unreadCount,
 } from '../repo.js';
 import { bus } from '../events.js';
-import { blockCharacterByUser, deleteMessage, handleUserMessage, isAway, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
+import { blockCharacterByUser, deleteMessage, handleUserMessage, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
-import { isOnline, serverWindowOpen } from '../engine/presence.js';
 import {
-  characterGallery, evaluateUserImage, listImageJobs, regenerateImage, respondToPhotoOffer, retryImageJob,
+  characterGallery, ensureProfilePicture, evaluateUserImage, listImageJobs, regenerateImage, retryImageJob,
 } from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji, rarityTier } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
 import { resetParts } from '../engine/reset.js';
-import { profileView, spendTraitCredit } from '../engine/discovery.js';
+import { profileView } from '../engine/discovery.js';
 import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
 import {
   dateHistory, deleteDateMessage, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate,
@@ -46,33 +45,19 @@ function publicLocation(l: Location) {
 }
 
 function publicCharacter(c: Character) {
-  const rel = getRelationship(c.id);
-  const knowsName = !!rel?.flags.state.real_name_known;
   const picture = db
     .prepare("SELECT path FROM images WHERE character_id = ? AND kind = 'profile' AND status = 'done' ORDER BY rowid ASC LIMIT 1")
     .get(c.id) as { path: string } | undefined;
   return {
     id: c.id,
     username: c.username,
-    display_name: knowsName ? c.real_name : c.username,
-    real_name_known: knowsName,
+    display_name: c.real_name,
     bio: c.bio,
     state: c.state,
     matched_at: c.matched_at,
-    online: isOnline(c) && !(rel && isAway(rel)),
-    // Stands in for her photo until one is actually unlocked, so a list of matches is
-    // distinguishable at a glance rather than a column of identical grey initials.
+    // Stands in for her photo until it has been generated.
     avatar_emoji: avatarEmojiFor(c),
-    // Both halves: her image has to exist AND the two of them have to have swapped. A
-    // picture that arrived without an exchange is not one he gets to look at.
-    profile_picture:
-      rel?.flags.state.profile_picture_sent && rel?.flags.state.photos_exchanged && picture
-        ? `/media/${picture.path}`
-        : null,
-    // Exposed separately from profile_picture: she can have agreed to swap while her image
-    // is still generating, or with images turned off entirely, and the button should know.
-    photos_exchanged: !!rel?.flags.state.photos_exchanged,
-    ghosting: !!rel?.ghosted_at,
+    profile_picture: picture ? `/media/${picture.path}` : null,
   };
 }
 
@@ -97,8 +82,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     return {
       onboarded: !!profile,
       profile,
-      server_open: serverWindowOpen(),
-      server_window: getSettings().server_window,
       generating: generatingCount(),
       api_configured: !!getSettings().api.api_key,
       auth_enabled: authEnabled(),
@@ -243,37 +226,17 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     const character = getCharacter(req.params.id);
     const rel = getRelationship(req.params.id);
     if (!character || !rel) return reply.code(404).send({ error: 'not found' });
-    return {
-      username: character.username,
-      display_name: rel.flags.state.real_name_known ? character.real_name : character.username,
-      bio: character.bio,
-      trait_credits: rel.flags.state.trait_credits ?? 0,
-      ...profileView(character, rel),
-    };
-  });
-
-  /**
-   * Spends one earned credit (see trackMessageForCredit in discovery.ts) to reveal a random
-   * still-locked trait - a small, guaranteed payoff for showing up that does not depend on
-   * her choosing to say something herself.
-   */
-  app.post<{ Params: { id: string } }>('/api/chats/:id/uncover-trait', async (req, reply) => {
-    const character = getCharacter(req.params.id);
-    const rel = getRelationship(req.params.id);
-    if (!character || !rel) return reply.code(404).send({ error: 'not found' });
-    const result = spendTraitCredit(character, rel);
-    if (!result.ok) {
-      const error = result.reason === 'no_credits' ? 'no trait credits available' : 'nothing left to uncover';
-      return reply.code(400).send({ error });
+    // Characters matched before profile pictures were made on match get theirs the first
+    // time he opens her profile.
+    if (character.state === 'matched') {
+      void ensureProfilePicture(character.id).catch((err) =>
+        logger.error('image', 'profile picture failed', { error: String(err) }),
+      );
     }
-    saveRelationship(rel);
-    logger.debug('app', `${character.username}: uncovered ${result.revealed!.key}`, { character_id: character.id });
     return {
-      revealed_key: result.revealed!.key,
       username: character.username,
-      display_name: rel.flags.state.real_name_known ? character.real_name : character.username,
+      display_name: character.real_name,
       bio: character.bio,
-      trait_credits: rel.flags.state.trait_credits ?? 0,
       ...profileView(character, rel),
     };
   });
@@ -349,17 +312,28 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     const relPath = join('uploads', name);
     writeFileSync(join(DATA_DIR, relPath), buffer);
 
-    const stored = await handleUserMessage({
-      characterId: req.params.id,
-      text: '',
-      kind: 'image',
-      meta: { path: relPath },
-    });
+    let stored;
+    try {
+      stored = await handleUserMessage({
+        characterId: req.params.id,
+        text: '',
+        kind: 'image',
+        meta: { path: relPath },
+        deferTurn: true,
+      });
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
 
-    // Vision pass runs in the background; the chat is never blocked by it.
-    void evaluateUserImage(req.params.id, buffer.toString('base64'), file.mimetype)
-      .then((result) => logger.info('director', 'image evaluated', result))
-      .catch((err) => logger.error('director', 'image evaluation failed', { error: String(err) }));
+    // She looks at it first, then replies - so her answer is about what is actually in it.
+    const characterId = req.params.id;
+    void evaluateUserImage(characterId, stored.id, buffer.toString('base64'), file.mimetype)
+      .catch((err) => logger.error('director', 'image evaluation failed', { error: String(err) }))
+      .finally(() => {
+        void takeTurn(characterId, { trigger: 'user_message' }).catch((err) =>
+          logger.error('actor', 'turn failed', { error: String(err) }),
+        );
+      });
 
     return { ...stored, image_url: `/media/${relPath}` };
   });
@@ -368,8 +342,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   app.get<{ Params: { id: string } }>('/api/chats/:id/gallery', async (req, reply) => {
     const character = getCharacter(req.params.id);
     if (!character) return reply.code(404).send({ error: 'not found' });
-    const rel = getRelationship(character.id);
-    const images = characterGallery(character.id, !!rel?.flags.state.photos_exchanged);
+    const images = characterGallery(character.id);
     return images.map((i) => ({
       id: i.id,
       kind: i.kind,
@@ -557,20 +530,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     },
   );
 
-  // Generation only ever starts from an accepted consent card, never on request - see
-  // respondToPhotoOffer(). This used to be a direct-trigger endpoint with no caller; kept
-  // that way would have been an unguarded bypass of the consent it now exists to enforce.
-  app.post<{ Params: { id: string; offerId: string }; Body: { accept?: boolean } }>(
-    '/api/chats/:id/photo-offer/:offerId',
-    async (req, reply) => {
-      try {
-        return await respondToPhotoOffer(req.params.id, req.params.offerId, !!req.body?.accept);
-      } catch (err) {
-        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
-      }
-    },
-  );
-
   // ------------------------------------------------------------- settings & tuning
   app.get('/api/settings', async () => ({ settings: getSettings(), usage: usageToday() }));
 
@@ -636,48 +595,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   app.get('/api/kink-domains', async () =>
     byCategory('kink_domain').map((d) => ({ id: d.id, label: d.label, hint: d.prompt_hint })));
 
-  /**
-   * He offers to swap profile pictures. This only raises the request - she answers it on
-   * her next turn and is allowed to say no, which is the point of asking rather than a
-   * button that simply reveals things.
-   */
-  app.post<{ Params: { id: string } }>('/api/chats/:id/profile-exchange', async (req, reply) => {
-    const character = getCharacter(req.params.id);
-    if (!character) return reply.code(404).send({ error: 'not found' });
-    const rel = getRelationship(character.id);
-    if (!rel) return reply.code(404).send({ error: 'not found' });
-    if (rel.flags.state.photos_exchanged) {
-      return reply.code(400).send({ error: 'you have already swapped pictures' });
-    }
-    if ((rel.mood as any)?.pending_exchange) {
-      return reply.code(400).send({ error: 'she has not answered the last one yet' });
-    }
-
-    const requestId = randomUUID();
-    const msg = addMessage({
-      character_id: character.id,
-      sender: 'system',
-      text: `You offered to swap profile pictures with ${character.real_name}.`,
-      kind: 'text',
-      meta: { type: 'exchange_request', request_id: requestId, status: 'pending' },
-      read_at: null,
-    });
-    bus.emitEvent({ type: 'message', character_id: character.id, message: msg });
-
-    rel.mood = {
-      ...rel.mood,
-      pending_exchange: { request_id: requestId, message_id: msg.id, requested_at: nowIso() },
-    };
-    saveRelationship(rel);
-
-    // Her answer comes back through the normal turn machinery. Only if she is around -
-    // offline, the request just sits there like any other unread message.
-    if (isOnline(character) && !isAway(rel)) {
-      void takeTurn(character.id, { trigger: 'user_message' }).catch(() => {});
-    }
-    return { ok: true, request_id: requestId };
-  });
-
   app.get('/api/attributes', async () => {
     return allCategories().map((category) => ({ category, entries: byCategory(category) }));
   });
@@ -731,7 +648,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       character: { ...character, seed_summary: describeSeed(character.seed) },
       relationship: rel,
       wakeup: getWakeup(character.id),
-      online: isOnline(character),
       now: nowIso(),
     };
   });

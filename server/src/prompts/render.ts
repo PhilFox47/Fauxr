@@ -15,7 +15,6 @@ export type TemplateName =
   | 'actor_profile_pic'
   | 'actor_photo_idea'
   | 'director_direction'
-  | 'director_update'
   | 'director_generate_character'
   | 'director_write_bio'
   | 'director_evaluate_image'

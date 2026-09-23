@@ -38,7 +38,7 @@ export interface UserProfile {
   age_max: number;
   /** Your own stances. Characters are told none of this; they find it out by talking to you. */
   kink_map: Record<string, KinkStance>;
-  /** Stands in for your photo until you have actually swapped with someone. */
+  /** Stands in for your photo when you have not uploaded one. */
   avatar_emoji: string;
   /** Everything else about you, same vocabulary the characters are built from. */
   card: Record<string, unknown>;
@@ -47,8 +47,6 @@ export interface UserProfile {
 export interface AppState {
   onboarded: boolean;
   profile: UserProfile | null;
-  server_open: boolean;
-  server_window: { from: string; to: string; timezone: string };
   generating: number;
   api_configured: boolean;
   auth_enabled: boolean;
@@ -81,16 +79,11 @@ export interface MatchSummary {
   id: string;
   username: string;
   display_name: string;
-  real_name_known: boolean;
   bio: string;
   state: string;
-  online: boolean;
-  /** Her stand-in avatar until a real photo is unlocked. Always set by the server. */
+  /** Her stand-in avatar until her profile picture has been generated. */
   avatar_emoji: string;
   profile_picture: string | null;
-  /** The two of you have swapped profile pictures. */
-  photos_exchanged: boolean;
-  ghosting: boolean;
   unread: number;
   last_message: { text: string; sender: string; sent_at: string } | null;
   last_activity: string | null;
@@ -134,12 +127,6 @@ export interface CharacterProfile {
   known: number;
   total: number;
   categories: { category: string; label: string; known: number; total: number; rows: ProfileRow[] }[];
-  /** Spendable on api.uncoverTrait to reveal one random still-locked trait. */
-  trait_credits: number;
-}
-
-export interface UncoverTraitResult extends CharacterProfile {
-  revealed_key: string;
 }
 
 /** A place you wrote in Settings, and can take someone to. */
@@ -238,8 +225,6 @@ export const api = {
   stack: () => request<{ generating: number; profiles: SwipeProfile[] }>('/api/stack'),
   kinkDomains: () => request<KinkDomain[]>('/api/kink-domains'),
   cardSpec: () => request<CardSpec>('/api/card-spec'),
-  offerProfileExchange: (id: string) =>
-    request<{ ok: true; request_id: string }>(`/api/chats/${id}/profile-exchange`, { method: 'POST' }),
   swipe: (id: string, direction: 'left' | 'right') =>
     request<any>(`/api/swipe/${id}`, { method: 'POST', body: JSON.stringify({ direction }) }),
   matches: () => request<MatchSummary[]>('/api/matches'),
@@ -253,7 +238,6 @@ export const api = {
   send: (id: string, text: string) =>
     request<Message>(`/api/chats/${id}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   profile: (id: string) => request<CharacterProfile>(`/api/chats/${id}/profile`),
-  uncoverTrait: (id: string) => request<UncoverTraitResult>(`/api/chats/${id}/uncover-trait`, { method: 'POST' }),
   gallery: (id: string) => request<GalleryImage[]>(`/api/chats/${id}/gallery`),
   markRead: (id: string) => request<any>(`/api/chats/${id}/read`, { method: 'POST' }),
   regenerate: (id: string, messageId: number) =>
@@ -270,11 +254,6 @@ export const api = {
     fd.append('file', file);
     return request<Message>(`/api/chats/${id}/image`, { method: 'POST', body: fd });
   },
-  respondToPhotoOffer: (id: string, offerId: string, accept: boolean) =>
-    request<{ ok: true; enqueued: boolean }>(`/api/chats/${id}/photo-offer/${offerId}`, {
-      method: 'POST',
-      body: JSON.stringify({ accept }),
-    }),
   // ---- locations and dates
   locations: () => request<Location[]>('/api/locations'),
   saveLocation: (l: { id?: string; name: string; description: string }) =>
@@ -344,7 +323,6 @@ export type ServerEvent =
   | { type: 'match'; character_id: string }
   | { type: 'character_state'; character_id: string; state: string }
   | { type: 'match_removed'; character_id: string }
-  | { type: 'presence'; character_id: string; online: boolean }
   | { type: 'stack'; count: number }
   | { type: 'generating'; count: number }
   | { type: 'reset' }

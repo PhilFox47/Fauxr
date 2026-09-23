@@ -84,61 +84,14 @@ function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
 }
 
 /**
- * The consent card for a photo she has offered. Generation never runs off her own decision
- * alone - see ActorHidden.photo_offer server-side - so this is the one place that actually
- * starts it, and the only place that can turn it down.
+ * A card left in older chats from when photos needed his consent and profile pictures were a
+ * swap. Both are gone; the cards stay readable as history, with nothing left to press.
  */
-/**
- * His side of the swap. There is no accept/decline here because it is not his to answer -
- * he asked, and the card resolves when she says yes or no on her next turn.
- */
-function ExchangeRequestCard({ text, status }: { text: string; status: string }) {
+function LegacyCard({ text }: { text: string }) {
   return (
     <div className="photo-offer">
       <span className="photo-offer-ico"><Icon name="camera" size={17} /></span>
       <span className="grow">{text}</span>
-      <span className="tiny muted photo-offer-resolved">
-        {status === 'accepted'
-          ? 'She said yes — swapped'
-          : status === 'declined'
-            ? 'She said no'
-            : 'Waiting for her'}
-      </span>
-    </div>
-  );
-}
-
-function PhotoOfferCard({
-  text,
-  status,
-  busy,
-  disabled,
-  onRespond,
-}: {
-  text: string;
-  status: string;
-  busy: boolean;
-  disabled: boolean;
-  onRespond: (accept: boolean) => void;
-}) {
-  return (
-    <div className="photo-offer">
-      <span className="photo-offer-ico"><Icon name="camera" size={17} /></span>
-      <span className="grow">{text}</span>
-      {status === 'pending' ? (
-        <div className="photo-offer-actions">
-          <button className="btn ghost" disabled={busy || disabled} onClick={() => onRespond(false)}>
-            Not now
-          </button>
-          <button className="btn" disabled={busy || disabled} onClick={() => onRespond(true)}>
-            Accept
-          </button>
-        </div>
-      ) : (
-        <span className="tiny muted photo-offer-resolved">
-          {status === 'accepted' ? 'Accepted — sending' : 'You said not now'}
-        </span>
-      )}
     </div>
   );
 }
@@ -170,8 +123,6 @@ export default function Chat({
   /** Armed by a first tap, so a second, deliberate tap is what actually deletes. */
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
   const confirmDeleteTimer = useRef<number | null>(null);
-  const [respondingOfferId, setRespondingOfferId] = useState<string | null>(null);
-  const [swapping, setSwapping] = useState(false);
   /** Non-null while she is out with him. The text chat stays readable, but frozen. */
   const [activeDate, setActiveDate] = useState<DateSession | null>(null);
   /**
@@ -179,7 +130,6 @@ export default function Chat({
    * into the text chat without ending anything, and also used to re-read a finished one.
    */
   const [openDateId, setOpenDateId] = useState<string | null>(null);
-  const swapped = !!character?.photos_exchanged;
   // One deduped set that both surfaces index into. A photo she sent in the chat is also in
   // her gallery, so concatenating the two blind would show it twice while paging.
   const allImages = [
@@ -387,32 +337,6 @@ export default function Chat({
     }, 2500);
   };
 
-  const offerExchange = async () => {
-    if (swapping) return;
-    setSwapping(true);
-    try {
-      await api.offerProfileExchange(characterId);
-      await load();
-    } catch (err) {
-      flashToast(String(err instanceof Error ? err.message : err));
-    } finally {
-      setSwapping(false);
-    }
-  };
-
-  const respondPhotoOffer = async (offerId: string, accept: boolean) => {
-    if (respondingOfferId) return;
-    setRespondingOfferId(offerId);
-    try {
-      await api.respondToPhotoOffer(characterId, offerId, accept);
-      await load();
-    } catch (err) {
-      flashToast(String(err instanceof Error ? err.message : err));
-    } finally {
-      setRespondingOfferId(null);
-    }
-  };
-
   const attach = async (file: File | undefined) => {
     if (!file) return;
     try {
@@ -423,8 +347,7 @@ export default function Chat({
     }
   };
 
-  const blocked = character?.state === 'blocked_by_char' || character?.state === 'blocked_by_user';
-  const lastMine = [...messages].reverse().find((m) => m.sender === 'user');
+  const blocked = character?.state === 'blocked_by_user';
   // Only the photo she sent most recently can be regenerated - an older one stays put, the
   // same restriction the text regen button already applies to her last reply.
   const lastHerImageId = [...messages].reverse().find((m) => m.kind === 'image' && m.sender === 'character')?.id ?? null;
@@ -449,31 +372,14 @@ export default function Chat({
         <button className="iconbtn" onClick={onBack} aria-label="Back">
           <Icon name="back" size={22} />
         </button>
-        <Avatar match={character} small presence={!blocked} />
+        <Avatar match={character} small />
         <div style={{ minWidth: 0 }}>
           <h1>{character?.display_name ?? '…'}</h1>
           <span className={`sub${isTyping ? ' live' : ''}`}>
-            {blocked
-              ? character?.state === 'blocked_by_char' ? 'She blocked you' : 'You blocked her'
-              : isTyping
-                ? 'typing…'
-                : character?.online
-                  ? 'online'
-                  : 'offline'}
+            {blocked ? 'You blocked her' : isTyping ? 'typing…' : 'online'}
           </span>
         </div>
         <div className="spacer" />
-        {!swapped && (
-          <button
-            className="iconbtn"
-            onClick={() => void offerExchange()}
-            disabled={blocked || swapping}
-            aria-label="Offer to swap profile pictures"
-            title="Swap profile pictures"
-          >
-            <Icon name="camera" size={20} />
-          </button>
-        )}
         {profile && (
           <button
             className="iconbtn known-count"
@@ -481,11 +387,14 @@ export default function Chat({
               openView(() => setProfileOpen(false));
               setProfileOpen(true);
             }}
-            aria-label={`What you know about her: ${profile.known} of ${profile.total}`}
-            title="What you know about her"
+            aria-label="Her profile"
+            title="Her profile"
           >
             <span className="glyph"><Icon name="eye" size={15} /></span>
-            <span>{profile.known}/{profile.total}</span>
+            {(() => {
+              const intimate = profile.categories.find((c) => c.category === 'intimate');
+              return intimate ? <span>{intimate.known}/{intimate.total}</span> : null;
+            })()}
           </button>
         )}
         <button className="iconbtn" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
@@ -497,7 +406,6 @@ export default function Chat({
         <ProfileSheet
           characterId={characterId}
           profile={profile}
-          onProfileChange={setProfile}
           gallery={gallery}
           onOpenImage={(url) => {
             openView(() => setLightboxAt(null));
@@ -588,7 +496,7 @@ export default function Chat({
             return (
               <div key={m.id} style={{ display: 'contents' }}>
                 {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
-                <ExchangeRequestCard text={m.text} status={m.meta.status ?? 'pending'} />
+                <LegacyCard text={m.text} />
               </div>
             );
           }
@@ -612,13 +520,7 @@ export default function Chat({
             return (
               <div key={m.id} style={{ display: 'contents' }}>
                 {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
-                <PhotoOfferCard
-                  text={m.text}
-                  status={m.meta.status ?? 'pending'}
-                  busy={respondingOfferId === m.meta.offer_id}
-                  disabled={blocked}
-                  onRespond={(accept) => void respondPhotoOffer(m.meta.offer_id, accept)}
-                />
+                <LegacyCard text={m.text} />
               </div>
             );
           }
@@ -727,11 +629,6 @@ export default function Chat({
           <div className="typing"><i /><i /><i /></div>
         )}
 
-        {!isTyping && character && !character.online && lastMine && !lastMine.read_at && (
-          <div className="center tiny muted" style={{ padding: '8px 0' }}>
-            She is offline. She will see it when she is back.
-          </div>
-        )}
         </div>
       </div>
 
@@ -793,13 +690,12 @@ export default function Chat({
 }
 
 /**
- * What he has found out about her so far. Everything starts as ??? and fills in only when
- * she actually tells him - it is a record of the conversation, not a stat readout.
+ * Her profile. The everyday facts are all there from the start; the intimate ones start as
+ * ??? and fill in as she lets them out - a record of the conversation, not a stat readout.
  */
 function ProfileSheet({
   characterId,
   profile,
-  onProfileChange,
   gallery,
   onOpenImage,
   onOpenDate,
@@ -807,32 +703,12 @@ function ProfileSheet({
 }: {
   characterId: string;
   profile: CharacterProfile;
-  onProfileChange: (p: CharacterProfile) => void;
   gallery: GalleryImage[];
   onOpenImage: (url: string) => void;
   onOpenDate: (dateId: string) => void;
   onClose: () => void;
 }) {
-  const [uncovering, setUncovering] = useState(false);
-  const [result, setResult] = useState<{ text: string; error: boolean } | null>(null);
-  const pct = profile.total ? Math.round((profile.known / profile.total) * 100) : 0;
-  const nothingLeft = profile.total > 0 && profile.known >= profile.total;
-
-  const uncover = async () => {
-    if (uncovering || profile.trait_credits <= 0 || nothingLeft) return;
-    setUncovering(true);
-    setResult(null);
-    try {
-      const updated = await api.uncoverTrait(characterId);
-      onProfileChange(updated);
-      const revealedRow = updated.categories.flatMap((c) => c.rows).find((r) => r.key === updated.revealed_key);
-      setResult({ text: `Uncovered: ${revealedRow?.label ?? 'a trait'} - ${revealedRow?.value ?? ''}`, error: false });
-    } catch (err) {
-      setResult({ text: String(err instanceof Error ? err.message : err), error: true });
-    } finally {
-      setUncovering(false);
-    }
-  };
+  const intimate = profile.categories.find((c) => c.category === 'intimate');
 
   return (
     <div className="sheet-backdrop" onClick={onClose}>
@@ -841,7 +717,7 @@ function ProfileSheet({
           <div>
             <h2>{profile.display_name}</h2>
             <span className="tiny muted">
-              {profile.known} of {profile.total} things known
+              {intimate ? `${intimate.known} of ${intimate.total} intimate things discovered` : `@${profile.username}`}
             </span>
           </div>
           <button className="iconbtn" onClick={onClose} aria-label="Close">
@@ -859,28 +735,11 @@ function ProfileSheet({
           view at all - it was rendered past the edge of a box nothing could scroll.
         */}
         <div className="sheet-body">
-          <div className="progress"><span style={{ width: `${pct}%` }} /></div>
-
-          <div className="uncover-row">
-            <span className="uncover-note">
-              {nothingLeft ? (
-                <>Everything about her is known.</>
-              ) : (
-                <>
-                  <strong>{profile.trait_credits}</strong> trait credit{profile.trait_credits === 1 ? '' : 's'} -
-                  earned one every 50 messages you send her.
-                </>
-              )}
-            </span>
-            <button
-              className="btn ghost"
-              onClick={() => void uncover()}
-              disabled={uncovering || profile.trait_credits <= 0 || nothingLeft}
-            >
-              {uncovering ? 'Uncovering…' : 'Uncover a trait'}
-            </button>
-          </div>
-          {result && <p className={`uncover-result${result.error ? ' error' : ''}`}>{result.text}</p>}
+          {intimate && intimate.total > 0 && (
+            <div className="progress">
+              <span style={{ width: `${Math.round((intimate.known / intimate.total) * 100)}%` }} />
+            </div>
+          )}
 
           <p className="small muted bio-quote">{profile.bio}</p>
 
@@ -1200,7 +1059,7 @@ function DateRoom({
         <button className="iconbtn" onClick={onOpenTextChat} aria-label="Back to the text chat">
           <Icon name="back" size={22} />
         </button>
-        <Avatar match={view?.character ?? null} small presence={false} />
+        <Avatar match={view?.character ?? null} small />
         <div style={{ minWidth: 0 }}>
           <h1>{view?.character.display_name ?? '…'}</h1>
           <span className={`sub${view?.typing ? ' live' : ''}`}>

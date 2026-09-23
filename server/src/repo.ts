@@ -227,6 +227,10 @@ export function updateCharacterProfile(id: string, fields: { username?: string; 
   if (sets.length) db.prepare(`UPDATE characters SET ${sets.join(', ')} WHERE id = @id`).run(params);
 }
 
+export function updateCharacterSeed(id: string, seed: CharacterSeed): void {
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), id);
+}
+
 /** The swipe stack: pool characters plus rejected ones whose cooldown has expired. */
 export function swipeStack(limit = 10): Character[] {
   const band = preferredAgeRange();
@@ -263,7 +267,7 @@ export function countPoolAvailable(): number {
 
 export function listMatches(): Character[] {
   const rows = db
-    .prepare(`SELECT * FROM characters WHERE state IN ('matched','blocked_by_char','blocked_by_user') ORDER BY matched_at DESC`)
+    .prepare(`SELECT * FROM characters WHERE state IN ('matched','blocked_by_user') ORDER BY matched_at DESC`)
     .all() as any[];
   return rows.map(hydrateCharacter);
 }
@@ -297,28 +301,23 @@ const EMPTY_LEDGER: Ledger = {
   director_notes: { intent: '', plans: [] },
 };
 
-const EMPTY_FLAGS: Flags = { state: {}, events: {}, negative: {} };
+const EMPTY_FLAGS: Flags = { state: {} };
 
 function hydrateRelationship(row: any): Relationship {
+  const storedFlags = JSON.parse(row.flags ?? '{}');
   return {
     character_id: row.character_id,
-    trust: row.trust,
-    spark: row.spark,
-    investment: row.investment,
-    reciprocity: row.reciprocity,
-    pressure: row.pressure,
     mood: JSON.parse(row.mood),
-    her_tension: row.her_tension,
-    user_tension: row.user_tension,
     arousal: row.arousal ?? 0,
     discovered: JSON.parse(row.discovered ?? '{}'),
     last_contact_at: row.last_contact_at,
     last_decay_at: row.last_decay_at,
-    flags: { ...EMPTY_FLAGS, ...JSON.parse(row.flags) },
+    // Older saves also carry `events` and `negative` flag groups from when she could be
+    // won or lost. Only `state` is read now; the rest is dropped on the next save.
+    flags: { state: { ...(storedFlags.state ?? {}) } },
     ledger: { ...EMPTY_LEDGER, ...JSON.parse(row.ledger) },
     active_direction: row.active_direction ? (JSON.parse(row.active_direction) as Direction) : null,
     direction_set_at: row.direction_set_at,
-    ghosted_at: row.ghosted_at,
   };
 }
 
@@ -343,12 +342,10 @@ export function getRelationship(characterId: string): Relationship | null {
 
 export function saveRelationship(r: Relationship): void {
   db.prepare(
-    `UPDATE relationships SET trust=@trust, spark=@spark, investment=@investment,
-       reciprocity=@reciprocity, pressure=@pressure, mood=@mood, her_tension=@her_tension,
-       user_tension=@user_tension, arousal=@arousal, discovered=@discovered,
+    `UPDATE relationships SET mood=@mood, arousal=@arousal, discovered=@discovered,
        last_contact_at=@last_contact_at, last_decay_at=@last_decay_at,
        flags=@flags, ledger=@ledger, active_direction=@active_direction,
-       direction_set_at=@direction_set_at, ghosted_at=@ghosted_at
+       direction_set_at=@direction_set_at
      WHERE character_id=@character_id`,
   ).run({
     ...r,

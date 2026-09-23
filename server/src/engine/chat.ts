@@ -1,21 +1,17 @@
-import { randomUUID } from 'node:crypto';
 import { getSettings } from '../config.js';
 import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
   activeDate, addMessage, clearWakeup, deleteMessages, getCharacter, getMessage, getRelationship, getWakeup,
-  markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, updateMessageMeta, type StoredMessage,
+  markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, type StoredMessage,
 } from '../repo.js';
-import type { Character, PendingExchange, PendingPhoto, Relationship } from '../types.js';
+import type { Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
 import { detectEvents, directionExpired, runDirector } from './director.js';
-import { computePressure, computeReciprocity } from './modifiers.js';
-import { alwaysOnline, isOnline } from './presence.js';
-import { randInt } from './dice.js';
-import { clearExpiredNegativeFlags, hasActiveNegativeFlag, markThreadRaised } from './state.js';
-import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries, trackMessageForCredit } from './discovery.js';
-import { enqueueImage, photoOfferEligible, hasProfileImageJob } from './images.js';
+import { markThreadRaised } from './state.js';
+import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
+import { photosEnabled, sendPhoto } from './images.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -64,29 +60,16 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function refreshModifiers(
-  rel: Relationship,
-  messages: StoredMessage[],
-  boundaryTouched: boolean,
-): void {
-  const hoursElapsed = rel.last_contact_at
-    ? (Date.now() - Date.parse(rel.last_contact_at)) / 3_600_000
-    : 0;
-  rel.reciprocity = computeReciprocity(messages);
-  rel.pressure = computePressure({
-    previous: rel.pressure,
-    hoursElapsed,
-    messages,
-    boundaryTouched,
-    negativeFlagActive: hasActiveNegativeFlag(rel),
-  });
-}
-
 export interface UserMessageInput {
   characterId: string;
   text: string;
   kind?: 'text' | 'image';
   meta?: Record<string, any>;
+  /**
+   * Store the message but do not start her turn. The image upload uses this so the vision
+   * pass can describe the photo before she replies to it; it starts the turn itself.
+   */
+  deferTurn?: boolean;
 }
 
 export async function handleUserMessage(input: UserMessageInput): Promise<StoredMessage> {
@@ -120,29 +103,13 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
     rel.mood = { ...rel.mood, followed_up_unanswered: false };
   }
 
-  const messages = recentMessages(character.id, getSettings().chat.context_messages);
-  refreshModifiers(rel, messages, false);
-  clearExpiredNegativeFlags(rel);
   // She only knows what he likes because he said it, and only in this conversation - the
   // match he told last week knows, the one he matched this morning does not.
   const learned = learnAboutHim(rel, input.text);
   if (learned.length) logger.debug('actor', `${character.username} learned his stance on ${learned.join(', ')}`);
 
-  // Showing up earns something concrete, independent of anything she chooses to reveal
-  // herself - see discovery.ts's trackMessageForCredit().
-  if (trackMessageForCredit(rel)) {
-    logger.debug('actor', `${character.username}: earned a trait-uncover credit`, {
-      messages_sent: rel.flags.state.messages_sent_count,
-      trait_credits: rel.flags.state.trait_credits,
-    });
-  }
   saveRelationship(rel);
-
-  if (!isOnline(character)) {
-    // She is offline: the message waits, unread. This is the intended behaviour.
-    logger.debug('actor', `${character.username} is offline, message queued`);
-    return stored;
-  }
+  if (input.deferTurn) return stored;
 
   void takeTurn(character.id, { trigger: 'user_message' }).catch((err) =>
     logger.error('actor', 'turn failed', { error: String(err) }),
@@ -180,13 +147,6 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     return;
   }
 
-  // She said she was going. She is actually gone, mid-conversation or not.
-  if (isAway(rel) && opts.trigger === 'user_message') {
-    logger.debug('actor', `${character.username} said she was leaving and is away`);
-    return;
-  }
-
-  // She only reads once she is actually online.
   if (markUserMessagesRead(character.id) > 0) {
     bus.emitEvent({ type: 'read', character_id: character.id, at: nowIso() });
   }
@@ -202,40 +162,14 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     isStaleSession(rel);
 
   if (needsDirector) {
-    const directed = await runDirector(character, rel, {
+    await runDirector(character, rel, {
       reason: opts.reason ?? (check.expired ? check.reason : opts.trigger),
     });
     rel = getRelationship(characterId)!;
     character = getCharacter(characterId)!;
-    if (directed.escalation === 'block') {
-      bus.emitEvent({ type: 'character_state', character_id: character.id, state: 'blocked_by_char' });
-      return;
-    }
-    if (directed.escalation === 'ghost') {
-      logger.info('actor', `${character.username} is ghosting, no reply sent`);
-      return;
-    }
-  }
-
-  if (rel.ghosted_at && opts.trigger === 'user_message') {
-    // Ghosting means she does not answer. A reactivation attempt is decided by the Director.
-    logger.debug('actor', `${character.username} is ghosting, staying silent`);
-    return;
   }
 
   await runActorPhase(character, rel, { startedIn, decrementValidFor: true });
-}
-
-/** What she'd be offering, in plain terms, for the consent card the user actually sees. */
-function photoOfferText(name: string, kind: 'profile' | 'chat' | 'spicy'): string {
-  switch (kind) {
-    case 'profile':
-      return `${name} wants to swap profile pictures. Accepting shows her yours too.`;
-    case 'spicy':
-      return `${name} wants to send you a photo. It might be explicit.`;
-    default:
-      return `${name} wants to send you a photo.`;
-  }
 }
 
 /**
@@ -324,84 +258,18 @@ async function runActorPhase(
   // A thread she was told to raise is now spent, whether or not he engaged with it.
   if (result.raisedThreadId) markThreadRaised(rel, result.raisedThreadId);
 
-  /**
-   * She decided to send a photo - but deciding is not sending. This only raises the
-   * consent card; generation does not start until he accepts it (see images.ts).
-   * Re-verified here rather than trusted from the model: the direction's unlock has to
-   * actually match the tier she is offering, one is not already pending, images have to be
-   * turned on, and a profile picture cannot be offered twice.
-   */
-  /**
-   * She has been asked to swap profile pictures and this turn carries her answer. It is
-   * genuinely her decision: a refusal resolves the card and nothing is revealed, which is
-   * why the request is worth making rather than being a button that always works.
-   */
-  const pendingExchange: PendingExchange | null = (rel.mood as any)?.pending_exchange ?? null;
-  let exchangeLeft: PendingExchange | null = pendingExchange;
-  if (pendingExchange && result.hidden.exchange_response) {
-    const accepted = result.hidden.exchange_response === 'accept';
-    exchangeLeft = null;
-    const updated = updateMessageMeta(pendingExchange.message_id, {
-      status: accepted ? 'accepted' : 'declined',
-    });
-    if (updated) bus.emitEvent({ type: 'message_updated', character_id: character.id, message: updated });
-
-    if (accepted) {
-      // The agreement is what counts, and it is symmetrical: from here she can see his
-      // picture whether or not her own image generates successfully afterwards.
-      rel.flags.state.photos_exchanged = true;
-      // Checked against the images table, not profile_picture_sent - that flag only flips
-      // once generation finishes, well after a same-turn photo_offer could otherwise slip a
-      // second, redundant profile job past it.
-      if (getSettings().images_enabled && !hasProfileImageJob(character.id)) {
-        enqueueImage({ characterId: character.id, kind: 'profile', situation: '' });
-      }
-    }
-    logger.debug('actor', `${character.username} ${accepted ? 'accepted' : 'declined'} the picture swap`);
-  }
-
-  let pendingPhoto: PendingPhoto | null = (rel.mood as any)?.pending_photo ?? null;
-  const offerKind = result.hidden.photo_offer;
-  if (offerKind && !pendingPhoto) {
-    // Re-verified here rather than trusted from the model: actor.ts already rejects a turn
-    // whose offer cannot actually be sent, so this should normally never fire, but it stays
-    // as the actual enforcement point in case the retry budget was spent on something else
-    // first. Which tier to offer is otherwise entirely her call - this only catches images
-    // being off, or a profile picture already on its way.
-    if (photoOfferEligible(rel, offerKind)) {
-      const offerId = randomUUID();
-      const offerMsg = addMessage({
-        character_id: character.id,
-        sender: 'system',
-        text: photoOfferText(character.real_name, offerKind),
-        kind: 'text',
-        meta: { type: 'photo_offer', offer_id: offerId, photo_kind: offerKind, status: 'pending' },
-        read_at: null,
-      });
-      bus.emitEvent({ type: 'message', character_id: character.id, message: offerMsg });
-      pendingPhoto = {
-        offer_id: offerId,
-        kind: offerKind,
-        situation: result.hidden.photo_situation ?? '',
-        // Her own choice of orientation for a chat/spicy shot; a profile picture ignores
-        // it and is always square. Default to portrait if she offered one without picking
-        // an aspect - the common case for a phone photo of herself.
-        aspect: offerKind === 'profile' ? null : result.hidden.photo_aspect ?? 'portrait',
-        // A profile picture always shows her face, by dating-app convention - that is the
-        // one photo real profiles never lead with a from-behind or cropped shot for.
-        // Otherwise trust what she actually said; omitted means face-in-frame as normal.
-        showsFace: offerKind === 'profile' ? true : result.hidden.photo_shows_face ?? true,
-        message_id: offerMsg.id,
-        offered_at: nowIso(),
-      };
-      logger.debug('actor', `${character.username} offered a ${offerKind} photo`, { offer_id: offerId });
-    } else {
-      logger.debug('actor', `${character.username}'s photo offer was not honoured`, {
-        offerKind,
-        imagesEnabled: getSettings().images_enabled,
-        unlock: rel.active_direction?.unlock,
-      });
-    }
+  // She decided to send a photo, so it is sent. Generation runs in the background and the
+  // picture lands in the chat when it is ready.
+  const photoKind = result.hidden.photo_offer;
+  if (photoKind && photosEnabled()) {
+    void sendPhoto({
+      characterId: character.id,
+      kind: photoKind,
+      situation: result.hidden.photo_situation ?? '',
+      aspect: result.hidden.photo_aspect ?? 'portrait',
+      showsFace: result.hidden.photo_shows_face ?? true,
+    }).catch((err) => logger.error('image', 'photo failed', { error: String(err) }));
+    logger.debug('actor', `${character.username} is sending a ${photoKind} photo`);
   }
 
   rel.mood = {
@@ -416,43 +284,30 @@ async function runActorPhase(
     location: result.hidden.location || (rel.mood as any)?.location || '',
     outfit: result.hidden.outfit || (rel.mood as any)?.outfit || '',
     activity: result.hidden.activity || (rel.mood as any)?.activity || '',
-    pending_photo: pendingPhoto,
-    pending_exchange: exchangeLeft,
+    // Left over from the old consent cards; cleared so nothing reads them again.
+    pending_photo: null,
+    pending_exchange: null,
   };
-  refreshModifiers(rel, recentMessages(character.id, 40), result.hidden.boundary_touched);
   saveRelationship(rel);
 
-  if (result.hidden.going_offline_in !== null) {
-    // She leaves when she said she would, and stays gone for a while afterwards.
-    const leavesAt = Date.now() + result.hidden.going_offline_in * 60_000;
-    const awayUntil = new Date(leavesAt + randInt(25, 180) * 60_000).toISOString();
-    logger.debug('actor', `${character.username} is leaving in ${result.hidden.going_offline_in}min`, { away_until: awayUntil });
-    rel.mood = { ...rel.mood, leaves_at: new Date(leavesAt).toISOString(), away_until: awayUntil };
-    saveRelationship(rel);
-  }
-
-  // Boundary crossings get a Director pass immediately, not on the next turn.
-  if (result.hidden.boundary_touched || result.hidden.director_needed) {
-    const res = await runDirector(character, getRelationship(characterId)!, {
-      reason: result.hidden.boundary_touched ? 'boundary_touched' : 'actor_requested',
+  if (result.hidden.director_needed) {
+    await runDirector(character, getRelationship(characterId)!, {
+      reason: 'actor_requested',
       actorReport: result.hidden,
     });
-    if (res.escalation === 'block') {
-      bus.emitEvent({ type: 'character_state', character_id: character.id, state: 'blocked_by_char' });
-    }
   }
 }
 
 /**
  * Reroll her most recent reply - the small redo button next to the timestamp. Only the
  * trailing run of her messages (the last turn) can be regenerated: anything older has
- * already had its stat and ledger effects folded into the relationship, and undoing those
+ * already had its arousal and ledger effects folded into the relationship, and undoing those
  * cleanly is not something this can do safely. If the user has replied since, that turn is
  * done and there is nothing left to reroll.
  *
- * The Director is not re-run - the original turn already scored and directed this moment,
- * and running it twice would double-apply trust/spark/investment/arousal deltas. This only
- * asks the Actor to write different words for the same direction.
+ * The Director is not re-run - the original turn already directed this moment, and running
+ * it twice would double-apply the arousal delta. This only asks the Actor to write different
+ * words for the same direction.
  */
 export async function regenerateLastTurn(characterId: string, messageId: number): Promise<{ removed_ids: number[] }> {
   if (running.has(characterId)) {
@@ -475,9 +330,6 @@ export async function regenerateLastTurn(characterId: string, messageId: number)
   if (!trailing.some((m) => m.id === messageId)) {
     throw new Error('that reply has already been superseded');
   }
-  if (rel.ghosted_at) {
-    throw new Error('she is ghosting - there is nothing to regenerate into');
-  }
 
   const removedIds = trailing.map((m) => m.id);
   deleteMessages(removedIds);
@@ -497,7 +349,7 @@ export async function regenerateLastTurn(characterId: string, messageId: number)
  * A plain delete, for either side of the conversation - typing something and wanting it gone
  * again, not a reroll. Unlike regenerateLastTurn this carries no restriction on position: an
  * older message can be deleted too, since nothing here tries to undo whatever it already fed
- * into trust/spark/the ledger - it just stops being shown, and stops being read as context
+ * into arousal or the ledger - it just stops being shown, and stops being read as context
  * from here on. Blocked only while a turn for her is actually in flight, so it cannot delete
  * a message out from under the context that turn is using.
  */
@@ -546,20 +398,6 @@ async function deliver(
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
   }
-}
-
-/**
- * She goes offline mid-conversation when the Actor said she would, and is genuinely
- * unreachable until the absence window closes.
- */
-export function isAway(rel: Relationship): boolean {
-  if (alwaysOnline()) return false;
-  const mood = rel.mood as any;
-  const leavesAt = mood?.leaves_at ? Date.parse(mood.leaves_at) : null;
-  const awayUntil = mood?.away_until ? Date.parse(mood.away_until) : null;
-  if (!leavesAt || !awayUntil) return false;
-  const now = Date.now();
-  return now >= leavesAt && now < awayUntil;
 }
 
 export async function blockCharacterByUser(characterId: string): Promise<void> {

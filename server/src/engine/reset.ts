@@ -8,7 +8,7 @@ import { logger } from '../log.js';
 import { clearLocationImages } from '../repo.js';
 import { abandonRunningTurns } from './chat.js';
 import { ensureStack, resetGenerationQueue } from './matching.js';
-import { clearPresenceCache, startScheduler, stopScheduler } from './scheduler.js';
+import { startScheduler, stopScheduler } from './scheduler.js';
 
 /** The cast and everything that happened with them. */
 const WORLD_TABLES = ['messages', 'wakeups', 'dates', 'images', 'relationships', 'characters'];
@@ -112,7 +112,6 @@ export async function resetParts(opts: ResetOptions = {}): Promise<ResetResult> 
 
   if (world) invalidateAttributeCache();
   if (settings) clearSettingsCache();
-  if (disruptive) clearPresenceCache();
 
   const attributeRows = world ? seedAttributes() : 0;
 

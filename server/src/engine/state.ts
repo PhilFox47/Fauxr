@@ -1,54 +1,21 @@
 import { nowIso } from '../db/index.js';
 import { logger } from '../log.js';
-import { saveRelationship, setCharacterState, clearWakeup } from '../repo.js';
-import type { Character, Ledger, OpenThread, Relationship, StateFlags } from '../types.js';
-import { applyModifiers, clampStat, type Deltas } from './modifiers.js';
+import { saveRelationship } from '../repo.js';
+import type { Character, Ledger, OpenThread, Relationship } from '../types.js';
 import { buildCatalogue, recordDiscoveries } from './discovery.js';
 
-export const STATE_FLAGS: (keyof StateFlags)[] = [
-  'real_name_known',
-  'profile_picture_sent',
-  'personal_photos_allowed',
-  'sexual_topics_allowed',
-  'spicy_photos_allowed',
-  'allows_date_requests',
-  'has_had_first_date',
-  'big_secret_known',
-];
-
-export const EVENT_FLAGS = [
-  'first_compliment_accepted',
-  'first_personal_story_told',
-  'first_conflict_resolved',
-  'first_time_she_initiated',
-  'first_rejection_survived',
-  'first_voice_message',
-];
-
-/** Negative flags expire on their own; this is how long each one lingers. */
-export const NEGATIVE_FLAG_HOURS: Record<string, number> = {
-  boundary_crossed_recent: 48,
-  came_on_too_strong: 36,
-  caught_in_inconsistency: 96,
-  ghosted_by_user: 168,
-  dealbreaker_hit: 8760,
-  bad_date_recent: 72,
-};
-
+/**
+ * What the Director can change after a turn. There is nothing here to win or lose: no
+ * trust, no spark, no flags that open doors. What remains is how turned on she is, what
+ * he has found out about her, and what she remembers.
+ */
 export interface DirectorUpdate {
-  trust_delta?: number;
-  spark_delta?: number;
-  investment_delta?: number;
-  her_tension?: number;
   arousal_delta?: number;
   /** Fact keys from engine/discovery.ts that he genuinely learned this exchange. */
   discovered?: string[];
+  /** True on the turn her big secret (if she has one) actually came out. */
+  big_secret_revealed?: boolean;
   reason?: string;
-  set_flags?: string[];
-  clear_flags?: string[];
-  event_flags?: string[];
-  negative_flags?: string[];
-  escalate?: string;
   ledger?: {
     facts_about_user?: string[];
     facts_about_her?: string[];
@@ -169,39 +136,10 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger']): Ledger {
   return next;
 }
 
-export interface ApplyResult {
-  applied: Deltas;
-  escalation: string;
-}
-
-/**
- * Apply a Director update to the relationship. The LLM deltas go through the code
- * modifiers first - the LLM never has the last word on the numbers.
- */
-export function applyUpdate(
-  character: Character,
-  rel: Relationship,
-  update: DirectorUpdate,
-): ApplyResult {
-  const raw: Deltas = {
-    trust: Number(update.trust_delta ?? 0) || 0,
-    spark: Number(update.spark_delta ?? 0) || 0,
-    investment: Number(update.investment_delta ?? 0) || 0,
-  };
-  // Guard against a cheap model inventing a huge swing.
-  const cap = (v: number) => Math.max(-25, Math.min(10, v));
-  const capped: Deltas = { trust: cap(raw.trust), spark: cap(raw.spark), investment: cap(raw.investment) };
-  const applied = applyModifiers(capped, rel.reciprocity, rel.pressure);
-
-  rel.trust = clampStat(rel.trust + applied.trust);
-  rel.spark = clampStat(rel.spark + applied.spark);
-  rel.investment = clampStat(rel.investment + applied.investment);
-  if (typeof update.her_tension === 'number') {
-    rel.her_tension = Math.max(0, Math.min(10, Math.round(update.her_tension)));
-  }
-
-  // Arousal moves freely but never past what this character is capable of over text.
-  const arousalDelta = Math.max(-40, Math.min(30, Number(update.arousal_delta ?? 0) || 0));
+/** Apply a Director update to the relationship and save it. */
+export function applyUpdate(character: Character, rel: Relationship, update: DirectorUpdate): void {
+  // Guard against a model inventing a huge swing in one go.
+  const arousalDelta = Math.max(-40, Math.min(35, Number(update.arousal_delta ?? 0) || 0));
   rel.arousal = Math.max(0, Math.min(100, rel.arousal + arousalDelta));
 
   if (update.discovered?.length) {
@@ -209,85 +147,17 @@ export function applyUpdate(
     const added = recordDiscoveries(rel, update.discovered, valid);
     if (added.length) logger.info('director', `${character.username} revealed: ${added.join(', ')}`);
   }
-
-  for (const f of update.set_flags ?? []) {
-    if (STATE_FLAGS.includes(f as keyof StateFlags)) (rel.flags.state as any)[f] = true;
-  }
-  for (const f of update.clear_flags ?? []) {
-    if (STATE_FLAGS.includes(f as keyof StateFlags)) (rel.flags.state as any)[f] = false;
-  }
-  for (const f of update.event_flags ?? []) {
-    if (EVENT_FLAGS.includes(f) && !(rel.flags.events as any)[f]) (rel.flags.events as any)[f] = nowIso();
-  }
-  for (const f of update.negative_flags ?? []) {
-    const hours = NEGATIVE_FLAG_HOURS[f];
-    if (!hours) continue;
-    rel.flags.negative[f] = new Date(Date.now() + hours * 3600_000).toISOString();
+  if (update.big_secret_revealed && character.seed.big_secret && character.seed.big_secret !== 'none') {
+    rel.flags.state.big_secret_known = true;
   }
 
   rel.ledger = mergeLedger(rel.ledger, update.ledger);
-  if (update.reason) {
-    rel.mood = { ...rel.mood, last_reason: update.reason };
-  }
-
-  const escalation = String(update.escalate ?? 'none');
-  applyEscalation(character, rel, escalation);
+  if (update.reason) rel.mood = { ...rel.mood, last_reason: update.reason };
   saveRelationship(rel);
 
-  logger.info('director', `stats ${character.username}`, {
-    raw: capped,
-    applied,
-    reciprocity: rel.reciprocity,
-    pressure: rel.pressure,
-    trust: rel.trust,
-    spark: rel.spark,
-    investment: rel.investment,
+  logger.info('director', `update ${character.username}`, {
+    arousal: rel.arousal,
+    arousal_delta: arousalDelta,
     reason: update.reason,
-    escalate: escalation,
   });
-  return { applied, escalation };
-}
-
-/** Three-stage failure: cool off, ghost, block. */
-export function applyEscalation(character: Character, rel: Relationship, escalation: string): void {
-  switch (escalation) {
-    case 'cool_off':
-      rel.investment = clampStat(rel.investment - 8);
-      rel.mood = { ...rel.mood, cooling: true };
-      break;
-    case 'ghost':
-      rel.ghosted_at = nowIso();
-      clearWakeup(character.id);
-      logger.info('director', `${character.username} is ghosting the user`);
-      break;
-    case 'block':
-      setCharacterState(character.id, 'blocked_by_char');
-      clearWakeup(character.id);
-      rel.ghosted_at = nowIso();
-      logger.warn('director', `${character.username} blocked the user`);
-      break;
-    case 'warm':
-      rel.mood = { ...rel.mood, cooling: false };
-      rel.ghosted_at = null;
-      break;
-    default:
-      break;
-  }
-}
-
-export function clearExpiredNegativeFlags(rel: Relationship): boolean {
-  const now = Date.now();
-  let changed = false;
-  for (const [flag, until] of Object.entries(rel.flags.negative ?? {})) {
-    if (Date.parse(until) <= now) {
-      delete rel.flags.negative[flag];
-      changed = true;
-    }
-  }
-  return changed;
-}
-
-export function hasActiveNegativeFlag(rel: Relationship): boolean {
-  const now = Date.now();
-  return Object.values(rel.flags.negative ?? {}).some((until) => Date.parse(until) > now);
 }
