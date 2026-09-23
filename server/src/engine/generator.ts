@@ -1019,6 +1019,10 @@ export async function generateCharacter(): Promise<Character> {
         // that has to take a seed full of explicit traits seriously rather than sand them
         // down. The director still runs the game; it just does not invent the cast.
         config: { ...settings.models.actor, max_tokens: CHARACTER_TOKENS },
+        // The biggest call in the app (a whole dossier plus her fantasies), running in the
+        // background where nobody is waiting on it. A reasoning model can take well over the
+        // default five minutes to think through it, and cutting it off just throws the work away.
+        timeoutMs: CHARACTER_TIMEOUT_MS,
         require: ['real_name', 'dossier'],
         messages: characterPassMessages,
       });
@@ -1313,6 +1317,7 @@ const BIOS_SHOWN = 10;
 const NAME_TOKENS = 2400;
 const BIO_TOKENS = 4800;
 const CHARACTER_TOKENS = 14400;
+const CHARACTER_TIMEOUT_MS = 600_000;
 
 const BIO_MIN_WORDS = 14;
 const BIO_MAX_WORDS = 75;

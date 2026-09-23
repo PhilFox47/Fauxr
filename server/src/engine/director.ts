@@ -68,8 +68,10 @@ export async function runDirector(
 ): Promise<DirectorResult> {
   const settings = getSettings();
   const user = getUserProfile();
-  // Older characters have no fantasies written yet; this writes them once, on first need.
-  await ensureFantasies(character);
+  // Older characters have no fantasies written yet; this writes them once, in the background.
+  // Not awaited: it is a slow call, and a chat turn must never sit waiting on it - she simply
+  // has them from the next pass on.
+  void ensureFantasies(character);
   const sinceId = Number((rel.mood as any)?.last_director_msg_id ?? 0);
   const all = recentMessages(character.id, settings.chat.context_messages);
   const since = sinceId ? all.filter((m) => m.id > sinceId) : all;

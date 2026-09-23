@@ -26,6 +26,17 @@ export class TruncatedError extends LlmError {
   }
 }
 
+/**
+ * Our own clock ran out before the provider answered. Not a content problem, so it must never
+ * be answered with "your JSON was invalid" - that used to happen, because fetch reports this as
+ * a bare AbortError that nothing recognised, and the re-ask then took just as long again.
+ */
+export class TimeoutError extends LlmError {
+  constructor(public readonly ms: number) {
+    super(`no answer within ${Math.round(ms / 1000)}s - the request was cancelled`);
+  }
+}
+
 /** A rate limit, an overloaded upstream or a 5xx - the request was never really answered. */
 export class TransportError extends LlmError {
   constructor(
@@ -122,6 +133,9 @@ const EXPAND_CEILING = 24000;
 const RETRYABLE = (status: number) => status === 429 || status === 408 || status >= 500;
 const TRANSPORT_ATTEMPTS = 3;
 
+/** How long one call may take before it is cancelled. Callers doing big background work raise it. */
+const DEFAULT_TIMEOUT_MS = 300_000;
+
 /**
  * OpenAI-compatible chat completion. Nano-GPT is the default provider, but nothing here
  * is provider specific beyond the configured base URL and key.
@@ -214,17 +228,34 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
   // larger needs real time to actually be written, or calls that would have finished start
   // getting cut off by the clock instead of the token cap - trading one kind of truncation
   // for another rather than removing it.
-  const timer = setTimeout(() => controller.abort(), opts.timeoutMs ?? 300_000);
+  const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${settings.api.api_key}`,
-      },
-      body: JSON.stringify(body),
-      signal: controller.signal,
-    });
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${settings.api.api_key}`,
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+    } catch (err) {
+      // fetch throws on our own abort and on dropped connections. Neither is a malformed
+      // answer, and both used to reach completeJson as one and get re-asked as a JSON error.
+      if (controller.signal.aborted) {
+        logger.error('api', `${opts.scope} call timed out`, {
+          label: opts.label,
+          model: opts.config.model,
+          timeout_ms: timeoutMs,
+          max_tokens: opts.config.max_tokens,
+        });
+        throw new TimeoutError(timeoutMs);
+      }
+      throw new TransportError(`network error: ${String(err)}`, 0, 5_000);
+    }
     const duration = Date.now() - started;
     const raw = await res.text();
     if (!res.ok) {
@@ -331,7 +362,10 @@ export async function completeJson<T = any>(opts: JsonCallOptions): Promise<T> {
     // truncation has already been handled inside complete() with the recovery that actually
     // fits it, and re-asking here would just spend the provider's patience telling an
     // overloaded server that its JSON was malformed.
-    if (err instanceof BudgetExceededError || err instanceof TransportError || err instanceof TruncatedError) throw err;
+    if (
+      err instanceof BudgetExceededError || err instanceof TransportError ||
+      err instanceof TruncatedError || err instanceof TimeoutError
+    ) throw err;
     logger.warn(opts.scope === 'generator' ? 'generator' : opts.scope, 'JSON parse failed, retrying', {
       label: opts.label,
       error: String(err),
