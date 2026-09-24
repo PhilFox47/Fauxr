@@ -148,7 +148,7 @@ const BASE_SUFFIX: Record<PromptStyle, string> = {
  * fake. The candid and date paths carry their own, milder "she is an attractive woman,
  * photographed honestly" language in the assembler template instead.
  */
-const FLATTERING_SUFFIX = 'Shot from a naturally attractive, flattering angle.';
+const FLATTERING_SUFFIX = 'Shot from a flattering angle that shows off her face and her figure.';
 
 /**
  * The "taken on her phone, right now" look - added on top of BASE_SUFFIX for a chat or
@@ -187,6 +187,22 @@ const DATE_SUFFIX: Record<PromptStyle, string> = {
 };
 
 /**
+ * A spicy photo is still a phone photo, but not an accident: she took it for him, on purpose,
+ * and posed for it. CANDID_SUFFIX's "caught in this exact moment" framing used to be forced on
+ * these too, and together with CANDID_NEGATIVE's ban on posing it pulled the hottest shots in
+ * the app back towards snapshots.
+ */
+const SPICY_SUFFIX: Record<PromptStyle, string> = {
+  seedream:
+    'Shot as an intimate amateur phone photo she took of herself for one man, posed on purpose ' +
+    'the way she knows looks good: real skin, a natural body, a little sensor grain.',
+  z_image_turbo:
+    'Shot as an intimate amateur phone photo she took of herself for one man, posed on purpose ' +
+    'the way she knows looks good, with real skin, a natural body and a little sensor grain - ' +
+    'not a studio shoot.',
+};
+
+/**
  * Sent with every Seedream image regardless of kind - the airbrushed-render look, the
  * opposite over-correction into unflattering, and the usual anatomy rubbish. Kept short and
  * in plain language on purpose: this model's own negative-prompt guidance says a long list
@@ -207,6 +223,9 @@ const BASE_NEGATIVE =
 const CANDID_NEGATIVE =
   'No studio lighting or posed professional-model styling. No golden-hour rim light, no ' +
   'lens flare, no halo of backlit hair, no perfectly tidy staged room.';
+
+/** The spicy version: posing is the point, a studio is not. */
+const SPICY_NEGATIVE = 'No studio backdrop or professional photoshoot lighting, no perfectly tidy staged room.';
 
 /**
  * The three pools below are the fix for "technically good, somehow fake".
@@ -287,6 +306,32 @@ const VENUE_TRUTH = [
   'coats, bags and a phone taking up exactly the space people really leave them in',
 ];
 
+/**
+ * The light for a spicy photo. LIGHT_CONDITIONS is deliberately unflattering - green strip
+ * lights, a pushed sensor - which is right for a snapshot and wrong for a photo she set up to
+ * turn him on. These are the lights a woman actually uses for that: still real sources with a
+ * visible cause, never a studio.
+ */
+const SPICY_LIGHT = [
+  'A ring light in front of her, the round catchlight in her eyes and a soft even glow on her skin, the room behind it falling off into dim.',
+  'LED strip lights washing the room pink and purple, the colour sitting on her skin and the shadows going deep violet.',
+  'One warm bedside lamp, low and to the side, gold on the skin it reaches and real dark everywhere it does not.',
+  'Her phone flash in a mirror: the flash itself a bright star in the glass, her skin lit bright and flat, the room behind her dark.',
+  'Late sun through half-closed blinds, striping her body in warm light and shadow.',
+  'A bathroom vanity light straight above the mirror, bright and slightly warm, steam softening the edges.',
+  'Candles and a string of fairy lights, warm and flickering, most of the room in soft dark.',
+  'The cool blue glow of a television or laptop beside her, the only light in the room.',
+  'Soft grey morning light from a window beside the bed, gentle on her skin, the sheets bright.',
+];
+
+/** Capture flaws mild enough for a photo she chose to send - no blown-out face, no missed focus. */
+const SPICY_FLAWS = [
+  'a little sensor grain in the shadows',
+  'slightly over-compressed, the way a photo looks once a messaging app has had it',
+  'a touch of motion blur on the hand holding the phone',
+  'the frame tilted a few degrees, the way a one-handed selfie comes out',
+];
+
 export interface ShootingConditions {
   light: string;
   flaw: string;
@@ -301,8 +346,9 @@ export interface ShootingConditions {
  * crooked horizon onto her own lead image would be the wrong correction entirely. What it
  * does get is the room - even her best photo was taken somewhere real.
  */
-function shootingConditions(kind: 'profile' | 'moment' | 'date'): ShootingConditions {
+function shootingConditions(kind: 'profile' | 'moment' | 'spicy' | 'date'): ShootingConditions {
   if (kind === 'profile') return { light: '', flaw: '', lived_in: pickOne(LIVED_IN_DETAILS) };
+  if (kind === 'spicy') return { light: pickOne(SPICY_LIGHT), flaw: pickOne(SPICY_FLAWS), lived_in: pickOne(LIVED_IN_DETAILS) };
   if (kind === 'date') return { light: pickOne(LIGHT_CONDITIONS), flaw: '', lived_in: pickOne(VENUE_TRUTH) };
   return { light: pickOne(LIGHT_CONDITIONS), flaw: pickOne(CAPTURE_FLAWS), lived_in: pickOne(LIVED_IN_DETAILS) };
 }
@@ -538,6 +584,51 @@ function referenceImage(characterId: string): string | null {
   return readFileSync(abs, 'base64');
 }
 
+/**
+ * How bold her lead photo is, from her own seed. A hookup app's profile pictures run from a
+ * look and a bit of skin to lingerie, and which one a woman leads with is as much her as her
+ * style is - so it is her confidence and how far she goes, not a house setting.
+ */
+export function profileHeat(seed: CharacterSeed): string {
+  // Thresholds measured on the current cast, which runs hot: about half bold, a third flirty,
+  // an eighth teasing. At freak >= 3.5 nearly three quarters came out bold, which is a house
+  // style again rather than a spread.
+  if ((seed.sexual_confidence ?? 3) >= 4 && (seed.freak ?? 0) >= 4.5) {
+    return 'Bold. Your lead photo is openly sexy: lingerie, a bikini, a see-through top, or topless with an arm or a hand across your chest.';
+  }
+  if ((seed.sexual_confidence ?? 3) <= 3 && (seed.freak ?? 0) < 4) {
+    return 'Teasing. Your lead photo is suggestive rather than revealing: a look, a bit of skin, a hint of what is under the clothes.';
+  }
+  return 'Flirty. Your lead photo shows off your figure - tight, short, low-cut, a bikini at most - without going as far as underwear.';
+}
+
+/**
+ * Her body, her look and her photo habits, for every prompt where she decides what a photo of
+ * her is. Those prompts used to get her dossier alone, so the one thing a photo on this app is
+ * for - her body, shown the way she likes it shown - came out generic: no word of what she is
+ * proudest of, what she wears underneath, or where a woman with her style takes her pictures
+ * (see clothing_style extra.photo_scene).
+ */
+export function photoSelfBlock(seed: CharacterSeed): string {
+  const label = (cat: string, id: string | undefined) => (id ? find(cat, id)?.label ?? id : '');
+  const hintOf = (cat: string, id: string | undefined) => (id ? find(cat, id)?.prompt_hint ?? '' : '');
+  const style = find('clothing_style', seed.clothing_style);
+  const pride = find('body_pride', seed.body_pride);
+  const ink = seed.tattoos.map((t) => `${label('tattoo_motif', t.motif)} (${label('tattoo_position', t.position)})`);
+  const metal = seed.piercings.map((p) => `${label('piercing_type', p.type)} (${label('piercing_position', p.position)})`);
+  return [
+    `How you look: ${seed.appearance_prompt}`,
+    `Your figure: ${[label('body_type', seed.body_type), label('breast_size', seed.breast_size) && `${label('breast_size', seed.breast_size).toLowerCase()} breasts`, label('butt_size', seed.butt_size) && `${label('butt_size', seed.butt_size).toLowerCase()} butt`].filter(Boolean).join(', ')}`,
+    style ? `Your style: ${style.label} - ${style.prompt_hint}` : '',
+    style?.extra?.photo_scene ? `Where your photos tend to happen: ${String(style.extra.photo_scene)}` : '',
+    pride ? `What you are proudest of: ${pride.label} - ${pride.prompt_hint || 'and your photos tend to show it off'}` : '',
+    seed.lingerie_style ? `What you wear underneath: ${label('lingerie_style', seed.lingerie_style)} - ${hintOf('lingerie_style', seed.lingerie_style)}` : '',
+    ink.length ? `Tattoos: ${ink.join('; ')}` : '',
+    metal.length ? `Piercings: ${metal.join('; ')}` : '',
+    `In bed: ${label('sexual_persona', seed.sexual_persona)}`,
+  ].filter(Boolean).join('\n');
+}
+
 /** Sized like BIO_TOKENS in generator.ts - one real paragraph, from a reasoning model. */
 const PROFILE_PIC_TOKENS = 4800;
 
@@ -566,6 +657,8 @@ async function profilePicConcept(character: Character): Promise<string> {
           content: render('actor_profile_pic', {
             real_name: character.real_name,
             dossier: character.seed.hints.dossier || describeSeed(character.seed),
+            photo_self: photoSelfBlock(character.seed),
+            profile_heat: profileHeat(character.seed),
           }),
         },
       ],
@@ -634,6 +727,7 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     // happens once, lazily, right where that gap used to go unfilled.
     const isProfile = job.kind === 'profile';
     const isDate = job.kind === 'date';
+    const isSpicy = job.kind === 'spicy';
     if (isProfile && !situation.trim()) {
       situation = await profilePicConcept(character);
     }
@@ -658,9 +752,11 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
       ? `${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`
       : isDate
         ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
-        : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
+        : isSpicy
+          ? `${BASE_SUFFIX[promptStyle]} ${SPICY_SUFFIX[promptStyle]}`
+          : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
     // Drawn per shot rather than left to the assembler's taste - see LIGHT_CONDITIONS.
-    const conditions = shootingConditions(isProfile ? 'profile' : isDate ? 'date' : 'moment');
+    const conditions = shootingConditions(isProfile ? 'profile' : isDate ? 'date' : isSpicy ? 'spicy' : 'moment');
     // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
     // characters - not a soft quality preference, an actual request error. That leaves the
     // assembler only whatever headroom styleSuffix does not already spend, plus a safety
@@ -692,7 +788,9 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             // the candid, taken-right-now rules regardless of what image_kind spells out. A
             // date's arrival photo is neither of those - see is_date below.
             is_profile: isProfile ? '1' : '',
-            is_moment: !isProfile && !isDate ? '1' : '',
+            // A spicy photo is posed on purpose and gets its own section (is_spicy); the
+            // "unposed, caught in the moment" rules are for an ordinary chat photo only.
+            is_moment: !isProfile && !isDate && !isSpicy ? '1' : '',
             // Not a photo either of them took: how he actually sees her, right now, in the
             // room - see image_prompt_assembler.md's is_date section for the framing this
             // maps to.
@@ -702,7 +800,10 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
             hides_face: facesCamera ? '' : '1',
             // The one tier that can plausibly reach nudity at all - see "HOW FAR THIS ONE
             // ACTUALLY GOES" in the template for what that does and does not mean.
-            is_spicy: job.kind === 'spicy' ? '1' : '',
+            is_spicy: isSpicy ? '1' : '',
+            // Only her own photos lean on her style's usual photo world (clothing_style
+            // extra.photo_scene) - a date's arrival photo is in the venue, not her room.
+            photo_scene: isDate ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
             mode_seedream: promptStyle === 'seedream' ? '1' : '',
             mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
             z_char_budget: zCharBudget,
@@ -742,7 +843,9 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     const negative =
       promptStyle === 'z_image_turbo'
         ? ''
-        : [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : CANDID_NEGATIVE].filter(Boolean).join(' ');
+        : [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : isSpicy ? SPICY_NEGATIVE : CANDID_NEGATIVE]
+            .filter(Boolean)
+            .join(' ');
     // Forcing her face to match a reference photo is exactly wrong for a shot that is not
     // supposed to show her face at all - it just makes one appear anyway. Skip the
     // reference whenever this shot does not put her face in frame.
@@ -844,6 +947,7 @@ async function freshPhotoIdea(
           content: render('actor_photo_idea', {
             real_name: character.real_name,
             dossier: character.seed.hints.dossier || describeSeed(character.seed),
+            photo_self: photoSelfBlock(character.seed),
             is_spicy: kind === 'spicy' ? '1' : '',
             is_chat: kind === 'chat' ? '1' : '',
           }),
@@ -920,9 +1024,9 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
 
 /** Used only when the Actor left no concrete detail to work from. */
 const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date', string> = {
-  profile: 'a plain, friendly selfie for her profile',
+  profile: 'a flirty mirror selfie in something tight that shows off her figure',
   chat: 'a casual photo of whatever she is doing right now',
-  spicy: 'a suggestive, revealing photo, framed and cropped the way she is comfortable sharing',
+  spicy: 'a mirror selfie in just her underwear, one arm across her chest, taken for him',
   date: 'how she looks as he arrives, whatever she decided to wear tonight',
 };
 

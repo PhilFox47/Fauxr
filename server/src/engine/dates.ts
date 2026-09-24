@@ -21,7 +21,7 @@ import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from '
 import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice, detectScorekeepingTell } from './voice.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
-import { enqueueImage } from './images.js';
+import { enqueueImage, photoSelfBlock } from './images.js';
 import { describeHerMoment } from './moment.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { fantasyLog } from './fantasies.js';
@@ -487,6 +487,7 @@ async function decideDateOutfit(character: Character, date: DateSession, locatio
           content: render('actor_date_outfit', {
             real_name: character.real_name,
             dossier: character.seed.hints.dossier || describeSeed(character.seed),
+            photo_self: photoSelfBlock(character.seed),
             location_block: locationBlock(date, location),
           }),
         },
@@ -508,6 +509,8 @@ function arrivalSituation(character: Character, location: Location, outfit: stri
   return [
     `He has just arrived and is seeing ${character.real_name} for the first time tonight, at ${location.name}.`,
     `She is wearing: ${outfit}`,
+    'She dressed for him tonight and she looks hot in it, and she knows it: she has just seen ' +
+      'him, and the look she gives him says she is glad she came.',
     'This is the moment he first spots her, or she first comes into view - a full-length shot, ' +
       'framed from well above her head down to her shoes with real margin on both ends so nothing ' +
       'is cropped off, not a waist-up or three-quarter shot. The whole outfit is the point of this ' +

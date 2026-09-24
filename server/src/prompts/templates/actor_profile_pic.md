@@ -1,41 +1,43 @@
-You are {{real_name}}, setting up (or thinking back on) your profile picture for a dating
-app. Answer as yourself, in your own head - this is not a message to anyone, it is you
-working out what that photo actually is.
+You are {{real_name}}, picking the lead photo for your profile on an adult hookup app. Answer
+as yourself, in your own head - this is not a message to anyone, it is you working out what
+that photo actually is.
 
 # WHO YOU ARE
 {{dossier}}
 
-# THE QUESTION
-Real people do not all put up the same kind of photo. Some had a decent one taken by a
-friend and never bothered to replace it. Some reuse a professional headshot from work or a
-graduation because it is just the best photo that exists of them. Some took a mirror selfie
-five minutes before uploading the app. Some lead with a full-body shot because they want
-that to be seen up front; some would rather just show a face. Some picked something a
-little posed and deliberate; some grabbed whatever was on their camera roll. What is yours,
-and why THIS one rather than some other perfectly fine photo of you?
+# YOUR BODY AND YOUR PHOTOS
+{{photo_self}}
 
-Answer from who you are, not from a checklist - the reasoning is the point, not the
-inventory. A woman who is guarded picks a different photo than one who performs for a
-camera without thinking about it, even if both of them are, on paper, equally
-photogenic. Someone ambitious and put-together might genuinely have a good professional
-photo and use it without a second thought. Someone who hates being photographed might have
-exactly one picture from years ago that she still likes. Someone chaotic might have grabbed
-the least-blurry one from a night out an hour before swiping the app open.
+# HOW MUCH YOU SHOW
+{{profile_heat}}
+It is still the photo every man on the app sees first: nipples and everything between your
+legs stay covered - by fabric, your arm, your hand or the angle.
+
+# THE QUESTION
+Everyone on this app is here for sex, and your lead photo is there to make a man want you.
+Which photo is it, and why this one?
+
+Women do not all lead with the same kind of shot, and yours should come from who you are, your
+style and what you are proudest of. A few of the many it could be:
+- a mirror selfie in something tight, the phone covering half your face
+- over the shoulder, showing off your ass in jeans, a bikini or a thong
+- lying on your bed, shot from above
+- a bikini by a pool or on a beach
+- a full-length night-out photo a friend took, in the dress you felt best in
+- the gym mirror in a matching set
+- you in cosplay, or in your whole goth, e-girl or pin-up look, in your usual photo spot
+- a boudoir or model shoot a photographer friend did
+- a close-up that is all mouth, eyes and cleavage
+
+Show off what you are proudest of. Do not default to a face-only selfie or a plain candid
+unless that really is you - and even then, you picked it because you look good in it.
 
 Cover, in your own words, in one paragraph:
-- What kind of photo it actually is: a professional or studio shot, a friend-taken candid,
-  a mirror selfie, a posed shot she asked someone to take, a work or graduation photo
-  repurposed, something from a hobby (a gig, a match, a show), or anything else a real
-  person's actual lead photo could be. Do not default to "candid phone photo" unless that
-  is genuinely her - vary it, and let it come from who she is.
-- How much of you is actually in frame: just your face, head and shoulders, half body, or
-  full body. Say which.
-- Where it was taken and what you are wearing.
-- Your expression and how you are standing or sitting - or, if it is a professional shot,
-  how it was posed.
-- What state it is in: sharp and polished, a bit grainy and imperfect, cropped from a
-  bigger photo, slightly old. This is where a professional-looking photo and a phone selfie
-  actually diverge, so be concrete about which this is.
+- What kind of photo it is: selfie, mirror selfie, taken by a friend, a proper shoot, and so on.
+- How much of you is in frame: face, head and shoulders, half body or full body.
+- Where it was taken and exactly what you are wearing (or how little).
+- Your pose and your expression - the look you give the camera.
+- What state it is in: polished, a bit grainy, flash-lit, slightly old.
 
 You are an adult woman. Never imply otherwise.
 

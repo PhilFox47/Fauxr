@@ -2351,7 +2351,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "a pastel bedroom, fluffy blankets, a heart-shaped mirror"
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -2388,7 +2390,8 @@
       "adds": {
         "tattoos": 1.0,
         "piercings": 1.0
-      }
+      },
+      "photo_scene": "a dark bedroom lit by one red lamp, black sheets, a mirror covered in band stickers"
     },
     "enabled": true,
     "rarity": "common"
@@ -2403,7 +2406,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "the gym mirror, a running track, the car after a session"
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -2417,7 +2422,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "a hotel suite, a restaurant bathroom mirror, a balcony at night"
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -2459,7 +2466,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "a flash-heavy mirror selfie, butterfly clips, a flip-phone aesthetic bedroom"
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -5693,7 +5702,8 @@
     "extra": {
       "adds": {
         "tattoos": 1.0
-      }
+      },
+      "photo_scene": "a vintage car, a retro diner booth, a vanity with bulbs"
     },
     "enabled": true
   },
@@ -5708,7 +5718,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "a hotel suite with a fur throw, gold everything, a big mirror"
+    },
     "enabled": true
   },
   {
@@ -7982,7 +7994,8 @@
       "adds": {
         "tattoos": 0.6,
         "piercings": 1.0
-      }
+      },
+      "photo_scene": "a bedroom full of posters and fairy lights, a high-angle selfie with the flash on"
     },
     "enabled": true
   },
@@ -8053,7 +8066,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "the gym mirror, her kitchen after a run, a yoga mat by the window"
+    },
     "enabled": true
   },
   {
@@ -8129,7 +8144,8 @@
       "adds": {
         "tattoos": 0.6,
         "piercings": 0.6
-      }
+      },
+      "photo_scene": "an unmade bed, fairy lights, a cracked mirror, a lot of eyeliner"
     },
     "enabled": true
   },
@@ -8158,7 +8174,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "a club bathroom mirror, a smoking area at 3am, glitter and flash"
+    },
     "enabled": true
   },
   {
@@ -16310,7 +16328,8 @@
       "adds": {
         "tattoos": 0.5,
         "piercings": 0.8
-      }
+      },
+      "photo_scene": "her bedroom lit pink and purple by LED strips, a ring light, a gaming chair and a sticker-covered mirror"
     },
     "enabled": true
   },
@@ -16330,7 +16349,8 @@
         "cosplay": 4.0,
         "cosplayer_professional": 3.0,
         "anime": 2.0
-      }
+      },
+      "photo_scene": "wigs on stands, a ring light and a backdrop she set up herself, or a convention hall"
     },
     "enabled": true
   },
@@ -16352,7 +16372,8 @@
         "twitch_streamer": 3.0,
         "gaming": 2.5,
         "sim_racing": 2.0
-      }
+      },
+      "photo_scene": "her desk setup glowing with RGB, a headset round her neck, a gaming chair she half-sits on"
     },
     "enabled": true
   },
@@ -16373,7 +16394,8 @@
         "anime": 3.0,
         "cosplay": 2.0,
         "comic_artist": 2.0
-      }
+      },
+      "photo_scene": "a room of figures and posters, fairy lights, a ring light and a full-length mirror"
     },
     "enabled": true
   },
@@ -16415,7 +16437,8 @@
       "adds": {
         "tattoos": 1.0,
         "piercings": 1.0
-      }
+      },
+      "photo_scene": "a dim room of candles and black sheets, dried flowers, an old full-length mirror with a tarnished frame"
     },
     "enabled": true
   },
@@ -16454,7 +16477,8 @@
       "adds": {
         "tattoos": 0.6,
         "piercings": 1.0
-      }
+      },
+      "photo_scene": "her bedroom with band posters and fairy lights, a phone-flash mirror selfie"
     },
     "enabled": true
   },
@@ -16503,7 +16527,8 @@
       "adds": {
         "tattoos": 1.4,
         "piercings": 1.2
-      }
+      },
+      "photo_scene": "a tattoo studio chair, a gig bathroom mirror, her flat full of records and plants"
     },
     "enabled": true
   },
@@ -16541,7 +16566,8 @@
       "adds": {
         "tattoos": 0.4,
         "piercings": 0.8
-      }
+      },
+      "photo_scene": "a festival field under UV light, a club bathroom mirror, glitter everywhere"
     },
     "enabled": true
   },
@@ -16556,7 +16582,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "a pastel room full of plushies and lace, a white vanity"
+    },
     "enabled": true
   },
   {
@@ -16594,7 +16622,8 @@
       "adds": {
         "tattoos": 1.2,
         "piercings": 1.2
-      }
+      },
+      "photo_scene": "a graffitied bathroom mirror at a gig, a leather sofa, a flat full of records"
     },
     "enabled": true
   },
@@ -16609,7 +16638,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "a sunny balcony, a beach, a picnic blanket"
+    },
     "enabled": true
   },
   {
@@ -16623,7 +16654,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "white sheets, soft window light, feathers and pearls"
+    },
     "enabled": true
   },
   {
@@ -16657,7 +16690,8 @@
       "adds": {
         "tattoos": 0.6,
         "piercings": 0.6
-      }
+      },
+      "photo_scene": "red light, black lace, candles, a full-length mirror"
     },
     "enabled": true
   },
@@ -16766,7 +16800,8 @@
       "adds": {
         "tattoos": 0.8,
         "piercings": 1.0
-      }
+      },
+      "photo_scene": "a dark room washed in red light, a leather chair, a full-length mirror"
     },
     "enabled": true
   },
@@ -16795,7 +16830,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "photo_scene": "a room of hearts and pink light, a heart-shaped mirror"
+    },
     "enabled": true
   },
   {
@@ -17775,7 +17812,8 @@
         "instagram_influencer": 3.0,
         "esthetician": 2.0,
         "makeup_artist": 2.0
-      }
+      },
+      "photo_scene": "a bathroom vanity with a ring light, a hotel mirror, a car-seat selfie with her nails on the wheel"
     },
     "enabled": true
   },
@@ -17803,7 +17841,8 @@
         "instagram_influencer": 2.5,
         "beauty_therapist": 2.0,
         "fashion": 2.0
-      }
+      },
+      "photo_scene": "everything pink - a fluffy rug, a vanity with bulbs, a pink-lit mirror, a white bed"
     },
     "enabled": true
   },
@@ -17831,7 +17870,8 @@
         "vintage_cars": 2.5,
         "burlesque": 3.0,
         "bartender_cocktail": 2.0
-      }
+      },
+      "photo_scene": "a vintage vanity, a retro armchair, a polka-dot bedspread, a red-lipstick mirror"
     },
     "enabled": true
   },
@@ -17858,7 +17898,8 @@
         "yoga_instructor": 2.0,
         "boxing": 2.0,
         "competitive_powerlifting": 2.0
-      }
+      },
+      "photo_scene": "the gym mirror between sets, a locker room, a car selfie straight after a session"
     },
     "enabled": true
   },

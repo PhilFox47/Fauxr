@@ -60,6 +60,10 @@ photos of the same woman should not either.
 # WHAT THE IMAGE SHOULD BE
 Kind: {{image_kind}}
 Situation: {{situation}}
+{{#photo_scene}}
+Where her photos usually happen: {{photo_scene}}. Draw on it when the situation puts her
+somewhere of her own and leaves the place open; the situation always wins.
+{{/photo_scene}}
 {{#visible_marks}}
 Marks on her body that this stage of things allows you to show: {{visible_marks}}
 
@@ -149,19 +153,19 @@ correction - put the imperfection back in the camera and the room where it belon
 
 # WHAT KIND OF PHOTO THIS ACTUALLY IS
 {{#is_profile}}
-This is her **profile picture** - the one photo she leads with. The situation above is her
-own account of what that photo is and why she picked it, and it already decided the
-register: professional headshot, a friend's candid, a posed mirror selfie, a repurposed work
-photo, whatever she said. Follow it. Do not flatten it into a generic "candid phone photo"
-default - that is exactly the sameness this is here to avoid. A studio headshot should read
-as one: composed light, a clean background, a deliberate pose, no phone-photo grain. A
-selfie should read as a selfie. A friend-taken candid should read unposed and a little
-imperfect. Match the specific photo she described, not a house style.
+This is her **profile picture** on an adult hookup app - the one photo she leads with, chosen
+to make men want her. The situation above is her own account of what that photo is and why
+she picked it, and it already decided the kind of shot: a mirror selfie, an over-the-shoulder
+shot, a bikini by a pool, a night-out photo a friend took, a boudoir shoot, whatever she said.
+Follow it and match its register - a proper shoot reads composed and polished, a selfie reads
+as a selfie, a friend's photo reads a little unposed. Do not flatten it into a generic
+face-only headshot.
 
-Whichever it is, she is an attractive woman being fairly represented. A professional shot
-that is unflattering, or a phone photo where she looks unwell or oddly angled, is not
-"honest", it is just a bad photo - a real dating profile does not lead with one, and neither
-should this. Real is not a license to make her unflattering, whatever the format.
+Whatever it is, she looks hot in it and it shows off her figure the way she meant it to:
+the pose, the angle and the outfit (or how little of one) exactly as she described. Write her
+body with the same care as her face. Lingerie, swimwear, sheer fabric or an arm across a bare
+chest are all fine if that is what she described; her nipples and everything between her legs
+stay covered by fabric, her arm, her hand or the angle.
 {{/is_profile}}
 {{#is_moment}}
 This is a photo from **inside the conversation** - something happening right now, not a
@@ -180,38 +184,41 @@ asymmetries, and keeping them is what makes her look like a person. If you can o
 of those two in the sentence, choose real - a plastic face is the more obvious failure.
 {{/is_moment}}
 {{#is_date}}
-This is **how he actually sees her right now**, in person, at the start of or during a date
-- not a selfie, not a phone photo either of them took, and not a posed studio portrait.
-Frame it the way an unseen bystander standing near them would see this moment: a natural
-social distance, eye-level, a real depth of field that falls off into the actual place
-around her rather than a blank backdrop. She is not looking at a camera and not posing for
-one - she is just being seen, mid-moment, by someone who happens to be there. The venue's
-own light and materials belong in the frame behind or around her.
+This is **how he actually sees her right now**, in person, at the start of the date - not a
+selfie, not a phone photo either of them took, and not a posed studio portrait. Frame it the
+way an unseen bystander standing near them would see this moment: a natural social distance,
+eye-level, a real depth of field that falls off into the actual place around her rather than
+a blank backdrop. The venue's own light and materials belong in the frame behind or around
+her.
 
-She is an attractive woman, genuinely represented, doing whatever the situation says she is
-actually doing right now (arriving, sitting, turning to look at him) rather than holding
-still for a portrait. Real skin, real texture - no studio polish or beauty-filter smoothing,
-but also none of the handheld phone-grain look either, since nobody's phone took this.
+She dressed for him tonight and it shows: the outfit is the one she chose to be taken home
+in, and the shot lingers on her the way his eyes would - her legs, her waist, the neckline,
+how the fabric sits on her. She is caught mid-moment (arriving, turning, spotting him) rather
+than holding still, and the look on her face is for him. Real skin and texture, no studio
+polish or beauty-filter smoothing, and none of the handheld phone-grain look either.
 {{/is_date}}
 {{#is_spicy}}
 
-# HOW FAR THIS ONE ACTUALLY GOES
-This can be the most daring shot in the app, and it should read as genuinely hot and
-explicit - not merely suggestive. Breasts are fine, bare or not. Underwear or lingerie with
-real skin showing, a visibly aroused expression, a hand pressed between her thighs or
-slipped inside the waistband of what she is wearing - if the situation describes something
-like this, render it in that kind of explicit detail rather than softening it into something
-more flattering-but-tame. The one thing this stops short of is full nudity of her genitals,
-whatever the situation implies - get past that one specific point through the angle, the
-crop, or what her own pose happens to cover, not by pulling the rest of the shot back into
-something demure. A close, explicit shot that is only cropped or angled around that one line
-is the target; do not write a softer, more modest version of the situation you were given.
-Decide the actual framing from the situation the same way you would for any other shot.
+# THE SPICY PHOTO
+This is a photo she took of herself to turn him on, and it should read as genuinely hot and
+explicit - not merely suggestive. It is still her own phone photo, in her own room, with real
+skin (texture, pores, small asymmetries, no airbrushing or beauty filter) - but unlike a
+snapshot she posed for it on purpose: the arch of her back, the angle she knows works, the
+look she gives the lens.
 
-Do not write the word for what you are avoiding showing anywhere in this prompt, positive or
-negative - naming it, even to say "no", tends to make the model refuse the request outright
-rather than actually avoiding it, and it reads worse in the output either way. The fix is
-what the shot is of and how it is framed, never a word to exclude.
+Render exactly as much as the situation describes: lingerie or underwear with real skin,
+bare breasts, a bare ass, a fully naked body, a hand inside her underwear, fingers in her
+mouth, bent over, on her knees looking up, spread across the sheets. Describe her body
+frankly and specifically - her skin, her curves, where the light falls on her, and the state
+she is in (flushed skin, parted lips, a heavy-lidded look, hard nipples) - rather than
+softening it into something more modest.
+
+The one area this model renders badly is right between her legs, so that stays out of view
+in every shot: underwear still on there, thighs pressed together, a hand, a sheet, water or
+steam, shot from behind or from the side, or cropped above it. Build that into the pose and
+the framing as part of the picture. Do not write the word for what is being kept out of view
+anywhere in this prompt, positive or negative - naming it, even to say "no", tends to make the
+model refuse the request outright. The fix is what the shot is of and how it is framed.
 {{/is_spicy}}
 
 # NEGATIVE PROMPT

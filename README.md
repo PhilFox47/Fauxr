@@ -514,6 +514,42 @@ her job as well as her interests and her hair and makeup. Goths are about twice 
 text deadpan and be into horror, and 3.6 times as likely to be tattoo artists; e-girls lean
 towards streaming, gym girls towards personal training, baddies towards influencing.
 
+## Photos that fit a hookup app
+
+The photo prompts were written for a generic dating app: her lead photo was asked to be a
+professional headshot, a repurposed work photo or a friend's candid, and every photo prompt
+knew her only from her dossier. Seedream 5.0 Lite handles NSFW well and rarely refuses, so
+they now aim at what Fauxr is.
+
+- **Her body and her photo habits reach every photo prompt.** `photoSelfBlock()` in
+  `images.ts` hands the profile-picture, photo-idea and date-outfit prompts her look, her
+  figure (build, breasts, butt), her style, what she is proudest of, what she wears
+  underneath, her ink and her persona, plus where a woman with her style takes her pictures:
+  a new `extra.photo_scene` on thirty clothing styles (an e-girl's LED-lit room with a ring
+  light, a goth's candles and black sheets, a gym girl's mirror between sets). The assembler
+  gets the scene too, for her own photos.
+- **Profile pictures are a hookup app's lead photo**: mirror selfies in something tight,
+  over-the-shoulder shots, bikinis, night-out photos, boudoir shoots, chosen to show off
+  what she is proudest of. How far hers goes comes from her own seed (`profileHeat()`):
+  about half the cast is bold (lingerie, a bikini, sheer, topless behind an arm), a third
+  flirty (tight, short, low-cut), an eighth teasing. A lead photo keeps nipples and the crotch
+  covered.
+- **Spicy photos are posed on purpose.** They used to share the snapshot rules - "unposed",
+  "no posed styling", and the deliberately unflattering light pool (green strip lights, a
+  pushed sensor) - which pulled the hottest shots back towards accidents. They now have their
+  own assembler section, `SPICY_SUFFIX`/`SPICY_NEGATIVE`, a light pool of what she would
+  actually use (ring light, LED strips, a bedside lamp, a flash in the mirror, blinds) and
+  only mild capture flaws. Anything goes up to full nudity, rendered frankly (flushed skin,
+  parted lips, hard nipples), except the one area Seedream renders badly: right between her
+  legs stays out of view through underwear, thighs, a hand, a sheet, the angle or the crop -
+  still never named in the prompt, since naming it triggers refusals.
+- **Date outfits are chosen to be taken home in**: short, tight, low-cut, sheer, a slit, in
+  her own style and fitted to the venue. The arrival photo lingers on her the way his eyes
+  would, and the look on her face is for him.
+- The Actor's own photo guidance (`actor_chat.md`) and the regenerate-with-a-new-idea prompt
+  follow the same heat ladder: lingerie, topless, fully naked, a hand in her underwear, bent
+  over, on her knees looking up.
+
 ## How a turn works
 
 ```
