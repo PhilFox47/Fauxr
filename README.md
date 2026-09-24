@@ -616,6 +616,27 @@ the chat is her call between square (a close selfie or a detail), 2:3 portrait (
 outfit shot) and 3:2 landscape (a view or a room). The kind wins over whatever aspect a job
 was handed, and the chat placeholder takes the photo's frame before it is opened.
 
+## Handles and bios lead with her look, attitude and sexuality
+
+Handles and bios kept identifying a character by her job or her flat ("nightshiftnurse", "my
+flatmate's cat has opinions"). Both were written from the dossier alone, where job and home are
+the most concrete, easiest-to-quote facts, and the bio prompt's own examples ("my flatmate's
+cat", "i get off work at 11ish") and its framing (a general dating app, "roughly how she spends
+her time", everything sexual kept for after the match) pointed straight at them.
+
+- `profileLeadBlock()` gives both prompts, next to the dossier, a "lead with these" list from
+  her seed - her style, her look, what she is proudest of, her personality and humour, who she
+  is in bed, how she talks dirty, one real kink, why she is on here - and her job and home
+  separately, as background only.
+- The handle prompt steers to her look, vibe or sexuality (an aesthetic, a colour, an
+  attitude, a wink at her kink), and a handle containing a word from her own occupation or
+  living-situation label is re-asked (`lifeWords()`).
+- The bio prompt frames Fauxr as the adult hookup app it is, uses style and sexuality examples,
+  and lets the bio tease one thing about her in bed in her own voice; the full list and her
+  fantasies still wait for the match. Job and home are a passing detail at most.
+- The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
+  her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
+
 ## How a turn works
 
 ```

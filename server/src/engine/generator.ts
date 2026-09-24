@@ -879,6 +879,45 @@ async function rerollName(
 }
 
 /**
+ * What her handle and bio lead with, pulled from her seed and handed to both prompts next to
+ * the dossier. Written from the dossier alone, both kept landing on her job and her flat -
+ * "nightshiftnurse", "my flatmate's cat has opinions" - because those are the most concrete,
+ * easiest-to-quote facts in it, and the prompts' own examples pointed there too. This is an
+ * adult app and the cast is here for sex in their own ways, so her look, her attitude and who
+ * she is in bed come first; her job and home are listed separately, as background.
+ */
+export function profileLeadBlock(seed: CharacterSeed): string {
+  const lab = (cat: string, id: string | undefined) => (id ? find(cat, id)?.label ?? id : '');
+  const both = (cat: string, id: string | undefined) => {
+    const a = id ? find(cat, id) : undefined;
+    return a ? (a.prompt_hint ? `${a.label} - ${a.prompt_hint.replace(/\.\s*$/, '')}` : a.label) : '';
+  };
+  const kink = seed.fetishes?.[0] ? lab('fetish', seed.fetishes[0]) : '';
+  return [
+    'LEAD WITH THESE - her look, her attitude, who she is in bed:',
+    `- her style: ${both('clothing_style', seed.clothing_style)}`,
+    `- her look: ${[lab('hair_color', seed.hair_color), lab('hair_style', seed.hair_style), lab('makeup_style', seed.makeup_style)].filter(Boolean).join(', ').toLowerCase()}`,
+    seed.body_pride ? `- what she is proudest of: ${lab('body_pride', seed.body_pride)}` : '',
+    `- her personality: ${both('archetype', seed.archetype)}; humour: ${lab('humor_type', seed.humor_type).toLowerCase()}`,
+    seed.sexual_persona ? `- in bed: ${both('sexual_persona', seed.sexual_persona)}` : '',
+    seed.dirty_talk ? `- how she talks dirty: ${lab('dirty_talk', seed.dirty_talk)}` : '',
+    kink ? `- one thing she is really into: ${kink}` : '',
+    seed.search_motive ? `- why she is on here: ${both('search_motive', seed.search_motive)}` : '',
+    '',
+    'BACKGROUND ONLY - a passing detail at most, never what it is built around:',
+    `- work: ${lab('occupation', seed.occupation)}; lives: ${lab('living_situation', seed.living_situation)}`,
+  ].filter((l) => l !== '').join('\n');
+}
+
+/** Words from her job and living situation that a handle should not be built from. */
+function lifeWords(seed: CharacterSeed): string[] {
+  const text = [find('occupation', seed.occupation)?.label, find('living_situation', seed.living_situation)?.label, seed.occupation, seed.living_situation]
+    .filter(Boolean).join(' ').toLowerCase();
+  const STOP = new Set(['with', 'alone', 'flat', 'from', 'home', 'working', 'work', 'student', 'general', 'first', 'place', 'their', 'after', 'years', 'shared', 'new', 'her', 'the', 'and']);
+  return [...new Set(text.split(/[^a-z]+/).filter((w) => w.length >= 4 && !STOP.has(w)))];
+}
+
+/**
  * Her handle, written last and by the actor model, against the finished character rather
  * than a half-built one. It used to come out of the coherence pass alongside her name and
  * her stats, which meant it was being invented before there was much of a person for it to
@@ -930,11 +969,15 @@ async function writeUsername(
         '',
         seed.hints.dossier,
         '',
-        'Work out what SHE would have typed into the box: some pick something nobody else could',
-        'decode; some are still using a handle they made at sixteen; some use a word they like, a',
-        'mangled surname that is not actually hers, an inside joke, a place, a number that means',
-        'something to them. A guarded woman and a loud one do not pick the same kind of handle.',
-        'There is no house style to match and nothing has to be clever.',
+        profileLeadBlock(seed),
+        '',
+        'Work out what SHE would have typed into the box. On an app like this most women build it',
+        'from their look, their vibe or what they are like in bed: her style or aesthetic, a colour',
+        'or a thing she always wears, an attitude, a wink at her kink or her persona, a nickname',
+        'someone gave her, a word she likes, a number that means something to her. A goth, a brat',
+        'and a quiet domme do not pick the same kind of handle. Not her job, her city, her flat or',
+        'her flatmates - that is her day, not what she is on here for. There is no house style to',
+        'match and nothing has to be clever.',
         '',
         'One thing every one of them has in common: a dating-app handle is anonymous by design,',
         'and hers is not the exception. Whoever she is, this cannot be a version of her actual name.',
@@ -1001,6 +1044,18 @@ async function writeUsername(
         correction =
           `"${cleaned}" hints at what she actually is, which she keeps hidden day to day - pick ` +
           `something with no connection to that at all. Same JSON, nothing else.`;
+        continue;
+      }
+
+      // Only the most concrete facts in a dossier are her job and her home, and left alone the
+      // model builds handles out of them. Checked against her own occupation and living
+      // situation labels, so "nightnurse" is caught for a nurse and fine for nobody.
+      const lifeWord = lifeWords(seed).find((w) => cleaned.includes(w));
+      if (lifeWord && attempt < 2) {
+        logger.warn('generator', 'handle built from her job or home, re-asking', { cleaned, lifeWord });
+        correction =
+          `"${cleaned}" is built from her job or where she lives ("${lifeWord}"). Pick one from her look, ` +
+          `her vibe or who she is in bed instead. Same JSON, nothing else.`;
         continue;
       }
 
@@ -1393,6 +1448,7 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
     // an actual person rather than a spec sheet, which is what let two women who rolled
     // three of the same tags come out with suspiciously similar bios.
     seed_block: character.seed.hints.dossier,
+    lead_block: profileLeadBlock(character.seed),
     // Same reasoning as the handles: the whole list still decides the clash, but showing
     // thirty bios spends a thousand tokens teaching the model exactly what to sound like.
     avoid_bios: existing.length

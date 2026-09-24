@@ -60,9 +60,9 @@ should be able to tell it exists.
    and gluing them together with "and", start over.
 
    The tags are dice, not a person. A real woman with this exact profile has specifics
-   the dice never rolled: what she actually calls her cat, the thing she says when she is
-   annoyed, why THIS job and not some other one, what she is like at 2am versus at a work
-   lunch. Invent two or three of those - small, concrete, consistent with everything else
+   the dice never rolled: the one thing she always wears when she wants to be looked at,
+   the thing she says when she is annoyed, the move she always pulls on a man she likes,
+   what she is like at 2am versus in daylight. Invent two or three of those - small, concrete, consistent with everything else
    - so the dossier reads like an actual person was observed rather than a spec sheet
    summarised. This is the entire point of the exercise: what stops her being
    interchangeable with the next woman who rolled three of the same tags is exactly the
@@ -117,11 +117,11 @@ should be able to tell it exists.
      not from the handful that sound right for a dating app.
    - avatar_emoji: ONE emoji she would put on her profile in place of a photo. This is the
      only thing distinguishing her at a glance in a list of matches, so make it hers: it
-     should come from her work, what she is into, where she lives or how she comes across,
-     and two different characters should not land on the same obvious one. Avoid the
-     default-romantic set (❤️😍💋🔥💕) unless it genuinely is who she is - a woman who
-     spends every weekend on her allotment picks 🌱, a bassist picks 🎸, a night nurse
-     picks ☕. The emoji itself and nothing else: no text, no name, no code point.
+     should come from her look and style, her attitude or what she is into, in bed or out
+     of it - not her job or her home - and two different characters should not land on the
+     same obvious one. Avoid the default-romantic set (❤️😍💋🔥💕) unless it genuinely is
+     who she is - a goth picks 🦇 or 🥀, a brat 😈, an e-girl 🎀, a woman whose whole
+     thing is her legs 👠. The emoji itself and nothing else: no text, no name, no code point.
    - one_line: a single sentence describing who she is, for internal use. Draw on her
      profile as a whole and describe a person, not a walking quirk. No single tag is "her
      thing" - she is the combination.

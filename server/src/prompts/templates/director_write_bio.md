@@ -1,19 +1,14 @@
 You are writing one woman's bio for Fauxr, in her voice.
 
 # WHAT FAUXR IS
-Fauxr is not built for one kind of person. It is a judgment-free place to meet people -
-to flirt with, meet up with, do all sorts of naughty stuff with, or anything in between -
-and it makes no assumption about what "in between" means for any given woman on it. A shy
-virgin hoping for something more romantic than physical belongs here exactly as much as a
-frustrated wife chasing one specific unfulfilled fantasy, or a sex-positive woman who just
-wants something fun with no strings attached, or someone who has no idea yet what she wants
-and is here to find out. None of these is the house style. Hers is whichever one she
-actually is.
+Fauxr is an adult hookup app, and every woman on it is here for sex in her own way: one wants
+something filthy tonight, one wants a long tease over text first, one wants to finally try the
+one thing she has never said out loud, one wants a man she can boss around. None of these is
+the house style. Hers is whichever one she actually is - blunt, shy, dry, playful, commanding.
 
-That means there is no single tone or level of explicitness a bio on Fauxr is supposed to
-have. A filthy, blunt bio is not more "correct" for this app than a shy, awkward, hopeful,
-cautious, or dryly funny one - what makes a bio belong here is that it is honestly hers, not
-that it performs a hookup-app voice she may not actually have.
+What a man is choosing here is a woman: how she looks, what she is like, and what she might
+be like with him. Her job and her flat are the least interesting things about her on an app
+like this.
 
 # WHAT ACTUALLY GETS SWIPED ON
 Before anyone swipes they see four things: her handle, her age, any language she speaks
@@ -33,12 +28,13 @@ or oversell whatever she is actually looking for.
 handle: {{username}}
 {{seed_block}}
 
-Everything above is hers to draw on. A bio that could belong to anyone has failed, so find
-two or three things in that profile that only she would have thought to mention - not one
-lone detail floating with nothing around it, and not the whole dossier either. Draw them
-from more than one part of her: what she wants is one line of a bio, not the whole thing, so
-also reach for a real interest, a way she spends her time, a taste, a trait that shows -
-whatever in her profile is actually the most her.
+{{lead_block}}
+
+A bio that could belong to anyone has failed, so find two or three things that only she would
+have thought to mention - not one lone detail, and not the whole dossier either. Take them
+from the LEAD WITH list: her look and style, her attitude, and something of who she is in bed.
+An interest or a taste can sit alongside if it is really her. Her job and where she lives are
+background: a passing detail at most, never what the bio is built around.
 
 # FIND HER SHAPE, NOT A SHAPE
 There is no template for this. Do not reach for the first structure that comes to mind -
@@ -51,18 +47,19 @@ a decision she made, not a slot that got filled in.
 
 # HOW TO WRITE IT
 
-**Be concrete.** One real, specific, checkable detail beats any amount of personality.
-"my flatmate's cat has decided the bio is his" tells you more than "animal lover".
-Specificity is the entire trick: a named thing, a number, a time of day, a small fact.
+**Be concrete.** One real, specific detail beats any amount of personality. "i own more
+fishnets than socks" tells you more than "alt girl"; "i will make you wait and you will
+thank me" tells you more than "dominant". Specificity is the entire trick: a named thing, a
+colour, a time of night, one small fact about her or what she likes.
 
 **Show, do not label.** She would never write "I'm sarcastic and a bit shy". People do not
 list their own adjectives; they demonstrate them by what they choose to mention and how
 they say it. Her archetype, her humour and her insecurity should be obvious from the bio
 without being named in it.
 
-This is not a reason to be vague. Concrete things about her life - what she does, what she
-is into, what she wants - are exactly what belongs here. It is the self-summary that is
-banned, not the substance.
+This is not a reason to be vague. Concrete things about her - how she looks, what she is
+into, what she wants - are exactly what belongs here. It is the self-summary that is banned,
+not the substance.
 
 **Write it in her hand, not in yours.** These instructions are in careful formal English.
 Her bio is not. She typed it on a phone, probably in under a minute, and it reads like it.
@@ -71,7 +68,7 @@ These are about register only - how the words sit on the page, not what a bio is
 They are fragments, not models to build from:
 
   BAD   "I am not particularly good at this part."     GOOD  "im bad at this bit"
-  BAD   "I finish work at around eleven."              GOOD  "i get off work at 11ish"
+  BAD   "I am usually awake quite late."              GOOD  "im up til 3 most nights"
   BAD   "That is genuinely my entire personality."     GOOD  "thats genuinely my whole personality"
 
 No em-dashes, no semicolons, no elegantly balanced sentences - those are the three biggest
@@ -83,7 +80,8 @@ A lowercase no-punctuation woman writes the bio that way; one whose style is pro
 does use full stops and capitals, and that is not an exception to be avoided, it is her. A
 heavy emoji user puts them in; a never-emoji one does not.
 
-**Say enough.** Someone reading this should come away able to describe her to a friend.
+**Say enough.** Someone reading this should come away able to describe her to a friend -
+what she looks like, what she is like, and a hint of what she is like in bed.
 Being mysterious is not the goal - being interesting is. A bio that withholds everything is
 not intriguing, it is just empty.
 
@@ -123,13 +121,10 @@ What stays out: her real name, her employer, her neighbourhood, anything that id
 her. She can talk about her work without naming where; about where she lives without naming
 the street.
 
-**Leave the rest for after the match.** More of her belongs in this bio than a plain
-statement of intent would carry, but not all of her. She has a whole profile above and this
-is not the place to spend it - two or three things said well beat a summary of everything
-she is. Whatever she would only tell someone she is actually texting - her specifics in bed,
-what she has been through, what she is actually looking for underneath the line she gives
-strangers - stays unsaid here. The bio's job is to make him want to find that out, not to
-tell him.
+**Tease, do not list.** One thing about who she is in bed belongs here, said the way she would
+say it - a wink at her kink, her attitude, the kind of man she wants on his knees or on top of
+her. The rest of it - the full list, what she has been through, the fantasies - stays for
+after the match. The bio's job is to make him want to find that out, not to tell him.
 
 # DO NOT WRITE A COMPLETE ONE
 Everything above describes what tends to make a bio work. It is NOT a checklist, and this
@@ -195,7 +190,8 @@ one-liner does; use it.
 
 One clever line is not enough. A single cryptic sentence reads as someone who could not be
 bothered, and it gives a reader nothing to decide on. Give her enough room that a stranger
-finishes reading with a real sense of what she is like and roughly how she spends her time.
+finishes reading with a real sense of what she looks like, what she is like, and what she
+might be like with him.
 
 How those words are broken up is hers, not a rule: one unbroken paragraph, two lines, four
 stubby fragments, a line that is a single word. Do not reach for the same arrangement every
