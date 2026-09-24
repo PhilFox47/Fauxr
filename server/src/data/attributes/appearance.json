@@ -16691,7 +16691,8 @@
         "tattoos": 0.6,
         "piercings": 0.6
       },
-      "photo_scene": "red light, black lace, candles, a full-length mirror"
+      "photo_scene": "red light, black lace, candles, a full-length mirror",
+      "photo_boldness": 0.5
     },
     "enabled": true
   },
@@ -16801,7 +16802,8 @@
         "tattoos": 0.8,
         "piercings": 1.0
       },
-      "photo_scene": "a dark room washed in red light, a leather chair, a full-length mirror"
+      "photo_scene": "a dark room washed in red light, a leather chair, a full-length mirror",
+      "photo_boldness": 1.0
     },
     "enabled": true
   },
@@ -17813,7 +17815,8 @@
         "esthetician": 2.0,
         "makeup_artist": 2.0
       },
-      "photo_scene": "a bathroom vanity with a ring light, a hotel mirror, a car-seat selfie with her nails on the wheel"
+      "photo_scene": "a bathroom vanity with a ring light, a hotel mirror, a car-seat selfie with her nails on the wheel",
+      "photo_boldness": 0.5
     },
     "enabled": true
   },
@@ -17842,7 +17845,8 @@
         "beauty_therapist": 2.0,
         "fashion": 2.0
       },
-      "photo_scene": "everything pink - a fluffy rug, a vanity with bulbs, a pink-lit mirror, a white bed"
+      "photo_scene": "everything pink - a fluffy rug, a vanity with bulbs, a pink-lit mirror, a white bed",
+      "photo_boldness": 1.0
     },
     "enabled": true
   },

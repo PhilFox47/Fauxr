@@ -113,7 +113,8 @@
         ]
       },
       "photo": "small closed-mouth smile, eyes slightly off-camera, shoulders drawn in a little, arm across her body, photo taken at slight distance",
-      "pace": 0.6
+      "pace": 0.6,
+      "photo_boldness": -1.5
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -224,7 +225,8 @@
         ]
       },
       "photo": "direct eye contact, easy open smile, relaxed square shoulders, chin level, arm-length selfie held high and steady",
-      "pace": 1.3
+      "pace": 1.3,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -546,7 +548,8 @@
         ]
       },
       "photo": "neutral closed expression, level appraising gaze, chin slightly down, body angled away from the lens",
-      "pace": 0.65
+      "pace": 0.65,
+      "photo_boldness": -1.0
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -657,7 +660,8 @@
         ]
       },
       "photo": "caught mid-laugh, eyes half shut, hair a bit everywhere, crooked framing, motion blur on one hand",
-      "pace": 1.4
+      "pace": 1.4,
+      "photo_boldness": 0.5
     },
     "enabled": true,
     "rarity": "common"
@@ -875,7 +879,8 @@
         ]
       },
       "photo": "chin lowered eyes up at the lens, knowing half-smile, hand near jaw or collarbone, close crop",
-      "pace": 1.4
+      "pace": 1.4,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -981,7 +986,8 @@
           1
         ]
       },
-      "photo": "open honest expression, full unguarded smile, looking directly at the camera, plain natural posture"
+      "photo": "open honest expression, full unguarded smile, looking directly at the camera, plain natural posture",
+      "photo_boldness": -0.5
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -1760,7 +1766,8 @@
         ]
       },
       "photo": "completely straight face, unblinking direct stare, very still, tight centred crop",
-      "pace": 1.3
+      "pace": 1.3,
+      "photo_boldness": 0.5
     },
     "enabled": true
   },
@@ -1863,7 +1870,8 @@
         ]
       },
       "photo": "slightly anxious half-smile, eyes searching the lens, hand fidgeting near her sleeve, several near-identical attempts energy",
-      "pace": 0.75
+      "pace": 0.75,
+      "photo_boldness": -0.5
     },
     "enabled": true
   },
@@ -1968,7 +1976,8 @@
         ]
       },
       "photo": "wicked grin, mischief in the eyes, leaning into the lens, slightly too close to the camera",
-      "pace": 1.4
+      "pace": 1.4,
+      "photo_boldness": 0.5
     },
     "enabled": true
   },
@@ -2277,7 +2286,8 @@
           3
         ]
       },
-      "photo": "big expressive grin, chin up, arm out, clearly aware of the camera and enjoying it"
+      "photo": "big expressive grin, chin up, arm out, clearly aware of the camera and enjoying it",
+      "photo_boldness": 1.0
     },
     "enabled": true
   },
@@ -2381,7 +2391,8 @@
         ]
       },
       "photo": "small private smile, indoors, soft lamp light, cosy layers, photo obviously taken alone at home",
-      "pace": 0.65
+      "pace": 0.65,
+      "photo_boldness": -1.0
     },
     "enabled": true
   },
@@ -2794,7 +2805,8 @@
         ]
       },
       "photo": "challenging direct stare, slow deliberate smirk, eyebrow up, leaning back as if daring the viewer",
-      "pace": 1.5
+      "pace": 1.5,
+      "photo_boldness": 1.5
     },
     "enabled": true
   },
@@ -2898,7 +2910,8 @@
         ]
       },
       "photo": "quiet unreadable expression, calm level gaze, very composed stillness, plain understated setting",
-      "pace": 0.65
+      "pace": 0.65,
+      "photo_boldness": -0.5
     },
     "enabled": true
   },
@@ -3473,7 +3486,8 @@
           0
         ]
       },
-      "photo": "warm accommodating smile, slightly anticipatory, leaning a little toward the camera"
+      "photo": "warm accommodating smile, slightly anticipatory, leaning a little toward the camera",
+      "photo_boldness": -0.5
     },
     "enabled": true
   },
@@ -5186,7 +5200,8 @@
         ]
       },
       "photo": "lazy confident half-smile, sunglasses pushed up or hanging off one hand, deliberately unposed",
-      "pace": 0.75
+      "pace": 0.75,
+      "photo_boldness": 0.5
     },
     "enabled": true
   },
@@ -5286,7 +5301,8 @@
         ]
       },
       "photo": "sudden delighted grin, caught mid-motion, hair not cooperating",
-      "pace": 1.4
+      "pace": 1.4,
+      "photo_boldness": 0.5
     },
     "enabled": true
   },
@@ -5386,7 +5402,8 @@
         ]
       },
       "photo": "slightly uncertain smile, eyes searching the lens a little, hands visible and a touch restless",
-      "pace": 0.75
+      "pace": 0.75,
+      "photo_boldness": -1.0
     },
     "enabled": true
   },
@@ -5789,7 +5806,8 @@
         ]
       },
       "photo": "calm settled expression, slight knowing smile, unhurried stillness",
-      "pace": 0.75
+      "pace": 0.75,
+      "photo_boldness": -0.5
     },
     "enabled": true
   },
@@ -5995,7 +6013,8 @@
         ]
       },
       "photo": "wide social smile, clearly mid-conversation, lively energy",
-      "pace": 1.3
+      "pace": 1.3,
+      "photo_boldness": 0.5
     },
     "enabled": true
   },
@@ -6396,7 +6415,8 @@
         ]
       },
       "photo": "exhilarated grin, windblown, eyes wide and alive",
-      "pace": 1.5
+      "pace": 1.5,
+      "photo_boldness": 0.5
     },
     "enabled": true
   },
@@ -6496,7 +6516,8 @@
         ]
       },
       "photo": "careful controlled smile, slight tension around the eyes",
-      "pace": 0.7
+      "pace": 0.7,
+      "photo_boldness": -0.5
     },
     "enabled": true
   },
@@ -6598,7 +6619,8 @@
         ]
       },
       "photo": "performed confident smile, chin up, very aware of the camera",
-      "pace": 1.3
+      "pace": 1.3,
+      "photo_boldness": 1.5
     },
     "enabled": true
   },

@@ -545,6 +545,22 @@ they now aim at what Fauxr is.
     from under her lashes.
   At every level the area between her legs stays out of view, since that is what Seedream
   renders badly.
+
+  The level and the photo's attitude follow who she is, so they never contradict her:
+  - `profileLevel()` scores her confidence and how far she goes plus `extra.photo_boldness`
+    on her persona, archetype and style (an exhibitionist or a domme +1.5 to +2, a romantic
+    -1, a shy archetype -1.5). Then three rules: a dominant woman (dom/sub >= 2), a show-off
+    persona or a bold archetype never leads coy; a shy woman with a soft persona never leads
+    topless; and a persona can set a floor (`extra.photo_level_min`) - "shy but filthy" came
+    out teasing four times in five on her shyness alone, and her whole point is showing more
+    than she seems to. Over 4000 characters: commanding dommes 94% bold and never teasing,
+    exhibitionists 99% bold, romantic lovers mostly teasing.
+  - `photoManner()` sets where the camera sits and what she does with it, in every photo
+    prompt (profile, photo idea, date outfit): a dominant woman has the camera low and looks
+    down into it, standing over it or sitting back with her legs apart, never kneeling; a
+    submissive one has it above her, kneeling or lying back and looking up. A camera-shy
+    archetype keeps a glance away even when she shows a lot; a show-off holds the lens. The
+    level lists used to say "kneeling on the bed" and "a shy smile" to everyone.
 - **Spicy photos are posed on purpose.** They used to share the snapshot rules - "unposed",
   "no posed styling", and the deliberately unflattering light pool (green strip lights, a
   pushed sensor) - which pulled the hottest shots back towards accidents. They now have their

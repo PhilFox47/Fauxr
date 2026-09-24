@@ -5385,7 +5385,8 @@
       },
       "pace": 1.2,
       "initiative": 0.15,
-      "freak_shift": 0.6
+      "freak_shift": 0.6,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -5442,7 +5443,8 @@
       },
       "pace": 1.2,
       "initiative": 0.15,
-      "freak_shift": 0.3
+      "freak_shift": 0.3,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -5549,7 +5551,8 @@
         "commanding": 2.0
       },
       "pace": 1.1,
-      "freak_shift": 0.5
+      "freak_shift": 0.5,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -5606,7 +5609,8 @@
         "shoulder_biting": 3.0
       },
       "pace": 1.2,
-      "freak_shift": 1.0
+      "freak_shift": 1.0,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -5658,7 +5662,8 @@
         "marking": 4.0
       },
       "pace": 1.2,
-      "freak_shift": 0.3
+      "freak_shift": 0.3,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -5709,7 +5714,8 @@
         "pinning_him": 3.0
       },
       "pace": 1.2,
-      "freak_shift": 1.0
+      "freak_shift": 1.0,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -5764,7 +5770,8 @@
         "a_man_on_his_knees": 2.0
       },
       "pace": 1.0,
-      "freak_shift": 0.5
+      "freak_shift": 0.5,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -5818,7 +5825,8 @@
         "commanding": 4.0
       },
       "pace": 1.0,
-      "freak_shift": 1.5
+      "freak_shift": 1.5,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -5872,7 +5880,8 @@
       },
       "pace": 1.0,
       "initiative": 0.1,
-      "freak_shift": 0.4
+      "freak_shift": 0.4,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -6069,7 +6078,8 @@
         "poetic": 3.0,
         "long_foreplay": 3.0
       },
-      "pace": 0.7
+      "pace": 0.7,
+      "photo_boldness": -1.0
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -6116,7 +6126,8 @@
         "whispering_during": 3.0,
         "eye_contact": 3.0
       },
-      "pace": 0.9
+      "pace": 0.9,
+      "photo_boldness": -1.0
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -6168,7 +6179,8 @@
       },
       "pace": 1.3,
       "initiative": 0.1,
-      "freak_shift": 0.4
+      "freak_shift": 0.4,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -6216,7 +6228,8 @@
       },
       "pace": 1.6,
       "initiative": 0.25,
-      "freak_shift": 0.5
+      "freak_shift": 0.5,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -6265,7 +6278,8 @@
       "pace": 0.6,
       "kink_bias": {
         "sensation": 1.5
-      }
+      },
+      "photo_boldness": -0.5
     },
     "enabled": true,
     "rarity": "rare"
@@ -6581,7 +6595,8 @@
         "costume_lingerie": 4.0
       },
       "pace": 1.0,
-      "freak_shift": 0.4
+      "freak_shift": 0.4,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -6632,7 +6647,8 @@
         "being_pinned": 3.0,
         "storyteller_voice": 3.0
       },
-      "pace": 0.9
+      "pace": 0.9,
+      "photo_boldness": -0.5
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -6694,7 +6710,8 @@
         "lingerie_to_bed": 3.0
       },
       "pace": 1.1,
-      "initiative": 0.15
+      "initiative": 0.15,
+      "photo_boldness": 2.0
     },
     "enabled": true,
     "rarity": "common"
@@ -6757,7 +6774,8 @@
       },
       "pace": 1.3,
       "initiative": 0.2,
-      "freak_shift": 0.6
+      "freak_shift": 0.6,
+      "photo_boldness": 2.0
     },
     "enabled": true,
     "rarity": "common"
@@ -6811,7 +6829,8 @@
       },
       "pace": 1.3,
       "initiative": 0.2,
-      "freak_shift": 0.6
+      "freak_shift": 0.6,
+      "photo_boldness": 2.0
     },
     "enabled": true,
     "rarity": "common"
@@ -7011,7 +7030,8 @@
         "nail_dragging": 3.0
       },
       "pace": 1.3,
-      "freak_shift": 0.8
+      "freak_shift": 0.8,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -7427,7 +7447,8 @@
         "wrestling": 4.0
       },
       "pace": 1.3,
-      "freak_shift": 0.3
+      "freak_shift": 0.3,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -7528,7 +7549,8 @@
         "finger_sucking": 3.0
       },
       "pace": 1.2,
-      "freak_shift": 1.0
+      "freak_shift": 1.0,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -7733,7 +7755,8 @@
       },
       "pace": 1.2,
       "initiative": 0.2,
-      "freak_shift": 0.4
+      "freak_shift": 0.4,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -7887,7 +7910,8 @@
         "degrading": 4.0
       },
       "pace": 1.1,
-      "freak_shift": 1.2
+      "freak_shift": 1.2,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -7989,7 +8013,8 @@
         "being_praised": 3.0
       },
       "pace": 1.0,
-      "freak_shift": 1.0
+      "freak_shift": 1.0,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8197,7 +8222,8 @@
         "sweet_filthy": 3.0
       },
       "pace": 0.8,
-      "freak_shift": 0.3
+      "freak_shift": 0.3,
+      "photo_level_min": "flirty"
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8246,7 +8272,8 @@
         "being_dominated": 3.0
       },
       "pace": 1.3,
-      "freak_shift": 1.2
+      "freak_shift": 1.2,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8396,7 +8423,9 @@
         "lowercase_texty": 2.0,
         "breathy_minimal": 2.0
       },
-      "pace": 0.6
+      "pace": 0.6,
+      "photo_boldness": 1.0,
+      "photo_level_min": "flirty"
     },
     "enabled": true,
     "rarity": "common"
@@ -8444,7 +8473,8 @@
         "inexperienced_eager": 6.0
       },
       "pace": 0.8,
-      "freak_shift": -0.3
+      "freak_shift": -0.3,
+      "photo_boldness": -1.0
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8491,7 +8521,9 @@
       },
       "pace": 1.3,
       "initiative": 0.1,
-      "freak_shift": 0.4
+      "freak_shift": 0.4,
+      "photo_boldness": 0.5,
+      "photo_level_min": "flirty"
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8539,7 +8571,8 @@
         "experienced": 2.0
       },
       "pace": 1.2,
-      "freak_shift": 0.8
+      "freak_shift": 0.8,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -8733,7 +8766,8 @@
         "slow_undressing": 3.0,
         "quiet_actions": 4.0
       },
-      "pace": 0.6
+      "pace": 0.6,
+      "photo_boldness": -0.5
     },
     "enabled": true,
     "rarity": "common"
@@ -8778,7 +8812,8 @@
         "describing_what_she_wants": 3.0,
         "deadpan": 6.0
       },
-      "pace": 1.0
+      "pace": 1.0,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -8824,7 +8859,8 @@
         "woken_with_kisses": 3.0,
         "giggly_filthy": 5.0
       },
-      "pace": 1.1
+      "pace": 1.1,
+      "photo_boldness": -0.5
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9021,7 +9057,8 @@
         "filthy_texts": 3.0
       },
       "pace": 1.4,
-      "initiative": 0.25
+      "initiative": 0.25,
+      "photo_boldness": 2.0
     },
     "enabled": true,
     "rarity": "common"
@@ -9068,7 +9105,8 @@
       },
       "pace": 1.3,
       "initiative": 0.2,
-      "freak_shift": 0.6
+      "freak_shift": 0.6,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -9217,7 +9255,8 @@
         "back_scratching": 3.0,
         "crude_blunt": 3.0
       },
-      "pace": 1.2
+      "pace": 1.2,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -9306,7 +9345,8 @@
         "deep_kissing": 3.0,
         "focusing_on_afterglow": 3.0
       },
-      "pace": 0.7
+      "pace": 0.7,
+      "photo_boldness": -1.0
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9406,7 +9446,8 @@
         "lap_grinding": 4.0,
         "dressed_sex": 2.0
       },
-      "pace": 0.8
+      "pace": 0.8,
+      "photo_boldness": -0.5
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9563,7 +9604,8 @@
         "band_tee": 2.0
       },
       "pace": 1.1,
-      "freak_shift": 0.8
+      "freak_shift": 0.8,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -9619,7 +9661,8 @@
         "leather_straps": 3.0
       },
       "pace": 1.1,
-      "freak_shift": 0.8
+      "freak_shift": 0.8,
+      "photo_boldness": 1.5
     },
     "enabled": true,
     "rarity": "common"
@@ -9669,7 +9712,8 @@
         "doctor_patient_roleplay": 3.0
       },
       "pace": 1.0,
-      "freak_shift": 0.3
+      "freak_shift": 0.3,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -9715,7 +9759,8 @@
         "deep_kissing": 3.0,
         "being_carried": 3.0
       },
-      "pace": 1.1
+      "pace": 1.1,
+      "photo_boldness": -1.0
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9912,7 +9957,8 @@
       },
       "pace": 1.1,
       "initiative": 0.15,
-      "freak_shift": 0.8
+      "freak_shift": 0.8,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -9962,7 +10008,8 @@
         "pinning_him": 3.0
       },
       "pace": 1.1,
-      "freak_shift": 0.5
+      "freak_shift": 0.5,
+      "photo_boldness": 1.0
     },
     "enabled": true,
     "rarity": "common"
@@ -10059,7 +10106,8 @@
       "initiative": 0.15,
       "kink_bias": {
         "tease_denial": 2.0
-      }
+      },
+      "photo_boldness": -0.5
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -10106,7 +10154,8 @@
         "confessional": 5.0,
         "whispered_secrets": 3.0
       },
-      "pace": 1.0
+      "pace": 1.0,
+      "photo_boldness": -0.5
     },
     "enabled": true,
     "rarity": "uncommon"

@@ -598,7 +598,7 @@ const PROFILE_LEVELS: Record<'bold' | 'flirty' | 'teasing', { name: string; show
     name: 'Bold',
     shows: 'Topless is fine - bare breasts, or lingerie, a thong, a bikini, wet or see-through fabric.',
     about: 'Openly about your body and sex: lying across your bed, the bathroom mirror, the shower doorway, a hotel bed, your usual photo spot with the lights set up for it.',
-    pose: 'Posed to show it off: back arched, ass to the camera over your shoulder, lying back with your arms above your head, kneeling on the bed, leaning into the mirror, a hand on your own body.',
+    pose: 'Posed to show it off: back arched, ass to the camera over your shoulder, stretched across the sheets, leaning into the mirror, a hand on your own body.',
     look: 'Straight into the lens - a bitten or parted lip, heavy-lidded eyes. You know exactly what this photo does.',
   },
   flirty: {
@@ -613,19 +613,47 @@ const PROFILE_LEVELS: Record<'bold' | 'flirty' | 'teasing', { name: string; show
     shows: 'Mostly covered - the point is what peeks out: a bare shoulder, a slipping strap, an oversized shirt and bare legs, a glimpse of lace.',
     about: 'An everyday moment with an edge: in bed in the morning, curled up on the sofa, a close-up of your face, a mirror half fogged up.',
     pose: 'Half hidden: looking back over a shoulder, legs tucked up, a hand in your hair or partly over your face, the camera close.',
-    look: 'A shy smile, a look up from under your lashes - it suggests more than it shows.',
+    look: 'A look that suggests more than it shows - shy from under your lashes, or knowing and patient, whichever you are.',
   },
 };
 
+const boldnessOf = (category: string, id: string | undefined) =>
+  Number((id ? find(category, id)?.extra?.photo_boldness : 0) ?? 0);
+
+/**
+ * Which level her lead photo is, from who she is: confidence and how far she goes, plus how
+ * her persona, archetype and style lean a photo (extra.photo_boldness). Driven by the first
+ * two alone it was right on average and still free to hand a commanding domme a shy teasing
+ * photo, so the persona and archetype count directly, and three combinations that would
+ * contradict her outright are ruled out whatever the score says.
+ */
+export function profileLevel(seed: CharacterSeed): 'bold' | 'flirty' | 'teasing' {
+  const persona = boldnessOf('sexual_persona', seed.sexual_persona);
+  const archetype = boldnessOf('archetype', seed.archetype);
+  const score =
+    ((seed.sexual_confidence ?? 3) - 3) * 0.8 + ((seed.freak ?? 3) - 3.5) * 0.6 +
+    persona + archetype + boldnessOf('clothing_style', seed.clothing_style);
+  let level: 'bold' | 'flirty' | 'teasing' = score >= BOLD_FROM ? 'bold' : score <= TEASING_UP_TO ? 'teasing' : 'flirty';
+  // A woman who is in charge, or whose whole thing is being looked at, does not lead coy.
+  const neverCoy = (seed.dom_sub_leaning ?? 0) >= 2 || persona >= 1.5 || archetype >= 1;
+  if (level === 'teasing' && neverCoy) level = 'flirty';
+  // A genuinely shy woman with a soft persona does not lead topless. A shy one with a filthy
+  // persona can - that contrast is the point of her - and her manner keeps it shy.
+  if (level === 'bold' && archetype <= -1 && persona <= 0) level = 'flirty';
+  // Some personas are exactly the contrast between a shy surface and what she shows ("shy but
+  // filthy"): scored on her shyness alone she came out teasing four times in five. The floor
+  // lives on the persona row (extra.photo_level_min); her manner keeps the photo shy.
+  const floor = find('sexual_persona', seed.sexual_persona)?.extra?.photo_level_min;
+  if (floor === 'flirty' && level === 'teasing') level = 'flirty';
+  if (floor === 'bold') level = 'bold';
+  return level;
+}
+// Measured on the current cast: about half bold, a third flirty, an eighth teasing.
+const BOLD_FROM = 2.5;
+const TEASING_UP_TO = 0.3;
+
 export function profileHeat(seed: CharacterSeed): string {
-  // Thresholds measured on the current cast, which runs hot: about half bold, a third flirty,
-  // an eighth teasing. At freak >= 3.5 nearly three quarters came out bold, which is a house
-  // style again rather than a spread.
-  const level =
-    (seed.sexual_confidence ?? 3) >= 4 && (seed.freak ?? 0) >= 4.5 ? 'bold'
-    : (seed.sexual_confidence ?? 3) <= 3 && (seed.freak ?? 0) < 4 ? 'teasing'
-    : 'flirty';
-  const l = PROFILE_LEVELS[level];
+  const l = PROFILE_LEVELS[profileLevel(seed)];
   return [
     `${l.name}.`,
     `- What you show: ${l.shows}`,
@@ -633,6 +661,29 @@ export function profileHeat(seed: CharacterSeed): string {
     `- How you pose: ${l.pose}`,
     `- Your look: ${l.look}`,
   ].join('\n');
+}
+
+/**
+ * The attitude of every photo of her, whatever the level: where the camera sits and what she
+ * does with it follows who she is in bed. The level lists said "kneeling on the bed" and "a shy
+ * smile" to everyone, which is exactly how a commanding domme ended up looking up at the lens
+ * like a nervous first-timer.
+ */
+export function photoManner(seed: CharacterSeed): string {
+  const lean = seed.dom_sub_leaning ?? 0;
+  const lines = [
+    lean >= 2
+      ? 'You are the one in charge and your photos say so: the camera low, you looking down into it; standing over it, sitting back with your legs apart, a heel up on the bed, a hand on your hip. Never kneeling, never asking.'
+      : lean <= -2
+        ? 'You love giving yourself over and your photos show it: the camera above you, looking down; kneeling, lying back, looking up into the lens - eager, soft, a little wicked.'
+        : 'Your photos are as much a dare as an invitation: eye-level, playful, confident either way round.',
+  ];
+  if (boldnessOf('archetype', seed.archetype) <= -1) {
+    lines.push('You are a little camera-shy even when you show a lot: a glance away, a half-hidden smile, a hand that almost covers.');
+  } else if (boldnessOf('sexual_persona', seed.sexual_persona) >= 1.5 || boldnessOf('archetype', seed.archetype) >= 1) {
+    lines.push('You like being looked at and it shows: nothing coy, you hold the lens.');
+  }
+  return lines.join(' ');
 }
 
 /**
@@ -659,6 +710,7 @@ export function photoSelfBlock(seed: CharacterSeed): string {
     ink.length ? `Tattoos: ${ink.join('; ')}` : '',
     metal.length ? `Piercings: ${metal.join('; ')}` : '',
     `In bed: ${label('sexual_persona', seed.sexual_persona)}`,
+    `How you come across in photos: ${photoManner(seed)}`,
   ].filter(Boolean).join('\n');
 }
 
