@@ -56,6 +56,12 @@ export interface RunDirectorOptions {
   actorReport?: ActorHidden | null;
   /** Extra context for the Director that is not in the message history. */
   event?: string;
+  /**
+   * What the direction is being written for: a live exchange with him ('user'), or a moment
+   * she is acting on her own ('unprompted' - her opener, a check-in). An unprompted direction
+   * is about him being quiet, so it must not outlive his next message.
+   */
+  origin?: 'user' | 'unprompted';
 }
 
 /**
@@ -174,7 +180,7 @@ export async function runDirector(
   rel.active_direction = direction;
   rel.direction_set_at = nowIso();
   const lastId = all.length ? all[all.length - 1].id : sinceId;
-  rel.mood = { ...rel.mood, last_director_msg_id: lastId };
+  rel.mood = { ...rel.mood, last_director_msg_id: lastId, direction_origin: opts.origin ?? 'user' };
   saveRelationship(rel);
   scheduleWakeup(character, parsed.wakeup);
   return { direction };
@@ -209,6 +215,26 @@ export function scheduleWakeup(character: Character, raw: any): void {
   logger.debug('scheduler', `wakeup for ${character.username} at ${at.toISOString()}`, {
     reason: raw.reason,
   });
+}
+
+/**
+ * A direction written for a different situation than the one his new message creates.
+ *
+ * Found in a real log: while he was quiet, a check-in had the Director write "no third
+ * nudge - she talks about her evening instead, zero mention of the scene". When he finally
+ * replied two hours later, that direction was still valid, so she ignored his message and
+ * talked about her rice - four times, including three regenerations. A direction written while
+ * he was silent expires the moment he writes, and any direction expires if he replies long
+ * after it was written.
+ */
+const DIRECTION_REPLY_WINDOW_MS = 30 * 60_000;
+
+export function directionOutdatedBy(rel: Relationship, userMessageAt: number): boolean {
+  if (!rel.active_direction || !rel.direction_set_at) return true;
+  const setAt = Date.parse(rel.direction_set_at);
+  if (userMessageAt <= setAt) return false; // written after his message: it already covers it
+  if ((rel.mood as any)?.direction_origin !== 'user') return true;
+  return userMessageAt - setAt > DIRECTION_REPLY_WINDOW_MS;
 }
 
 /** Does this direction still cover the next turn? */

@@ -335,7 +335,22 @@ schedules are all switched off. The Director is told to leave `wakeup` null, and
 already scheduled is dropped on the next tick. The only other wakeup that still runs is the
 safety net that answers a message of yours that somehow went unanswered.
 
-## Keeping characters distinct
+## A direction never outlives the moment it was written for
+
+A real log had Hana ignore a reply and talk about her dinner instead, four times in a row,
+three of them regenerations. The cause was not the model or its sampling. While he was quiet, a
+check-in had the Director write "no third nudge - talk about your evening, zero mention of the
+scene". When he replied two hours later that direction was still valid, so she followed it.
+
+Now:
+
+- A direction written for a moment she acted on her own (her opener, a check-in) expires as
+  soon as he writes.
+- Any direction expires if he replies more than 30 minutes after it was written.
+- Regenerating a reply refreshes an outdated direction before rewriting, instead of rerolling
+  the same wrong plan.
+- Both prompts say it outright: the direction never means ignoring his newest message.
+
 
 Every character reads the same profile of you, so anything generic in her prompt comes out
 identical across the cast. A real log showed four characters opening with "so ur a switch"

@@ -8,7 +8,7 @@ import {
 } from '../repo.js';
 import type { Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
-import { detectEvents, directionExpired, runDirector } from './director.js';
+import { detectEvents, directionExpired, directionOutdatedBy, runDirector } from './director.js';
 import { markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
 import { canSendPhotos, sendPhoto } from './images.js';
@@ -156,16 +156,20 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   const messages = recentMessages(character.id, getSettings().chat.context_messages);
   const events = detectEvents(messages);
   const check = directionExpired(rel, null, events);
+  const lastUser = [...messages].reverse().find((m) => m.sender === 'user');
+  const outdated = opts.trigger === 'user_message' && !!lastUser && directionOutdatedBy(rel, Date.parse(lastUser.sent_at));
   const needsDirector =
     opts.forceDirector ||
     check.expired ||
+    outdated ||
     opts.trigger === 'wakeup' ||
     opts.trigger === 'match_opener' ||
     isStaleSession(rel);
 
   if (needsDirector) {
     await runDirector(character, rel, {
-      reason: opts.reason ?? (check.expired ? check.reason : opts.trigger),
+      reason: opts.reason ?? (check.expired ? check.reason : outdated ? 'he replied - direction outdated' : opts.trigger),
+      origin: opts.trigger === 'user_message' ? 'user' : 'unprompted',
     });
     rel = getRelationship(characterId)!;
     character = getCharacter(characterId)!;
@@ -305,6 +309,7 @@ async function runActorPhase(
     await runDirector(character, getRelationship(characterId)!, {
       reason: 'actor_requested',
       actorReport: result.hidden,
+      origin: 'user',
     });
   }
 }
@@ -365,7 +370,18 @@ export async function regenerateLastTurn(characterId: string, messageId: number)
 
   running.add(characterId);
   const startedIn = epoch;
-  void runActorPhase(character, rel, { startedIn, decrementValidFor: false })
+  // A reroll normally keeps the direction - but not one that was already out of date when
+  // his message came in, or every reroll just repeats the same wrong reply in new words.
+  const lastUser = [...recent].reverse().find((m) => m.sender === 'user');
+  const refresh = !!lastUser && directionOutdatedBy(rel, Date.parse(lastUser.sent_at));
+  void (async () => {
+    let current = rel;
+    if (refresh) {
+      await runDirector(character, rel, { reason: 'regenerate - direction outdated', origin: 'user' });
+      current = getRelationship(characterId) ?? rel;
+    }
+    await runActorPhase(character, current, { startedIn, decrementValidFor: false });
+  })()
     .catch((err) => logger.error('actor', 'regenerate failed', { error: String(err) }))
     .finally(() => running.delete(characterId));
 
