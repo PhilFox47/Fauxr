@@ -123,5 +123,8 @@ own turn loop. The text chat is frozen while a date is active.
 - A character's own fields must stay consistent: a fetish is only drawn from a kink domain
   she is into or curious about, and a hard limit only from one she is a hard no on
   (`rollKinkMap` and the lines after it in `generator.ts`).
+- Ids are unique per category, not globally, and `ctx.drawn` mixes every category. An id that is
+  both a language and an ethnicity (`japanese`) matches the other one's affinities and
+  conflicts too. Suffix new ethnicities (`swedish_ethnic`) and keep languages rolled after looks.
 - Characters must never talk in system language (trust, levels, unlocks, scores, "testing
   you"); `engine/voice.ts` has detectors that reject and retry such replies.

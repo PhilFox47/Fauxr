@@ -81,6 +81,18 @@ for (const e of all) {
   }
 }
 
+// Every ethnicity must leave at least one option in each of the looks rolled after it.
+// generator.ts rolls these with `!` - an ethnicity every skin tone conflicts with crashes
+// generation instead of just skewing it.
+for (const eth of byCategory.get('ethnicity') ?? []) {
+  for (const cat of ['skin_tone', 'hair_color', 'eye_color', 'hair_style']) {
+    const open = (byCategory.get(cat) ?? []).filter(
+      (e) => e.enabled && !e.conflicts.includes(eth.id) && !eth.conflicts.includes(e.id),
+    );
+    if (!open.length) errors.push(`ethnicity '${eth.id}' conflicts with every ${cat}`);
+  }
+}
+
 console.log(`${all.length} entries across ${byCategory.size} categories in ${files.length} files.`);
 if (errors.length) {
   console.log(`\n${errors.length} error(s):`);

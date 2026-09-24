@@ -351,6 +351,7 @@ Now:
   the same wrong plan.
 - Both prompts say it outright: the direction never means ignoring his newest message.
 
+## Keeping characters distinct
 
 Every character reads the same profile of you, so anything generic in her prompt comes out
 identical across the cast. A real log showed four characters opening with "so ur a switch"
@@ -371,6 +372,37 @@ do to me first?"). Fixes:
   first attempt and dropped after that. The older overlap check ignored anything under three
   words, which is how "i have a list 📝" could loop.
 
+## Who shows up: ethnicity weighting
+
+The cast leans towards the owner's taste: mostly European and East Asian women, with
+everything else still possible but rarer. Ethnicity is set in three tiers through each row's
+`weight` in `appearance.json` (not its rarity tag, so the Rarity dial still does its own job on
+everything else):
+
+| tier | ethnicities | weight | share of the cast |
+|---|---|---|---|
+| most common | German, English, American, Japanese | 6.0 | ~35%, ~9% each |
+| common | Dutch, Swedish, Korean, Chinese, Australian, Scottish, Irish, Spanish, Italian, Polish, Canadian, Croatian | 2.2 | ~39% |
+| everything else | the other ~95, from Brazilian to Nigerian to Uzbek | 0.5 | ~26%, none above ~1% |
+
+English, American, Swedish, Australian, Spanish, Canadian and Croatian were added for this.
+Looks follow ethnicity: skin tones, hair colours and eye colours list broad groups
+(`white_european`, `east_asian`, ...) in their affinities and conflicts, and each specific
+ethnicity now inherits its group's links, so an English character gets fair to tanned skin
+rather than any tone at random. The newer looks (`rosy_fair`, `mahogany`, `icy_blonde`,
+`sea_green`, ...) copy the links of the closest older tone.
+
+Two traps showed up along the way:
+
+- Some ids are both a language and an ethnicity. The new ones are suffixed (`swedish_ethnic`,
+  `spanish_ethnic`, `croatian_ethnic`, like the older `czech_ethnic`); `japanese`, `korean` and
+  `turkish` stay as they are because existing characters store them.
+- Languages used to be rolled before looks, so a language in the drawn set could veto a look
+  by conflict. A Nigerian woman who spoke Swedish had every skin tone excluded and generation
+  crashed. Languages are now rolled after looks. The validator also fails any ethnicity that
+  leaves no skin tone, hair colour, hair style or eye colour open.
+
+## How a turn works
 
 ```
 user message
@@ -3181,7 +3213,7 @@ hidden thresholds" principle the rest of the unlock system already follows, not 
 archetype can simply out-pace.
 
 **Ethnicity was already broad (89 entries spanning every major region at reasonable rarity,
-not secretly weighted toward Europe) but had zero connection to what a character speaks** -
+not secretly weighted toward Europe - it is now, on purpose, see "Who shows up") but had zero connection to what a character speaks** -
 `ethnicity` and `languages` were rolled fully independently, with languages actually drawn
 *first*, before ethnicity even existed yet in the generation cascade. The language roll now
 happens after ethnicity instead, and 48 ethnicity entries carry an `extra.weights` boost

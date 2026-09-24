@@ -275,13 +275,6 @@ export function rollSeed(): RolledSeed {
 
   // ---- 3. looks, drawn knowing who she is and how old she is
   const ethnicity = one('ethnicity');
-  // Rolled here rather than up front, now that she has an ethnicity to draw from: a German
-  // entry's extra.weights leans this toward german, a Brazilian one toward portuguese, and
-  // so on, so who she is on paper actually shows up in what she speaks - not a hard rule
-  // (english is still always first, and plenty of ids are deliberately left unweighted,
-  // "white_european" and "mixed_race" among them, since no single language fits), just a
-  // real thumb on the scale instead of a roll with no connection to her at all.
-  const extraLanguages = rollMany('language', ctx, drawCount([0.55, 0.33, 0.12], 0)).map((a) => a.id);
   const skin_tone = one('skin_tone');
   const height = one('height');
   const body_type = one('body_type');
@@ -293,6 +286,14 @@ export function rollSeed(): RolledSeed {
   const grooming = one('grooming');
   const makeup_style = one('makeup_style');
   const distinctive_feature = one('distinctive_feature');
+  // Languages come after her ethnicity so it can lean them: a German entry's extra.weights
+  // leans this toward german, a Brazilian one toward portuguese, and so on - not a hard rule
+  // (english is always first, and ids like "white_european" and "mixed_race" lean nothing),
+  // just a real thumb on the scale. They come after her looks too, because a few ids are both
+  // a language and an ethnicity (japanese, korean, turkish): rolled before, a language in
+  // ctx.drawn vetoed looks by conflict, and a Nigerian woman who spoke Swedish once had every
+  // skin tone excluded and generation crashed.
+  const extraLanguages = rollMany('language', ctx, drawCount([0.55, 0.33, 0.12], 0)).map((a) => a.id);
 
   const tattooCount = drawCount(counts.tattoos, 0);
   const tattoos = Array.from({ length: tattooCount }, () => ({
