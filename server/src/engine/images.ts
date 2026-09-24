@@ -148,7 +148,7 @@ const BASE_SUFFIX: Record<PromptStyle, string> = {
  * fake. The candid and date paths carry their own, milder "she is an attractive woman,
  * photographed honestly" language in the assembler template instead.
  */
-const FLATTERING_SUFFIX = 'Shot from a flattering angle that shows off her face and her figure.';
+const FLATTERING_SUFFIX = 'Framed from the waist up or closer, her face sharp, clearly lit and fully visible, from a flattering angle.';
 
 /**
  * The "taken on her phone, right now" look - added on top of BASE_SUFFIX for a chat or
@@ -443,7 +443,9 @@ function demeanourFor(seed: CharacterSeed, isProfile: boolean): string {
     const photo = String(arch.extra.photo);
     lines.push(
       isProfile
-        ? `Left to choose her own photo, she picks one like this: ${photo}.`
+        ? `Left to choose her own photo, she picks one like this: ${photo}. Keep the manner; the ` +
+          `crop is fixed for this one (waist up or closer, her whole face clear), so a distance or ` +
+          `an averted body in that line means an angle, not a smaller or hidden face.`
         : `Left to choose her own photo she picks one like this: ${photo}. That is a photo she ` +
           `composed; this one she did not. Take the manner in it - what her face and her ` +
           `posture default to - and leave the crop, the camera distance and the specific ` +
@@ -598,21 +600,21 @@ const PROFILE_LEVELS: Record<'bold' | 'flirty' | 'teasing', { name: string; show
     name: 'Bold',
     shows: 'Topless is fine - bare breasts, or lingerie, a thong, a bikini, wet or see-through fabric.',
     about: 'Openly about your body and sex: lying across your bed, the bathroom mirror, the shower doorway, a hotel bed, your usual photo spot with the lights set up for it.',
-    pose: 'Posed to show it off: back arched, ass to the camera over your shoulder, stretched across the sheets, leaning into the mirror, a hand on your own body.',
+    pose: 'Posed to show it off: back arched, looking back over a bare shoulder, stretched across the sheets, leaning into the mirror, a hand on your own body.',
     look: 'Straight into the lens - a bitten or parted lip, heavy-lidded eyes. You know exactly what this photo does.',
   },
   flirty: {
     name: 'Flirty',
     shows: 'Your figure in something tight, short or low-cut, a bikini or a sports set - no underwear on show.',
     about: 'You out in the world looking good: a night out, the gym mirror, a pool, the mirror before you leave, your car, a festival.',
-    pose: 'Angled to show your shape: a hip popped, looking back over your shoulder, legs crossed on a bar stool, leaning in towards the camera.',
+    pose: 'Angled to show your shape: a shoulder turned to the lens, looking back over it, leaning in towards the camera, chin down and eyes up.',
     look: 'A smirk or a knowing smile, and eye contact that holds a beat too long.',
   },
   teasing: {
     name: 'Teasing',
     shows: 'Mostly covered - the point is what peeks out: a bare shoulder, a slipping strap, an oversized shirt and bare legs, a glimpse of lace.',
     about: 'An everyday moment with an edge: in bed in the morning, curled up on the sofa, a close-up of your face, a mirror half fogged up.',
-    pose: 'Half hidden: looking back over a shoulder, legs tucked up, a hand in your hair or partly over your face, the camera close.',
+    pose: 'Half covered: a sheet or an oversized shirt slipping off one shoulder, knees pulled up, a hand in your hair, the camera close.',
     look: 'A look that suggests more than it shows - shy from under your lashes, or knowing and patient, whichever you are.',
   },
 };
@@ -679,7 +681,7 @@ export function photoManner(seed: CharacterSeed): string {
         : 'Your photos are as much a dare as an invitation: eye-level, playful, confident either way round.',
   ];
   if (boldnessOf('archetype', seed.archetype) <= -1) {
-    lines.push('You are a little camera-shy even when you show a lot: a glance away, a half-hidden smile, a hand that almost covers.');
+    lines.push('You are a little camera-shy even when you show a lot: a glance away, a half-hidden smile, a hand that almost covers your chest - never your face.');
   } else if (boldnessOf('sexual_persona', seed.sexual_persona) >= 1.5 || boldnessOf('archetype', seed.archetype) >= 1) {
     lines.push('You like being looked at and it shows: nothing coy, you hold the lens.');
   }
@@ -1109,7 +1111,7 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
 
 /** Used only when the Actor left no concrete detail to work from. */
 const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date', string> = {
-  profile: 'a flirty mirror selfie in something tight that shows off her figure',
+  profile: 'a flirty waist-up mirror selfie in something tight, the phone held low so her face is clear',
   chat: 'a casual photo of whatever she is doing right now',
   spicy: 'a mirror selfie in just her underwear, one arm across her chest, taken for him',
   date: 'how she looks as he arrives, whatever she decided to wear tonight',

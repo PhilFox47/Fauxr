@@ -546,6 +546,15 @@ they now aim at what Fauxr is.
   At every level the area between her legs stays out of view, since that is what Seedream
   renders badly.
 
+  Whatever the level, a profile picture is framed on her face and upper body (head and
+  shoulders, chest up or waist up, never full-length or from behind) with her face sharp, lit
+  and unobstructed - no phone, hair, hand, sunglasses or shadow across it. It is the identity
+  reference every later photo of her is matched to, and a face half behind a phone in a
+  full-length mirror shot is a poor one. Angle, light, mood and a glance away stay free; the
+  assembler reframes an account that breaks the rule rather than dropping it, and the level
+  and attitude texts no longer suggest shots that would (ass to the camera, a hand over her
+  face).
+
   The level and the photo's attitude follow who she is, so they never contradict her:
   - `profileLevel()` scores her confidence and how far she goes plus `extra.photo_boldness`
     on her persona, archetype and style (an exhibitionist or a domme +1.5 to +2, a romantic

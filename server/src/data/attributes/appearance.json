@@ -16395,7 +16395,7 @@
         "cosplay": 2.0,
         "comic_artist": 2.0
       },
-      "photo_scene": "a room of figures and posters, fairy lights, a ring light and a full-length mirror"
+      "photo_scene": "a room of figures and posters, fairy lights, a ring light and a tall mirror"
     },
     "enabled": true
   },
@@ -16438,7 +16438,7 @@
         "tattoos": 1.0,
         "piercings": 1.0
       },
-      "photo_scene": "a dim room of candles and black sheets, dried flowers, an old full-length mirror with a tarnished frame"
+      "photo_scene": "a dim room of candles and black sheets, dried flowers, an old tall mirror with a tarnished frame"
     },
     "enabled": true
   },
@@ -16691,7 +16691,7 @@
         "tattoos": 0.6,
         "piercings": 0.6
       },
-      "photo_scene": "red light, black lace, candles, a full-length mirror",
+      "photo_scene": "red light, black lace, candles, a tall mirror",
       "photo_boldness": 0.5
     },
     "enabled": true
@@ -16802,7 +16802,7 @@
         "tattoos": 0.8,
         "piercings": 1.0
       },
-      "photo_scene": "a dark room washed in red light, a leather chair, a full-length mirror",
+      "photo_scene": "a dark room washed in red light, a leather chair, a tall mirror",
       "photo_boldness": 1.0
     },
     "enabled": true

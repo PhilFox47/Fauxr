@@ -161,6 +161,15 @@ Follow it and match its register - a proper shoot reads composed and polished, a
 as a selfie, a friend's photo reads a little unposed. Do not flatten it into a generic
 face-only headshot.
 
+This photo is also the identity reference every later photo of her is matched to, so two
+things are fixed whatever she described: it is framed on her face and upper body - head and
+shoulders, chest up or waist up, never full-length or from behind - and her face is sharp,
+well lit and fully visible, turned to the camera or three-quarter, eyes showing, not hidden by
+a phone, hair, a hand, sunglasses or shadow. Everything artistic stays open inside that: the
+angle, a glance off to one side, dramatic or coloured light, a hand in her hair, a mirror.
+If her account asks for something that would break either rule, keep its spirit and reframe
+it (a full-length mirror shot becomes the same mirror from the waist up).
+
 Whatever it is, she looks hot in it and it shows off her figure the way she meant it to:
 the pose, the angle and the outfit (or how little of one) exactly as she described. Write her
 body with the same care as her face. Lingerie, swimwear, sheer or wet fabric and bare
