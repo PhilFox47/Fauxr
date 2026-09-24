@@ -48,6 +48,8 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   // 'date'-kind image job posts its result into.
   { table: 'dates', column: 'outfit', definition: 'TEXT' },
   { table: 'images', column: 'date_id', definition: 'TEXT' },
+  { table: 'images', column: 'negative_prompt', definition: 'TEXT' },
+  { table: 'images', column: 'caption', definition: 'TEXT' },
 ];
 
 function addMissingColumns(): void {

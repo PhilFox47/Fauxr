@@ -80,8 +80,11 @@ export async function ensureProfilePicture(characterId: string): Promise<void> {
 }
 
 /**
- * She sends him a photo. No consent card, no unlock: she decided to, so it happens. If she has
- * no profile picture yet, that is generated first so this one can match her face.
+ * She sends him a photo. No consent card, no unlock: she decided to, so it is sent - but only
+ * prepared, not rendered. Her idea, the full prompt and a one-line caption are built now and a
+ * placeholder bubble goes into the chat; the image model, the part that costs real money, only
+ * runs when he taps "show photo" (showPhoto below). She can send as many as she likes, and he
+ * decides which ones are worth paying for.
  */
 export async function sendPhoto(opts: {
   characterId: string;
@@ -91,7 +94,6 @@ export async function sendPhoto(opts: {
   showsFace: boolean;
 }): Promise<void> {
   if (!photosEnabled()) return;
-  await ensureProfilePicture(opts.characterId);
   const job = insertImageJob({
     characterId: opts.characterId,
     kind: opts.kind,
@@ -99,7 +101,66 @@ export async function sendPhoto(opts: {
     aspect: opts.aspect,
     showsFace: opts.showsFace,
   });
-  await runImageJob(job.id, job.situation ?? '', true);
+  const loaded = loadJob(job.id);
+  if (!loaded) return;
+  setStatus(job.id, 'running');
+  try {
+    const shot = await assembleImageJob(loaded.job, loaded.character, job.situation ?? '');
+    setStatus(job.id, 'pending');
+    const stored = addMessage({
+      character_id: loaded.character.id,
+      sender: 'character',
+      text: '',
+      kind: 'image',
+      // description is what later prompts read to know what she sent; caption is all he sees
+      // until he chooses to look.
+      meta: { image_id: job.id, pending: true, caption: shot.caption, description: shot.situation },
+      read_at: null,
+      date_id: null,
+    });
+    bus.emitEvent({ type: 'message', character_id: loaded.character.id, message: stored });
+  } catch (err) {
+    logger.error('image', `preparing photo ${job.id} failed`, { error: String(err) });
+    setStatus(job.id, 'failed', { error: String(err) });
+  }
+}
+
+/**
+ * He tapped "show photo": render the prompt prepared when she sent it. Returns as soon as the
+ * bubble is marked as developing; the finished image arrives as a message_updated event. Her
+ * profile picture is made first if it somehow does not exist yet, so this one can match her
+ * face.
+ */
+export async function showPhoto(imageId: string): Promise<void> {
+  const job = getImageJob(imageId);
+  if (!job) throw new Error('photo not found');
+  if (job.status === 'done' || job.status === 'running') return;
+  if (!job.prompt) throw new Error('this photo was never prepared');
+  const loaded = loadJob(imageId);
+  if (!loaded) throw new Error(getImageJob(imageId)?.error ?? 'image generation is unavailable');
+  const message = findMessageByImageId(imageId);
+  const mark = (patch: Record<string, unknown>) => {
+    if (!message) return;
+    const updated = updateMessageMeta(message.id, patch);
+    if (updated) bus.emitEvent({ type: 'message_updated', character_id: loaded.character.id, message: updated });
+  };
+  setStatus(imageId, 'running');
+  mark({ rendering: true, render_error: null });
+  void (async () => {
+    try {
+      await ensureProfilePicture(loaded.character.id);
+      await renderImageJob(loaded.job, loaded.character, {
+        prompt: job.prompt,
+        negative: job.negative_prompt ?? '',
+        caption: job.caption ?? '',
+        situation: job.situation ?? '',
+      }, true);
+    } catch (err) {
+      logger.error('image', `showing photo ${imageId} failed`, { error: String(err) });
+      setStatus(imageId, 'failed', { error: String(err) });
+      mark({ rendering: false, render_error: 'That one did not come through. Try again.' });
+    }
+  })();
 }
 
 type PromptStyle = 'seedream' | 'z_image_turbo';
@@ -478,7 +539,8 @@ export interface ImageJob {
   prompt: string;
   seed: number | null;
   ref_image: string | null;
-  status: 'queued' | 'running' | 'done' | 'failed';
+  /** 'pending': prepared (prompt built) and waiting for him to choose to see it. */
+  status: 'queued' | 'running' | 'pending' | 'done' | 'failed';
   path: string | null;
   error: string | null;
   aspect: 'portrait' | 'landscape' | null;
@@ -488,6 +550,10 @@ export interface ImageJob {
   situation: string | null;
   /** Set only for a 'date' kind job: which date's transcript this posts into. */
   date_id: string | null;
+  /** Stored with the prompt, so a prepared photo renders later with exactly what was built. */
+  negative_prompt: string | null;
+  /** One short sentence for the placeholder bubble. */
+  caption: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -793,207 +859,258 @@ export function enqueueImage(opts: ImageJobOptions): ImageJob {
   return job;
 }
 
-export async function runImageJob(id: string, situation: string, postToChat = true): Promise<void> {
+interface AssembledShot {
+  prompt: string;
+  negative: string;
+  caption: string;
+  situation: string;
+}
+
+function loadJob(id: string): { job: ImageJob; character: Character } | null {
   const job = getImageJob(id);
-  if (!job) return;
-  const settings = getSettings();
-  if (!settings.images_enabled) {
+  if (!job) return null;
+  if (!getSettings().images_enabled) {
     setStatus(id, 'failed', { error: 'image generation is disabled in settings' });
-    return;
+    return null;
   }
   const character = job.character_id ? getCharacter(job.character_id) : null;
   if (!character) {
     setStatus(id, 'failed', { error: 'character not found' });
-    return;
+    return null;
   }
+  return { job, character };
+}
 
+/** Assemble and render in one go: her profile picture, a date's arrival photo, retries and regenerations. */
+export async function runImageJob(id: string, situation: string, postToChat = true): Promise<void> {
+  const loaded = loadJob(id);
+  if (!loaded) return;
   setStatus(id, 'running');
   try {
-    // The one photo she leads with has no "right now" to describe, so nothing upstream
-    // ever gave it a situation - it arrived here as ''. Asking her what it actually is
-    // happens once, lazily, right where that gap used to go unfilled.
-    const isProfile = job.kind === 'profile';
-    const isDate = job.kind === 'date';
-    const isSpicy = job.kind === 'spicy';
-    if (isProfile && !situation.trim()) {
-      situation = await profilePicConcept(character);
-    }
-    // Resolved once here - persisted so a later regenerate ("same idea") has the actual
-    // idea to reassemble from, not the blank a profile job may have started with.
-    db.prepare('UPDATE images SET situation = ? WHERE id = ?').run(situation, id);
-
-    const facesCamera = isProfile || showsFace(job);
-    const promptStyle: PromptStyle = settings.models.image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream';
-
-    // Candid phone-photo texture only applies to a moment inside the conversation. A
-    // profile picture's style - polished headshot or grainy selfie - was already decided
-    // by the assembler from her own account of the photo, so forcing the candid suffix on
-    // top would fight a studio shot into looking like a bad phone photo. A date's arrival
-    // photo is neither: nobody's phone took it, so it gets DATE_SUFFIX instead of the candid
-    // one. Computed before the assembler call, not after, because Z Image Turbo needs to know
-    // how much of its own character budget this suffix is going to eat - see zCharBudget below.
-    // FLATTERING_SUFFIX rides with the profile picture only - see its own comment for why
-    // asking every candid for a flattering angle was most of what made them read as shot
-    // rather than taken.
-    const styleSuffix = isProfile
-      ? `${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`
-      : isDate
-        ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
-        : isSpicy
-          ? `${BASE_SUFFIX[promptStyle]} ${SPICY_SUFFIX[promptStyle]}`
-          : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
-    // Drawn per shot rather than left to the assembler's taste - see LIGHT_CONDITIONS.
-    const conditions = shootingConditions(isProfile ? 'profile' : isDate ? 'date' : isSpicy ? 'spicy' : 'moment');
-    // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
-    // characters - not a soft quality preference, an actual request error. That leaves the
-    // assembler only whatever headroom styleSuffix does not already spend, plus a safety
-    // margin for the joining space. Handed to it as a concrete number rather than a vague
-    // "keep it short", because "this model likes long prompts" is the model's general
-    // reputation and directly wrong for this specific limit.
-    const zCharBudget = Z_IMAGE_MAX_CHARS - styleSuffix.length - 1;
-
-    const assembled = await completeJson<{ prompt: string; negative_prompt?: string }>({
-      scope: 'image',
-      label: `assemble:${character.username}`,
-      config: settings.models.director,
-      require: ['prompt'],
-      messages: [
-        {
-          role: 'user',
-          content: render('image_prompt_assembler', {
-            appearance_prompt: character.seed.appearance_prompt,
-            image_kind: job.kind,
-            situation,
-            visible_marks: visibleMarks(character, job.kind, facesCamera),
-            demeanour: demeanourFor(character.seed, isProfile),
-            light_condition: conditions.light,
-            capture_flaw: conditions.flaw,
-            lived_in_detail: conditions.lived_in,
-            // Only a profile picture gets to be a professional shot, a repurposed work
-            // photo, a posed full-body - anything her own account above says it is. A
-            // chat or spicy photo is always a moment inside the conversation, so it keeps
-            // the candid, taken-right-now rules regardless of what image_kind spells out. A
-            // date's arrival photo is neither of those - see is_date below.
-            is_profile: isProfile ? '1' : '',
-            // A spicy photo is posed on purpose and gets its own section (is_spicy); the
-            // "unposed, caught in the moment" rules are for an ordinary chat photo only.
-            is_moment: !isProfile && !isDate && !isSpicy ? '1' : '',
-            // Not a photo either of them took: how he actually sees her, right now, in the
-            // room - see image_prompt_assembler.md's is_date section for the framing this
-            // maps to.
-            is_date: isDate ? '1' : '',
-            // A profile picture always shows her face by convention; a chat/spicy/date shot
-            // only when she did not deliberately pick one that hides it.
-            hides_face: facesCamera ? '' : '1',
-            // The one tier that can plausibly reach nudity at all - see "HOW FAR THIS ONE
-            // ACTUALLY GOES" in the template for what that does and does not mean.
-            is_spicy: isSpicy ? '1' : '',
-            // Only her own photos lean on her style's usual photo world (clothing_style
-            // extra.photo_scene) - a date's arrival photo is in the venue, not her room.
-            photo_scene: isDate ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
-            mode_seedream: promptStyle === 'seedream' ? '1' : '',
-            mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
-            z_char_budget: zCharBudget,
-          }),
-        },
-      ],
-    });
-
-    // Plain sentences joined as prose, not comma-glued tags - this model reasons over the
-    // prompt as a written brief, and a tag-stack tail would undo the paragraph the assembler
-    // just wrote.
-    //
-    // The instruction above is a request, not an enforcement - the model can still ignore
-    // the budget, so this is the actual backstop against a rejected API call. Trims the
-    // assembler's own text, never styleSuffix: styleSuffix is short and carries standing
-    // quality/style instructions that matter on every single shot, where the assembler's
-    // prose is the one part that is safe to lose the tail end of.
-    let assembledPrompt = assembled.prompt;
-    if (promptStyle === 'z_image_turbo' && assembledPrompt.length > zCharBudget) {
-      logger.warn('image', 'z_image_turbo prompt over the character budget, trimming', {
-        character: character.username,
-        length: assembledPrompt.length,
-        budget: zCharBudget,
-      });
-      assembledPrompt = truncateAtWord(assembledPrompt, zCharBudget);
-    }
-    const prompt = `${assembledPrompt} ${styleSuffix}`;
-    // Z Image Turbo runs with no classifier-free guidance at all, so it never reads a
-    // negative prompt - sending one is not wrong exactly, just pure dead weight, and the
-    // constraints it would have carried are already folded into the prompt itself above
-    // (see BASE_SUFFIX/CANDID_SUFFIX and the assembler's own negative_prompt, left blank in
-    // this mode). Seedream gets the real thing: the assembler has always returned a negative
-    // prompt and it used to be dropped on the floor here - never passed to the image call at
-    // all. Its shot-specific negative now rides along with the standing ones. CANDID_NEGATIVE
-    // (no studio lighting, no professional-model posing) only applies to a moment shot, for
-    // the same reason. Kept short throughout: see BASE_NEGATIVE for why.
-    const negative =
-      promptStyle === 'z_image_turbo'
-        ? ''
-        : [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : isSpicy ? SPICY_NEGATIVE : CANDID_NEGATIVE]
-            .filter(Boolean)
-            .join(' ');
-    // Forcing her face to match a reference photo is exactly wrong for a shot that is not
-    // supposed to show her face at all - it just makes one appear anyway. Skip the
-    // reference whenever this shot does not put her face in frame.
-    const ref = isProfile || !facesCamera ? null : referenceImage(character.id);
-    // Only when one is actually attached - see REF_NOTE for why the reference needs telling
-    // what it is for. Appended after styleSuffix so it is the last thing read, and left off
-    // the Z Image Turbo budget maths above on purpose: that mode never sends a reference at
-    // all unless a profile picture exists, and the same trim still protects the ceiling.
-    const finalPrompt = ref ? `${prompt} ${REF_NOTE}` : prompt;
-    const size = isProfile ? IMAGE_SIZE.profile : IMAGE_SIZE[job.aspect === 'landscape' ? 'landscape' : 'portrait'];
-    const imageSeed = seedFor(character.seed, isProfile);
-    const b64 = await generateImage({
-      prompt: finalPrompt,
-      negativePrompt: negative,
-      seed: imageSeed,
-      refImage: ref ?? undefined,
-      size,
-    });
-
-    const relPath = join('images', `${id}.png`);
-    writeFileSync(join(DATA_DIR, relPath), Buffer.from(b64, 'base64'));
-    // The log records what was actually sent, reference note and per-shot seed included -
-    // otherwise two shots that came out identical would show identical log rows for no
-    // visible reason.
-    db.prepare('UPDATE images SET prompt = ?, seed = ?, ref_image = ? WHERE id = ?').run(
-      finalPrompt,
-      imageSeed,
-      ref ? 'profile' : null,
-      id,
-    );
-    setStatus(id, 'done', { path: relPath });
-
-    if (postToChat) {
-      const stored = addMessage({
-        character_id: character.id,
-        // A date's arrival photo is not something she chose to send - it is the scene
-        // itself, the same way the "you took her to X" line at the top of a date is. Every
-        // other kind is genuinely her sending a picture, so it keeps 'character'.
-        sender: isDate ? 'system' : 'character',
-        text: '',
-        kind: 'image',
-        // What the photo shows, so later prompts know what she actually sent.
-        meta: { image_id: id, path: relPath, description: situation },
-        read_at: null,
-        date_id: job.date_id,
-      });
-      bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
-    }
-    if (job.kind === 'profile') {
-      const rel = getRelationship(character.id);
-      if (rel) {
-        rel.flags.state.profile_picture_sent = true;
-        db.prepare('UPDATE relationships SET flags = ? WHERE character_id = ?').run(
-          JSON.stringify(rel.flags),
-          character.id,
-        );
-      }
-    }
+    const shot = await assembleImageJob(loaded.job, loaded.character, situation);
+    await renderImageJob(loaded.job, loaded.character, shot, postToChat);
   } catch (err) {
     logger.error('image', `image job ${id} failed`, { error: String(err) });
     setStatus(id, 'failed', { error: String(err) });
+  }
+}
+
+/** One short sentence for the placeholder bubble - never the prompt itself. */
+function cleanCaption(raw: unknown, situation: string): string {
+  const pick = (t: string) => (t.replace(/\s+/g, ' ').trim().match(/^.*?[.!?](\s|$)/)?.[0] ?? t).trim();
+  const text = pick(String(raw ?? '')) || pick(situation);
+  return text.length > 140 ? `${truncateAtWord(text, 137)}...` : text;
+}
+
+/**
+ * Everything up to the image model: her idea resolved, the assembler's prompt, the suffixes and
+ * negatives, and a one-line caption. Stored on the job, so a photo can be prepared now and
+ * rendered later, from exactly the prompt that was built for the moment she sent it.
+ */
+async function assembleImageJob(job: ImageJob, character: Character, situation: string): Promise<AssembledShot> {
+  const settings = getSettings();
+  const id = job.id;
+  // The one photo she leads with has no "right now" to describe, so nothing upstream
+  // ever gave it a situation - it arrived here as ''. Asking her what it actually is
+  // happens once, lazily, right where that gap used to go unfilled.
+  const isProfile = job.kind === 'profile';
+  const isDate = job.kind === 'date';
+  const isSpicy = job.kind === 'spicy';
+  if (isProfile && !situation.trim()) {
+    situation = await profilePicConcept(character);
+  }
+  // Resolved once here - persisted so a later regenerate ("same idea") has the actual
+  // idea to reassemble from, not the blank a profile job may have started with.
+  db.prepare('UPDATE images SET situation = ? WHERE id = ?').run(situation, id);
+
+  const facesCamera = isProfile || showsFace(job);
+  const promptStyle: PromptStyle = settings.models.image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream';
+
+  // Candid phone-photo texture only applies to a moment inside the conversation. A
+  // profile picture's style - polished headshot or grainy selfie - was already decided
+  // by the assembler from her own account of the photo, so forcing the candid suffix on
+  // top would fight a studio shot into looking like a bad phone photo. A date's arrival
+  // photo is neither: nobody's phone took it, so it gets DATE_SUFFIX instead of the candid
+  // one. Computed before the assembler call, not after, because Z Image Turbo needs to know
+  // how much of its own character budget this suffix is going to eat - see zCharBudget below.
+  // FLATTERING_SUFFIX rides with the profile picture only - see its own comment for why
+  // asking every candid for a flattering angle was most of what made them read as shot
+  // rather than taken.
+  const styleSuffix = isProfile
+    ? `${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`
+    : isDate
+      ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
+      : isSpicy
+        ? `${BASE_SUFFIX[promptStyle]} ${SPICY_SUFFIX[promptStyle]}`
+        : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
+  // Drawn per shot rather than left to the assembler's taste - see LIGHT_CONDITIONS.
+  const conditions = shootingConditions(isProfile ? 'profile' : isDate ? 'date' : isSpicy ? 'spicy' : 'moment');
+  // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
+  // characters - not a soft quality preference, an actual request error. That leaves the
+  // assembler only whatever headroom styleSuffix does not already spend, plus a safety
+  // margin for the joining space. Handed to it as a concrete number rather than a vague
+  // "keep it short", because "this model likes long prompts" is the model's general
+  // reputation and directly wrong for this specific limit.
+  const zCharBudget = Z_IMAGE_MAX_CHARS - styleSuffix.length - 1;
+
+  const assembled = await completeJson<{ prompt: string; negative_prompt?: string; caption?: string }>({
+    scope: 'image',
+    label: `assemble:${character.username}`,
+    config: settings.models.director,
+    require: ['prompt'],
+    messages: [
+      {
+        role: 'user',
+        content: render('image_prompt_assembler', {
+          appearance_prompt: character.seed.appearance_prompt,
+          image_kind: job.kind,
+          situation,
+          visible_marks: visibleMarks(character, job.kind, facesCamera),
+          demeanour: demeanourFor(character.seed, isProfile),
+          light_condition: conditions.light,
+          capture_flaw: conditions.flaw,
+          lived_in_detail: conditions.lived_in,
+          // Only a profile picture gets to be a professional shot, a repurposed work
+          // photo, a posed full-body - anything her own account above says it is. A
+          // chat or spicy photo is always a moment inside the conversation, so it keeps
+          // the candid, taken-right-now rules regardless of what image_kind spells out. A
+          // date's arrival photo is neither of those - see is_date below.
+          is_profile: isProfile ? '1' : '',
+          // A spicy photo is posed on purpose and gets its own section (is_spicy); the
+          // "unposed, caught in the moment" rules are for an ordinary chat photo only.
+          is_moment: !isProfile && !isDate && !isSpicy ? '1' : '',
+          // Not a photo either of them took: how he actually sees her, right now, in the
+          // room - see image_prompt_assembler.md's is_date section for the framing this
+          // maps to.
+          is_date: isDate ? '1' : '',
+          // A profile picture always shows her face by convention; a chat/spicy/date shot
+          // only when she did not deliberately pick one that hides it.
+          hides_face: facesCamera ? '' : '1',
+          // The one tier that can plausibly reach nudity at all - see "HOW FAR THIS ONE
+          // ACTUALLY GOES" in the template for what that does and does not mean.
+          is_spicy: isSpicy ? '1' : '',
+          // Only her own photos lean on her style's usual photo world (clothing_style
+          // extra.photo_scene) - a date's arrival photo is in the venue, not her room.
+          photo_scene: isDate ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
+          mode_seedream: promptStyle === 'seedream' ? '1' : '',
+          mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
+          z_char_budget: zCharBudget,
+        }),
+      },
+    ],
+  });
+
+  // Plain sentences joined as prose, not comma-glued tags - this model reasons over the
+  // prompt as a written brief, and a tag-stack tail would undo the paragraph the assembler
+  // just wrote.
+  //
+  // The instruction above is a request, not an enforcement - the model can still ignore
+  // the budget, so this is the actual backstop against a rejected API call. Trims the
+  // assembler's own text, never styleSuffix: styleSuffix is short and carries standing
+  // quality/style instructions that matter on every single shot, where the assembler's
+  // prose is the one part that is safe to lose the tail end of.
+  let assembledPrompt = assembled.prompt;
+  if (promptStyle === 'z_image_turbo' && assembledPrompt.length > zCharBudget) {
+    logger.warn('image', 'z_image_turbo prompt over the character budget, trimming', {
+      character: character.username,
+      length: assembledPrompt.length,
+      budget: zCharBudget,
+    });
+    assembledPrompt = truncateAtWord(assembledPrompt, zCharBudget);
+  }
+  const prompt = `${assembledPrompt} ${styleSuffix}`;
+  // Z Image Turbo runs with no classifier-free guidance at all, so it never reads a
+  // negative prompt - sending one is not wrong exactly, just pure dead weight, and the
+  // constraints it would have carried are already folded into the prompt itself above
+  // (see BASE_SUFFIX/CANDID_SUFFIX and the assembler's own negative_prompt, left blank in
+  // this mode). Seedream gets the real thing: the assembler has always returned a negative
+  // prompt and it used to be dropped on the floor here - never passed to the image call at
+  // all. Its shot-specific negative now rides along with the standing ones. CANDID_NEGATIVE
+  // (no studio lighting, no professional-model posing) only applies to a moment shot, for
+  // the same reason. Kept short throughout: see BASE_NEGATIVE for why.
+  const negative =
+    promptStyle === 'z_image_turbo'
+      ? ''
+      : [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : isSpicy ? SPICY_NEGATIVE : CANDID_NEGATIVE]
+          .filter(Boolean)
+          .join(' ');
+  const caption = cleanCaption(assembled.caption, situation);
+  db.prepare('UPDATE images SET prompt = ?, negative_prompt = ?, caption = ? WHERE id = ?').run(prompt, negative, caption, id);
+  return { prompt, negative, caption, situation };
+}
+
+/** The paid part: the image model call, the file, and the chat bubble. */
+async function renderImageJob(job: ImageJob, character: Character, shot: AssembledShot, postToChat: boolean): Promise<void> {
+  const id = job.id;
+  const isProfile = job.kind === 'profile';
+  const isDate = job.kind === 'date';
+  const facesCamera = isProfile || showsFace(job);
+  const { prompt, negative, situation } = shot;
+  // Forcing her face to match a reference photo is exactly wrong for a shot that is not
+  // supposed to show her face at all - it just makes one appear anyway. Skip the
+  // reference whenever this shot does not put her face in frame.
+  const ref = isProfile || !facesCamera ? null : referenceImage(character.id);
+  // Only when one is actually attached - see REF_NOTE for why the reference needs telling
+  // what it is for. Appended after styleSuffix so it is the last thing read, and left off
+  // the Z Image Turbo budget maths above on purpose: that mode never sends a reference at
+  // all unless a profile picture exists, and the same trim still protects the ceiling.
+  const finalPrompt = ref ? `${prompt} ${REF_NOTE}` : prompt;
+  const size = isProfile ? IMAGE_SIZE.profile : IMAGE_SIZE[job.aspect === 'landscape' ? 'landscape' : 'portrait'];
+  const imageSeed = seedFor(character.seed, isProfile);
+  const b64 = await generateImage({
+    prompt: finalPrompt,
+    negativePrompt: negative,
+    seed: imageSeed,
+    refImage: ref ?? undefined,
+    size,
+  });
+
+  const relPath = join('images', `${id}.png`);
+  writeFileSync(join(DATA_DIR, relPath), Buffer.from(b64, 'base64'));
+  // The log records what was actually sent, reference note and per-shot seed included -
+  // otherwise two shots that came out identical would show identical log rows for no
+  // visible reason.
+  db.prepare('UPDATE images SET prompt = ?, seed = ?, ref_image = ? WHERE id = ?').run(
+    finalPrompt,
+    imageSeed,
+    ref ? 'profile' : null,
+    id,
+  );
+  setStatus(id, 'done', { path: relPath });
+
+  // A photo she sent into the chat already has its message - the placeholder he tapped "show
+  // photo" on - so that bubble is filled in rather than a second one posted under it.
+  const placeholder = postToChat ? findMessageByImageId(id) : null;
+  if (placeholder) {
+    const updated = updateMessageMeta(placeholder.id, {
+      path: relPath, pending: false, rendering: false, render_error: null, image_v: Date.now(),
+    });
+    if (updated) bus.emitEvent({ type: 'message_updated', character_id: character.id, message: updated });
+  } else if (postToChat) {
+    const stored = addMessage({
+      character_id: character.id,
+      // A date's arrival photo is not something she chose to send - it is the scene
+      // itself, the same way the "you took her to X" line at the top of a date is. Every
+      // other kind is genuinely her sending a picture, so it keeps 'character'.
+      sender: isDate ? 'system' : 'character',
+      text: '',
+      kind: 'image',
+      // What the photo shows, so later prompts know what she actually sent.
+      meta: { image_id: id, path: relPath, description: situation },
+      read_at: null,
+      date_id: job.date_id,
+    });
+    bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
+  }
+  if (job.kind === 'profile') {
+    const rel = getRelationship(character.id);
+    if (rel) {
+      rel.flags.state.profile_picture_sent = true;
+      db.prepare('UPDATE relationships SET flags = ? WHERE character_id = ?').run(
+        JSON.stringify(rel.flags),
+        character.id,
+      );
+    }
   }
 }
 

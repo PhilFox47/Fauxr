@@ -19,7 +19,7 @@ import { bus } from '../events.js';
 import { blockCharacterByUser, deleteMessage, handleUserMessage, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import {
-  characterGallery, ensureProfilePicture, evaluateUserImage, hasSwapped, listImageJobs, regenerateImage, retryImageJob,
+  characterGallery, ensureProfilePicture, evaluateUserImage, hasSwapped, listImageJobs, regenerateImage, retryImageJob, showPhoto,
 } from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji, rarityTier } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
@@ -543,6 +543,17 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   });
 
   app.get('/api/images', async () => listImageJobs(100));
+
+  // "Show photo" on a photo she sent: renders the prompt prepared when she sent it. Returns as
+  // soon as the bubble is marked as developing; the image arrives as a message_updated event.
+  app.post<{ Params: { id: string } }>('/api/images/:id/show', async (req, reply) => {
+    try {
+      await showPhoto(req.params.id);
+      return { ok: true };
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
 
   app.post<{ Params: { id: string } }>('/api/images/:id/retry', async (req, reply) => {
     try {

@@ -586,6 +586,29 @@ they now aim at what Fauxr is.
   follow the same heat ladder: lingerie, topless, fully naked, a hand in her underwear, bent
   over, on her knees looking up.
 
+## Her photos are prepared, not rendered, until you tap "Show photo"
+
+A character sends as many photos as she likes - nothing about when or how often she sends
+one is limited - but none of them costs an image generation until you choose to see it.
+
+- When she sends one (`sendPhoto` in `images.ts`), everything up to the image model runs: her
+  idea, the assembled prompt with its suffix and negative prompt, and a one-sentence caption
+  the assembler writes alongside it (`caption` in its JSON). They are stored on the job
+  (`images.prompt`, `negative_prompt`, `caption`; status `pending`) and a placeholder bubble
+  goes into the chat: a camera tile, the caption and a "Show photo" button.
+- "Show photo" (`POST /api/images/:id/show`, `showPhoto`) renders exactly the prompt built
+  when she sent it, marks the bubble as developing, and fills in the same bubble when the
+  image lands - no second message. A failed render leaves the placeholder with a note and the
+  button, so it can be tried again. Her profile picture, if it does not exist yet, is made at
+  that point too, so the photo can match her face.
+- Later prompts still read what she sent from the message's `description`, whether or not
+  you opened it. Regenerating works on a photo once it has been shown.
+- Her profile picture (behind the swap button) and a date's arrival photo still render
+  straight away; both are already your own action.
+
+`runImageJob` is now the two halves in a row - `assembleImageJob` then `renderImageJob` - for
+the paths that render at once.
+
 ## How a turn works
 
 ```

@@ -250,4 +250,8 @@ the job that "no airbrushing" cannot do here.
 # OUTPUT
 Reply with exactly one JSON object and nothing else:
 
-{ "prompt": "...", "negative_prompt": "..." }
+{ "prompt": "...", "negative_prompt": "...", "caption": "..." }
+
+"caption" is one short sentence (under 15 words) saying plainly what the photo shows, the way
+a chat app would label a photo before it is opened - "a mirror selfie in black lace, lamp
+light", "her view from the balcony". Not the prompt, no styling or camera language.

@@ -273,8 +273,8 @@ async function runActorPhase(
     logger.debug('actor', `${character.username} pitched a fantasy`, { fantasy: pitched, firstTime });
   }
 
-  // She decided to send a photo, so it is sent. Generation runs in the background and the
-  // picture lands in the chat when it is ready.
+  // She decided to send a photo, so it is sent: prepared in the background (her idea, the
+  // prompt, a caption) and posted as a placeholder he can choose to open - see sendPhoto.
   const photoKind = result.hidden.photo_offer;
   if (photoKind && canSendPhotos(rel)) {
     void sendPhoto({

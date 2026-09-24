@@ -317,6 +317,7 @@ export const api = {
   },
   images: () => request<ImageJob[]>('/api/images'),
   retryImage: (id: string) => request<any>(`/api/images/${id}/retry`, { method: 'POST' }),
+  showPhoto: (id: string) => request<{ ok: true }>(`/api/images/${id}/show`, { method: 'POST' }),
   regenerateImage: (id: string, mode: 'same_idea' | 'new_idea') =>
     request<any>(`/api/images/${id}/regenerate`, { method: 'POST', body: JSON.stringify({ mode }) }),
   usage: () => request<any>('/api/usage'),

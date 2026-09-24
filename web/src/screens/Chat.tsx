@@ -119,6 +119,8 @@ export default function Chat({
   const [lightboxAt, setLightboxAt] = useState<number | null>(null);
   const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
   const [regeneratingImageId, setRegeneratingImageId] = useState<number | null>(null);
+  // Photos she sent that he asked to see; kept until the server says it is developing or done.
+  const [showingPhotoIds, setShowingPhotoIds] = useState<Set<string>>(new Set());
   const [deletingId, setDeletingId] = useState<number | null>(null);
   /** Armed by a first tap, so a second, deliberate tap is what actually deletes. */
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
@@ -309,6 +311,23 @@ export default function Chat({
       flashToast(String(err instanceof Error ? err.message : err));
     } finally {
       setRegeneratingImageId(null);
+    }
+  };
+
+  /** She sent a photo as a placeholder; this is the one tap that actually pays for rendering it. */
+  const showPhoto = async (imageId: string) => {
+    setShowingPhotoIds((prev) => new Set(prev).add(imageId));
+    try {
+      await api.showPhoto(imageId);
+      await load();
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+    } finally {
+      setShowingPhotoIds((prev) => {
+        const next = new Set(prev);
+        next.delete(imageId);
+        return next;
+      });
     }
   };
 
@@ -577,7 +596,22 @@ export default function Chat({
           return (
             <div key={m.id} style={{ display: 'contents' }}>
               {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
-              {m.kind === 'image' ? (
+              {m.kind === 'image' && m.meta?.pending ? (
+                <div className={`bubble photo-pending ${mine ? 'me' : 'them'}`}>
+                  <div className="photo-pending-art" aria-hidden>
+                    <Icon name="camera" size={22} />
+                  </div>
+                  {m.meta.caption && <p className="photo-pending-caption">{m.meta.caption}</p>}
+                  {m.meta.render_error && <p className="tiny level-error">{m.meta.render_error}</p>}
+                  <button
+                    className="btn"
+                    onClick={() => void showPhoto(m.meta.image_id)}
+                    disabled={!!m.meta.rendering || showingPhotoIds.has(m.meta.image_id)}
+                  >
+                    {m.meta.rendering || showingPhotoIds.has(m.meta.image_id) ? 'Developing…' : 'Show photo'}
+                  </button>
+                </div>
+              ) : m.kind === 'image' ? (
                 <div className={`bubble image ${mine ? 'me' : 'them'}`}>
                   {m.image_url ? (
                     <img
@@ -634,7 +668,7 @@ export default function Chat({
                       <Icon name="refresh" size={13} />
                     </button>
                   )}
-                  {!mine && !blocked && m.kind === 'image' && m.id === lastHerImageId && m.meta?.image_id && (
+                  {!mine && !blocked && m.kind === 'image' && m.id === lastHerImageId && m.meta?.image_id && !m.meta?.pending && (
                     <span className="regen-menu">
                       <button
                         className={`regen-btn${regeneratingImageId === m.id ? ' spinning' : ''}`}
