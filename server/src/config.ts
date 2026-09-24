@@ -69,6 +69,13 @@ export interface Settings {
    * her one opening message after a match).
    */
   unprompted_messages: boolean;
+  /**
+   * His taste, from Settings -> Taste: "category/id" -> multiplier on how often that attribute
+   * is rolled for a new character (0 never, 1 or absent normal). Two keys are not attribute
+   * rows: "lean/dom_sub" (-1..1) leans the persona roll towards submissive or dominant, and
+   * kink domains ("kink_domain/feet") lean how likely she is to be into them.
+   */
+  taste: Record<string, number>;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -99,6 +106,7 @@ export const DEFAULT_SETTINGS: Settings = {
   spice: 1.15,
   rarity_bias: 1,
   unprompted_messages: false,
+  taste: {},
 };
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {

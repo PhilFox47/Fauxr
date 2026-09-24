@@ -1,6 +1,7 @@
 import { db, nowIso } from './db/index.js';
 import { byCategory, find } from './db/attributes.js';
 import { newContext, roll } from './engine/dice.js';
+import { rollDomainStance } from './engine/kinks.js';
 import type {
   Character, CharacterSeed, CharacterState, DateSession, Direction, Flags, Ledger,
   Location, Relationship, UserProfile,
@@ -207,11 +208,54 @@ function backfillSexualProfile(characterId: string, seed: CharacterSeed): Charac
   return seed;
 }
 
+/**
+ * Fields and kink domains added after a character was made: her butt, what she wears
+ * underneath and to bed, her grooming, and a stance on every kink domain she has none for.
+ * Rolled with her own style, build and persona in the context so they lean the way they would
+ * for a new character. A new domain she already has a fetish from counts as one she is into,
+ * so an existing "going all the way" does not end up under an oral hard no. Persisted once.
+ */
+function backfillIntimateDetails(characterId: string, seed: CharacterSeed): CharacterSeed {
+  const domains = byCategory('kink_domain');
+  const missingDomains = domains.filter((d) => !seed.kink_map?.[d.id]);
+  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length) return seed;
+  if (!byCategory('lingerie_style').length) return seed; // attribute table not seeded yet
+  const ctx = newContext();
+  for (const id of [seed.body_type, seed.height, seed.clothing_style, seed.sexual_persona, seed.archetype]) if (id) ctx.drawn.add(id);
+  for (const [id, m] of Object.entries(find('sexual_persona', seed.sexual_persona)?.extra?.weights ?? {})) {
+    ctx.weights[id] = (ctx.weights[id] ?? 1) * Number(m);
+  }
+  const fill = (field: 'butt_size' | 'lingerie_style' | 'sleepwear' | 'intimate_grooming') => {
+    if (seed[field] && find(field, seed[field])) return;
+    const a = roll(field, ctx);
+    if (a) seed[field] = a.id;
+    if (a && field === 'butt_size' && a.image_prompt) {
+      seed.appearance_prompt = [seed.appearance_prompt, a.image_prompt].filter(Boolean).join(', ');
+    }
+  };
+  fill('butt_size');
+  fill('lingerie_style');
+  fill('sleepwear');
+  fill('intimate_grooming');
+  if (missingDomains.length) {
+    const bias = (find('sexual_persona', seed.sexual_persona)?.extra?.kink_bias ?? {}) as Record<string, number>;
+    const fetishes = new Set(seed.fetishes ?? []);
+    seed.kink_map = { ...(seed.kink_map ?? {}) };
+    for (const d of missingDomains) {
+      const owned = ((d.extra?.fetishes as string[]) ?? []).some((f) => fetishes.has(f));
+      seed.kink_map[d.id] = owned ? 'into' : rollDomainStance(seed.freak ?? 2.5, d, Number(bias[d.id] ?? 0));
+    }
+  }
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
   let seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
   seed = backfillSpecies(row.id, seed);
   seed = backfillCommStyles(row.id, seed);
   seed = backfillSexualProfile(row.id, seed);
+  seed = backfillIntimateDetails(row.id, seed);
   return {
     id: row.id,
     username: row.username,

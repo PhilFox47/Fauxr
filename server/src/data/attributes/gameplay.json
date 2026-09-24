@@ -1088,7 +1088,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -2082,7 +2084,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -2541,17 +2545,12 @@
     "rarity": "common",
     "prompt_hint": "a man who does what she says the first time",
     "image_prompt": null,
-    "affinities": [
-      "commanding_domme",
-      "teasing_dom",
-      "sadistic_tease",
-      "worship_me",
-      "brat_tamer",
-      "slow_corruptor"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -2562,18 +2561,12 @@
     "rarity": "common",
     "prompt_hint": "slow, total attention on her body",
     "image_prompt": null,
-    "affinities": [
-      "commanding_domme",
-      "teasing_dom",
-      "sadistic_tease",
-      "worship_me",
-      "brat_tamer",
-      "slow_corruptor",
-      "body_worshipper"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -2584,17 +2577,12 @@
     "rarity": "common",
     "prompt_hint": "the view from above",
     "image_prompt": null,
-    "affinities": [
-      "commanding_domme",
-      "teasing_dom",
-      "sadistic_tease",
-      "worship_me",
-      "brat_tamer",
-      "slow_corruptor"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -2605,17 +2593,12 @@
     "rarity": "common",
     "prompt_hint": "hearing him ask for it",
     "image_prompt": null,
-    "affinities": [
-      "commanding_domme",
-      "teasing_dom",
-      "sadistic_tease",
-      "worship_me",
-      "brat_tamer",
-      "slow_corruptor"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -2626,16 +2609,12 @@
     "rarity": "common",
     "prompt_hint": "his weight on her and her wrists held",
     "image_prompt": null,
-    "affinities": [
-      "bratty_sub",
-      "rough_and_ready",
-      "wants_to_feel_owned",
-      "loves_feeling_small",
-      "obedient_sub"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -2646,17 +2625,12 @@
     "rarity": "common",
     "prompt_hint": "the two words, at the right moment",
     "image_prompt": null,
-    "affinities": [
-      "bratty_sub",
-      "rough_and_ready",
-      "wants_to_feel_owned",
-      "loves_feeling_small",
-      "obedient_sub",
-      "praise_hungry"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -2667,16 +2641,12 @@
     "rarity": "common",
     "prompt_hint": "being taken past the point where she can think",
     "image_prompt": null,
-    "affinities": [
-      "bratty_sub",
-      "rough_and_ready",
-      "wants_to_feel_owned",
-      "loves_feeling_small",
-      "obedient_sub"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -2687,16 +2657,12 @@
     "rarity": "common",
     "prompt_hint": "hands that grip and do not ask",
     "image_prompt": null,
-    "affinities": [
-      "bratty_sub",
-      "rough_and_ready",
-      "wants_to_feel_owned",
-      "loves_feeling_small",
-      "obedient_sub"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -2707,9 +2673,7 @@
     "rarity": "common",
     "prompt_hint": "catching him looking and him not looking away",
     "image_prompt": null,
-    "affinities": [
-      "exhibitionist_tease"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {},
@@ -2723,10 +2687,7 @@
     "rarity": "common",
     "prompt_hint": "his eyes on her while she touches herself",
     "image_prompt": null,
-    "affinities": [
-      "exhibitionist_tease",
-      "camera_lover"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {},
@@ -2740,10 +2701,7 @@
     "rarity": "common",
     "prompt_hint": "specific, explicit messages at the wrong time of day",
     "image_prompt": null,
-    "affinities": [
-      "digital_tease",
-      "wordsmith"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {},
@@ -2757,9 +2715,7 @@
     "rarity": "common",
     "prompt_hint": "a man who says exactly what he wants",
     "image_prompt": null,
-    "affinities": [
-      "wordsmith"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {},
@@ -2773,12 +2729,12 @@
     "rarity": "common",
     "prompt_hint": "hands that cover her",
     "image_prompt": null,
-    "affinities": [
-      "loves_feeling_small"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -2789,9 +2745,7 @@
     "rarity": "common",
     "prompt_hint": "tattoos, the more the better",
     "image_prompt": null,
-    "affinities": [
-      "tattooed_alt"
-    ],
+    "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {},

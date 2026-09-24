@@ -20,6 +20,11 @@ export interface CardSpec {
   options: Record<string, { id: string; label: string }[]>;
 }
 
+export interface TasteSection {
+  title: string;
+  categories: { category: string; label: string; options: { id: string; label: string; hint: string }[] }[];
+}
+
 export interface KinkDomain {
   id: string;
   label: string;
@@ -232,6 +237,7 @@ export const api = {
   saveProfile: (p: UserProfile) => request<UserProfile>('/api/profile', { method: 'PUT', body: JSON.stringify(p) }),
   stack: () => request<{ generating: number; profiles: SwipeProfile[] }>('/api/stack'),
   kinkDomains: () => request<KinkDomain[]>('/api/kink-domains'),
+  tasteSpec: () => request<TasteSection[]>('/api/taste-spec'),
   cardSpec: () => request<CardSpec>('/api/card-spec'),
   swipe: (id: string, direction: 'left' | 'right') =>
     request<any>(`/api/swipe/${id}`, { method: 'POST', body: JSON.stringify({ direction }) }),

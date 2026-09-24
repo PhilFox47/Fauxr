@@ -71,6 +71,7 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   add('eyes', 'looks', 'Eyes', label('eye_color', s.eye_color), 'Needs a photo.');
   add('height', 'looks', 'Height', label('height', s.height), 'Needs a photo, or a date.');
   add('body_type', 'looks', 'Build', label('body_type', s.body_type), 'Needs a photo, or a date.');
+  add('butt_size', 'looks', 'Her butt', s.butt_size ? label('butt_size', s.butt_size) : '', 'Needs a photo from the right angle.');
   add('style', 'looks', 'Style', label('clothing_style', s.clothing_style), 'Needs a photo.');
   add('distinctive_feature', 'looks', 'Distinctive', label('distinctive_feature', s.distinctive_feature), 'Needs a photo, or a date.');
   s.tattoos.forEach((t, i) =>
@@ -87,6 +88,9 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   add('sexual_experience', 'intimate', 'Experience', label('sexual_experience', s.sexual_experience), 'Ask what she has done.');
   add('body_pride', 'intimate', 'Proudest of', label('body_pride', s.body_pride), 'Compliment her and see what lands.');
   add('signature_move', 'intimate', 'Her signature', label('signature_move', s.signature_move), 'She will come back to it.');
+  add('lingerie_style', 'intimate', 'Underneath', s.lingerie_style ? label('lingerie_style', s.lingerie_style) : '', 'Ask what she has on.');
+  add('sleepwear', 'intimate', 'Sleeps in', s.sleepwear ? label('sleepwear', s.sleepwear) : '', 'Ask her at bedtime.');
+  add('intimate_grooming', 'intimate', 'Down there', s.intimate_grooming ? label('intimate_grooming', s.intimate_grooming) : '', 'She will tell you if you ask nicely.');
   add('orientation', 'basics', 'Orientation', label('orientation', s.orientation), '');
   add('freak', 'intimate', 'How far she goes',
     s.freak >= 4 ? 'Very little fazes her' : s.freak >= 2.5 ? 'Fairly open' : s.freak >= 1.2 ? 'Open to a point' : 'Knows what she likes',

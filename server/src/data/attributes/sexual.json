@@ -431,7 +431,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -445,7 +447,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -739,7 +743,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -837,7 +843,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -851,7 +859,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -865,7 +875,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -879,7 +891,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -893,7 +907,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -907,7 +923,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -921,7 +939,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -935,7 +955,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -949,7 +971,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -963,7 +987,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -977,7 +1003,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -991,7 +1019,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1005,7 +1035,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1019,7 +1051,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1033,7 +1067,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1047,7 +1083,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1089,7 +1127,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1103,7 +1143,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1117,7 +1159,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1131,7 +1175,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1145,7 +1191,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1173,7 +1221,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1187,7 +1237,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1201,7 +1253,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1215,7 +1269,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1229,7 +1285,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1243,7 +1301,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1257,7 +1317,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1271,7 +1333,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1299,7 +1363,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1327,7 +1393,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1341,7 +1409,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1355,7 +1425,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1369,7 +1441,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1383,7 +1457,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1411,7 +1487,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1425,7 +1503,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1453,7 +1533,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -1467,7 +1549,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -1481,7 +1565,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -2377,7 +2463,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -2615,7 +2703,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4070,7 +4160,8 @@
     "image_prompt": null,
     "affinities": [],
     "conflicts": [
-      "deepthroat_giving"
+      "deepthroat_giving",
+      "sloppy_head"
     ],
     "modifies": {},
     "extra": {},
@@ -4435,7 +4526,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4505,7 +4598,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4519,7 +4614,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4533,7 +4630,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -4547,7 +4646,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4561,7 +4662,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -4603,7 +4706,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4617,7 +4722,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -4631,7 +4738,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4673,7 +4782,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -4729,7 +4840,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4743,7 +4856,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -4757,7 +4872,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -4799,7 +4916,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -4813,7 +4932,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": -1
+    },
     "enabled": true
   },
   {
@@ -4983,7 +5104,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "dom_sub": 1
+    },
     "enabled": true
   },
   {
@@ -5245,7 +5368,8 @@
       },
       "kink_bias": {
         "bdsm_power": 2.5,
-        "bondage": 1
+        "bondage": 1,
+        "instruction": 1.5
       },
       "weights": {
         "giving_commands": 3.0,
@@ -5254,7 +5378,10 @@
         "collaring_him": 3.0,
         "tying_him": 3.0,
         "power_exchange_formal": 3.0,
-        "commanding": 4.0
+        "commanding": 4.0,
+        "leather_straps": 2.5,
+        "strappy_harness": 2.0,
+        "latex_pvc": 2.0
       },
       "pace": 1.2,
       "initiative": 0.15,
@@ -5300,7 +5427,9 @@
       },
       "kink_bias": {
         "bdsm_power": 1.5,
-        "toys": 0.5
+        "toys": 0.5,
+        "tease_denial": 1.5,
+        "instruction": 1.0
       },
       "weights": {
         "edging_giving": 3.0,
@@ -5465,7 +5594,8 @@
       "kink_bias": {
         "impact": 2,
         "pain_intense": 1.5,
-        "degradation": 1
+        "degradation": 1,
+        "tease_denial": 1.5
       },
       "weights": {
         "impact_giving": 3.0,
@@ -5629,7 +5759,9 @@
         "boot_licking_receiving": 3.0,
         "massage_receiving": 3.0,
         "breast_worship": 3.0,
-        "face_sitting": 3.0
+        "face_sitting": 3.0,
+        "being_worshipped": 3.0,
+        "a_man_on_his_knees": 2.0
       },
       "pace": 1.0,
       "freak_shift": 0.5
@@ -5727,7 +5859,9 @@
       },
       "kink_bias": {
         "exhibitionism": 1,
-        "recording": 1
+        "recording": 1,
+        "instruction": 2.0,
+        "voyeurism": 1.5
       },
       "weights": {
         "watching_him": 3.0,
@@ -5834,7 +5968,10 @@
         "edging_receiving": 3.0
       },
       "pace": 1.2,
-      "initiative": 0.1
+      "initiative": 0.1,
+      "kink_bias": {
+        "primal": 1.0
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -6125,7 +6262,10 @@
         "massage_giving": 3.0,
         "music_synced": 3.0
       },
-      "pace": 0.6
+      "pace": 0.6,
+      "kink_bias": {
+        "sensation": 1.5
+      }
     },
     "enabled": true,
     "rarity": "rare"
@@ -6165,7 +6305,8 @@
         ]
       },
       "kink_bias": {
-        "bondage": 1
+        "bondage": 1,
+        "sensation": 2.5
       },
       "weights": {
         "ice_play_receiving": 3.0,
@@ -6216,7 +6357,8 @@
         ]
       },
       "kink_bias": {
-        "cum_play": 1
+        "cum_play": 1,
+        "oral": 2.5
       },
       "weights": {
         "deepthroat_giving": 3.0,
@@ -6274,7 +6416,8 @@
         "chest_hair": 3.0,
         "collarbone_licking": 3.0,
         "inner_thigh_kissing": 3.0,
-        "hands_on_chest": 3.0
+        "hands_on_chest": 3.0,
+        "being_worshipped": 2.0
       },
       "pace": 1.0
     },
@@ -6323,7 +6466,9 @@
         "voice_kink": 3.0,
         "poetic": 2.0,
         "storyteller_voice": 2.0,
-        "running_commentary": 2.0
+        "running_commentary": 2.0,
+        "a_dirty_mouth": 3.0,
+        "filthy_texts": 2.0
       },
       "pace": 1.2,
       "initiative": 0.15
@@ -6432,7 +6577,8 @@
         "hentai_together": 3.0,
         "costume_roleplay": 3.0,
         "knee_high_socks_wearing": 3.0,
-        "nerdy_references": 5.0
+        "nerdy_references": 5.0,
+        "costume_lingerie": 4.0
       },
       "pace": 1.0,
       "freak_shift": 0.4
@@ -6541,7 +6687,11 @@
         "suggestive_photos_giving": 3.0,
         "corset_wearing": 3.0,
         "lingerie_reveal": 4.0,
-        "striptease": 2.0
+        "striptease": 2.0,
+        "corset_garters": 3.0,
+        "black_lace": 2.0,
+        "silk_satin": 2.0,
+        "lingerie_to_bed": 3.0
       },
       "pace": 1.1,
       "initiative": 0.15
@@ -6588,7 +6738,8 @@
       },
       "kink_bias": {
         "exhibitionism": 2.5,
-        "recording": 1
+        "recording": 1,
+        "voyeurism": 1.0
       },
       "weights": {
         "mild_public_tease": 3.0,
@@ -6597,7 +6748,12 @@
         "suggestive_photos_giving": 3.0,
         "claimed_in_public": 3.0,
         "outdoors": 3.0,
-        "toy_remote": 3.0
+        "toy_remote": 3.0,
+        "being_stared_at": 3.0,
+        "being_watched": 3.0,
+        "nothing_underneath": 3.0,
+        "sheer_mesh": 2.0,
+        "crotchless": 2.0
       },
       "pace": 1.3,
       "initiative": 0.2,
@@ -6650,7 +6806,8 @@
         "suggestive_photos_giving": 3.0,
         "mutual_masturbation": 3.0,
         "photo_trail": 3.0,
-        "mirror": 3.0
+        "mirror": 3.0,
+        "being_watched": 3.0
       },
       "pace": 1.3,
       "initiative": 0.2,
@@ -6694,7 +6851,8 @@
         ]
       },
       "kink_bias": {
-        "exhibitionism": 0.5
+        "exhibitionism": 0.5,
+        "voyeurism": 2.5
       },
       "weights": {
         "watching_him": 3.0,
@@ -6841,7 +6999,8 @@
       },
       "kink_bias": {
         "bdsm_power": 1.5,
-        "impact": 1
+        "impact": 1,
+        "primal": 2.5
       },
       "weights": {
         "primal_play": 3.0,
@@ -6894,7 +7053,8 @@
       },
       "kink_bias": {
         "impact": 1,
-        "bdsm_power": 1
+        "bdsm_power": 1,
+        "primal": 2.0
       },
       "weights": {
         "hair_pulling": 3.0,
@@ -7151,7 +7311,8 @@
       "kink_bias": {
         "bdsm_power": 2,
         "degradation": 1,
-        "bondage": 1
+        "bondage": 1,
+        "primal": 1.5
       },
       "weights": {
         "dark_romance_fantasy": 3.0,
@@ -7209,7 +7370,8 @@
         "being_carried": 3.0,
         "being_pinned": 3.0,
         "hip_grip": 3.0,
-        "hands_on_waist": 3.0
+        "hands_on_waist": 3.0,
+        "big_hands": 3.0
       },
       "pace": 1.0
     },
@@ -7253,7 +7415,8 @@
       },
       "kink_bias": {
         "size_difference": 1,
-        "bdsm_power": 0.5
+        "bdsm_power": 0.5,
+        "primal": 1.5
       },
       "weights": {
         "pinning_him": 3.0,
@@ -7354,7 +7517,8 @@
         ]
       },
       "kink_bias": {
-        "cum_play": 2.5
+        "cum_play": 2.5,
+        "oral": 1.5
       },
       "weights": {
         "cum_marking": 3.0,
@@ -7561,7 +7725,7 @@
       "weights": {
         "being_dominated": 3.0,
         "spanking_receiving": 3.0,
-        "being_pinned": 3.0,
+        "being_pinned": 2.0,
         "hair_pulling": 3.0,
         "taking_commands": 3.0,
         "mouthy_bratty": 5.0,
@@ -7610,7 +7774,8 @@
       },
       "kink_bias": {
         "bdsm_power": 2.5,
-        "praise": 1
+        "praise": 1,
+        "instruction": 1.5
       },
       "weights": {
         "taking_commands": 3.0,
@@ -7667,7 +7832,8 @@
         "being_told_beautiful": 3.0,
         "being_told_she_smells_good": 3.0,
         "taking_commands": 3.0,
-        "begging": 2.0
+        "begging": 2.0,
+        "being_called_good_girl": 3.0
       },
       "pace": 1.0
     },
@@ -7762,7 +7928,9 @@
         ]
       },
       "kink_bias": {
-        "bdsm_power": 1
+        "bdsm_power": 1,
+        "instruction": 1.0,
+        "oral": 1.0
       },
       "weights": {
         "doing_it_for_him": 3.0,
@@ -7915,7 +8083,8 @@
       "kink_bias": {
         "impact": 2.5,
         "pain_intense": 2.5,
-        "bdsm_power": 1
+        "bdsm_power": 1,
+        "sensation": 1.0
       },
       "weights": {
         "impact_receiving": 3.0,
@@ -7966,7 +8135,8 @@
       },
       "kink_bias": {
         "bdsm_power": 1.5,
-        "toys": 1
+        "toys": 1,
+        "tease_denial": 2.5
       },
       "weights": {
         "edging_receiving": 3.0,
@@ -8466,7 +8636,10 @@
         "being_told_beautiful": 3.0,
         "silk_sheets": 3.0
       },
-      "pace": 0.9
+      "pace": 0.9,
+      "kink_bias": {
+        "oral": 1.0
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8511,7 +8684,10 @@
         "deepthroat_giving": 3.0,
         "watching_him": 3.0
       },
-      "pace": 1.0
+      "pace": 1.0,
+      "kink_bias": {
+        "oral": 1.5
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8829,7 +9005,8 @@
         ]
       },
       "kink_bias": {
-        "recording": 1
+        "recording": 1,
+        "instruction": 1.0
       },
       "weights": {
         "suggestive_photos_giving": 3.0,
@@ -8840,7 +9017,8 @@
         "lots_of_sexting": 4.0,
         "photo_trail": 3.0,
         "on_the_phone": 2.0,
-        "lowercase_texty": 2.0
+        "lowercase_texty": 2.0,
+        "filthy_texts": 3.0
       },
       "pace": 1.4,
       "initiative": 0.25
@@ -9169,7 +9347,8 @@
       },
       "kink_bias": {
         "recording": 1,
-        "exhibitionism": 1
+        "exhibitionism": 1,
+        "voyeurism": 2.0
       },
       "weights": {
         "mutual_masturbation": 3.0,
@@ -9377,7 +9556,11 @@
         "collar_receiving": 3.0,
         "nylon_fishnet": 3.0,
         "nail_dragging": 3.0,
-        "kink_community": 3.0
+        "kink_community": 3.0,
+        "ink_on_him": 3.0,
+        "strappy_harness": 2.5,
+        "fishnet_bodystocking": 2.0,
+        "band_tee": 2.0
       },
       "pace": 1.1,
       "freak_shift": 0.8
@@ -9431,7 +9614,9 @@
         "leather_wearing": 3.0,
         "corset_wearing": 3.0,
         "high_heels_wearing": 3.0,
-        "seeing_him_in_leather": 3.0
+        "seeing_him_in_leather": 3.0,
+        "latex_pvc": 4.0,
+        "leather_straps": 3.0
       },
       "pace": 1.1,
       "freak_shift": 0.8
@@ -9623,7 +9808,10 @@
         "voice_notes": 5.0
       },
       "pace": 1.2,
-      "initiative": 0.1
+      "initiative": 0.1,
+      "kink_bias": {
+        "instruction": 1.0
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9664,7 +9852,8 @@
       "kink_bias": {
         "toys": 2,
         "bdsm_power": 1,
-        "bondage": 1
+        "bondage": 1,
+        "tease_denial": 1.0
       },
       "weights": {
         "overstimulation": 3.0,
@@ -9867,7 +10056,10 @@
         "teasing_questions": 3.0
       },
       "pace": 0.8,
-      "initiative": 0.15
+      "initiative": 0.15,
+      "kink_bias": {
+        "tease_denial": 2.0
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -11304,5 +11496,1786 @@
     "extra": {},
     "enabled": true,
     "rarity": "common"
+  },
+  {
+    "id": "oral_receiving",
+    "category": "fetish",
+    "label": "Being eaten out, properly",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "long and unhurried, and she will tell him exactly where",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "oral_giving",
+    "category": "fetish",
+    "label": "Going down on him",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "genuinely loves it; it is never a favour",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sloppy_head",
+    "category": "fetish",
+    "label": "Sloppy, noisy head",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "wet, loud, no manners about it, and she wants him to watch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "guiding_him_by_phone",
+    "category": "fetish",
+    "label": "Talking him through it on the phone",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "every stroke on her count",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_told_how_to_touch_herself",
+    "category": "fetish",
+    "label": "Being told exactly how to touch herself",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "his words, her hands, no improvising",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "countdown",
+    "category": "fetish",
+    "label": "A countdown, and not a second early",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "he finishes on zero or not at all",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "chastity_him",
+    "category": "fetish",
+    "label": "Keeping him locked",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a cage, a key she wears, and a date she might move",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "ruined_orgasm_giving",
+    "category": "fetish",
+    "label": "Ruining it for him at the last second",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "letting go exactly when he cannot stop",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "asking_permission",
+    "category": "fetish",
+    "label": "Having to ask before she comes",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "and sometimes being told no",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "tease_for_days",
+    "category": "fetish",
+    "label": "Teasing for days before anything happens",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "the build is the point and she makes it last",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "peeping_fantasy",
+    "category": "fetish",
+    "label": "A set-up peeping fantasy",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "curtains left open on purpose, both of them in on it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "chase_and_catch",
+    "category": "fetish",
+    "label": "Being chased and caught",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "running for real, and the moment he gets hold of her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "bite_marks",
+    "category": "fetish",
+    "label": "Bites that leave marks",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "teeth on the shoulder and thigh, and wearing them the next day",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wrestling_for_top",
+    "category": "fetish",
+    "label": "Wrestling for who ends up on top",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "a real struggle, and the winner decides",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "rough_sex",
+    "category": "fetish",
+    "label": "Rough, properly rough",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "thrown around, held down, nothing careful about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "temperature_contrast",
+    "category": "fetish",
+    "label": "Hot and cold, one after the other",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "a warm mouth after an ice cube, on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "oral_limit",
+    "category": "hard_limit",
+    "label": "Oral, either way",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "oral",
+    "category": "kink_domain",
+    "label": "Oral",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "going down on him, him going down on her, sitting on his face, all of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "oral_receiving",
+        "oral_giving",
+        "sloppy_head",
+        "deepthroat_giving",
+        "face_sitting_receiving",
+        "face_sitting_giving",
+        "sixty_nine"
+      ],
+      "limits": [
+        "oral_limit"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "instruction",
+    "category": "kink_domain",
+    "label": "Instruction and JOI",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "being told exactly what to do with her hands, or telling him - on a call, in a voice note, in person",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "joi_giving",
+        "joi_receiving",
+        "guiding_him_by_phone",
+        "being_told_how_to_touch_herself",
+        "countdown",
+        "describing_what_she_wants",
+        "doing_it_for_him"
+      ],
+      "limits": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "tease_denial",
+    "category": "kink_domain",
+    "label": "Tease and denial",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "edging, waiting, asking permission, being kept on the edge on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "denying_him",
+        "self_denial",
+        "being_made_to_wait",
+        "edging_receiving",
+        "edging_giving",
+        "chastity_him",
+        "ruined_orgasm_giving",
+        "asking_permission",
+        "tease_for_days"
+      ],
+      "limits": [
+        "denial_limit"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "voyeurism",
+    "category": "kink_domain",
+    "label": "Watching",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "watching him, watching herself, watching each other with no touching allowed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 0,
+      "fetishes": [
+        "voyeurism_watching",
+        "watching_him",
+        "mirror_watching_him",
+        "mirror_watching_self",
+        "mutual_masturbation",
+        "erotica_together",
+        "hentai_together",
+        "peeping_fantasy"
+      ],
+      "limits": [
+        "mirror_limit",
+        "filming_others"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "primal",
+    "category": "kink_domain",
+    "label": "Primal and rough",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "chasing, pinning, wrestling, biting - instinct over technique, and play at resistance for some",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 2,
+      "fetishes": [
+        "primal_play",
+        "consensual_nonconsent",
+        "chase_and_catch",
+        "bite_marks",
+        "wrestling_for_top",
+        "rough_sex",
+        "pushed_against_wall"
+      ],
+      "limits": [
+        "rough_handling_limit",
+        "surprise"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sensation",
+    "category": "kink_domain",
+    "label": "Sensation play",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "wax, ice, feathers, nails, a blindfold - playing with what her skin feels",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "wax_play_receiving",
+        "wax_play_giving",
+        "ice_play_receiving",
+        "ice_play_giving",
+        "metal_cold",
+        "feather_tickler",
+        "nail_dragging",
+        "blindfold_receiving",
+        "sensory_deprivation",
+        "temperature_contrast",
+        "tickling_receiving"
+      ],
+      "limits": [
+        "temperature_play_limit"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hotel_bar_strangers",
+    "category": "fantasy_scenario",
+    "label": "Strangers at a hotel bar",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "they meet at a hotel bar pretending not to know each other, and she decides how far the pretence goes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "office_after_hours",
+    "category": "fantasy_scenario",
+    "label": "The office after hours",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "everyone has gone home and the desk is right there",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism",
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "gym_after_close",
+    "category": "fantasy_scenario",
+    "label": "The gym after closing",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "still sweaty from a session, the lights half off",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "massage_goes_further",
+    "category": "fantasy_scenario",
+    "label": "A massage that goes further",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "a massage, given or received, that neither of them stops where it should",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sensation",
+        "tease_denial"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "tied_and_teased",
+    "category": "fantasy_scenario",
+    "label": "Tied up and teased for an hour",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "wrists tied, and he is not allowed to hurry",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "bondage",
+        "tease_denial"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "him_tied_her_rules",
+    "category": "fantasy_scenario",
+    "label": "Him tied to her bed",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "he cannot move and she sets every rule",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "bondage",
+        "bdsm_power"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "worship_evening",
+    "category": "fantasy_scenario",
+    "label": "An evening of being worshipped",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "he spends the whole evening on her body, where and how she tells him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "bdsm_power",
+        "praise"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "heels_off",
+    "category": "fantasy_scenario",
+    "label": "Heels off, his mouth on her feet",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "after a long night out, her feet in his lap and then his mouth",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "feet"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "call_instructions",
+    "category": "fantasy_scenario",
+    "label": "Talking him through it on a call",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she tells him exactly what to do and when, and he is not allowed to finish early",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "instruction"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "following_orders_call",
+    "category": "fantasy_scenario",
+    "label": "Following his instructions on a call",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "he tells her what to do with her hands and she does it, out loud",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "instruction"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "edged_until_he_begs",
+    "category": "fantasy_scenario",
+    "label": "Edging him until he begs",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she brings him to the edge again and again and decides when",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "tease_denial"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "locked_for_a_week",
+    "category": "fantasy_scenario",
+    "label": "Keeping him locked for a week",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a key on a chain round her neck and a week of teasing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "tease_denial",
+        "bdsm_power"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "chased_and_caught",
+    "category": "fantasy_scenario",
+    "label": "Chased and caught",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "she runs, through a house or a dark garden, and he catches her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "primal"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "wrestle_for_top",
+    "category": "fantasy_scenario",
+    "label": "Wrestling for the top",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "a real struggle for who ends up on top, and the winner takes what they want",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "primal"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "negotiated_take",
+    "category": "fantasy_scenario",
+    "label": "A negotiated take-me scene",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "planned together to the last detail, then played as if it was not",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "primal",
+        "bdsm_power"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "pinned_at_the_door",
+    "category": "fantasy_scenario",
+    "label": "Pinned against the door",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "the second the door closes behind them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "primal"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "parked_car",
+    "category": "fantasy_scenario",
+    "label": "In a parked car",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "somewhere they could be seen if anyone walked past",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "remote_toy_public",
+    "category": "fantasy_scenario",
+    "label": "A remote toy in public",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she wears it out to dinner and he holds the remote",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "toys",
+        "exhibitionism"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "remote_toy_on_him",
+    "category": "fantasy_scenario",
+    "label": "Holding the remote",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "he wears it out and she holds the remote all evening",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "toys",
+        "exhibitionism"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "strip_game",
+    "category": "fantasy_scenario",
+    "label": "A strip game that gets out of hand",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "cards, questions or dares, and nobody ends up dressed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "photoshoot",
+    "category": "fantasy_scenario",
+    "label": "A photoshoot that escalates",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "it starts as pictures and stops being about the pictures",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "recording",
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "filming_it",
+    "category": "fantasy_scenario",
+    "label": "Filming it, just for them",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a phone propped up and a video they watch back together",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "recording"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "mirror_view",
+    "category": "fantasy_scenario",
+    "label": "In front of a mirror",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "so she can watch every second of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "voyeurism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "watching_him_touch",
+    "category": "fantasy_scenario",
+    "label": "Watching him touch himself",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she sits across the room and directs",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "voyeurism",
+        "instruction"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "no_touching",
+    "category": "fantasy_scenario",
+    "label": "Watching each other, no touching allowed",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "across the room, hands only on themselves, until someone breaks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "voyeurism",
+        "tease_denial"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "another_woman",
+    "category": "fantasy_scenario",
+    "label": "A third, another woman",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a woman she picks, and the two of them focused on him or on each other",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "watching_him_with_her",
+    "category": "fantasy_scenario",
+    "label": "Watching him with someone else",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "from a chair, telling them both what to do",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing",
+        "voyeurism"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "uniform_scenario",
+    "category": "fantasy_scenario",
+    "label": "A uniform scenario",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "nurse, officer, flight attendant - a uniform and the role that comes with it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "professor_office_hours",
+    "category": "fantasy_scenario",
+    "label": "Professor and grad student",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a late meeting in his office about her thesis, both of them adults with a lot to lose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "boss_new_hire",
+    "category": "fantasy_scenario",
+    "label": "Boss and new hire",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "one of them in charge at work and both of them testing it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay",
+        "bdsm_power"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "in_costume",
+    "category": "fantasy_scenario",
+    "label": "In costume as his favourite character",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she shows up as a character he loves and stays in role",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "collar_and_leash",
+    "category": "fantasy_scenario",
+    "label": "Collar, leash and rules",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "petplay with real rules, and she is the pet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay",
+        "bdsm_power"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "her_pet",
+    "category": "fantasy_scenario",
+    "label": "Him as her pet",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a collar on him, and rules she wrote",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay",
+        "bdsm_power"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "latex_night",
+    "category": "fantasy_scenario",
+    "label": "A night in latex or leather",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "dressed head to toe in it, and it stays on",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "fetishwear"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "nothing_under_the_dress",
+    "category": "fantasy_scenario",
+    "label": "Lingerie under a dress through dinner",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she tells him what she has on underneath at the start of dinner, then makes him wait",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "fetishwear",
+        "tease_denial"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "praised_through_it",
+    "category": "fantasy_scenario",
+    "label": "Praised through every second",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "he tells her how good she is the whole time and does not stop",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "praise"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "praising_him",
+    "category": "fantasy_scenario",
+    "label": "Telling him how good he is",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she is on top and tells him exactly how well he is doing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "praise"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "used_as_asked",
+    "category": "fantasy_scenario",
+    "label": "Called names, exactly as she asked",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "talked down to and used, to a script she wrote",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "degradation"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "putting_him_in_his_place",
+    "category": "fantasy_scenario",
+    "label": "Putting him in his place",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "she talks down to him, slowly, and he takes it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "degradation"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "over_his_knee",
+    "category": "fantasy_scenario",
+    "label": "Over his knee",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "counting, out loud, and losing count",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "impact"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "over_her_knee",
+    "category": "fantasy_scenario",
+    "label": "Over her knee",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "him across her lap and her hand, then something else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "impact"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "wax_and_ice",
+    "category": "fantasy_scenario",
+    "label": "Wax and ice, blindfolded",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "hot then cold, and she cannot see which is next",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sensation"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "blindfold_guessing",
+    "category": "fantasy_scenario",
+    "label": "Blindfolded and guessing",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she has to guess what is touching her next",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sensation",
+        "bondage"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "throne",
+    "category": "fantasy_scenario",
+    "label": "Sitting on his face until she is done",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "and she decides when that is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "oral",
+        "bdsm_power"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "oral_as_long_as_she_wants",
+    "category": "fantasy_scenario",
+    "label": "Going down on him for as long as she likes",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "no hurry, no stopping, and he is not allowed to touch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "oral"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "him_first_with_mouth",
+    "category": "fantasy_scenario",
+    "label": "Nothing else until she has come on his mouth",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "the rule for the whole night",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "oral"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sixty_nine_race",
+    "category": "fantasy_scenario",
+    "label": "A race in 69",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "whoever finishes first loses",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "oral"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "anal_together",
+    "category": "fantasy_scenario",
+    "label": "Anal, taken slowly",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "properly prepared, a lot of lube, and completely her pace",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "anal"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "pegging_night",
+    "category": "fantasy_scenario",
+    "label": "Pegging him",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "the harness she bought and a night she has planned",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "anal",
+        "bdsm_power"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "marked",
+    "category": "fantasy_scenario",
+    "label": "Marked where she chooses",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she tells him where he finishes, and she wears it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "cum_play"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "carried_to_bed",
+    "category": "fantasy_scenario",
+    "label": "Picked up and carried",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "lifted like she weighs nothing and put exactly where he wants her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "size_difference"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "shower_before_work",
+    "category": "fantasy_scenario",
+    "label": "The shower before work",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "both of them late on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "skinny_dipping",
+    "category": "fantasy_scenario",
+    "label": "Skinny dipping that turns into more",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "a lake or a pool at night, and then the towels",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "motel_road_trip",
+    "category": "fantasy_scenario",
+    "label": "A road trip and a cheap motel",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "a thin wall, a squeaky bed and nobody who knows them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "hotel_weekend",
+    "category": "fantasy_scenario",
+    "label": "A hotel weekend they never leave",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "room service and the do-not-disturb sign",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "under_the_table",
+    "category": "fantasy_scenario",
+    "label": "Hands under the table",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "at a dinner with friends, keeping a straight face",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism",
+        "tease_denial"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "club_bathroom",
+    "category": "fantasy_scenario",
+    "label": "A club bathroom",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "music through the wall and a queue outside",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sleeper_train",
+    "category": "fantasy_scenario",
+    "label": "A sleeper train cabin",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a narrow bunk, a rattling door and a long night",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "woken_by_her_mouth",
+    "category": "fantasy_scenario",
+    "label": "Waking him with her mouth",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "he wakes up to it, as agreed the night before",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "oral"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "free_use_weekend",
+    "category": "fantasy_scenario",
+    "label": "A free-use weekend",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "a weekend where he can have her whenever he wants, agreed in advance",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "bdsm_power"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "rules_contract",
+    "category": "fantasy_scenario",
+    "label": "Writing the rules together",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a proper contract with rules, safewords and rewards, then living by it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "bdsm_power"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "made_to_keep_coming",
+    "category": "fantasy_scenario",
+    "label": "Made to keep coming",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "long after she thinks she is done",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "tease_denial",
+        "bdsm_power"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "all_day_sexting",
+    "category": "fantasy_scenario",
+    "label": "A whole day of filthy texts before they meet",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she builds it up from breakfast to the door",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "instruction"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "voice_notes_only",
+    "category": "fantasy_scenario",
+    "label": "Voice notes only, no touching until she says",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she sends voice notes all day and he has to wait for the word",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "instruction",
+        "tease_denial"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "dark_romance_stranger",
+    "category": "fantasy_scenario",
+    "label": "A dark-romance stranger",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a stranger who decides she is his, played out as agreed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "primal",
+        "roleplay"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "the_other_woman",
+    "category": "fantasy_scenario",
+    "label": "The other-woman fantasy",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "she plays the woman he should not be with",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "neighbour_hears",
+    "category": "fantasy_scenario",
+    "label": "The neighbour hears everything",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "and she makes sure of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "changing_room",
+    "category": "fantasy_scenario",
+    "label": "A changing room with a curtain",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she asks his opinion on something and pulls him in",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "slow_rope",
+    "category": "fantasy_scenario",
+    "label": "A slow rope session",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "proper shibari, an hour of it, before anything else happens",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "bondage"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "private_cam_show",
+    "category": "fantasy_scenario",
+    "label": "A private cam show just for him",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she sets up the camera, he types the requests",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "recording",
+        "exhibitionism",
+        "instruction"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hand_at_her_throat",
+    "category": "fantasy_scenario",
+    "label": "His hand at her throat",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "carefully, and exactly how she showed him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "breath_play"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "in_the_rain",
+    "category": "fantasy_scenario",
+    "label": "Outside in the rain",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "soaked through and not caring who looks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
   }
 ]

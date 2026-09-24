@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type CardSpec, type ImageJob, type KinkDomain, type KinkStance, type Location, type LogEntry, type ResetParts, type UserProfile } from '../api';
+import { api, type CardSpec, type ImageJob, type KinkDomain, type KinkStance, type Location, type LogEntry, type ResetParts, type TasteSection, type UserProfile } from '../api';
 
-type Pane = 'models' | 'behaviour' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
+type Pane = 'models' | 'behaviour' | 'taste' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
 
 const PANES: { id: Pane; label: string }[] = [
   { id: 'models', label: 'Models' },
   { id: 'behaviour', label: 'Behaviour' },
+  { id: 'taste', label: 'Taste' },
   { id: 'profile', label: 'Your profile' },
   { id: 'locations', label: 'Locations' },
   { id: 'logs', label: 'Logs' },
@@ -123,6 +124,7 @@ export default function Settings({
         {pane === 'behaviour' && (
           <BehaviourPane settings={settings} patch={patch} save={save} saved={saved} usage={usage} />
         )}
+        {pane === 'taste' && <TastePane settings={settings} patch={patch} save={save} saved={saved} />}
         {pane === 'profile' && <ProfilePane profile={profile} onSaved={onProfileSaved} />}
         {pane === 'locations' && <LocationsPane />}
         {pane === 'logs' && <LogsPane />}
@@ -564,6 +566,130 @@ function CardEditor({
           )}
         </details>
       ))}
+    </>
+  );
+}
+
+/** How far each Taste button moves a row. Normal is 1, stored rather than deleted so a save clears it. */
+const TASTE_LEVELS: { label: string; value: number }[] = [
+  { label: 'Never', value: 0 },
+  { label: 'Less', value: 0.3 },
+  { label: 'More', value: 3 },
+];
+const levelOf = (v: number | undefined) =>
+  v === undefined || v === 1 ? 1 : v === 0 ? 0 : v < 1 ? 0.3 : 3;
+
+const DOM_SUB_LEAN: { label: string; value: number }[] = [
+  { label: 'Mostly submissive', value: -1 },
+  { label: 'Lean sub', value: -0.5 },
+  { label: 'No lean', value: 0 },
+  { label: 'Lean dom', value: 0.5 },
+  { label: 'Mostly dominant', value: 1 },
+];
+
+/**
+ * His taste: which kinds of women show up in the stack. Every button is a multiplier on how
+ * often that attribute is rolled for a new character, on top of the tuned tables; nothing here
+ * touches characters that already exist.
+ */
+function TastePane({ settings, patch, save, saved }: any) {
+  const [spec, setSpec] = useState<TasteSection[] | null>(null);
+  const [filter, setFilter] = useState('');
+  useEffect(() => {
+    void api.tasteSpec().then(setSpec).catch(() => setSpec([]));
+  }, []);
+  const taste: Record<string, number> = settings.taste ?? {};
+  const set = (key: string, value: number) => patch(['taste'], { ...taste, [key]: value });
+  const neutral = (k: string) => (k === 'lean/dom_sub' ? 0 : 1);
+  const setCount = Object.entries(taste).filter(([k, v]) => v !== neutral(k)).length;
+  const clearAll = () => patch(['taste'], Object.fromEntries(Object.keys(taste).map((k) => [k, neutral(k)])));
+  const q = filter.trim().toLowerCase();
+
+  return (
+    <>
+      <div className="card">
+        <h2>Your taste</h2>
+        <p className="tiny muted">
+          Leans who shows up in your stack. More makes something about three times as likely, Less
+          about a third, Never keeps it out. It applies to characters generated from now on - the
+          few already waiting in the stack and everyone you have matched stay as they are.
+        </p>
+        <div className="field">
+          <span>Dominant or submissive</span>
+          <div className="kink-stances">
+            {DOM_SUB_LEAN.map((l) => (
+              <button
+                key={l.value}
+                type="button"
+                className="chip"
+                data-active={(taste['lean/dom_sub'] ?? 0) === l.value}
+                aria-pressed={(taste['lean/dom_sub'] ?? 0) === l.value}
+                onClick={() => set('lean/dom_sub', l.value)}
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <label className="field">
+          <span>Find</span>
+          <input type="text" value={filter} placeholder="goth, feet, curvy, bartender…" onChange={(e) => setFilter(e.target.value)} />
+        </label>
+        {setCount > 0 && (
+          <button type="button" className="btn ghost block" onClick={clearAll}>
+            Clear all ({setCount})
+          </button>
+        )}
+      </div>
+
+      {!spec && <div className="empty">Loading…</div>}
+      {spec?.map((section) => {
+        const matches = (o: { id: string; label: string; hint: string }) =>
+          !q || `${o.label} ${o.hint} ${o.id}`.toLowerCase().includes(q);
+        if (!section.categories.some((c) => c.options.some(matches))) return null;
+        return (
+        <div className="card" key={section.title}>
+          <h2>{section.title}</h2>
+          {section.categories.map((cat) => {
+            const options = cat.options.filter(matches);
+            if (!options.length) return null;
+            const changed = cat.options.filter((o) => levelOf(taste[`${cat.category}/${o.id}`]) !== 1).length;
+            return (
+              <details key={cat.category} className="card-section" open={!!q}>
+                <summary>{cat.label}{changed ? ` · ${changed} set` : ''}</summary>
+                {options.map((o) => {
+                  const key = `${cat.category}/${o.id}`;
+                  const level = levelOf(taste[key]);
+                  return (
+                    <div key={o.id} className="kink-row">
+                      <div className="kink-label">
+                        <strong>{o.label}</strong>
+                        {o.hint && <span className="tiny muted">{o.hint}</span>}
+                      </div>
+                      <div className="kink-stances">
+                        {TASTE_LEVELS.map((l) => (
+                          <button
+                            key={l.label}
+                            type="button"
+                            className="chip"
+                            data-active={level === l.value}
+                            aria-pressed={level === l.value}
+                            onClick={() => set(key, level === l.value ? 1 : l.value)}
+                          >
+                            {l.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </details>
+            );
+          })}
+        </div>
+        );
+      })}
+      <SaveBar save={save} saved={saved} />
     </>
   );
 }

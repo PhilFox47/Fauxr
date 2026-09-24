@@ -31,6 +31,7 @@ import {
   dateHistory, deleteDateMessage, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate,
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
+import { TASTE_SECTIONS } from '../engine/kinks.js';
 import type { Character, KinkStance, Location } from '../types.js';
 
 /**
@@ -628,6 +629,16 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       ]),
     ),
   }));
+
+  /** Settings -> Taste: the categories it offers and every row in them, labels only. */
+  app.get('/api/taste-spec', async () =>
+    TASTE_SECTIONS.map((section) => ({
+      title: section.title,
+      categories: section.categories.map((c) => ({
+        ...c,
+        options: byCategory(c.category).map((a) => ({ id: a.id, label: a.label, hint: a.prompt_hint })),
+      })),
+    })));
 
   /** Just the domains and their descriptions, for the profile editor. */
   app.get('/api/kink-domains', async () =>

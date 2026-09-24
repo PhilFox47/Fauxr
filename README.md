@@ -453,6 +453,67 @@ What changed:
   ("cuddling after", "eye contact") despite a kink map full of yeses, which is what read as
   vanilla. The soft entries are also uncommon now.
 
+## Your taste, and who she is underneath
+
+**Settings → Taste** is where the cast gets tuned to you, without touching the tables. Every
+style, build, breast and butt size, hair, makeup, accessory, persona, kink, lingerie style,
+dirty-talk style, fantasy idea, personality, texting voice, job and relationship status has
+Never / Less / More, plus a dominant-or-submissive lean for the whole cast. The pane has a
+search box ("goth", "feet", "bartender").
+
+- It is stored as `settings.taste`, keyed `category/id` (ids are only unique per category),
+  and applied in `roll()` as one more multiplier: More ×3, Less ×0.3, Never ×0. It sits on top
+  of everything, including the deliberately surprising `ignoreArchetype` rolls.
+- Kink domains are not rolled by `roll()`; `rollDomainStance()` in `engine/kinks.ts` turns the
+  multiplier into reach (log2, so More is about +1.6) and Never into "not for her".
+- `lean/dom_sub` (-1..1) weights each persona by the middle of its dom/sub range.
+- It only affects characters generated after you save; the few already waiting in the stack
+  and everyone you have matched stay as they are. Measured over 3000 rolls: More on goth took
+  goths from 5% to 13%, Never on feet took "into feet" from 55% to 0%, and "Mostly dominant"
+  took dominant-leaning characters from 48% to 69%.
+
+**Ages lean young.** Every age up to 27 inside your preferred range is equally likely, and each
+year after that is less likely than the one before (`rollAge`, four-year decay). With the
+default 18-42 band, 74% of the cast is 18-27; it was about 30%.
+
+**Persona first, then the kinks.** Turn-ons used to be rolled before her sexual persona, blind
+to it: 27% of strong dommes were turned on by "being pinned" and 19% of strong subs by "a man
+on his knees". They are rolled after the persona now, with its weights, and rows coded
+dominant or submissive (`extra.dom_sub`, read by `domSubLean()`) lean with her dom/sub
+leaning: 9% and 8% now, and switches still get both. Her fetishes follow the same leaning,
+since the power-exchange domains hold both sides.
+
+**Six new kink domains**, so the acts that were missing get a stance, a hard no and a place
+in discovery: oral (going down on him and her, face-sitting, 69 - thirteen explicit fetishes
+no domain used to own), instruction and JOI, tease and denial, watching, primal and rough, and
+sensation play. They come with sixteen new fetishes and an oral hard limit, personas lean
+them (`kink_bias`), and existing characters get a stance on each on first load: "into" if she
+already has one of its fetishes, otherwise rolled from her freak level and persona. They
+appear in your own kink profile automatically.
+
+**New fields for sexting:** her butt (`butt_size`, also in her appearance prompt), what she
+wears underneath (`lingerie_style`: black lace, harness sets, latex, corsets and garters,
+character lingerie, nothing at all, ...), what she sleeps in (`sleepwear`) and how she keeps
+herself (`intimate_grooming`). Lingerie and sleepwear lean with her style and persona (a
+latex fetishist, a goth's harness set, a cosplayer's bunny set). The three intimate ones go
+to her prompt and discovery, never to the fixed image prompt. Existing characters get them
+on first load.
+
+**Fantasies: a few ideas, a few of her own.** A new `fantasy_scenario` table holds 72 scenario
+ideas (a hotel-bar stranger, a remote toy at dinner, tied and teased, a private cam show, a
+sleeper train, ...), each tagged with the kink domains it touches. Three are rolled per
+character, leaned towards domains she is into, never touching one she is a hard no on, and
+following her dom/sub leaning. The character pass turns two or three of them into hers,
+with the setting, roles and details changed, and invents two or three more itself. Written
+all from one prompt, fantasies drift to the same few across the cast; written only from the
+table, they would all be recognisable.
+
+**Her style shapes the person, not just the look.** Clothing style is now rolled right after
+her archetype instead of with her looks, so its `extra.weights` reach her texting voice and
+her job as well as her interests and her hair and makeup. Goths are about twice as likely to
+text deadpan and be into horror, and 3.6 times as likely to be tattoo artists; e-girls lean
+towards streaming, gym girls towards personal training, baddies towards influencing.
+
 ## How a turn works
 
 ```

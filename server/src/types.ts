@@ -26,6 +26,7 @@ export interface CharacterSeed {
   height: string;
   body_type: string;
   breast_size: string;
+  butt_size: string;
   hair_color: string;
   hair_style: string;
   eye_color: string;
@@ -103,6 +104,12 @@ export interface CharacterSeed {
   body_pride: string;
   /** Her signature move or setting - the thing she keeps coming back to. */
   signature_move: string;
+  /** What she wears underneath, what she sleeps in and how she keeps herself - sexting detail. */
+  lingerie_style: string;
+  sleepwear: string;
+  intimate_grooming: string;
+  /** fantasy_scenario ids the character pass adapted into some of her fantasies. */
+  fantasy_seeds?: string[];
   /** Who she is attracted to. Decides whether she can appear for this user at all. */
   orientation: string;
   /** How it shows when she is turned on, so warming up is not identical for everyone. */

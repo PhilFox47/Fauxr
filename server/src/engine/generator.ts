@@ -10,6 +10,7 @@ import {
   updateCharacterSeed,
 } from '../repo.js';
 import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
+import { domSubLean, rollFantasySeeds, rollKinkMap } from './kinks.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
@@ -51,17 +52,26 @@ function speciesCanHave(fetish: Attribute, speciesId: string): boolean {
 
 /**
  * Her age, drawn inside whatever band he asked for in his profile (18-42 by default).
- * Two draws averaged give a triangular curve rather than a flat one, so the middle of the
- * band is common and its edges are not - the same shape the fixed 18-42 roll had, just
- * rescaled to fit. The 18 floor is enforced here as well as at the profile, because this
- * is the last place it can be got wrong.
+ * Weighted towards the early and mid twenties on purpose: every age up to YOUNG_PEAK_END is
+ * equally likely, and each year past it is less likely than the one before, so with the
+ * default band about three quarters of the cast is 18-27 and the thirties stay a real but
+ * smaller share. A narrower band he sets keeps the same shape inside it. The 18 floor is
+ * enforced here as well as at the profile, because this is the last place it can be got wrong.
  */
+const YOUNG_PEAK_END = 27;
+const AGE_DECAY_YEARS = 4;
 function rollAge(): number {
   const { min, max } = preferredAgeRange();
   const lo = Math.max(AGE_FLOOR, min);
   const hi = Math.max(lo, max);
-  const span = hi - lo;
-  return lo + Math.round((randInt(0, span) + randInt(0, span)) / 2);
+  const ages = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
+  const weights = ages.map((a) => (a <= YOUNG_PEAK_END ? 1 : Math.exp(-(a - YOUNG_PEAK_END) / AGE_DECAY_YEARS)));
+  let r = Math.random() * weights.reduce((x, y) => x + y, 0);
+  for (let i = 0; i < ages.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return ages[i];
+  }
+  return hi;
 }
 
 function rollTypoRate(typingStyle: string, archetype: string, textingPersona: string): number {
@@ -158,40 +168,6 @@ function rollFreak(libido: number, confidence: number, sexting: number, archetyp
   return Math.max(0, Math.min(5, Math.round((base + shift + jitter) * 10) / 10));
 }
 
-/**
- * Her standing position on every kink domain, decided before any specific fetish is drawn.
- *
- * The point is that the general view comes first and the specifics live inside it. Fetishes
- * used to be drawn from all 183 rows independently of the 22 hard limits, so a character
- * could genuinely come out loving spanking and refusing all impact - the two tables never
- * consulted each other. Now a domain gets a stance, and both the fetishes and the limits are
- * drawn from that.
- *
- * `freak` decides how generous the stances are, and intensity gates the far end: a domain
- * marked intense is mostly off the table for someone who is not built for it, rather than
- * being impossible for anyone.
- */
-function rollKinkMap(freak: number, domains: Attribute[], bias: Record<string, number> = {}): Record<string, KinkStance> {
-  const map: Record<string, KinkStance> = {};
-  for (const d of domains) {
-    const intensity = Number(d.extra?.intensity ?? 0);
-    // Roughly: freak 0 says yes to almost nothing, freak 5 says yes to most of the
-    // mainstream and a fair bit of the rest. Her persona leans specific domains on top -
-    // a rope bunny is far more likely to be into bondage than her freak alone would make her.
-    const reach = freak - intensity * 1.7 + Number(bias[d.id] ?? 0);
-    const intoChance = Math.max(0.02, Math.min(0.6, 0.05 + reach * 0.115));
-    const curiousChance = Math.max(0.05, Math.min(0.4, 0.12 + reach * 0.07));
-    const r = Math.random();
-    if (r < intoChance) map[d.id] = 'into';
-    else if (r < intoChance + curiousChance) map[d.id] = 'curious';
-    else {
-      // A hard no is a real position, not just absence of interest, and it is much more
-      // likely on the things she is furthest from.
-      map[d.id] = Math.random() < 0.25 + intensity * 0.16 - freak * 0.04 ? 'hard_no' : 'soft_no';
-    }
-  }
-  return map;
-}
 
 /**
  * Generation runs as a cascade rather than one flat roll, because the order is what makes a
@@ -241,6 +217,11 @@ export function rollSeed(): RolledSeed {
   const counts = extra.counts ?? {};
   const ranges = extra.ranges ?? {};
 
+  // Her look is rolled with who she is, not with the rest of her looks: a style is half a
+  // personality here, and its extra.weights lean how she texts, what she does for work and
+  // what she is into (a goth towards deadpan texting, horror and tattoo studios, an e-girl
+  // towards streaming), as well as the hair, makeup and jewellery rolled later.
+  const clothing_style = one('clothing_style');
   const humor_type = one('humor_type');
   const quirks = rollMany('quirk', ctx, drawCount(counts.quirks, 2)).map((a) => a.id);
 
@@ -279,10 +260,10 @@ export function rollSeed(): RolledSeed {
   const height = one('height');
   const body_type = one('body_type');
   const breast_size = one('breast_size');
+  const butt_size = one('butt_size');
   const hair_color = one('hair_color');
   const hair_style = one('hair_style');
   const eye_color = one('eye_color');
-  const clothing_style = one('clothing_style');
   const grooming = one('grooming');
   const makeup_style = one('makeup_style');
   const distinctive_feature = one('distinctive_feature');
@@ -321,11 +302,10 @@ export function rollSeed(): RolledSeed {
 
   const accessories = rollMany('accessory', ctx, drawCount(counts.accessories, 1)).map((a) => a.id);
 
-  // ---- 4. what she is into, the non-sexual half. The turn-ons deliberately skip the
-  // archetype filter so she can still surprise.
+  // ---- 4. what she is into, the non-sexual half. Turn-offs deliberately skip the archetype
+  // filter so she can still surprise; turn-ons wait for her persona, below.
   const interests = rollMany('interest', ctx, drawCount(counts.interests, 3)).map((a) => a.id);
   const hobbies = rollMany('hobby', ctx, drawCount(counts.hobbies, 2)).map((a) => a.id);
-  const turn_ons = rollMany('turn_on', ctx, randInt(2, 4), { ignoreArchetype: true }).map((a) => a.id);
   const turn_offs = rollMany('turn_off', ctx, drawCount(counts.turn_offs, 2), { ignoreArchetype: true }).map((a) => a.id);
 
   // ---- 5. the intimate half, last, knowing everything above.
@@ -334,12 +314,30 @@ export function rollSeed(): RolledSeed {
   // decided by it, so a quiet archivist can still turn out to be a commanding domme. Its
   // ranges replace the archetype's for the sexual stats, its kink_bias leans the kink map,
   // and its extra.weights lean the fetishes, dirty talk and signature rolled below.
-  const persona = one('sexual_persona')!;
+  // His taste can lean the whole cast dominant or submissive (Settings -> Taste): each
+  // persona is weighted by where the middle of its dom/sub range sits.
+  const domSubTaste = Math.max(-1, Math.min(1, Number(getSettings().taste?.['lean/dom_sub'] ?? 0)));
+  const personaLean: Record<string, number> = {};
+  if (domSubTaste) {
+    for (const p of byCategory('sexual_persona')) {
+      const r = (p.extra?.ranges?.dom_sub_leaning as number[] | undefined) ?? [0, 0];
+      personaLean[p.id] = Math.exp(0.5 * domSubTaste * ((r[0] + r[1]) / 2));
+    }
+  }
+  const persona = roll('sexual_persona', ctx, { lean: personaLean })!;
+  fieldIds.sexual_persona = persona.id;
   const pr = (persona.extra?.ranges ?? {}) as Record<string, number[]>;
   const search_motive = roll('search_motive', ctx, { ignoreArchetype: true })!;
   const libido = rollRange(pr.libido ?? ranges.libido, 1, 5);
   const sexual_confidence = rollRange(pr.sexual_confidence ?? ranges.sexual_confidence, 1, 5);
   const dom_sub_leaning = rollRange(pr.dom_sub_leaning ?? ranges.dom_sub_leaning, -3, 3);
+  // Turn-ons come after the persona and follow it. Rolled back in stage 4, blind to her, 27% of
+  // strong dommes came out turned on by "being pinned" and 19% of strong subs by "a man on his
+  // knees". Now her persona's weights apply and rows coded dom or sub (extra.dom_sub) lean
+  // with her; a switch still gets both.
+  const turn_ons = rollMany('turn_on', ctx, randInt(2, 4), {
+    lean: domSubLean(byCategory('turn_on'), dom_sub_leaning),
+  }).map((a) => a.id);
   const sextingMod = pr.sexting_readiness ? 0 : Number((archetype.modifies as any)?.sexting_readiness ?? 0);
   const sexting_readiness = Math.max(1, Math.min(5, rollRange(pr.sexting_readiness ?? ranges.sexting_readiness, 1, 5) + sextingMod));
   const orientation = roll('orientation', ctx, {
@@ -377,12 +375,16 @@ export function rollSeed(): RolledSeed {
       .flatMap((d) => (d.extra?.fetishes as string[]) ?? [])
       .filter((f) => allowedFetishes.has(f)),
   );
-  const signatureKink = intoIds.size ? roll('fetish', ctx, { only: intoIds }) : null;
+  // The power-exchange domains hold both sides ("giving commands", "being told what to do"),
+  // so her fetishes follow her dom/sub leaning the same way her turn-ons do.
+  const fetishLean = domSubLean(byCategory('fetish'), dom_sub_leaning);
+  const signatureKink = intoIds.size ? roll('fetish', ctx, { only: intoIds, lean: fetishLean }) : null;
   const fetishes = [
     ...(signatureKink ? [signatureKink.id] : []),
     ...rollMany('fetish', ctx, Math.max(0, drawCount(counts.fetishes, 3) - (signatureKink ? 1 : 0)), {
       only: allowedFetishes,
       exclude: new Set(signatureKink ? [signatureKink.id] : []),
+      lean: fetishLean,
     }).map((a) => a.id),
   ];
 
@@ -415,6 +417,12 @@ export function rollSeed(): RolledSeed {
   if (/petite|short|tiny/.test(height!.id)) ctx.weights.being_petite = (ctx.weights.being_petite ?? 1) * 3;
   const body_pride = one('body_pride')!;
   const signature = one('signature_move')!;
+  // What she wears underneath, to bed, and how she keeps herself - leaned by her persona and
+  // her style. For sexting and her own photo ideas, never in the fixed appearance prompt.
+  const lingerie_style = one('lingerie_style')!;
+  const sleepwear = one('sleepwear')!;
+  const intimate_grooming = one('intimate_grooming')!;
+  const fantasy_seeds = rollFantasySeeds({ kink_map, dom_sub_leaning });
 
   const hints: Record<string, string> = {
     species: hintOf(species),
@@ -460,6 +468,7 @@ export function rollSeed(): RolledSeed {
     height: height!.id,
     body_type: body_type!.id,
     breast_size: breast_size!.id,
+    butt_size: butt_size!.id,
     hair_color: hair_color!.id,
     hair_style: hair_style!.id,
     eye_color: eye_color!.id,
@@ -505,6 +514,10 @@ export function rollSeed(): RolledSeed {
     sexual_experience: sexual_experience.id,
     body_pride: body_pride.id,
     signature_move: signature.id,
+    lingerie_style: lingerie_style.id,
+    sleepwear: sleepwear.id,
+    intimate_grooming: intimate_grooming.id,
+    fantasy_seeds,
     orientation: orientation.id,
     arousal_tell: arousal_tell.id,
     libido,
@@ -534,7 +547,7 @@ export function rollSeed(): RolledSeed {
 function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }[] {
   const singular: [string, string][] = [
     ['species', seed.species], ['ethnicity', seed.ethnicity], ['skin_tone', seed.skin_tone], ['height', seed.height],
-    ['body_type', seed.body_type], ['breast_size', seed.breast_size], ['hair_color', seed.hair_color],
+    ['body_type', seed.body_type], ['breast_size', seed.breast_size], ['butt_size', seed.butt_size], ['hair_color', seed.hair_color],
     ['hair_style', seed.hair_style], ['eye_color', seed.eye_color], ['clothing_style', seed.clothing_style],
     ['grooming', seed.grooming], ['makeup_style', seed.makeup_style], ['distinctive_feature', seed.distinctive_feature],
     ['archetype', seed.archetype], ['humor_type', seed.humor_type],
@@ -545,6 +558,7 @@ function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }
     ['social_energy', seed.social_energy], ['search_motive', seed.search_motive],
     ['sexual_persona', seed.sexual_persona], ['dirty_talk', seed.dirty_talk],
     ['sexual_experience', seed.sexual_experience], ['body_pride', seed.body_pride], ['signature_move', seed.signature_move],
+    ['lingerie_style', seed.lingerie_style], ['sleepwear', seed.sleepwear], ['intimate_grooming', seed.intimate_grooming],
     ['orientation', seed.orientation], ['arousal_tell', seed.arousal_tell],
     ['big_secret', seed.big_secret],
   ];
@@ -639,6 +653,7 @@ export function buildAppearancePrompt(seed: CharacterSeed): string {
     ['height', seed.height],
     ['body_type', seed.body_type],
     ['breast_size', seed.breast_size],
+    ['butt_size', seed.butt_size],
     ['hair_color', seed.hair_color],
     ['hair_style', seed.hair_style],
     ['eye_color', seed.eye_color],
@@ -711,6 +726,8 @@ export function describeSeed(seed: CharacterSeed): string {
     `experience: ${label('sexual_experience', seed.sexual_experience)} - ${hintFor(seed, 'sexual_experience')}`,
     `proudest of: ${label('body_pride', seed.body_pride)} - ${hintFor(seed, 'body_pride')}`,
     `signature: ${label('signature_move', seed.signature_move)} - ${hintFor(seed, 'signature_move')}`,
+    `underneath she wears: ${label('lingerie_style', seed.lingerie_style)} - ${hintFor(seed, 'lingerie_style')}`,
+    `sleeps in: ${label('sleepwear', seed.sleepwear)}; down there: ${label('intimate_grooming', seed.intimate_grooming)}`,
     `orientation: ${label('orientation', seed.orientation)} - ${seed.hints.orientation ?? ''}`,
     `how far she goes in general (0-5): ${seed.freak}`,
     `how it shows when she is turned on: ${label('arousal_tell', seed.arousal_tell)} - ${seed.hints.arousal_tell ?? ''}`,
@@ -1020,6 +1037,7 @@ export async function generateCharacter(): Promise<Character> {
         is_fantasy: seed.species && seed.species !== 'human' ? '1' : '',
         is_big_secret: seed.big_secret && seed.big_secret !== 'none' ? '1' : '',
         age: seed.age,
+        fantasy_seeds: fantasySeedList(seed.fantasy_seeds),
         allowed_swaps: allowedSwapList(),
         avoid_names: takenNames.length ? takenNames.map((n) => `- ${n}`).join('\n') : '(none yet)',
       }),
@@ -1464,6 +1482,15 @@ function cleanFantasies(raw: unknown): string[] {
 
 const fantasyBackfills = new Map<string, Promise<void>>();
 
+/** Scenario ideas as a bullet list for a prompt; empty when there are none. */
+function fantasySeedList(ids: string[] | undefined): string {
+  return (ids ?? [])
+    .map((id) => find('fantasy_scenario', id))
+    .filter((a): a is Attribute => !!a)
+    .map((a) => `- ${a.label}: ${a.prompt_hint}`)
+    .join('\n');
+}
+
 /**
  * Characters generated before fantasies existed get theirs written the first time the
  * Director needs them - one small call from her dossier and kinks, stored on her seed.
@@ -1471,6 +1498,9 @@ const fantasyBackfills = new Map<string, Promise<void>>();
  */
 export function ensureFantasies(character: Character): Promise<void> {
   if (character.seed.hints?.fantasies) return Promise.resolve();
+  const seeds = character.seed.fantasy_seeds?.length
+    ? character.seed.fantasy_seeds
+    : rollFantasySeeds({ kink_map: character.seed.kink_map ?? {}, dom_sub_leaning: character.seed.dom_sub_leaning ?? 0 });
   const running = fantasyBackfills.get(character.id);
   if (running) return running;
   const job = (async () => {
@@ -1491,10 +1521,14 @@ export function ensureFantasies(character: Character): Promise<void> {
             `Her kinks: ${character.seed.fetishes.map((f) => find('fetish', f)?.label ?? f).join(', ') || 'none listed'}.`,
             `Her hard limits (never include these): ${character.seed.hard_limits.map((h) => find('hard_limit', h)?.label ?? h).join(', ') || 'none listed'}.`,
             '',
-            'Write 3 to 5 sexual fantasies she genuinely wants to play out with a man she is into. Each one a',
-            'concrete scenario in one or two sentences - a setting, a situation, what happens - drawn from who',
-            'she is in bed, her kinks and her personality, varied from each other, explicit where it needs to be, nothing that',
-            'touches her hard limits. Written in third person about her.',
+            'Scenario ideas that fit her:',
+            fantasySeedList(seeds),
+            '',
+            'Write 4 to 6 sexual fantasies she genuinely wants to play out with a man she is into. Each one a',
+            'concrete scenario in one or two sentences - a setting, a situation, what happens - explicit where it',
+            'needs to be, nothing that touches her hard limits. Take two or three of the ideas above and make them',
+            'hers (change the setting, roles and details until they could only be hers), then invent two or three',
+            'more of her own from who she is in bed, her kinks, her job and her life. Written in third person about her.',
             '',
             'Reply with exactly one JSON object: { "fantasies": ["...", "..."] }',
           ].join('\n'),

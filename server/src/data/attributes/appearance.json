@@ -2380,7 +2380,10 @@
         "septum": 2.0,
         "horror": 2.0,
         "music_scene": 2.0,
-        "tarot": 1.5
+        "tarot": 1.5,
+        "deadpan_texter": 2.0,
+        "dark": 1.8,
+        "tattoo_artist": 2.0
       },
       "adds": {
         "tattoos": 1.0,
@@ -16296,7 +16299,13 @@
         "double_braids": 2.0,
         "cat_ear_headphones": 3.0,
         "gaming": 2.0,
-        "anime": 2.0
+        "anime": 2.0,
+        "cute_texter": 2.0,
+        "chaotic_texter": 2.0,
+        "meme": 2.0,
+        "twitch_streamer": 3.0,
+        "streaming_hobby": 2.5,
+        "competitive_gaming_esports": 2.0
       },
       "adds": {
         "tattoos": 0.5,
@@ -16316,7 +16325,13 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "cosplay": 4.0,
+        "cosplayer_professional": 3.0,
+        "anime": 2.0
+      }
+    },
     "enabled": true
   },
   {
@@ -16330,7 +16345,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "chaotic_texter": 1.8,
+        "meme": 2.0,
+        "twitch_streamer": 3.0,
+        "gaming": 2.5,
+        "sim_racing": 2.0
+      }
+    },
     "enabled": true
   },
   {
@@ -16344,7 +16367,14 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "weights": {
+        "cute_texter": 2.0,
+        "anime": 3.0,
+        "cosplay": 2.0,
+        "comic_artist": 2.0
+      }
+    },
     "enabled": true
   },
   {
@@ -16371,9 +16401,16 @@
         "fishnet_tights": 2.5,
         "platform_boots": 2.0,
         "septum": 2.0,
-        "horror": 2.0,
+        "horror": 2.5,
         "music_scene": 2.0,
-        "tarot": 1.5
+        "tarot": 2.0,
+        "deadpan_texter": 2.5,
+        "mean_texter": 2.0,
+        "dark": 2.0,
+        "tattoo_artist": 2.5,
+        "record_store_employee": 2.5,
+        "funeral_director": 3.0,
+        "witch": 2.0
       },
       "adds": {
         "tattoos": 1.0,
@@ -16407,8 +16444,12 @@
         "platform_boots": 2.0,
         "septum": 2.0,
         "horror": 2.0,
-        "music_scene": 2.0,
-        "tarot": 1.5
+        "music_scene": 2.5,
+        "tarot": 1.5,
+        "dramatic_texter": 2.5,
+        "self_deprecating": 2.0,
+        "poetry": 2.0,
+        "record_store_employee": 2.0
       },
       "adds": {
         "tattoos": 0.6,
@@ -16492,7 +16533,10 @@
         "septum": 2.0,
         "horror": 2.0,
         "music_scene": 2.0,
-        "tarot": 1.5
+        "tarot": 1.5,
+        "nightlife": 3.0,
+        "djing": 3.0,
+        "chaotic_texter": 1.8
       },
       "adds": {
         "tattoos": 0.4,
@@ -16540,8 +16584,12 @@
         "platform_boots": 2.0,
         "septum": 2.0,
         "horror": 2.0,
-        "music_scene": 2.0,
-        "tarot": 1.5
+        "music_scene": 2.5,
+        "tarot": 1.5,
+        "blunt_texter": 2.0,
+        "mean_texter": 1.8,
+        "tattoo_artist": 2.5,
+        "bike_courier": 2.0
       },
       "adds": {
         "tattoos": 1.2,
@@ -16709,7 +16757,11 @@
         "septum": 2.0,
         "horror": 2.0,
         "music_scene": 2.0,
-        "tarot": 1.5
+        "tarot": 1.5,
+        "mean_texter": 1.8,
+        "nightlife": 2.0,
+        "night_club_owner": 2.0,
+        "stripper": 2.0
       },
       "adds": {
         "tattoos": 0.8,
@@ -17718,7 +17770,11 @@
         "nail_art": 3.0,
         "sleek_straight": 2.5,
         "hourglass": 1.8,
-        "nightlife": 2.0
+        "nightlife": 2.5,
+        "flirty_texting": 2.0,
+        "instagram_influencer": 3.0,
+        "esthetician": 2.0,
+        "makeup_artist": 2.0
       }
     },
     "enabled": true
@@ -17741,7 +17797,12 @@
         "glam": 2.0,
         "nail_art": 2.5,
         "very_large": 1.8,
-        "large": 1.5
+        "large": 1.5,
+        "flirty_texting": 2.0,
+        "cute_texter": 1.8,
+        "instagram_influencer": 2.5,
+        "beauty_therapist": 2.0,
+        "fashion": 2.0
       }
     },
     "enabled": true
@@ -17766,7 +17827,10 @@
         "bold_lip": 3.0,
         "cat_eye_classic": 3.0,
         "victory_rolls": 6.0,
-        "hourglass": 2.0
+        "hourglass": 2.0,
+        "vintage_cars": 2.5,
+        "burlesque": 3.0,
+        "bartender_cocktail": 2.0
       }
     },
     "enabled": true
@@ -17788,7 +17852,12 @@
         "curvy_athletic": 2.5,
         "high_ponytail": 2.5,
         "fitness": 3.0,
-        "pt": 2.0
+        "pt": 3.0,
+        "blunt_texter": 1.6,
+        "gym_manager": 2.5,
+        "yoga_instructor": 2.0,
+        "boxing": 2.0,
+        "competitive_powerlifting": 2.0
       }
     },
     "enabled": true
@@ -17857,6 +17926,680 @@
     "rarity": "uncommon",
     "prompt_hint": "",
     "image_prompt": "pastel cat-ear headphones",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "small_perky",
+    "category": "butt_size",
+    "label": "Small and perky",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "small, high and tight",
+    "image_prompt": "small perky butt",
+    "affinities": [
+      "slim",
+      "petite",
+      "lanky",
+      "narrow_frame",
+      "delicate_frame"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "round",
+    "category": "butt_size",
+    "label": "Round",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "round and firm, fills out jeans properly",
+    "image_prompt": "round butt",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bubble",
+    "category": "butt_size",
+    "label": "Bubble butt",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "high, round and very much the first thing people notice",
+    "image_prompt": "round bubble butt",
+    "affinities": [
+      "curvy",
+      "hourglass",
+      "petite_curvy",
+      "short_curvy",
+      "curvy_athletic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "big_heavy",
+    "category": "butt_size",
+    "label": "Big and heavy",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a lot of it, soft and heavy",
+    "image_prompt": "big full butt",
+    "affinities": [
+      "plus_size",
+      "full_figured",
+      "pear",
+      "broad_hipped",
+      "curvy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gym_built",
+    "category": "butt_size",
+    "label": "Built at the gym",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "squats made this and she will tell you about it",
+    "image_prompt": "toned athletic butt",
+    "affinities": [
+      "athletic",
+      "curvy_athletic",
+      "muscular",
+      "dancer_build",
+      "soft_athletic",
+      "gym_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "heart_shaped",
+    "category": "butt_size",
+    "label": "Heart-shaped",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "wide at the bottom, narrow waist above it",
+    "image_prompt": "heart-shaped butt, narrow waist",
+    "affinities": [
+      "pear",
+      "hourglass",
+      "broad_hipped"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "flat_behind",
+    "category": "butt_size",
+    "label": "Not much of one",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "more leg than behind",
+    "image_prompt": "slim flat butt",
+    "affinities": [
+      "lanky",
+      "narrow_frame",
+      "wiry"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fully_shaved",
+    "category": "intimate_grooming",
+    "label": "Completely smooth",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "everything, always",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "landing_strip",
+    "category": "intimate_grooming",
+    "label": "A neat landing strip",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "kept exactly the same for years",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "trimmed",
+    "category": "intimate_grooming",
+    "label": "Trimmed short",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "tidy, not bare",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "natural_full",
+    "category": "intimate_grooming",
+    "label": "Natural, untouched",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "never saw the point of doing anything about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "waxed_religiously",
+    "category": "intimate_grooming",
+    "label": "Waxed every few weeks, without fail",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "books it like a dentist appointment",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "shaped",
+    "category": "intimate_grooming",
+    "label": "Shaped into something",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "a small heart or a triangle, which she thinks is funny",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dyed_to_match",
+    "category": "intimate_grooming",
+    "label": "Dyed to match her hair",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "commits to the colour everywhere",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "black_lace",
+    "category": "lingerie_style",
+    "label": "Black lace",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "black lace sets, matching, always",
+    "image_prompt": "black lace lingerie",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "red_lace",
+    "category": "lingerie_style",
+    "label": "Red lace",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "red, for when she means it",
+    "image_prompt": "red lace lingerie",
+    "affinities": [
+      "devilcore",
+      "pin_up",
+      "lovecore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "strappy_harness",
+    "category": "lingerie_style",
+    "label": "Strappy harness sets",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "straps and O-rings more than fabric",
+    "image_prompt": "strappy harness lingerie with O-rings",
+    "affinities": [
+      "goth_girl",
+      "alt_goth",
+      "alt_girl",
+      "fetishcore",
+      "punk_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "latex_pvc",
+    "category": "lingerie_style",
+    "label": "Latex and PVC",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "shiny, tight, takes twenty minutes to get into",
+    "image_prompt": "black latex lingerie",
+    "affinities": [
+      "fetishcore",
+      "latex_fetishist",
+      "devilcore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "leather_straps",
+    "category": "lingerie_style",
+    "label": "Leather and buckles",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "leather straps and a harness",
+    "image_prompt": "leather strap lingerie with buckles",
+    "affinities": [
+      "fetishcore",
+      "punk_style",
+      "latex_fetishist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sheer_mesh",
+    "category": "lingerie_style",
+    "label": "Sheer mesh",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "see-through and not pretending otherwise",
+    "image_prompt": "sheer mesh lingerie",
+    "affinities": [
+      "baddie",
+      "rave_wear",
+      "club_kid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cotton_basics",
+    "category": "lingerie_style",
+    "label": "Cotton basics",
+    "weight": 0.7,
+    "rarity": "common",
+    "prompt_hint": "plain cotton, and she makes it work",
+    "image_prompt": "simple cotton underwear",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sporty_sets",
+    "category": "lingerie_style",
+    "label": "Matching sports sets",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "a sports bra and thong that match her leggings",
+    "image_prompt": "matching sports bra and thong set",
+    "affinities": [
+      "gym_girl",
+      "sporty",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "babydoll",
+    "category": "lingerie_style",
+    "label": "Babydolls and slips",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "short, floaty, a little bit innocent-looking",
+    "image_prompt": "sheer babydoll slip",
+    "affinities": [
+      "soft_girl",
+      "angelcore",
+      "lovecore",
+      "bimbo_glam",
+      "sundress_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pastel_frills",
+    "category": "lingerie_style",
+    "label": "Pastel frills and bows",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "pink, ruffles, a bow somewhere it should not be",
+    "image_prompt": "pastel frilly lingerie with bows",
+    "affinities": [
+      "e_girl",
+      "lolita_fashion",
+      "fairycore",
+      "anime_girl_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "corset_garters",
+    "category": "lingerie_style",
+    "label": "Corset, garters and stockings",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "the full vintage set, clips and all",
+    "image_prompt": "corset with garter belt and stockings",
+    "affinities": [
+      "pin_up",
+      "rockabilly",
+      "goth_girl",
+      "mob_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "silk_satin",
+    "category": "lingerie_style",
+    "label": "Silk and satin",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "expensive, soft, the kind you notice by touch",
+    "image_prompt": "silk satin lingerie",
+    "affinities": [
+      "elegant",
+      "quiet_luxury",
+      "mob_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "crotchless",
+    "category": "lingerie_style",
+    "label": "Crotchless everything",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "practical, in her words",
+    "image_prompt": "open crotchless lingerie",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "nothing_underneath",
+    "category": "lingerie_style",
+    "label": "Usually nothing underneath",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "she mentions it at the worst possible moment",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fishnet_bodystocking",
+    "category": "lingerie_style",
+    "label": "Fishnet bodystockings",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "one piece, all holes",
+    "image_prompt": "black fishnet bodystocking",
+    "affinities": [
+      "e_girl",
+      "rave_wear",
+      "punk_style",
+      "scene_alt"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "costume_lingerie",
+    "category": "lingerie_style",
+    "label": "Character lingerie",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "bunny, maid, cat - there is a drawer for it",
+    "image_prompt": "costume lingerie set, bunny ears",
+    "affinities": [
+      "cosplayer_style",
+      "anime_girl_style",
+      "cosplay_nerd"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "naked",
+    "category": "sleepwear",
+    "label": "Nothing",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "sleeps naked, all year",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "his_tshirt",
+    "category": "sleepwear",
+    "label": "An oversized t-shirt and nothing else",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "a shirt that used to be someone else's",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "silk_cami_set",
+    "category": "sleepwear",
+    "label": "A silk cami set",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "shorts and a cami, matching",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "lingerie_to_bed",
+    "category": "sleepwear",
+    "label": "Lingerie, even to sleep",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "why own it if you do not wear it",
+    "image_prompt": null,
+    "affinities": [
+      "baddie",
+      "bimbo_glam"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "band_tee",
+    "category": "sleepwear",
+    "label": "A band tee and underwear",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "a faded tour shirt, nothing on her legs",
+    "image_prompt": null,
+    "affinities": [
+      "goth_girl",
+      "emo_style",
+      "punk_style",
+      "alt_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cute_pyjamas",
+    "category": "sleepwear",
+    "label": "Matching pyjamas, cute ones",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "printed ones, and she will send a picture",
+    "image_prompt": null,
+    "affinities": [
+      "soft_girl",
+      "e_girl",
+      "anime_girl_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "boyshorts_crop",
+    "category": "sleepwear",
+    "label": "Boyshorts and a crop top",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "comfortable and not at all accidental",
+    "image_prompt": null,
+    "affinities": [
+      "sporty",
+      "gym_girl",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "huge_hoodie",
+    "category": "sleepwear",
+    "label": "A huge hoodie, legs out",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "the hoodie comes to mid-thigh",
+    "image_prompt": null,
+    "affinities": [
+      "e_girl",
+      "gamer_girl",
+      "soft_grunge"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "short_nightie",
+    "category": "sleepwear",
+    "label": "A short nightie",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "barely-there, a little old-fashioned",
+    "image_prompt": null,
+    "affinities": [
+      "pin_up",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "thong_only",
+    "category": "sleepwear",
+    "label": "A thong and nothing else",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "gets too hot otherwise, she says",
+    "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},

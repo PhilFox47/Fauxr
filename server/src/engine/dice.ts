@@ -52,6 +52,18 @@ function rarityWeight(a: Attribute): number {
   return Math.pow(base, 1 / bias);
 }
 
+/**
+ * His own taste from Settings -> Taste, keyed "category/id" because ids are only unique per
+ * category ("average" is a height, a body type and a breast size). It sits on top of
+ * everything else, including the deliberately surprising ignoreArchetype rolls: it is the
+ * one lean that is his rather than the character's. 0 means never; the 0.0001 floor in
+ * roll() still keeps a category from coming up empty.
+ */
+export function tasteWeight(category: string, id: string): number {
+  const t = getSettings().taste?.[`${category}/${id}`];
+  return typeof t === 'number' && Number.isFinite(t) && t >= 0 ? t : 1;
+}
+
 function effectiveWeight(a: Attribute, ctx: DiceContext): number {
   let w = a.weight * rarityWeight(a) * (ctx.weights[a.id] ?? 1);
   // Affinity works both ways: an already-drawn tag that lists this one, or vice versa.
@@ -70,6 +82,8 @@ export interface RollOptions {
   only?: Set<string>;
   /** Do not register the result in ctx.drawn (used for throwaway sub-rolls). */
   transient?: boolean;
+  /** Extra per-id multipliers for this roll only, applied in both modes (e.g. her dom/sub lean). */
+  lean?: Record<string, number>;
 }
 
 export function roll(category: string, ctx: DiceContext, opts: RollOptions = {}): Attribute | null {
@@ -81,12 +95,11 @@ export function roll(category: string, ctx: DiceContext, opts: RollOptions = {})
   });
   if (pool.length === 0) return null;
 
-  const weights = pool.map((a) =>
+  const weights = pool.map((a) => {
     // Rarity always applies; only the archetype's own re-weighting is skipped.
-    opts.ignoreArchetype
-      ? Math.max(a.weight * rarityWeight(a), 0.0001)
-      : Math.max(effectiveWeight(a, ctx), 0.0001),
-  );
+    const base = opts.ignoreArchetype ? a.weight * rarityWeight(a) : effectiveWeight(a, ctx);
+    return Math.max(base * (opts.lean?.[a.id] ?? 1) * tasteWeight(a.category, a.id), 0.0001);
+  });
   const total = weights.reduce((a, b) => a + b, 0);
   let r = Math.random() * total;
   let chosen = pool[pool.length - 1];

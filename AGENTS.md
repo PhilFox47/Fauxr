@@ -20,6 +20,8 @@ not in whether he has earned something. So:
   to the Director as guidance.
 - Her hard limits are the only real "no". They are part of the fiction, not a hedge.
 - Characters should drive: pitch fantasies, start things, send photos, flirt unprompted.
+- His taste (Settings -> Taste, `settings.taste`) is applied inside `roll()`. A new roll that
+  bypasses `roll()` also bypasses his taste; go through it.
 - The one deliberate cost gate: **nothing image-related is generated for a character until
   the user presses "swap profile pictures"** (`photos_exchanged`). Image generation is
   expensive; keep all image spend behind a user action.
@@ -96,7 +98,8 @@ own turn loop. The text chat is frozen while a date is active.
   `TransportError` (wait and retry), `TimeoutError` (our clock ran out, never treated as
   bad JSON). Big background calls pass a larger `timeoutMs`.
 - **Attribute tables are data, not code.** Behaviour hangs off `extra` fields (`weights`,
-  `ranges`, `kink_bias`, `pace`, `initiative`, ...) rather than `if (id === '...')`. Rows are
+  `ranges`, `kink_bias`, `pace`, `initiative`, `dom_sub`, `adds`, `domains`, ...) rather than
+  `if (id === '...')`. Rows are
   seeded by content hash; removed ids and whole removed categories are pruned on upgrade.
 - **Schema changes** are additive: add a column to `ADDED_COLUMNS` in `db/index.ts`, never
   drop one. One-off data fixes go at the end of `migrate()` and must be idempotent.

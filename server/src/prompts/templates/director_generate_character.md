@@ -125,15 +125,22 @@ should be able to tell it exists.
    - one_line: a single sentence describing who she is, for internal use. Draw on her
      profile as a whole and describe a person, not a walking quirk. No single tag is "her
      thing" - she is the combination.
-   - fantasies: 3 to 5 sexual fantasies she genuinely wants to play out with a man she is
+   - fantasies: 4 to 6 sexual fantasies she genuinely wants to play out with a man she is
      into. Each one a concrete scenario in one or two sentences - a setting, a situation,
-     what happens - drawn from her persona, her fetishes and her personality, varied from each other,
-     explicit where it needs to be, never touching her hard limits. She will pitch these to
-     him herself, so make them specific and hers, not generic.
+     what happens - explicit where it needs to be, never touching her hard limits. Take two
+     or three of the SCENARIO IDEAS below and make them hers: change the setting, the roles
+     and the details until they could only be her fantasy. Then invent two or three more of
+     her own, from her persona, her fetishes, her job and her life, unlike the ideas. She
+     will pitch these to him herself, so make them specific and hers, not generic.
    - director_intent: what she wants to explore with him, one sentence. Her sexual long
      game, not a test he has to pass.
    - opening_plan: one concrete first move she makes (a fantasy to hint at, a question
      about what he is into, a photo) with an expiry condition.
+
+{{#fantasy_seeds}}
+# SCENARIO IDEAS FOR HER FANTASIES
+{{fantasy_seeds}}
+{{/fantasy_seeds}}
 
 All output in English. Her age is {{age}} and must stay at or above 18.
 
