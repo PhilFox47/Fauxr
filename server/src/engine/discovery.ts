@@ -253,7 +253,9 @@ export function herCuriosity(character: Character, rel: Relationship, limit = 2)
     .map((f) => find('fetish', f)?.label ?? f)
     .filter((label) => !known.includes(label.toLowerCase()))
     .slice(0, 1)
-    .map((label) => `whether he would be into ${label.toLowerCase()} with her`);
+    // Quoted rather than spliced: the labels are written from her side ("Spanking him"), so
+    // "whether he would be into spanking him with her" came out garbled.
+    .map((label) => `whether he is up for one of her kinks: "${label.toLowerCase()}"`);
   const generic = seededOrder(HER_QUESTIONS, character.id)
     .filter((q) => !q.keywords.some((k) => known.includes(k)))
     .slice(0, Math.max(0, limit - own.length))

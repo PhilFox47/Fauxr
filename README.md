@@ -402,6 +402,57 @@ Two traps showed up along the way:
   crashed. Languages are now rolled after looks. The validator also fails any ethnicity that
   leaves no skin tone, hair colour, hair style or eye colour open.
 
+## Fewer vanilla characters
+
+This is a playground, not a census, so the tables lean away from realism and towards
+characters worth talking to: alt and OnlyFans-style looks, a real named kink, more women who
+take charge. Nothing was taken off the table; the soft, plain end of every table is still
+there, it just no longer fills the middle. Only new characters are affected.
+
+Measured over 4000 rolled characters, before and after:
+
+| | before | after |
+|---|---|---|
+| alt / OnlyFans styles (goth, e-girl, emo, alt, punk, gamer, cosplay, ...) | 24% | 52% |
+| dominant-leaning (dom/sub >= 1) | 35% | 48% |
+| submissive-leaning | 43% | 36% |
+| tattooed / two or more tattoos | 49% / 22% | 67% / 35% |
+| two or more piercings | 33% | 49% |
+| dyed or bleached hair | 18% | 27% |
+| named fetishes that are actual kinks (from a kink domain) | 38% | 72% |
+| characters with no real kink among their fetishes | 26% | 0% |
+
+What changed:
+
+- **Every table was re-tiered**, by setting `rarity` and `weight` per row (the script is
+  idempotent and asserts every id). Up: alt and glam clothing, liner and bold lips, dyed hair
+  and deliberate cuts, curvier figures, striking features, alt tattoo motifs on the hips,
+  ribs, thighs and lower back, septum/navel/nipple/tongue piercings, bold archetypes
+  (provocateur, flirty, menace), bartenders, tattoo artists, streamers, models and trainers,
+  pole and burlesque, horror and tarot, open and poly relationships, experienced women, bi
+  women, and a hidden secret for about one in three instead of one in six. Down, to uncommon
+  or rare: beige basics, bare faces, "cold hands" features, compass and bicycle tattoos,
+  office jobs, competitive lawn bowls, and the timid archetypes.
+- **New rows:** baddie, bimbo glam, pin-up and gym girl styles; fishnets, thigh-highs,
+  platform boots, an O-ring choker and cat-ear headphones; pole dancing and burlesque; and
+  fourteen explicit turn-ons (being obeyed, being worshipped, a man on his knees, being
+  pinned, being called a good girl, filthy texts, ...). The turn-ons used to read like a
+  dating profile ("someone who cooks for her"); those are rare now, and "dominance that is
+  earned" is very rare, since earning is exactly what this app removed. Kidcore was removed
+  outright: it has no place next to sexual content.
+- **Looks pull their own look along.** Alt styles carry `extra.weights` towards black or
+  vivid dyed hair, liner, chokers, fishnets and platform boots, and a new `extra.adds`
+  (`{ tattoos, piercings }`, read in `rollSeed`) gives them more ink and metal: each whole
+  unit is one more, the fraction a chance of one more. Sexual personas list matching styles as
+  affinities, so a goth leans towards the domme, the latex fetishist and the alt girl.
+- **Personas lean dominant and distinctive.** The dom personas lead, the kink-specific ones
+  (foot-focused, exhibitionist, rope bunny, latex) are common, and the soft middle
+  (lazy-morning lover, giggly goofball, cuddly and horny) is uncommon at a lower weight.
+- **Every character has a signature kink.** Her first fetish is drawn only from a domain she
+  is into. Drawn from the whole allowed set, a quarter of the cast had only soft entries
+  ("cuddling after", "eye contact") despite a kink map full of yeses, which is what read as
+  vanilla. The soft entries are also uncommon now.
+
 ## How a turn works
 
 ```

@@ -466,8 +466,8 @@
     "id": "hands_veins",
     "category": "fetish",
     "label": "Mesmerised by his hands",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "fixates on his hands, his forearms, the veins in them. Loses her train of thought watching them",
     "image_prompt": null,
     "affinities": [],
@@ -494,8 +494,8 @@
     "id": "scalp_massage_giving",
     "category": "fetish",
     "label": "Giving a slow scalp massage",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "genuinely enjoys running her fingers through his hair and along his scalp, unhurried",
     "image_prompt": null,
     "affinities": [],
@@ -508,8 +508,8 @@
     "id": "ear_nibbling",
     "category": "fetish",
     "label": "Being nibbled on the ear",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "her ear is a direct line to everywhere else and she will not pretend otherwise",
     "image_prompt": null,
     "affinities": [],
@@ -522,8 +522,8 @@
     "id": "neck_nibbling",
     "category": "fetish",
     "label": "Being nibbled on the neck",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "her neck, done properly, short-circuits her faster than almost anything else",
     "image_prompt": null,
     "affinities": [],
@@ -592,8 +592,8 @@
     "id": "navel_play",
     "category": "fetish",
     "label": "Navel play",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a spot most people ignore entirely and she notices when someone does not",
     "image_prompt": null,
     "affinities": [],
@@ -606,8 +606,8 @@
     "id": "hip_grip",
     "category": "fetish",
     "label": "Having her hips held firmly",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a firm grip on her hips mid-everything. Says a lot without either of them saying anything",
     "image_prompt": null,
     "affinities": [],
@@ -634,8 +634,8 @@
     "id": "hand_holding_during",
     "category": "fetish",
     "label": "Holding hands during sex",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "an oddly tender thing to want in the middle of everything else, and she does want it",
     "image_prompt": null,
     "affinities": [],
@@ -760,8 +760,8 @@
     "id": "temple_kissing",
     "category": "fetish",
     "label": "Being kissed on the temple",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "unexpectedly tender for how much it affects her",
     "image_prompt": null,
     "affinities": [],
@@ -774,7 +774,7 @@
     "id": "hand_kissing_receiving",
     "category": "fetish",
     "label": "Her hand, kissed properly",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "an old-fashioned gesture that does far more to her than it should",
     "image_prompt": null,
@@ -788,8 +788,8 @@
     "id": "chest_hair",
     "category": "fetish",
     "label": "A specific physical thing on him",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "one particular physical detail she finds herself drawn to and has never told anyone she notices",
     "image_prompt": null,
     "affinities": [],
@@ -816,7 +816,7 @@
     "id": "scent_aphrodisiac",
     "category": "fetish",
     "label": "His scent, specifically",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "his actual smell rather than cologne - shirt he has worn, skin, the pillow after",
     "image_prompt": null,
@@ -1586,7 +1586,7 @@
     "id": "silk_sheets",
     "category": "fetish",
     "label": "Silk or satin sheets",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "the texture against skin. A small deliberate indulgence",
     "image_prompt": null,
@@ -1614,8 +1614,8 @@
     "id": "oversized_shirt",
     "category": "fetish",
     "label": "Wearing his shirt and nothing else",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a specific, deliberate look she reaches for and knows exactly what it does",
     "image_prompt": null,
     "affinities": [],
@@ -1712,7 +1712,7 @@
     "id": "fur_touching",
     "category": "fetish",
     "label": "Fur, texture-wise",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "touching it, wearing it, the specific feel against skin",
     "image_prompt": null,
@@ -1768,8 +1768,8 @@
     "id": "feather_tickler",
     "category": "fetish",
     "label": "A feather, or something similarly light",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "barely-there sensation used deliberately, drawn out",
     "image_prompt": null,
     "affinities": [],
@@ -1796,8 +1796,8 @@
     "id": "wearing_his_clothes",
     "category": "fetish",
     "label": "Wearing something of his",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not just a shirt necessarily - anything of his, worn deliberately",
     "image_prompt": null,
     "affinities": [],
@@ -1964,8 +1964,8 @@
     "id": "morning_sex",
     "category": "fetish",
     "label": "Mornings, unhurried",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "half awake, nothing else scheduled that day. Different in kind from any other time",
     "image_prompt": null,
     "affinities": [],
@@ -2006,8 +2006,8 @@
     "id": "watching_him_dress",
     "category": "fetish",
     "label": "Watching him get dressed afterwards",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a strangely intimate moment she looks forward to as much as anything before it",
     "image_prompt": null,
     "affinities": [],
@@ -2020,7 +2020,7 @@
     "id": "dressing_him",
     "category": "fetish",
     "label": "Choosing what he wears, or helping him into it",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "a small act of care and control combined",
     "image_prompt": null,
@@ -2034,8 +2034,8 @@
     "id": "bathing_together",
     "category": "fetish",
     "label": "A bath together, unhurried",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not a shower - slow, warm, no rush to finish",
     "image_prompt": null,
     "affinities": [],
@@ -2090,8 +2090,8 @@
     "id": "being_carried",
     "category": "fetish",
     "label": "Being picked up and carried",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "the physical statement of it more than the logistics",
     "image_prompt": null,
     "affinities": [],
@@ -2118,8 +2118,8 @@
     "id": "cuddling_after",
     "category": "fetish",
     "label": "Staying close afterwards, properly",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not rolling away - staying, talking or not talking, for a while",
     "image_prompt": null,
     "affinities": [],
@@ -2132,8 +2132,8 @@
     "id": "sleeping_naked",
     "category": "fetish",
     "label": "Sleeping with nothing on",
-    "weight": 1.2,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a small deliberate choice about how she likes to sleep when it is an option",
     "image_prompt": null,
     "affinities": [],
@@ -2146,8 +2146,8 @@
     "id": "woken_with_kisses",
     "category": "fetish",
     "label": "Being woken up gently",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a specific way of waking up she finds disproportionately affecting",
     "image_prompt": null,
     "affinities": [],
@@ -2160,7 +2160,7 @@
     "id": "hot_tub_pool",
     "category": "fetish",
     "label": "Somewhere warm and enclosed in water",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "a hot tub, a pool after hours, somewhere with that specific set of logistics",
     "image_prompt": null,
@@ -2174,7 +2174,7 @@
     "id": "visiting_a_shop_together",
     "category": "fetish",
     "label": "Going shopping for this, together",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "the specific intimacy of choosing something together rather than it just appearing",
     "image_prompt": null,
@@ -2202,8 +2202,8 @@
     "id": "massage_giving",
     "category": "fetish",
     "label": "Giving a proper massage",
-    "weight": 1.2,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "takes her time with it, treats it as its own thing rather than only a prelude",
     "image_prompt": null,
     "affinities": [],
@@ -2216,8 +2216,8 @@
     "id": "massage_receiving",
     "category": "fetish",
     "label": "A proper massage, unhurried",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not rushed towards anything else - wants it treated as its own thing sometimes",
     "image_prompt": null,
     "affinities": [],
@@ -2230,8 +2230,8 @@
     "id": "candlelight",
     "category": "fetish",
     "label": "Candles specifically, for the light and the ritual of it",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a small deliberate piece of atmosphere she actually cares about",
     "image_prompt": null,
     "affinities": [],
@@ -2244,7 +2244,7 @@
     "id": "music_synced",
     "category": "fetish",
     "label": "Music that matches the mood, chosen on purpose",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "pays attention to what is playing and it genuinely changes things for her",
     "image_prompt": null,
@@ -2272,7 +2272,7 @@
     "id": "robe_wearing",
     "category": "fetish",
     "label": "A robe, specifically, between things",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "a particular garment she reaches for in the in-between moments",
     "image_prompt": null,
@@ -2286,8 +2286,8 @@
     "id": "slow_unbuttoning",
     "category": "fetish",
     "label": "Buttons undone slowly, one at a time",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "the process matters more than the speed - drawn out on purpose",
     "image_prompt": null,
     "affinities": [],
@@ -2328,8 +2328,8 @@
     "id": "spooning_sex",
     "category": "fetish",
     "label": "Spooning, specifically",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "close, unhurried, facing the same way. A specific kind of intimacy the position itself creates",
     "image_prompt": null,
     "affinities": [],
@@ -2398,8 +2398,8 @@
     "id": "prolonged_foreplay",
     "category": "fetish",
     "label": "Foreplay that actually takes its time",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not a formality before the main event - wants it treated as substantial in its own right",
     "image_prompt": null,
     "affinities": [],
@@ -2594,8 +2594,8 @@
     "id": "lip_biting",
     "category": "fetish",
     "label": "Biting her own lip, or his",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a small physical tell she is not always aware she is doing",
     "image_prompt": null,
     "affinities": [],
@@ -2650,8 +2650,8 @@
     "id": "eye_contact_during",
     "category": "fetish",
     "label": "Eye contact, held, the whole time",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "more exposing to her than nudity - being looked at properly throughout",
     "image_prompt": null,
     "affinities": [],
@@ -2664,8 +2664,8 @@
     "id": "whispering_during",
     "category": "fetish",
     "label": "Being talked to quietly, close, throughout",
-    "weight": 1.2,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not silence and not loud - low and close and constant",
     "image_prompt": null,
     "affinities": [],
@@ -2678,8 +2678,8 @@
     "id": "deep_kissing",
     "category": "fetish",
     "label": "Kissing that goes on properly",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not a formality before anything else - wants it to be its own extended thing",
     "image_prompt": null,
     "affinities": [],
@@ -2706,7 +2706,7 @@
     "id": "wrist_kissing",
     "category": "fetish",
     "label": "Her wrists, kissed specifically",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "an unusually tender specific spot for her",
     "image_prompt": null,
@@ -2720,8 +2720,8 @@
     "id": "collarbone_licking",
     "category": "fetish",
     "label": "Her collarbone, specifically",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a spot that does more than its share of work for her",
     "image_prompt": null,
     "affinities": [],
@@ -2748,8 +2748,8 @@
     "id": "hands_on_chest",
     "category": "fetish",
     "label": "His hands there, specifically, unhurried",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not rushed towards anything else - wants attention paid there properly",
     "image_prompt": null,
     "affinities": [],
@@ -2762,8 +2762,8 @@
     "id": "hands_on_waist",
     "category": "fetish",
     "label": "Hands at her waist, firm, throughout",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a specific point of contact she notices and wants maintained",
     "image_prompt": null,
     "affinities": [],
@@ -2776,8 +2776,8 @@
     "id": "hands_on_thighs",
     "category": "fetish",
     "label": "His hands on her thighs specifically",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "builds anticipation more than almost any other single point of contact",
     "image_prompt": null,
     "affinities": [],
@@ -2790,8 +2790,8 @@
     "id": "exploring_slowly",
     "category": "fetish",
     "label": "Being explored slowly, properly, without rushing",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "wants the whole thing unhurried, every part of it actually attended to",
     "image_prompt": null,
     "affinities": [],
@@ -2804,8 +2804,8 @@
     "id": "firm_touch",
     "category": "fetish",
     "label": "Touch with real weight behind it, not tentative",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not rough necessarily - just confident rather than hesitant",
     "image_prompt": null,
     "affinities": [],
@@ -2818,8 +2818,8 @@
     "id": "inner_thigh_kissing",
     "category": "fetish",
     "label": "Her inner thigh, specifically, taken slowly",
-    "weight": 1.2,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "a deliberate build rather than a means to an end",
     "image_prompt": null,
     "affinities": [],
@@ -2860,8 +2860,8 @@
     "id": "slow_undressing",
     "category": "fetish",
     "label": "Being undressed slowly, deliberately, by him",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not undressing herself - being undressed, taken slowly on purpose",
     "image_prompt": null,
     "affinities": [],
@@ -2916,7 +2916,7 @@
     "id": "pausing_mid_act",
     "category": "fetish",
     "label": "Being stopped mid-way, deliberately, then resumed",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "the interruption itself is the point, not an accident",
     "image_prompt": null,
@@ -2930,8 +2930,8 @@
     "id": "closing_eyes",
     "category": "fetish",
     "label": "Losing herself in it completely, eyes closed",
-    "weight": 1.3,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "fully somewhere else mentally rather than performing presence",
     "image_prompt": null,
     "affinities": [],
@@ -2944,7 +2944,7 @@
     "id": "planning_together",
     "category": "fetish",
     "label": "Talking about what they want beforehand, in detail",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "half the appeal is the anticipation of discussing it first",
     "image_prompt": null,
@@ -2958,8 +2958,8 @@
     "id": "trying_new_things",
     "category": "fetish",
     "label": "Actively wanting to try something neither of them has before",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "genuinely motivated by novelty rather than just going along with it",
     "image_prompt": null,
     "affinities": [],
@@ -2972,8 +2972,8 @@
     "id": "focusing_on_afterglow",
     "category": "fetish",
     "label": "The time right after, treated as its own thing",
-    "weight": 1.4,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "not the finish line - wants it treated as a phase in its own right, not rushed past",
     "image_prompt": null,
     "affinities": [],
@@ -3429,7 +3429,7 @@
     "id": "straight",
     "category": "orientation",
     "label": "Straight",
-    "weight": 3.4,
+    "weight": 2.2,
     "prompt_hint": "into men, and that is the whole of it",
     "image_prompt": null,
     "affinities": [],
@@ -3447,7 +3447,7 @@
     "id": "bi",
     "category": "orientation",
     "label": "Bisexual",
-    "weight": 1.5,
+    "weight": 2.2,
     "prompt_hint": "into men and women both, not necessarily equally",
     "image_prompt": null,
     "affinities": [],
@@ -3486,7 +3486,7 @@
     "id": "pan",
     "category": "orientation",
     "label": "Pansexual",
-    "weight": 0.7,
+    "weight": 1.0,
     "prompt_hint": "gender is not really the axis she sorts people on",
     "image_prompt": null,
     "affinities": [],
@@ -4355,8 +4355,8 @@
     "id": "heteroflexible",
     "category": "orientation",
     "label": "Straight, with exceptions",
-    "weight": 0.9,
-    "rarity": "uncommon",
+    "weight": 1.0,
+    "rarity": "common",
     "prompt_hint": "",
     "image_prompt": null,
     "affinities": [],
@@ -4934,8 +4934,8 @@
     "id": "tickling_receiving",
     "category": "fetish",
     "label": "Being tickled",
-    "weight": 1.0,
-    "rarity": "common",
+    "weight": 0.5,
+    "rarity": "uncommon",
     "prompt_hint": "being tickled somewhere specific, more playful than intense",
     "image_prompt": null,
     "affinities": [],
@@ -4948,7 +4948,7 @@
     "id": "tickling_giving",
     "category": "fetish",
     "label": "Tickling him",
-    "weight": 1.0,
+    "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "tickling him deliberately, enjoying the reaction more than anything else",
     "image_prompt": null,
@@ -5208,7 +5208,7 @@
     "id": "commanding_domme",
     "category": "sexual_persona",
     "label": "Commanding domme",
-    "weight": 1.0,
+    "weight": 1.4,
     "prompt_hint": "Cool, unhurried control. She gives instructions rather than suggestions, expects them followed, and rewards obedience sparingly. Over text she sets rules for him - what to wear, when he is allowed to touch himself, what to tell her - and enjoys watching him comply.",
     "image_prompt": null,
     "affinities": [
@@ -5216,7 +5216,11 @@
       "confident",
       "stoic",
       "cool_girl",
-      "ambitious"
+      "ambitious",
+      "goth_girl",
+      "fetishcore",
+      "power_dressing",
+      "alt_goth"
     ],
     "conflicts": [],
     "modifies": {},
@@ -5257,13 +5261,13 @@
       "freak_shift": 0.6
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "teasing_dom",
     "category": "sexual_persona",
     "label": "Teasing dom",
-    "weight": 1.0,
+    "weight": 1.4,
     "prompt_hint": "She is in charge, but through play rather than rules: she edges him, makes him wait, laughs when he begs and then gives him a little more. Her control is all teasing - withheld photos, half-finished sentences, \"not yet\".",
     "image_prompt": null,
     "affinities": [
@@ -5366,7 +5370,7 @@
       "freak_shift": 0.2
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "mommy_dom",
@@ -5419,20 +5423,23 @@
       "freak_shift": 0.5
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "sadistic_tease",
     "category": "sexual_persona",
     "label": "Sadistic tease",
-    "weight": 1.0,
+    "weight": 1.4,
     "prompt_hint": "She enjoys making him squirm - a sharp slap, a bite that leaves a mark, a comment designed to make him blush. Cruel in a way that is obviously affectionate. She likes asking how much he can take and then finding out.",
     "image_prompt": null,
     "affinities": [
       "deadpan_menace",
       "menace",
       "instigator",
-      "provocateur"
+      "provocateur",
+      "goth_girl",
+      "devilcore",
+      "baddie"
     ],
     "conflicts": [],
     "modifies": {},
@@ -5472,13 +5479,13 @@
       "freak_shift": 1.0
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "possessive_claimer",
     "category": "sexual_persona",
     "label": "Possessive claimer",
-    "weight": 1.0,
+    "weight": 1.4,
     "prompt_hint": "Territorial in the hottest way. She leaves marks, says \"mine\" and means it, wants him wearing something of hers. Jealousy is foreplay to her - she likes reminding him who he belongs to.",
     "image_prompt": null,
     "affinities": [
@@ -5524,7 +5531,7 @@
       "freak_shift": 0.3
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "strap_on_switchover",
@@ -5575,13 +5582,13 @@
       "freak_shift": 1.0
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "worship_me",
     "category": "sexual_persona",
     "label": "Wants to be worshipped",
-    "weight": 1.0,
+    "weight": 1.4,
     "prompt_hint": "She sits back and lets him adore her. Her body, her feet, her thighs around his head - she expects devotion and describes exactly how she wants to receive it. Being worshipped makes her purr; being rushed makes her stop him.",
     "image_prompt": null,
     "affinities": [
@@ -5628,7 +5635,7 @@
       "freak_shift": 0.5
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "protocol_mistress",
@@ -5682,7 +5689,7 @@
       "freak_shift": 1.5
     },
     "enabled": true,
-    "rarity": "very_rare"
+    "rarity": "uncommon"
   },
   {
     "id": "voyeur_director",
@@ -5734,7 +5741,7 @@
       "freak_shift": 0.4
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "playful_switch",
@@ -5885,7 +5892,7 @@
     "id": "sensual_slow_burner",
     "category": "sexual_persona",
     "label": "Sensual slow-burner",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Unhurried and deliberate. Long foreplay, slow undressing, every touch described. She builds tension patiently and makes him feel how much she is enjoying the wait - when it finally tips over, it is intense.",
     "image_prompt": null,
     "affinities": [
@@ -5928,13 +5935,13 @@
       "pace": 0.7
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "romantic_lover",
     "category": "sexual_persona",
     "label": "Romantic and filthy",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Tender and explicit at once. Eye contact, deep kissing, whispered \"I want you\" - and then very specifically what she wants. She makes sex feel intimate without ever making it tame.",
     "image_prompt": null,
     "affinities": [
@@ -5975,7 +5982,7 @@
       "pace": 0.9
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "hedonist",
@@ -6027,7 +6034,7 @@
       "freak_shift": 0.4
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "insatiable",
@@ -6075,7 +6082,7 @@
       "freak_shift": 0.5
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "tantric_sensualist",
@@ -6389,7 +6396,11 @@
       "chronically_online",
       "big_kid",
       "hermit",
-      "intellectual"
+      "intellectual",
+      "cosplayer_style",
+      "anime_girl_style",
+      "e_girl",
+      "gamer_girl"
     ],
     "conflicts": [],
     "modifies": {},
@@ -6427,13 +6438,13 @@
       "freak_shift": 0.4
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "smut_reader",
     "category": "sexual_persona",
     "label": "Smut reader",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "She reads a lot of erotica and it shows. She quotes scenes, wants to recreate her favourite tropes, and has opinions about pacing. Her fantasies come with plot.",
     "image_prompt": null,
     "affinities": [
@@ -6478,7 +6489,7 @@
       "pace": 0.9
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "lingerie_showgirl",
@@ -6492,7 +6503,10 @@
       "socialite",
       "performer",
       "cool_girl",
-      "flirty"
+      "flirty",
+      "pin_up",
+      "bimbo_glam",
+      "baddie"
     ],
     "conflicts": [],
     "modifies": {},
@@ -6546,7 +6560,10 @@
       "daredevil",
       "provocateur",
       "show_off",
-      "wild_card"
+      "wild_card",
+      "baddie",
+      "bimbo_glam",
+      "gym_girl"
     ],
     "conflicts": [],
     "modifies": {},
@@ -6587,7 +6604,7 @@
       "freak_shift": 0.6
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "camera_lover",
@@ -6640,7 +6657,7 @@
       "freak_shift": 0.6
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "voyeur",
@@ -6786,7 +6803,7 @@
       "freak_shift": 0.9
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "primal",
@@ -6838,7 +6855,7 @@
       "freak_shift": 0.8
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "rough_and_ready",
@@ -6900,7 +6917,7 @@
     "id": "quickie_queen",
     "category": "sexual_persona",
     "label": "Quickie queen",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "No time, no problem. Car, office after hours, kitchen counter before work. She loves the urgency and the fact that it could not wait, and sends texts that make it clear she cannot either.",
     "image_prompt": null,
     "affinities": [
@@ -6949,7 +6966,7 @@
     "id": "lazy_morning",
     "category": "sexual_persona",
     "label": "Lazy-morning lover",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Sleepy, warm, unhurried. Morning sex under the duvet, spooning, waking him with kisses. She is at her horniest half-awake and describes it like a slow Sunday.",
     "image_prompt": null,
     "affinities": [
@@ -6991,13 +7008,13 @@
       "pace": 0.8
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "adventurer",
     "category": "sexual_persona",
     "label": "Adventurer",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "New places, new things. Hotel rooms, beaches, a tent, the back of a car on a road trip. She wants sex to be an adventure and keeps a list of places she has not done it yet.",
     "image_prompt": null,
     "affinities": [
@@ -7043,7 +7060,7 @@
       "freak_shift": 0.3
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "forbidden_fruit",
@@ -7106,7 +7123,9 @@
       "dreamy",
       "still_water",
       "secret_softie",
-      "overthinker"
+      "overthinker",
+      "goth_girl",
+      "emo_style"
     ],
     "conflicts": [],
     "modifies": {},
@@ -7145,7 +7164,7 @@
       "freak_shift": 1.0
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   {
     "id": "loves_feeling_small",
@@ -7208,7 +7227,8 @@
       "competitive",
       "confident",
       "daredevil",
-      "try_hard"
+      "try_hard",
+      "gym_girl"
     ],
     "conflicts": [],
     "modifies": {},
@@ -7247,7 +7267,7 @@
       "freak_shift": 0.3
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "group_curious",
@@ -7297,7 +7317,7 @@
       "freak_shift": 1.0
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   {
     "id": "messy_and_raw",
@@ -7347,13 +7367,13 @@
       "freak_shift": 1.0
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "scent_led",
     "category": "sexual_persona",
     "label": "Scent-led",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "She is ruled by smell. She steals his hoodie, wants to bury her face in his neck, gets turned on by the gym smell on him. She talks about how he smells the way other people talk about looks.",
     "image_prompt": null,
     "affinities": [
@@ -7444,7 +7464,7 @@
       "freak_shift": 0.3
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "anal_enthusiast",
@@ -7494,7 +7514,7 @@
       "freak_shift": 0.8
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   {
     "id": "bratty_sub",
@@ -7508,7 +7528,10 @@
       "menace",
       "provocateur",
       "rebel",
-      "instigator"
+      "instigator",
+      "e_girl",
+      "bimbo_glam",
+      "emo_style"
     ],
     "conflicts": [],
     "modifies": {},
@@ -7701,7 +7724,7 @@
       "freak_shift": 1.2
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   {
     "id": "eager_to_please",
@@ -7801,7 +7824,7 @@
       "freak_shift": 1.0
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   {
     "id": "rope_bunny",
@@ -7853,7 +7876,7 @@
       "freak_shift": 0.7
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "masochist",
@@ -7905,7 +7928,7 @@
       "freak_shift": 1.3
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   {
     "id": "edge_addict",
@@ -7955,7 +7978,7 @@
       "freak_shift": 0.6
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "good_girl_gone_bad",
@@ -8056,7 +8079,7 @@
       "freak_shift": 1.2
     },
     "enabled": true,
-    "rarity": "very_rare"
+    "rarity": "uncommon"
   },
   {
     "id": "daddys_girl",
@@ -8212,7 +8235,7 @@
     "id": "curious_first_timer",
     "category": "sexual_persona",
     "label": "Curious beginner",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Not very experienced and eager to change that. She asks questions, admits what she has never done, and wants to try things with him - nervous and excited in equal measure.",
     "image_prompt": null,
     "affinities": [
@@ -8254,7 +8277,7 @@
       "freak_shift": -0.3
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "late_bloomer_unleashed",
@@ -8349,7 +8372,7 @@
       "freak_shift": 0.8
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "teacher",
@@ -8401,13 +8424,13 @@
       "freak_shift": 0.3
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "pillow_princess",
     "category": "sexual_persona",
     "label": "Pillow princess",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "She likes to lie back and be spoiled. Oral, massages, him doing the work while she tells him how good it is. Lazy, demanding and very appreciative.",
     "image_prompt": null,
     "affinities": [
@@ -8452,7 +8475,7 @@
     "id": "giver",
     "category": "sexual_persona",
     "label": "Giver",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "His pleasure is her pleasure. She loves making him come, watching him lose control, and asks in detail what he likes so she can do it better.",
     "image_prompt": null,
     "affinities": [
@@ -8491,7 +8514,7 @@
       "pace": 1.0
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "ice_queen_melts",
@@ -8537,7 +8560,7 @@
       "pace": 0.6
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "deadpan_filth",
@@ -8582,13 +8605,13 @@
       "pace": 1.0
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "giggly_goofball",
     "category": "sexual_persona",
     "label": "Giggly goofball",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "She laughs during sex and thinks that is part of it. Silly, tickly, playful - the mood swings from ridiculous to very hot and back again without her losing either.",
     "image_prompt": null,
     "affinities": [
@@ -8628,13 +8651,13 @@
       "pace": 1.1
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "cuddly_horny",
     "category": "sexual_persona",
     "label": "Cuddly and horny",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Affectionate, clingy, horny. She wants to be wrapped up in him and wants him inside her and does not see those as different things. Sex blends into cuddling and back again.",
     "image_prompt": null,
     "affinities": [
@@ -8674,13 +8697,13 @@
       "pace": 0.9
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "intense_lover",
     "category": "sexual_persona",
     "label": "Intense",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Everything with her feels like a big deal. Held eye contact, whispered confessions, sex that leaves both of them shaken. She wants him to feel it as much as she does.",
     "image_prompt": null,
     "affinities": [
@@ -8726,7 +8749,7 @@
     "id": "stress_release",
     "category": "sexual_persona",
     "label": "Stress release",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Sex is how she switches off. After a long day she texts bluntly - \"i need this\" - and wants it hard and fast, no small talk. Afterwards she is a different, much softer person.",
     "image_prompt": null,
     "affinities": [
@@ -8766,7 +8789,7 @@
       "initiative": 0.1
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "digital_tease",
@@ -8779,7 +8802,10 @@
       "chronically_online",
       "flirty",
       "anxious_texter",
-      "socialite"
+      "socialite",
+      "e_girl",
+      "gamer_girl",
+      "baddie"
     ],
     "conflicts": [],
     "modifies": {},
@@ -8867,20 +8893,21 @@
       "freak_shift": 0.6
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "athletic_stamina",
     "category": "sexual_persona",
     "label": "Stamina",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Fit, sweaty, tireless. Sex after the gym, in the shower, round after round. She treats it like a workout she happens to love and teases him about keeping up.",
     "image_prompt": null,
     "affinities": [
       "competitive",
       "daredevil",
       "try_hard",
-      "confident"
+      "confident",
+      "gym_girl"
     ],
     "conflicts": [],
     "modifies": {},
@@ -8975,7 +9002,10 @@
       "rebel",
       "cynic",
       "wild_card",
-      "menace"
+      "menace",
+      "punk_style",
+      "soft_grunge",
+      "scene_alt"
     ],
     "conflicts": [],
     "modifies": {},
@@ -9012,13 +9042,13 @@
       "pace": 1.2
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "rare_but_intense",
     "category": "sexual_persona",
     "label": "Rare but intense",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "She is not in the mood often - but when she is, it is all-consuming and very specific. She warns him when it hits and then does not let him go until it has passed.",
     "image_prompt": null,
     "affinities": [
@@ -9062,7 +9092,7 @@
     "id": "emotion_led",
     "category": "sexual_persona",
     "label": "Emotion-led",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "For her, arousal starts in conversation - being understood, being teased, feeling close. Once that is there it tips straight into something explicit. She wants to talk and then very much stop talking.",
     "image_prompt": null,
     "affinities": [
@@ -9256,7 +9286,7 @@
     "id": "caretaker_after",
     "category": "sexual_persona",
     "label": "Soft after, wild during",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Two people in one: wild, demanding and loud during, then the softest, most doting person imaginable afterwards. She is just as eager to talk about the aftercare as the sex.",
     "image_prompt": null,
     "affinities": [
@@ -9296,7 +9326,7 @@
       "pace": 1.0
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "tattooed_alt",
@@ -9309,7 +9339,12 @@
       "rebel",
       "cool_girl",
       "cynic",
-      "deadpan_menace"
+      "deadpan_menace",
+      "alt_girl",
+      "goth_girl",
+      "punk_style",
+      "alt_goth",
+      "emo_style"
     ],
     "conflicts": [],
     "modifies": {},
@@ -9348,7 +9383,7 @@
       "freak_shift": 0.8
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "latex_fetishist",
@@ -9361,7 +9396,10 @@
       "cool_girl",
       "show_off",
       "performer",
-      "rebel"
+      "rebel",
+      "fetishcore",
+      "goth_girl",
+      "devilcore"
     ],
     "conflicts": [],
     "modifies": {},
@@ -9399,7 +9437,7 @@
       "freak_shift": 0.8
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "common"
   },
   {
     "id": "uniform_lover",
@@ -9449,13 +9487,13 @@
       "freak_shift": 0.3
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "touch_starved",
     "category": "sexual_persona",
     "label": "Touch-starved",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "It has been a while and she is aching for it. Every touch she describes is charged; a hand on her waist is enough to undo her. She is honest about how much she needs it.",
     "image_prompt": null,
     "affinities": [
@@ -9501,7 +9539,7 @@
     "id": "hand_fixation",
     "category": "sexual_persona",
     "label": "Hands",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "She is fixated on his hands - on her throat, her hips, in her hair, inside her. She asks about them, imagines them, and describes exactly where she wants them.",
     "image_prompt": null,
     "affinities": [
@@ -9638,13 +9676,13 @@
       "freak_shift": 0.9
     },
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   {
     "id": "slow_corruptor",
     "category": "sexual_persona",
     "label": "Corruptor",
-    "weight": 1.0,
+    "weight": 1.4,
     "prompt_hint": "She likes leading him somewhere he has not been before. A little further every time, a new idea slipped in casually, delighted when he says yes to something he would not have a week ago.",
     "image_prompt": null,
     "affinities": [
@@ -9688,13 +9726,13 @@
       "freak_shift": 0.8
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "brat_tamer",
     "category": "sexual_persona",
     "label": "Brat tamer",
-    "weight": 1.0,
+    "weight": 1.4,
     "prompt_hint": "She wants him to misbehave so she can deal with it. Amused, patient, firm - she lets him push and then puts him back in his place with a smile.",
     "image_prompt": null,
     "affinities": [
@@ -9738,13 +9776,13 @@
       "freak_shift": 0.5
     },
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "shower_and_water",
     "category": "sexual_persona",
     "label": "Water baby",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "Showers, baths, pools, the sea. Water makes her feel sexy and slippery and free, and most of her best ideas involve getting wet in the literal sense too.",
     "image_prompt": null,
     "affinities": [
@@ -9791,7 +9829,7 @@
     "id": "long_game_teaser",
     "category": "sexual_persona",
     "label": "Anticipation junkie",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "The build-up is her favourite part. Hints for days, a promise of what happens next time, a countdown. She plans things and then describes the plan until he is going mad.",
     "image_prompt": null,
     "affinities": [
@@ -9832,13 +9870,13 @@
       "initiative": 0.15
     },
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "confessor",
     "category": "sexual_persona",
     "label": "Confessor",
-    "weight": 1.0,
+    "weight": 0.6,
     "prompt_hint": "She tells him things she has never told anyone - fantasies, embarrassing turn-ons, what she thinks about alone. Admitting it is half the thrill and she wants his confessions back.",
     "image_prompt": null,
     "affinities": [
@@ -10229,7 +10267,7 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "rare"
   },
   {
     "id": "vanilla_so_far",
@@ -10243,7 +10281,7 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "common"
+    "rarity": "rare"
   },
   {
     "id": "one_long_relationship",
@@ -10257,7 +10295,7 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "some_experience",
@@ -10271,13 +10309,13 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "common"
+    "rarity": "uncommon"
   },
   {
     "id": "experienced",
     "category": "sexual_experience",
     "label": "Experienced",
-    "weight": 1.0,
+    "weight": 1.2,
     "prompt_hint": "knows what she likes and how to ask for it. Hard to surprise, easy to delight.",
     "image_prompt": null,
     "affinities": [],
@@ -10299,7 +10337,7 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "kink_community",
@@ -10313,7 +10351,7 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "rare"
+    "rarity": "uncommon"
   },
   {
     "id": "late_start",
@@ -10327,13 +10365,13 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "rare"
   },
   {
     "id": "lots_of_sexting",
     "category": "sexual_experience",
     "label": "More sexting than sex",
-    "weight": 1.0,
+    "weight": 1.2,
     "prompt_hint": "has done far more over text than in person, and is very good at it.",
     "image_prompt": null,
     "affinities": [],
@@ -10341,13 +10379,13 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "casual_veteran",
     "category": "sexual_experience",
     "label": "Casual veteran",
-    "weight": 1.0,
+    "weight": 1.2,
     "prompt_hint": "lots of hookups, not much repetition. Would like someone to get to know her body properly.",
     "image_prompt": null,
     "affinities": [],
@@ -10355,13 +10393,13 @@
     "modifies": {},
     "extra": {},
     "enabled": true,
-    "rarity": "uncommon"
+    "rarity": "common"
   },
   {
     "id": "solo_expert",
     "category": "sexual_experience",
     "label": "Knows herself",
-    "weight": 1.0,
+    "weight": 1.2,
     "prompt_hint": "modest partner count, huge amount of solo exploration. Knows exactly what works.",
     "image_prompt": null,
     "affinities": [],

@@ -295,7 +295,12 @@ export function rollSeed(): RolledSeed {
   // skin tone excluded and generation crashed.
   const extraLanguages = rollMany('language', ctx, drawCount([0.55, 0.33, 0.12], 0)).map((a) => a.id);
 
-  const tattooCount = drawCount(counts.tattoos, 0);
+  // A look can carry more ink and metal than her archetype alone would give her - a goth or
+  // alt girl with bare skin reads as a costume. extra.adds on the clothing style: each whole
+  // unit is one more, the fraction a chance of one more.
+  const adds = (clothing_style?.extra?.adds ?? {}) as Record<string, number>;
+  const bonus = (p = 0) => Math.floor(p) + (Math.random() < p % 1 ? 1 : 0);
+  const tattooCount = drawCount(counts.tattoos, 0) + bonus(adds.tattoos);
   const tattoos = Array.from({ length: tattooCount }, () => ({
     motif: roll('tattoo_motif', ctx, { transient: true })?.id ?? 'fineline_flower',
     position: roll('tattoo_position', ctx, { transient: true })?.id ?? 'forearm',
@@ -303,7 +308,7 @@ export function rollSeed(): RolledSeed {
 
   // Type first, then a position that type can actually go in: rolling both independently
   // produced things like a stretched lobe in a navel.
-  const piercingCount = drawCount(counts.piercings, 1);
+  const piercingCount = drawCount(counts.piercings, 1) + bonus(adds.piercings);
   const piercings = Array.from({ length: piercingCount }, () => {
     const type = roll('piercing_type', ctx, { transient: true });
     const allowed: string[] = (type?.extra?.positions as string[]) ?? [];
@@ -362,8 +367,24 @@ export function rollSeed(): RolledSeed {
       .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) && speciesCanHave(f, species.id))
       .map((f) => f.id),
   );
-  const fetishes = rollMany('fetish', ctx, drawCount(counts.fetishes, 3), { only: allowedFetishes })
-    .map((a) => a.id);
+  // Her first fetish always comes from a domain she is actually into, so every character has
+  // at least one real kink by name. Drawn from the whole allowed set, a quarter of the cast
+  // used to end up with only soft entries ("cuddling after", "eye contact") despite a kink map
+  // full of yeses - which is exactly what read as vanilla.
+  const intoIds = new Set(
+    domains
+      .filter((d) => kink_map[d.id] === 'into')
+      .flatMap((d) => (d.extra?.fetishes as string[]) ?? [])
+      .filter((f) => allowedFetishes.has(f)),
+  );
+  const signatureKink = intoIds.size ? roll('fetish', ctx, { only: intoIds }) : null;
+  const fetishes = [
+    ...(signatureKink ? [signatureKink.id] : []),
+    ...rollMany('fetish', ctx, Math.max(0, drawCount(counts.fetishes, 3) - (signatureKink ? 1 : 0)), {
+      only: allowedFetishes,
+      exclude: new Set(signatureKink ? [signatureKink.id] : []),
+    }).map((a) => a.id),
+  ];
 
   // Limits come from the domains she is a hard no on, so they can never contradict a
   // fetish she was just given. The two limits no domain owns stay open to anyone.
