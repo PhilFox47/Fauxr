@@ -586,20 +586,53 @@ function referenceImage(characterId: string): string | null {
 
 /**
  * How bold her lead photo is, from her own seed. A hookup app's profile pictures run from a
- * look and a bit of skin to lingerie, and which one a woman leads with is as much her as her
- * style is - so it is her confidence and how far she goes, not a house setting.
+ * look and a bit of skin to topless in bed, and which one a woman leads with is as much her as
+ * her style is - so it is her confidence and how far she goes, not a house setting.
+ *
+ * Each level sets the whole photo, not just the outfit: what she shows, what the picture is
+ * about, how she positions herself and the look she gives the lens. Clothing alone left every
+ * level free to fall back on the same standing mirror selfie with a different amount of fabric.
  */
+const PROFILE_LEVELS: Record<'bold' | 'flirty' | 'teasing', { name: string; shows: string; about: string; pose: string; look: string }> = {
+  bold: {
+    name: 'Bold',
+    shows: 'Topless is fine - bare breasts, or lingerie, a thong, a bikini, wet or see-through fabric.',
+    about: 'Openly about your body and sex: lying across your bed, the bathroom mirror, the shower doorway, a hotel bed, your usual photo spot with the lights set up for it.',
+    pose: 'Posed to show it off: back arched, ass to the camera over your shoulder, lying back with your arms above your head, kneeling on the bed, leaning into the mirror, a hand on your own body.',
+    look: 'Straight into the lens - a bitten or parted lip, heavy-lidded eyes. You know exactly what this photo does.',
+  },
+  flirty: {
+    name: 'Flirty',
+    shows: 'Your figure in something tight, short or low-cut, a bikini or a sports set - no underwear on show.',
+    about: 'You out in the world looking good: a night out, the gym mirror, a pool, the mirror before you leave, your car, a festival.',
+    pose: 'Angled to show your shape: a hip popped, looking back over your shoulder, legs crossed on a bar stool, leaning in towards the camera.',
+    look: 'A smirk or a knowing smile, and eye contact that holds a beat too long.',
+  },
+  teasing: {
+    name: 'Teasing',
+    shows: 'Mostly covered - the point is what peeks out: a bare shoulder, a slipping strap, an oversized shirt and bare legs, a glimpse of lace.',
+    about: 'An everyday moment with an edge: in bed in the morning, curled up on the sofa, a close-up of your face, a mirror half fogged up.',
+    pose: 'Half hidden: looking back over a shoulder, legs tucked up, a hand in your hair or partly over your face, the camera close.',
+    look: 'A shy smile, a look up from under your lashes - it suggests more than it shows.',
+  },
+};
+
 export function profileHeat(seed: CharacterSeed): string {
   // Thresholds measured on the current cast, which runs hot: about half bold, a third flirty,
   // an eighth teasing. At freak >= 3.5 nearly three quarters came out bold, which is a house
   // style again rather than a spread.
-  if ((seed.sexual_confidence ?? 3) >= 4 && (seed.freak ?? 0) >= 4.5) {
-    return 'Bold. Your lead photo is openly sexy: lingerie, a bikini, a see-through top, or topless with an arm or a hand across your chest.';
-  }
-  if ((seed.sexual_confidence ?? 3) <= 3 && (seed.freak ?? 0) < 4) {
-    return 'Teasing. Your lead photo is suggestive rather than revealing: a look, a bit of skin, a hint of what is under the clothes.';
-  }
-  return 'Flirty. Your lead photo shows off your figure - tight, short, low-cut, a bikini at most - without going as far as underwear.';
+  const level =
+    (seed.sexual_confidence ?? 3) >= 4 && (seed.freak ?? 0) >= 4.5 ? 'bold'
+    : (seed.sexual_confidence ?? 3) <= 3 && (seed.freak ?? 0) < 4 ? 'teasing'
+    : 'flirty';
+  const l = PROFILE_LEVELS[level];
+  return [
+    `${l.name}.`,
+    `- What you show: ${l.shows}`,
+    `- What the photo is about: ${l.about}`,
+    `- How you pose: ${l.pose}`,
+    `- Your look: ${l.look}`,
+  ].join('\n');
 }
 
 /**

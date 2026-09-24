@@ -163,9 +163,11 @@ face-only headshot.
 
 Whatever it is, she looks hot in it and it shows off her figure the way she meant it to:
 the pose, the angle and the outfit (or how little of one) exactly as she described. Write her
-body with the same care as her face. Lingerie, swimwear, sheer fabric or an arm across a bare
-chest are all fine if that is what she described; her nipples and everything between her legs
-stay covered by fabric, her arm, her hand or the angle.
+body with the same care as her face. Lingerie, swimwear, sheer or wet fabric and bare
+breasts are all fine if that is what she described - render them as described, not covered
+back up. The one area that stays out of view is right between her legs (underwear, a thigh,
+a hand, the angle), because the model renders it badly; do not write the word for it
+anywhere in the prompt, since naming it tends to get the request refused.
 {{/is_profile}}
 {{#is_moment}}
 This is a photo from **inside the conversation** - something happening right now, not a

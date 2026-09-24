@@ -530,10 +530,21 @@ they now aim at what Fauxr is.
   gets the scene too, for her own photos.
 - **Profile pictures are a hookup app's lead photo**: mirror selfies in something tight,
   over-the-shoulder shots, bikinis, night-out photos, boudoir shoots, chosen to show off
-  what she is proudest of. How far hers goes comes from her own seed (`profileHeat()`):
-  about half the cast is bold (lingerie, a bikini, sheer, topless behind an arm), a third
-  flirty (tight, short, low-cut), an eighth teasing. A lead photo keeps nipples and the crotch
-  covered.
+  what she is proudest of. How far hers goes comes from her own seed (`profileHeat()`,
+  `PROFILE_LEVELS`), and a level sets the whole photo - what she shows, what the picture is
+  about, how she poses and the look she gives the lens - because clothing alone left every
+  level falling back on the same standing mirror selfie with more or less fabric:
+  - **Bold** (about half the cast): topless is fine, or lingerie, a thong, wet or sheer
+    fabric; the photo is openly about her body (across her bed, the shower doorway, a hotel
+    bed); posed to show it (back arched, ass to the camera, arms above her head, kneeling on
+    the bed); a direct, heavy-lidded look.
+  - **Flirty** (a third): tight, short or low-cut, a bikini at most; her out looking good (a
+    night out, the gym mirror, a pool); angled to show her shape; a smirk that holds.
+  - **Teasing** (an eighth): mostly covered, the point is what peeks out; an everyday moment
+    with an edge (in bed in the morning, a close-up); half hidden, legs tucked up; a shy look
+    from under her lashes.
+  At every level the area between her legs stays out of view, since that is what Seedream
+  renders badly.
 - **Spicy photos are posed on purpose.** They used to share the snapshot rules - "unposed",
   "no posed styling", and the deliberately unflattering light pool (green strip lights, a
   pushed sensor) - which pulled the hottest shots back towards accidents. They now have their

@@ -8,10 +8,12 @@ that photo actually is.
 # YOUR BODY AND YOUR PHOTOS
 {{photo_self}}
 
-# HOW MUCH YOU SHOW
+# HOW FAR YOUR PHOTO GOES
 {{profile_heat}}
-It is still the photo every man on the app sees first: nipples and everything between your
-legs stay covered - by fabric, your arm, your hand or the angle.
+
+Take this as your level, not a script: the exact shot still comes from your style, your body
+and your usual spot. Whatever the level, what is between your legs stays out of view -
+underwear, a thigh, a hand or the angle.
 
 # THE QUESTION
 Everyone on this app is here for sex, and your lead photo is there to make a man want you.
