@@ -15,7 +15,7 @@ import { userCardBlock } from './usercard.js';
 import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { pickNudge } from './nudge.js';
-import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty } from './voice.js';
+import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
 import { canSendPhotos, hasSwapped } from './images.js';
 import { fantasyLog } from './fantasies.js';
 
@@ -243,6 +243,8 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
   const recent = recentMessages(ctx.character.id, 12);
   const lastUserMessage = [...recent].reverse().find((m) => m.sender === 'user')?.text ?? '';
   const recentOwnMessages = recent.filter((m) => m.sender === 'character').map((m) => m.text);
+  // A wider window for exact repeats only: a catchphrase can come back every few turns.
+  const longOwnHistory = recentMessages(ctx.character.id, 60).filter((m) => m.sender === 'character').map((m) => m.text);
 
   /**
    * Two signals that the floor is not clear. The Actor's own report from last turn is the
@@ -306,6 +308,26 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       logger.warn('actor', 'actor produced no usable messages');
       correction = retryHint('it contained no usable message', 'Send at least one actual message.');
       continue;
+    }
+
+    // Word-for-word repeats of her own lines. First time round she rewrites; after that the
+    // repeated lines are simply dropped rather than spending the last attempt on a fallback.
+    const repeats = verbatimRepeats(out.messages.map((m) => m.text), longOwnHistory);
+    if (repeats.length) {
+      if (attempt === 0) {
+        logger.warn('actor', 'rejected: repeated her own lines word for word', {
+          character: ctx.character.username,
+          messages: out.messages.map((m) => m.text),
+        });
+        correction = retryHint(
+          'you repeated your own earlier lines word for word',
+          `These are lines you already sent: ${repeats.map((i) => `"${out.messages[i].text}"`).join(', ')}. ` +
+            'Never reuse a line. Say something new, in your own voice, that moves this forward.',
+        );
+        continue;
+      }
+      const kept = out.messages.filter((_, i) => !repeats.includes(i));
+      if (kept.length) out.messages = kept.map((m, i) => (i === 0 ? { ...m, delay: 0 } : m));
     }
 
     const problem = out.messages

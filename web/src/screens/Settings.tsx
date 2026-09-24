@@ -299,6 +299,28 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
   return (
     <>
       <div className="card">
+        <label className="switch-row">
+          <span className="switch">
+            <input
+              type="checkbox"
+              checked={!!settings.unprompted_messages}
+              onChange={(e) => patch(['unprompted_messages'], e.target.checked)}
+            />
+            <span className="track" />
+          </span>
+          <span className="small">
+            Characters can text first
+            <br />
+            <span className="tiny muted">
+              Follow-ups after a silence, check-ins and anniversaries. Off, a character only
+              replies to you - apart from her first message after you match. Each of these costs
+              tokens.
+            </span>
+          </span>
+        </label>
+      </div>
+
+      <div className="card">
         <label className="field">
           <div className="slider-head">
             <span className="label">Spice</span>

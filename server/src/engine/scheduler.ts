@@ -41,6 +41,21 @@ function contactableMatches(): Character[] {
   return listActiveMatches().filter((c) => !onDate.has(c.id));
 }
 
+/** Reason used when a message of his somehow went unanswered - a reply, not an unprompted text. */
+const PENDING_REPLY_REASON = 'she has unread messages from him';
+
+/**
+ * Wakeups that are allowed with unprompted messages switched off: her opening message after a
+ * match, and answering something he actually wrote. Everything else is her texting first.
+ */
+function isReplyWakeup(reason: string): boolean {
+  return reason === 'match_opener' || reason === PENDING_REPLY_REASON;
+}
+
+function unpromptedAllowed(): boolean {
+  return !!getSettings().unprompted_messages;
+}
+
 /** The one table the server polls. One row per character, checked once a minute. */
 export async function tick(): Promise<void> {
   const onDate = characterIdsOnDate();
@@ -48,6 +63,11 @@ export async function tick(): Promise<void> {
     const character = getCharacter(w.character_id);
     if (!character || character.state !== 'matched') {
       clearWakeup(w.character_id);
+      continue;
+    }
+    // Scheduled before the setting was turned off (or by an older version): drop it.
+    if (!unpromptedAllowed() && !isReplyWakeup(w.reason)) {
+      clearWakeup(character.id);
       continue;
     }
     // Left due rather than cleared: whatever she meant to say is still worth saying once
@@ -67,9 +87,11 @@ export async function tick(): Promise<void> {
 
   answerPendingMessages();
   decayPass();
-  maybeDoubleText();
-  maybeBeProactive();
-  maybeCelebrateMilestone();
+  if (unpromptedAllowed()) {
+    maybeDoubleText();
+    maybeBeProactive();
+    maybeCelebrateMilestone();
+  }
   void ensureStack();
 }
 
@@ -156,7 +178,7 @@ function answerPendingMessages(): void {
     setWakeup({
       character_id: character.id,
       scheduled_at: new Date(Date.now() + randInt(0, 2) * 60_000).toISOString(),
-      reason: 'she has unread messages from him',
+      reason: PENDING_REPLY_REASON,
       cancel_if_user_writes: true,
     });
     logger.debug('scheduler', `${character.username} has unanswered messages`);

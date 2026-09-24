@@ -228,11 +228,40 @@ const HER_QUESTIONS: { topic: string; keywords: string[] }[] = [
   { topic: 'what he likes to hear in bed', keywords: ['dirty talk', 'say to me', 'talk dirty', 'hear you say', 'moan'] },
 ];
 
-export function herCuriosity(rel: Relationship, limit = 4): string {
+/** A stable per-character order, so two characters never get the same questions in the same order. */
+function seededOrder<T>(items: T[], key: string): T[] {
+  let h = 2166136261;
+  for (const ch of key) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
+  const scored = items.map((item, i) => {
+    let x = (h ^ Math.imul(i + 1, 2654435761)) >>> 0;
+    x ^= x >>> 15; x = Math.imul(x, 2246822507) >>> 0; x ^= x >>> 13;
+    return { item, x };
+  });
+  return scored.sort((a, b) => a.x - b.x).map((s) => s.item);
+}
+
+/**
+ * A couple of things SHE would like to know about him. Deliberately few, deliberately
+ * hers: the same fixed list used to go to every character in the same order, which is how four
+ * different women all opened by asking "take charge or be told?" and "what would you do to me
+ * first". Half of it now comes from her own kinks, and the generic half is shuffled per
+ * character.
+ */
+export function herCuriosity(character: Character, rel: Relationship, limit = 2): string {
   const known = (rel.ledger?.facts?.about_user ?? []).join(' ').toLowerCase();
-  const open = HER_QUESTIONS.filter((q) => !q.keywords.some((k) => known.includes(k)));
-  if (!open.length) return 'She knows a lot about what he likes by now. Dig for something more specific.';
-  return open.slice(0, limit).map((q) => `- ${q.topic}`).join('\n');
+  const own = seededOrder(character.seed.fetishes ?? [], character.id)
+    .map((f) => find('fetish', f)?.label ?? f)
+    .filter((label) => !known.includes(label.toLowerCase()))
+    .slice(0, 1)
+    .map((label) => `whether he would be into ${label.toLowerCase()} with her`);
+  const generic = seededOrder(HER_QUESTIONS, character.id)
+    .filter((q) => !q.keywords.some((k) => known.includes(k)))
+    .slice(0, Math.max(0, limit - own.length))
+    .map((q) => q.topic);
+  const all = [...own, ...generic];
+  if (!all.length) return 'She knows a lot about what he likes by now.';
+  return all.map((t) => `- ${t}`).join('\n') +
+    '\nLow priority: she mostly finds these out by noticing what gets him, not by asking. At most one question per turn, and not every turn.';
 }
 
 export interface FetishProgress {

@@ -56,6 +56,11 @@ export function pickNudge(
    * for everyone.
    */
   const boldness = (seed.sexual_confidence - 2) * 0.06 + personaBonus / 2;
+  // Her own specifics, so the push to flirt or escalate comes out in her voice, not a stock one.
+  const dirtyTalk = find('dirty_talk', seed.dirty_talk)?.label.toLowerCase() ?? '';
+  const signature = find('signature_move', seed.signature_move)?.label.toLowerCase() ?? '';
+  const personaLabel = find('sexual_persona', seed.sexual_persona)?.label.toLowerCase() ?? '';
+  const pride = find('body_pride', seed.body_pride)?.label.toLowerCase() ?? '';
   const forward = seed.sexual_confidence >= 4 || seed.libido >= 4;
 
   if ((rel.arousal >= 55 || (forward && rel.arousal >= 25)) && chance(0.45 + boldness)) {
@@ -63,8 +68,9 @@ export function pickNudge(
       id: 'escalate',
       text:
         'You are the one pushing this turn. Do not wait for him to take it somewhere - take it there ' +
-        'yourself: say the specific thing you have been thinking about, tell him what you want, or ' +
-        'ask him something filthy you genuinely want the answer to.',
+        'yourself: say the specific thing you have been thinking about, or tell him exactly what you want' +
+        (dirtyTalk ? `, the way you talk dirty (${dirtyTalk})` : '') +
+        (signature ? `. Your signature is ${signature} - this could be the moment for it` : '') + '.',
     };
   }
 
@@ -86,8 +92,10 @@ export function pickNudge(
     return {
       id: 'flirt',
       text:
-        'Flirt with him this turn, and mean it. Not a polite compliment - something with an edge, ' +
-        'a double meaning, something that makes him picture it. You are into him and it shows.',
+        'Flirt with him this turn, and mean it - as yourself' +
+        (personaLabel ? ` (in bed you are: ${personaLabel})` : '') +
+        '. Not a polite compliment: something with an edge that only you would say' +
+        (pride ? `, maybe drawing his attention to ${pride}` : '') + '.',
     };
   }
 
@@ -148,7 +156,7 @@ export function pickNudge(
    * nothing here pushes her to actually want to know something about him, which "acting
    * interested" needs at least as much as flirting does.
    */
-  if (chance(0.22 + energy)) {
+  if (chance(0.1 + energy / 2)) {
     return {
       id: 'curious',
       text:
@@ -163,7 +171,7 @@ export function pickNudge(
       text:
         'Nothing much is hanging in the air, so bring something of your own into it rather than just ' +
         'answering - something from your actual day, a thought you were already having, a thing that ' +
-        'annoyed you, or a question you actually want the answer to. You are not waiting for prompts.',
+        'annoyed you, a confession. You are not waiting for prompts.',
     };
   }
 

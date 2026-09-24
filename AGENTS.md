@@ -113,6 +113,13 @@ own turn loop. The text chat is frozen while a date is active.
   `dist/prompts/templates` so a deleted table or template cannot keep being loaded.
 - `fetch` reports our own abort as a bare `AbortError`; the client converts it to
   `TimeoutError`. Do not catch LLM errors generically and re-ask as if the JSON were bad.
+- Node's built-in `fetch` (undici) gives up after 5 minutes without response headers and says
+  only "fetch failed". A non-streaming call gets no headers until the model finishes, so
+  `llm/client.ts` uses undici's own `fetch` with an `Agent` whose timeouts are off; our
+  AbortController is the only clock. Do not switch back to the global `fetch`.
+- Anything the whole cast sees identically (his profile and bio, generic curiosity lists,
+  stock nudge texts, default typing rules) becomes the same line from every character. Tie
+  prompts to her own seed.
 - A character's own fields must stay consistent: a fetish is only drawn from a kink domain
   she is into or curious about, and a hard limit only from one she is a hard no on
   (`rollKinkMap` and the lines after it in `generator.ts`).

@@ -1,3 +1,4 @@
+import { Agent, fetch } from 'undici';
 import { db, nowIso } from '../db/index.js';
 import { getSettings, type ModelConfig } from '../config.js';
 import { logger } from '../log.js';
@@ -137,6 +138,16 @@ const TRANSPORT_ATTEMPTS = 3;
 const DEFAULT_TIMEOUT_MS = 300_000;
 
 /**
+ * Node's built-in fetch gives up on its own after 5 minutes without response headers
+ * (undici's default headersTimeout), reported only as "fetch failed". A non-streaming call
+ * gets no headers until the model has finished, so a reasoning model writing a character
+ * was being cut off at exactly 5 minutes however long timeoutMs allowed - and each of those
+ * was then retried as a network error, for ~20 minutes a character. Our own AbortController
+ * is the only clock now.
+ */
+const dispatcher = new Agent({ headersTimeout: 0, bodyTimeout: 0 });
+
+/**
  * OpenAI-compatible chat completion. Nano-GPT is the default provider, but nothing here
  * is provider specific beyond the configured base URL and key.
  */
@@ -231,7 +242,7 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
   const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    let res: Response;
+    let res: Awaited<ReturnType<typeof fetch>>;
     try {
       res = await fetch(url, {
         method: 'POST',
@@ -241,6 +252,7 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
         },
         body: JSON.stringify(body),
         signal: controller.signal,
+        dispatcher,
       });
     } catch (err) {
       // fetch throws on our own abort and on dropped connections. Neither is a malformed
@@ -431,6 +443,7 @@ export async function generateImage(req: ImageRequest): Promise<string> {
     method: 'POST',
     headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
     body: JSON.stringify(body),
+    dispatcher,
   });
   const raw = await res.text();
   if (!res.ok) {

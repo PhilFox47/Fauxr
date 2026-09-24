@@ -326,7 +326,36 @@ you play them out there over text or on a date, the same way anything else happe
 (A "Play it out" button that turned a fantasy into a separate scene mode existed briefly. It
 was taken out for being intrusive. Any cards it left in a chat's history are hidden.)
 
-## How a turn works
+## She replies; she does not text first (by default)
+
+**Settings → Behaviour → "Characters can text first"** is off by default. With it off, a
+character only writes when you have written, apart from her one opening message after a match.
+Follow-ups after a silence, check-ins, anniversary messages and the wakeups the Director
+schedules are all switched off. The Director is told to leave `wakeup` null, and anything
+already scheduled is dropped on the next tick. The only other wakeup that still runs is the
+safety net that answers a message of yours that somehow went unanswered.
+
+## Keeping characters distinct
+
+Every character reads the same profile of you, so anything generic in her prompt comes out
+identical across the cast. A real log showed four characters opening with "so ur a switch"
+(from the bio) and all asking the same questions ("take charge or be told?", "what would you
+do to me first?"). Fixes:
+
+- Her curiosity about you is per character: one question tied to her own kinks plus one
+  generic topic, shuffled with a stable per-character order. It is marked low priority; she
+  mostly finds things out by noticing.
+- The Director is told to build every goal from what is specific to her, never to open by
+  quoting a label from your bio, and to vary the kind of move (tell, confess, describe, order,
+  tease) instead of quizzing you.
+- The Actor no longer has a generic "lowercase, u, tbh" texting default that overrode each
+  character's own typing style. She types exactly as her own style block says.
+- The flirt and escalate nudges use her persona, dirty-talk style, signature move and body
+  pride.
+- Word-for-word repeats of her own lines, or duplicates inside one turn, are rejected on the
+  first attempt and dropped after that. The older overlap check ignored anything under three
+  words, which is how "i have a list 📝" could loop.
+
 
 ```
 user message

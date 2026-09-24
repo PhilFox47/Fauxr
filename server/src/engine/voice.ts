@@ -333,6 +333,31 @@ function selfRepeat(text: string, recentOwnMessages: string[] | undefined): bool
   return matches >= SELF_REPEAT_ALLOWANCE;
 }
 
+/** Lowercased, whitespace-collapsed and trailing punctuation dropped - for exact-repeat checks. */
+function normalizeLine(text: string): string {
+  return text.toLowerCase().replace(/\s+/g, ' ').replace(/[.!?,\s]+$/, '').trim();
+}
+
+/**
+ * Exact repeats, which the overlap check above cannot see: it ignores anything under three
+ * words, so a stuck model looping "go ??" or "i have a list. 📝" - word for word, turn after
+ * turn, sometimes twice in the same turn - sailed straight past it. Returns the indexes of this
+ * turn's messages that repeat one of her own earlier lines, or another message in the same turn.
+ * One- and two-character replies ("ok", "k") are left alone.
+ */
+export function verbatimRepeats(messages: string[], recentOwnMessages: string[] = []): number[] {
+  const earlier = new Set(recentOwnMessages.map(normalizeLine).filter((t) => t.length > 2));
+  const seen = new Set<string>();
+  const hits: number[] = [];
+  messages.forEach((m, i) => {
+    const t = normalizeLine(m);
+    if (t.length <= 2) return;
+    if (earlier.has(t) || seen.has(t)) hits.push(i);
+    seen.add(t);
+  });
+  return hits;
+}
+
 export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
   // First, because it is the one failure that is not a style problem: everything below
   // assumes a reply that is at least trying to be her.

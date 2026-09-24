@@ -62,6 +62,13 @@ export interface Settings {
    * attributes more often, lower keeps characters closer to the common set.
    */
   rarity_bias: number;
+  /**
+   * Whether characters may message him unprompted: follow-ups after a silence, check-ins,
+   * anniversaries, and the wakeups the Director schedules. Off by default - they cost tokens
+   * and can feel like pressure. With it off, a character only ever writes when he has (plus
+   * her one opening message after a match).
+   */
+  unprompted_messages: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -91,6 +98,7 @@ export const DEFAULT_SETTINGS: Settings = {
   voice_enabled: false,
   spice: 1.15,
   rarity_bias: 1,
+  unprompted_messages: false,
 };
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {

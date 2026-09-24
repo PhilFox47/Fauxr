@@ -82,7 +82,7 @@ export async function runDirector(
   const prompt = render('director_direction', {
     pace: describePace(character),
     fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel)) || '(none written yet - she makes them up as she goes, from her kinks)',
-    her_curiosity: herCuriosity(rel),
+    her_curiosity: herCuriosity(character, rel),
     fetish_block: describeFetishProgress(character, rel),
     his_side: describeHim(rel),
     // Only his side of the exchange: this is about what HE brought up, not what she said.
@@ -108,6 +108,8 @@ export async function runDirector(
     last_contact: rel.last_contact_at ?? 'never',
     now: new Date().toLocaleString('en-GB'),
     spice_directive: spiceDirective(settings.spice),
+    unprompted: settings.unprompted_messages ? '1' : '',
+    replies_only: settings.unprompted_messages ? '' : '1',
     ledger_block: ledgerBlock(rel.ledger, { full: true }) || '(empty)',
     previous_direction: rel.active_direction ? directionBlock(rel.active_direction) : '(none yet)',
     actor_report: opts.actorReport
@@ -183,6 +185,8 @@ export async function runDirector(
  * text at once. She is always reachable, so there is no online window to push it into.
  */
 export function scheduleWakeup(character: Character, raw: any): void {
+  // With unprompted messages off she only ever answers him, so the Director's wakeup is moot.
+  if (!getSettings().unprompted_messages) return;
   if (!raw || typeof raw !== 'object') return;
   const minutes = Number(raw.in_minutes);
   if (!Number.isFinite(minutes) || minutes <= 0) {
