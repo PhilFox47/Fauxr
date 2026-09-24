@@ -90,7 +90,7 @@ export async function sendPhoto(opts: {
   characterId: string;
   kind: 'chat' | 'spicy';
   situation: string;
-  aspect: 'portrait' | 'landscape' | null;
+  aspect: PhotoAspect | null;
   showsFace: boolean;
 }): Promise<void> {
   if (!photosEnabled()) return;
@@ -114,7 +114,7 @@ export async function sendPhoto(opts: {
       kind: 'image',
       // description is what later prompts read to know what she sent; caption is all he sees
       // until he chooses to look.
-      meta: { image_id: job.id, pending: true, caption: shot.caption, description: shot.situation },
+      meta: { image_id: job.id, pending: true, caption: shot.caption, description: shot.situation, aspect: job.aspect },
       read_at: null,
       date_id: null,
     });
@@ -461,22 +461,35 @@ function truncateAtWord(text: string, max: number): string {
   return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trim();
 }
 
+/** The frames a photo in the chat can come in - her call, from what the shot actually is. */
+export type PhotoAspect = 'square' | 'portrait' | 'landscape';
+export const PHOTO_ASPECTS = new Set<PhotoAspect>(['square', 'portrait', 'landscape']);
+
 /**
- * Resolution per shot. A profile picture is always square - it is the one photo she leads
- * with, and a dating app's main photo slot is square everywhere. Anything after that is
- * her call between a tall phone-style frame and a wide one, made from what she is actually
- * showing (see photo_aspect on ActorHidden) - a portrait for a selfie or an outfit shot, a
- * landscape for a view or a wider scene.
+ * Resolution per shot, fixed by kind where the kind decides it:
+ * - a profile picture is always square: the main photo slot is square everywhere, and it is
+ *   the identity reference every later photo is matched to;
+ * - a date's arrival photo is always 2:3 portrait: it shows her whole outfit, head to shoes;
+ * - a photo she sends in the chat is her call (see photo_aspect on ActorHidden): square for a
+ *   close selfie or a detail, 2:3 portrait for a mirror or outfit shot, 3:2 landscape for a
+ *   view or a wider scene.
  *
  * Exported because locations.ts's backdrop reuses `portrait` directly: the provider silently
  * squared off a "1152x2048" request that was never actually on its supported list, and the
  * one resolution already confirmed working for a tall shot is this one.
  */
-export const IMAGE_SIZE: Record<'profile' | 'portrait' | 'landscape', string> = {
+export const IMAGE_SIZE: Record<'profile' | PhotoAspect, string> = {
   profile: '2048x2048',
+  square: '2048x2048',
   portrait: '2048x3072',
   landscape: '3072x2048',
 };
+
+function sizeFor(job: Pick<ImageJob, 'kind' | 'aspect'>): string {
+  if (job.kind === 'profile') return IMAGE_SIZE.profile;
+  if (job.kind === 'date') return IMAGE_SIZE.portrait;
+  return IMAGE_SIZE[job.aspect && PHOTO_ASPECTS.has(job.aspect) ? job.aspect : 'portrait'];
+}
 
 /**
  * How she holds herself in a photo, from who she is rather than what she looks like.
@@ -543,7 +556,7 @@ export interface ImageJob {
   status: 'queued' | 'running' | 'pending' | 'done' | 'failed';
   path: string | null;
   error: string | null;
-  aspect: 'portrait' | 'landscape' | null;
+  aspect: PhotoAspect | null;
   /** Stored as 0/1 by sqlite. Use showsFace() rather than reading this raw. */
   shows_face: number;
   /** The idea the photo is of, resolved (never the blank the Actor may have offered with). */
@@ -834,7 +847,7 @@ type ImageJobOptions = {
   dateId?: string | null;
   situation: string;
   /** Ignored for a profile picture, which is always square. Defaults to portrait. */
-  aspect?: 'portrait' | 'landscape' | null;
+  aspect?: PhotoAspect | null;
   /** False only for a shot that deliberately does not put her face in frame. Defaults true. */
   showsFace?: boolean;
   postToChat?: boolean;
@@ -842,7 +855,8 @@ type ImageJobOptions = {
 
 function insertImageJob(opts: ImageJobOptions): ImageJob {
   const id = randomUUID();
-  const aspect = opts.kind === 'profile' ? null : opts.aspect ?? 'portrait';
+  // Fixed by kind where the kind decides it - see IMAGE_SIZE.
+  const aspect = opts.kind === 'profile' ? 'square' : opts.kind === 'date' ? 'portrait' : opts.aspect ?? 'portrait';
   db.prepare(
     `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, shows_face, situation, date_id, created_at, updated_at)
      VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?, ?, ?, ?)`,
@@ -1055,7 +1069,7 @@ async function renderImageJob(job: ImageJob, character: Character, shot: Assembl
   // the Z Image Turbo budget maths above on purpose: that mode never sends a reference at
   // all unless a profile picture exists, and the same trim still protects the ceiling.
   const finalPrompt = ref ? `${prompt} ${REF_NOTE}` : prompt;
-  const size = isProfile ? IMAGE_SIZE.profile : IMAGE_SIZE[job.aspect === 'landscape' ? 'landscape' : 'portrait'];
+  const size = sizeFor(job);
   const imageSeed = seedFor(character.seed, isProfile);
   const b64 = await generateImage({
     prompt: finalPrompt,
@@ -1138,7 +1152,7 @@ const PHOTO_IDEA_TOKENS = 2400;
 async function freshPhotoIdea(
   character: Character,
   kind: 'chat' | 'spicy',
-): Promise<{ situation: string; aspect: 'portrait' | 'landscape' }> {
+): Promise<{ situation: string; aspect: PhotoAspect }> {
   try {
     const out = await completeJson<{ situation?: string; aspect?: string }>({
       scope: 'image',
@@ -1159,7 +1173,7 @@ async function freshPhotoIdea(
       ],
     });
     const situation = (out.situation ?? '').trim();
-    if (situation) return { situation, aspect: out.aspect === 'landscape' ? 'landscape' : 'portrait' };
+    if (situation) return { situation, aspect: PHOTO_ASPECTS.has(out.aspect as PhotoAspect) ? (out.aspect as PhotoAspect) : 'portrait' };
   } catch (err) {
     logger.warn('image', 'fresh photo idea failed, using a generic default', {
       character: character.username,

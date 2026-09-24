@@ -765,10 +765,14 @@ input[type='range'] {
 }
 .photo-pending-art {
   display: grid; place-items: center; align-self: stretch;
-  height: 96px; border-radius: var(--r-md);
+  aspect-ratio: 2 / 3; max-height: 240px; border-radius: var(--r-md);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
   color: var(--accent);
 }
+/* The tile takes the photo's own frame, so a square, tall or wide shot is recognisable before it is opened. */
+.photo-pending-art[data-aspect='square'] { aspect-ratio: 1 / 1; }
+.photo-pending-art[data-aspect='landscape'] { aspect-ratio: 3 / 2; }
+.photo-pending-art[data-aspect='portrait'] { aspect-ratio: 2 / 3; margin-inline: auto; width: 160px; align-self: center; }
 .photo-pending-caption { margin: 0; font-size: 13.5px; line-height: 1.4; }
 .bubble.photo-pending .btn { width: 100%; padding: 9px 14px; font-size: 13.5px; }
 .bubble.image img { display: block; max-width: 240px; border-radius: var(--r-md); }

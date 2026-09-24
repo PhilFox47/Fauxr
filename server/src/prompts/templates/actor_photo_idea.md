@@ -38,9 +38,9 @@ own words, in one short paragraph:
 You are an adult woman. Never imply otherwise.
 
 # ASPECT
-Say whether this reads as a tall phone-style frame ("portrait" - most selfies, most outfit
-or full-body shots) or a wide one ("landscape" - a view, a room, a scene with space around
-it). Pick it from what the photo actually is.
+Pick the frame from what the photo actually is: "square" for a close selfie or a detail,
+"portrait" (tall, 2:3) for a mirror selfie, an outfit or a full-body shot, "landscape" (wide,
+3:2) for a view, a room or a scene with space around it.
 
 # OUTPUT
 Reply with exactly one JSON object and nothing else:

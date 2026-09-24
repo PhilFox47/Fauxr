@@ -598,7 +598,7 @@ export default function Chat({
               {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
               {m.kind === 'image' && m.meta?.pending ? (
                 <div className={`bubble photo-pending ${mine ? 'me' : 'them'}`}>
-                  <div className="photo-pending-art" aria-hidden>
+                  <div className="photo-pending-art" data-aspect={m.meta.aspect ?? 'portrait'} aria-hidden>
                     <Icon name="camera" size={22} />
                   </div>
                   {m.meta.caption && <p className="photo-pending-caption">{m.meta.caption}</p>}

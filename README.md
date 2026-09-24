@@ -609,6 +609,13 @@ one is limited - but none of them costs an image generation until you choose to 
 `runImageJob` is now the two halves in a row - `assembleImageJob` then `renderImageJob` - for
 the paths that render at once.
 
+**Frames are fixed by kind** (`IMAGE_SIZE`, `sizeFor()` in `images.ts`): a profile picture is
+always square (2048x2048) - the main photo slot and the identity reference; a date's arrival
+photo is always 2:3 portrait (2048x3072), since it shows her whole outfit; a photo she sends in
+the chat is her call between square (a close selfie or a detail), 2:3 portrait (a mirror or
+outfit shot) and 3:2 landscape (a view or a room). The kind wins over whatever aspect a job
+was handed, and the chat placeholder takes the photo's frame before it is opened.
+
 ## How a turn works
 
 ```

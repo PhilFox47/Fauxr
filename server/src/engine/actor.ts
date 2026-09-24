@@ -75,7 +75,7 @@ function fallbackOutput(): ActorOutput {
 }
 
 const PHOTO_OFFER_KINDS = new Set(['chat', 'spicy']);
-const PHOTO_ASPECTS = new Set(['portrait', 'landscape']);
+const PHOTO_ASPECTS = new Set(['square', 'portrait', 'landscape']);
 
 function normalizeHidden(raw: any): ActorHidden {
   return {

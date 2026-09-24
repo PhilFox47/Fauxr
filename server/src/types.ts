@@ -255,7 +255,7 @@ export interface ActorHidden {
    * Her call on the shot's orientation. "portrait" is the tall phone-style frame,
    * "landscape" the wide one. Null when photo_offer is null.
    */
-  photo_aspect: 'portrait' | 'landscape' | null;
+  photo_aspect: 'square' | 'portrait' | 'landscape' | null;
   /**
    * False only when she has deliberately picked a shot that does not put her face in frame
    * - turned away, cropped, a hands/outfit close-up, a scene she is not even in. Null or
