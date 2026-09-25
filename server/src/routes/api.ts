@@ -31,9 +31,9 @@ import {
   dateHistory, deleteDateMessage, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate,
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
-import { TASTE_SECTIONS } from '../engine/kinks.js';
+import { domainSides, TASTE_SECTIONS } from '../engine/kinks.js';
 import { statusOf } from '../engine/status.js';
-import type { Character, KinkStance, Location } from '../types.js';
+import type { Character, KinkSide, KinkStance, Location } from '../types.js';
 
 /**
  * The backdrop is cache-busted on updated_at: regenerating writes a new file, but an edit
@@ -106,6 +106,17 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     return out;
   };
 
+  /** A side only for a domain that has two ends and that he is open to at all. */
+  const sanitizeKinkSides = (raw: unknown, map: Record<string, KinkStance>): Record<string, KinkSide> => {
+    const out: Record<string, KinkSide> = {};
+    for (const [k, v] of Object.entries((raw ?? {}) as Record<string, unknown>)) {
+      if (!['her', 'his', 'both'].includes(v as string)) continue;
+      if (!domainSides(find('kink_domain', k)) || (map[k] !== 'into' && map[k] !== 'curious')) continue;
+      out[k] = v as KinkSide;
+    }
+    return out;
+  };
+
   // ------------------------------------------------------------- profile
   app.put<{ Body: any }>('/api/profile', async (req, reply) => {
     const b = (req.body ?? {}) as Record<string, any>;
@@ -126,6 +137,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       // Only the four known stances survive, keyed by a real domain id, so nothing the
       // client sends can put junk in front of a model later.
       kink_map: sanitizeKinkMap(b.kink_map),
+      kink_sides: sanitizeKinkSides(b.kink_sides, sanitizeKinkMap(b.kink_map)),
       // Same validation the generated characters get, so his emoji cannot be ":)" either.
       avatar_emoji: sanitizeEmoji(b.avatar_emoji) ?? '',
       card: sanitizeCard(b.card),
@@ -670,7 +682,10 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
 
   /** Just the domains and their descriptions, for the profile editor. */
   app.get('/api/kink-domains', async () =>
-    byCategory('kink_domain').map((d) => ({ id: d.id, label: d.label, hint: d.prompt_hint })));
+    byCategory('kink_domain').map((d) => {
+      const s = domainSides(d);
+      return { id: d.id, label: d.label, hint: d.prompt_hint, sides: s ? { her: s.her.label, his: s.his.label } : null };
+    }));
 
   app.get('/api/attributes', async () => {
     return allCategories().map((category) => ({ category, entries: byCategory(category) }));

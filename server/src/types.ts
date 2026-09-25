@@ -6,6 +6,11 @@ export type CharacterState =
 
 /** Her standing position on a whole kink domain, not one specific act. */
 export type KinkStance = 'into' | 'curious' | 'soft_no' | 'hard_no';
+/**
+ * Which end of a kink domain: 'her' is the end done to her or about her (her feet worshipped,
+ * being tied up), 'his' is her doing it to him (worshipping his feet, tying him up).
+ */
+export type KinkSide = 'her' | 'his' | 'both';
 
 export interface Tattoo { motif: string; position: string }
 export interface Piercing { type: string; position: string }
@@ -133,6 +138,12 @@ export interface CharacterSeed {
    * "loves spanking" and "no impact, ever" can no longer both be true.
    */
   kink_map: Record<string, KinkStance>;
+  /**
+   * For each domain with two ends that she is into or curious about, which end she wants.
+   * "Into feet" alone never said whether she wants hers worshipped or worships his; her
+   * fetishes in a domain are drawn from this side only. Filled in by rollKinkSides().
+   */
+  kink_sides?: Record<string, KinkSide>;
   fetishes: string[];
   hard_limits: string[];
 
@@ -364,6 +375,8 @@ export interface UserProfile {
    * him, which is the point - it gives them something real to be curious about.
    */
   kink_map: Record<string, KinkStance>;
+  /** Which end he wants of a domain with two, in the same terms as hers: 'her' = done to her. */
+  kink_sides?: Record<string, KinkSide>;
   /**
    * The emoji standing in for his profile picture. This is what a character sees of him
    * until the two of them have actually swapped real pictures.

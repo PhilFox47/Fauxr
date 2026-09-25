@@ -732,6 +732,61 @@ built on him answering.
 He can still bring his own fantasies and she gets into them - nothing stops him talking about
 himself; she just no longer makes him.
 
+## Every kink says which end of it she wants
+
+Her profile read "Into: Feet" - which could mean she wants her feet worshipped, that she
+worships his, or both. She got the same ambiguity in her prompt, so she had to guess what her
+own kink was. There were two sources of it:
+
+- **Domains had no direction.** A kink domain (feet, bondage, power play, oral...) was one
+  stance and nothing else. Nineteen of them now have two ends (`extra.sides` on kink_domain):
+  `her` is the end done to her or about her (her feet, being tied up, being told what to do),
+  `his` is her doing it to him (his feet, tying him up, being in charge of him). Each end is
+  coded dominant or submissive. Exhibitionism, sharing, roleplay and size difference stay
+  without sides; their rows say who does what on their own.
+- **About sixty fetish labels did not stand alone.** "Toes, specifically", "Doing that to
+  him", "Using one on him", "A specific physical thing on him", "Spanking" (given or taken?)
+  and "Hair pulling" (whose?). Every label now says who does what to whom: "Having her toes
+  sucked", "Sucking his toes", "Being spanked", "Using a riding crop on him", "His chest hair".
+  The label is shown on its own in the profile and in her prompt. Each fetish row also has
+  `extra.side` (`her`/`his`, or none for shared things like 69 or sex in the shower). The
+  teacher and doctor roleplays are split by who plays which role, and primal gets "Hunting
+  him down", since every row in it was about her being chased.
+
+**Her end is rolled before her fetishes.** `rollKinkSides()` gives every two-ended domain she
+is into or curious about a side (`seed.kink_sides`): her dom/sub leaning weights each end, and
+someone in the middle is as likely to want both. A persona that is about one end sets
+`extra.side_bias` and gets it three times in four. That matters where dom/sub says nothing:
+a pillow princess wants oral on her, a giver goes down on him, a voyeur watches him. Her
+fetishes are then drawn only from her end (`fitsSide()`), and fantasy scenarios and chat games
+tagged with a side (`extra.sides`: "Over his knee" is impact on her) skip the wrong end
+(`wrongEnd()`). Measured over 2000 rolls: no fetish, scenario or game on the wrong end.
+Dominant women are in charge of him in power play 75% of the time and on the receiving end 9%;
+submissive women the reverse.
+
+**Where it shows:**
+- Her profile: "Into | Feet - his feet".
+- Her prompt: "Feet (...): into it - his feet (worshipping his feet) - the other way round
+  does little for her".
+- The character dossier, and the Director's note when you bring a kink up ("Feet (her end:
+  his feet)").
+- Hard limits that come from a domain she is a hard no on cover both ends. "Being
+  restrained" became "Restraint, either way", because it read as if tying him up were fine.
+
+**Your side too.** In Settings -> Your profile, a two-ended domain you are into or curious
+about offers "Her feet / His feet / Both" (`user_profile.kink_sides`). The "wait, really? me
+too" moment now needs the ends to meet: she wants her feet worshipped and you want to worship
+them. Two people who both want their own feet worshipped no longer count as a match. Leaving
+the side unset meets anything.
+
+**Existing characters** get their sides on first load, taken from the fetishes they already
+have wherever those say (a woman with "Worshipping his feet" gets `his`), and rolled only
+where they say nothing. On the next load, a chat game at the wrong end is swapped for a new
+one. The six domains added in the last batch (oral, instruction, tease and denial, watching,
+primal, sensation) and size difference also got the keywords that let the Director notice
+when you bring them up; they had been missing. The note about his unknown kinks no longer
+calls asking him about one "a genuinely good use of a turn".
+
 ## How a turn works
 
 ```

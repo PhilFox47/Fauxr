@@ -1,9 +1,9 @@
 import { db, nowIso } from './db/index.js';
 import { byCategory, find } from './db/attributes.js';
 import { newContext, roll } from './engine/dice.js';
-import { rollChatGames, rollDomainStance } from './engine/kinks.js';
+import { rollChatGames, rollDomainStance, rollKinkSides, wrongEnd } from './engine/kinks.js';
 import type {
-  Character, CharacterSeed, CharacterState, DateSession, Direction, Flags, Ledger,
+  Character, CharacterSeed, CharacterState, DateSession, Direction, Flags, KinkSide, Ledger,
   Location, Relationship, UserProfile,
 } from './types.js';
 
@@ -60,6 +60,7 @@ export function getUserProfile(): UserProfile | null {
     age_min: row.age_min ?? 18,
     age_max: row.age_max ?? 42,
     kink_map: JSON.parse(row.kink_map ?? '{}'),
+    kink_sides: JSON.parse(row.kink_sides ?? '{}'),
     avatar_emoji: row.avatar_emoji ?? '',
     card: JSON.parse(row.card ?? '{}'),
     seeking: row.seeking,
@@ -69,12 +70,12 @@ export function getUserProfile(): UserProfile | null {
 export function saveUserProfile(p: UserProfile): UserProfile {
   const ts = nowIso();
   db.prepare(
-    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, kink_map, avatar_emoji, card, created_at, updated_at)
-     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @kink_map, @avatar_emoji, @card, @ts, @ts)
+    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, kink_map, kink_sides, avatar_emoji, card, created_at, updated_at)
+     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @kink_map, @kink_sides, @avatar_emoji, @card, @ts, @ts)
      ON CONFLICT(id) DO UPDATE SET display_name = excluded.display_name, age = excluded.age,
        bio = excluded.bio, photos = excluded.photos, gender = excluded.gender,
        seeking = excluded.seeking, age_min = excluded.age_min, age_max = excluded.age_max,
-       kink_map = excluded.kink_map, avatar_emoji = excluded.avatar_emoji, card = excluded.card,
+       kink_map = excluded.kink_map, kink_sides = excluded.kink_sides, avatar_emoji = excluded.avatar_emoji, card = excluded.card,
        updated_at = excluded.updated_at`,
   ).run({
     ...p,
@@ -82,6 +83,7 @@ export function saveUserProfile(p: UserProfile): UserProfile {
     age_min: clampPreferredAge(p.age_min, 18),
     age_max: clampPreferredAge(p.age_max, 42),
     kink_map: JSON.stringify(p.kink_map ?? {}),
+    kink_sides: JSON.stringify(p.kink_sides ?? {}),
     avatar_emoji: p.avatar_emoji ?? '',
     card: JSON.stringify(p.card ?? {}),
     ts,
@@ -209,6 +211,21 @@ function backfillSexualProfile(characterId: string, seed: CharacterSeed): Charac
 }
 
 /**
+ * Whether her sides are out of step with her kink map: a two-ended domain she is open to
+ * with no side, or a side left on one she no longer is. Checked on every load without
+ * rolling anything.
+ */
+function kinkSidesDue(seed: CharacterSeed): boolean {
+  const want = new Set<string>();
+  for (const d of byCategory('kink_domain')) {
+    const st = seed.kink_map?.[d.id];
+    if ((d.extra as any)?.sides && (st === 'into' || st === 'curious')) want.add(d.id);
+  }
+  const have = Object.keys(seed.kink_sides ?? {});
+  return have.length !== want.size || have.some((k) => !want.has(k));
+}
+
+/**
  * Fields and kink domains added after a character was made: her butt, what she wears
  * underneath and to bed, her grooming, and a stance on every kink domain she has none for.
  * Rolled with her own style, build and persona in the context so they lean the way they would
@@ -218,9 +235,17 @@ function backfillSexualProfile(characterId: string, seed: CharacterSeed): Charac
 function backfillIntimateDetails(characterId: string, seed: CharacterSeed): CharacterSeed {
   const domains = byCategory('kink_domain');
   const missingDomains = domains.filter((d) => !seed.kink_map?.[d.id]);
-  // A game that was removed from the table leaves a hole in her four; she gets a new one in its place.
-  const staleGames = (seed.chat_games ?? []).some((id) => !find('chat_game', id));
-  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length && seed.chat_games?.length && !staleGames) return seed;
+  // A game that was removed from the table leaves a hole in her four, and so does one about the
+  // other end of a kink from hers ("Make me beg" for a woman who does the edging); she gets a
+  // new one in its place.
+  const keepGame = (id: string) => {
+    const g = find('chat_game', id);
+    return !!g && !wrongEnd(g, seed.kink_sides);
+  };
+  const staleGames = (seed.chat_games ?? []).some((id) => !keepGame(id));
+  // Every two-ended domain she is open to needs her end of it (see rollKinkSides).
+  const sidesDue = kinkSidesDue(seed);
+  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length && seed.chat_games?.length && !staleGames && !sidesDue) return seed;
   if (!byCategory('lingerie_style').length) return seed; // attribute table not seeded yet
   const ctx = newContext();
   for (const id of [seed.body_type, seed.height, seed.clothing_style, seed.sexual_persona, seed.archetype]) if (id) ctx.drawn.add(id);
@@ -248,9 +273,18 @@ function backfillIntimateDetails(characterId: string, seed: CharacterSeed): Char
       seed.kink_map[d.id] = owned ? 'into' : rollDomainStance(seed.freak ?? 2.5, d, Number(bias[d.id] ?? 0));
     }
   }
+  // After the new domains have a stance, so they get a side too. Taken from the fetishes she
+  // already has wherever they say, so an existing "worshipping his feet" makes her side 'his'.
+  seed.kink_sides = rollKinkSides({
+    kink_map: seed.kink_map ?? {},
+    dom_sub_leaning: seed.dom_sub_leaning ?? 0,
+    fetishes: seed.fetishes,
+    kink_sides: seed.kink_sides,
+    side_bias: find('sexual_persona', seed.sexual_persona)?.extra?.side_bias as any,
+  });
   if ((!seed.chat_games?.length || staleGames) && byCategory('chat_game').length) {
-    const kept = (seed.chat_games ?? []).filter((id) => find('chat_game', id));
-    const fresh = rollChatGames({ kink_map: seed.kink_map ?? {}, dom_sub_leaning: seed.dom_sub_leaning ?? 0, sexual_persona: seed.sexual_persona });
+    const kept = (seed.chat_games ?? []).filter(keepGame);
+    const fresh = rollChatGames({ kink_map: seed.kink_map ?? {}, dom_sub_leaning: seed.dom_sub_leaning ?? 0, sexual_persona: seed.sexual_persona, kink_sides: seed.kink_sides });
     seed.chat_games = [...kept, ...fresh.filter((id) => !kept.includes(id))].slice(0, Math.max(fresh.length, kept.length));
   }
   db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);

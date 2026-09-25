@@ -78,6 +78,23 @@ for (const e of all) {
     for (const ref of e.extra?.limits ?? []) {
       if (!limitIds.has(ref)) errors.push(`${e.id} (${e._file}): kink_domain.extra.limits references unknown hard_limit '${ref}'`);
     }
+    // A domain with sides needs both of them, each with a label she and the profile can show.
+    const sides = e.extra?.sides;
+    if (sides !== undefined) {
+      for (const side of ['her', 'his']) {
+        if (!sides?.[side]?.label) errors.push(`${e.id} (${e._file}): kink_domain.extra.sides.${side} needs a label`);
+      }
+    }
+  }
+  if (e.category === 'fetish' && e.extra?.side !== undefined && !['her', 'his'].includes(e.extra.side)) {
+    errors.push(`${e.id} (${e._file}): fetish.extra.side must be 'her' or 'his', not '${e.extra.side}'`);
+  }
+  if (e.category === 'sexual_persona' && e.extra?.side_bias) {
+    for (const [dom, side] of Object.entries(e.extra.side_bias)) {
+      const d = (byCategory.get('kink_domain') ?? []).find((k) => k.id === dom);
+      if (!d?.extra?.sides) errors.push(`${e.id} (${e._file}): side_bias names '${dom}', which is not a kink domain with sides`);
+      if (!['her', 'his', 'both'].includes(side)) errors.push(`${e.id} (${e._file}): side_bias.${dom} must be her, his or both`);
+    }
   }
 }
 

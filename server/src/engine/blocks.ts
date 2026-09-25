@@ -4,6 +4,7 @@ import type { Character, CharacterSeed, DateSession, Direction, Flags, Ledger, U
 import { describeSeed } from './generator.js';
 import { freshThreads, pruneThreads } from './state.js';
 import { chatPhotoLine } from './photolevel.js';
+import { sideDetail } from './kinks.js';
 
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
@@ -172,7 +173,10 @@ export function kinkMapBlock(seed: CharacterSeed): string {
     .map(([id, stance]) => {
       const d = find('kink_domain', id);
       if (!d) return '';
-      return `- ${d.label} (${d.prompt_hint}): ${STANCE_WORD[stance] ?? stance}`;
+      // Which end of it, for the ones with two: "into feet" alone left her guessing whether
+      // she wants hers worshipped or worships his.
+      const side = stance === 'into' || stance === 'curious' ? sideDetail(d, seed.kink_sides?.[id]) : '';
+      return `- ${d.label} (${d.prompt_hint}): ${STANCE_WORD[stance] ?? stance}${side ? ` - ${side}` : ''}`;
     })
     .filter(Boolean);
   if (!rows.length) return '';

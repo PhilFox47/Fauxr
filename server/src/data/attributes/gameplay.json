@@ -884,7 +884,7 @@
   {
     "id": "hands",
     "category": "turn_on",
-    "label": "Notices hands specifically",
+    "label": "His hands",
     "weight": 1.1,
     "rarity": "common",
     "prompt_hint": "has a specific, slightly embarrassing thing about hands",
@@ -1052,10 +1052,10 @@
   {
     "id": "forearms",
     "category": "turn_on",
-    "label": "A very specific physical fixation",
+    "label": "His forearms",
     "weight": 1.1,
     "rarity": "common",
-    "prompt_hint": "has a specific, slightly private physical fixation and knows it is a cliche",
+    "prompt_hint": "a specific, slightly private fixation on his forearms, and she knows it is a cliche",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -1138,7 +1138,7 @@
   {
     "id": "good_posture",
     "category": "turn_on",
-    "label": "Notices posture, specifically",
+    "label": "How he carries himself",
     "weight": 0.8,
     "rarity": "rare",
     "prompt_hint": "has an oddly specific weakness for how someone carries themselves",
@@ -3070,7 +3070,11 @@
         "bdsm_power",
         "instruction"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "bdsm_power": "his",
+        "instruction": "his"
+      }
     },
     "enabled": true
   },
@@ -3095,7 +3099,11 @@
         "bdsm_power",
         "tease_denial"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "bdsm_power": "his",
+        "tease_denial": "his"
+      }
     },
     "enabled": true
   },
@@ -3120,7 +3128,11 @@
         "instruction",
         "tease_denial"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "instruction": "his",
+        "tease_denial": "his"
+      }
     },
     "enabled": true
   },
@@ -3144,7 +3156,10 @@
       "domains": [
         "tease_denial"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "tease_denial": "his"
+      }
     },
     "enabled": true
   },
@@ -3169,7 +3184,11 @@
         "instruction",
         "bdsm_power"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "instruction": "her",
+        "bdsm_power": "her"
+      }
     },
     "enabled": true
   },
@@ -3194,7 +3213,11 @@
         "bdsm_power",
         "tease_denial"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "bdsm_power": "her",
+        "tease_denial": "her"
+      }
     },
     "enabled": true
   },
@@ -3266,7 +3289,11 @@
         "bdsm_power",
         "praise"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "praise": "her",
+        "bdsm_power": "his"
+      }
     },
     "enabled": true
   },
@@ -3290,7 +3317,10 @@
       "domains": [
         "praise"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "praise": "her"
+      }
     },
     "enabled": true
   },

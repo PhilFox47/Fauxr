@@ -1,4 +1,6 @@
 export type KinkStance = 'into' | 'curious' | 'soft_no' | 'hard_no';
+/** Which end of a two-ended kink: 'her' = done to her, 'his' = done to him. */
+export type KinkSide = 'her' | 'his' | 'both';
 
 export interface CardField {
   key: string;
@@ -29,6 +31,8 @@ export interface KinkDomain {
   id: string;
   label: string;
   hint: string;
+  /** The two ends, for the domains that have them ("her feet" / "his feet"). */
+  sides: { her: string; his: string } | null;
 }
 
 export interface UserProfile {
@@ -43,6 +47,8 @@ export interface UserProfile {
   age_max: number;
   /** Your own stances. Characters are told none of this; they find it out by talking to you. */
   kink_map: Record<string, KinkStance>;
+  /** Which end you want, for the two-ended ones you are into or curious about. Unset = either. */
+  kink_sides?: Record<string, KinkSide>;
   /** Stands in for your photo when you have not uploaded one. */
   avatar_emoji: string;
   /** Everything else about you, same vocabulary the characters are built from. */

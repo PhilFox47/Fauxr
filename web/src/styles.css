@@ -1255,6 +1255,7 @@ input[type='range'] {
 .kink-label .tiny { line-height: 1.45; }
 .kink-stances { display: flex; flex-wrap: wrap; gap: var(--s2); }
 .kink-stances .chip { font-size: 12.5px; padding: 6px 11px; }
+.kink-sides { margin-top: var(--s2); padding-left: var(--s3); border-left: 2px solid var(--line-strong); }
 
 
 /* ---- user character card editor: collapsed by default, since it is a long form */

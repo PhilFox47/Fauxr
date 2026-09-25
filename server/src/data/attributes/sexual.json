@@ -2,7 +2,7 @@
   {
     "id": "pain",
     "category": "hard_limit",
-    "label": "Pain of any kind",
+    "label": "Pain of any kind, either way",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "",
@@ -29,7 +29,7 @@
   {
     "id": "humiliation",
     "category": "hard_limit",
-    "label": "Humiliation",
+    "label": "Humiliation, either way",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "",
@@ -46,7 +46,7 @@
   {
     "id": "degradation",
     "category": "hard_limit",
-    "label": "Being degraded",
+    "label": "Degradation, either way",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "",
@@ -62,7 +62,7 @@
   {
     "id": "name_calling",
     "category": "hard_limit",
-    "label": "Being called names",
+    "label": "Name-calling, either way",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "",
@@ -134,7 +134,7 @@
   {
     "id": "choking",
     "category": "hard_limit",
-    "label": "Choking or anything near her throat",
+    "label": "Anything at anyone's throat",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "",
@@ -167,7 +167,7 @@
   {
     "id": "restraint",
     "category": "hard_limit",
-    "label": "Being restrained",
+    "label": "Restraint, either way",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "",
@@ -190,7 +190,7 @@
   {
     "id": "blindfolds",
     "category": "hard_limit",
-    "label": "Not being able to see",
+    "label": "Blindfolds, either way",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "",
@@ -227,7 +227,7 @@
   {
     "id": "impact",
     "category": "hard_limit",
-    "label": "Being hit, at all",
+    "label": "Hitting or being hit, at all",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "",
@@ -246,7 +246,7 @@
   {
     "id": "marks_limit",
     "category": "hard_limit",
-    "label": "Anything that leaves marks",
+    "label": "Leaving or getting marks",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "",
@@ -267,7 +267,7 @@
   {
     "id": "feet_limit",
     "category": "hard_limit",
-    "label": "Feet",
+    "label": "Anything with feet, hers or his",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "",
@@ -304,7 +304,7 @@
   {
     "id": "degrading_language",
     "category": "hard_limit",
-    "label": "Being talked down to, even in play",
+    "label": "Talking down, either way, even in play",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "",
@@ -329,6 +329,8 @@
     "image_prompt": null,
     "affinities": [],
     "conflicts": [
+      "doctor_patient_roleplay",
+      "patient_roleplay",
       "using_a_swing_or_wedge",
       "wax_play_giving",
       "wax_play_receiving"
@@ -432,7 +434,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -448,7 +451,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -463,7 +467,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -477,13 +483,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "hair_pulling",
     "category": "fetish",
-    "label": "Hair pulling",
+    "label": "Having her hair pulled",
     "weight": 1.2,
     "rarity": "common",
     "prompt_hint": "a handful of her hair, firmly, mid-everything. Shorthand for a lot of the rest of what she wants",
@@ -491,13 +499,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "scalp_massage_giving",
     "category": "fetish",
-    "label": "Giving a slow scalp massage",
+    "label": "Giving him a slow scalp massage",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "genuinely enjoys running her fingers through his hair and along his scalp, unhurried",
@@ -505,13 +515,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "ear_nibbling",
     "category": "fetish",
-    "label": "Being nibbled on the ear",
+    "label": "Having her ear nibbled",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "her ear is a direct line to everywhere else and she will not pretend otherwise",
@@ -519,13 +531,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "neck_nibbling",
     "category": "fetish",
-    "label": "Being nibbled on the neck",
+    "label": "Having her neck kissed and nibbled",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "her neck, done properly, short-circuits her faster than almost anything else",
@@ -533,13 +547,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "sweat_scent",
     "category": "fetish",
-    "label": "The smell of him after exertion",
+    "label": "The smell of him after a workout",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "sweat after the gym, after a run, after anything physical. She will not always admit this out loud",
@@ -547,7 +563,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -561,27 +579,31 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "armpit_receiving",
     "category": "fetish",
-    "label": "Attention there, specifically",
+    "label": "Having her armpits kissed and licked",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "an unusual specific spot that does more for her than it has any right to. She is a little embarrassed about it",
+    "prompt_hint": "an unusual spot that does more for her than it has any right to. She is a little embarrassed about it",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "armpit_giving",
     "category": "fetish",
-    "label": "Giving attention there",
+    "label": "Kissing and licking his armpits",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "enjoys it on him specifically and could not fully explain why",
@@ -589,13 +611,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "navel_play",
     "category": "fetish",
-    "label": "Navel play",
+    "label": "Having her navel kissed and teased",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "a spot most people ignore entirely and she notices when someone does not",
@@ -603,7 +627,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -617,13 +643,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "shoulder_biting",
     "category": "fetish",
-    "label": "Being bitten on the shoulder, gently",
+    "label": "Having her shoulder bitten, gently",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "teeth on her shoulder, not hard, just enough to notice",
@@ -631,7 +659,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -659,55 +689,63 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "stockings_seeing",
     "category": "fetish",
-    "label": "Seeing him in something specific",
+    "label": "Him in a fitted shirt, sleeves rolled up",
     "weight": 1.0,
     "rarity": "rare",
-    "prompt_hint": "has a very particular thing for one item of his clothing and has never explained why",
+    "prompt_hint": "one specific look on him that gets her every time and she has never fully explained why",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "nail_dragging",
     "category": "fetish",
-    "label": "Nails dragged, lightly",
+    "label": "Dragging her nails down his back",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "down his back, his chest, his arm. Barely there but she notices it land",
+    "prompt_hint": "down his back, his chest, his arm - light or deep, and watching him react",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "toe_sucking_receiving",
     "category": "fetish",
-    "label": "Toes, specifically",
+    "label": "Having her toes sucked",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "attention there specifically, and she finds it does more than it should",
+    "prompt_hint": "his mouth on her toes, one at a time - it does more for her than it should",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "toe_sucking_giving",
     "category": "fetish",
-    "label": "Doing that to him",
+    "label": "Sucking his toes",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "less common the other way round, but genuinely into it when she is",
@@ -715,27 +753,31 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "lactation_fantasy",
     "category": "fetish",
-    "label": "A specific fantasy involving lactation",
+    "label": "A lactation fantasy about herself",
     "weight": 0.6,
     "rarity": "very_rare",
-    "prompt_hint": "a niche one she has never said out loud to anyone, purely fantasy, never come up before",
+    "prompt_hint": "her own breasts full and leaking for him - a niche one she has never said out loud, purely fantasy",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "ass_slapping_receiving",
     "category": "fetish",
-    "label": "A firm hand there",
+    "label": "His hand smacking her ass",
     "weight": 1.3,
     "rarity": "common",
     "prompt_hint": "open palm, without warning, mid-anything. She will ask for it again before she asks him to stop",
@@ -744,22 +786,25 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "back_scratching",
     "category": "fetish",
-    "label": "Back scratching",
+    "label": "Scratching up his back",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "proper marks, not gentle. She likes finding them the next morning",
+    "prompt_hint": "proper marks down his back, not gentle - she likes seeing them on him the next morning",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -773,13 +818,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "hand_kissing_receiving",
     "category": "fetish",
-    "label": "Her hand, kissed properly",
+    "label": "Having her hand kissed",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "an old-fashioned gesture that does far more to her than it should",
@@ -787,21 +834,25 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "chest_hair",
     "category": "fetish",
-    "label": "A specific physical thing on him",
+    "label": "His chest hair",
     "weight": 0.5,
     "rarity": "uncommon",
-    "prompt_hint": "one particular physical detail she finds herself drawn to and has never told anyone she notices",
+    "prompt_hint": "running her fingers through it, her face against it - a physical detail she is drawn to and has never admitted noticing",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -815,7 +866,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -829,7 +882,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -844,7 +899,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -860,7 +916,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -876,7 +933,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -892,14 +950,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "being_pinned",
     "category": "fetish",
-    "label": "Being pinned down, gently",
+    "label": "Being pinned down by him",
     "weight": 1.4,
     "rarity": "common",
     "prompt_hint": "hands pinned, weight on her, unable to move. Not rope, just physically held",
@@ -908,7 +967,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -924,14 +984,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "blindfold_receiving",
     "category": "fetish",
-    "label": "Wearing a blindfold",
+    "label": "Being blindfolded",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "not being able to see makes everything else louder, and she finds that unbearable in a good way",
@@ -940,7 +1001,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -956,14 +1018,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "restraint_receiving",
     "category": "fetish",
-    "label": "Being restrained",
+    "label": "Being restrained by him",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "cuffs, ties, whatever is to hand. Being genuinely unable to move is the whole point for her",
@@ -972,7 +1035,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -988,14 +1052,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "spanking_receiving",
     "category": "fetish",
-    "label": "Spanking",
+    "label": "Being spanked",
     "weight": 1.3,
     "rarity": "common",
     "prompt_hint": "open hand, building. She will ask for harder before she asks him to stop",
@@ -1004,7 +1069,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -1020,7 +1086,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -1036,14 +1103,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "edging_receiving",
     "category": "fetish",
-    "label": "Being edged",
+    "label": "Being edged by him",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "taken right to the edge and stopped, repeatedly, for as long as he has the patience for it",
@@ -1052,7 +1120,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -1068,14 +1137,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "overstimulation",
     "category": "fetish",
-    "label": "Being made to keep going",
+    "label": "Being made to keep coming",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "not being allowed to stop once she already has. Too much, on purpose",
@@ -1084,22 +1154,25 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "sensory_deprivation",
     "category": "fetish",
-    "label": "Sensory deprivation",
+    "label": "Being blindfolded and tied, all sensation",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "blindfold and restraint together, so there is nothing left to focus on but sensation",
+    "prompt_hint": "blindfold and restraint on her together, so there is nothing left to focus on but what he does",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -1113,7 +1186,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -1128,7 +1203,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -1144,7 +1220,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -1160,7 +1237,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -1176,14 +1254,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "forced_orgasm",
     "category": "fetish",
-    "label": "Being pushed past when she thought she was done",
+    "label": "Being made to come again when she thought she was done",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "kept going past her own stopping point, made to come again when she thought she could not",
@@ -1192,14 +1271,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "self_denial",
     "category": "fetish",
-    "label": "Denying herself, on purpose",
+    "label": "Holding back her own orgasm, on purpose",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "holding off on her own pleasure deliberately, for the anticipation",
@@ -1207,7 +1287,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -1222,7 +1304,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -1238,94 +1321,100 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "collar_receiving",
     "category": "fetish",
-    "label": "Wearing something that means something",
+    "label": "Wearing something of his that marks her as his",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "a collar, a bracelet, a specific phrase - something worn or said that marks the dynamic",
+    "prompt_hint": "a collar, a bracelet, a phrase - something she wears that says whose she is",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "collaring_him",
     "category": "fetish",
-    "label": "Putting something on him that means something",
+    "label": "Putting a collar on him",
     "weight": 1.0,
     "rarity": "rare",
-    "prompt_hint": "being the one who marks the dynamic rather than wearing it",
+    "prompt_hint": "being the one who marks the dynamic - something he wears that says he is hers",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "impact_receiving",
     "category": "fetish",
-    "label": "Impact, beyond just a hand",
+    "label": "Being hit with a paddle or belt",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "implements, not just palms. Negotiated, building, careful",
+    "prompt_hint": "implements on her, not just palms. Negotiated, building, careful",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "impact_giving",
     "category": "fetish",
-    "label": "Delivering impact",
+    "label": "Paddling him",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "enjoys being the one holding the implement, more than she expected to",
+    "prompt_hint": "enjoys being the one holding the paddle or the belt, more than she expected to",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "flogging_receiving",
     "category": "fetish",
-    "label": "Something with more spread to it",
+    "label": "Being flogged",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "a flogger rather than a single point of contact - the difference matters to her",
+    "prompt_hint": "a flogger on her back and ass rather than a single point of contact - the difference matters to her",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "flogging_giving",
     "category": "fetish",
-    "label": "Using one on him",
+    "label": "Flogging him",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "enjoys the rhythm of it and the control it takes to do properly",
@@ -1334,14 +1423,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "wax_play_receiving",
     "category": "fetish",
-    "label": "Hot wax, carefully",
+    "label": "Hot wax dripped on her",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "the shock of temperature rather than pain exactly. Tested first, always",
@@ -1349,13 +1439,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "wax_play_giving",
     "category": "fetish",
-    "label": "Dripping wax on him",
+    "label": "Dripping hot wax on him",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "enjoys controlling exactly where and how much",
@@ -1364,22 +1456,25 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "bondage_shibari",
     "category": "fetish",
-    "label": "Proper rope, not improvised",
+    "label": "Being tied up in proper rope",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "actual technique, actual patience. She has looked into it more than she has told anyone",
+    "prompt_hint": "actual technique on her body, actual patience. She has looked into it more than she has told anyone",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -1394,30 +1489,32 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "crop_receiving",
     "category": "fetish",
-    "label": "A riding crop, specifically",
+    "label": "Being cropped",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "the precision of it rather than the force. A very particular thing to want",
+    "prompt_hint": "a riding crop on her - the precision of it rather than the force",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "crop_giving",
     "category": "fetish",
-    "label": "Using one on him",
+    "label": "Using a riding crop on him",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "enjoys the precision of aiming it rather than just swinging",
@@ -1426,14 +1523,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "being_called_pet",
     "category": "fetish",
-    "label": "A specific name he uses only for this",
+    "label": "A pet name he calls her only in bed",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "not her actual name - something he calls her only in this context, and it works on her every time",
@@ -1442,14 +1540,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "calling_him_pet",
     "category": "fetish",
-    "label": "Having her own name for him",
+    "label": "Her own pet name for him, only in bed",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "only in private, only in this context",
@@ -1458,14 +1557,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "power_exchange_formal",
     "category": "fetish",
-    "label": "Talking it through properly first",
+    "label": "Negotiating the dynamic properly first",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "actually discussing the dynamic beforehand rather than assuming it. She finds the negotiation itself appealing",
@@ -1479,53 +1579,57 @@
   {
     "id": "secretary_roleplay",
     "category": "fetish",
-    "label": "A specific power-imbalance scenario",
+    "label": "Playing his secretary",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "boss and secretary, or something with that shape. The scenario itself is most of the appeal",
+    "prompt_hint": "boss and secretary with him as the boss - the power imbalance is most of the appeal",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "boss_roleplay",
     "category": "fetish",
-    "label": "Being the one in charge, in a scenario",
+    "label": "Playing his boss",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "the other side of that scenario - being the one with the power in the fiction",
+    "prompt_hint": "boss and employee with her as the boss - she holds the power in the fiction",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "mild_public_tease",
     "category": "fetish",
-    "label": "Being teased where someone could almost notice",
+    "label": "Being teased by him where someone could almost notice",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "a hand, a whispered thing, somewhere semi-public where the risk is small but real",
+    "prompt_hint": "his hand, a whispered thing, somewhere semi-public where the risk is small but real",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "humiliating_him_lightly",
     "category": "fetish",
-    "label": "A bit of teasing that has an edge to it",
+    "label": "Teasing him with a mean edge",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "enjoys pushing him slightly further than pure affection would, within limits they both know",
@@ -1534,7 +1638,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -1550,7 +1655,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -1566,42 +1672,47 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "claimed_in_public",
     "category": "fetish",
-    "label": "A small, deliberate public gesture",
+    "label": "Him claiming her in public, subtly",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "something small and possessive done where others could see, nothing explicit, just enough that she knows what it means",
+    "prompt_hint": "a small possessive gesture from him where others could see - nothing explicit, just enough that she knows what it means",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "claiming_in_public",
     "category": "fetish",
-    "label": "Doing that to him",
+    "label": "Claiming him in public, subtly",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "a hand on him in a way only the two of them understand the meaning of",
+    "prompt_hint": "her hand on him in a way only the two of them understand",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "lace_lingerie",
     "category": "fetish",
-    "label": "Lace, specifically",
+    "label": "Wearing lace",
     "weight": 1.4,
     "rarity": "common",
     "prompt_hint": "the texture and the effort of it. Wears it because she wants to, not only for him",
@@ -1609,13 +1720,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "leather_wearing",
     "category": "fetish",
-    "label": "Leather",
+    "label": "Wearing leather",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "the weight and smell of it, wearing something with actual structure to it",
@@ -1623,13 +1736,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "latex_wearing",
     "category": "fetish",
-    "label": "Latex or PVC",
+    "label": "Wearing latex or PVC",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "the specific feel of it against her skin. A more particular taste than leather",
@@ -1637,13 +1752,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "seeing_him_in_leather",
     "category": "fetish",
-    "label": "Him in leather specifically",
+    "label": "Him in leather",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "a jacket, gloves, whatever. A specific and slightly surprising thing to be into",
@@ -1651,13 +1768,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "high_heels_wearing",
     "category": "fetish",
-    "label": "Heels, and knowing what they do",
+    "label": "Wearing heels, and knowing what they do",
     "weight": 1.2,
     "rarity": "common",
     "prompt_hint": "not for the height - for how she carries herself in them",
@@ -1665,7 +1784,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -1685,7 +1806,7 @@
   {
     "id": "nylon_fishnet",
     "category": "fetish",
-    "label": "Stockings with actual texture to them",
+    "label": "Wearing fishnets",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "fishnet or patterned nylon specifically, not just any stocking",
@@ -1693,7 +1814,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -1707,13 +1830,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "corset_wearing",
     "category": "fetish",
-    "label": "A corset",
+    "label": "Wearing a corset",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "the structure of it, the ritual of putting it on properly",
@@ -1721,13 +1846,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "garter_belt",
     "category": "fetish",
-    "label": "A garter belt",
+    "label": "Wearing a garter belt",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "specifically, over just stockings alone - the whole assembly",
@@ -1735,13 +1862,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "uniform_seeing",
     "category": "fetish",
-    "label": "A uniform on him, specifically",
+    "label": "Him in a uniform",
     "weight": 1.3,
     "rarity": "common",
     "prompt_hint": "scrubs, a suit, a specific line of work. Not the job - the look of it",
@@ -1749,13 +1878,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "uniform_wearing",
     "category": "fetish",
-    "label": "Wearing a uniform herself",
+    "label": "Wearing a uniform for him",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "a specific costume or work outfit that changes how she carries herself",
@@ -1763,13 +1894,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "wet_clothes",
     "category": "fetish",
-    "label": "Clothes that are wet, on either of them",
+    "label": "Wet clothes clinging, on either of them",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "the way fabric behaves wet rather than the water itself",
@@ -1783,7 +1916,7 @@
   {
     "id": "tight_clothes",
     "category": "fetish",
-    "label": "Tight, deliberately",
+    "label": "Wearing things skin-tight",
     "weight": 1.2,
     "rarity": "common",
     "prompt_hint": "clothing chosen specifically to be tight, on purpose, and she knows it",
@@ -1791,13 +1924,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "fur_touching",
     "category": "fetish",
-    "label": "Fur, texture-wise",
+    "label": "Fur against her skin",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "touching it, wearing it, the specific feel against skin",
@@ -1805,13 +1940,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "metal_cold",
     "category": "fetish",
-    "label": "Something cold and metal against skin",
+    "label": "Cold metal against her skin",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "the shock of temperature contrast, deliberately used",
@@ -1819,13 +1956,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "ice_play_receiving",
     "category": "fetish",
-    "label": "Ice, specifically",
+    "label": "Ice run over her skin",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "the exact sensation of it against warm skin, used deliberately",
@@ -1833,13 +1972,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "ice_play_giving",
     "category": "fetish",
-    "label": "Using it on him",
+    "label": "Running ice over him",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "enjoys the control of exactly where and how long",
@@ -1847,13 +1988,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "feather_tickler",
     "category": "fetish",
-    "label": "A feather, or something similarly light",
+    "label": "A feather drawn over her skin",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "barely-there sensation used deliberately, drawn out",
@@ -1861,13 +2004,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "jewelry_that_marks",
     "category": "fetish",
-    "label": "Jewellery that means something specific",
+    "label": "Wearing one piece of jewellery only for this",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "an anklet, a particular piece she only wears in this context",
@@ -1875,7 +2020,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -1889,27 +2036,31 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "tie_as_prop",
     "category": "fetish",
-    "label": "A tie, used as more than clothing",
+    "label": "Having her wrists tied with his tie",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "restraint improvised from something ordinary, which she finds more interesting than actual rope",
+    "prompt_hint": "restraint improvised from something he was wearing, which she finds hotter than actual rope",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "costume_roleplay",
     "category": "fetish",
-    "label": "A specific costume for a specific scenario",
+    "label": "Dressing up for a scenario, both of them",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "not everyday roleplay - a genuine costume, put on for the occasion",
@@ -1923,7 +2074,7 @@
   {
     "id": "car_sex",
     "category": "fetish",
-    "label": "In the car",
+    "label": "Sex in the car",
     "weight": 1.3,
     "rarity": "common",
     "prompt_hint": "somewhere cramped and slightly ridiculous, and she likes it precisely because of that",
@@ -1937,7 +2088,7 @@
   {
     "id": "shower_sex",
     "category": "fetish",
-    "label": "In the shower",
+    "label": "Sex in the shower",
     "weight": 1.4,
     "rarity": "common",
     "prompt_hint": "water, steam, the logistics of it. A recurring want rather than a one-off",
@@ -1951,7 +2102,7 @@
   {
     "id": "risky_outdoor",
     "category": "fetish",
-    "label": "Outdoors, with real risk of being seen",
+    "label": "Sex outdoors, where someone might see",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "not exhibitionism exactly - the specific thrill of somewhere they should not be",
@@ -1973,7 +2124,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -1987,13 +2140,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "kitchen_counter",
     "category": "fetish",
-    "label": "On a counter, somewhere domestic",
+    "label": "Sex on the kitchen counter",
     "weight": 1.2,
     "rarity": "common",
     "prompt_hint": "the ordinariness of the location is most of the appeal",
@@ -2007,7 +2162,7 @@
   {
     "id": "beach_water",
     "category": "fetish",
-    "label": "Somewhere with water and no walls",
+    "label": "Sex in the sea or a lake",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "the ocean, a lake, somewhere that is not a bedroom",
@@ -2049,7 +2204,7 @@
   {
     "id": "morning_sex",
     "category": "fetish",
-    "label": "Mornings, unhurried",
+    "label": "Morning sex, unhurried",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "half awake, nothing else scheduled that day. Different in kind from any other time",
@@ -2077,7 +2232,7 @@
   {
     "id": "being_caught_almost",
     "category": "fetish",
-    "label": "Nearly being caught",
+    "label": "Almost getting caught",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "the specific thrill of almost getting interrupted, without actually wanting to be",
@@ -2099,7 +2254,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -2113,7 +2270,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -2133,7 +2292,7 @@
   {
     "id": "tent_camping",
     "category": "fetish",
-    "label": "Somewhere with thin walls and no real privacy",
+    "label": "Sex in a tent, or anywhere with thin walls",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "camping, a tent, somewhere the usual rules of noise do not quite apply",
@@ -2147,7 +2306,7 @@
   {
     "id": "office_after_hours",
     "category": "fetish",
-    "label": "Somewhere professional, after hours",
+    "label": "Sex in an office after hours",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "a workplace emptied out, the wrongness of the location doing some of the work",
@@ -2169,13 +2328,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "being_carried",
     "category": "fetish",
-    "label": "Being picked up and carried",
+    "label": "Being picked up and carried by him",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "the physical statement of it more than the logistics",
@@ -2183,13 +2344,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "pushed_against_wall",
     "category": "fetish",
-    "label": "Being pushed against a wall",
+    "label": "Being pushed against a wall by him",
     "weight": 1.4,
     "rarity": "common",
     "prompt_hint": "sudden, decisive, no warning given first",
@@ -2197,7 +2360,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -2225,13 +2390,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "woken_with_kisses",
     "category": "fetish",
-    "label": "Being woken up gently",
+    "label": "Being woken up with kisses",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "a specific way of waking up she finds disproportionately affecting",
@@ -2239,7 +2406,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -2273,7 +2442,7 @@
   {
     "id": "erotica_together",
     "category": "fetish",
-    "label": "Reading or watching something together, on purpose",
+    "label": "Watching porn or reading erotica together",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "using shared material as a starting point rather than an accident",
@@ -2287,7 +2456,7 @@
   {
     "id": "massage_giving",
     "category": "fetish",
-    "label": "Giving a proper massage",
+    "label": "Giving him a proper massage",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "takes her time with it, treats it as its own thing rather than only a prelude",
@@ -2295,13 +2464,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "massage_receiving",
     "category": "fetish",
-    "label": "A proper massage, unhurried",
+    "label": "Getting a proper massage from him",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "not rushed towards anything else - wants it treated as its own thing sometimes",
@@ -2309,7 +2480,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -2343,7 +2516,7 @@
   {
     "id": "truth_or_dare",
     "category": "fetish",
-    "label": "An actual game, played properly",
+    "label": "Truth or dare, played for real",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "not a metaphor - an actual game with actual stakes, played as a warm-up",
@@ -2365,41 +2538,47 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "slow_unbuttoning",
     "category": "fetish",
-    "label": "Buttons undone slowly, one at a time",
+    "label": "Unbuttoning his shirt slowly",
     "weight": 0.5,
     "rarity": "uncommon",
-    "prompt_hint": "the process matters more than the speed - drawn out on purpose",
+    "prompt_hint": "one button at a time, on purpose - the process matters more than the speed",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "being_ridden",
     "category": "fetish",
-    "label": "Being on top and setting the pace herself",
+    "label": "Riding him, setting the pace herself",
     "weight": 1.3,
     "rarity": "common",
-    "prompt_hint": "controlling the rhythm entirely, rather than following his",
+    "prompt_hint": "on top, controlling the rhythm entirely rather than following his",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "doggy_receiving",
     "category": "fetish",
-    "label": "A specific position she is particularly into",
+    "label": "Being taken from behind",
     "weight": 1.2,
     "rarity": "common",
     "prompt_hint": "one position that does more for her than the others, and she has opinions about why",
@@ -2407,13 +2586,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "spooning_sex",
     "category": "fetish",
-    "label": "Spooning, specifically",
+    "label": "Sex spooning",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "close, unhurried, facing the same way. A specific kind of intimacy the position itself creates",
@@ -2427,7 +2608,7 @@
   {
     "id": "grinding_clothed",
     "category": "fetish",
-    "label": "Getting worked up with clothes still on",
+    "label": "Grinding with clothes still on",
     "weight": 1.2,
     "rarity": "common",
     "prompt_hint": "the frustration of it is most of the point, drawn out on purpose",
@@ -2441,7 +2622,7 @@
   {
     "id": "anal_receiving",
     "category": "fetish",
-    "label": "Anal, when she is properly ready for it",
+    "label": "Anal, on her, when she is properly ready",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "only with real preparation and patience, but genuinely into it under those conditions",
@@ -2449,29 +2630,32 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "anal_giving",
     "category": "fetish",
-    "label": "The other direction, on him",
+    "label": "Playing with his ass",
     "weight": 1.0,
     "rarity": "rare",
-    "prompt_hint": "less commonly her thing, but genuinely into it when it is",
+    "prompt_hint": "fingers, her tongue, a toy - less commonly her thing, but genuinely into it when it is",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "multiple_rounds",
     "category": "fetish",
-    "label": "More than once, the same night",
+    "label": "Coming more than once a night",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "not satisfied with just once when the night allows for more",
@@ -2479,7 +2663,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -2499,43 +2685,49 @@
   {
     "id": "deep_penetration",
     "category": "fetish",
-    "label": "A specific angle or depth she is particular about",
+    "label": "Being taken deep, at the angle she likes",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "has clear preferences about this and is not shy about directing towards them",
+    "prompt_hint": "has clear preferences about depth and angle and is not shy about directing him there",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "dirty_talk_receiving",
     "category": "fetish",
-    "label": "Being told, specifically, in detail",
+    "label": "Being talked dirty to, in detail",
     "weight": 1.5,
     "rarity": "common",
-    "prompt_hint": "words doing more work than anything physical - being told exactly what he wants",
+    "prompt_hint": "his words doing more work than anything physical - being told exactly what he wants to do to her",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "dirty_talk_giving",
     "category": "fetish",
-    "label": "Saying it herself, specifically",
+    "label": "Talking dirty to him, in detail",
     "weight": 1.3,
     "rarity": "common",
-    "prompt_hint": "telling him exactly what she wants, in detail, rather than hinting",
+    "prompt_hint": "telling him exactly what she wants and what she will do, rather than hinting",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -2549,27 +2741,31 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "describing_what_she_wants",
     "category": "fetish",
-    "label": "Being asked what she wants, and answering honestly",
+    "label": "Telling him exactly what she wants, out loud",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "being given the space to actually say it rather than being guessed at",
+    "prompt_hint": "not hinting and hoping - saying it in detail and having him do it",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "using_toys_together",
     "category": "fetish",
-    "label": "Toys, used together rather than alone",
+    "label": "Toys, used on each other",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "not a substitute for him - an addition, used together",
@@ -2583,15 +2779,17 @@
   {
     "id": "double_penetration",
     "category": "fetish",
-    "label": "Filled in more than one way at once",
+    "label": "Being filled in both holes at once",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "a specific and fairly particular want, not universal but real for her",
+    "prompt_hint": "him and a toy, or more - a specific and fairly particular want, real for her",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -2619,13 +2817,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "handjob_giving",
     "category": "fetish",
-    "label": "Using her hands specifically",
+    "label": "Giving him a slow handjob",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "takes her time with it rather than treating it as a warm-up act",
@@ -2633,7 +2833,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -2653,7 +2855,7 @@
   {
     "id": "watching_him",
     "category": "fetish",
-    "label": "Watching him do it himself",
+    "label": "Watching him touch himself",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "finds it genuinely arousing to watch rather than only participate",
@@ -2661,71 +2863,80 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "doing_it_for_him",
     "category": "fetish",
-    "label": "Doing it in front of him, deliberately",
+    "label": "Touching herself for him to watch",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "performing it for him rather than just being watched incidentally",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "lip_biting",
-    "category": "fetish",
-    "label": "Biting her own lip, or his",
-    "weight": 0.5,
-    "rarity": "uncommon",
-    "prompt_hint": "a small physical tell she is not always aware she is doing",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "face_sitting_receiving",
-    "category": "fetish",
-    "label": "Being properly in control of that position specifically",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "one specific position where she is fully setting the pace and the pressure",
+    "prompt_hint": "performing it for him on purpose, rather than just being watched incidentally",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "lip_biting",
+    "category": "fetish",
+    "label": "Biting his lip when they kiss",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "his lower lip between her teeth - a small thing she does before she knows she is doing it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_sitting_receiving",
+    "category": "fetish",
+    "label": "Sitting on his face",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "fully setting the pace and the pressure herself, his mouth exactly where she wants it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "face_sitting_giving",
     "category": "fetish",
-    "label": "The other side of that same position",
+    "label": "Being underneath, him on her face",
     "weight": 1.0,
     "rarity": "rare",
-    "prompt_hint": "less commonly her preference, but genuinely into it that way round sometimes",
+    "prompt_hint": "the other side of that position - less commonly her preference, but genuinely into it sometimes",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "sixty_nine",
     "category": "fetish",
-    "label": "Both at once",
+    "label": "69",
     "weight": 1.3,
     "rarity": "common",
     "prompt_hint": "the specific mutual quality of it rather than either alone",
@@ -2739,7 +2950,7 @@
   {
     "id": "eye_contact_during",
     "category": "fetish",
-    "label": "Eye contact, held, the whole time",
+    "label": "Eye contact, held the whole time",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "more exposing to her than nudity - being looked at properly throughout",
@@ -2753,21 +2964,23 @@
   {
     "id": "whispering_during",
     "category": "fetish",
-    "label": "Being talked to quietly, close, throughout",
+    "label": "Him whispering to her the whole time",
     "weight": 0.5,
     "rarity": "uncommon",
-    "prompt_hint": "not silence and not loud - low and close and constant",
+    "prompt_hint": "not silence and not loud - his voice low and close and constant",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "deep_kissing",
     "category": "fetish",
-    "label": "Kissing that goes on properly",
+    "label": "Long, deep kissing",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "not a formality before anything else - wants it to be its own extended thing",
@@ -2781,21 +2994,23 @@
   {
     "id": "scarf_tie",
     "category": "fetish",
-    "label": "Something soft used to restrain, improvised",
+    "label": "Being tied up with a scarf",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "a scarf or similar rather than proper rope - less formal, still effective",
+    "prompt_hint": "something soft on her wrists rather than proper rope - less formal, still effective",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "wrist_kissing",
     "category": "fetish",
-    "label": "Her wrists, kissed specifically",
+    "label": "Having her wrists kissed",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "an unusually tender specific spot for her",
@@ -2803,13 +3018,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "collarbone_licking",
     "category": "fetish",
-    "label": "Her collarbone, specifically",
+    "label": "Having her collarbone licked",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "a spot that does more than its share of work for her",
@@ -2817,13 +3034,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "deepthroat_giving",
     "category": "fetish",
-    "label": "Taking her time and going all the way",
+    "label": "Deepthroating him",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "not rushed, and genuinely into doing it properly rather than performing reluctance",
@@ -2831,13 +3050,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "hands_on_chest",
     "category": "fetish",
-    "label": "His hands there, specifically, unhurried",
+    "label": "His hands on her breasts, unhurried",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "not rushed towards anything else - wants attention paid there properly",
@@ -2845,13 +3066,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "hands_on_waist",
     "category": "fetish",
-    "label": "Hands at her waist, firm, throughout",
+    "label": "His hands on her waist, firm",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "a specific point of contact she notices and wants maintained",
@@ -2859,7 +3082,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -2873,13 +3098,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "exploring_slowly",
     "category": "fetish",
-    "label": "Being explored slowly, properly, without rushing",
+    "label": "Being explored slowly, all over",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "wants the whole thing unhurried, every part of it actually attended to",
@@ -2887,13 +3114,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "firm_touch",
     "category": "fetish",
-    "label": "Touch with real weight behind it, not tentative",
+    "label": "Being touched firmly, never tentatively",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "not rough necessarily - just confident rather than hesitant",
@@ -2901,13 +3130,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "inner_thigh_kissing",
     "category": "fetish",
-    "label": "Her inner thigh, specifically, taken slowly",
+    "label": "Having her inner thighs kissed, slowly",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "a deliberate build rather than a means to an end",
@@ -2915,27 +3146,31 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "suggestive_photos_receiving",
     "category": "fetish",
-    "label": "Photos sent to her, deliberately",
+    "label": "Getting nudes from him",
     "weight": 1.2,
     "rarity": "common",
-    "prompt_hint": "enjoys being sent something specifically for her rather than only sending her own",
+    "prompt_hint": "being sent something specifically for her rather than only sending her own",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "suggestive_photos_giving",
     "category": "fetish",
-    "label": "Sending her own, deliberately",
+    "label": "Sending him nudes first",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "comfortable being the one who sends first, when she trusts the person",
@@ -2943,13 +3178,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "slow_undressing",
     "category": "fetish",
-    "label": "Being undressed slowly, deliberately, by him",
+    "label": "Being undressed slowly by him",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "not undressing herself - being undressed, taken slowly on purpose",
@@ -2957,13 +3194,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "finger_sucking",
     "category": "fetish",
-    "label": "Her mouth on his fingers, deliberately",
+    "label": "Sucking his fingers",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "a small specific thing that does more than its size suggests",
@@ -2971,13 +3210,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "filming_together",
     "category": "fetish",
-    "label": "Recording, only with someone she deeply trusts",
+    "label": "Filming themselves together",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "a want that comes with real conditions attached - trust has to be established first",
@@ -2991,7 +3232,7 @@
   {
     "id": "using_a_swing_or_wedge",
     "category": "fetish",
-    "label": "Equipment that changes the angle or position",
+    "label": "A sex swing or a wedge",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "genuinely into the logistics of it rather than finding it clinical",
@@ -3005,7 +3246,7 @@
   {
     "id": "pausing_mid_act",
     "category": "fetish",
-    "label": "Being stopped mid-way, deliberately, then resumed",
+    "label": "Stopping mid-way on purpose, then carrying on",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "the interruption itself is the point, not an accident",
@@ -3019,7 +3260,7 @@
   {
     "id": "closing_eyes",
     "category": "fetish",
-    "label": "Losing herself in it completely, eyes closed",
+    "label": "Losing herself, eyes closed",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "fully somewhere else mentally rather than performing presence",
@@ -3027,7 +3268,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -3061,7 +3304,7 @@
   {
     "id": "focusing_on_afterglow",
     "category": "fetish",
-    "label": "The time right after, treated as its own thing",
+    "label": "The afterglow, treated as its own thing",
     "weight": 0.5,
     "rarity": "uncommon",
     "prompt_hint": "not the finish line - wants it treated as a phase in its own right, not rushed past",
@@ -3121,7 +3364,19 @@
       ],
       "limits": [
         "power_play"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "being told what to do",
+          "hint": "him in charge - orders, rules, being made to wait",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "being in charge of him",
+          "hint": "her in charge - orders, rules, making him wait",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3152,7 +3407,19 @@
       "limits": [
         "restraint",
         "blindfolds"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "being tied up",
+          "hint": "rope, cuffs or a blindfold on her",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "tying him up",
+          "hint": "rope, cuffs or a blindfold on him",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3184,7 +3451,19 @@
       "limits": [
         "impact",
         "marks_limit"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "being spanked",
+          "hint": "his hand, a paddle or a crop on her",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "spanking him",
+          "hint": "her hand, a paddle or a crop on him",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3214,7 +3493,19 @@
       "limits": [
         "pain",
         "marks_limit"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "wax, nails and teeth on her",
+          "hint": "sharper sensation on her own skin",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "wax, nails and teeth on him",
+          "hint": "leaving it on his skin",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3237,7 +3528,19 @@
       ],
       "limits": [
         "choking"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "his hand at her throat",
+          "hint": "carefully, the weight of it",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "her hand at his throat",
+          "hint": "carefully, knowing exactly how far",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3266,7 +3569,19 @@
         "degradation",
         "name_calling",
         "degrading_language"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "being degraded",
+          "hint": "called names and talked down to, as play",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "degrading him",
+          "hint": "calling him names and talking down to him, as play",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3289,7 +3604,19 @@
         "being_told_beautiful",
         "being_told_she_smells_good"
       ],
-      "limits": []
+      "limits": [],
+      "sides": {
+        "her": {
+          "label": "being praised",
+          "hint": "being told she is good, beautiful, doing so well",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "praising him",
+          "hint": "telling him how good he is and watching it land",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3317,7 +3644,19 @@
       ],
       "limits": [
         "feet_limit"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "her feet",
+          "hint": "her feet worshipped, kissed, and used on him",
+          "dom_sub": 1
+        },
+        "his": {
+          "label": "his feet",
+          "hint": "worshipping his feet",
+          "dom_sub": -1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3385,7 +3724,7 @@
     "category": "kink_domain",
     "label": "Anal",
     "weight": 1.0,
-    "prompt_hint": "anal, in either direction",
+    "prompt_hint": "anal, on her or on him",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -3397,7 +3736,19 @@
         "anal_giving",
         "pegging_him"
       ],
-      "limits": []
+      "limits": [],
+      "sides": {
+        "her": {
+          "label": "anal on her",
+          "hint": "him in her ass, with the patience it takes",
+          "dom_sub": 0
+        },
+        "his": {
+          "label": "his ass",
+          "hint": "playing with his ass or pegging him",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3417,7 +3768,19 @@
       "fetishes": [
         "using_toys_together"
       ],
-      "limits": []
+      "limits": [],
+      "sides": {
+        "her": {
+          "label": "toys on her",
+          "hint": "a wand or vibrator in his hands, on her",
+          "dom_sub": 0
+        },
+        "his": {
+          "label": "toys on him",
+          "hint": "using them on him",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3449,7 +3812,9 @@
         "strip_games",
         "somnophilia_fantasy",
         "teacher_student_roleplay",
-        "doctor_patient_roleplay"
+        "doctor_patient_roleplay",
+        "student_roleplay",
+        "patient_roleplay"
       ],
       "limits": [
         "roleplay_limits",
@@ -3479,7 +3844,19 @@
       "limits": [
         "anything_recorded",
         "sexting_pictures"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "her on camera",
+          "hint": "sending her own photos and videos, being filmed",
+          "dom_sub": 0
+        },
+        "his": {
+          "label": "him on camera",
+          "hint": "getting his photos and videos, filming him",
+          "dom_sub": 0
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -3510,7 +3887,19 @@
         "knee_high_socks_wearing",
         "dressing_him_femme"
       ],
-      "limits": []
+      "limits": [],
+      "sides": {
+        "her": {
+          "label": "wearing it herself",
+          "hint": "latex, leather, lace, heels on her",
+          "dom_sub": 0
+        },
+        "his": {
+          "label": "dressing him up",
+          "hint": "him in leather, in something of hers",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -4189,7 +4578,7 @@
   {
     "id": "denial_limit",
     "category": "hard_limit",
-    "label": "Being denied or edged",
+    "label": "Edging or denial, either way",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "",
@@ -4512,7 +4901,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -4527,7 +4918,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -4548,21 +4940,23 @@
   {
     "id": "cum_marking",
     "category": "fetish",
-    "label": "Being marked, specifically",
+    "label": "Cum on her, somewhere specific",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "where it ends up mattering to her, as its own thing",
+    "prompt_hint": "where he finishes on her - face, chest, ass, stomach - matters to her as its own thing",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "sockjob_giving",
     "category": "fetish",
-    "label": "Giving a footjob with socks on",
+    "label": "Giving him a footjob in her socks",
     "weight": 0.7,
     "rarity": "uncommon",
     "prompt_hint": "using her feet through the fabric of her socks",
@@ -4570,13 +4964,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "shoejob_giving",
     "category": "fetish",
-    "label": "Giving a footjob with shoes on",
+    "label": "Giving him a footjob in her shoes",
     "weight": 0.6,
     "rarity": "rare",
     "prompt_hint": "using her feet, still in her shoes, deliberately",
@@ -4584,13 +4980,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "boot_licking_receiving",
     "category": "fetish",
-    "label": "Having her boots cleaned",
+    "label": "Having him lick her boots clean",
     "weight": 0.6,
     "rarity": "rare",
     "prompt_hint": "having him clean her boots or shoes with his mouth",
@@ -4599,14 +4997,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "joi_giving",
     "category": "fetish",
-    "label": "Giving him instructions",
+    "label": "Giving him jerk-off instructions",
     "weight": 0.9,
     "rarity": "uncommon",
     "prompt_hint": "talking him through it step by step, exactly how she wants",
@@ -4615,14 +5014,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "joi_receiving",
     "category": "fetish",
-    "label": "Being talked through it",
+    "label": "Being given instructions to touch herself",
     "weight": 0.8,
     "rarity": "uncommon",
     "prompt_hint": "being told exactly how, pace and all, and following it",
@@ -4631,7 +5031,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -4647,7 +5048,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -4663,14 +5065,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "cosplay_for_him",
     "category": "fetish",
-    "label": "Dressing as a specific character for him",
+    "label": "Cosplaying a character for him",
     "weight": 0.8,
     "rarity": "uncommon",
     "prompt_hint": "a full costume, a specific character, put together properly",
@@ -4678,7 +5081,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -4707,7 +5112,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -4723,7 +5129,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -4739,7 +5146,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -4754,7 +5162,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -4768,7 +5178,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -4783,28 +5195,31 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "dark_romance_fantasy",
     "category": "fetish",
-    "label": "Dark romance fantasies",
+    "label": "Dark romance, her as the one pursued",
     "weight": 0.8,
     "rarity": "uncommon",
-    "prompt_hint": "possessive, intense, a little dangerous - the fantasy, not the reality",
+    "prompt_hint": "a possessive, dangerous man who wants her - the fantasy, not the reality",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "affair_roleplay",
     "category": "fetish",
-    "label": "The other-woman fantasy",
+    "label": "Playing the other woman",
     "weight": 0.6,
     "rarity": "rare",
     "prompt_hint": "playing at something illicit, purely as fantasy between the two of them",
@@ -4832,7 +5247,7 @@
   {
     "id": "breath_play_giving",
     "category": "fetish",
-    "label": "A hand at his throat",
+    "label": "Her hand at his throat",
     "weight": 0.7,
     "rarity": "rare",
     "prompt_hint": "her hand there instead, carefully, and knowing exactly how far",
@@ -4841,7 +5256,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -4857,7 +5273,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -4873,17 +5290,18 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "primal_play",
     "category": "fetish",
-    "label": "Losing the plot a little",
+    "label": "Going feral together",
     "weight": 0.7,
     "rarity": "rare",
-    "prompt_hint": "instinct over technique, a chase, nothing measured about it",
+    "prompt_hint": "instinct over technique, a chase, growling, nothing measured about it",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -4917,7 +5335,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -4933,7 +5352,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
@@ -4948,7 +5368,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -4975,7 +5397,7 @@
     "category": "kink_domain",
     "label": "Cum",
     "weight": 1.0,
-    "prompt_hint": "what happens with it and where - a real, specific preference rather than an afterthought",
+    "prompt_hint": "where he finishes and what happens with it - a real, specific preference rather than an afterthought",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -4990,7 +5412,19 @@
       ],
       "limits": [
         "cum_limit"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "on her and in her mouth",
+          "hint": "where he finishes on her, swallowing, sharing it",
+          "dom_sub": 0
+        },
+        "his": {
+          "label": "making him deal with his",
+          "hint": "making him clean up or eat his own",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -4998,7 +5432,7 @@
   {
     "id": "voyeurism_watching",
     "category": "fetish",
-    "label": "Watching people she does not know",
+    "label": "Watching strangers, unseen",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "watching strangers, from a safe distance, for the thrill of it rather than for them specifically",
@@ -5012,43 +5446,49 @@
   {
     "id": "somnophilia_fantasy",
     "category": "fetish",
-    "label": "A pretend-asleep fantasy, worked out beforehand",
+    "label": "Pretend-asleep play, her the one \"asleep\"",
     "weight": 0.8,
     "rarity": "extremely_rare",
-    "prompt_hint": "a fully pre-negotiated pretend-asleep scenario. Never actually non-consensual - the whole thing is agreed in advance",
+    "prompt_hint": "a fully pre-negotiated scenario where she plays asleep and he does not wait. Never actually non-consensual - agreed in advance",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "teacher_student_roleplay",
     "category": "fetish",
-    "label": "A specific teacher/student scenario",
+    "label": "Playing his teacher",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "a classic power-imbalance roleplay scenario, played for the dynamic rather than anything literal",
+    "prompt_hint": "the strict or patient teacher, him the student she keeps after class - played for the dynamic, both adults",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "doctor_patient_roleplay",
     "category": "fetish",
-    "label": "A specific doctor/patient scenario",
+    "label": "Playing his doctor",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "a classic clinical-scenario roleplay, played for the dynamic rather than anything literal",
+    "prompt_hint": "examining him, very thoroughly, in charge of the whole appointment - played for the dynamic",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -5062,7 +5502,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -5076,7 +5518,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -5096,7 +5540,7 @@
   {
     "id": "dressing_him_femme",
     "category": "fetish",
-    "label": "Putting him in something of hers, for the thrill of it",
+    "label": "Dressing him in her clothes",
     "weight": 0.7,
     "rarity": "extremely_rare",
     "prompt_hint": "dressing him in something feminine, for the specific charge of it rather than as a joke",
@@ -5105,14 +5549,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "voice_kink",
     "category": "fetish",
-    "label": "His voice specifically, especially low and close",
+    "label": "His voice, low and close",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "his voice itself - low, close, unhurried - independent of what he is actually saying",
@@ -5120,7 +5565,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -5157,7 +5604,7 @@
   {
     "id": "size_worship",
     "category": "fetish",
-    "label": "Size worship",
+    "label": "Being admired for the size difference",
     "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "being genuinely admired for how big or small she is next to him, rather than it being tip-toed around - wants her scale actually appreciated, not politely ignored.",
@@ -5165,13 +5612,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
     "id": "careful_of_scale",
     "category": "fetish",
-    "label": "Careful handling",
+    "label": "Being handled carefully across a size difference",
     "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "the deliberate tenderness a real size difference requires, and finding that carefulness itself affecting - whichever end of the gap she is on.",
@@ -5202,7 +5651,7 @@
     "label": "Size difference",
     "weight": 1,
     "rarity": "common",
-    "prompt_hint": "",
+    "prompt_hint": "a real gap in size between them as part of the appeal - being picked up, pinned with one hand, or the other way round",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -5240,10 +5689,10 @@
   {
     "id": "coil_binding",
     "category": "fetish",
-    "label": "Coil binding",
+    "label": "Wrapping him up in her coils",
     "weight": 1,
     "rarity": "common",
-    "prompt_hint": "being wrapped and held snugly by her coils during sex - not rope, just her own body, and being able to feel exactly how much give she leaves decides whether it reads as restraint or reassurance.",
+    "prompt_hint": "holding him snug in her coils during sex - how much give she leaves decides whether it reads as restraint or reassurance",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -5251,14 +5700,15 @@
     "extra": {
       "species": [
         "lamia"
-      ]
+      ],
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "hoard_claiming",
     "category": "fetish",
-    "label": "Claimed as hers",
+    "label": "Claiming him as part of her hoard",
     "weight": 1,
     "rarity": "common",
     "prompt_hint": "a roleplay where he becomes something she has claimed and keeps - part treasure, part hers - which she takes seriously in a way that surprises her as much as him.",
@@ -5269,14 +5719,15 @@
     "extra": {
       "species": [
         "dragonkin"
-      ]
+      ],
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "palm_sized_intimacy",
     "category": "fetish",
-    "label": "Held at her actual size",
+    "label": "Being held at her tiny size",
     "weight": 1,
     "rarity": "common",
     "prompt_hint": "being held, carried or touched at her actual tiny scale during intimacy - the logistics of it are the whole point, not an obstacle to work around.",
@@ -5287,14 +5738,15 @@
     "extra": {
       "species": [
         "fairy"
-      ]
+      ],
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "energy_exchange",
     "category": "fetish",
-    "label": "Energy exchange",
+    "label": "Feeding on his energy during sex",
     "weight": 1,
     "rarity": "common",
     "prompt_hint": "taking a little of what he has to give during sex, felt as a real pull rather than a metaphor - and giving back plenty in the moment, so it never reads as one-sided.",
@@ -5305,14 +5757,15 @@
     "extra": {
       "species": [
         "succubus"
-      ]
+      ],
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "scent_marking",
     "category": "fetish",
-    "label": "Scent marking",
+    "label": "Scent-marking him",
     "weight": 1,
     "rarity": "common",
     "prompt_hint": "rubbing against him, wearing his smell after, leaving something of hers on him too - a real instinct she is not embarrassed by, whatever he makes of it.",
@@ -5323,7 +5776,8 @@
     "extra": {
       "species": [
         "catgirl"
-      ]
+      ],
+      "side": "his"
     },
     "enabled": true
   },
@@ -5499,7 +5953,10 @@
         "praise_loop": 4.0
       },
       "pace": 1.0,
-      "freak_shift": 0.2
+      "freak_shift": 0.2,
+      "side_bias": {
+        "praise": "his"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -5553,7 +6010,10 @@
       },
       "pace": 1.1,
       "freak_shift": 0.5,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "side_bias": {
+        "praise": "his"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -5717,7 +6177,10 @@
       },
       "pace": 1.2,
       "freak_shift": 1.0,
-      "photo_boldness": 1.0
+      "photo_boldness": 1.0,
+      "side_bias": {
+        "anal": "his"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -5773,7 +6236,12 @@
       },
       "pace": 1.0,
       "freak_shift": 0.5,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "side_bias": {
+        "feet": "her",
+        "praise": "her",
+        "oral": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -5883,7 +6351,11 @@
       "pace": 1.0,
       "initiative": 0.1,
       "freak_shift": 0.4,
-      "photo_boldness": 1.0
+      "photo_boldness": 1.0,
+      "side_bias": {
+        "voyeurism": "his",
+        "instruction": "his"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -5982,6 +6454,9 @@
       "initiative": 0.1,
       "kink_bias": {
         "primal": 1.0
+      },
+      "side_bias": {
+        "primal": "both"
       }
     },
     "enabled": true,
@@ -6286,7 +6761,10 @@
         "sensation": 1.5
       },
       "photo_boldness": -0.5,
-      "climax_pace": 0.6
+      "climax_pace": 0.6,
+      "side_bias": {
+        "sensation": "both"
+      }
     },
     "enabled": true,
     "rarity": "rare"
@@ -6338,7 +6816,10 @@
         "sensory_deprivation": 3.0
       },
       "pace": 1.0,
-      "freak_shift": 0.5
+      "freak_shift": 0.5,
+      "side_bias": {
+        "sensation": "her"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -6390,7 +6871,10 @@
         "slow_head": 3.0,
         "face_sitting": 2.0
       },
-      "pace": 1.1
+      "pace": 1.1,
+      "side_bias": {
+        "oral": "both"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -6542,7 +7026,8 @@
         "teacher_student_roleplay": 3.0,
         "affair_roleplay": 3.0,
         "secretary_roleplay": 3.0,
-        "storyteller_voice": 3.0
+        "storyteller_voice": 3.0,
+        "student_roleplay": 3.0
       },
       "pace": 1.1,
       "initiative": 0.15,
@@ -6603,7 +7088,10 @@
       },
       "pace": 1.0,
       "freak_shift": 0.4,
-      "photo_boldness": 1.0
+      "photo_boldness": 1.0,
+      "side_bias": {
+        "fetishwear": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -6718,7 +7206,10 @@
       },
       "pace": 1.1,
       "initiative": 0.15,
-      "photo_boldness": 2.0
+      "photo_boldness": 2.0,
+      "side_bias": {
+        "fetishwear": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -6782,7 +7273,11 @@
       "pace": 1.3,
       "initiative": 0.2,
       "freak_shift": 0.6,
-      "photo_boldness": 2.0
+      "photo_boldness": 2.0,
+      "side_bias": {
+        "voyeurism": "her",
+        "recording": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -6837,7 +7332,10 @@
       "pace": 1.3,
       "initiative": 0.2,
       "freak_shift": 0.6,
-      "photo_boldness": 2.0
+      "photo_boldness": 2.0,
+      "side_bias": {
+        "recording": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -6886,7 +7384,10 @@
         "mirror_watching_him": 3.0,
         "watching_him_dress": 3.0
       },
-      "pace": 0.9
+      "pace": 0.9,
+      "side_bias": {
+        "voyeurism": "his"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -6935,7 +7436,10 @@
         "forced_orgasm": 3.0
       },
       "pace": 1.2,
-      "initiative": 0.1
+      "initiative": 0.1,
+      "side_bias": {
+        "toys": "her"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -7039,7 +7543,10 @@
       "pace": 1.3,
       "freak_shift": 0.8,
       "photo_boldness": 1.0,
-      "climax_pace": 1.2
+      "climax_pace": 1.2,
+      "side_bias": {
+        "primal": "both"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -7454,11 +7961,15 @@
         "being_dominant": 3.0,
         "multiple_rounds": 3.0,
         "sweat_scent": 3.0,
-        "wrestling": 4.0
+        "wrestling": 4.0,
+        "hunting_him": 2
       },
       "pace": 1.3,
       "freak_shift": 0.3,
-      "photo_boldness": 1.0
+      "photo_boldness": 1.0,
+      "side_bias": {
+        "primal": "his"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -7561,7 +8072,10 @@
       "pace": 1.2,
       "freak_shift": 1.0,
       "photo_boldness": 1.5,
-      "climax_pace": 1.2
+      "climax_pace": 1.2,
+      "side_bias": {
+        "cum_play": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -7658,7 +8172,10 @@
         "sockjob_giving": 3.0
       },
       "pace": 1.0,
-      "freak_shift": 0.3
+      "freak_shift": 0.3,
+      "side_bias": {
+        "feet": "both"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -7708,7 +8225,10 @@
         "double_penetration": 3.0
       },
       "pace": 1.2,
-      "freak_shift": 0.8
+      "freak_shift": 0.8,
+      "side_bias": {
+        "anal": "her"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -7869,7 +8389,10 @@
         "begging": 2.0,
         "being_called_good_girl": 3.0
       },
-      "pace": 1.0
+      "pace": 1.0,
+      "side_bias": {
+        "praise": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -7974,7 +8497,10 @@
         "handjob_giving": 3.0,
         "deepthroat_giving": 3.0
       },
-      "pace": 1.0
+      "pace": 1.0,
+      "side_bias": {
+        "oral": "his"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8182,7 +8708,10 @@
       },
       "pace": 1.1,
       "freak_shift": 0.6,
-      "climax_pace": 0.6
+      "climax_pace": 0.6,
+      "side_bias": {
+        "tease_denial": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -8337,7 +8866,10 @@
         "taking_commands": 3.0
       },
       "pace": 1.0,
-      "freak_shift": 0.5
+      "freak_shift": 0.5,
+      "side_bias": {
+        "praise": "her"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -8637,7 +9169,10 @@
         "clinical_precise": 3.0
       },
       "pace": 1.0,
-      "freak_shift": 0.3
+      "freak_shift": 0.3,
+      "side_bias": {
+        "instruction": "his"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -8685,6 +9220,9 @@
       "pace": 0.9,
       "kink_bias": {
         "oral": 1.0
+      },
+      "side_bias": {
+        "oral": "her"
       }
     },
     "enabled": true,
@@ -8733,6 +9271,9 @@
       "pace": 1.0,
       "kink_bias": {
         "oral": 1.5
+      },
+      "side_bias": {
+        "oral": "his"
       }
     },
     "enabled": true,
@@ -9071,7 +9612,10 @@
       },
       "pace": 1.4,
       "initiative": 0.25,
-      "photo_boldness": 2.0
+      "photo_boldness": 2.0,
+      "side_bias": {
+        "recording": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -9216,7 +9760,10 @@
         "lace_lingerie": 3.0,
         "hotel_room": 4.0
       },
-      "pace": 1.0
+      "pace": 1.0,
+      "side_bias": {
+        "fetishwear": "her"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9413,7 +9960,11 @@
         "on_the_phone": 4.0
       },
       "pace": 1.2,
-      "initiative": 0.15
+      "initiative": 0.15,
+      "side_bias": {
+        "voyeurism": "both",
+        "recording": "both"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9620,7 +10171,10 @@
       },
       "pace": 1.1,
       "freak_shift": 0.8,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "side_bias": {
+        "fetishwear": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -9677,7 +10231,10 @@
       },
       "pace": 1.1,
       "freak_shift": 0.8,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "side_bias": {
+        "fetishwear": "her"
+      }
     },
     "enabled": true,
     "rarity": "common"
@@ -9724,7 +10281,8 @@
         "uniform_wearing": 3.0,
         "uniform_seeing": 3.0,
         "costume_roleplay": 3.0,
-        "doctor_patient_roleplay": 3.0
+        "doctor_patient_roleplay": 3.0,
+        "patient_roleplay": 3.0
       },
       "pace": 1.0,
       "freak_shift": 0.3,
@@ -9924,7 +10482,10 @@
       "pace": 1.3,
       "freak_shift": 0.9,
       "climax_pace": 1.3,
-      "multiple_rounds": true
+      "multiple_rounds": true,
+      "side_bias": {
+        "toys": "her"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -10125,7 +10686,10 @@
         "tease_denial": 2.0
       },
       "photo_boldness": -0.5,
-      "climax_pace": 0.7
+      "climax_pace": 0.7,
+      "side_bias": {
+        "tease_denial": "his"
+      }
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -11589,13 +12153,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "sloppy_head",
     "category": "fetish",
-    "label": "Sloppy, noisy head",
+    "label": "Giving him sloppy, noisy head",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "wet, loud, no manners about it, and she wants him to watch",
@@ -11603,7 +12169,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
@@ -11618,7 +12186,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
@@ -11634,14 +12203,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "countdown",
     "category": "fetish",
-    "label": "A countdown, and not a second early",
+    "label": "Making him finish on her countdown",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "he finishes on zero or not at all",
@@ -11650,14 +12220,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "chastity_him",
     "category": "fetish",
-    "label": "Keeping him locked",
+    "label": "Keeping him locked in chastity",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "a cage, a key she wears, and a date she might move",
@@ -11666,14 +12237,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "ruined_orgasm_giving",
     "category": "fetish",
-    "label": "Ruining it for him at the last second",
+    "label": "Ruining his orgasm at the last second",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "letting go exactly when he cannot stop",
@@ -11682,14 +12254,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": 1
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   },
   {
     "id": "asking_permission",
     "category": "fetish",
-    "label": "Having to ask before she comes",
+    "label": "Having to ask him before she comes",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "and sometimes being told no",
@@ -11698,14 +12271,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "tease_for_days",
     "category": "fetish",
-    "label": "Teasing for days before anything happens",
+    "label": "Teasing him for days before anything happens",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "the build is the point and she makes it last",
@@ -11713,13 +12287,15 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "his"
+    },
     "enabled": true
   },
   {
     "id": "peeping_fantasy",
     "category": "fetish",
-    "label": "A set-up peeping fantasy",
+    "label": "A set-up peeping fantasy, both in on it",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "curtains left open on purpose, both of them in on it",
@@ -11742,22 +12318,25 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "bite_marks",
     "category": "fetish",
-    "label": "Bites that leave marks",
+    "label": "Being bitten hard enough to leave marks",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "teeth on the shoulder and thigh, and wearing them the next day",
+    "prompt_hint": "teeth on her shoulder and thigh, and wearing the marks the next day",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -11777,7 +12356,7 @@
   {
     "id": "rough_sex",
     "category": "fetish",
-    "label": "Rough, properly rough",
+    "label": "Being handled rough, properly",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "thrown around, held down, nothing careful about it",
@@ -11786,14 +12365,15 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "dom_sub": -1
+      "dom_sub": -1,
+      "side": "her"
     },
     "enabled": true
   },
   {
     "id": "temperature_contrast",
     "category": "fetish",
-    "label": "Hot and cold, one after the other",
+    "label": "Hot and cold on her skin, one after the other",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "a warm mouth after an ice cube, on purpose",
@@ -11801,7 +12381,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "side": "her"
+    },
     "enabled": true
   },
   {
@@ -11842,7 +12424,19 @@
       ],
       "limits": [
         "oral_limit"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "him going down on her",
+          "hint": "his mouth on her, sitting on his face",
+          "dom_sub": 0
+        },
+        "his": {
+          "label": "going down on him",
+          "hint": "her mouth on him, taking her time",
+          "dom_sub": 0
+        }
+      }
     },
     "enabled": true
   },
@@ -11868,7 +12462,19 @@
         "describing_what_she_wants",
         "doing_it_for_him"
       ],
-      "limits": []
+      "limits": [],
+      "sides": {
+        "her": {
+          "label": "being told how to touch herself",
+          "hint": "his words, her hands",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "telling him how to touch himself",
+          "hint": "her words, his hands",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true
   },
@@ -11898,7 +12504,19 @@
       ],
       "limits": [
         "denial_limit"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "being kept on the edge",
+          "hint": "edged, made to wait, asking before she comes",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "keeping him on the edge",
+          "hint": "edging him, making him wait, deciding when he comes",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true
   },
@@ -11928,7 +12546,19 @@
       "limits": [
         "mirror_limit",
         "filming_others"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "being watched",
+          "hint": "putting on a show for him, watching herself",
+          "dom_sub": 0
+        },
+        "his": {
+          "label": "watching him",
+          "hint": "watching him touch himself, get dressed, react",
+          "dom_sub": 0
+        }
+      }
     },
     "enabled": true
   },
@@ -11952,12 +12582,25 @@
         "bite_marks",
         "wrestling_for_top",
         "rough_sex",
-        "pushed_against_wall"
+        "pushed_against_wall",
+        "hunting_him"
       ],
       "limits": [
         "rough_handling_limit",
         "surprise"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "being chased and taken",
+          "hint": "hunted, pinned, bitten, handled rough",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "chasing and taking him",
+          "hint": "hunting him down, pinning him, biting him",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true
   },
@@ -11989,7 +12632,19 @@
       ],
       "limits": [
         "temperature_play_limit"
-      ]
+      ],
+      "sides": {
+        "her": {
+          "label": "sensation on her skin",
+          "hint": "ice, wax, feathers, nails and blindfolds on her",
+          "dom_sub": -1
+        },
+        "his": {
+          "label": "playing with his skin",
+          "hint": "ice, wax, feathers and nails on him",
+          "dom_sub": 1
+        }
+      }
     },
     "enabled": true
   },
@@ -12083,7 +12738,11 @@
         "bondage",
         "tease_denial"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "bondage": "her",
+        "tease_denial": "her"
+      }
     },
     "enabled": true
   },
@@ -12103,7 +12762,11 @@
         "bondage",
         "bdsm_power"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "bondage": "his",
+        "bdsm_power": "his"
+      }
     },
     "enabled": true
   },
@@ -12123,7 +12786,11 @@
         "bdsm_power",
         "praise"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "bdsm_power": "his",
+        "praise": "her"
+      }
     },
     "enabled": true
   },
@@ -12142,7 +12809,10 @@
       "domains": [
         "feet"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "feet": "her"
+      }
     },
     "enabled": true
   },
@@ -12161,7 +12831,10 @@
       "domains": [
         "instruction"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "instruction": "his"
+      }
     },
     "enabled": true
   },
@@ -12180,7 +12853,10 @@
       "domains": [
         "instruction"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "instruction": "her"
+      }
     },
     "enabled": true
   },
@@ -12199,7 +12875,10 @@
       "domains": [
         "tease_denial"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "tease_denial": "his"
+      }
     },
     "enabled": true
   },
@@ -12219,7 +12898,11 @@
         "tease_denial",
         "bdsm_power"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "tease_denial": "his",
+        "bdsm_power": "his"
+      }
     },
     "enabled": true
   },
@@ -12238,7 +12921,10 @@
       "domains": [
         "primal"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "primal": "her"
+      }
     },
     "enabled": true
   },
@@ -12276,7 +12962,11 @@
         "primal",
         "bdsm_power"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "primal": "her",
+        "bdsm_power": "her"
+      }
     },
     "enabled": true
   },
@@ -12295,7 +12985,10 @@
       "domains": [
         "primal"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "primal": "her"
+      }
     },
     "enabled": true
   },
@@ -12333,7 +13026,10 @@
         "toys",
         "exhibitionism"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "toys": "her"
+      }
     },
     "enabled": true
   },
@@ -12353,7 +13049,10 @@
         "toys",
         "exhibitionism"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "toys": "his"
+      }
     },
     "enabled": true
   },
@@ -12390,7 +13089,10 @@
       "domains": [
         "recording",
         "exhibitionism"
-      ]
+      ],
+      "sides": {
+        "recording": "her"
+      }
     },
     "enabled": true
   },
@@ -12426,7 +13128,10 @@
     "extra": {
       "domains": [
         "voyeurism"
-      ]
+      ],
+      "sides": {
+        "voyeurism": "her"
+      }
     },
     "enabled": true
   },
@@ -12446,7 +13151,11 @@
         "voyeurism",
         "instruction"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "voyeurism": "his",
+        "instruction": "his"
+      }
     },
     "enabled": true
   },
@@ -12503,7 +13212,10 @@
         "sharing",
         "voyeurism"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "voyeurism": "his"
+      }
     },
     "enabled": true
   },
@@ -12596,7 +13308,10 @@
         "roleplay",
         "bdsm_power"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "bdsm_power": "her"
+      }
     },
     "enabled": true
   },
@@ -12616,7 +13331,10 @@
         "roleplay",
         "bdsm_power"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "bdsm_power": "his"
+      }
     },
     "enabled": true
   },
@@ -12634,7 +13352,10 @@
     "extra": {
       "domains": [
         "fetishwear"
-      ]
+      ],
+      "sides": {
+        "fetishwear": "her"
+      }
     },
     "enabled": true
   },
@@ -12653,7 +13374,10 @@
       "domains": [
         "fetishwear",
         "tease_denial"
-      ]
+      ],
+      "sides": {
+        "fetishwear": "her"
+      }
     },
     "enabled": true
   },
@@ -12672,7 +13396,10 @@
       "domains": [
         "praise"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "praise": "her"
+      }
     },
     "enabled": true
   },
@@ -12691,7 +13418,10 @@
       "domains": [
         "praise"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "praise": "his"
+      }
     },
     "enabled": true
   },
@@ -12710,7 +13440,10 @@
       "domains": [
         "degradation"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "degradation": "her"
+      }
     },
     "enabled": true
   },
@@ -12729,7 +13462,10 @@
       "domains": [
         "degradation"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "degradation": "his"
+      }
     },
     "enabled": true
   },
@@ -12748,7 +13484,10 @@
       "domains": [
         "impact"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "impact": "her"
+      }
     },
     "enabled": true
   },
@@ -12767,7 +13506,10 @@
       "domains": [
         "impact"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "impact": "his"
+      }
     },
     "enabled": true
   },
@@ -12786,7 +13528,10 @@
       "domains": [
         "sensation"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "sensation": "her"
+      }
     },
     "enabled": true
   },
@@ -12806,7 +13551,11 @@
         "sensation",
         "bondage"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "sensation": "her",
+        "bondage": "her"
+      }
     },
     "enabled": true
   },
@@ -12826,7 +13575,11 @@
         "oral",
         "bdsm_power"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "oral": "her",
+        "bdsm_power": "his"
+      }
     },
     "enabled": true
   },
@@ -12844,7 +13597,10 @@
     "extra": {
       "domains": [
         "oral"
-      ]
+      ],
+      "sides": {
+        "oral": "his"
+      }
     },
     "enabled": true
   },
@@ -12862,7 +13618,10 @@
     "extra": {
       "domains": [
         "oral"
-      ]
+      ],
+      "sides": {
+        "oral": "her"
+      }
     },
     "enabled": true
   },
@@ -12899,7 +13658,10 @@
       "domains": [
         "anal"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "anal": "her"
+      }
     },
     "enabled": true
   },
@@ -12919,7 +13681,11 @@
         "anal",
         "bdsm_power"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "anal": "his",
+        "bdsm_power": "his"
+      }
     },
     "enabled": true
   },
@@ -12937,7 +13703,10 @@
     "extra": {
       "domains": [
         "cum_play"
-      ]
+      ],
+      "sides": {
+        "cum_play": "her"
+      }
     },
     "enabled": true
   },
@@ -13096,7 +13865,10 @@
       "domains": [
         "oral"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "oral": "his"
+      }
     },
     "enabled": true
   },
@@ -13115,7 +13887,10 @@
       "domains": [
         "bdsm_power"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "bdsm_power": "her"
+      }
     },
     "enabled": true
   },
@@ -13153,7 +13928,11 @@
         "tease_denial",
         "bdsm_power"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "tease_denial": "her",
+        "bdsm_power": "her"
+      }
     },
     "enabled": true
   },
@@ -13191,7 +13970,11 @@
         "instruction",
         "tease_denial"
       ],
-      "dom_sub": 1
+      "dom_sub": 1,
+      "sides": {
+        "instruction": "his",
+        "tease_denial": "his"
+      }
     },
     "enabled": true
   },
@@ -13211,7 +13994,10 @@
         "primal",
         "roleplay"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "primal": "her"
+      }
     },
     "enabled": true
   },
@@ -13284,7 +14070,10 @@
       "domains": [
         "bondage"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "bondage": "her"
+      }
     },
     "enabled": true
   },
@@ -13304,7 +14093,10 @@
         "recording",
         "exhibitionism",
         "instruction"
-      ]
+      ],
+      "sides": {
+        "recording": "her"
+      }
     },
     "enabled": true
   },
@@ -13323,7 +14115,10 @@
       "domains": [
         "breath_play"
       ],
-      "dom_sub": -1
+      "dom_sub": -1,
+      "sides": {
+        "breath_play": "her"
+      }
     },
     "enabled": true
   },
@@ -13342,6 +14137,57 @@
       "domains": [
         "exhibitionism"
       ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "student_roleplay",
+    "category": "fetish",
+    "label": "Playing his student",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "the eager or bratty student, him the teacher who keeps her after class - played for the dynamic, both adults",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "patient_roleplay",
+    "category": "fetish",
+    "label": "Being his patient",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "lying back on the table while \"the doctor\" examines her, very thoroughly - played for the dynamic",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hunting_him",
+    "category": "fetish",
+    "label": "Hunting him down",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "chasing him, catching him and pinning him - she is the predator for once, and she means it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
     },
     "enabled": true
   }

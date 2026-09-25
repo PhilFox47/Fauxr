@@ -10,7 +10,7 @@ import {
   updateCharacterSeed,
 } from '../repo.js';
 import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
-import { domSubLean, rollChatGames, rollFantasySeeds, rollKinkMap } from './kinks.js';
+import { domSubLean, fitsSide, rollChatGames, rollFantasySeeds, rollKinkMap, rollKinkSides, sideLabel } from './kinks.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
@@ -348,15 +348,20 @@ export function rollSeed(): RolledSeed {
   const arousal_tell = one('arousal_tell')!;
   const domains = byCategory('kink_domain');
   const kink_map = rollKinkMap(freak, domains, (persona.extra?.kink_bias ?? {}) as Record<string, number>);
+  // Which end of each two-ended domain she wants, before any fetish: "into feet" has to say
+  // whether it is her feet or his before "worshipping his feet" can be drawn for her.
+  const kink_sides = rollKinkSides({ kink_map, dom_sub_leaning, side_bias: persona.extra?.side_bias as any });
+  const fetishRows = new Map(byCategory('fetish').map((f) => [f.id, f]));
 
-  // Her named fetishes are drawn only from domains she is actually open to, and the
-  // unmapped ones (kissing, massage, mornings - most of the table) stay available to
-  // everyone. Being "into feet" now means the feet domain already said yes.
+  // Her named fetishes are drawn only from domains she is actually open to, and only from
+  // the end of it she wants; the unmapped ones (kissing, massage, mornings - most of the
+  // table) stay available to everyone. Being "into feet" now means the feet domain already
+  // said yes, and which feet.
   const openIds = new Set<string>();
   for (const d of domains) {
     const stance = kink_map[d.id];
     if (stance === 'into' || stance === 'curious') {
-      for (const f of (d.extra?.fetishes as string[]) ?? []) openIds.add(f);
+      for (const f of (d.extra?.fetishes as string[]) ?? []) if (fitsSide(fetishRows.get(f), kink_sides[d.id])) openIds.add(f);
     }
   }
   const claimed = new Set<string>(domains.flatMap((d) => (d.extra?.fetishes as string[]) ?? []));
@@ -372,7 +377,7 @@ export function rollSeed(): RolledSeed {
   const intoIds = new Set(
     domains
       .filter((d) => kink_map[d.id] === 'into')
-      .flatMap((d) => (d.extra?.fetishes as string[]) ?? [])
+      .flatMap((d) => ((d.extra?.fetishes as string[]) ?? []).filter((f) => fitsSide(fetishRows.get(f), kink_sides[d.id])))
       .filter((f) => allowedFetishes.has(f)),
   );
   // The power-exchange domains hold both sides ("giving commands", "being told what to do"),
@@ -422,8 +427,8 @@ export function rollSeed(): RolledSeed {
   const lingerie_style = one('lingerie_style')!;
   const sleepwear = one('sleepwear')!;
   const intimate_grooming = one('intimate_grooming')!;
-  const fantasy_seeds = rollFantasySeeds({ kink_map, dom_sub_leaning });
-  const chat_games = rollChatGames({ kink_map, dom_sub_leaning, sexual_persona: persona.id });
+  const fantasy_seeds = rollFantasySeeds({ kink_map, dom_sub_leaning, kink_sides });
+  const chat_games = rollChatGames({ kink_map, dom_sub_leaning, sexual_persona: persona.id, kink_sides });
 
   const hints: Record<string, string> = {
     species: hintOf(species),
@@ -528,6 +533,7 @@ export function rollSeed(): RolledSeed {
     sexting_readiness,
     freak,
     kink_map,
+    kink_sides,
     fetishes,
     hard_limits,
 
@@ -736,7 +742,10 @@ export function describeSeed(seed: CharacterSeed): string {
     `where she stands on the usual kinks: ${
       Object.entries(seed.kink_map ?? {})
         .filter(([, st]) => st === 'into' || st === 'hard_no')
-        .map(([d, st]) => `${label('kink_domain', d)} = ${st === 'into' ? 'into it' : 'hard no'}`)
+        .map(([d, st]) => {
+          const side = st === 'into' ? sideLabel(find('kink_domain', d), seed.kink_sides?.[d]) : '';
+          return `${label('kink_domain', d)} = ${st === 'into' ? `into it${side ? ` (${side})` : ''}` : 'hard no'}`;
+        })
         .join('; ') || 'nothing strong either way'
     }`,
     `turn ons: ${labels('turn_on', seed.turn_ons)}`,
@@ -1558,7 +1567,7 @@ export function ensureFantasies(character: Character): Promise<void> {
   if (character.seed.hints?.fantasies) return Promise.resolve();
   const seeds = character.seed.fantasy_seeds?.length
     ? character.seed.fantasy_seeds
-    : rollFantasySeeds({ kink_map: character.seed.kink_map ?? {}, dom_sub_leaning: character.seed.dom_sub_leaning ?? 0 });
+    : rollFantasySeeds({ kink_map: character.seed.kink_map ?? {}, dom_sub_leaning: character.seed.dom_sub_leaning ?? 0, kink_sides: character.seed.kink_sides });
   const running = fantasyBackfills.get(character.id);
   if (running) return running;
   const job = (async () => {

@@ -1,6 +1,7 @@
 import { find } from '../db/attributes.js';
 import { getUserProfile } from '../repo.js';
-import type { Character, Relationship } from '../types.js';
+import type { Character, KinkSide, Relationship } from '../types.js';
+import { sideLabel } from './kinks.js';
 
 /**
  * Everything a player can learn about a character, and whether they have learned it yet.
@@ -99,7 +100,8 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
     if (stance !== 'into' && stance !== 'hard_no') continue;
     const d = find('kink_domain', domain);
     if (!d) continue;
-    add(`kink:${domain}`, 'intimate', stance === 'into' ? 'Into' : 'Not for her', d.label,
+    const side = stance === 'into' ? sideLabel(d, s.kink_sides?.[domain]) : '';
+    add(`kink:${domain}`, 'intimate', stance === 'into' ? 'Into' : 'Not for her', side ? `${d.label} - ${side}` : d.label,
       stance === 'into' ? 'She will let you know, one way or another.' : 'She will say so if it comes up.');
   }
   add('libido', 'intimate', 'Drive', `${s.libido}/5`, 'Shows in how often she goes there.');
@@ -320,13 +322,31 @@ const DOMAIN_TERMS: Record<string, string[]> = {
   recording: ['film', 'record', 'video', 'send a pic', 'photos of you', 'camera'],
   fetishwear: ['latex', 'leather', 'lingerie', 'corset', 'stockings', 'fishnet', 'heels', 'pantyhose', 'knee highs', 'knee-high'],
   cum_play: ['cum', 'swallow', 'facial', 'cum play', 'cum in', 'cum on'],
+  oral: ['go down on', 'eat you out', 'eat me out', 'blowjob', 'blow job', 'suck you off', 'sit on my face', 'sit on your face', 'oral', ' 69 '],
+  instruction: ['instructions', 'tell me how to touch', 'tell you how to touch', 'on my count', 'countdown', 'do as i say'],
+  tease_denial: ['edge you', 'edge me', 'edging', 'deny you', 'denial', 'ruin it', 'ruined orgasm', 'chastity', 'permission to cum', 'permission to come'],
+  voyeurism: ['watch you touch', 'watch me touch', 'watch each other', 'in the mirror', 'watch you get dressed', 'peep'],
+  primal: ['chase you', 'chase me', 'hunt you', 'hunt me', 'pin you down', 'pin me down', 'primal', 'wrestle', 'rough sex', 'take you rough'],
+  sensation: ['ice cube', 'feather', 'hot wax', 'blindfold', 'temperature play', 'nails down'],
+  size_difference: ['size difference', 'so small next to', 'so tiny next to', 'pick you up', 'height difference'],
 };
+
+/** Whether two ends of a domain meet: unset means no preference, so it meets anything. */
+function sidesMeet(a: KinkSide | undefined, b: KinkSide | undefined): boolean {
+  return !a || !b || a === 'both' || b === 'both' || a === b;
+}
 
 export interface KinkHit {
   domain: string;
   label: string;
   stance: string;
-  /** True when his own profile independently has this domain as 'into' too. */
+  /** Her end of it, in words, for a domain with two ends. */
+  side: string;
+  /**
+   * True when his own profile has this domain as 'into' too, at an end that meets hers: she
+   * wants her feet worshipped and he wants to worship them. Two people who both want their
+   * own feet worshipped are not a "me too".
+   */
   mutual: boolean;
 }
 
@@ -339,17 +359,21 @@ export interface KinkHit {
 export function detectKinkHits(character: Character, saidByUser: string): KinkHit[] {
   const text = ` ${saidByUser.toLowerCase()} `;
   const map = character.seed.kink_map ?? {};
-  const his = getUserProfile()?.kink_map ?? {};
+  const profile = getUserProfile();
+  const his = profile?.kink_map ?? {};
   const hits: KinkHit[] = [];
   for (const [domain, terms] of Object.entries(DOMAIN_TERMS)) {
     const stance = map[domain];
     if (!stance) continue;
     if (!terms.some((t) => text.includes(t))) continue;
+    const d = find('kink_domain', domain);
+    const herSide = character.seed.kink_sides?.[domain];
     hits.push({
       domain,
-      label: find('kink_domain', domain)?.label ?? domain,
+      label: d?.label ?? domain,
       stance,
-      mutual: stance === 'into' && his[domain] === 'into',
+      side: stance === 'into' || stance === 'curious' ? sideLabel(d, herSide) : '',
+      mutual: stance === 'into' && his[domain] === 'into' && sidesMeet(herSide, profile?.kink_sides?.[domain]),
     });
   }
   return hits;
@@ -359,11 +383,12 @@ export function detectKinkHits(character: Character, saidByUser: string): KinkHi
 export function describeKinkHits(hits: KinkHit[]): string {
   if (!hits.length) return '';
   const lines = hits.map((h) => {
-    if (h.mutual) return `- ${h.label}: he just brought this up, and it is not just one of hers - it is one of HIS too. This is a "wait, really? me too" moment, not just an arousal spike: let her react to the overlap itself, explicitly, before letting it move things forward.`;
-    if (h.stance === 'into') return `- ${h.label}: he just brought this up and it is one of HERS. This moves arousal hard, and she lets it show and runs with it.`;
-    if (h.stance === 'curious') return `- ${h.label}: he brought this up and she is curious about it. Interest, not indifference.`;
-    if (h.stance === 'hard_no') return `- ${h.label}: he brought this up and it is a hard limit. She says so plainly and steers to something she does want.`;
-    return `- ${h.label}: he brought this up and it does nothing for her. Not offended, just not interested.`;
+    const label = h.side ? `${h.label} (her end: ${h.side})` : h.label;
+    if (h.mutual) return `- ${label}: he just brought this up, and it is not just one of hers - it is one of HIS too. This is a "wait, really? me too" moment, not just an arousal spike: let her react to the overlap itself, explicitly, before letting it move things forward.`;
+    if (h.stance === 'into') return `- ${label}: he just brought this up and it is one of HERS. This moves arousal hard, and she lets it show and runs with it.`;
+    if (h.stance === 'curious') return `- ${label}: he brought this up and she is curious about it. Interest, not indifference.`;
+    if (h.stance === 'hard_no') return `- ${label}: he brought this up and it is a hard limit. She says so plainly and steers to something she does want.`;
+    return `- ${label}: he brought this up and it does nothing for her. Not offended, just not interested.`;
   });
   return 'WHAT HE JUST WALKED INTO:\n' + lines.join('\n');
 }
@@ -403,7 +428,7 @@ const HIS_STANCE_WORD: Record<string, string> = {
   hard_no: 'a hard no for him',
 };
 
-/** What she knows about his side, and the gaps she could actually ask about. */
+/** What she knows about his side, and the gaps. */
 export function describeHim(rel: Relationship): string {
   const his = getUserProfile()?.kink_map ?? {};
   const entries = Object.entries(his);
@@ -416,7 +441,13 @@ export function describeHim(rel: Relationship): string {
   if (known.length) {
     lines.push(
       'What she has worked out about what HE likes:\n' +
-        known.map(([d, st]) => `- ${find('kink_domain', d)?.label ?? d}: ${HIS_STANCE_WORD[st] ?? st}`).join('\n') +
+        known
+          .map(([d, st]) => {
+            const dom = find('kink_domain', d);
+            const side = st === 'into' || st === 'curious' ? sideLabel(dom, getUserProfile()?.kink_sides?.[d]) : '';
+            return `- ${dom?.label ?? d}: ${HIS_STANCE_WORD[st] ?? st}${side ? ` (${side})` : ''}`;
+          })
+          .join('\n') +
         '\nShe knows these because he told her. She can use them, refer back to them, and take them into account.',
     );
   }
@@ -424,8 +455,7 @@ export function describeHim(rel: Relationship): string {
     lines.push(
       'She does NOT know where he stands on: ' +
         unknown.map(([d]) => find('kink_domain', d)?.label ?? d).join(', ') +
-        '.\nThese are real gaps in what she knows, and asking about one is a genuinely good use of a turn - ' +
-        'not an interview question, the way someone actually asks when they want to know what they are dealing with. ' +
+        '.\nShe finds these out from how he reacts to what she brings, not by asking him down a list. ' +
         'Never assume an answer to one of these, and never act as though he has already said.',
     );
   }

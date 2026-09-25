@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type CardSpec, type ImageJob, type KinkDomain, type KinkStance, type Location, type LogEntry, type ResetParts, type TasteSection, type UserProfile } from '../api';
+import { api, type CardSpec, type ImageJob, type KinkDomain, type KinkSide, type KinkStance, type Location, type LogEntry, type ResetParts, type TasteSection, type UserProfile } from '../api';
 
 type Pane = 'models' | 'behaviour' | 'taste' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
 
@@ -707,10 +707,12 @@ const STANCES: { id: KinkStance; label: string }[] = [
  */
 function KinkEditor({
   value,
+  sides,
   onChange,
 }: {
   value: Record<string, KinkStance>;
-  onChange: (v: Record<string, KinkStance>) => void;
+  sides: Record<string, KinkSide>;
+  onChange: (v: Record<string, KinkStance>, sides: Record<string, KinkSide>) => void;
 }) {
   const [domains, setDomains] = useState<KinkDomain[]>([]);
   useEffect(() => {
@@ -722,7 +724,16 @@ function KinkEditor({
     const next = { ...value };
     if (next[id] === stance) delete next[id];
     else next[id] = stance;
-    onChange(next);
+    // A side only means something while you are open to it.
+    const nextSides = { ...sides };
+    if (next[id] !== 'into' && next[id] !== 'curious') delete nextSides[id];
+    onChange(next, nextSides);
+  };
+  const setSide = (id: string, side: KinkSide) => {
+    const nextSides = { ...sides };
+    if (nextSides[id] === side) delete nextSides[id];
+    else nextSides[id] = side;
+    onChange(value, nextSides);
   };
 
   return (
@@ -730,7 +741,8 @@ function KinkEditor({
       <span>What you are into</span>
       <span className="tiny muted" style={{ marginBottom: 'var(--s3)' }}>
         Nobody is told any of this. Characters start knowing nothing about you and work it out
-        from what you actually say — leaving one unset just means it never comes up.
+        from what you actually say — leaving one unset just means it never comes up. For the ones
+        with two ends, pick which you want; "her feet" means hers, worshipped by you.
       </span>
       {domains.map((d) => (
         <div key={d.id} className="kink-row">
@@ -752,6 +764,22 @@ function KinkEditor({
               </button>
             ))}
           </div>
+          {d.sides && (value[d.id] === 'into' || value[d.id] === 'curious') && (
+            <div className="kink-stances kink-sides" role="group" aria-label={`Which end of ${d.label}`}>
+              {([['her', d.sides.her], ['his', d.sides.his], ['both', 'Both']] as [KinkSide, string][]).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className="chip"
+                  data-active={sides[d.id] === id}
+                  aria-pressed={sides[d.id] === id}
+                  onClick={() => setSide(d.id, id)}
+                >
+                  {label.charAt(0).toUpperCase() + label.slice(1)}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -820,7 +848,8 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
       />
       <KinkEditor
         value={form.kink_map ?? {}}
-        onChange={(kink_map) => setForm((f) => ({ ...f, kink_map }))}
+        sides={form.kink_sides ?? {}}
+        onChange={(kink_map, kink_sides) => setForm((f) => ({ ...f, kink_map, kink_sides }))}
       />
       <label className="field">
         <span>Add a photo ({form.photos.length})</span>

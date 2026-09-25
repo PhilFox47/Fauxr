@@ -1,6 +1,6 @@
 import { byCategory, type Attribute } from '../db/attributes.js';
 import { getSettings } from '../config.js';
-import type { KinkStance } from '../types.js';
+import type { KinkSide, KinkStance } from '../types.js';
 import { newContext, rollMany } from './dice.js';
 
 /**
@@ -44,6 +44,99 @@ export function rollKinkMap(freak: number, domains: Attribute[], bias: Record<st
   return map;
 }
 
+/** The two ends of a domain, when it has them (`extra.sides` on kink_domain). */
+export function domainSides(domain: Attribute | undefined): Record<'her' | 'his', { label: string; hint?: string; dom_sub?: number }> | null {
+  const s = domain?.extra?.sides as any;
+  return s?.her?.label && s?.his?.label ? s : null;
+}
+
+/**
+ * Which end of one domain she wants. Each end is coded dominant or submissive like a fetish
+ * row, so her leaning picks: a strong domme into bondage ties him up four times in five, a
+ * strong sub is the one tied, and someone in the middle is as likely to want both. A persona
+ * that is about one end (`extra.side_bias`: a pillow princess and oral) gets it three times
+ * in four, since oral and watching are not dominant or submissive either way.
+ */
+export function rollDomainSide(domain: Attribute, leaning: number, bias?: KinkSide): KinkSide {
+  if (bias && Math.random() < 0.75) return bias;
+  const sides = domainSides(domain)!;
+  const weight = (coded: number) =>
+    !coded || !leaning ? 1
+    : Math.sign(coded) === Math.sign(leaning) ? 1 + 0.5 * Math.abs(leaning)
+    : Math.max(0.08, 1 - 0.3 * Math.abs(leaning));
+  const w = { her: weight(Number(sides.her.dom_sub ?? 0)), his: weight(Number(sides.his.dom_sub ?? 0)), both: Math.abs(leaning) <= 1 ? 1 : 0.45 };
+  let r = Math.random() * (w.her + w.his + w.both);
+  if ((r -= w.her) < 0) return 'her';
+  if ((r -= w.his) < 0) return 'his';
+  return 'both';
+}
+
+/**
+ * Her side of every domain with two ends that she is into or curious about. Keeps a side she
+ * already has; an existing character without one takes it from her fetishes in that domain
+ * (her own feet worshipped -> 'her', both kinds -> 'both') so nothing she has contradicts it,
+ * and only rolls where they say nothing.
+ */
+export function rollKinkSides(seed: {
+  kink_map: Record<string, KinkStance>;
+  dom_sub_leaning: number;
+  fetishes?: string[];
+  kink_sides?: Record<string, KinkSide>;
+  side_bias?: Record<string, KinkSide>;
+}): Record<string, KinkSide> {
+  const out: Record<string, KinkSide> = {};
+  const fetishes = new Map(byCategory('fetish').map((f) => [f.id, f]));
+  for (const d of byCategory('kink_domain')) {
+    const st = seed.kink_map?.[d.id];
+    if (!domainSides(d) || (st !== 'into' && st !== 'curious')) continue;
+    const kept = seed.kink_sides?.[d.id];
+    if (kept === 'her' || kept === 'his' || kept === 'both') {
+      out[d.id] = kept;
+      continue;
+    }
+    const own = new Set<string>();
+    for (const f of (d.extra?.fetishes as string[]) ?? []) {
+      const side = fetishes.get(f)?.extra?.side;
+      if ((seed.fetishes ?? []).includes(f) && (side === 'her' || side === 'his')) own.add(side);
+    }
+    out[d.id] = own.size === 2 ? 'both' : own.size === 1 ? ([...own][0] as KinkSide) : rollDomainSide(d, seed.dom_sub_leaning, seed.side_bias?.[d.id]);
+  }
+  return out;
+}
+
+/**
+ * A scenario or game that is about one end of a domain (`extra.sides`, e.g. "Over his knee"
+ * is impact on her) that is not the end she wants. A domain she has no side on never clashes.
+ */
+export function wrongEnd(row: Attribute, sides: Record<string, KinkSide> | undefined): boolean {
+  const rowSides = (row.extra?.sides ?? {}) as Record<string, string>;
+  return Object.entries(rowSides).some(([d, side]) => {
+    const hers = sides?.[d];
+    return !!hers && hers !== 'both' && hers !== side;
+  });
+}
+
+/** Whether a fetish row sits on the end of a domain she wants. Rows with no side fit either. */
+export function fitsSide(fetish: Attribute | undefined, side: KinkSide | undefined): boolean {
+  const own = fetish?.extra?.side;
+  return !side || side === 'both' || (own !== 'her' && own !== 'his') || own === side;
+}
+
+/** "her feet", "both ways - her feet and his feet", or '' for a domain without ends. */
+export function sideLabel(domain: Attribute | undefined, side: KinkSide | undefined): string {
+  const s = domainSides(domain);
+  if (!s || !side) return '';
+  return side === 'both' ? `both ways - ${s.her.label} and ${s.his.label}` : s[side].label;
+}
+
+/** The same, with what each end means, for prompts. */
+export function sideDetail(domain: Attribute | undefined, side: KinkSide | undefined): string {
+  const s = domainSides(domain);
+  if (!s || !side) return '';
+  const one = (k: 'her' | 'his') => (s[k].hint ? `${s[k].label} (${s[k].hint})` : s[k].label);
+  return side === 'both' ? `both ends - ${one('her')}, and ${one('his')}` : `${one(side)} - the other way round does little for her`;
+}
+
 /**
  * How much a row that is coded dominant (extra.dom_sub > 0) or submissive (< 0) suits her,
  * as per-id multipliers for roll()'s `lean`. A strong domme almost never draws "being
@@ -70,7 +163,7 @@ export function domSubLean(rows: Attribute[], leaning: number): Record<string, n
  * touches one she is a hard no on, and follows her dom/sub leaning like her kinks do.
  */
 export function rollFantasySeeds(
-  seed: { kink_map: Record<string, KinkStance>; dom_sub_leaning: number },
+  seed: { kink_map: Record<string, KinkStance>; dom_sub_leaning: number; kink_sides?: Record<string, KinkSide> },
   count = 3,
 ): string[] {
   const all = byCategory('fantasy_scenario');
@@ -79,7 +172,7 @@ export function rollFantasySeeds(
   for (const s of all) {
     const domains = (s.extra?.domains as string[] | undefined) ?? [];
     const stances = domains.map((d) => seed.kink_map?.[d]);
-    if (stances.includes('hard_no')) continue;
+    if (stances.includes('hard_no') || wrongEnd(s, seed.kink_sides)) continue;
     allowed.add(s.id);
     let m = lean[s.id] ?? 1;
     for (const st of stances) m *= st === 'into' ? 3 : st === 'curious' ? 1.5 : st === 'soft_no' ? 0.4 : 1;
@@ -138,7 +231,7 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
  * recognisably hers and the cast does not all run the same truth-or-dare.
  */
 export function rollChatGames(
-  seed: { kink_map: Record<string, KinkStance>; dom_sub_leaning: number; sexual_persona?: string },
+  seed: { kink_map: Record<string, KinkStance>; dom_sub_leaning: number; sexual_persona?: string; kink_sides?: Record<string, KinkSide> },
   count = 4,
 ): string[] {
   const all = byCategory('chat_game');
@@ -146,7 +239,7 @@ export function rollChatGames(
   const allowed = new Set<string>();
   for (const g of all) {
     const stances = ((g.extra?.domains as string[] | undefined) ?? []).map((d) => seed.kink_map?.[d]);
-    if (stances.includes('hard_no')) continue;
+    if (stances.includes('hard_no') || wrongEnd(g, seed.kink_sides)) continue;
     allowed.add(g.id);
     let m = lean[g.id] ?? 1;
     for (const st of stances) m *= st === 'into' ? 2.5 : st === 'curious' ? 1.4 : st === 'soft_no' ? 0.3 : 1;
