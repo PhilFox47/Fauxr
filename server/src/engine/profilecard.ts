@@ -81,7 +81,7 @@ function options(seed: CharacterSeed): Option[] {
     })),
     { category: 'occupation', id: seed.occupation, key: 'occupation', caption: 'Job', group: 'life', lean: 0.25 },
     ...(seed.relationship_status && !PLAIN_STATUS.has(seed.relationship_status)
-      ? [{ category: 'relationship_status', id: seed.relationship_status, key: 'relationship_status', caption: 'Status', group: 'life', lean: 0.3 }]
+      ? [{ category: 'relationship_status', id: seed.relationship_status, key: 'relationship_status', caption: 'Relationship', group: 'life', lean: 0.3 }]
       : []),
     ...(seed.hobbies?.[0] ? [{ category: 'hobby', id: seed.hobbies[0], key: `hobby:${seed.hobbies[0]}`, caption: 'Lives for', group: 'life', lean: 0.2 }] : []),
   ];
@@ -138,7 +138,10 @@ export function coreTraits(seed: CharacterSeed, characterId: string): CoreTrait[
     .map((e) => {
       const attr = find(e.category, e.id);
       if (!attr) return null;
-      return { ...e, label: attr.label, hint: attr.prompt_hint || attr.label, intimate: INTIMATE.has(e.category) };
+      // Stored cores from before the rename still say "Status", which now reads as her WhatsApp
+      // status sitting right under it in her profile.
+      const caption = e.category === 'relationship_status' ? 'Relationship' : e.caption;
+      return { ...e, caption, label: attr.label, hint: attr.prompt_hint || attr.label, intimate: INTIMATE.has(e.category) };
     })
     .filter((t): t is CoreTrait => !!t);
 }

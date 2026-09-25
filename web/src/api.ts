@@ -148,6 +148,8 @@ export interface CharacterProfile {
   bio: string;
   /** What defines her, most defining first. */
   core: { caption: string; label: string }[];
+  /** Her current status, in full, and when she posted it. Null before her first one. */
+  status: { text: string; set_at: string } | null;
   known: number;
   total: number;
   categories: { category: string; label: string; known: number; total: number; rows: ProfileRow[] }[];

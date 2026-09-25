@@ -1635,3 +1635,16 @@ input[type='range'] {
   text-transform: uppercase;
   color: var(--accent-bright);
 }
+/* Her status in full, under "What defines her" in her profile sheet. */
+.profile-status { margin: 0 0 var(--s4); }
+.profile-status-text {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-size: 14.5px;
+  line-height: 1.5;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}

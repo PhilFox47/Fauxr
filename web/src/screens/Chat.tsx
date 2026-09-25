@@ -874,6 +874,19 @@ function ProfileSheet({
             </div>
           )}
 
+          {/* The header and the chat list cut her status to one line; this is where it reads in full. */}
+          {profile.status?.text && (
+            <div className="profile-status">
+              <div className="section-title" style={{ padding: '0 0 var(--s2)' }}>
+                Status{' '}
+                <span className="muted">
+                  {new Date(profile.status.set_at).toLocaleString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
+              <p className="profile-status-text">{profile.status.text}</p>
+            </div>
+          )}
+
           {gallery.length > 0 && (
             <div className="gallery">
               <div className="section-title" style={{ padding: '0 0 var(--s2)' }}>

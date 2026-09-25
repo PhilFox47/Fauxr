@@ -2103,7 +2103,7 @@ under it, so choosing whom to talk to was a guess. It now reads, top to bottom:
 - the bio
 - **three traits that define her**, each with a small caption: "Style: Goth girl",
   "In bed: Commanding domme", "Into: Having her feet worshipped", "Species: Vampire",
-  "Personality: Deadpan menace", "Job: Circus aerialist", "Status: Part of a polycule"
+  "Personality: Deadpan menace", "Job: Circus aerialist", "Relationship: Part of a polycule"
 
 No photo; that stays behind the swap, where the image spend is. Languages left the card to
 keep it to that format; they are still in her profile.
@@ -2184,6 +2184,9 @@ load, keyed on their id so it matches their card.
   covers all five. Everything else is true but is flavour for when he asks or the moment calls
   for it. A job outside the core is explicitly a passing detail.
 - **Her profile sheet** opens with "What defines her": her traits as chips.
+  Her current status follows it in full, with when she posted it; the chat header and the chat
+  list cut it to one line, so this is the only place it can be read whole. The relationship
+  trait is captioned "Relationship" rather than "Status" so the two do not collide.
 - **Her life block** shows a non-core job as "Work (background - mention in passing, not a
   topic)". Interests are flavour; only a hobby that is part of her core gets its full
   description.

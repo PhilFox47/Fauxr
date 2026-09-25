@@ -254,6 +254,8 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       display_name: character.real_name,
       bio: character.bio,
       core: coreTraits(character.seed, character.id).map(({ caption, label }) => ({ caption, label })),
+      // In full here: the chat header and the chat list truncate it to one line.
+      status: character.state === 'matched' ? statusOf(rel) : null,
       ...profileView(character, rel),
     };
   });
