@@ -84,8 +84,9 @@ function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
 }
 
 /**
- * A system line with a camera on it: "you swapped profile pictures", and the photo-offer and
- * swap-request cards left in older chats, which have nothing left to press.
+ * A system line with a camera on it: "you generated her profile picture" (or "you swapped
+ * profile pictures" in older chats), and the photo-offer and swap-request cards left in older
+ * chats, which have nothing left to press.
  */
 function LegacyCard({ text }: { text: string }) {
   return (
@@ -132,9 +133,9 @@ export default function Chat({
    * into the text chat without ending anything, and also used to re-read a finished one.
    */
   const [openDateId, setOpenDateId] = useState<string | null>(null);
-  /** First tap arms the swap, second tap does it - it starts a paid image generation. */
-  const [confirmSwap, setConfirmSwap] = useState(false);
-  const [swapping, setSwapping] = useState(false);
+  /** First tap arms it, second tap does it - it starts a paid image generation. */
+  const [confirmPicture, setConfirmPicture] = useState(false);
+  const [generatingPicture, setGeneratingPicture] = useState(false);
   // One deduped set that both surfaces index into. A photo she sent in the chat is also in
   // her gallery, so concatenating the two blind would show it twice while paging.
   const allImages = [
@@ -372,23 +373,23 @@ export default function Chat({
     }, 2500);
   };
 
-  const swapPhotos = async () => {
-    if (swapping) return;
-    if (!confirmSwap) {
-      setConfirmSwap(true);
-      window.setTimeout(() => setConfirmSwap(false), 4000);
+  const generateProfilePicture = async () => {
+    if (generatingPicture) return;
+    if (!confirmPicture) {
+      setConfirmPicture(true);
+      window.setTimeout(() => setConfirmPicture(false), 4000);
       return;
     }
-    setSwapping(true);
+    setGeneratingPicture(true);
     try {
-      const res = await api.swapPhotos(characterId);
-      if (!res.images_enabled) flashToast('Swapped. Image generation is off, so she keeps her emoji for now.');
+      const res = await api.generateProfilePicture(characterId);
+      if (!res.images_enabled) flashToast('Image generation is off, so she keeps her emoji for now.');
       await load();
     } catch (err) {
       flashToast(String(err instanceof Error ? err.message : err));
     } finally {
-      setSwapping(false);
-      setConfirmSwap(false);
+      setGeneratingPicture(false);
+      setConfirmPicture(false);
     }
   };
 
@@ -437,13 +438,13 @@ export default function Chat({
         <div className="spacer" />
         {character && !character.photos_exchanged && !blocked && (
           <button
-            className={confirmSwap ? 'btn swap-confirm' : 'iconbtn'}
-            onClick={() => void swapPhotos()}
-            disabled={swapping}
-            aria-label="Swap profile pictures"
-            title="Swap profile pictures - generates hers, and she gets to see yours"
+            className={confirmPicture ? 'btn picture-confirm' : 'iconbtn'}
+            onClick={() => void generateProfilePicture()}
+            disabled={generatingPicture}
+            aria-label="Generate profile pic"
+            title="Generate profile pic - her picture, and from then on she can send photos"
           >
-            {confirmSwap ? (swapping ? 'Swapping…' : 'Swap pics?') : <Icon name="camera" size={20} />}
+            {confirmPicture ? (generatingPicture ? 'Generating…' : 'Generate profile pic?') : <Icon name="camera" size={20} />}
           </button>
         )}
         {profile && (

@@ -412,8 +412,8 @@ export interface UserProfile {
    */
   joiners?: Joiners | '';
   /**
-   * The emoji standing in for his profile picture. This is what a character sees of him
-   * until the two of them have actually swapped real pictures.
+   * The emoji standing in for his profile picture: what a character sees of him when he has
+   * no real photo up.
    */
   avatar_emoji: string;
   /** Everything else about him, same vocabulary the characters are built from. */

@@ -23,7 +23,7 @@ not in whether he has earned something. So:
 - His taste (Settings -> Taste, `settings.taste`) is applied inside `roll()`. A new roll that
   bypasses `roll()` also bypasses his taste; go through it.
 - The one deliberate cost gate: **nothing image-related is generated for a character until
-  the user presses "swap profile pictures"** (`photos_exchanged`). Image generation is
+  the user presses "Generate profile pic"** (`photos_exchanged`). Image generation is
   expensive; keep all image spend behind a user action.
 
 ## Layout

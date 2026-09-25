@@ -477,8 +477,8 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
             Image generation
             <br />
             <span className="tiny muted">
-              Nothing is generated for a character until you swap profile pictures with her
-              (the camera button in her chat). Her photos, and her profile picture, start then.
+              Nothing is generated for a character until you press "Generate profile pic" (the
+              camera button in her chat). Her profile picture, and her photos, start then.
             </span>
           </span>
         </label>
@@ -861,8 +861,8 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
           onChange={(e) => setForm({ ...form, avatar_emoji: e.target.value })}
         />
         <span className="tiny muted">
-          What characters see of you until you swap profile pictures with them (the camera
-          button in a chat). After the swap they see your real photo, if you have one.
+          What characters see of you when you have no photo up. With a photo, every
+          character sees that instead.
         </span>
       </label>
       <label className="field">

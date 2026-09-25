@@ -315,11 +315,11 @@ What was added:
   (`ensureFantasies()`). The Director, the Actor and dates all see them, and she brings one up
   when the conversation gets near it (a `pitch_fantasy` nudge used to push it; see "She decides
   where it goes" below).
-- **Photos start with a swap.** Image generation is expensive, so nothing is generated for a
-  character until you press the camera button in her chat to swap profile pictures. Until then
-  she is an emoji to you and you are one to her, and she cannot send photos (she can tease you
-  about it). The swap generates her profile picture and lets her see yours, and she reacts to
-  it. From then on, when she decides to send a photo it is generated straight away with no
+- **Photos start with "Generate profile pic".** Image generation is expensive, so nothing is
+  generated for a character until you press the camera button in her chat. Until then she is
+  an emoji to you and she cannot send photos. (This was a "swap" at first: your pictures were
+  hidden from her until then and she reacted to it. See "Generate profile pic, not a swap"
+  below.) From then on, when she decides to send a photo it is generated straight away with no
   consent card, using her profile picture as the reference for her face. Characters whose
   picture was already generated count as swapped.
 - **She sees what you send.** A photo you upload is described by the vision model before she
@@ -713,6 +713,30 @@ her time", everything sexual kept for after the match) pointed straight at them.
   fantasies still wait for the match. Job and home are a passing detail at most.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
+
+## Generate profile pic, not a swap
+
+The camera button in a chat used to be "swap profile pictures". Your pictures and your looks
+were hidden from her until you pressed it, a line "You swapped profile pictures with her" went
+into the chat, and she took a turn to react. Characters kept commenting on "the swap", which
+made a cost decision of yours into a scene in her life.
+
+Now:
+- **Your pictures are always visible.** Every character sees your profile picture and the
+  "what you look like" part of your card from the first message (`userBlock`,
+  `userCardBlock`). Your emoji is only what she sees when you have no photo up.
+- **The button is "Generate profile pic".** It generates her profile picture, and from then on
+  she can send photos. Nothing else changes, and she does not take a turn over it. The route is
+  `POST /api/chats/:id/profile-picture`; `/swap-photos` still works for an old client.
+- **She does not know it happened.** The chat line ("You generated Mia's profile picture.") is
+  for you only; her history leaves it out, along with the old "You swapped profile pictures"
+  lines in existing chats. Until then her prompt says only that she cannot send photos in this
+  chat for now, with no reason given, so there is nothing for her to talk about. The same note
+  shows when image generation is off.
+- The armed label "Generate profile pic?" wraps inside the header on a phone instead of
+  pushing the page sideways.
+
+The internal flag keeps its old name, `photos_exchanged`.
 
 ## She decides where it goes
 
@@ -2698,7 +2722,7 @@ Who sees what follows the rules the app already has, rather than inventing a fou
 | Section | Who sees it, and when |
 |---|---|
 | Your life, what you're into, what you want | On your profile — known, the way she would having read it |
-| What you look like | Only after you have swapped profile pictures |
+| What you look like | Always, like your picture (it used to wait for the "swap") |
 | The intimate half | Discovered in conversation, on the existing kink-discovery path |
 | Your hard limits | **Always** visible to her |
 

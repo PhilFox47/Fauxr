@@ -34,7 +34,7 @@ export const CARD_SECTIONS: CardSection[] = [
   {
     id: 'looks',
     label: 'What you look like',
-    note: 'Seen by a character once the two of you have swapped profile pictures.',
+    note: 'Seen by every character, along with your picture.',
     fields: [
       { key: 'ethnicity', category: 'ethnicity', label: 'Background' },
       { key: 'skin_tone', category: 'skin_tone', label: 'Skin tone' },
@@ -179,7 +179,7 @@ function section(id: CardSection['id']): CardField[] {
  * His profile and looks are readable, the same as anyone's before swiping; the intimate half
  * is discovered in conversation.
  */
-export function userCardBlock(user: UserProfile, swapped = true): string {
+export function userCardBlock(user: UserProfile): string {
   const card = user.card ?? {};
   const out: string[] = [];
 
@@ -198,8 +198,8 @@ export function userCardBlock(user: UserProfile, swapped = true): string {
     );
   }
 
-  // What he looks like comes with his picture, so only after the swap.
-  const looks = swapped ? lines(card, section('looks'), g) : [];
+  // What he looks like comes with his picture, which every match can see.
+  const looks = lines(card, section('looks'), g);
   if (looks.length) {
     out.push('WHAT HE LOOKS LIKE (you have seen his picture):\n' + looks.map((l) => `- ${l}`).join('\n'));
   }

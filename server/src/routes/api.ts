@@ -156,7 +156,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       // Her name, handle, age, ethnicity, bio, the emoji she picked for herself and the three
       // traits that define her (profilecard.ts). The card used to be handle, age, languages
       // and bio, which made choosing whom to talk to a guess. Still no photo: that stays
-      // behind the swap, where the image spend is.
+      // behind "Generate profile pic", where the image spend is.
       profiles: stack().map((c) => ({
         id: c.id,
         real_name: c.real_name,
@@ -261,37 +261,41 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   });
 
   /**
-   * He swaps profile pictures with her. This is the one thing that starts image generation for
-   * a character: her profile picture is made now (in the background) and she gets to see his.
-   * Nothing is generated before it, so he can chat first and decide she is worth the cost.
+   * He has her profile picture generated. This is the one thing that starts image generation
+   * for a character: her picture is made now (in the background), and from then on she can
+   * send photos. Nothing is generated before it, so he can chat first and decide she is worth
+   * the cost.
+   *
+   * It used to be "swap profile pictures": his were hidden from her until then and she took a
+   * turn to react to the swap. His pictures are simply always visible now, and nothing about
+   * this reaches her - it is a cost decision of his, not an event in their chat.
+   * `/swap-photos` stays as an alias for a client still running the old build.
    */
-  app.post<{ Params: { id: string } }>('/api/chats/:id/swap-photos', async (req, reply) => {
+  const generateProfilePicture = async (req: { params: { id: string } }, reply: any) => {
     const character = getCharacter(req.params.id);
     const rel = getRelationship(req.params.id);
     if (!character || !rel) return reply.code(404).send({ error: 'not found' });
     if (character.state !== 'matched') return reply.code(400).send({ error: 'you are not matched with her' });
-    if (hasSwapped(rel)) return reply.code(400).send({ error: 'you have already swapped pictures' });
+    if (hasSwapped(rel)) return reply.code(400).send({ error: 'her profile picture has already been generated' });
 
+    // The flag keeps its old name; it now means "her picture was asked for".
     rel.flags.state.photos_exchanged = true;
     saveRelationship(rel);
+    // A line for him in the chat. historyBlock leaves it out of her prompt (meta type).
     const msg = addMessage({
       character_id: character.id,
       sender: 'system',
-      text: `You swapped profile pictures with ${character.real_name}.`,
+      text: `You generated ${character.real_name}'s profile picture.`,
       meta: { type: 'photos_swapped' },
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: msg });
     void ensureProfilePicture(character.id).catch((err) =>
       logger.error('image', 'profile picture failed', { error: String(err) }),
     );
-    // She has just seen his picture; let her react, unless she is out with him right now.
-    if (!activeDate(character.id)) {
-      void takeTurn(character.id, { trigger: 'user_message' }).catch((err) =>
-        logger.error('actor', 'turn failed', { error: String(err) }),
-      );
-    }
     return { ok: true, images_enabled: getSettings().images_enabled };
-  });
+  };
+  app.post<{ Params: { id: string } }>('/api/chats/:id/profile-picture', generateProfilePicture);
+  app.post<{ Params: { id: string } }>('/api/chats/:id/swap-photos', generateProfilePicture);
 
   app.post<{ Params: { id: string } }>('/api/chats/:id/read', async (req) => {
     const marked = markCharacterMessagesRead(req.params.id);

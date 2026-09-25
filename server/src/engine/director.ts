@@ -54,7 +54,7 @@ import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
 import { ensureFantasies } from './generator.js';
 import { fantasyLog } from './fantasies.js';
-import { hasSwapped } from './images.js';
+import { canSendPhotos } from './images.js';
 import { DIRECTOR } from '../llm/schemas.js';
 
 export interface DirectorResult {
@@ -142,8 +142,8 @@ export async function runDirector(
     char_real_name: character.real_name,
     char_username: character.username,
     user_block: [
-      userBlock(user, hasSwapped(rel)),
-      hasSwapped(rel) ? '' : 'They have not swapped profile pictures yet, so she cannot send photos until he does. Do not plan photos; teasing about the swap is fine.',
+      userBlock(user),
+      canSendPhotos(rel) ? '' : 'She cannot send photos in this chat yet. Do not plan photos, and do not have her mention why.',
       user ? userCardFullBlock(user) : '',
     ]
       .filter(Boolean)

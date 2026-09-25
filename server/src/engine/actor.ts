@@ -18,7 +18,7 @@ import { describeHerMoment } from './moment.js';
 import { initiativeNudge } from './nudge.js';
 import { releaseBlock } from './release.js';
 import { detectQuizzingHim, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
-import { canSendPhotos, hasSwapped } from './images.js';
+import { canSendPhotos } from './images.js';
 import { fantasyLog } from './fantasies.js';
 import { ACTOR_CHAT, VOICE_NOTE } from '../llm/schemas.js';
 
@@ -234,15 +234,16 @@ function buildPrompt(
     char_display_name: character.real_name,
     user_name: user?.display_name ?? 'him',
     user_block: [
-      userBlock(user, hasSwapped(relationship)),
-      user ? userCardBlock(user, hasSwapped(relationship)) : '',
+      userBlock(user),
+      user ? userCardBlock(user) : '',
       describeHim(relationship),
     ].filter(Boolean).join('\n\n'),
-    photo_status: hasSwapped(relationship)
+    // Not a fiction she lives in: her picture simply has not been generated, which is his call
+    // and costs money. She is not told why, so there is nothing for her to comment on.
+    photo_status: canSendPhotos(relationship)
       ? ''
-      : 'You two have not swapped profile pictures yet - he only sees your emoji, and you only ' +
-        'see his. Until he swaps, you cannot send photos: leave "photo_offer" null. You can tease ' +
-        'him about what he is missing, describe it instead, or nudge him to swap.',
+      : 'You cannot send photos in this chat for now: leave "photo_offer" null. If he asks for ' +
+        'one, put it off in your own way or describe it in words instead. Do not make a thing of it.',
     identity_block: identityBlock(character, flags),
     core_block: coreBlock(character),
     communication_block: communicationBlock(seed),
@@ -459,7 +460,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
         messages: out.messages.map((m) => m.text),
       });
       correction = retryHint(
-        'sending a photo before you have swapped profile pictures (or with photos turned off)',
+        'sending a photo while photos are not available in this chat',
         'You set photo_offer, but that would silently fail to reach him right now, leaving your ' +
           'messages promising a photo that never arrives. Write this turn again without offering one.',
       );

@@ -10,13 +10,14 @@ import { coreTraits, isCore } from './profilecard.js';
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
 
-export function userBlock(user: UserProfile | null, swapped = true): string {
+export function userBlock(user: UserProfile | null): string {
   if (!user) return 'Unknown - he has not filled in his profile.';
-  const pictureLine = !swapped
-    ? `You have not seen a picture of him yet - you have not swapped. All you have is his emoji: ${user.avatar_emoji || '(none set)'}.`
-    : user.photos.length
-      ? 'You have seen his profile picture - you swapped. You can refer to it.'
-      : `You swapped pictures, but he has no real photo up, just an emoji: ${user.avatar_emoji || '(none set)'}.`;
+  // His pictures are on his profile for every match to see, from the first message. There used
+  // to be a "swap" that hid them until he pressed it, and she reacted to the swap as an event;
+  // the button now only generates her picture (see the profile-picture route in api.ts).
+  const pictureLine = user.photos.length
+    ? 'You have seen his profile picture. You can refer to it.'
+    : `He has no real photo up, just an emoji: ${user.avatar_emoji || '(none set)'}.`;
   return [
     `Name: ${user.display_name}`,
     `Age: ${user.age}`,
@@ -504,8 +505,10 @@ export function historyBlock(
   const her = character.real_name;
   const him = user?.display_name ?? 'him';
   return messages
-    // Leftover cards from the short-lived "Play it out" button carry nothing she said.
-    .filter((m) => m.meta?.type !== 'fantasy_pitch')
+    // Leftover cards from the short-lived "Play it out" button carry nothing she said, and the
+    // "profile picture generated" line is his bookkeeping, not an event in their chat - with it
+    // in her history she kept commenting on "the swap".
+    .filter((m) => m.meta?.type !== 'fantasy_pitch' && m.meta?.type !== 'photos_swapped')
     .map((m) => {
       const who = m.sender === 'user' ? him : m.sender === 'character' ? her : 'system';
       const time = new Date(m.sent_at).toLocaleString('en-GB', {
