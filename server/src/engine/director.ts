@@ -6,10 +6,12 @@ import { getUserProfile, listDates, recentMessages, saveRelationship, setWakeup,
 import { render } from '../prompts/render.js';
 import type { ActorHidden, Character, Direction, Relationship } from '../types.js';
 import {
+  coreBlock,
   dateHistoryFact, directionBlock, fantasiesBlock, historyBlock, ledgerBlock, seedBlock,
   spiceDirective, userBlock,
 } from './blocks.js';
 import { describeArousal, describePace } from './stage.js';
+import { lifeBlockForDirector } from './life.js';
 import { describeFetishProgress, describeHim, describeKinkHits, detectKinkHits, herCuriosity, undiscoveredKeys } from './discovery.js';
 import { userCardFullBlock } from './usercard.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
@@ -111,6 +113,8 @@ export async function runDirector(
       .filter(Boolean)
       .join('\n\n'),
     seed_block: seedBlock(character),
+    core_block: coreBlock(character),
+    life_block: lifeBlockForDirector(character.id),
     last_contact: rel.last_contact_at ?? 'never',
     now: new Date().toLocaleString('en-GB'),
     spice_directive: spiceDirective(settings.spice),

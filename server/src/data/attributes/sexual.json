@@ -235,6 +235,8 @@
     "affinities": [],
     "conflicts": [
       "crop_receiving",
+      "face_slapping_giving",
+      "face_slapping_receiving",
       "flogging_receiving",
       "impact_receiving",
       "spanking_receiving"
@@ -3364,7 +3366,11 @@
         "primal_play",
         "slave_treatment_giving",
         "slave_treatment_receiving",
-        "passed_around"
+        "passed_around",
+        "hypnosis_fantasy",
+        "hypnotising_him",
+        "dollification",
+        "findom"
       ],
       "limits": [
         "power_play"
@@ -3406,7 +3412,8 @@
         "blindfold_giving",
         "sensory_deprivation",
         "scarf_tie",
-        "using_a_swing_or_wedge"
+        "using_a_swing_or_wedge",
+        "gagged"
       ],
       "limits": [
         "restraint",
@@ -3450,7 +3457,9 @@
         "crop_receiving",
         "crop_giving",
         "ass_slapping_receiving",
-        "hair_pulling"
+        "hair_pulling",
+        "face_slapping_receiving",
+        "face_slapping_giving"
       ],
       "limits": [
         "impact",
@@ -3492,7 +3501,8 @@
         "shoulder_biting",
         "ice_play_receiving",
         "ice_play_giving",
-        "metal_cold"
+        "metal_cold",
+        "nipple_clamps"
       ],
       "limits": [
         "pain",
@@ -3566,7 +3576,9 @@
         "mild_public_tease",
         "degrading_him",
         "being_degraded",
-        "forbidden_thrill"
+        "forbidden_thrill",
+        "cuckolding_him",
+        "body_writing"
       ],
       "limits": [
         "humiliation",
@@ -3728,7 +3740,9 @@
         "polycule_play",
         "play_party",
         "swingers_club",
-        "passed_around"
+        "passed_around",
+        "hotwife",
+        "cuckolding_him"
       ],
       "limits": [
         "third_parties",
@@ -3833,7 +3847,14 @@
         "teacher_student_roleplay",
         "doctor_patient_roleplay",
         "student_roleplay",
-        "patient_roleplay"
+        "patient_roleplay",
+        "first_time_roleplay",
+        "hypnosis_fantasy",
+        "hypnotising_him",
+        "monster_fantasy",
+        "tentacle_fantasy",
+        "dollification",
+        "maid_roleplay"
       ],
       "limits": [
         "roleplay_limits",
@@ -5405,10 +5426,12 @@
     "image_prompt": null,
     "affinities": [],
     "conflicts": [
-      "cum_eating_receiving",
+      "breeding_kink",
+      "creampie",
       "cum_eating_forced_him",
-      "cum_swapping",
-      "cum_marking"
+      "cum_eating_receiving",
+      "cum_marking",
+      "cum_swapping"
     ],
     "modifies": {},
     "extra": {},
@@ -5430,7 +5453,9 @@
         "cum_eating_receiving",
         "cum_eating_forced_him",
         "cum_swapping",
-        "cum_marking"
+        "cum_marking",
+        "breeding_kink",
+        "creampie"
       ],
       "limits": [
         "cum_limit"
@@ -5682,7 +5707,8 @@
       "intensity": 0,
       "fetishes": [
         "size_worship",
-        "careful_of_scale"
+        "careful_of_scale",
+        "size_queen"
       ],
       "limits": [
         "size_difference_limit"
@@ -12454,7 +12480,8 @@
         "deepthroat_giving",
         "face_sitting_receiving",
         "face_sitting_giving",
-        "sixty_nine"
+        "sixty_nine",
+        "thighs_around_his_head"
       ],
       "limits": [
         "oral_limit"
@@ -12534,7 +12561,9 @@
         "chastity_him",
         "ruined_orgasm_giving",
         "asking_permission",
-        "tease_for_days"
+        "tease_for_days",
+        "orgasm_control_receiving",
+        "orgasm_control_giving"
       ],
       "limits": [
         "denial_limit"
@@ -14717,5 +14746,636 @@
     },
     "enabled": true,
     "rarity": "rare"
+  },
+  {
+    "id": "messy",
+    "category": "kink_domain",
+    "label": "Messy",
+    "weight": 1.0,
+    "prompt_hint": "spit, sweat, squirting, soaked sheets - sex that leaves a mess and is better for it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "intensity": 1,
+      "fetishes": [
+        "spit_play",
+        "squirting",
+        "soaked_sheets",
+        "sweat_licking"
+      ],
+      "limits": [
+        "messy_limit"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "messy_limit",
+    "category": "hard_limit",
+    "label": "Nothing messy - spit, sweat or squirting",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "soaked_sheets",
+      "spit_play",
+      "squirting",
+      "sweat_licking"
+    ],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hotwife",
+    "category": "fetish",
+    "label": "Being his hotwife",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "another man having her while he watches, knows, or waits at home to hear every detail - and it is all for him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her",
+      "joiner": "man"
+    },
+    "enabled": true
+  },
+  {
+    "id": "cuckolding_him",
+    "category": "fetish",
+    "label": "Cuckolding him",
+    "weight": 1.0,
+    "rarity": "extremely_rare",
+    "prompt_hint": "another man having her in front of him, and her rubbing it in the whole time",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his",
+      "joiner": "man"
+    },
+    "enabled": true
+  },
+  {
+    "id": "breeding_kink",
+    "category": "fetish",
+    "label": "Breeding kink",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "wanting him to finish inside her and saying so, the words as much as the act - pure fantasy, and she knows it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "creampie",
+    "category": "fetish",
+    "label": "Him finishing inside her",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "that one specific ending, and feeling it after",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "spit_play",
+    "category": "fetish",
+    "label": "Spit play",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "spitting in his mouth, him spitting in hers, spit as lube - filthy on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "squirting",
+    "category": "fetish",
+    "label": "Squirting",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "she squirts, she loves that she does, and she wants him to make it happen again",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "soaked_sheets",
+    "category": "fetish",
+    "label": "Soaked-sheets sex",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "sweaty, wet, sheets wrecked, nobody caring how it looks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "face_slapping_receiving",
+    "category": "fetish",
+    "label": "A light slap across her face",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "an open hand, light, mid-sex - the shock of it more than the sting",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_slapping_giving",
+    "category": "fetish",
+    "label": "Slapping his face, lightly",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "a light open hand when he gets cheeky, and watching him like it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "body_writing",
+    "category": "fetish",
+    "label": "Words written on her body",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "lipstick or marker on her skin - \"his\", a tally, something filthy - and seeing it in the mirror after",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "lipstick_marks",
+    "category": "fetish",
+    "label": "Leaving lipstick marks all over him",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "her lipstick on his neck, his chest, lower - proof of where she has been",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "muscle_worship_giving",
+    "category": "fetish",
+    "label": "Worshipping his muscles",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "arms, shoulders, abs - touching, biting, telling him exactly what they do to her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "muscle_worship_receiving",
+    "category": "fetish",
+    "label": "Having her muscles worshipped",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "her strong legs, her abs, her back - she trained for them and wants them adored",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "orgasm_control_receiving",
+    "category": "fetish",
+    "label": "Only coming when he says",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "her orgasm is his to allow, and she has to hold it until he does",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "orgasm_control_giving",
+    "category": "fetish",
+    "label": "Deciding exactly when he comes",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "his orgasm on her say, down to the second",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "first_time_roleplay",
+    "category": "fetish",
+    "label": "Playing her first time, all over again",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "the nervous, eager first-time fantasy, played by two adults who both know better",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "hypnosis_fantasy",
+    "category": "fetish",
+    "label": "Being hypnotised into it",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "the fantasy of being put under and doing whatever she is told - pure play, a word to bring her back",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hypnotising_him",
+    "category": "fetish",
+    "label": "Hypnotising him",
+    "weight": 1.0,
+    "rarity": "extremely_rare",
+    "prompt_hint": "the fantasy of putting him under, a soft voice and a countdown, and him doing exactly as she says",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "monster_fantasy",
+    "category": "fetish",
+    "label": "A monster fantasy",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "something big, not quite human and very interested in her - pure fantasy, and she has read a lot of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "tentacle_fantasy",
+    "category": "fetish",
+    "label": "Tentacles, in fantasy",
+    "weight": 1.0,
+    "rarity": "extremely_rare",
+    "prompt_hint": "the full tentacle fantasy, from the art she will admit to having saved",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "ass_worship",
+    "category": "fetish",
+    "label": "Having her ass worshipped",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "kissed, bitten, grabbed and admired, and she will present it for exactly that",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "thighs_around_his_head",
+    "category": "fetish",
+    "label": "Her thighs around his head",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "squeezing while he eats her out, holding him right there",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "size_queen",
+    "category": "fetish",
+    "label": "Size queen",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "she likes them big and says so, with a ruler in her voice",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "dollification",
+    "category": "fetish",
+    "label": "Being his doll",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "dressed, posed, arranged and used like a pretty doll, told to stay just like that",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "maid_roleplay",
+    "category": "fetish",
+    "label": "Playing his maid",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "the outfit, the \"yes sir\", and being punished for missing a spot",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "findom",
+    "category": "fetish",
+    "label": "Making him pay tribute",
+    "weight": 1.0,
+    "rarity": "extremely_rare",
+    "prompt_hint": "financial domination as play - he treats her, she decides what he has earned",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "gagged",
+    "category": "fetish",
+    "label": "Being gagged",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "a gag in her mouth, drool and all, only able to answer with her eyes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "nipple_clamps",
+    "category": "fetish",
+    "label": "Nipple clamps",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "the bite of them going on and the rush when they come off",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hotwife_night",
+    "category": "fantasy_scenario",
+    "label": "Another man, and him in the chair",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a man she picked, him watching from across the room, and her looking at him the whole time",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing",
+        "voyeurism"
+      ],
+      "joiner": "man",
+      "dom_sub": -1,
+      "sides": {
+        "voyeurism": "his"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "hypnosis_session",
+    "category": "fantasy_scenario",
+    "label": "A hypnosis session",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a soft voice, a countdown, and her going under - or him, if she is the one counting",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay",
+        "bdsm_power"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "monster_in_the_woods",
+    "category": "fantasy_scenario",
+    "label": "Something in the woods",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a cabin, a storm, and something not quite human at the door that wants her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "maid_for_a_day",
+    "category": "fantasy_scenario",
+    "label": "His maid for a day",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "the uniform, a list of chores, and every mistake counted",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay",
+        "bdsm_power"
+      ],
+      "dom_sub": -1,
+      "sides": {
+        "bdsm_power": "her"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "soaked",
+    "category": "fantasy_scenario",
+    "label": "Wrecking the sheets",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a whole night of it until the bed is soaked and neither of them cares",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "messy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "worship_her_body",
+    "category": "fantasy_scenario",
+    "label": "Worshipping every inch of her",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "her lying back, him taking an hour, and her not letting him skip anything",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "praise"
+      ],
+      "dom_sub": 1,
+      "sides": {
+        "praise": "her"
+      }
+    },
+    "enabled": true
   }
 ]

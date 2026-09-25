@@ -2108,23 +2108,8 @@ under it, so choosing whom to talk to was a guess. It now reads, top to bottom:
 No photo; that stays behind the swap, where the image spend is. Languages left the card to
 keep it to that format; they are still in her profile.
 
-**How the three are picked** (`engine/profilecard.ts`, computed from her seed, nothing
-stored, so every existing character has them at once):
-- **Candidates:** a visible non-human species, personality, style, who she is in bed, her
-  signature kink (her first fetish, always from a domain she is into), her job, and her
-  relationship status unless it is plain single.
-- **Scoring:** how rare the rolled value is, plus a lean towards sexuality and style over
-  job, the same lesson as the bio work.
-- **Balance:** one per group, and a second intimate trait only when it is rare enough to
-  beat a penalty. Without that, 60% of cards were two thirds sex. Now almost every card has
-  exactly one intimate trait, and fewer than 4% have two.
-- **Species:** a species that shows in any photo always leads. One she can hide (witch,
-  succubus, angel, android, ...) is hers to reveal and never goes on the card, and neither
-  does her big secret.
-- **Ties** break the same way every time, so a card never reshuffles between loads.
-
-Measured over 3000 cards, each trait's share of cards: style 82%, personality 65%, in bed
-60%, a kink 37%, job 29%, relationship status 20%.
+**The three are her core** - see [her core drives what she talks about](#her-core-drives-what-she-talks-about)
+below for how they are picked and what they do beyond the card.
 
 Whatever intimate trait the card showed counts as found out once you match. You swiped
 knowing it, so it is in her profile and the Director treats it as known rather than
@@ -2141,6 +2126,107 @@ Ages are drawn on a triangular curve across whatever band is set, so the middle 
 and the edges are not — the same shape the fixed 18–42 roll had, rescaled. 18 is a hard
 floor enforced at the profile, at the clamp and again at the roll, and a range saved back to
 front is sorted rather than matching nothing.
+
+### Her core drives what she talks about
+
+Every character used to tend her whole attribute list evenly, so every chat circled the same
+spread, above all her job. The prompts named her job on every turn: the moment block said
+"Your work: ..." and asked for "the actual shift", and the chat brief sent her to "your job
+and your day". Everyone came out as the same well-rounded person, and nobody stood out.
+
+Now three traits are **her core** (`seed.core`, picked in `engine/profilecard.ts`). They are
+on her swipe card and they shape every prompt; the rest of her seed is flavour.
+
+**The candidates are broad, so cores vary:**
+- a visible species
+- personality, humour, how she texts, how she talks dirty
+- style, what she is proudest of
+- who she is in bed, her signature move, one or two of her kinks
+- her job, her relationship status, her main hobby
+
+One woman is two kinks and her personality; the next is her style, her job and how she
+flirts.
+
+**How they are picked:**
+- **Scoring:** a softened rarity score, so one extremely rare kink does not always win, plus
+  a per-category lean and a large random jitter.
+- **Groups:** one pick per group, except kinks, which can take two.
+- **Intimate traits:** at most two, and a second one has to beat a penalty.
+- **Species:** a visible species always makes it. A hidden species never does, and neither
+  does her big secret.
+
+Measured over 4000 characters:
+- 189 different combinations; the most common is only 3%.
+- 22% of cores have two intimate traits, and 3% are two kinks.
+- Job is core for about a quarter of characters.
+
+**When it is picked:** once at generation, and stored. Existing characters get theirs on first
+load, keyed on their id so it matches their card.
+
+**What it changes:**
+- **What defines you** (`coreBlock`) sits in her chat and date prompts and in the Director's.
+  It lists her three and says to lean on them, again and again. Everything else is true but is
+  flavour for when he asks or the moment calls for it. A job outside the core is explicitly a
+  passing detail.
+- **Her life block** shows a non-core job as "Work (background - mention in passing, not a
+  topic)". Interests are flavour; only a hobby that is part of her core gets its full
+  description.
+- **The moment block** no longer spells out her job every turn. It names it fully only when it
+  is core, and asks for something that sounds like her core instead of a work report.
+- **The chat brief:** "Be unmistakably you" points at her core instead of "your job and your
+  day". Ordinary facts are answered when he asks, and expanded on only when they touch her
+  core.
+- **The Director** builds most goals from her core; the rest of her seed is flavour, not a
+  list to work through.
+- **Other places:** `describeSeed` (the dossier writer and the Director) opens with her core.
+  Her status is told to come mostly from her core, and the "her story" nudge points there too.
+
+### Her life keeps happening
+
+Each matched character has three or four **storylines** of her own (`engine/life.ts`,
+`relationships.life`): a feud with her landlord, a coffin-shaped shelf she is hunting down, her
+sister's wedding and the lilac dress. They are written by the model from her dossier and
+mostly out of her core, with at most one about work and only when work is core. Nothing is
+picked from a topic list, so a goth girl's week is not a nurse's.
+
+Her status refresh (every 4-12 hours, already a call) carries them. It sees the list, picks
+the one that moved on, says in a sentence what just happened, and flags it if the storyline is
+over. That costs a few output tokens, not a new call. When fewer than three are still running,
+one small call writes new ones, told which she already has. Finished ones are kept for a while
+so she can say how they ended.
+
+The Director sees all of them, freshest first, as material for when the chat needs something
+new. She sees the two freshest in her moment block, as something true of her week that she can
+bring up when she feels like it.
+
+### More kinks, styles and personalities
+
+**Kinks:**
+- Hotwife, and cuckolding him. Both need another man, so they follow "Who joins in".
+- Breeding kink, and him finishing inside her.
+- A light slap across her face, and slapping his.
+- Words written on her body, and lipstick marks all over him.
+- Worshipping his muscles, and having hers worshipped.
+- Orgasm control, both ways.
+- Playing her first time again (adults only).
+- Fantasy only: being hypnotised, or hypnotising him; monsters; tentacles.
+- Ass worship, her thighs around his head, size queen.
+- Being his doll, playing his maid, financial domination, being gagged, nipple clamps.
+
+There is a new **Messy** kink domain (spit play, squirting, soaked sheets, and sweat licking,
+which was unmapped). It comes with its own hard limit, "Nothing messy". There are six new
+fantasy scenarios: another man with him in the chair, a hypnosis session, something in the
+woods, his maid for a day, wrecking the sheets, and worshipping every inch of her.
+
+**Styles:** coquette, clean girl, office siren, tomboy, gyaru, K-pop idol, grunge, cyberpunk,
+surfer girl, biker, Bratz doll, rockstar girlfriend, mermaidcore, pastel goth, Old Hollywood,
+witchcore and decora. Each has image prompts, photo scenes, a boldness level, and weights for
+the looks, voices and jobs that fit her.
+
+**Personalities:** brat, tsundere, femme fatale, airhead, mean girl, theatre kid, witchy,
+party girl, jock, nerd, girlboss, southern belle, conspiracy theorist, nihilist and spoiled
+princess. Each has sexual ranges, pace, photo attitude and weights that lean the rest of her
+roll: a brat leans towards the bratty-sub persona, a femme fatale towards the commanding domme.
 
 ### A rarity badge, spoiler-free
 

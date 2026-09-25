@@ -39,6 +39,7 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'dates', column: 'npcs', definition: "TEXT NOT NULL DEFAULT '[]'" },
   { table: 'dates', column: 'company', definition: "TEXT NOT NULL DEFAULT ''" },
   { table: 'relationships', column: 'circle', definition: "TEXT NOT NULL DEFAULT '[]'" },
+  { table: 'relationships', column: 'life', definition: "TEXT NOT NULL DEFAULT '[]'" },
   { table: 'user_profile', column: 'avatar_emoji', definition: "TEXT NOT NULL DEFAULT ''" },
   { table: 'user_profile', column: 'card', definition: "TEXT NOT NULL DEFAULT '{}'" },
   { table: 'images', column: 'aspect', definition: 'TEXT' },

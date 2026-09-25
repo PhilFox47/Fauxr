@@ -12,6 +12,30 @@ export type KinkStance = 'into' | 'curious' | 'soft_no' | 'hard_no';
  */
 export type KinkSide = 'her' | 'his' | 'both';
 
+/**
+ * One of the storylines running through her life (engine/life.ts): the colleague she is
+ * feuding with, the tattoo she has booked, her sister's wedding. Written from her own seed,
+ * moved on by her status refreshes, and there for her to bring up.
+ */
+export interface LifeThread {
+  id: string;
+  title: string;
+  /** What the storyline is about. */
+  arc: string;
+  /** Where it stands right now: the latest thing that happened. */
+  now: string;
+  updated_at: string;
+  resolved?: boolean;
+}
+
+/** One of her three core traits: which attribute, its discovery key and its card caption. */
+export interface CoreEntry {
+  category: string;
+  id: string;
+  key: string;
+  caption: string;
+}
+
 export interface Tattoo { motif: string; position: string }
 export interface Piercing { type: string; position: string }
 export interface OnlineWindow { weekday: number; from: string; to: string }
@@ -144,6 +168,11 @@ export interface CharacterSeed {
    * fetishes in a domain are drawn from this side only. Filled in by rollKinkSides().
    */
   kink_sides?: Record<string, KinkSide>;
+  /**
+   * The three things that define her (profilecard.ts): on her swipe card, and what every
+   * prompt builds her around. The rest of the seed is flavour.
+   */
+  core?: CoreEntry[];
   fetishes: string[];
   hard_limits: string[];
 

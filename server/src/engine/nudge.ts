@@ -203,7 +203,7 @@ export function pickNudge(
     return {
       id: 'her_story',
       text:
-        'Tell him something about you he does not know yet - a story, a strong opinion, something that ' +
+        'Tell him something about you he does not know yet, from what defines you - a story, a strong opinion, something that ' +
         'happened this week, a confession, a thing only you would care about. Yours, specific, and told ' +
         'the way you tell things. No question at the end needed.',
     };

@@ -1,92 +1,127 @@
-import { find, RARITY_WEIGHT } from '../db/attributes.js';
-import type { CharacterSeed } from '../types.js';
+import { randomUUID } from 'node:crypto';
+import { find } from '../db/attributes.js';
+import type { CharacterSeed, CoreEntry } from '../types.js';
 
 /**
- * The three things on her swipe card that say who she is.
+ * Her core: the three things that define her.
  *
- * The card used to be a handle, an age, her languages and a bio, which made choosing whom to
- * talk to a guess. Now it names three of her defining traits. They are picked here from her
- * seed, not stored, so every existing character has them the moment this ships:
- * - candidates are her species (when she is not human), personality, style, who she is in
- *   bed, her signature kink, her job, and her relationship status when it is not plain single;
- * - each scores by how rare the rolled value is, plus a lean towards what the app is about
- *   (sexuality and style over job and living situation - the bio work had the same lesson);
- * - no two from the same group, and a second intimate trait (in bed plus a kink) only when it
- *   is rare enough to beat the penalty - measured without it, 60% of cards were two thirds
- *   sex, which drowned the personality and style that make the choice interesting;
- * - a non-human species always makes it, since nothing else on the card would matter more -
- *   but only one that shows in any photo anyway. A species she can hide (a witch, a succubus,
- *   an angel) is hers to reveal, a bit of play the card must not spoil; the bio skips it too.
- *   Her big secret is never a candidate.
- * A small per-character jitter breaks ties the same way every time, so the card is stable.
+ * They are printed on her swipe card, and they are what she is built around in every prompt
+ * (coreBlock in blocks.ts): what she brings up, what colours how she flirts, what he remembers
+ * her by. Everything else in her seed is true and available but is flavour. Before this every
+ * character tended her whole attribute list evenly, so every chat circled the same spread -
+ * above all her job, which the prompts named on every turn - and nobody stood out.
+ *
+ * For that to make the cast varied, the cores themselves have to vary, so the candidates are
+ * broad: a visible species, personality, humour, how she texts, how she talks dirty, style,
+ * what she is proudest of, who she is in bed, her signature move, one or two of her kinks, her
+ * job, her relationship status and her main hobby. One woman is two kinks and her personality;
+ * the next is her style, her job and how she flirts.
+ * - Each candidate scores by how rare the rolled value is (softened, so one extremely rare
+ *   kink does not win every time), a per-category lean, and a random jitter large enough that
+ *   two similar women still come out with different cores.
+ * - One per group, except kinks, which can take two slots. At most two intimate traits, and a
+ *   second one has to beat a penalty - most cores are one part sex, two parts person.
+ * - A species that shows in any photo always makes it. One she can hide (a witch, a succubus,
+ *   an angel) is hers to reveal and never does; neither does her big secret.
+ * Picked once at generation and stored (seed.core); existing characters get theirs on first
+ * load (repo.ts), with a jitter keyed on their id so it is the same every time.
  */
 
-export interface CoreTrait {
-  /** The discovery key this trait corresponds to (see discovery.ts). */
-  key: string;
-  /** What kind of thing it is, as a small caption: "Style", "In bed", "Into". */
-  caption: string;
+export interface CoreTrait extends CoreEntry {
   label: string;
-  /** Whether it is part of her intimate side, which the card reveals up front. */
+  /** The attribute's own description, for prompts. */
+  hint: string;
+  /** Part of her intimate side, which the card reveals up front (see matching.ts). */
   intimate: boolean;
 }
 
-interface Candidate extends CoreTrait {
-  group: string;
-  score: number;
-}
-
-/** How distinctive a rolled value is: 0 for common, rising with rarity. */
-function distinct(category: string, id: string): number {
-  const weight = RARITY_WEIGHT[find(category, id)?.rarity ?? 'common'] ?? 1;
-  return -Math.log2(weight);
-}
-
-/** What a second intimate trait has to beat: about one rarity tier. */
-const SECOND_INTIMATE_PENALTY = 1.3;
+/** Softened rarity: enough to prefer the unusual, not enough to always crown the rarest roll. */
+const RARITY_SCORE: Record<string, number> = { common: 0, uncommon: 0.8, rare: 1.4, very_rare: 1.9, extremely_rare: 2.3 };
+/** How much a random roll moves each candidate; large on purpose, see above. */
+const JITTER = 2.2;
+/** What a second intimate trait has to beat. */
+const SECOND_INTIMATE_PENALTY = 0.35;
 
 /** Statuses that say nothing on a card: she is single, or between things. */
 const PLAIN_STATUS = new Set(['single', 'single_recently', 'newly_single', 'taking_a_break', 'separated', 'complicated']);
 
-/** A stable 0-1 jitter per character and trait, so ties do not flip between loads. */
-function jitter(seedKey: string): number {
+const INTIMATE = new Set(['dirty_talk', 'sexual_persona', 'signature_move', 'fetish']);
+
+interface Candidate { entry: CoreEntry; group: string; intimate: boolean; score: number }
+
+/** A 0-1 number from a string: stable for a stored character, fresh for a new one. */
+function unit(s: string): number {
   let h = 2166136261;
-  for (let i = 0; i < seedKey.length; i++) h = Math.imul(h ^ seedKey.charCodeAt(i), 16777619);
-  return ((h >>> 0) % 1000) / 1000;
+  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  return ((h >>> 0) % 10007) / 10007;
 }
 
-export function coreTraits(seed: CharacterSeed, characterId: string): CoreTrait[] {
-  const out: Candidate[] = [];
-  const add = (group: string, caption: string, category: string, id: string | undefined, key: string, lean: number, intimate = false) => {
-    const attr = id ? find(category, id) : undefined;
-    if (!attr) return;
-    out.push({ group, caption, label: attr.label, key, intimate, score: distinct(category, id!) + lean + jitter(characterId + key) * 0.6 });
-  };
+interface Option { category: string; id?: string; key: string; caption: string; group: string; lean: number; force?: boolean }
 
-  if (seed.species && seed.species !== 'human' && (find('species', seed.species)?.extra?.visibility ?? 'profile') === 'profile') {
-    add('identity', 'Species', 'species', seed.species, 'species', 100);
-  }
-  add('identity', 'Personality', 'archetype', seed.archetype, 'archetype', 1.0);
-  add('look', 'Style', 'clothing_style', seed.clothing_style, 'style', 1.1);
-  add('bed', 'In bed', 'sexual_persona', seed.sexual_persona, 'sexual_persona', 1.2, true);
-  // Her first fetish is the signature one, always from a domain she is into (generator.ts).
-  if (seed.fetishes?.[0]) add('kink', 'Into', 'fetish', seed.fetishes[0], `fetish:${seed.fetishes[0]}`, 1.0, true);
-  add('life', 'Job', 'occupation', seed.occupation, 'occupation', 0);
-  if (seed.relationship_status && !PLAIN_STATUS.has(seed.relationship_status)) {
-    add('life', 'Status', 'relationship_status', seed.relationship_status, 'relationship_status', 0.4);
-  }
+function options(seed: CharacterSeed): Option[] {
+  const species = seed.species && seed.species !== 'human' ? find('species', seed.species) : undefined;
+  return [
+    ...(species && (species.extra?.visibility ?? 'profile') === 'profile'
+      ? [{ category: 'species', id: seed.species, key: 'species', caption: 'Species', group: 'identity', lean: 0, force: true }]
+      : []),
+    { category: 'archetype', id: seed.archetype, key: 'archetype', caption: 'Personality', group: 'identity', lean: 0.55 },
+    { category: 'humor_type', id: seed.humor_type, key: 'humor_type', caption: 'Humour', group: 'voice', lean: 0.35 },
+    { category: 'texting_persona', id: seed.texting_persona, key: 'texting_persona', caption: 'Texts like', group: 'voice', lean: 0.5 },
+    { category: 'dirty_talk', id: seed.dirty_talk, key: 'dirty_talk', caption: 'Talks dirty', group: 'voice', lean: 0.8 },
+    { category: 'clothing_style', id: seed.clothing_style, key: 'style', caption: 'Style', group: 'look', lean: 0.55 },
+    { category: 'body_pride', id: seed.body_pride, key: 'body_pride', caption: 'Proudest of', group: 'look', lean: 0.5 },
+    { category: 'sexual_persona', id: seed.sexual_persona, key: 'sexual_persona', caption: 'In bed', group: 'bed', lean: 0.6 },
+    { category: 'signature_move', id: seed.signature_move, key: 'signature_move', caption: 'Her move', group: 'bed', lean: 0.4 },
+    ...(seed.fetishes ?? []).slice(0, 2).map((f, i) => ({
+      category: 'fetish', id: f, key: `fetish:${f}`, caption: 'Into', group: 'kink', lean: i === 0 ? 0.6 : 0.45,
+    })),
+    { category: 'occupation', id: seed.occupation, key: 'occupation', caption: 'Job', group: 'life', lean: 0.25 },
+    ...(seed.relationship_status && !PLAIN_STATUS.has(seed.relationship_status)
+      ? [{ category: 'relationship_status', id: seed.relationship_status, key: 'relationship_status', caption: 'Status', group: 'life', lean: 0.3 }]
+      : []),
+    ...(seed.hobbies?.[0] ? [{ category: 'hobby', id: seed.hobbies[0], key: `hobby:${seed.hobbies[0]}`, caption: 'Lives for', group: 'life', lean: 0.2 }] : []),
+  ];
+}
 
-  const picked: CoreTrait[] = [];
-  const used = new Set<string>();
+/** Choose her three. `jitterKey` is her id for a stored character, anything random for a new one. */
+export function pickCore(seed: CharacterSeed, jitterKey: string = randomUUID()): CoreEntry[] {
+  const pool: Candidate[] = [];
+  for (const o of options(seed)) {
+    const attr = o.id ? find(o.category, o.id) : undefined;
+    if (!attr) continue;
+    const score = o.force ? 100 : (RARITY_SCORE[attr.rarity ?? 'common'] ?? 0) + o.lean + unit(jitterKey + o.key) * JITTER;
+    pool.push({ entry: { category: o.category, id: o.id!, key: o.key, caption: o.caption }, group: o.group, intimate: INTIMATE.has(o.category), score });
+  }
+  const picked: Candidate[] = [];
+  const perGroup: Record<string, number> = {};
   while (picked.length < 3) {
-    const hasIntimate = picked.some((p) => p.intimate);
-    const next = out
-      .filter((c) => !used.has(c.group))
-      .map((c) => ({ c, s: c.score - (c.intimate && hasIntimate ? SECOND_INTIMATE_PENALTY : 0) }))
+    const intimate = picked.filter((p) => p.intimate).length;
+    const next = pool
+      .filter((c) => !picked.includes(c))
+      .filter((c) => (perGroup[c.group] ?? 0) < (c.group === 'kink' ? 2 : 1))
+      .filter((c) => !(c.intimate && intimate >= 2))
+      .map((c) => ({ c, s: c.score - (c.intimate && intimate === 1 ? SECOND_INTIMATE_PENALTY : 0) }))
       .sort((a, b) => b.s - a.s)[0]?.c;
     if (!next) break;
-    used.add(next.group);
-    picked.push({ key: next.key, caption: next.caption, label: next.label, intimate: next.intimate });
+    picked.push(next);
+    perGroup[next.group] = (perGroup[next.group] ?? 0) + 1;
   }
-  return picked;
+  return picked.map((p) => p.entry);
+}
+
+/** Her core as displayable, prompt-ready traits: the stored one, or picked now for an old seed. */
+export function coreTraits(seed: CharacterSeed, characterId: string): CoreTrait[] {
+  const entries = seed.core?.length ? seed.core : pickCore(seed, characterId);
+  return entries
+    .map((e) => {
+      const attr = find(e.category, e.id);
+      if (!attr) return null;
+      return { ...e, label: attr.label, hint: attr.prompt_hint || attr.label, intimate: INTIMATE.has(e.category) };
+    })
+    .filter((t): t is CoreTrait => !!t);
+}
+
+/** Whether one of her fields is part of her core - her job, say. */
+export function isCore(seed: CharacterSeed, category: string): boolean {
+  return (seed.core ?? []).some((e) => e.category === category);
 }

@@ -18650,5 +18650,412 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "coquette",
+    "category": "clothing_style",
+    "label": "Coquette",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "bows in her hair, lace, pastel pink and ribbons - sweet on purpose, and she knows exactly what sweet does",
+    "image_prompt": "coquette outfit, pastel pink lace top, satin ribbon bows in her hair, frilly mini skirt, pearl jewellery, soft blush makeup",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "soft_girl": 1,
+        "cute_texter": 2.5,
+        "affectionate_texter": 2,
+        "baking": 2,
+        "dyed_pastel": 2,
+        "pastel_frills": 3
+      },
+      "photo_scene": "a pink bedroom with fairy lights and a vanity full of perfume bottles, a lace-curtained window",
+      "photo_boldness": 0.2
+    },
+    "enabled": true
+  },
+  {
+    "id": "clean_girl",
+    "category": "clothing_style",
+    "label": "Clean girl",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "slicked-back bun, gold hoops, glowing skin and a matching set - effortless in a way that takes effort",
+    "image_prompt": "clean girl aesthetic, slicked back bun, gold hoop earrings, dewy skin, neutral fitted matching set",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "yoga": 2,
+        "minimal": 2,
+        "low_bun": 3,
+        "small_gold_hoops": 3
+      },
+      "photo_scene": "a bright white bathroom with plants, a pilates studio mirror, a sunny kitchen with an iced coffee",
+      "photo_boldness": 0.2
+    },
+    "enabled": true
+  },
+  {
+    "id": "office_siren",
+    "category": "clothing_style",
+    "label": "Office siren",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "pencil skirt, sheer blouse, thin glasses and a look over them - the office dress code, bent as far as it goes",
+    "image_prompt": "office siren outfit, fitted pencil skirt, sheer button-up blouse, thin rectangular glasses, pointed heels, hair in a claw clip",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "glasses": 3,
+        "lawyer": 2,
+        "blunt_texter": 1.5,
+        "businesslike_texter": 2,
+        "marketing": 2
+      },
+      "photo_scene": "an empty office after hours, a glass meeting room, a lift mirror in a corporate building",
+      "photo_boldness": 0.6
+    },
+    "enabled": true
+  },
+  {
+    "id": "tomboy",
+    "category": "clothing_style",
+    "label": "Tomboy",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "baggy jeans, a boxy tee, a cap backwards and a sports bra you only see when she lifts her arms",
+    "image_prompt": "tomboy style, baggy jeans, oversized boxy t-shirt, backwards cap, trainers, sports bra peeking out",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "gaming": 2,
+        "blunt_texter": 2,
+        "gremlin_texter": 2,
+        "mechanic": 2,
+        "skater": 1.5
+      },
+      "photo_scene": "a skatepark at dusk, her messy room with a games console, a garage with a half-fixed motorbike",
+      "photo_boldness": 0.3
+    },
+    "enabled": true
+  },
+  {
+    "id": "gyaru",
+    "category": "clothing_style",
+    "label": "Gyaru",
+    "weight": 0.9,
+    "rarity": "rare",
+    "prompt_hint": "bleached hair, a deep tan or pale glam, huge lashes, platform boots and a lot of personality",
+    "image_prompt": "gyaru fashion, bleached blonde hair, dramatic false lashes, bronzed makeup, platform boots, mini skirt, layered accessories",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "japanese": 1,
+        "chaotic_texter": 2,
+        "cute_texter": 1.5,
+        "nail_art": 3
+      },
+      "photo_scene": "a neon purikura photo booth, a karaoke room, a crowded shopping street at night",
+      "photo_boldness": 0.5
+    },
+    "enabled": true
+  },
+  {
+    "id": "kpop_idol",
+    "category": "clothing_style",
+    "label": "K-pop idol",
+    "weight": 1.1,
+    "rarity": "uncommon",
+    "prompt_hint": "stage-ready even at the shops - pleated mini, oversized blazer, perfect hair and a practised wink",
+    "image_prompt": "k-pop idol style, pleated mini skirt, oversized cropped blazer, thigh-high socks, glossy hair, dewy idol makeup",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "korean": 1,
+        "cute_texter": 2,
+        "dancing": 3,
+        "dancer_build": 1.5
+      },
+      "photo_scene": "a dance practice room with a wall of mirrors, a concert light-stick glow, a bedroom with posters and a ring light",
+      "photo_boldness": 0.4
+    },
+    "enabled": true
+  },
+  {
+    "id": "grunge",
+    "category": "clothing_style",
+    "label": "Grunge",
+    "weight": 1.1,
+    "rarity": "uncommon",
+    "prompt_hint": "flannel, ripped tights, band tees and eyeliner she slept in",
+    "image_prompt": "grunge outfit, oversized flannel shirt, band t-shirt, ripped black tights, combat boots, smudged eyeliner, messy hair",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "music_scene": 2.5,
+        "deadpan_texter": 2,
+        "record_store_employee": 2
+      },
+      "photo_scene": "a sticky-floored gig venue, a dim bedroom with a guitar and fairy lights, a rainy bus stop",
+      "photo_boldness": 0.3,
+      "adds": {
+        "tattoos": 0.5,
+        "piercings": 0.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "cyberpunk",
+    "category": "clothing_style",
+    "label": "Cyberpunk",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "neon, techwear straps, a holographic jacket and hair in a colour nature never made",
+    "image_prompt": "cyberpunk fashion, holographic jacket, techwear harness straps, neon-dyed hair, LED accessories, black platform boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "dyed_vivid": 3,
+        "gaming": 2,
+        "leetspeak_texting": 2,
+        "app_developer": 2
+      },
+      "photo_scene": "a neon-lit alley in the rain, a gaming setup glowing RGB, a rooftop over a city at night",
+      "photo_boldness": 0.5,
+      "adds": {
+        "piercings": 0.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "surfer_girl",
+    "category": "clothing_style",
+    "label": "Surfer girl",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "salt in her hair, a bikini under everything and a tan line she is proud of",
+    "image_prompt": "surfer girl style, sun-bleached beach waves, string bikini under an open shirt, shell necklace, tanned skin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "surfing": 3,
+        "beach_waves": 3,
+        "sun_kissed": 2
+      },
+      "photo_scene": "a beach at golden hour with a board, a van with the back doors open, an outdoor shower",
+      "photo_boldness": 0.6
+    },
+    "enabled": true
+  },
+  {
+    "id": "biker_chick",
+    "category": "clothing_style",
+    "label": "Biker",
+    "weight": 0.9,
+    "rarity": "rare",
+    "prompt_hint": "leather jacket, ripped jeans, boots with a buckle and helmet hair she does not apologise for",
+    "image_prompt": "biker style, black leather motorcycle jacket, ripped skinny jeans, heavy buckle boots, fingerless gloves",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "motorcycles": 3,
+        "mechanic": 2,
+        "blunt_texter": 2,
+        "leather_wearing": 1.5
+      },
+      "photo_scene": "next to her motorbike in a garage, a roadside diner at night, a gravel lay-by with the engine ticking",
+      "photo_boldness": 0.6,
+      "adds": {
+        "tattoos": 1
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "bratz_doll",
+    "category": "clothing_style",
+    "label": "Bratz doll",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "glossy overlined lips, huge hair, baby tee, low-rise everything - a doll who talks back",
+    "image_prompt": "bratz doll style, glossy overlined lips, voluminous hair, cropped baby tee, low-rise mini skirt, platform heels, rhinestones",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "glam": 2,
+        "nail_art": 3,
+        "chaotic_texter": 2,
+        "flirty_texting": 2
+      },
+      "photo_scene": "a hot-pink bedroom full of mirrors, a mall bathroom with bad lighting and good angles",
+      "photo_boldness": 0.6
+    },
+    "enabled": true
+  },
+  {
+    "id": "rockstar_gf",
+    "category": "clothing_style",
+    "label": "Rockstar girlfriend",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "leopard print, a band tee cut into a crop, smudged liner and someone else's leather jacket",
+    "image_prompt": "rockstar girlfriend style, leopard print coat, cropped band t-shirt, mini skirt, smudged black eyeliner, messy blowout hair, knee boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "music_scene": 3,
+        "nightlife": 2,
+        "flirty_texting": 1.5
+      },
+      "photo_scene": "backstage with a broken mirror, a hotel room after a gig, a tour-bus window",
+      "photo_boldness": 0.6,
+      "adds": {
+        "tattoos": 0.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "mermaidcore",
+    "category": "clothing_style",
+    "label": "Mermaidcore",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "iridescent fabrics, shell details, pearls in her hair and a lot of sheer",
+    "image_prompt": "mermaidcore outfit, iridescent sheer fabric, shell bralette, pearls woven into long wavy hair, shimmering body glitter",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "swimming": 2.5
+      },
+      "photo_scene": "a sea cave, a bath full of bubbles and candles, a pool lit blue at night",
+      "photo_boldness": 0.5
+    },
+    "enabled": true
+  },
+  {
+    "id": "pastel_goth",
+    "category": "clothing_style",
+    "label": "Pastel goth",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "goth with a sugar rush - lilac hair, black lace, bat clips and a cross in baby pink",
+    "image_prompt": "pastel goth style, lavender hair, black lace dress with pastel pink accents, bat hair clips, platform shoes, choker",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "dyed_vivid": 2.5,
+        "thin_choker": 2,
+        "horror": 2,
+        "cute_texter": 1.5
+      },
+      "photo_scene": "a bedroom with a black canopy and pastel plushies, a cemetery in spring",
+      "photo_boldness": 0.4,
+      "adds": {
+        "piercings": 0.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "old_hollywood",
+    "category": "clothing_style",
+    "label": "Old Hollywood",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "satin gowns, finger waves, a red lip and gloves she takes off one finger at a time",
+    "image_prompt": "old hollywood glamour, satin bias-cut gown, finger-wave hair, red lipstick, long evening gloves, pearl earrings",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "vintage": 2,
+        "eloquent_texter": 2,
+        "film": 2,
+        "bold_lip": 3
+      },
+      "photo_scene": "a velvet armchair and a tall gilt mirror, a champagne bar, a vintage bathroom with pink tiles",
+      "photo_boldness": 0.4
+    },
+    "enabled": true
+  },
+  {
+    "id": "witchcore",
+    "category": "clothing_style",
+    "label": "Witchcore",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "layered black skirts, silver rings on every finger, crystals and a velvet cloak for good measure",
+    "image_prompt": "witchcore style, long layered black skirt, velvet cloak, silver rings, crystal pendant, dark lipstick",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "tarot": 3,
+        "witch": 3,
+        "astrology": 2,
+        "dark": 2
+      },
+      "photo_scene": "a candlelit room of crystals and herbs, a foggy forest path, an altar by a window at midnight",
+      "photo_boldness": 0.3,
+      "adds": {
+        "piercings": 0.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "decora",
+    "category": "clothing_style",
+    "label": "Decora",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "Harajuku decora - clips, stickers, colour on colour and far too many accessories",
+    "image_prompt": "decora kei fashion, dozens of colourful hair clips, layered bright clothes, stickers on her cheeks, plastic bracelets",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "chaotic_texter": 2.5,
+        "uwu_texting": 2,
+        "cute_texter": 2
+      },
+      "photo_scene": "a colourful bedroom stacked with plushies, a purikura booth, a crosswalk in Harajuku",
+      "photo_boldness": 0.2
+    },
+    "enabled": true
   }
 ]

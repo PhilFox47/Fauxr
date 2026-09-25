@@ -2,8 +2,9 @@ import { db, nowIso } from './db/index.js';
 import { byCategory, find } from './db/attributes.js';
 import { newContext, roll } from './engine/dice.js';
 import { rollChatGames, rollDomainStance, rollKinkSides, wrongEnd } from './engine/kinks.js';
+import { pickCore } from './engine/profilecard.js';
 import type {
-  Character, CharacterSeed, CharacterState, DateNpc, DateSession, Direction, Flags, KinkSide, Ledger,
+  Character, CharacterSeed, CharacterState, DateNpc, DateSession, Direction, Flags, KinkSide, Ledger, LifeThread,
   Location, Relationship, UserProfile,
 } from './types.js';
 
@@ -293,12 +294,25 @@ function backfillIntimateDetails(characterId: string, seed: CharacterSeed): Char
   return seed;
 }
 
+/**
+ * Her core (profilecard.ts), picked once and stored. Characters made before cores existed get
+ * theirs on first load, keyed on their id so the pick is the one their card already showed.
+ */
+function backfillCore(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.core?.length) return seed;
+  if (!byCategory('archetype').length) return seed; // attribute table not seeded yet
+  seed.core = pickCore(seed, characterId);
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
   let seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
   seed = backfillSpecies(row.id, seed);
   seed = backfillCommStyles(row.id, seed);
   seed = backfillSexualProfile(row.id, seed);
   seed = backfillIntimateDetails(row.id, seed);
+  seed = backfillCore(row.id, seed);
   return {
     id: row.id,
     username: row.username,
@@ -780,6 +794,20 @@ export function getCircle(characterId: string): DateNpc[] {
 
 export function setCircle(characterId: string, circle: DateNpc[]): void {
   db.prepare('UPDATE relationships SET circle = ? WHERE character_id = ?').run(JSON.stringify(circle), characterId);
+}
+
+/** Her storylines (engine/life.ts). Its own column, like the circle, for the same reason. */
+export function getLife(characterId: string): LifeThread[] {
+  const row = db.prepare('SELECT life FROM relationships WHERE character_id = ?').get(characterId) as any;
+  try {
+    return JSON.parse(row?.life ?? '[]');
+  } catch {
+    return [];
+  }
+}
+
+export function setLife(characterId: string, threads: LifeThread[]): void {
+  db.prepare('UPDATE relationships SET life = ? WHERE character_id = ?').run(JSON.stringify(threads), characterId);
 }
 
 /**

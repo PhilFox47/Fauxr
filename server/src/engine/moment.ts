@@ -1,5 +1,7 @@
 import { find } from '../db/attributes.js';
 import type { Character } from '../types.js';
+import { coreTraits, isCore } from './profilecard.js';
+import { lifeLinesForHer } from './life.js';
 
 /**
  * What is going on in her life at this exact moment, assembled in code from the clock and
@@ -41,21 +43,25 @@ export function describeHerMoment(character: Character, now = new Date()): strin
 
   const lines = [
     `Right now it is ${DAYS[now.getDay()]}, ${String(hour).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} - ${partOfDay(hour)}. ${dayShape(now)}`,
-    `Your work: ${hint('occupation', seed.occupation)}`,
-    `Where you are living: ${hint('living_situation', seed.living_situation)}`,
+    // Her work used to be spelled out here on every single turn, "the actual shift" and all,
+    // which is a large part of why every character kept talking about her job. It is named
+    // in full only when it is one of the things that define her.
+    isCore(seed, 'occupation')
+      ? `Your work: ${hint('occupation', seed.occupation)}`
+      : `Your work, in the background: ${find('occupation', seed.occupation)?.label ?? seed.occupation}`,
+    `Where you are living: ${find('living_situation', seed.living_situation)?.label ?? seed.living_situation}`,
   ];
-
-  if (seed.hobbies.length) {
-    lines.push(`Things you actually do with your time: ${seed.hobbies.map((h) => find('hobby', h)?.label ?? h).join(', ')}`);
-  }
   if (hour >= 23 || hour < 5) {
     lines.push('It is very late. Either you cannot sleep, or you are out, or you are about to go to bed. Whichever it is, it is true and it shows.');
   }
 
+  const life = lifeLinesForHer(character.id);
+  if (life) lines.push(life);
+  const core = coreTraits(seed, character.id).map((t) => t.label.toLowerCase()).join(', ');
   lines.push(
     'You have been doing something with your day, and it did not stop when he messaged you. ' +
-      'If you mention it, be specific: the actual shift, the actual person, the actual thing that went wrong. ' +
-      'Never invent a job or a life that contradicts the above.',
+      `If you mention it, be specific, and let it be something that sounds like you${core ? ` (${core})` : ''} ` +
+      'rather than a work report. Never invent a job or a life that contradicts the above.',
   );
   return lines.join('\n');
 }

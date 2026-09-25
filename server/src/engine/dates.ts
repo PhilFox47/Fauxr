@@ -13,7 +13,7 @@ import {
 } from '../repo.js';
 import type { Character, DateSession, Location, Relationship } from '../types.js';
 import {
-  appearanceBlock, fantasiesBlock, historyBlock, identityBlock, interestsBlock, languageBlock,
+  appearanceBlock, fantasiesBlock, historyBlock, coreBlock, identityBlock, interestsBlock, languageBlock,
   ledgerBlock, lifeBlock, moodBlock, quirksBlock, seedBlock, sexualBlock, speechStyleBlock,
   spiceBlock, userBlock,
 } from './blocks.js';
@@ -199,6 +199,7 @@ function buildDatePrompt(
       ? historyBlock(transcript, character, user)
       : OPENING_NOTE,
     identity_block: identityBlock(character, flags),
+    core_block: coreBlock(character),
     speech_style_block: speechStyleBlock(seed),
     quirks_block: quirksBlock(seed),
     appearance_block: appearanceBlock(seed),

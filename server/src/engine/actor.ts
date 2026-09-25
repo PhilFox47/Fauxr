@@ -7,7 +7,7 @@ import { render } from '../prompts/render.js';
 import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Relationship } from '../types.js';
 import {
   appearanceBlock, communicationBlock, continuityBlock, directionBlock, fantasiesBlock, historyBlock,
-  identityBlock, interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
+  coreBlock, identityBlock, interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
   sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
 import { describeHim } from './discovery.js';
@@ -196,6 +196,7 @@ function buildPrompt(
         'see his. Until he swaps, you cannot send photos: leave "photo_offer" null. You can tease ' +
         'him about what he is missing, describe it instead, or nudge him to swap.',
     identity_block: identityBlock(character, flags),
+    core_block: coreBlock(character),
     communication_block: communicationBlock(seed),
     quirks_block: quirksBlock(seed),
     // She always knows all of herself. Nothing here is gated on how far things have got.

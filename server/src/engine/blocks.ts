@@ -5,6 +5,7 @@ import { describeSeed } from './generator.js';
 import { freshThreads, pruneThreads } from './state.js';
 import { chatPhotoLine } from './photolevel.js';
 import { sideDetail } from './kinks.js';
+import { coreTraits, isCore } from './profilecard.js';
 
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
@@ -139,9 +140,30 @@ export function appearanceBlock(seed: CharacterSeed): string {
   ].filter(Boolean).join('\n');
 }
 
+/**
+ * The three things that define her, for every prompt that plays her. The rest of her seed is
+ * still there, but as flavour - before this, every character tended her whole attribute list
+ * evenly and they all sounded like the same well-rounded person, above all about work.
+ */
+export function coreBlock(character: Character): string {
+  const traits = coreTraits(character.seed, character.id);
+  if (!traits.length) return '';
+  const jobIsCore = traits.some((t) => t.category === 'occupation');
+  return [
+    'Three things are the heart of you. They are what you bring up, what colours how you flirt and ' +
+      'what he will remember you by - lean on them, again and again, in your own way:',
+    ...traits.map((t) => `- ${t.caption}: ${t.label} - ${t.hint}`),
+    'Everything else about you below is true and there when it fits, but it is flavour: it comes up ' +
+      'when he asks or the moment calls for it, never as what you steer towards.' +
+      (jobIsCore ? '' : ' Your job especially is a passing detail - a word here and there, not a topic.'),
+  ].join('\n');
+}
+
 export function lifeBlock(seed: CharacterSeed): string {
   return [
-    `Work: ${hint('occupation', seed.occupation)}`,
+    isCore(seed, 'occupation')
+      ? `Work: ${hint('occupation', seed.occupation)}`
+      : `Work (background - mention in passing, not a topic): ${label('occupation', seed.occupation)}`,
     `Living: ${hint('living_situation', seed.living_situation)}`,
     `Where you stand romantically right now: ${hint('relationship_status', seed.relationship_status)}`,
     `Social energy: ${hint('social_energy', seed.social_energy)}`,
@@ -149,9 +171,11 @@ export function lifeBlock(seed: CharacterSeed): string {
 }
 
 export function interestsBlock(seed: CharacterSeed): string {
+  // A hobby that is part of her core gets its full description; the rest are flavour.
+  const coreHobby = (seed.core ?? []).find((e) => e.category === 'hobby')?.id;
   return [
-    `Into: ${seed.interests.map((i) => `${label('interest', i)} (${hint('interest', i)})`).join('; ')}`,
-    `Does: ${seed.hobbies.map((h) => `${label('hobby', h)} (${hint('hobby', h)})`).join('; ')}`,
+    `Into (flavour): ${seed.interests.map((i) => label('interest', i)).join(', ')}`,
+    `Does: ${seed.hobbies.map((h) => (h === coreHobby ? `${label('hobby', h)} (${hint('hobby', h)}) - this one is a big part of you` : label('hobby', h))).join('; ')}`,
   ].join('\n');
 }
 

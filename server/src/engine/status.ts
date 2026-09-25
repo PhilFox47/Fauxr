@@ -6,6 +6,8 @@ import { logger } from '../log.js';
 import { characterIdsOnDate, getRelationship, listActiveMatches, saveRelationship } from '../repo.js';
 import type { Character, Relationship } from '../types.js';
 import { randInt } from './dice.js';
+import { coreTraits } from './profilecard.js';
+import { advanceThread, ensureLife, threadsForStatus } from './life.js';
 
 /**
  * Her status, like a WhatsApp status: one short line she has "posted" about where she is or
@@ -73,6 +75,10 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
   const now = new Date();
   const previous = statusOf(rel)?.text;
   const hours = randInt(MIN_HOURS, MAX_HOURS);
+  // Her storylines ride along on this call: it already runs every few hours, so moving one of
+  // them on here costs a few output tokens rather than a call of its own (life.ts).
+  const threads = await ensureLife(character);
+  const threadList = threadsForStatus(threads);
 
   // Deliberately small: a handful of her own facts, the clock and her last status. The
   // dossier would make this ten times the price for a one-line answer.
@@ -82,6 +88,8 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
       `Work: ${lab('occupation', seed.occupation)}. Lives: ${lab('living_situation', seed.living_situation)}. ` +
       `Hobbies: ${(seed.hobbies ?? []).map((h) => lab('hobby', h)).join(', ') || 'none listed'}. ` +
       `Types like: ${lab('typing_style', seed.typing_style)}, emoji: ${lab('emoji_usage', seed.emoji_usage)}.`,
+    `What defines her most: ${coreTraits(seed, character.id).map((t) => `${t.caption.toLowerCase()} - ${t.label}`).join('; ')}. ` +
+      'Her status usually comes from one of these; her work only now and then.',
     `It is ${now.toLocaleDateString('en-GB', { weekday: 'long' })}, ${partOfDay(now)}, and this status will stay up for about ${hours} hours.`,
     previous ? `Her last status was: "${previous}" - this one is something new.` : '',
     '',
@@ -91,16 +99,20 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
     'sometimes mundane, sometimes a little flirty or suggestive if that is her. No hashtags,',
     'no quotation marks, not addressed to anyone.',
     '',
+    threadList ? `Things going on in her life:\n${threadList}\nPick the one that has moved on since her last status and say, in one sentence, what just happened in it - a small real development, not a summary. The status can be about it, or about something else.` : '',
+    '',
     'Reply with exactly one JSON object and nothing else:',
-    '{ "status": "...", "location": "where she physically is", "activity": "what she is doing", "outfit": "what she has on" }',
+    threadList
+      ? '{ "status": "...", "location": "where she physically is", "activity": "what she is doing", "outfit": "what she has on", "thread": 1, "happened": "what just happened in it", "resolved": false }'
+      : '{ "status": "...", "location": "where she physically is", "activity": "what she is doing", "outfit": "what she has on" }',
   ].filter(Boolean).join('\n');
 
   const fresh = getRelationship(character.id) ?? rel;
   try {
-    const out = await completeJson<{ status?: string; location?: string; activity?: string; outfit?: string }>({
+    const out = await completeJson<{ status?: string; location?: string; activity?: string; outfit?: string; thread?: number; happened?: string; resolved?: boolean }>({
       scope: 'director',
       label: `status:${character.username}`,
-      config: { ...getSettings().models.director, max_tokens: 800 },
+      config: { ...getSettings().models.director, max_tokens: 1000 },
       require: ['status'],
       messages: [{ role: 'user', content: prompt }],
     });
@@ -120,6 +132,7 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
       outfit: String(out.outfit ?? '').trim().slice(0, 200) || (fresh.mood as any)?.outfit || '',
     };
     saveRelationship(fresh);
+    advanceThread(character.id, threads, out.thread, out.happened, out.resolved);
     bus.emitEvent({ type: 'character_state', character_id: character.id, state: 'status' });
     logger.debug('director', `${character.username} posted a status`, { status: text, hours });
     return status;

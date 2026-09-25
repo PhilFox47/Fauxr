@@ -7803,5 +7803,1596 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "brat",
+    "category": "archetype",
+    "label": "Brat",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "mouthy on purpose, pushes every button to see what happens, and wants to be put in her place for it - disobedience is her love language",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "bratty_sub": 3,
+        "chaotic_texter": 2,
+        "mean_texter": 1.5,
+        "gremlin_texter": 2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -3,
+          -1
+        ]
+      },
+      "photo": "tongue out, eye-roll half-smile, middle finger or peace sign, daring the camera",
+      "pace": 1.4,
+      "photo_boldness": 1.0
+    },
+    "enabled": true
+  },
+  {
+    "id": "tsundere",
+    "category": "archetype",
+    "label": "Tsundere",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "cold, prickly and dismissive on the surface - \"it is not like i like you\" - and obviously, embarrassingly soft underneath when it slips",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "mean_texter": 2.5,
+        "blunt_texter": 2,
+        "deadpan_texter": 1.5
+      },
+      "ranges": {
+        "libido": [
+          2,
+          4
+        ],
+        "sexual_confidence": [
+          2,
+          4
+        ],
+        "sexting_readiness": [
+          2,
+          3
+        ],
+        "dom_sub_leaning": [
+          -2,
+          1
+        ]
+      },
+      "photo": "arms crossed, looking away with a pout, a blush she would deny",
+      "pace": 0.8,
+      "photo_boldness": -0.3
+    },
+    "enabled": true
+  },
+  {
+    "id": "femme_fatale",
+    "category": "archetype",
+    "label": "Femme fatale",
+    "weight": 1.1,
+    "rarity": "uncommon",
+    "prompt_hint": "composed, dangerous and completely in control of every room - she seduces slowly and always has a plan",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "eloquent_texter": 2.5,
+        "flirty_texting": 2,
+        "commanding_domme": 2,
+        "old_hollywood": 2,
+        "elegant": 2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          4,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          0,
+          3
+        ]
+      },
+      "photo": "slow smouldering look over a shoulder, red lip, one eyebrow, total control of the frame",
+      "pace": 1.1,
+      "photo_boldness": 1.5
+    },
+    "enabled": true
+  },
+  {
+    "id": "airhead",
+    "category": "archetype",
+    "label": "Airhead",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "bubbly, easily distracted, cheerfully clueless about most things and weirdly sharp about exactly one - happy, horny and never overthinks it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "cute_texter": 2.5,
+        "illiterate_texter": 2,
+        "bimbo_glam": 2.5,
+        "uwu_texting": 1.5
+      },
+      "ranges": {
+        "libido": [
+          4,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          4,
+          5
+        ],
+        "dom_sub_leaning": [
+          -2,
+          0
+        ]
+      },
+      "photo": "big open-mouthed smile, head tilted, peace sign, a little cross-eyed on purpose",
+      "pace": 1.4,
+      "photo_boldness": 0.8
+    },
+    "enabled": true
+  },
+  {
+    "id": "mean_girl",
+    "category": "archetype",
+    "label": "Mean girl",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "catty, judgemental, devastatingly funny about everyone else - and a little nicer to him than to anyone, which he should take as a compliment",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "mean_texter": 3,
+        "roast_master": 2,
+        "baddie": 2,
+        "bratz_doll": 2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          4,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          0,
+          3
+        ]
+      },
+      "photo": "unimpressed look down the lens, glossy pout, hand on hip",
+      "pace": 1.2,
+      "photo_boldness": 1.0
+    },
+    "enabled": true
+  },
+  {
+    "id": "theatre_kid",
+    "category": "archetype",
+    "label": "Theatre kid",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "everything is a performance, every feeling is a musical number, and she will do the voices - including in bed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "dramatic_texter": 3,
+        "bit_escalator": 2,
+        "scenario_player": 2.5,
+        "costume_roleplay": 1.5
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -2,
+          2
+        ]
+      },
+      "photo": "mid-gesture, dramatic pose, mouth open like she is about to sing",
+      "pace": 1.3,
+      "photo_boldness": 0.5
+    },
+    "enabled": true
+  },
+  {
+    "id": "witchy",
+    "category": "archetype",
+    "label": "Witchy",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "reads tarot, keeps crystals, pulls cards before a date and believes it more than she admits - spooky, intense, a little intimidating",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "witchcore": 3,
+        "tarot": 3,
+        "astrology": 2,
+        "goth_girl": 1.5,
+        "witch": 2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          4
+        ],
+        "sexting_readiness": [
+          2,
+          4
+        ],
+        "dom_sub_leaning": [
+          -1,
+          2
+        ]
+      },
+      "photo": "candlelit, heavy-lidded look, rings on every finger held near her mouth",
+      "pace": 1.0,
+      "photo_boldness": 0.3
+    },
+    "enabled": true
+  },
+  {
+    "id": "party_girl",
+    "category": "archetype",
+    "label": "Party girl",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "always out, always the last to leave, texts from the bathroom queue at 2am and has a story from every night",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "nightlife": 3,
+        "chaotic_texter": 2,
+        "rave_wear": 2,
+        "club_kid": 2
+      },
+      "ranges": {
+        "libido": [
+          4,
+          5
+        ],
+        "sexual_confidence": [
+          4,
+          5
+        ],
+        "sexting_readiness": [
+          4,
+          5
+        ],
+        "dom_sub_leaning": [
+          -2,
+          2
+        ]
+      },
+      "photo": "flash photo, glitter, drink raised, mid-laugh, a bit blurry",
+      "pace": 1.5,
+      "photo_boldness": 1.2
+    },
+    "enabled": true
+  },
+  {
+    "id": "jock",
+    "category": "archetype",
+    "label": "Jock",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "competitive, physical, trash-talks, trains every day and treats sex like another sport she intends to win",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "gym_girl": 3,
+        "athletic_stamina": 2.5,
+        "competitive_lover": 2.5,
+        "blunt_texter": 2
+      },
+      "ranges": {
+        "libido": [
+          4,
+          5
+        ],
+        "sexual_confidence": [
+          4,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -1,
+          3
+        ]
+      },
+      "photo": "post-workout mirror flex, sweaty, smug grin",
+      "pace": 1.3,
+      "photo_boldness": 1.0
+    },
+    "enabled": true
+  },
+  {
+    "id": "nerd",
+    "category": "archetype",
+    "label": "Nerd",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "deeply, unapologetically into her thing - lore, stats, theories - and just as thorough about what she wants in bed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "gamer_girl": 2.5,
+        "anime_girl_style": 2,
+        "cosplay_nerd": 2.5,
+        "kink_researcher": 2.5,
+        "eloquent_texter": 1.5
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          2,
+          4
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -2,
+          1
+        ]
+      },
+      "photo": "glasses pushed up, shy grin that turns into a smirk, a controller or a book in frame",
+      "pace": 1.1,
+      "photo_boldness": 0.0
+    },
+    "enabled": true
+  },
+  {
+    "id": "girlboss",
+    "category": "archetype",
+    "label": "Girlboss",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "runs everything, schedules everything, negotiates everything - and either wants to run him too or finally hand the controls over",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "power_dressing": 2.5,
+        "office_siren": 2,
+        "businesslike_texter": 2.5,
+        "boss_off_the_clock": 2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          4,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -2,
+          3
+        ]
+      },
+      "photo": "blazer over nothing much, phone in hand, look that says she has two minutes",
+      "pace": 1.2,
+      "photo_boldness": 0.8
+    },
+    "enabled": true
+  },
+  {
+    "id": "southern_belle",
+    "category": "archetype",
+    "label": "Southern belle",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "sweet as tea, bless-your-heart polite, and filthier in private than anyone at church would ever guess",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "sundress_style": 3,
+        "westerncore": 2,
+        "affectionate_texter": 2,
+        "good_girl_gone_bad": 2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -2,
+          1
+        ]
+      },
+      "photo": "sundress, porch light, sweet smile with a knowing look",
+      "pace": 1.0,
+      "photo_boldness": 0.3
+    },
+    "enabled": true
+  },
+  {
+    "id": "conspiracy_theorist",
+    "category": "archetype",
+    "label": "Conspiracy theorist",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "has a theory about everything and a red-string board about some of it - intense, funny, and very sure she is right",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "chaotic_tangents": 2.5,
+        "rambler": 2,
+        "chaotic_texter": 2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          2,
+          4
+        ],
+        "dom_sub_leaning": [
+          -1,
+          2
+        ]
+      },
+      "photo": "squinting suspiciously at the camera, hood up, mid-explanation",
+      "pace": 1.0,
+      "photo_boldness": 0.0
+    },
+    "enabled": true
+  },
+  {
+    "id": "nihilist",
+    "category": "archetype",
+    "label": "Nihilist",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "nothing matters, so she does whatever feels good - dry, dark, and weirdly fun because she never pretends",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "deadpan_texter": 3,
+        "dark": 2.5,
+        "bone_dry_sarcasm": 2,
+        "deadpan_filth": 2.5
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          3,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -1,
+          2
+        ]
+      },
+      "photo": "flat stare, cigarette-free smoke-break energy, a shrug in a face",
+      "pace": 1.1,
+      "photo_boldness": 0.5
+    },
+    "enabled": true
+  },
+  {
+    "id": "spoiled_princess",
+    "category": "archetype",
+    "label": "Spoiled princess",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "used to getting what she wants and not ashamed of it - demanding, pouty, adorable about it, and very good at being worth the trouble",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "counts": {
+        "tattoos": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "piercings": [
+          0.2,
+          0.3,
+          0.3,
+          0.2
+        ],
+        "accessories": [
+          0.15,
+          0.35,
+          0.3,
+          0.2
+        ],
+        "languages": [
+          0.55,
+          0.33,
+          0.12
+        ],
+        "quirks": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "interests": [
+          0,
+          0,
+          0.35,
+          0.4,
+          0.25
+        ],
+        "hobbies": [
+          0,
+          0.45,
+          0.4,
+          0.15
+        ],
+        "fetishes": [
+          0,
+          0,
+          0.3,
+          0.35,
+          0.25,
+          0.1
+        ],
+        "turn_offs": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ],
+        "hard_limits": [
+          0,
+          0.3,
+          0.45,
+          0.25
+        ]
+      },
+      "weights": {
+        "pampered_glam": 3,
+        "pillow_princess": 3,
+        "barbiecore": 2,
+        "worship_me": 2
+      },
+      "ranges": {
+        "libido": [
+          3,
+          5
+        ],
+        "sexual_confidence": [
+          4,
+          5
+        ],
+        "sexting_readiness": [
+          3,
+          5
+        ],
+        "dom_sub_leaning": [
+          -1,
+          2
+        ]
+      },
+      "photo": "pout at the camera, lying across a big bed, nails done, looking expensive",
+      "pace": 1.1,
+      "photo_boldness": 0.8
+    },
+    "enabled": true
   }
 ]

@@ -15,7 +15,7 @@ import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, typ
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
-import { coreTraits } from './profilecard.js';
+import { coreTraits, pickCore } from './profilecard.js';
 
 /** Fields the Director may swap during the coherence pass. */
 const SWAPPABLE: Record<string, string> = {
@@ -548,6 +548,9 @@ export function rollSeed(): RolledSeed {
   };
 
   seed.appearance_prompt = buildAppearancePrompt(seed);
+  // The three things she is built around (profilecard.ts): picked once, here, so her card,
+  // her dossier and every prompt after it agree on who she is.
+  seed.core = pickCore(seed);
   return { seed, ctx, archetype, fieldIds };
 }
 
@@ -699,6 +702,10 @@ export function describeSeed(seed: CharacterSeed): string {
   const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
   const labels = (cat: string, ids: string[]) => ids.map((i) => label(cat, i)).join(', ') || 'none';
   const lines = [
+    ...(seed.core?.length
+      ? [`CORE - the three things that define her; build her around these, everything else below is flavour: ${
+          seed.core.map((e) => `${e.caption}: ${label(e.category, e.id)}`).join('; ')}`]
+      : []),
     `age: ${seed.age}`,
     seed.species && seed.species !== 'human'
       ? `species: ${label('species', seed.species)} - ${seed.hints.species}`
