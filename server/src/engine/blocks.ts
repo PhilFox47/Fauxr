@@ -415,7 +415,7 @@ export function directionBlock(d: Direction | null, somethingLive = false): stri
   if (!d) {
     return [
       'Mood: good - into this new match.',
-      'What you privately want (never say it out loud): get him going, find out what he is into.',
+      'What you privately want (never say it out loud): get him going with something of yours - a thought, a confession, a fantasy.',
       'Stance: warm, flirty, herself.',
       'Length: short.',
     ].join('\n');

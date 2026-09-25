@@ -134,8 +134,9 @@ should be able to tell it exists.
      will pitch these to him herself, so make them specific and hers, not generic.
    - director_intent: what she wants to explore with him, one sentence. Her sexual long
      game, not a test he has to pass.
-   - opening_plan: one concrete first move she makes (a fantasy to hint at, a question
-     about what he is into, a photo) with an expiry condition.
+   - opening_plan: one concrete first move she makes (a fantasy to hint at, a confession,
+     something she is doing right now, a photo) with an expiry condition. Something of hers,
+     not a question about him.
 
 {{#fantasy_seeds}}
 # SCENARIO IDEAS FOR HER FANTASIES

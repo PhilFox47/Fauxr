@@ -28,7 +28,7 @@ const DEFAULT_DIRECTION: Direction = {
   expires_on: [],
   mood: 'into him, playful',
   energy: 'normal',
-  goal: 'get him going and find out what he is into',
+  goal: 'get him going with something of hers - a thought, a confession, a fantasy',
   stance: 'warm, flirty, herself',
   forbidden: [],
   bring_up: null,

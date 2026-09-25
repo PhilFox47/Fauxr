@@ -16,7 +16,7 @@ import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { initiativeNudge, pickNudge } from './nudge.js';
 import { releaseBlock } from './release.js';
-import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
+import { detectQuizzingHim, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
 import { canSendPhotos, hasSwapped } from './images.js';
 import { fantasyLog } from './fantasies.js';
 
@@ -352,6 +352,22 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       }
       const kept = out.messages.filter((_, i) => !repeats.includes(i));
       if (kept.length) out.messages = kept.map((m, i) => (i === 0 ? { ...m, delay: 0 } : m));
+    }
+
+    // Handing him the work instead of bringing her own - see detectQuizzingHim.
+    const quiz = attempt === 0 ? detectQuizzingHim(out.messages.map((m) => m.text)) : null;
+    if (quiz) {
+      logger.warn('actor', `rejected: quizzing him (${quiz})`, {
+        character: ctx.character.username,
+        messages: out.messages.map((m) => m.text),
+      });
+      correction = retryHint(
+        `you handed the work to him (${quiz})`,
+        'He is here to hear your fantasies and your side of things, not to guess at you or write the ' +
+          'scene himself. Say it yourself instead: what you would do, what you have on, what you want, ' +
+          'what happened - specific and yours. It is fine to end on a statement.',
+      );
+      continue;
     }
 
     const problem = out.messages

@@ -197,18 +197,15 @@ export function pickNudge(
     };
   }
 
-  /**
-   * Curiosity about him, specifically - not sexual, not about her own day. She matched him
-   * for a reason and the nudges above only ever bring HER material or push things physically;
-   * nothing here pushes her to actually want to know something about him, which "acting
-   * interested" needs at least as much as flirting does.
-   */
+  // Her, not him: a story, an opinion, a confession. This used to be a push to ask about him,
+  // which across a dozen chats turned every character into the same interviewer.
   if (chance(0.1 + energy / 2)) {
     return {
-      id: 'curious',
+      id: 'her_story',
       text:
-        'Ask him something real about himself - not small talk, something you actually want to know. Pull on ' +
-        'something he already said if there is a thread worth following, rather than starting from nothing.',
+        'Tell him something about you he does not know yet - a story, a strong opinion, something that ' +
+        'happened this week, a confession, a thing only you would care about. Yours, specific, and told ' +
+        'the way you tell things. No question at the end needed.',
     };
   }
 

@@ -670,7 +670,7 @@ has not written anything new, and she must never say or imply he asked. What she
 hers, weighted by the moment: a fantasy, a photo out of nowhere, picking things back up if it was
 hot, a game, or something from right now (her status). Voice notes are skipped for these turns.
 
-**Games.** A `chat_game` table of 30 games she can start - truth or dare, a dare chain, yes/no/
+**Games.** A `chat_game` table of 25 games she can start - truth or dare, a dare chain, yes/no/
 maybe, strip quiz, photo dare, rules for tonight, make me beg, the countdown, do what I do, and
 more - each with how she runs it, a dom/sub coding, the kink domains it touches and a heat
 level. Every character has four of her own (`rollChatGames()`, leaned by her persona, her kinks
@@ -695,6 +695,41 @@ started, building, close, on the edge, coming right now - and at the top she com
 reply, then has an afterglow in her own style for two replies before it can build again.
 Personas made for more (`extra.multiple_rounds`: insatiable, overstimulation chaser, hedonist,
 free-use) bounce back after one. A regenerate rewrites the same moment and does not move it.
+
+## She is the subject, not him
+
+Characters kept "testing" him: guess what I'm wearing, what would you do to me, what's your
+wildest fantasy, take charge or be told. He cannot know the answer to a guessing game, and a
+"what would you do to me" makes him write the fantasy he came to be handed - and since every
+character asked him the same things, a dozen chats became the same interview about himself.
+The cause was not one line but the whole stack pointing at him: the Actor's brief said "find
+out what he likes", the Director had a curiosity list about him and an example goal of "ask him
+what he'd do", the default direction and the "curious" nudge both pushed her to ask about him,
+the generated opening plan suggested "a question about him", and a sixth of the chat games were
+built on him answering.
+
+- `actor_chat.md`: "You are the subject, not him" replaces "find out what he likes". She tells
+  him what she did, has on, wants, would do; she never makes him guess and never hands him the
+  scene. She learns what he likes from how he reacts to her material.
+- `director_direction.md`: kink discovery happens through his reactions, never by quizzing; a
+  new SHE IS THE SUBJECT section rules out goals that make him guess, describe what he would do
+  or supply a fantasy; "what she is curious about" is now "what she might notice about him",
+  low priority and never asked outright. The fallback direction and the opening plan in
+  character generation now start from something of hers.
+- The "curious" nudge is now `her_story`: a story, a strong opinion, a confession, something
+  from her week - hers and told her way, no question needed at the end.
+- The five answer-him games are gone (would you rather, two truths one lie, guess the photo,
+  finish my sentence, one line each), and the rest are reworded so she does the talking: in
+  truth or dare she confesses and dares, "guess what I'm wearing" became "what she has on", in
+  never have I ever she tells the story behind hers, in the hot seat she is the one in it.
+- `detectQuizzingHim()` in `voice.ts` catches the stock phrasings on her first draft ("guess
+  what/where/which...", "what would you do to me", "tell me what you'd do", "what's your wildest
+  fantasy", "what are you into", "take charge or be told") and asks for a rewrite in which she
+  says it herself. Only the first draft is checked, so a reply is never blocked outright, and a
+  "guess what, I got the job" announcement is left alone.
+
+He can still bring his own fantasies and she gets into them - nothing stops him talking about
+himself; she just no longer makes him.
 
 ## How a turn works
 

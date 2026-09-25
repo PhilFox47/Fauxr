@@ -190,6 +190,34 @@ const SCOREKEEPING_PATTERNS: { re: RegExp; what: string }[] = [
   { re: /\bthat one doesn'?t count\b/i, what: '"that one doesn\'t count"' },
 ];
 
+/**
+ * Handing him the work: a guessing game about her, "what would you do to me", "tell me your
+ * fantasy", "what are you into". A real complaint, not a style nit - it makes him guess at
+ * things he cannot know or write the fantasy himself, when he is here to be told hers, and
+ * across a dozen chats it becomes the same interview about him over and over. Only the first
+ * draft is rewritten (see actor.ts), so a reply is never blocked outright over it.
+ */
+const QUIZ_PATTERNS: { re: RegExp; what: string }[] = [
+  // "guess what, i got the job" / "guess what?" is her announcing news, not a game; only a
+  // "guess what..." that runs on into the thing to be guessed is one.
+  { re: /\b(?:guess|guessing) (?:what\b(?! *(?:[,.!?:)]|$))|where|which|who|how|my)\b/i, what: 'a guessing game about you' },
+  { re: /\b(?:can|could|bet) (?:you|u) (?:can'?t )?guess\b|\btry (?:and|to) guess\b|\bwanna guess\b/i, what: 'a guessing game about you' },
+  { re: /\bwhat (?:would|will|'?d) (?:you|u) do (?:to|with) me\b/i, what: '"what would you do to me"' },
+  { re: /\bwhat (?:would|'?d) (?:you|u) do (?:first|next)\b/i, what: '"what would you do first"' },
+  { re: /\bwhat do (?:you|u) (?:want|wanna) (?:to )?do to me\b/i, what: '"what do you want to do to me"' },
+  { re: /\btell me (?:what|how) (?:you|u)(?:'?d| would)\b/i, what: '"tell me what you would do"' },
+  { re: /\bdescribe (?:what|how) (?:you|u)(?:'?d| would)?\b/i, what: 'asking him to describe the scene' },
+  { re: /\b(?:what'?s|whats|tell me) (?:your|ur) (?:biggest |wildest |dirtiest |filthiest |secret |favou?rite |darkest )?(?:fantasy|fantasies|kink|kinks|fetish|turn[- ]?ons?)\b/i, what: '"tell me your fantasy"' },
+  { re: /\bwhat (?:are|r) (?:you|u) into\b|\bwhat turns (?:you|u) on\b/i, what: '"what are you into"' },
+  { re: /\b(?:take|taking) charge or (?:be |get )?(?:told|bossed|led)\b/i, what: '"take charge or be told"' },
+  { re: /\b(?:your|ur) turn to (?:tell|describe|guess|confess)\b/i, what: '"your turn to tell me"' },
+];
+
+export function detectQuizzingHim(messages: string[]): string | null {
+  for (const text of messages) for (const p of QUIZ_PATTERNS) if (p.re.test(text)) return p.what;
+  return null;
+}
+
 export function detectScorekeepingTell(text: string): string | null {
   for (const p of SCOREKEEPING_PATTERNS) if (p.re.test(text)) return p.what;
   return null;

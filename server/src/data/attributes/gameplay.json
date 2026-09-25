@@ -2757,7 +2757,7 @@
     "label": "Truth or dare",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "she runs it by text, alternating, each round a notch hotter than the last",
+    "prompt_hint": "she runs it by text and takes her own turns seriously: every truth she picks she answers in detail, every dare she actually does and reports back",
     "image_prompt": null,
     "affinities": [
       "chaos_gremlin",
@@ -2799,7 +2799,7 @@
     "label": "Never have I ever, the dirty version",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "one line each, and every \"I have\" has to come with the story",
+    "prompt_hint": "she goes first every round, and every \"I have\" comes with the story - he can match her or just listen",
     "image_prompt": null,
     "affinities": [
       "seasoned_pro",
@@ -2815,32 +2815,12 @@
     "enabled": true
   },
   {
-    "id": "would_you_rather",
-    "category": "chat_game",
-    "label": "Filthy would-you-rather",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "she gives him two scenarios and he has to pick one and say why",
-    "image_prompt": null,
-    "affinities": [
-      "scenario_player",
-      "kink_researcher"
-    ],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {
-      "heat": "light",
-      "domains": []
-    },
-    "enabled": true
-  },
-  {
     "id": "guess_what_im_wearing",
     "category": "chat_game",
-    "label": "Guess what she has on",
+    "label": "What she has on",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "twenty questions about what she is wearing right now, down to the underwear",
+    "prompt_hint": "she tells him what she has on, one piece at a time, with a detail about each - he only has to keep asking for the next one",
     "image_prompt": null,
     "affinities": [
       "lingerie_showgirl",
@@ -2861,7 +2841,7 @@
     "label": "Yes, no, maybe",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "she names things one at a time and he answers yes, no or maybe - then she tells him her answers",
+    "prompt_hint": "she names things one at a time, says where she stands on each and why, and he only answers yes, no or maybe",
     "image_prompt": null,
     "affinities": [
       "kink_researcher",
@@ -2873,70 +2853,6 @@
     "extra": {
       "heat": "light",
       "domains": []
-    },
-    "enabled": true
-  },
-  {
-    "id": "two_truths_one_lie",
-    "category": "chat_game",
-    "label": "Two truths and a lie, bedroom edition",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "three things she has done, one of them made up, and he has to spot it",
-    "image_prompt": null,
-    "affinities": [
-      "seasoned_pro",
-      "deadpan_filth",
-      "confessor"
-    ],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {
-      "heat": "light",
-      "domains": []
-    },
-    "enabled": true
-  },
-  {
-    "id": "finish_my_sentence",
-    "category": "chat_game",
-    "label": "Finish my sentence",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "she starts a filthy sentence and he has to finish it, then the other way round",
-    "image_prompt": null,
-    "affinities": [
-      "wordsmith",
-      "digital_tease"
-    ],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {
-      "heat": "light",
-      "domains": []
-    },
-    "enabled": true
-  },
-  {
-    "id": "one_line_each",
-    "category": "chat_game",
-    "label": "A story, one line each",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "they write a dirty story together, one line each, and neither gets to steer it alone",
-    "image_prompt": null,
-    "affinities": [
-      "wordsmith",
-      "scenario_player",
-      "smut_reader"
-    ],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {
-      "heat": "light",
-      "domains": [
-        "roleplay"
-      ]
     },
     "enabled": true
   },
@@ -2966,7 +2882,7 @@
     "label": "The hot seat",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "for the next few messages he can ask her anything and she has to answer honestly - then they swap",
+    "prompt_hint": "for the next few messages he can ask her anything and she answers honestly, in detail",
     "image_prompt": null,
     "affinities": [
       "confessor",
@@ -2986,7 +2902,7 @@
     "label": "Confession trade",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "one filthy confession each, and each has to be worse than the last",
+    "prompt_hint": "she confesses one thing at a time, each worse than the last; he can match her or just enjoy it",
     "image_prompt": null,
     "affinities": [
       "confessor",
@@ -3028,7 +2944,7 @@
     "label": "Build the night",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "they take turns adding one detail to a night they would spend together, from the first drink to the morning",
+    "prompt_hint": "she plans the night they would spend together, detail by detail, from the first drink to the morning, and he only gets to say \"more\" or \"slower\"",
     "image_prompt": null,
     "affinities": [
       "romantic_lover",
@@ -3070,7 +2986,7 @@
     "label": "Strangers again",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "they pretend they have never met and he has to pick her up from scratch",
+    "prompt_hint": "they pretend they have never met; she plays the stranger and makes the first move",
     "image_prompt": null,
     "affinities": [
       "scenario_player",
@@ -3093,7 +3009,7 @@
     "label": "Strip quiz",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "she asks him questions about her; every wrong answer and she takes something off - every right one and he does",
+    "prompt_hint": "every message of his that makes her laugh or blush, she takes something off - and tells him what",
     "image_prompt": null,
     "affinities": [
       "exhibitionist_tease",
@@ -3121,28 +3037,6 @@
     "affinities": [
       "camera_lover",
       "exhibitionist_tease",
-      "digital_tease"
-    ],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {
-      "heat": "hot",
-      "domains": [
-        "recording"
-      ]
-    },
-    "enabled": true
-  },
-  {
-    "id": "guess_the_photo",
-    "category": "chat_game",
-    "label": "Guess the photo",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "she describes a photo she is about to send in three clues; if he guesses it, he gets it",
-    "image_prompt": null,
-    "affinities": [
-      "camera_lover",
       "digital_tease"
     ],
     "conflicts": [],
@@ -3357,7 +3251,7 @@
     "label": "Where first",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "she lists the parts of her body and he has to say, in detail, what he would do to each - in order",
+    "prompt_hint": "she tells him where she wants his mouth first, then next, in order, and exactly why each one",
     "image_prompt": null,
     "affinities": [
       "worship_me",
