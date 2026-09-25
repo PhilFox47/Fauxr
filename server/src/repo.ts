@@ -218,7 +218,9 @@ function backfillSexualProfile(characterId: string, seed: CharacterSeed): Charac
 function backfillIntimateDetails(characterId: string, seed: CharacterSeed): CharacterSeed {
   const domains = byCategory('kink_domain');
   const missingDomains = domains.filter((d) => !seed.kink_map?.[d.id]);
-  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length && seed.chat_games?.length) return seed;
+  // A game that was removed from the table leaves a hole in her four; she gets a new one in its place.
+  const staleGames = (seed.chat_games ?? []).some((id) => !find('chat_game', id));
+  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length && seed.chat_games?.length && !staleGames) return seed;
   if (!byCategory('lingerie_style').length) return seed; // attribute table not seeded yet
   const ctx = newContext();
   for (const id of [seed.body_type, seed.height, seed.clothing_style, seed.sexual_persona, seed.archetype]) if (id) ctx.drawn.add(id);
@@ -246,8 +248,10 @@ function backfillIntimateDetails(characterId: string, seed: CharacterSeed): Char
       seed.kink_map[d.id] = owned ? 'into' : rollDomainStance(seed.freak ?? 2.5, d, Number(bias[d.id] ?? 0));
     }
   }
-  if (!seed.chat_games?.length && byCategory('chat_game').length) {
-    seed.chat_games = rollChatGames({ kink_map: seed.kink_map ?? {}, dom_sub_leaning: seed.dom_sub_leaning ?? 0, sexual_persona: seed.sexual_persona });
+  if ((!seed.chat_games?.length || staleGames) && byCategory('chat_game').length) {
+    const kept = (seed.chat_games ?? []).filter((id) => find('chat_game', id));
+    const fresh = rollChatGames({ kink_map: seed.kink_map ?? {}, dom_sub_leaning: seed.dom_sub_leaning ?? 0, sexual_persona: seed.sexual_persona });
+    seed.chat_games = [...kept, ...fresh.filter((id) => !kept.includes(id))].slice(0, Math.max(fresh.length, kept.length));
   }
   db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
   return seed;

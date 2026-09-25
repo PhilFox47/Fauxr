@@ -719,7 +719,8 @@ built on him answering.
 - The "curious" nudge is now `her_story`: a story, a strong opinion, a confession, something
   from her week - hers and told her way, no question needed at the end.
 - The five answer-him games are gone (would you rather, two truths one lie, guess the photo,
-  finish my sentence, one line each), and the rest are reworded so she does the talking: in
+  finish my sentence, one line each; a character who had one gets a new game in its place on
+  first load), and the rest are reworded so she does the talking: in
   truth or dare she confesses and dares, "guess what I'm wearing" became "what she has on", in
   never have I ever she tells the story behind hers, in the hot seat she is the one in it.
 - `detectQuizzingHim()` in `voice.ts` catches the stock phrasings on her first draft ("guess
