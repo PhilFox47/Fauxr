@@ -861,6 +861,20 @@ function ProfileSheet({
 
           <p className="small muted bio-quote">{profile.bio}</p>
 
+          {(profile.tagline || profile.core?.length > 0) && (
+            <div className="profile-core">
+              <div className="section-title" style={{ padding: '0 0 var(--s2)' }}>What defines her</div>
+              {profile.tagline && <p className="profile-tagline">{profile.tagline}</p>}
+              <div className="profile-core-chips">
+                {profile.core?.map((t) => (
+                  <span key={t.caption + t.label} className="core-chip">
+                    <span className="caption">{t.caption}</span> {t.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {gallery.length > 0 && (
             <div className="gallery">
               <div className="section-title" style={{ padding: '0 0 var(--s2)' }}>

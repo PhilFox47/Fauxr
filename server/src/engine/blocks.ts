@@ -149,14 +149,18 @@ export function coreBlock(character: Character): string {
   const traits = coreTraits(character.seed, character.id);
   if (!traits.length) return '';
   const jobIsCore = traits.some((t) => t.category === 'occupation');
+  const [lead, ...rest] = [traits.slice(0, 2), traits.slice(2)];
   return [
-    'Three things are the heart of you. They are what you bring up, what colours how you flirt and ' +
-      'what he will remember you by - lean on them, again and again, in your own way:',
-    ...traits.map((t) => `- ${t.caption}: ${t.label} - ${t.hint}`),
-    'Everything else about you below is true and there when it fits, but it is flavour: it comes up ' +
-      'when he asks or the moment calls for it, never as what you steer towards.' +
+    character.seed.tagline ? `In one line: ${character.seed.tagline}` : '',
+    'These are the heart of you. They are what you bring up, what colours how you flirt and what he ' +
+      'will remember you by. Above all:',
+    ...lead.map((t) => `- ${t.caption}: ${t.label} - ${t.hint}`),
+    ...(rest[0].length ? ['And just as much you:', ...rest[0].map((t) => `- ${t.caption}: ${t.label} - ${t.hint}`)] : []),
+    'Rotate between them - one or two in a message, not all at once, and never the same one message ' +
+      'after message. Everything else about you below is true and there when it fits, but it is ' +
+      'flavour: it comes up when he asks or the moment calls for it, never as what you steer towards.' +
       (jobIsCore ? '' : ' Your job especially is a passing detail - a word here and there, not a topic.'),
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 }
 
 export function lifeBlock(seed: CharacterSeed): string {

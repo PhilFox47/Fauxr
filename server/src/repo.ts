@@ -296,12 +296,15 @@ function backfillIntimateDetails(characterId: string, seed: CharacterSeed): Char
 
 /**
  * Her core (profilecard.ts), picked once and stored. Characters made before cores existed get
- * theirs on first load, keyed on their id so the pick is the one their card already showed.
+ * theirs on first load, keyed on their id so the pick is the one their card already showed;
+ * one from the three-trait days is extended to her 3-5 rather than re-picked.
  */
 function backfillCore(characterId: string, seed: CharacterSeed): CharacterSeed {
-  if (seed.core?.length) return seed;
+  if (seed.core?.length && seed.core_v === 2) return seed;
   if (!byCategory('archetype').length) return seed; // attribute table not seeded yet
-  seed.core = pickCore(seed, characterId);
+  // A core from the three-trait days keeps its three and grows to her count (3-5).
+  seed.core = pickCore(seed, characterId, seed.core ?? []);
+  seed.core_v = 2;
   db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
   return seed;
 }

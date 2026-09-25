@@ -3,7 +3,8 @@ import { find } from '../db/attributes.js';
 import type { CharacterSeed, CoreEntry } from '../types.js';
 
 /**
- * Her core: the three things that define her.
+ * Her core: the three to five things that define her - "Kristina is a girl who is a tsundere,
+ * lives in pantyhose and works as a scientist".
  *
  * They are printed on her swipe card, and they are what she is built around in every prompt
  * (coreBlock in blocks.ts): what she brings up, what colours how she flirts, what he remembers
@@ -19,8 +20,11 @@ import type { CharacterSeed, CoreEntry } from '../types.js';
  * - Each candidate scores by how rare the rolled value is (softened, so one extremely rare
  *   kink does not win every time), a per-category lean, and a random jitter large enough that
  *   two similar women still come out with different cores.
- * - One per group, except kinks, which can take two slots. At most two intimate traits, and a
- *   second one has to beat a penalty - most cores are one part sex, two parts person.
+ * - Three to five of them (coreCount): some women are three things, some need five. Ranked,
+ *   so the first two are what she is above all and the rest support them.
+ * - One per group, except kinks, which can take two slots. At most two intimate traits (three
+ *   in a core of five), and each one past the first has to beat a penalty - most cores are one
+ *   part sex, two parts person.
  * - A species that shows in any photo always makes it. One she can hide (a witch, a succubus,
  *   an angel) is hers to reveal and never does; neither does her big secret.
  * Picked once at generation and stored (seed.core); existing characters get theirs on first
@@ -83,8 +87,20 @@ function options(seed: CharacterSeed): Option[] {
   ];
 }
 
-/** Choose her three. `jitterKey` is her id for a stored character, anything random for a new one. */
-export function pickCore(seed: CharacterSeed, jitterKey: string = randomUUID()): CoreEntry[] {
+/** How many traits define her: 3 for a quarter, 4 for nearly half, 5 for the rest. */
+export function coreCount(key: string): number {
+  const u = unit(key + ':count');
+  return u < 0.25 ? 3 : u < 0.7 ? 4 : 5;
+}
+
+/**
+ * Choose her core. `jitterKey` is her id for a stored character, anything random for a new
+ * one. `start` keeps a core she already has and only adds to it - a character from the
+ * three-trait days keeps her three and grows to her count.
+ */
+export function pickCore(seed: CharacterSeed, jitterKey: string = randomUUID(), start: CoreEntry[] = []): CoreEntry[] {
+  const count = coreCount(jitterKey);
+  const maxIntimate = count >= 5 ? 3 : 2;
   const pool: Candidate[] = [];
   for (const o of options(seed)) {
     const attr = o.id ? find(o.category, o.id) : undefined;
@@ -94,13 +110,19 @@ export function pickCore(seed: CharacterSeed, jitterKey: string = randomUUID()):
   }
   const picked: Candidate[] = [];
   const perGroup: Record<string, number> = {};
-  while (picked.length < 3) {
+  for (const e of start) {
+    const c = pool.find((p) => p.entry.key === e.key);
+    if (!c || picked.includes(c)) continue;
+    picked.push(c);
+    perGroup[c.group] = (perGroup[c.group] ?? 0) + 1;
+  }
+  while (picked.length < count) {
     const intimate = picked.filter((p) => p.intimate).length;
     const next = pool
       .filter((c) => !picked.includes(c))
       .filter((c) => (perGroup[c.group] ?? 0) < (c.group === 'kink' ? 2 : 1))
-      .filter((c) => !(c.intimate && intimate >= 2))
-      .map((c) => ({ c, s: c.score - (c.intimate && intimate === 1 ? SECOND_INTIMATE_PENALTY : 0) }))
+      .filter((c) => !(c.intimate && intimate >= maxIntimate))
+      .map((c) => ({ c, s: c.score - (c.intimate && intimate >= 1 ? SECOND_INTIMATE_PENALTY * intimate : 0) }))
       .sort((a, b) => b.s - a.s)[0]?.c;
     if (!next) break;
     picked.push(next);

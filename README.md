@@ -2137,6 +2137,23 @@ and your day". Everyone came out as the same well-rounded person, and nobody sto
 Now three traits are **her core** (`seed.core`, picked in `engine/profilecard.ts`). They are
 on her swipe card and they shape every prompt; the rest of her seed is flavour.
 
+**Three to five of them, and one sentence.** Well-known characters can usually be summed up
+in a few traits: "Kristina is a girl who is a tsundere, loves wearing pantyhose and works as a
+scientist." That is the model here.
+- **How many:** a quarter of characters have 3, nearly half have 4 and the rest 5
+  (`coreCount`).
+- **Ranked:** the first two are what she is above all, and the rest support them.
+- **The sentence** (`seed.tagline`, `engine/coreline.ts`) is written once by the model from her
+  core, in order: "X is a girl who ...". It is not stitched from labels, because labels are
+  written to stand alone ("Refuses to grow up properly", "eloquent", "Her ass", "Riding him")
+  and any template joining them comes out broken for much of the cast. A reply that does not
+  start with her name, or runs long, is dropped.
+- **When the sentence is written:** new characters get it at generation. Existing ones get it
+  one per scheduler tick, matched characters first, and a failed one waits an hour before
+  trying again.
+- **Cores from the three-trait version** keep their three and grow to their count. The
+  `core_v` marker tells an old core apart from a new one that happens to have three.
+
 **The candidates are broad, so cores vary:**
 - a visible species
 - personality, humour, how she texts, how she talks dirty
@@ -2151,23 +2168,30 @@ flirts.
 - **Scoring:** a softened rarity score, so one extremely rare kink does not always win, plus
   a per-category lean and a large random jitter.
 - **Groups:** one pick per group, except kinks, which can take two.
-- **Intimate traits:** at most two, and a second one has to beat a penalty.
+- **Intimate traits:** at most two (three in a core of five), and each one past the first has
+  to beat a penalty.
 - **Species:** a visible species always makes it. A hidden species never does, and neither
   does her big secret.
 
 Measured over 4000 characters:
-- 189 different combinations; the most common is only 3%.
-- 22% of cores have two intimate traits, and 3% are two kinks.
-- Job is core for about a quarter of characters.
+- 642 different combinations, none more common than 1%.
+- 43% of cores have two intimate traits, 4% have three, and 9% include two kinks; only 4%
+  have none.
+- Job is core for about 30% of characters.
 
 **When it is picked:** once at generation, and stored. Existing characters get theirs on first
 load, keyed on their id so it matches their card.
 
 **What it changes:**
 - **What defines you** (`coreBlock`) sits in her chat and date prompts and in the Director's.
-  It lists her three and says to lean on them, again and again. Everything else is true but is
-  flavour for when he asks or the moment calls for it. A job outside the core is explicitly a
-  passing detail.
+  It opens with her one-line sentence, then her first two traits ("Above all") and the rest
+  ("And just as much you"). She is told to rotate between them, one or two in a message and
+  never the same one message after message, so a five-trait core does not mean every message
+  covers all five. Everything else is true but is flavour for when he asks or the moment calls
+  for it. A job outside the core is explicitly a passing detail.
+- **Her swipe card** shows the sentence without her name ("A girl who ...") between the bio
+  and the traits, and her profile sheet opens with "What defines her": the sentence and her
+  traits as chips.
 - **Her life block** shows a non-core job as "Work (background - mention in passing, not a
   topic)". Interests are flavour; only a hobby that is part of her core gets its full
   description.

@@ -1614,3 +1614,34 @@ input[type='range'] {
 /* People from her life he has met before, as quick picks under "Anyone else there?". */
 .circle-picks { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s2); }
 .circle-picks .chip { font-size: 12.5px; padding: 5px 10px; }
+
+/* Her core in one sentence, between the bio and the traits on the swipe card. */
+.swipe-tagline {
+  font-size: 14px;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--text);
+  padding-left: var(--s3);
+  border-left: 2px solid var(--accent-line);
+}
+/* Five traits have to fit a phone; slightly tighter rows than the three-trait card had. */
+.swipe-traits li { padding: 7px 12px; }
+
+/* "What defines her" at the top of her profile sheet. */
+.profile-core { margin: var(--s4) 0; }
+.profile-tagline { margin: 0 0 var(--s3); font-size: 14.5px; line-height: 1.5; font-style: italic; }
+.profile-core-chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.core-chip {
+  font-size: 12.5px;
+  padding: 5px 10px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+}
+.core-chip .caption {
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+}

@@ -173,6 +173,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
                   {current.ethnicity && <span>{current.ethnicity}</span>}
                 </div>
                 <div className="bio">{current.bio}</div>
+                {current.tagline && <div className="swipe-tagline">{current.tagline}</div>}
                 {current.traits?.length > 0 && (
                   <ul className="swipe-traits" aria-label="What defines her">
                     {current.traits.map((t) => (
