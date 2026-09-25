@@ -740,6 +740,17 @@ screen instead:
 
 Below 1024px nothing changed: the phone layout, bottom tabs and bottom sheets are as before.
 
+Images needed their own pass, because on a phone the screen width had always been the limit
+and nothing capped their height. On a desktop:
+- The photo viewer showed a portrait photo at its full 1536px on a 900px screen. It now fits the
+  screen (`max-height: 100dvh` minus the padding, rather than a percentage of a grid row that
+  sizes to its own content).
+- A date's arrival photo filled the chat pane's width, 820 x 1230. It keeps its proportions and
+  is capped at 70% of the screen height (640px at most).
+- Generated images in Settings -> Images are capped at 480px tall, and location pictures at
+  560px wide.
+Phone sizes are unchanged.
+
 ## A failed photo can always be asked for again
 
 A log showed her profile picture failing on a provider outage (503 `all_fallbacks_failed`,

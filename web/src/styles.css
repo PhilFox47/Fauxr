@@ -1361,8 +1361,13 @@ input[type='range'] {
   animation: lightbox-in var(--fast) var(--ease);
 }
 .lightbox img {
-  max-width: 100%;
-  max-height: 100%;
+  /* Capped by the screen itself, not "100%": the grid row around it sizes to its content, so
+     a percentage resolved against nothing and a portrait photo showed at its full 1536px on a
+     900px-tall monitor. On a phone the width limit always won first, which hid it. */
+  max-width: calc(100vw - 2 * var(--s4));
+  max-height: calc(100dvh - 2 * var(--s6));
+  width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: var(--r-md);
   box-shadow: var(--sh-3);
@@ -1468,12 +1473,17 @@ input[type='range'] {
 /* The arrival photo: how he actually sees her, not a bubble she "sent" - so it gets no
    border or tint, just the picture itself, rounded to match everything else in the room. */
 .date-photo {
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
+  align-self: center;
   border-radius: var(--r-md);
   overflow: hidden;
   box-shadow: var(--sh-2);
 }
-.date-photo img { display: block; width: 100%; height: auto; }
+/* Full width was right on a phone and far too tall anywhere wider: in the desktop chat pane a
+   portrait arrival photo came out 820 x 1230 and most of it was off screen. It keeps its
+   proportions and is capped by the screen height instead. */
+.date-photo img { display: block; max-width: 100%; max-height: min(70dvh, 640px); width: auto; height: auto; }
 
 .date-summary {
   margin-top: var(--s4);
@@ -1565,6 +1575,7 @@ input[type='range'] {
    when the image loads - or stretching a placeholder into a tall block. */
 .location-thumb {
   width: 100%;
+  max-width: 560px;
   aspect-ratio: 3 / 2;
   object-fit: cover;
   border-radius: var(--r-md);
@@ -1780,3 +1791,7 @@ input[type='range'] {
   .sheet::before { display: none; }
 }
 @keyframes pop { from { transform: scale(0.97); opacity: 0.6; } to { transform: none; opacity: 1; } }
+
+/* A generated image in Settings -> Images. Width alone kept it phone-sized on a phone and made
+   a portrait one about 830 x 1240 in the desktop settings column. */
+.job-image { display: block; max-width: 100%; max-height: min(60dvh, 480px); width: auto; height: auto; border-radius: 12px; margin-top: 10px; }

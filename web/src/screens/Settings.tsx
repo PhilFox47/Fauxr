@@ -1280,7 +1280,7 @@ function ImagesPane() {
               </button>
             )}
           </div>
-          {job.path && <img src={`/media/${job.path}`} alt="" style={{ maxWidth: '100%', borderRadius: 12, marginTop: 10 }} />}
+          {job.path && <img className="job-image" src={`/media/${job.path}`} alt="" />}
           {job.error && <p className="tiny level-error">{job.error}</p>}
           {job.prompt && <p className="tiny muted">{job.prompt}</p>}
         </div>
