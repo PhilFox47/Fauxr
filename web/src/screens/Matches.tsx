@@ -95,7 +95,10 @@ export default function Matches({
       >
         <Avatar match={m} onDate={!opts.archived && m.on_date} />
         <div style={{ minWidth: 0, flex: 1 }}>
-          <div className="name">{m.display_name}</div>
+          <div className="name">
+            {m.display_name}
+            {!opts.archived && m.status && <span className="match-status"> · {m.status}</span>}
+          </div>
           <div className={`preview${typing[m.id] ? ' typing-now' : ''}`}>
             {m.on_date && !opts.archived
               ? 'On a date right now'

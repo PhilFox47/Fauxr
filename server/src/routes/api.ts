@@ -32,6 +32,7 @@ import {
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
 import { TASTE_SECTIONS } from '../engine/kinks.js';
+import { statusOf } from '../engine/status.js';
 import type { Character, KinkStance, Location } from '../types.js';
 
 /**
@@ -62,6 +63,8 @@ function publicCharacter(c: Character) {
     avatar_emoji: avatarEmojiFor(c),
     profile_picture: picture ? `/media/${picture.path}` : null,
     photos_exchanged: hasSwapped(rel),
+    // Her WhatsApp-style status line, only while she is an active match (see engine/status.ts).
+    status: c.state === 'matched' ? statusOf(rel)?.text ?? null : null,
   };
 }
 
@@ -543,6 +546,20 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   });
 
   app.get('/api/images', async () => listImageJobs(100));
+
+  // "Your move": she texts first, on her own impulse - the manual version of an unprompted text.
+  // The turn runs in the background; her messages arrive as events like any other reply.
+  app.post<{ Params: { id: string } }>('/api/chats/:id/your-move', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    if (!character || character.state !== 'matched') return reply.code(404).send({ error: 'not found' });
+    if (activeDate(character.id)) return reply.code(409).send({ error: 'she is out with you right now' });
+    if (isRunning(character.id)) return reply.code(409).send({ error: 'she is already typing' });
+    void takeTurn(character.id, {
+      trigger: 'initiative',
+      reason: 'she wants to text him right now - her own impulse, not a reply to anything',
+    }).catch((err) => logger.error('actor', 'your-move turn failed', { error: String(err) }));
+    return { ok: true };
+  });
 
   // "Show photo" on a photo she sent: renders the prompt prepared when she sent it. Returns as
   // soon as the bubble is marked as developing; the image arrives as a message_updated event.

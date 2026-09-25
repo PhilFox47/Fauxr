@@ -2750,5 +2750,677 @@
     "modifies": {},
     "extra": {},
     "enabled": true
+  },
+  {
+    "id": "truth_or_dare",
+    "category": "chat_game",
+    "label": "Truth or dare",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she runs it by text, alternating, each round a notch hotter than the last",
+    "image_prompt": null,
+    "affinities": [
+      "chaos_gremlin",
+      "bratty_sub",
+      "hedonist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "dare_chain",
+    "category": "chat_game",
+    "label": "A chain of dares",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she dares him, he dares her back, and each dare has to top the last one",
+    "image_prompt": null,
+    "affinities": [
+      "bratty_sub",
+      "chaos_gremlin",
+      "competitive_lover"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "never_have_i_ever",
+    "category": "chat_game",
+    "label": "Never have I ever, the dirty version",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "one line each, and every \"I have\" has to come with the story",
+    "image_prompt": null,
+    "affinities": [
+      "seasoned_pro",
+      "confessor",
+      "insatiable"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "would_you_rather",
+    "category": "chat_game",
+    "label": "Filthy would-you-rather",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she gives him two scenarios and he has to pick one and say why",
+    "image_prompt": null,
+    "affinities": [
+      "scenario_player",
+      "kink_researcher"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "guess_what_im_wearing",
+    "category": "chat_game",
+    "label": "Guess what she has on",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "twenty questions about what she is wearing right now, down to the underwear",
+    "image_prompt": null,
+    "affinities": [
+      "lingerie_showgirl",
+      "digital_tease",
+      "clothed_tease"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "yes_no_maybe",
+    "category": "chat_game",
+    "label": "Yes, no, maybe",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she names things one at a time and he answers yes, no or maybe - then she tells him her answers",
+    "image_prompt": null,
+    "affinities": [
+      "kink_researcher",
+      "curious_first_timer",
+      "teacher"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "two_truths_one_lie",
+    "category": "chat_game",
+    "label": "Two truths and a lie, bedroom edition",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "three things she has done, one of them made up, and he has to spot it",
+    "image_prompt": null,
+    "affinities": [
+      "seasoned_pro",
+      "deadpan_filth",
+      "confessor"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "finish_my_sentence",
+    "category": "chat_game",
+    "label": "Finish my sentence",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she starts a filthy sentence and he has to finish it, then the other way round",
+    "image_prompt": null,
+    "affinities": [
+      "wordsmith",
+      "digital_tease"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "one_line_each",
+    "category": "chat_game",
+    "label": "A story, one line each",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "they write a dirty story together, one line each, and neither gets to steer it alone",
+    "image_prompt": null,
+    "affinities": [
+      "wordsmith",
+      "scenario_player",
+      "smut_reader"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "pick_a_number",
+    "category": "chat_game",
+    "label": "Pick a number",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she has a secret numbered list of things she wants to do to him; he picks a number blind and she tells him what he won",
+    "image_prompt": null,
+    "affinities": [
+      "chaos_gremlin",
+      "teasing_dom"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "hot_seat",
+    "category": "chat_game",
+    "label": "The hot seat",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "for the next few messages he can ask her anything and she has to answer honestly - then they swap",
+    "image_prompt": null,
+    "affinities": [
+      "confessor",
+      "ice_queen_melts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "confession_trade",
+    "category": "chat_game",
+    "label": "Confession trade",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "one filthy confession each, and each has to be worse than the last",
+    "image_prompt": null,
+    "affinities": [
+      "confessor",
+      "shy_but_filthy",
+      "good_girl_gone_bad"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "emoji_only",
+    "category": "chat_game",
+    "label": "Emojis only",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "for a few messages they can only say what they want to do in emojis, and the other has to translate",
+    "image_prompt": null,
+    "affinities": [
+      "giggly_goofball",
+      "chaos_gremlin",
+      "digital_tease"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "build_a_night",
+    "category": "chat_game",
+    "label": "Build the night",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "they take turns adding one detail to a night they would spend together, from the first drink to the morning",
+    "image_prompt": null,
+    "affinities": [
+      "romantic_lover",
+      "sensual_slow_burner",
+      "scenario_player"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "bet_with_stakes",
+    "category": "chat_game",
+    "label": "A bet with a forfeit",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she bets him on something - who texts first, a game score, a guess - and the loser owes a very specific forfeit",
+    "image_prompt": null,
+    "affinities": [
+      "competitive_lover",
+      "chaos_gremlin",
+      "bratty_sub"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": []
+    },
+    "enabled": true
+  },
+  {
+    "id": "strangers_again",
+    "category": "chat_game",
+    "label": "Strangers again",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "they pretend they have never met and he has to pick her up from scratch",
+    "image_prompt": null,
+    "affinities": [
+      "scenario_player",
+      "cosplay_nerd",
+      "ice_queen_melts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "light",
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "strip_quiz",
+    "category": "chat_game",
+    "label": "Strip quiz",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she asks him questions about her; every wrong answer and she takes something off - every right one and he does",
+    "image_prompt": null,
+    "affinities": [
+      "exhibitionist_tease",
+      "lingerie_showgirl",
+      "digital_tease"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "exhibitionism"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "photo_dare",
+    "category": "chat_game",
+    "label": "Photo dare",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "they dare each other to send one specific photo, and whoever chickens out owes the other one",
+    "image_prompt": null,
+    "affinities": [
+      "camera_lover",
+      "exhibitionist_tease",
+      "digital_tease"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "recording"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "guess_the_photo",
+    "category": "chat_game",
+    "label": "Guess the photo",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she describes a photo she is about to send in three clues; if he guesses it, he gets it",
+    "image_prompt": null,
+    "affinities": [
+      "camera_lover",
+      "digital_tease"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "recording"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rules_for_tonight",
+    "category": "chat_game",
+    "label": "Rules for tonight",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she gives him rules for the rest of the evening and a way to report back on each one",
+    "image_prompt": null,
+    "affinities": [
+      "commanding_domme",
+      "protocol_mistress",
+      "teasing_dom"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "bdsm_power",
+        "instruction"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "ask_permission",
+    "category": "chat_game",
+    "label": "Ask first",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "he is not allowed to do anything without asking her first, and she decides",
+    "image_prompt": null,
+    "affinities": [
+      "commanding_domme",
+      "sadistic_tease",
+      "edge_addict"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "bdsm_power",
+        "tease_denial"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "countdown",
+    "category": "chat_game",
+    "label": "The countdown",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she counts down from ten, one message at a time, and he does not finish before zero",
+    "image_prompt": null,
+    "affinities": [
+      "teasing_dom",
+      "sadistic_tease",
+      "voyeur_director"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "instruction",
+        "tease_denial"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "dont_touch_yet",
+    "category": "chat_game",
+    "label": "Not yet",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she describes, slowly, everything she would do, and he is not allowed to touch himself until she says",
+    "image_prompt": null,
+    "affinities": [
+      "sadistic_tease",
+      "long_game_teaser",
+      "edge_addict"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "tease_denial"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "give_me_an_order",
+    "category": "chat_game",
+    "label": "Give me an order",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she asks him to give her one order at a time, does it, and tells him exactly how it went",
+    "image_prompt": null,
+    "affinities": [
+      "obedient_sub",
+      "eager_to_please",
+      "pet"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "instruction",
+        "bdsm_power"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "make_me_beg",
+    "category": "chat_game",
+    "label": "Make me beg",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she wants him to make her beg for it, one message at a time",
+    "image_prompt": null,
+    "affinities": [
+      "bratty_sub",
+      "degradation_lover",
+      "wants_to_feel_owned"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "bdsm_power",
+        "tease_denial"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "do_what_i_do",
+    "category": "chat_game",
+    "label": "Do what I do",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she tells him what she is doing to herself right now and he has to match it, message for message",
+    "image_prompt": null,
+    "affinities": [
+      "mutual_watcher",
+      "voyeur",
+      "insatiable"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "voyeurism",
+        "instruction"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "close_your_eyes",
+    "category": "chat_game",
+    "label": "Close your eyes",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she describes, in close detail, what he would feel if she were there, one sensation at a time",
+    "image_prompt": null,
+    "affinities": [
+      "sensation_seeker",
+      "tantric_sensualist",
+      "body_worshipper"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "sensation"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "worship_list",
+    "category": "chat_game",
+    "label": "Where first",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she lists the parts of her body and he has to say, in detail, what he would do to each - in order",
+    "image_prompt": null,
+    "affinities": [
+      "worship_me",
+      "body_worshipper",
+      "mommy_dom"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "bdsm_power",
+        "praise"
+      ],
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "good_girl_count",
+    "category": "chat_game",
+    "label": "Count them",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "every time he calls her a good girl she counts it, and at five something happens",
+    "image_prompt": null,
+    "affinities": [
+      "praise_hungry",
+      "daddys_girl",
+      "eager_to_please"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "praise"
+      ],
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "scene_roulette",
+    "category": "chat_game",
+    "label": "Scene roulette",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "she gives him three scenarios and he picks one without knowing which is hers - then they play it",
+    "image_prompt": null,
+    "affinities": [
+      "scenario_player",
+      "dark_romance",
+      "forbidden_fruit"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "heat": "hot",
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
   }
 ]

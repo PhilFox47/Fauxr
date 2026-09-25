@@ -1,7 +1,7 @@
 import { db, nowIso } from './db/index.js';
 import { byCategory, find } from './db/attributes.js';
 import { newContext, roll } from './engine/dice.js';
-import { rollDomainStance } from './engine/kinks.js';
+import { rollChatGames, rollDomainStance } from './engine/kinks.js';
 import type {
   Character, CharacterSeed, CharacterState, DateSession, Direction, Flags, Ledger,
   Location, Relationship, UserProfile,
@@ -218,7 +218,7 @@ function backfillSexualProfile(characterId: string, seed: CharacterSeed): Charac
 function backfillIntimateDetails(characterId: string, seed: CharacterSeed): CharacterSeed {
   const domains = byCategory('kink_domain');
   const missingDomains = domains.filter((d) => !seed.kink_map?.[d.id]);
-  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length) return seed;
+  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length && seed.chat_games?.length) return seed;
   if (!byCategory('lingerie_style').length) return seed; // attribute table not seeded yet
   const ctx = newContext();
   for (const id of [seed.body_type, seed.height, seed.clothing_style, seed.sexual_persona, seed.archetype]) if (id) ctx.drawn.add(id);
@@ -245,6 +245,9 @@ function backfillIntimateDetails(characterId: string, seed: CharacterSeed): Char
       const owned = ((d.extra?.fetishes as string[]) ?? []).some((f) => fetishes.has(f));
       seed.kink_map[d.id] = owned ? 'into' : rollDomainStance(seed.freak ?? 2.5, d, Number(bias[d.id] ?? 0));
     }
+  }
+  if (!seed.chat_games?.length && byCategory('chat_game').length) {
+    seed.chat_games = rollChatGames({ kink_map: seed.kink_map ?? {}, dom_sub_leaning: seed.dom_sub_leaning ?? 0, sexual_persona: seed.sexual_persona });
   }
   db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
   return seed;
@@ -515,6 +518,14 @@ export function findMessageByImageId(imageId: string): StoredMessage | null {
     .prepare("SELECT * FROM messages WHERE json_extract(meta, '$.image_id') = ? ORDER BY id DESC LIMIT 1")
     .get(imageId) as any;
   return row ? hydrateMessage(row) : null;
+}
+
+/** The placeholders of one "which one?" photo choice, in the order she offered them. */
+export function messagesInChoiceGroup(group: string): StoredMessage[] {
+  const rows = db
+    .prepare("SELECT * FROM messages WHERE json_extract(meta, '$.choice_group') = ? ORDER BY id ASC")
+    .all(group) as any[];
+  return rows.map(hydrateMessage);
 }
 
 /** Merges into a message's existing meta - used to resolve a photo-offer card in place. */

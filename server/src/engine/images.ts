@@ -9,6 +9,7 @@ import { logger } from '../log.js';
 import {
   addMessage,
   findMessageByImageId,
+  messagesInChoiceGroup,
   getCharacter,
   getRelationship,
   saveRelationship,
@@ -96,6 +97,33 @@ export async function sendPhoto(opts: {
   showsFace: boolean;
 }): Promise<void> {
   if (!photosEnabled()) return;
+  await preparePhoto(opts, {});
+}
+
+/**
+ * "Red set or black?" - she offers two photos and he picks which one he sees. Both are
+ * prepared (prompt and caption, no image), posted as two placeholders in one choice group;
+ * picking one renders it and sets the other aside (showPhoto below). Still one image to pay for.
+ */
+export async function sendPhotoChoice(opts: {
+  characterId: string;
+  kind: 'chat' | 'spicy';
+  options: string[];
+  aspect: PhotoAspect | null;
+  showsFace: boolean;
+}): Promise<void> {
+  if (!photosEnabled()) return;
+  const group = randomUUID();
+  // In order, so the two bubbles land in the order she named them.
+  for (const [i, situation] of opts.options.slice(0, 2).entries()) {
+    await preparePhoto({ ...opts, situation }, { choice_group: group, choice_index: i });
+  }
+}
+
+async function preparePhoto(
+  opts: { characterId: string; kind: 'chat' | 'spicy'; situation: string; aspect: PhotoAspect | null; showsFace: boolean },
+  extraMeta: Record<string, unknown>,
+): Promise<void> {
   const job = insertImageJob({
     characterId: opts.characterId,
     kind: opts.kind,
@@ -116,7 +144,7 @@ export async function sendPhoto(opts: {
       kind: 'image',
       // description is what later prompts read to know what she sent; caption is all he sees
       // until he chooses to look.
-      meta: { image_id: job.id, pending: true, caption: shot.caption, description: shot.situation, aspect: job.aspect },
+      meta: { image_id: job.id, pending: true, caption: shot.caption, description: shot.situation, aspect: job.aspect, ...extraMeta },
       read_at: null,
       date_id: null,
     });
@@ -137,6 +165,7 @@ export async function showPhoto(imageId: string): Promise<void> {
   const job = getImageJob(imageId);
   if (!job) throw new Error('photo not found');
   if (job.status === 'done' || job.status === 'running') return;
+  if (findMessageByImageId(imageId)?.meta?.declined) throw new Error('he already picked the other one');
   if (!job.prompt) throw new Error('this photo was never prepared');
   const loaded = loadJob(imageId);
   if (!loaded) throw new Error(getImageJob(imageId)?.error ?? 'image generation is unavailable');
@@ -146,6 +175,18 @@ export async function showPhoto(imageId: string): Promise<void> {
     const updated = updateMessageMeta(message.id, patch);
     if (updated) bus.emitEvent({ type: 'message_updated', character_id: loaded.character.id, message: updated });
   };
+  // One of two she offered: he picked this one, so the other is set aside - it stays in the
+  // chat as "not picked", and later prompts know which one he chose.
+  if (message?.meta?.choice_group) {
+    for (const other of messagesInChoiceGroup(String(message.meta.choice_group))) {
+      if (other.id === message.id || other.meta?.declined) continue;
+      const updated = updateMessageMeta(other.id, {
+        declined: true,
+        description: `${other.meta?.description ?? 'a photo'} (she offered it, he picked the other one)`,
+      });
+      if (updated) bus.emitEvent({ type: 'message_updated', character_id: loaded.character.id, message: updated });
+    }
+  }
   setStatus(imageId, 'running');
   mark({ rendering: true, render_error: null });
   void (async () => {

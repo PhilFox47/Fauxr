@@ -314,6 +314,19 @@ export default function Chat({
     }
   };
 
+  const [movePending, setMovePending] = useState(false);
+  /** "Your move" - she writes first. Cleared once her typing shows or after a short grace. */
+  const yourMove = async () => {
+    setMovePending(true);
+    try {
+      await api.yourMove(characterId);
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+    } finally {
+      window.setTimeout(() => setMovePending(false), 4000);
+    }
+  };
+
   /** She sent a photo as a placeholder; this is the one tap that actually pays for rendering it. */
   const showPhoto = async (imageId: string) => {
     setShowingPhotoIds((prev) => new Set(prev).add(imageId));
@@ -418,7 +431,7 @@ export default function Chat({
         <div style={{ minWidth: 0 }}>
           <h1>{character?.display_name ?? '…'}</h1>
           <span className={`sub${isTyping ? ' live' : ''}`}>
-            {blocked ? 'You blocked her' : isTyping ? 'typing…' : 'online'}
+            {blocked ? 'You blocked her' : isTyping ? 'typing…' : character?.status || 'online'}
           </span>
         </div>
         <div className="spacer" />
@@ -596,8 +609,13 @@ export default function Chat({
           return (
             <div key={m.id} style={{ display: 'contents' }}>
               {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
-              {m.kind === 'image' && m.meta?.pending ? (
-                <div className={`bubble photo-pending ${mine ? 'me' : 'them'}`}>
+              {m.kind === 'image' && m.meta?.pending && m.meta?.declined ? (
+                <div className={`bubble photo-pending declined ${mine ? 'me' : 'them'}`}>
+                  {m.meta.caption && <p className="photo-pending-caption">{m.meta.caption}</p>}
+                  <span className="tiny muted">Not picked</span>
+                </div>
+              ) : m.kind === 'image' && m.meta?.pending ? (
+                <div className={`bubble photo-pending ${mine ? 'me' : 'them'}${m.meta.choice_group ? ' choice' : ''}`}>
                   <div className="photo-pending-art" data-aspect={m.meta.aspect ?? 'portrait'} aria-hidden>
                     <Icon name="camera" size={22} />
                   </div>
@@ -608,7 +626,11 @@ export default function Chat({
                     onClick={() => void showPhoto(m.meta.image_id)}
                     disabled={!!m.meta.rendering || showingPhotoIds.has(m.meta.image_id)}
                   >
-                    {m.meta.rendering || showingPhotoIds.has(m.meta.image_id) ? 'Developing…' : 'Show photo'}
+                    {m.meta.rendering || showingPhotoIds.has(m.meta.image_id)
+                      ? 'Developing…'
+                      : m.meta.choice_group
+                        ? 'Pick this one'
+                        : 'Show photo'}
                   </button>
                 </div>
               ) : m.kind === 'image' ? (
@@ -629,8 +651,11 @@ export default function Chat({
               ) : m.kind === 'voice' ? (
                 <VoiceBubble message={m} mine={mine} />
               ) : (
-                <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}`}>
+                <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}${m.meta?.reaction ? ' reacted' : ''}`}>
                   {m.text}
+                  {m.meta?.reaction && (
+                    <span className="bubble-reaction" title="Her reaction">{m.meta.reaction}</span>
+                  )}
                   {m.meta?.failed && (
                     <span className="fail-mark" title="Generation failed - this is a placeholder, not a real reply">
                       <Icon name="alert" size={14} />
@@ -753,6 +778,19 @@ export default function Chat({
           <button className="attach" onClick={() => fileRef.current?.click()} aria-label="Send a photo">
             <Icon name="plus" size={20} />
           </button>
+          {/* "Your move": she texts first, on her own impulse. Only while the box is empty -
+              once he is typing, he is the one making the move. */}
+          {!draft.trim() && (
+            <button
+              className="attach your-move"
+              onClick={() => void yourMove()}
+              disabled={isTyping || movePending}
+              aria-label="Let her make a move"
+              title="Let her make a move"
+            >
+              <Icon name="spark" size={19} />
+            </button>
+          )}
           <textarea
             ref={inputRef}
             value={draft}

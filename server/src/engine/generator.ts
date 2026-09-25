@@ -10,7 +10,7 @@ import {
   updateCharacterSeed,
 } from '../repo.js';
 import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
-import { domSubLean, rollFantasySeeds, rollKinkMap } from './kinks.js';
+import { domSubLean, rollChatGames, rollFantasySeeds, rollKinkMap } from './kinks.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
@@ -423,6 +423,7 @@ export function rollSeed(): RolledSeed {
   const sleepwear = one('sleepwear')!;
   const intimate_grooming = one('intimate_grooming')!;
   const fantasy_seeds = rollFantasySeeds({ kink_map, dom_sub_leaning });
+  const chat_games = rollChatGames({ kink_map, dom_sub_leaning, sexual_persona: persona.id });
 
   const hints: Record<string, string> = {
     species: hintOf(species),
@@ -518,6 +519,7 @@ export function rollSeed(): RolledSeed {
     sleepwear: sleepwear.id,
     intimate_grooming: intimate_grooming.id,
     fantasy_seeds,
+    chat_games,
     orientation: orientation.id,
     arousal_tell: arousal_tell.id,
     libido,

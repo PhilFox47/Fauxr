@@ -646,6 +646,56 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## Making the chat feel alive
+
+**Her status.** Every active match has a WhatsApp-style status - "gym then pizza, dont judge 🍕" -
+shown under her name in the chat and next to it in the chat list (`engine/status.ts`). It lasts
+4 to 12 hours, drawn per status, then a new one replaces it. It is cheap on purpose: one small
+call per match per status (a few hundred tokens of task on the Director model), at most one
+refresh per scheduler tick so a long list never fires a burst, and only for matched characters -
+blocked and deleted ones never get one. It runs whether or not unprompted messages are on,
+since it is not her texting him. The status also becomes her real situation (location, activity,
+outfit in `rel.mood`), and her prompt knows he can see it, so her replies and her status agree.
+
+**Reactions.** She can tap one emoji on his message (`hidden.react`), shown as a badge on his
+bubble. No reaction is the default: she is told to react only when a message really landed,
+anything that is not a single emoji is dropped, and code caps it at one reaction per four of his
+messages, because "only when it matters" in a prompt drifts towards "most turns".
+
+**"Your move".** The spark button in the composer (shown while the box is empty) makes her text
+first, right now - the manual version of an unprompted message (`POST /api/chats/:id/your-move`,
+trigger `initiative`). The Director runs with "she wants to text him right now - her own
+impulse", and the Actor gets `initiativeNudge()`: she is texting because she feels like it, he
+has not written anything new, and she must never say or imply he asked. What she comes with is
+hers, weighted by the moment: a fantasy, a photo out of nowhere, picking things back up if it was
+hot, a game, or something from right now (her status). Voice notes are skipped for these turns.
+
+**Games.** A `chat_game` table of 30 games she can start - truth or dare, a dare chain, yes/no/
+maybe, strip quiz, photo dare, rules for tonight, make me beg, the countdown, do what I do, and
+more - each with how she runs it, a dom/sub coding, the kink domains it touches and a heat
+level. Every character has four of her own (`rollChatGames()`, leaned by her persona, her kinks
+and her dom/sub leaning, never one touching a hard no; existing characters get theirs on first
+load). `gameNudge()` enforces the two things a prompt cannot: at most one game every 20 hours,
+and no game she has played while her list still has unplayed ones, nor any within five days.
+Hot games wait until she is worked up, photo games until you have swapped pictures. Chat games
+are also in Settings -> Taste.
+
+**"Which one?".** Instead of one photo she can offer two (`hidden.photo_options`): both are
+prepared, not rendered, and posted as two compact placeholders in one choice group with "Pick
+this one". Picking renders that one; the other stays in the chat as "not picked", its
+description tells later prompts he chose the other, and it can no longer be rendered. Still one
+image to pay for.
+
+**How close she is.** A climax tracker under the arousal level (`engine/release.ts`), for
+sexting and for sex on dates alike. It only climbs while she reports being in the act
+(`hidden.in_the_act`), by 7-12 points per exchange scaled by her persona's `extra.climax_pace`
+and how turned on she is, and cools by 12 when they step out of it. Measured: about thirteen
+exchanges for a slow-burner, six for a quickie queen. She is told the stage in words - just
+started, building, close, on the edge, coming right now - and at the top she comes in that
+reply, then has an afterglow in her own style for two replies before it can build again.
+Personas made for more (`extra.multiple_rounds`: insatiable, overstimulation chaser, hedonist,
+free-use) bounce back after one. A regenerate rewrites the same moment and does not move it.
+
 ## How a turn works
 
 ```

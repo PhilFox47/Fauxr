@@ -14,7 +14,8 @@ import { describeHim } from './discovery.js';
 import { userCardBlock } from './usercard.js';
 import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
-import { pickNudge } from './nudge.js';
+import { initiativeNudge, pickNudge } from './nudge.js';
+import { releaseBlock } from './release.js';
 import { detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
 import { canSendPhotos, hasSwapped } from './images.js';
 import { fantasyLog } from './fantasies.js';
@@ -70,6 +71,9 @@ function fallbackOutput(): ActorOutput {
       photo_shows_face: null,
       fantasy_pitched: null,
       new_fantasy: null,
+      react: null,
+      photo_options: null,
+      in_the_act: false,
     },
   };
 }
@@ -97,7 +101,20 @@ function normalizeHidden(raw: any): ActorHidden {
     photo_shows_face: typeof raw?.photo_shows_face === 'boolean' ? raw.photo_shows_face : null,
     fantasy_pitched: Number.isInteger(raw?.fantasy_pitched) && raw.fantasy_pitched > 0 ? raw.fantasy_pitched : null,
     new_fantasy: raw?.new_fantasy ? String(raw.new_fantasy).slice(0, 400) : null,
+    react: singleEmoji(raw?.react),
+    photo_options: Array.isArray(raw?.photo_options)
+      ? raw.photo_options.map((o: unknown) => String(o ?? '').trim().slice(0, 300)).filter(Boolean).slice(0, 2)
+      : null,
+    in_the_act: raw?.in_the_act === true,
   };
+}
+
+/** The first emoji of whatever came back, or null - a reaction is one emoji, never text. */
+export function singleEmoji(raw: unknown): string | null {
+  const text = String(raw ?? '').trim();
+  if (!text || text === 'null') return null;
+  const first = [...new Intl.Segmenter('en', { granularity: 'grapheme' }).segment(text)][0]?.segment ?? '';
+  return /\p{Extended_Pictographic}/u.test(first) ? first : null;
 }
 
 /**
@@ -138,6 +155,8 @@ export interface ActorContext {
   character: Character;
   relationship: Relationship;
   direction: Direction | null;
+  /** She is texting first, on her own impulse ("your move") - not answering anything. */
+  initiative?: boolean;
 }
 
 /** Set by runActor so the caller can burn down a thread she was told to raise. */
@@ -145,6 +164,8 @@ export interface ActorRun extends ActorOutput {
   raisedThreadId?: string;
   /** The fantasy the pitch_fantasy nudge told her to pitch this turn, if it fired. */
   nudgedFantasy?: string;
+  /** The chat game she was told to start this turn, so it can be logged as played. */
+  nudgedGame?: string;
 }
 
 function buildPrompt(
@@ -189,6 +210,7 @@ function buildPrompt(
     ledger_block: ledgerBlock(relationship.ledger),
     direction_block: directionBlock(direction, somethingLive),
     mood_block: moodBlock(relationship.arousal, seed.hints.arousal_tell),
+    release_block: releaseBlock(character, relationship),
     moment_block: describeHerMoment(character),
     continuity_block: continuityBlock(relationship.mood),
     turn_nudge: nudge,
@@ -255,7 +277,9 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
     !!(ctx.relationship.mood as any)?.unresolved ||
     (recent[recent.length - 1]?.sender === 'user' && lastUserMessage.includes('?'));
 
-  const nudge = pickNudge(ctx.character, ctx.relationship, { somethingLive });
+  const nudge = ctx.initiative
+    ? initiativeNudge(ctx.character, ctx.relationship)
+    : pickNudge(ctx.character, ctx.relationship, { somethingLive });
   const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '', somethingLive);
   const base = [{ role: 'user' as const, content: prompt }];
 
@@ -391,7 +415,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
     }
 
     if (nudge) logger.debug('actor', `nudge applied: ${nudge.id}`, { character: ctx.character.username });
-    return { ...out, raisedThreadId: nudge?.threadId, nudgedFantasy: nudge?.fantasy };
+    return { ...out, raisedThreadId: nudge?.threadId, nudgedFantasy: nudge?.fantasy, nudgedGame: nudge?.game };
   }
 
   logger.error('actor', `actor failed twice for ${ctx.character.username}, using fallback`);

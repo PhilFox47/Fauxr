@@ -21,6 +21,47 @@ export interface Nudge {
   threadId?: string;
   /** Set by pitch_fantasy: the exact fantasy she was told to pitch. */
   fantasy?: string;
+  /** Set by start_game: the chat_game she was told to start, logged once she has. */
+  game?: string;
+}
+
+/** At most one game every this long, whoever starts it. */
+const GAME_COOLDOWN_MS = 20 * 3_600_000;
+/** A game she has already played does not come back sooner than this, even once all are used. */
+const GAME_REPEAT_MS = 5 * 24 * 3_600_000;
+
+/**
+ * A game she could start right now, or null. The two failure modes this guards against are a
+ * character suggesting games every few messages and the same game coming back again and
+ * again, so both are enforced here rather than left to the prompt: one game per cooldown,
+ * never one she has played while her list still has others, and never within five days.
+ * Hot games wait until she is worked up; photo games until you have swapped pictures.
+ */
+export function gameNudge(character: Character, rel: Relationship): Nudge | null {
+  const log = ((rel.mood as any)?.games ?? {}) as { last_at?: string; played?: Record<string, string> };
+  if (log.last_at && Date.now() - Date.parse(log.last_at) < GAME_COOLDOWN_MS) return null;
+  const played = log.played ?? {};
+  const swapped = !!(rel.flags?.state?.photos_exchanged || rel.flags?.state?.profile_picture_sent);
+  const eligible = (character.seed.chat_games ?? [])
+    .map((id) => find('chat_game', id))
+    .filter((g): g is NonNullable<typeof g> => !!g)
+    .filter((g) => g.extra?.heat !== 'hot' || rel.arousal >= 40)
+    .filter((g) => swapped || !((g.extra?.domains as string[] | undefined) ?? []).includes('recording'));
+  const unplayed = eligible.filter((g) => !played[g.id]);
+  const pool = unplayed.length
+    ? unplayed
+    : eligible.filter((g) => Date.now() - Date.parse(played[g.id]) > GAME_REPEAT_MS)
+        .sort((a, b) => Date.parse(played[a.id]) - Date.parse(played[b.id]))
+        .slice(0, 1);
+  if (!pool.length) return null;
+  const g = pool[Math.floor(Math.random() * pool.length)];
+  return {
+    id: 'start_game',
+    game: g.id,
+    text:
+      `Start a game with him this turn: ${g.label} - ${g.prompt_hint}. Set it up in your own words, ` +
+      'with whatever rules you want, and make the first move yourself. It is your idea, so sell it.',
+  };
 }
 
 function chance(p: number): boolean {
@@ -86,6 +127,12 @@ export function pickNudge(
         'scene in a line or two, tell him what you would want him to do, and ask if he is in. Tweak ' +
         'it to what you know about him. If you already pitched this one, move it forward instead.',
     };
+  }
+
+  // Now and then, a game of hers - gameNudge() holds the cooldown and the no-repeat rules.
+  if (!ctx.somethingLive && chance(0.12)) {
+    const game = gameNudge(character, rel);
+    if (game) return game;
   }
 
   if (chance(0.3 + boldness + (forward ? 0.1 : 0))) {
@@ -204,4 +251,76 @@ export function pickNudge(
   }
 
   return null;
+}
+
+/**
+ * "Your move": he pressed the button, so she texts first - and has to experience that as her
+ * own impulse. Nothing in here may read as "he asked you to write": she has simply thought of
+ * him, or of something she wants to say or show him, and is sending it. What she comes with
+ * is drawn from her own material, weighted by what fits the moment.
+ */
+export function initiativeNudge(character: Character, rel: Relationship): Nudge {
+  const seed = character.seed;
+  const opener =
+    'You are texting him first, right now, because you feel like it. He has not sent anything new ' +
+    'and nothing he did set this off - he has been on your mind, or something just happened, or you ' +
+    'want something. Do not answer an old message as if it were new, and never say or imply that he ' +
+    'asked you to write. ';
+  const options: { weight: number; build: () => Nudge }[] = [];
+
+  const fantasies = fantasyList(seed);
+  const pitched = new Set(Object.keys((rel.mood as any)?.fantasy_log ?? {}));
+  const fresh = fantasies.filter((f) => !pitched.has(f));
+  if (fantasies.length) {
+    const pick = (fresh.length ? fresh : fantasies)[Math.floor(Math.random() * (fresh.length || fantasies.length))];
+    options.push({
+      weight: 2,
+      build: () => ({
+        id: 'initiative',
+        fantasy: pick,
+        text: opener + `Come to him with one of your fantasies - it has been on your mind: ${pick}. Set the scene and ask if he is in.`,
+      }),
+    });
+  }
+  const swapped = !!(rel.flags?.state?.photos_exchanged || rel.flags?.state?.profile_picture_sent);
+  if (swapped) {
+    options.push({
+      weight: 1.5,
+      build: () => ({
+        id: 'initiative',
+        text: opener + 'Send him a photo out of nowhere - what you are doing, what you have on, or something to tease him with - and a line with it.',
+      }),
+    });
+  }
+  const game = gameNudge(character, rel);
+  if (game) {
+    options.push({ weight: 1.2, build: () => ({ ...game, text: opener + game.text }) });
+  }
+  if (rel.arousal >= 40) {
+    options.push({
+      weight: 2,
+      build: () => ({
+        id: 'initiative',
+        text: opener + 'You are still thinking about where things got to between you, and you want more. Pick it back up yourself, specifically.',
+      }),
+    });
+  }
+  options.push({
+    weight: 1.5,
+    build: () => ({
+      id: 'initiative',
+      text:
+        opener +
+        'Tell him something from right now - what you are doing (your status says it), a thought you just had about him, ' +
+        'a confession, something that made you think of him. Something of yours, not a question to fill the silence.',
+    }),
+  });
+
+  const total = options.reduce((a, o) => a + o.weight, 0);
+  let r = Math.random() * total;
+  for (const o of options) {
+    r -= o.weight;
+    if (r <= 0) return o.build();
+  }
+  return options[options.length - 1].build();
 }

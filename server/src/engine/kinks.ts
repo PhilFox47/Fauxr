@@ -117,6 +117,7 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
       { category: 'lingerie_style', label: 'Underneath' },
       { category: 'dirty_talk', label: 'Dirty talk' },
       { category: 'fantasy_scenario', label: 'Fantasy ideas' },
+      { category: 'chat_game', label: 'Chat games' },
     ],
   },
   {
@@ -129,3 +130,29 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
     ],
   },
 ];
+
+/**
+ * The few chat games that are hers (chat_game table): leaned by her persona (rows list the
+ * personas they suit), by the domains she is into, and by her dom/sub leaning, never one that
+ * touches a domain she is a hard no on. A handful per character, so what she suggests is
+ * recognisably hers and the cast does not all run the same truth-or-dare.
+ */
+export function rollChatGames(
+  seed: { kink_map: Record<string, KinkStance>; dom_sub_leaning: number; sexual_persona?: string },
+  count = 4,
+): string[] {
+  const all = byCategory('chat_game');
+  const lean = domSubLean(all, seed.dom_sub_leaning);
+  const allowed = new Set<string>();
+  for (const g of all) {
+    const stances = ((g.extra?.domains as string[] | undefined) ?? []).map((d) => seed.kink_map?.[d]);
+    if (stances.includes('hard_no')) continue;
+    allowed.add(g.id);
+    let m = lean[g.id] ?? 1;
+    for (const st of stances) m *= st === 'into' ? 2.5 : st === 'curious' ? 1.4 : st === 'soft_no' ? 0.3 : 1;
+    lean[g.id] = m;
+  }
+  const ctx = newContext();
+  if (seed.sexual_persona) ctx.drawn.add(seed.sexual_persona);
+  return rollMany('chat_game', ctx, count, { only: allowed, lean, transient: true }).map((a) => a.id);
+}

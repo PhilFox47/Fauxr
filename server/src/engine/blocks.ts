@@ -316,6 +316,10 @@ export function continuityBlock(mood: Record<string, unknown>): string {
   const location = String(mood?.location ?? '').trim();
   const outfit = String(mood?.outfit ?? '').trim();
   const activity = String(mood?.activity ?? '').trim();
+  const status = String((mood as any)?.status?.text ?? '').trim();
+  const statusLine = status
+    ? `Your status right now, which he can see under your name: "${status}". It is yours - you can mention it, and he may ask about it.`
+    : '';
   if (!location && !outfit && !activity) {
     return (
       'You have not settled where you physically are, what you are wearing, or what you are ' +
@@ -324,6 +328,7 @@ export function continuityBlock(mood: Record<string, unknown>): string {
     );
   }
   return [
+    statusLine,
     'Your actual physical situation right now, unless something below has clearly moved on ' +
       'since:',
     location ? `- Where you are: ${location}` : '',

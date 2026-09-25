@@ -110,6 +110,8 @@ export interface CharacterSeed {
   intimate_grooming: string;
   /** fantasy_scenario ids the character pass adapted into some of her fantasies. */
   fantasy_seeds?: string[];
+  /** chat_game ids that are hers to suggest (see kinks.ts rollChatGames). */
+  chat_games?: string[];
   /** Who she is attracted to. Decides whether she can appear for this user at all. */
   orientation: string;
   /** How it shows when she is turned on, so warming up is not identical for everyone. */
@@ -266,6 +268,12 @@ export interface ActorHidden {
   fantasy_pitched: number | null;
   /** A brand-new fantasy she came up with and pitched in these messages, or null. */
   new_fantasy: string | null;
+  /** One emoji she taps on his last message - null almost always, set only when it really landed. */
+  react: string | null;
+  /** Two short photo ideas when she lets him pick which one she sends; null otherwise. */
+  photo_options: string[] | null;
+  /** True only while the two of them are actively sexting right now - drives the climax tracker. */
+  in_the_act: boolean;
 }
 
 export interface ActorOutput {

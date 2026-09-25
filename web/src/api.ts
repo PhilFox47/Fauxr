@@ -96,6 +96,8 @@ export interface MatchSummary {
   last_activity: string | null;
   /** She is out with him right now - the chat is frozen and there is somewhere better to look. */
   on_date: boolean;
+  /** Her WhatsApp-style status line, refreshed every 4-12 hours; null until she has one. */
+  status?: string | null;
 }
 
 export interface Message {
@@ -317,6 +319,7 @@ export const api = {
   },
   images: () => request<ImageJob[]>('/api/images'),
   retryImage: (id: string) => request<any>(`/api/images/${id}/retry`, { method: 'POST' }),
+  yourMove: (characterId: string) => request<{ ok: true }>(`/api/chats/${characterId}/your-move`, { method: 'POST' }),
   showPhoto: (id: string) => request<{ ok: true }>(`/api/images/${id}/show`, { method: 'POST' }),
   regenerateImage: (id: string, mode: 'same_idea' | 'new_idea') =>
     request<any>(`/api/images/${id}/regenerate`, { method: 'POST', body: JSON.stringify({ mode }) }),

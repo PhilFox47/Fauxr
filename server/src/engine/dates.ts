@@ -22,6 +22,7 @@ import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, 
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage, photoSelfBlock } from './images.js';
+import { advanceRelease, releaseBlock, releaseOf } from './release.js';
 import { describeHerMoment } from './moment.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { fantasyLog } from './fantasies.js';
@@ -156,7 +157,7 @@ export function directionBlock(direction: string): string {
 
 export interface DateTurnResult {
   text: string;
-  hidden: { thoughts: string; mood: string; wants: string };
+  hidden: { thoughts: string; mood: string; wants: string; in_the_act?: boolean };
 }
 
 // ------------------------------------------------------------------ prompt blocks
@@ -216,6 +217,7 @@ function buildDatePrompt(
     ].filter(Boolean).join('\n\n'),
     ledger_block: ledgerBlock(rel.ledger),
     mood_block: moodBlock(rel.arousal, seed.hints.arousal_tell, 'in_person'),
+    release_block: releaseBlock(character, rel, 'in_person'),
     moment_block: describeHerMoment(character),
     // Empty unless he has actually written one. Deliberately the last block in the template,
     // immediately before OUTPUT - see directionBlock for why position matters here.
@@ -391,6 +393,7 @@ async function runDateActor(
         thoughts: String(parsed?.hidden?.thoughts ?? ''),
         mood: String(parsed?.hidden?.mood ?? ''),
         wants: String(parsed?.hidden?.wants ?? ''),
+        in_the_act: parsed?.hidden?.in_the_act === true,
       },
     };
   }
@@ -412,6 +415,7 @@ async function takeDateTurn(dateId: string): Promise<void> {
   if (!claimTurn(character.id)) return;
 
   const startedIn = currentEpoch();
+  const releaseBefore = releaseOf(rel);
   bus.emitEvent({ type: 'typing', character_id: character.id, on: true });
   try {
     const result = await runDateActor(character, rel, date);
@@ -437,6 +441,8 @@ async function takeDateTurn(dateId: string): Promise<void> {
         thoughts: result.hidden.thoughts,
         date_wants: result.hidden.wants,
       };
+      // Same tracker as the chat: sex on a date gets the same build, edge, climax and afterglow.
+      advanceRelease(character, fresh, releaseBefore, !!result.hidden.in_the_act);
       fresh.last_contact_at = nowIso();
       saveRelationship(fresh);
     }

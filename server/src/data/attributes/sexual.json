@@ -5444,7 +5444,8 @@
       "pace": 1.2,
       "initiative": 0.15,
       "freak_shift": 0.3,
-      "photo_boldness": 1.0
+      "photo_boldness": 1.0,
+      "climax_pace": 0.8
     },
     "enabled": true,
     "rarity": "common"
@@ -5610,7 +5611,8 @@
       },
       "pace": 1.2,
       "freak_shift": 1.0,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "climax_pace": 0.8
     },
     "enabled": true,
     "rarity": "common"
@@ -6079,7 +6081,8 @@
         "long_foreplay": 3.0
       },
       "pace": 0.7,
-      "photo_boldness": -1.0
+      "photo_boldness": -1.0,
+      "climax_pace": 0.75
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -6180,7 +6183,8 @@
       "pace": 1.3,
       "initiative": 0.1,
       "freak_shift": 0.4,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "multiple_rounds": true
     },
     "enabled": true,
     "rarity": "common"
@@ -6229,7 +6233,9 @@
       "pace": 1.6,
       "initiative": 0.25,
       "freak_shift": 0.5,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "climax_pace": 1.3,
+      "multiple_rounds": true
     },
     "enabled": true,
     "rarity": "common"
@@ -6279,7 +6285,8 @@
       "kink_bias": {
         "sensation": 1.5
       },
-      "photo_boldness": -0.5
+      "photo_boldness": -0.5,
+      "climax_pace": 0.6
     },
     "enabled": true,
     "rarity": "rare"
@@ -7031,7 +7038,8 @@
       },
       "pace": 1.3,
       "freak_shift": 0.8,
-      "photo_boldness": 1.0
+      "photo_boldness": 1.0,
+      "climax_pace": 1.2
     },
     "enabled": true,
     "rarity": "common"
@@ -7088,7 +7096,8 @@
         "hair_pulled": 3.0
       },
       "pace": 1.3,
-      "freak_shift": 0.4
+      "freak_shift": 0.4,
+      "climax_pace": 1.2
     },
     "enabled": true,
     "rarity": "common"
@@ -7137,7 +7146,8 @@
         "car": 2.0
       },
       "pace": 1.4,
-      "initiative": 0.15
+      "initiative": 0.15,
+      "climax_pace": 1.7
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -7550,7 +7560,8 @@
       },
       "pace": 1.2,
       "freak_shift": 1.0,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "climax_pace": 1.2
     },
     "enabled": true,
     "rarity": "common"
@@ -8170,7 +8181,8 @@
         "overstimulation": 3.0
       },
       "pace": 1.1,
-      "freak_shift": 0.6
+      "freak_shift": 0.6,
+      "climax_pace": 0.6
     },
     "enabled": true,
     "rarity": "common"
@@ -8273,7 +8285,8 @@
       },
       "pace": 1.3,
       "freak_shift": 1.2,
-      "photo_boldness": 1.5
+      "photo_boldness": 1.5,
+      "multiple_rounds": true
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9153,7 +9166,8 @@
         "hip_grip": 3.0,
         "being_ridden": 3.0
       },
-      "pace": 1.2
+      "pace": 1.2,
+      "climax_pace": 0.7
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9300,7 +9314,8 @@
         "pushed_against_wall": 3.0,
         "eye_contact_during": 3.0
       },
-      "pace": 0.5
+      "pace": 0.5,
+      "climax_pace": 0.9
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -9907,7 +9922,9 @@
         "multiple_rounds": 3.0
       },
       "pace": 1.3,
-      "freak_shift": 0.9
+      "freak_shift": 0.9,
+      "climax_pace": 1.3,
+      "multiple_rounds": true
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -10107,7 +10124,8 @@
       "kink_bias": {
         "tease_denial": 2.0
       },
-      "photo_boldness": -0.5
+      "photo_boldness": -0.5,
+      "climax_pace": 0.7
     },
     "enabled": true,
     "rarity": "uncommon"

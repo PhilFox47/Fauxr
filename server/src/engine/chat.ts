@@ -4,14 +4,15 @@ import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
   activeDate, addMessage, clearWakeup, deleteMessages, getCharacter, getMessage, getRelationship, getWakeup,
-  markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, type StoredMessage,
+  markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, type StoredMessage, updateMessageMeta,
 } from '../repo.js';
 import type { Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
 import { detectEvents, directionExpired, directionOutdatedBy, runDirector } from './director.js';
 import { markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
-import { canSendPhotos, sendPhoto } from './images.js';
+import { canSendPhotos, sendPhoto, sendPhotoChoice } from './images.js';
+import { advanceRelease, releaseOf } from './release.js';
 import { addInventedFantasy, markPitched } from './fantasies.js';
 import { fantasyList } from './blocks.js';
 
@@ -120,7 +121,8 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
 }
 
 export interface TurnOptions {
-  trigger: 'user_message' | 'wakeup' | 'match_opener' | 'catch_up';
+  /** 'initiative' is the "your move" button: she texts first, on her own impulse. */
+  trigger: 'user_message' | 'wakeup' | 'match_opener' | 'catch_up' | 'initiative';
   reason?: string;
   /** Force a Director pass before the Actor runs. */
   forceDirector?: boolean;
@@ -164,6 +166,7 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     outdated ||
     opts.trigger === 'wakeup' ||
     opts.trigger === 'match_opener' ||
+    opts.trigger === 'initiative' ||
     isStaleSession(rel);
 
   if (needsDirector) {
@@ -175,7 +178,7 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     character = getCharacter(characterId)!;
   }
 
-  await runActorPhase(character, rel, { startedIn, decrementValidFor: true });
+  await runActorPhase(character, rel, { startedIn, decrementValidFor: true, initiative: opts.trigger === 'initiative' });
 }
 
 /**
@@ -186,7 +189,7 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
 async function runActorPhase(
   character: Character,
   rel: Relationship,
-  opts: { startedIn: number; decrementValidFor: boolean },
+  opts: { startedIn: number; decrementValidFor: boolean; initiative?: boolean },
 ): Promise<void> {
   const characterId = character.id;
   const { startedIn } = opts;
@@ -209,12 +212,19 @@ async function runActorPhase(
     bus.emitEvent({ type: 'typing', character_id: characterId, on: false });
   };
 
+  // Where the climax tracker stood when her prompt was built - see engine/release.ts.
+  const releaseBefore = releaseOf(rel);
+  // The message she is answering, if the last word was his - the only thing a reaction can land on.
+  const answering = recentMessages(characterId, 1)[0];
+  const replyTo = answering?.sender === 'user' ? answering : null;
+
   let result: ActorRun;
   try {
     showTyping();
 
-    const useVoice = wantsVoiceMessage(character);
-    const ctx = { character, relationship: rel, direction: rel.active_direction };
+    // The initiative nudge is written for a text turn; a voice note would drop it.
+    const useVoice = !opts.initiative && wantsVoiceMessage(character);
+    const ctx = { character, relationship: rel, direction: rel.active_direction, initiative: opts.initiative };
     const output = useVoice
       ? await runActorVoice(ctx).then((v) => (v ? { messages: [v.message], hidden: v.hidden } : null))
       : null;
@@ -261,6 +271,17 @@ async function runActorPhase(
     if (added.length) logger.debug('actor', `revealed in passing: ${added.join(', ')}`);
   }
 
+  applyReaction(characterId, replyTo, result.hidden.react);
+  // A regenerate rewrites the same moment, so it does not move the tracker a second time.
+  if (opts.decrementValidFor) advanceRelease(character, rel, releaseBefore, result.hidden.in_the_act);
+
+  // She started one of her games: log it, so the cooldown and the no-repeat rule hold.
+  if (result.nudgedGame) {
+    const games = ((rel.mood as any)?.games ?? {}) as { last_at?: string; played?: Record<string, string> };
+    const at = nowIso();
+    rel.mood = { ...rel.mood, games: { last_at: at, played: { ...(games.played ?? {}), [result.nudgedGame]: at } } };
+  }
+
   // A thread she was told to raise is now spent, whether or not he engaged with it.
   if (result.raisedThreadId) markThreadRaised(rel, result.raisedThreadId);
 
@@ -276,7 +297,18 @@ async function runActorPhase(
   // She decided to send a photo, so it is sent: prepared in the background (her idea, the
   // prompt, a caption) and posted as a placeholder he can choose to open - see sendPhoto.
   const photoKind = result.hidden.photo_offer;
-  if (photoKind && canSendPhotos(rel)) {
+  const options = result.hidden.photo_options ?? [];
+  if (photoKind && canSendPhotos(rel) && options.length === 2) {
+    // "Which one?" - two placeholders, he picks the one he sees.
+    void sendPhotoChoice({
+      characterId: character.id,
+      kind: photoKind,
+      options,
+      aspect: result.hidden.photo_aspect ?? 'portrait',
+      showsFace: result.hidden.photo_shows_face ?? true,
+    }).catch((err) => logger.error('image', 'photo choice failed', { error: String(err) }));
+    logger.debug('actor', `${character.username} is offering a choice of two ${photoKind} photos`);
+  } else if (photoKind && canSendPhotos(rel)) {
     void sendPhoto({
       characterId: character.id,
       kind: photoKind,
@@ -312,6 +344,20 @@ async function runActorPhase(
       origin: 'user',
     });
   }
+}
+
+/**
+ * She taps an emoji on his message. Off by default - the Actor is told to leave it null unless
+ * the message really landed - and capped here as well, because "only when it matters" in a
+ * prompt drifts towards "most turns": if any of his last four messages already carries one,
+ * this one does not get another.
+ */
+function applyReaction(characterId: string, replyTo: StoredMessage | null, react: string | null): void {
+  if (!react || !replyTo || replyTo.meta?.reaction) return;
+  const hisRecent = recentMessages(characterId, 16).filter((m) => m.sender === 'user').slice(-4);
+  if (hisRecent.some((m) => m.meta?.reaction)) return;
+  const updated = updateMessageMeta(replyTo.id, { reaction: react });
+  if (updated) bus.emitEvent({ type: 'message_updated', character_id: characterId, message: updated });
 }
 
 /**
