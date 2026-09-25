@@ -12,8 +12,8 @@ that photo actually is.
 {{profile_heat}}
 
 Take this as your level, not a script: the exact shot still comes from your style, your body
-and your usual spot. Whatever the level, what is between your legs stays out of view -
-underwear, a thigh, a hand or the angle.
+and your usual spot. This is the first photo of you anyone sees, so whatever the level it is
+never naked: your nipples stay covered, and what is between your legs stays out of view.
 
 # THE ONE FIXED THING: YOUR FACE
 This photo is the one every later picture of you is matched to, so it is framed on your face

@@ -534,17 +534,26 @@ they now aim at what Fauxr is.
   `PROFILE_LEVELS`), and a level sets the whole photo - what she shows, what the picture is
   about, how she poses and the look she gives the lens - because clothing alone left every
   level falling back on the same standing mirror selfie with more or less fabric:
-  - **Bold** (about half the cast): topless is fine, or lingerie, a thong, wet or sheer
-    fabric; the photo is openly about her body (across her bed, the shower doorway, a hotel
-    bed); posed to show it (back arched, ass to the camera, arms above her head, kneeling on
-    the bed); a direct, heavy-lidded look.
-  - **Flirty** (a third): tight, short or low-cut, a bikini at most; her out looking good (a
+  - **Teasing** (about half the cast): mostly covered, the point is what peeks out; an
+    everyday moment with an edge (in bed in the morning, a close-up); half covered, legs
+    tucked up; a look that suggests more than it shows - shy or knowing, whichever she is.
+  - **Flirty** (about 40%): tight, short or low-cut, a bikini at most; her out looking good (a
     night out, the gym mirror, a pool); angled to show her shape; a smirk that holds.
-  - **Teasing** (an eighth): mostly covered, the point is what peeks out; an everyday moment
-    with an edge (in bed in the morning, a close-up); half hidden, legs tucked up; a shy look
-    from under her lashes.
-  At every level the area between her legs stays out of view, since that is what Seedream
-  renders badly.
+  - **Bold** (about 6%): lingerie, a bikini, wet or sheer fabric, or an arm across a bare
+    chest; openly about her body (across her bed, the shower doorway); posed to show it; a
+    direct, heavy-lidded look.
+  The profile picture is the first image of her anyone sees and stays on her profile, so it
+  is never naked at any level: nipples stay covered and the area between her legs stays out
+  of view. It leans teasing on purpose; only the real show-offs (an exhibitionist persona, a
+  show-off personality) never lead with a tease.
+
+  **Her chat photos have their own, bolder scale** (`chatPhotoLevel()` in
+  `engine/photolevel.ts`, same score, different thresholds): about half bold (topless and
+  fully naked are normal once it turns sexual), 40% flirty (lingerie and underwear first),
+  a tenth teasing (hints first, more when he asks). It reaches the Actor's sexual block and
+  the photo-idea prompt as "how far your photos to him usually go" - a baseline, not a cap -
+  and in the chat a dominant woman never sends coy photos. Only the area between her legs
+  stays out of view there, since that is what Seedream renders badly.
 
   Whatever the level, a profile picture is framed on her face and upper body (head and
   shoulders, chest up or waist up, never full-length or from behind) with her face sharp, lit

@@ -172,11 +172,11 @@ it (a full-length mirror shot becomes the same mirror from the waist up).
 
 Whatever it is, she looks hot in it and it shows off her figure the way she meant it to:
 the pose, the angle and the outfit (or how little of one) exactly as she described. Write her
-body with the same care as her face. Lingerie, swimwear, sheer or wet fabric and bare
-breasts are all fine if that is what she described - render them as described, not covered
-back up. The one area that stays out of view is right between her legs (underwear, a thigh,
-a hand, the angle), because the model renders it badly; do not write the word for it
-anywhere in the prompt, since naming it tends to get the request refused.
+body with the same care as her face. It is the first photo of her anyone sees, so it is
+never naked: lingerie, swimwear, sheer or wet fabric, or an arm across a bare chest are as far
+as it goes - her nipples stay covered and the area between her legs stays out of view. Do not
+write the word for what is covered anywhere in the prompt, since naming it tends to get the
+request refused; say what covers it instead.
 {{/is_profile}}
 {{#is_moment}}
 This is a photo from **inside the conversation** - something happening right now, not a

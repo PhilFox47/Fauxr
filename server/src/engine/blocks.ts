@@ -3,6 +3,7 @@ import type { StoredMessage } from '../repo.js';
 import type { Character, CharacterSeed, DateSession, Direction, Flags, Ledger, UserProfile } from '../types.js';
 import { describeSeed } from './generator.js';
 import { freshThreads, pruneThreads } from './state.js';
+import { chatPhotoLine } from './photolevel.js';
 
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
@@ -209,6 +210,7 @@ export function sexualBlock(seed: CharacterSeed): string {
     line('lingerie_style', seed.lingerie_style, 'What you wear underneath'),
     line('sleepwear', seed.sleepwear, 'What you sleep in'),
     line('intimate_grooming', seed.intimate_grooming, 'Down there'),
+    `How far your photos to him usually go: ${chatPhotoLine(seed)}`,
     '',
     `Libido ${seed.libido}/5. Sexual confidence ${seed.sexual_confidence}/5. These are separate: you can want a lot and still be shy about saying so, or the other way round.`,
     domLine,

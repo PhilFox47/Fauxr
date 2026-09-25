@@ -18,6 +18,8 @@ import { render } from '../prompts/render.js';
 import { find } from '../db/attributes.js';
 import { pickOne, randInt } from './dice.js';
 import { describeSeed } from './generator.js';
+import { chatPhotoLine, photoManner, profileHeat } from './photolevel.js';
+export { profileHeat, profileLevel, chatPhotoLevel, photoManner } from './photolevel.js';
 import type { Character, CharacterSeed, Relationship } from '../types.js';
 
 /** Whether image generation is switched on at all. */
@@ -666,115 +668,13 @@ function referenceImage(characterId: string): string | null {
 }
 
 /**
- * How bold her lead photo is, from her own seed. A hookup app's profile pictures run from a
- * look and a bit of skin to topless in bed, and which one a woman leads with is as much her as
- * her style is - so it is her confidence and how far she goes, not a house setting.
- *
- * Each level sets the whole photo, not just the outfit: what she shows, what the picture is
- * about, how she positions herself and the look she gives the lens. Clothing alone left every
- * level free to fall back on the same standing mirror selfie with a different amount of fabric.
- */
-const PROFILE_LEVELS: Record<'bold' | 'flirty' | 'teasing', { name: string; shows: string; about: string; pose: string; look: string }> = {
-  bold: {
-    name: 'Bold',
-    shows: 'Topless is fine - bare breasts, or lingerie, a thong, a bikini, wet or see-through fabric.',
-    about: 'Openly about your body and sex: lying across your bed, the bathroom mirror, the shower doorway, a hotel bed, your usual photo spot with the lights set up for it.',
-    pose: 'Posed to show it off: back arched, looking back over a bare shoulder, stretched across the sheets, leaning into the mirror, a hand on your own body.',
-    look: 'Straight into the lens - a bitten or parted lip, heavy-lidded eyes. You know exactly what this photo does.',
-  },
-  flirty: {
-    name: 'Flirty',
-    shows: 'Your figure in something tight, short or low-cut, a bikini or a sports set - no underwear on show.',
-    about: 'You out in the world looking good: a night out, the gym mirror, a pool, the mirror before you leave, your car, a festival.',
-    pose: 'Angled to show your shape: a shoulder turned to the lens, looking back over it, leaning in towards the camera, chin down and eyes up.',
-    look: 'A smirk or a knowing smile, and eye contact that holds a beat too long.',
-  },
-  teasing: {
-    name: 'Teasing',
-    shows: 'Mostly covered - the point is what peeks out: a bare shoulder, a slipping strap, an oversized shirt and bare legs, a glimpse of lace.',
-    about: 'An everyday moment with an edge: in bed in the morning, curled up on the sofa, a close-up of your face, a mirror half fogged up.',
-    pose: 'Half covered: a sheet or an oversized shirt slipping off one shoulder, knees pulled up, a hand in your hair, the camera close.',
-    look: 'A look that suggests more than it shows - shy from under your lashes, or knowing and patient, whichever you are.',
-  },
-};
-
-const boldnessOf = (category: string, id: string | undefined) =>
-  Number((id ? find(category, id)?.extra?.photo_boldness : 0) ?? 0);
-
-/**
- * Which level her lead photo is, from who she is: confidence and how far she goes, plus how
- * her persona, archetype and style lean a photo (extra.photo_boldness). Driven by the first
- * two alone it was right on average and still free to hand a commanding domme a shy teasing
- * photo, so the persona and archetype count directly, and three combinations that would
- * contradict her outright are ruled out whatever the score says.
- */
-export function profileLevel(seed: CharacterSeed): 'bold' | 'flirty' | 'teasing' {
-  const persona = boldnessOf('sexual_persona', seed.sexual_persona);
-  const archetype = boldnessOf('archetype', seed.archetype);
-  const score =
-    ((seed.sexual_confidence ?? 3) - 3) * 0.8 + ((seed.freak ?? 3) - 3.5) * 0.6 +
-    persona + archetype + boldnessOf('clothing_style', seed.clothing_style);
-  let level: 'bold' | 'flirty' | 'teasing' = score >= BOLD_FROM ? 'bold' : score <= TEASING_UP_TO ? 'teasing' : 'flirty';
-  // A woman who is in charge, or whose whole thing is being looked at, does not lead coy.
-  const neverCoy = (seed.dom_sub_leaning ?? 0) >= 2 || persona >= 1.5 || archetype >= 1;
-  if (level === 'teasing' && neverCoy) level = 'flirty';
-  // A genuinely shy woman with a soft persona does not lead topless. A shy one with a filthy
-  // persona can - that contrast is the point of her - and her manner keeps it shy.
-  if (level === 'bold' && archetype <= -1 && persona <= 0) level = 'flirty';
-  // Some personas are exactly the contrast between a shy surface and what she shows ("shy but
-  // filthy"): scored on her shyness alone she came out teasing four times in five. The floor
-  // lives on the persona row (extra.photo_level_min); her manner keeps the photo shy.
-  const floor = find('sexual_persona', seed.sexual_persona)?.extra?.photo_level_min;
-  if (floor === 'flirty' && level === 'teasing') level = 'flirty';
-  if (floor === 'bold') level = 'bold';
-  return level;
-}
-// Measured on the current cast: about half bold, a third flirty, an eighth teasing.
-const BOLD_FROM = 2.5;
-const TEASING_UP_TO = 0.3;
-
-export function profileHeat(seed: CharacterSeed): string {
-  const l = PROFILE_LEVELS[profileLevel(seed)];
-  return [
-    `${l.name}.`,
-    `- What you show: ${l.shows}`,
-    `- What the photo is about: ${l.about}`,
-    `- How you pose: ${l.pose}`,
-    `- Your look: ${l.look}`,
-  ].join('\n');
-}
-
-/**
- * The attitude of every photo of her, whatever the level: where the camera sits and what she
- * does with it follows who she is in bed. The level lists said "kneeling on the bed" and "a shy
- * smile" to everyone, which is exactly how a commanding domme ended up looking up at the lens
- * like a nervous first-timer.
- */
-export function photoManner(seed: CharacterSeed): string {
-  const lean = seed.dom_sub_leaning ?? 0;
-  const lines = [
-    lean >= 2
-      ? 'You are the one in charge and your photos say so: the camera low, you looking down into it; standing over it, sitting back with your legs apart, a heel up on the bed, a hand on your hip. Never kneeling, never asking.'
-      : lean <= -2
-        ? 'You love giving yourself over and your photos show it: the camera above you, looking down; kneeling, lying back, looking up into the lens - eager, soft, a little wicked.'
-        : 'Your photos are as much a dare as an invitation: eye-level, playful, confident either way round.',
-  ];
-  if (boldnessOf('archetype', seed.archetype) <= -1) {
-    lines.push('You are a little camera-shy even when you show a lot: a glance away, a half-hidden smile, a hand that almost covers your chest - never your face.');
-  } else if (boldnessOf('sexual_persona', seed.sexual_persona) >= 1.5 || boldnessOf('archetype', seed.archetype) >= 1) {
-    lines.push('You like being looked at and it shows: nothing coy, you hold the lens.');
-  }
-  return lines.join(' ');
-}
-
-/**
  * Her body, her look and her photo habits, for every prompt where she decides what a photo of
  * her is. Those prompts used to get her dossier alone, so the one thing a photo on this app is
  * for - her body, shown the way she likes it shown - came out generic: no word of what she is
  * proudest of, what she wears underneath, or where a woman with her style takes her pictures
  * (see clothing_style extra.photo_scene).
  */
-export function photoSelfBlock(seed: CharacterSeed): string {
+export function photoSelfBlock(seed: CharacterSeed, opts: { profile?: boolean } = {}): string {
   const label = (cat: string, id: string | undefined) => (id ? find(cat, id)?.label ?? id : '');
   const hintOf = (cat: string, id: string | undefined) => (id ? find(cat, id)?.prompt_hint ?? '' : '');
   const style = find('clothing_style', seed.clothing_style);
@@ -792,6 +692,8 @@ export function photoSelfBlock(seed: CharacterSeed): string {
     metal.length ? `Piercings: ${metal.join('; ')}` : '',
     `In bed: ${label('sexual_persona', seed.sexual_persona)}`,
     `How you come across in photos: ${photoManner(seed)}`,
+    // Her chat level only - her profile picture has its own, tamer one (profileHeat).
+    opts.profile ? '' : `How far your photos to him usually go: ${chatPhotoLine(seed)}`,
   ].filter(Boolean).join('\n');
 }
 
@@ -823,7 +725,7 @@ async function profilePicConcept(character: Character): Promise<string> {
           content: render('actor_profile_pic', {
             real_name: character.real_name,
             dossier: character.seed.hints.dossier || describeSeed(character.seed),
-            photo_self: photoSelfBlock(character.seed),
+            photo_self: photoSelfBlock(character.seed, { profile: true }),
             profile_heat: profileHeat(character.seed),
           }),
         },
