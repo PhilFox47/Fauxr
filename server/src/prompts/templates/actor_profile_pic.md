@@ -35,7 +35,7 @@ style and what you are proudest of. A few of the many it could be:
 - lying on your bed, shot from above, hair spread on the pillow
 - a bikini by a pool, chest up, wet hair
 - a night-out photo a friend took, waist up, in the dress you felt best in
-- the gym mirror in a matching set, waist up
+- a flushed selfie after the gym in a matching set, held high, chest up
 - you in cosplay, or in your whole goth, e-girl or pin-up makeup and look, in your usual spot
 - a boudoir or model shoot a photographer friend did, close and polished
 

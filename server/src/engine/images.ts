@@ -421,7 +421,7 @@ const SPICY_LIGHT = [
   'A ring light in front of her, the round catchlight in her eyes and a soft even glow on her skin, the room behind it falling off into dim.',
   'LED strip lights washing the room pink and purple, the colour sitting on her skin and the shadows going deep violet.',
   'One warm bedside lamp, low and to the side, gold on the skin it reaches and real dark everywhere it does not.',
-  'Her phone flash in a mirror: the flash itself a bright star in the glass, her skin lit bright and flat, the room behind her dark.',
+  'Her phone flash straight on at arm\'s length, her skin lit bright and flat, the room behind her falling into dark.',
   'Late sun through half-closed blinds, striping her body in warm light and shadow.',
   'A bathroom vanity light straight above the mirror, bright and slightly warm, steam softening the edges.',
   'Candles and a string of fairy lights, warm and flickering, most of the room in soft dark.',
@@ -1189,9 +1189,9 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
 
 /** Used only when the Actor left no concrete detail to work from. */
 const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date', string> = {
-  profile: 'a flirty waist-up mirror selfie in something tight, the phone held low so her face is clear',
+  profile: 'a flirty close selfie held high in something low-cut, looking up into the lens',
   chat: 'a casual photo of whatever she is doing right now',
-  spicy: 'a mirror selfie in just her underwear, one arm across her chest, taken for him',
+  spicy: 'a selfie from above, lying on her bed in just her underwear, one arm across her chest, taken for him',
   date: 'how she looks as he arrives, whatever she decided to wear tonight',
 };
 

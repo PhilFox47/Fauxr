@@ -108,7 +108,9 @@ then place it: what the light is doing, what sits behind or around it, how close
 is. Framing is not fixed - a close portrait of her
 face, a waist-up shot, a full-length shot, and a photo that does not include her at all are
 different pictures, and the sentence has to say which this is. Get that from the situation;
-do not default to the same crop or the same kind of shot every time. She is an adult woman
+do not default to the same crop or the same kind of shot every time. A selfie is the front
+camera held out at arm's length or above her, so the phone is not in the picture; it is a
+mirror selfie only when the situation says mirror. She is an adult woman
 whenever she appears. Never imply otherwise.
 
 # HOW THIS ONE WAS ACTUALLY TAKEN
@@ -155,7 +157,7 @@ correction - put the imperfection back in the camera and the room where it belon
 {{#is_profile}}
 This is her **profile picture** on an adult hookup app - the one photo she leads with, chosen
 to make men want her. The situation above is her own account of what that photo is and why
-she picked it, and it already decided the kind of shot: a mirror selfie, an over-the-shoulder
+she picked it, and it already decided the kind of shot: a close selfie, an over-the-shoulder
 shot, a bikini by a pool, a night-out photo a friend took, a boudoir shoot, whatever she said.
 Follow it and match its register - a proper shoot reads composed and polished, a selfie reads
 as a selfie, a friend's photo reads a little unposed. Do not flatten it into a generic
@@ -253,5 +255,5 @@ Reply with exactly one JSON object and nothing else:
 { "prompt": "...", "negative_prompt": "...", "caption": "..." }
 
 "caption" is one short sentence (under 15 words) saying plainly what the photo shows, the way
-a chat app would label a photo before it is opened - "a mirror selfie in black lace, lamp
+a chat app would label a photo before it is opened - "a selfie in bed in black lace, lamp
 light", "her view from the balcony". Not the prompt, no styling or camera language.

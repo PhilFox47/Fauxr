@@ -714,6 +714,30 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## More regular selfies, fewer mirror selfies
+
+Her photos leaned hard on mirror selfies. Not because anyone asked for them: the prompts kept
+offering one as the example. The only sample photo in her chat prompt was a "mirror selfie in
+the black lace set", both fallback descriptions (profile and spicy) were mirror selfies, all
+three profile-photo boldness levels mentioned a mirror, one of the nine spicy lighting options
+was "her phone flash in a mirror", and the image-prompt writer's examples led with one.
+
+Now:
+- The examples are ordinary selfies: the chat sample is "selfie from above, lying on the bed in
+  the black lace set", the fallbacks are a close selfie held high and a selfie from above on her
+  bed, and the caption example is "a selfie in bed in black lace".
+- The chat and photo-idea prompts say it once, positively: most selfies are the phone held out
+  or above her, and a mirror is for when the whole outfit or her whole body is the point.
+- The profile-photo levels keep one mirror between them ("the mirror before you leave", "the
+  bathroom mirror"), and the gym shot became a flushed selfie after the gym. The mirror-flash
+  lighting became a direct phone flash at arm's length.
+- The image-prompt writer is told what a selfie is: the front camera at arm's length or above
+  her, so the phone is not in the picture, and a mirror only when her description says so.
+  Image models tend to add both when handed the bare word "selfie".
+
+Mirror selfies are still there for outfit and full-body shots, where they are the natural
+photo.
+
 ## Generate profile pic, not a swap
 
 The camera button in a chat used to be "swap profile pictures". Your pictures and your looks
