@@ -453,7 +453,9 @@ input[type='range'] {
   touch-action: pan-y;
   box-shadow: var(--sh-3), var(--edge);
   transition: transform var(--med) var(--ease-out), opacity var(--med) var(--ease);
-  overflow: hidden;
+  /* A long bio plus three traits can outgrow a short phone; scroll inside rather than clip. */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .swipe-card.dragging { transition: none; }
 /* Not a photo - the emoji she picked for herself, so the stack is not a run of identical
@@ -463,17 +465,26 @@ input[type='range'] {
   line-height: 1;
   margin-top: auto;
 }
+.swipe-names { display: flex; flex-direction: column; gap: 2px; }
+.swipe-card .real-name {
+  font-size: 26px;
+  font-weight: 720;
+  letter-spacing: -0.4px;
+  line-height: 1.15;
+  /* Clear of the rarity badge in the top-right corner. */
+  padding-right: 88px;
+}
 .swipe-card .handle {
-  font-size: 21px;
-  font-weight: 680;
-  letter-spacing: -0.3px;
+  font-size: 14px;
+  font-weight: 560;
+  color: var(--muted);
 }
 .swipe-card .handle::before {
   content: '@';
   color: var(--accent);
   margin-right: 1px;
 }
-/* Age, and any language beyond English. Small, dim and factual - it is profile furniture,
+/* Age and ethnicity. Small, dim and factual - it is profile furniture,
    not part of what she wrote. */
 .swipe-card .swipe-meta {
   display: flex;
@@ -495,18 +506,36 @@ input[type='range'] {
   line-height: 1.6;
   color: var(--text-dim);
   white-space: pre-line;
-  /* This auto and the one on .handle split the slack above and below, so a two-line bio
-     sits centred in the card instead of clinging to the top of a tall empty box. */
-  margin-bottom: auto;
 }
-.swipe-card .hint {
-  font-size: 11.5px;
-  color: var(--faint);
-  letter-spacing: 0.3px;
+/* The three traits that define her: a caption for what kind of thing it is, then the thing.
+   The auto margin splits the slack with the emoji's, so a short card sits centred. */
+.swipe-traits {
+  list-style: none;
+  margin: 0 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+.swipe-traits li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s3);
+  padding: 9px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--surface-3) 55%, transparent);
+}
+.swipe-traits .caption {
+  flex: none;
+  width: 76px;
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  font-weight: 600;
+  color: var(--accent-bright);
 }
-
+.swipe-traits .value { font-size: 14.5px; font-weight: 560; color: var(--text); line-height: 1.35; }
 /**
  * A spoiler-free grade on how unusual her rolled traits are as a whole - see rarityTier()
  * server-side. Common is deliberately understated (grey, no glow) so it reads as the quiet

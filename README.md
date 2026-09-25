@@ -2094,10 +2094,42 @@ The **heightening** slider went with it, since it existed only to weight the sig
 
 ### What the swipe card shows, and who is on it
 
-The card is her handle, her avatar emoji, her **age**, any **language she speaks besides
-English**, and the bio. No photo, no job, no distance. English is left off because everyone
-speaks it, so it says nothing about her; the bio prompt is told the age and languages are
-already on the card, so a bio that repeats them is wasting a line.
+The card used to be her handle, emoji, age, languages and bio, with "That is all you get"
+under it, so choosing whom to talk to was a guess. It now reads, top to bottom:
+
+- her avatar emoji
+- her **real name**, with the handle small underneath
+- **age · ethnicity**
+- the bio
+- **three traits that define her**, each with a small caption: "Style: Goth girl",
+  "In bed: Commanding domme", "Into: Having her feet worshipped", "Species: Vampire",
+  "Personality: Deadpan menace", "Job: Circus aerialist", "Status: Part of a polycule"
+
+No photo; that stays behind the swap, where the image spend is. Languages left the card to
+keep it to that format; they are still in her profile.
+
+**How the three are picked** (`engine/profilecard.ts`, computed from her seed, nothing
+stored, so every existing character has them at once):
+- **Candidates:** a visible non-human species, personality, style, who she is in bed, her
+  signature kink (her first fetish, always from a domain she is into), her job, and her
+  relationship status unless it is plain single.
+- **Scoring:** how rare the rolled value is, plus a lean towards sexuality and style over
+  job, the same lesson as the bio work.
+- **Balance:** one per group, and a second intimate trait only when it is rare enough to
+  beat a penalty. Without that, 60% of cards were two thirds sex. Now almost every card has
+  exactly one intimate trait, and fewer than 4% have two.
+- **Species:** a species that shows in any photo always leads. One she can hide (witch,
+  succubus, angel, android, ...) is hers to reveal and never goes on the card, and neither
+  does her big secret.
+- **Ties** break the same way every time, so a card never reshuffles between loads.
+
+Measured over 3000 cards, each trait's share of cards: style 82%, personality 65%, in bed
+60%, a kink 37%, job 29%, relationship status 20%.
+
+Whatever intimate trait the card showed counts as found out once you match. You swiped
+knowing it, so it is in her profile and the Director treats it as known rather than
+something she still has to reveal. The bio prompt is given the card's three traits, so the
+bio adds to them instead of restating them.
 
 A **preferred age range** lives on your profile under Settings, defaulting to 18–42, which
 is exactly the band generation used to be hardcoded to. It does two things: new characters

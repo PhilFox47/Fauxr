@@ -8,6 +8,7 @@ import {
 import type { Character } from '../types.js';
 import { generateCharacter } from './generator.js';
 import { randInt } from './dice.js';
+import { coreTraits } from './profilecard.js';
 
 export const STACK_SIZE = 10;
 
@@ -97,6 +98,11 @@ export function swipeRight(characterId: string): MatchResult {
   if (rel) {
     rel.last_contact_at = nowIso();
     rel.last_decay_at = nowIso();
+    // Whatever intimate thing her card showed (who she is in bed, her signature kink) he
+    // swiped knowing, so it counts as found out rather than something she has to reveal.
+    for (const t of coreTraits(character.seed, character.id)) {
+      if (t.intimate && !rel.discovered?.[t.key]) rel.discovered = { ...(rel.discovered ?? {}), [t.key]: nowIso() };
+    }
     saveRelationship(rel);
   }
 

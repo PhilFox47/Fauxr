@@ -11,14 +11,15 @@ be like with him. Her job and her flat are the least interesting things about he
 like this.
 
 # WHAT ACTUALLY GETS SWIPED ON
-Before anyone swipes they see four things: her handle, her age, any language she speaks
-besides English, and this bio. No photo, no job, no distance. Everything else about her has
-to be implied by these few words, and the decision to swipe is made on them alone - which
-makes this a want-ad's job and a sales pitch's job at once, done however SHE specifically
-would do it, not however a generic profile on this kind of app is expected to sound.
+Before anyone swipes they see her name, her handle, her age and ethnicity, this bio, and three
+things about her printed right under it:
+{{card_traits}}
+No photo, no distance. The decision to swipe is made on the card alone - which makes this a
+want-ad's job and a sales pitch's job at once, done however SHE specifically would do it, not
+however a generic profile on this kind of app is expected to sound.
 
-Her age and languages are already on the card, so the bio saying them again is a wasted
-line - write as though the reader has just read them.
+Everything above is already on the card, so the bio restating it is a wasted line - write as
+though the reader has just read it, and give them something those labels cannot.
 
 So it cannot be a description of her. It has to be the thing she would actually type into
 that box, knowing exactly what kind of place this is and feeling no need to apologise for

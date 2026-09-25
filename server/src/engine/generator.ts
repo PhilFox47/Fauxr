@@ -15,6 +15,7 @@ import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, typ
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
+import { coreTraits } from './profilecard.js';
 
 /** Fields the Director may swap during the coherence pass. */
 const SWAPPABLE: Record<string, string> = {
@@ -1464,6 +1465,8 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
     // three of the same tags come out with suspiciously similar bios.
     seed_block: character.seed.hints.dossier,
     lead_block: profileLeadBlock(character.seed),
+    // What the card prints next to the bio (profilecard.ts), so the bio adds to it instead.
+    card_traits: coreTraits(character.seed, character.id).map((t) => `- ${t.caption}: ${t.label}`).join('\n'),
     // Same reasoning as the handles: the whole list still decides the clash, but showing
     // thirty bios spends a thousand tokens teaching the model exactly what to sound like.
     avoid_bios: existing.length

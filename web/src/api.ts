@@ -69,7 +69,12 @@ export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare' | 'extreme
 
 export interface SwipeProfile {
   id: string;
+  real_name: string;
   username: string;
+  /** Display label of her ethnicity. */
+  ethnicity: string;
+  /** The three traits that define her, most defining first: "Style: Goth girl". */
+  traits: { caption: string; label: string }[];
   bio: string;
   /** Not a photo - just the emoji she picked for herself, so cards are tellable apart. */
   avatar_emoji: string;

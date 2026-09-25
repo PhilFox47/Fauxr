@@ -164,13 +164,25 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
                 <RarityBadge rarity={current.rarity} />
 
                 <div className="swipe-emoji" aria-hidden="true">{current.avatar_emoji}</div>
-                <div className="handle">{current.username}</div>
+                <div className="swipe-names">
+                  <div className="real-name">{current.real_name}</div>
+                  <div className="handle">{current.username}</div>
+                </div>
                 <div className="swipe-meta">
                   <span>{current.age}</span>
-                  {!!current.languages?.length && <span>{current.languages.join(', ')}</span>}
+                  {current.ethnicity && <span>{current.ethnicity}</span>}
                 </div>
                 <div className="bio">{current.bio}</div>
-                <div className="hint">That is all you get</div>
+                {current.traits?.length > 0 && (
+                  <ul className="swipe-traits" aria-label="What defines her">
+                    {current.traits.map((t) => (
+                      <li key={t.caption + t.label}>
+                        <span className="caption">{t.caption}</span>
+                        <span className="value">{t.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 
@@ -184,7 +196,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
             </div>
           </>
         )}
-        <div className="stack-count">No photos. Her age, her languages, the bio, and how unusual she is.</div>
+        <div className="stack-count">Swipe right to like, left to pass. Arrow keys work too.</div>
       </div>
     </>
   );

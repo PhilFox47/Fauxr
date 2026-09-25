@@ -32,6 +32,7 @@ import {
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
 import { domainSides, TASTE_SECTIONS } from '../engine/kinks.js';
+import { coreTraits } from '../engine/profilecard.js';
 import { statusOf } from '../engine/status.js';
 import type { Character, KinkSide, KinkStance, Location } from '../types.js';
 
@@ -152,14 +153,16 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     void ensureStack();
     return {
       generating: generatingCount(),
-      // Handle, bio, age, languages and the emoji she picked for herself. Age and
-      // languages are on the card because they are what a dating app actually shows before
-      // you swipe, and making someone extract them in conversation was never a game. Still
-      // no photo and no interests: the emoji exists so the stack is not a run of identical
-      // cards, not to give away what she looks like.
+      // Her name, handle, age, ethnicity, bio, the emoji she picked for herself and the three
+      // traits that define her (profilecard.ts). The card used to be handle, age, languages
+      // and bio, which made choosing whom to talk to a guess. Still no photo: that stays
+      // behind the swap, where the image spend is.
       profiles: stack().map((c) => ({
         id: c.id,
+        real_name: c.real_name,
         username: c.username,
+        ethnicity: find('ethnicity', c.seed.ethnicity)?.label ?? '',
+        traits: coreTraits(c.seed, c.id).map(({ caption, label }) => ({ caption, label })),
         bio: c.bio,
         avatar_emoji: avatarEmojiFor(c),
         age: c.seed.age,
