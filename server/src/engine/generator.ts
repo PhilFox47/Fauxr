@@ -15,6 +15,7 @@ import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, typ
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
+import { pick, unwrap } from '../llm/shape.js';
 import { coreTraits, pickCore } from './profilecard.js';
 
 /** Fields the Director may swap during the coherence pass. */
@@ -861,6 +862,17 @@ interface DirectorPass {
   opening_plan?: { text: string; expires_when: string };
 }
 
+/** Words a dossier can open with that are not her name. */
+const NOT_A_NAME = new Set(['she', 'her', 'the', 'a', 'an', 'who', 'this', 'at', 'in', 'on', 'born', 'meet', 'twenty', 'thirty']);
+
+/** "Nayeli spends her day..." / "WERONIKA - goes by Wera" -> the name; '' if it does not start with one. */
+export function nameFromDossier(dossier: string): string {
+  const m = dossier.trim().match(/^([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ'-]{1,20})\b/);
+  if (!m || NOT_A_NAME.has(m[1].toLowerCase())) return '';
+  const word = m[1];
+  return word === word.toUpperCase() ? word.charAt(0) + word.slice(1).toLowerCase() : word;
+}
+
 /** One cheap, targeted re-ask for a name that landed on one already in the cast. */
 async function rerollName(
   seed: CharacterSeed,
@@ -1143,6 +1155,16 @@ export async function generateCharacter(): Promise<Character> {
         // default five minutes to think through it, and cutting it off just throws the work away.
         timeoutMs: CHARACTER_TIMEOUT_MS,
         require: ['real_name', 'dossier'],
+        // Seen: the whole character wrapped in {"character": {...}}, and "name" for "real_name".
+        normalize: (v: any) => {
+          const p = unwrap(v, ['real_name', 'dossier', 'swaps', 'name', 'character_name']);
+          if (!p.real_name) p.real_name = pick(p, ['name', 'first_name', 'character_name']);
+          if (!p.dossier) p.dossier = pick(p, ['character_dossier', 'dossier_text', 'writeup']);
+          // The commonest miss of all: a full dossier and no name field. The dossier nearly
+          // always opens with her name, and using that keeps the prose and the name in step.
+          if (!p.real_name && typeof p.dossier === 'string') p.real_name = nameFromDossier(p.dossier);
+          return p;
+        },
         messages: characterPassMessages,
       });
       break;

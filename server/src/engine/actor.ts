@@ -1,6 +1,7 @@
 import { getSettings } from '../config.js';
 import { find } from '../db/attributes.js';
 import { complete, extractJson } from '../llm/client.js';
+import { isObj, pick } from '../llm/shape.js';
 import { logger } from '../log.js';
 import { getUserProfile, recentMessages } from '../repo.js';
 import { render } from '../prompts/render.js';
@@ -81,6 +82,48 @@ function fallbackOutput(): ActorOutput {
 const PHOTO_OFFER_KINDS = new Set(['chat', 'spicy']);
 const PHOTO_ASPECTS = new Set(['square', 'portrait', 'landscape']);
 
+/**
+ * The names this app's models actually use for the hidden fields, collected from logs. The
+ * Actor runs warm and bends the schema more than anything else: "hidden_thoughts" and
+ * "reflection" for thoughts, "current_activity", a "meta" block instead of "hidden", fields
+ * hoisted to the top level next to "messages".
+ */
+const HIDDEN_ALIASES: Record<string, string[]> = {
+  thoughts: ['thoughts', 'hidden_thoughts', 'reflection', 'inner_thoughts', 'thought', 'inner_monologue'],
+  unresolved: ['unresolved', 'waiting_on', 'open_loop'],
+  mood: ['mood', 'current_mood', 'feeling'],
+  location: ['location', 'current_location', 'where'],
+  outfit: ['outfit', 'current_outfit', 'wearing'],
+  activity: ['activity', 'current_activity', 'doing'],
+  new_fact: ['new_fact', 'new_information', 'last_fact_learned', 'fact_learned'],
+  open_thread: ['open_thread', 'open_loops'],
+  director_needed: ['director_needed', 'needs_director'],
+  photo_shows_face: ['photo_shows_face', 'show_face', 'shows_face'],
+  react: ['react', 'reaction'],
+};
+
+/** Everything that is not a message, from "hidden", "meta" or the top level, under our names. */
+export function collectHidden(parsed: any): any {
+  if (!parsed || typeof parsed !== 'object') return {};
+  const { messages: _m, message: _m1, reply: _r, text: _t, ...top } = parsed;
+  const pool = { ...top, ...(isObj(parsed.meta) ? parsed.meta : {}), ...(isObj(parsed.state) ? parsed.state : {}), ...(isObj(parsed.hidden) ? parsed.hidden : {}) };
+  const out: any = { ...pool };
+  for (const [key, aliases] of Object.entries(HIDDEN_ALIASES)) {
+    const v = pick(pool, aliases);
+    if (v !== undefined) out[key] = Array.isArray(v) && key !== 'photo_options' ? v.join('; ') : v;
+  }
+  // A photo she clearly meant to send, filed under a name of its own ("photo_spice": "the open
+  // bottle of red on her counter") - without this it was silently dropped.
+  if (!out.photo_offer) {
+    const photoKey = Object.keys(pool).find((k) => /^photo_(spic|chat|desc|idea|situation)/.test(k) && typeof pool[k] === 'string' && pool[k].trim());
+    if (photoKey) {
+      out.photo_offer = /spic/.test(photoKey) ? 'spicy' : 'chat';
+      out.photo_situation = out.photo_situation ?? pool[photoKey];
+    }
+  }
+  return out;
+}
+
 function normalizeHidden(raw: any): ActorHidden {
   return {
     thoughts: String(raw?.thoughts ?? ''),
@@ -135,12 +178,23 @@ export function typingDelay(text: string, maxSeconds: number): number {
  * look slow. Every message after it is paced by its own length, since those arrive
  * together and would otherwise land in the same instant.
  */
+/**
+ * Her messages, whichever shape they came in: `[{"text": ...}]` as asked, a list of plain
+ * strings (what the model sent every time in the log this was fixed from), a single string,
+ * or a "message"/"reply" key instead of "messages".
+ */
+export function collectMessages(parsed: any): unknown[] {
+  const raw = pick(parsed, ['messages', 'message', 'reply', 'replies', 'text']);
+  if (typeof raw === 'string') return [raw];
+  return Array.isArray(raw) ? raw : [];
+}
+
 function normalizeMessages(raw: any): ActorMessage[] {
   const { max_messages_per_turn, max_delay_seconds } = getSettings().chat;
   const list = Array.isArray(raw) ? raw : [];
   const out: ActorMessage[] = [];
   for (const m of list.slice(0, max_messages_per_turn)) {
-    const text = String(m?.text ?? '').trim();
+    const text = String(typeof m === 'string' ? m : pick(m, ['text', 'message', 'content', 'body']) ?? '').trim();
     if (!text) continue;
     out.push({
       text,
@@ -326,8 +380,8 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
     }
 
     const out: ActorOutput = {
-      messages: normalizeMessages(parsed?.messages),
-      hidden: normalizeHidden(parsed?.hidden),
+      messages: normalizeMessages(collectMessages(parsed)),
+      hidden: normalizeHidden(collectHidden(parsed)),
     };
     if (out.messages.length === 0) {
       logger.warn('actor', 'actor produced no usable messages');
@@ -457,7 +511,9 @@ export async function runActorVoice(ctx: ActorContext): Promise<VoiceOutput | nu
       messages: [{ role: 'user', content: prompt }],
     });
     const parsed: any = extractJson(text);
-    const body = String(parsed?.message?.text ?? '').trim();
+    // Same drift as a chat reply: {"message": "..."}, {"text": "..."} or a list, as well as the asked-for shape.
+    const first = collectMessages(parsed)[0];
+    const body = String((typeof first === 'string' ? first : pick(first as any, ['text', 'message', 'content'])) ?? '').trim();
     if (!body) return null;
     // Voice messages may be prose, but still never narration.
     if (detectRoleplay(body)) {

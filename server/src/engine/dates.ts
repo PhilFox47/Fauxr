@@ -27,6 +27,7 @@ import { describeHerMoment } from './moment.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { fantasyLog } from './fantasies.js';
 import { userCardBlock } from './usercard.js';
+import { isObj, pick } from '../llm/shape.js';
 import { castFromInvite, castLine, circleBlock, groupRules, markLeft, mergeJoined, npcBlock, presentNpcs, rememberCast } from './npcs.js';
 
 /**
@@ -294,7 +295,12 @@ async function runDateActor(
       continue;
     }
 
-    const text = String(parsed?.text ?? '').trim();
+    // The scene text under whatever key it came back as, or a list of lines joined.
+    const rawText = pick(parsed, ['text', 'beat', 'reply', 'message', 'scene', 'messages']);
+    const text = (Array.isArray(rawText)
+      ? rawText.map((m: any) => (typeof m === 'string' ? m : pick(m, ['text', 'message', 'content']) ?? '')).join('\n\n')
+      : String(rawText ?? '')).trim();
+    const hiddenRaw = { ...parsed, ...(isObj(parsed?.meta) ? parsed.meta : {}), ...(isObj(parsed?.hidden) ? parsed.hidden : {}) };
     if (!text || !visibleContent(text)) {
       correction =
         'Your reply contained no visible scene - a hidden thought on its own renders as a blank ' +
@@ -403,12 +409,12 @@ async function runDateActor(
     return {
       text,
       hidden: {
-        thoughts: String(parsed?.hidden?.thoughts ?? ''),
-        mood: String(parsed?.hidden?.mood ?? ''),
-        wants: String(parsed?.hidden?.wants ?? ''),
-        in_the_act: parsed?.hidden?.in_the_act === true,
-        joined: parsed?.hidden?.joined,
-        left: parsed?.hidden?.left,
+        thoughts: String(pick(hiddenRaw, ['thoughts', 'hidden_thoughts', 'reflection']) ?? ''),
+        mood: String(hiddenRaw.mood ?? ''),
+        wants: String(pick(hiddenRaw, ['wants', 'want', 'wants_next']) ?? ''),
+        in_the_act: hiddenRaw.in_the_act === true,
+        joined: hiddenRaw.joined,
+        left: hiddenRaw.left,
       },
     };
   }

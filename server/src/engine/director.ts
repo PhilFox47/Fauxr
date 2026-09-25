@@ -12,6 +12,42 @@ import {
 } from './blocks.js';
 import { describeArousal, describePace } from './stage.js';
 import { lifeBlockForDirector } from './life.js';
+import { isObj, pick, unwrap } from '../llm/shape.js';
+
+const UPDATE_KEYS = ['arousal_delta', 'reason', 'discovered', 'big_secret_revealed', 'fantasies_played'];
+const LEDGER_KEYS = ['facts_about_user', 'facts_about_her', 'events', 'what_landed', 'open_threads_add', 'open_threads_close', 'director_notes'];
+const DIRECTION_KEYS = ['valid_for', 'expires_on', 'mood', 'energy', 'goal', 'stance', 'forbidden', 'bring_up', 'length'];
+
+/**
+ * The Director's reply in {update, direction, wakeup} shape, from however it actually came
+ * back. Seen in the log this was built from: update fields and ledger fields hoisted to the top
+ * level with no "update" at all, and update fields dropped inside "direction". Every one of
+ * those was retried as "empty" and often came back the same way.
+ */
+export function coerceDirectorReply(value: any): { update: any; direction: any; wakeup: any } {
+  const p = unwrap(value, ['update', 'direction', 'goal', 'ledger']);
+  const update: any = isObj(p.update) ? { ...p.update } : {};
+  const direction: any = isObj(p.direction) ? { ...p.direction } : {};
+  for (const k of UPDATE_KEYS) {
+    if (update[k] === undefined) {
+      const v = pick(p, [k]) ?? (k === 'reason' || k === 'mood' ? undefined : direction[k]);
+      if (v !== undefined) update[k] = v;
+    }
+  }
+  const ledger: any = isObj(update.ledger) ? { ...update.ledger } : isObj(p.ledger) ? { ...p.ledger } : {};
+  for (const k of LEDGER_KEYS) {
+    if (ledger[k] === undefined) {
+      const v = p[k] ?? update[k] ?? direction[k];
+      if (v !== undefined) ledger[k] = v;
+    }
+  }
+  if (Object.keys(ledger).length) update.ledger = ledger;
+  for (const k of DIRECTION_KEYS) {
+    // "reason" belongs to the update; "mood" at the top level is the direction's.
+    if (direction[k] === undefined && p[k] !== undefined && !(k in update)) direction[k] = p[k];
+  }
+  return { update, direction, wakeup: p.wakeup ?? null };
+}
 import { describeFetishProgress, describeHim, describeKinkHits, detectKinkHits, herCuriosity, undiscoveredKeys } from './discovery.js';
 import { userCardFullBlock } from './usercard.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
@@ -137,6 +173,7 @@ export async function runDirector(
       config: settings.models.director,
       messages: [{ role: 'user', content: prompt }],
       require: ['direction', 'update'],
+      normalize: coerceDirectorReply,
     });
   } catch (err) {
     // Keep playing with the last valid direction rather than stalling the chat.

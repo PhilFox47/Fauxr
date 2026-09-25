@@ -353,6 +353,14 @@ export interface JsonCallOptions extends CompletionOptions {
    * or, as `write_username` did, discards it in silence and asks again identically.
    */
   require?: string[];
+  /**
+   * Puts a reply into the shape the caller expects before `require` is checked. Models drift
+   * from a nested schema far more than they write invalid JSON: in the log this was built from,
+   * every "well formed but empty" reply had the right content under the wrong structure -
+   * `name` for `real_name`, the whole character wrapped in `{"character": {...}}`, the
+   * Director's update fields hoisted out of `update`. Re-asking gets the same drift back.
+   */
+  normalize?: (value: any) => any;
 }
 
 /** `{}` is valid JSON and a useless answer. Say which it is. */
@@ -369,6 +377,7 @@ export async function completeJson<T = any>(opts: JsonCallOptions): Promise<T> {
   let parsed: T;
   try {
     parsed = extractJson<T>(await complete({ ...opts, json: true }));
+    if (opts.normalize) parsed = opts.normalize(parsed);
   } catch (err) {
     // Only a content problem earns the "that was not valid JSON" nudge. A rate limit or a
     // truncation has already been handled inside complete() with the recovery that actually
@@ -407,7 +416,8 @@ async function retryJson<T>(opts: JsonCallOptions, hint: string): Promise<T> {
     messages: [...opts.messages, { role: 'user', content: hint }],
     label: `${opts.label ?? 'call'}:retry`,
   });
-  return extractJson<T>(retried);
+  const parsed = extractJson<T>(retried);
+  return opts.normalize ? opts.normalize(parsed) : parsed;
 }
 
 export interface ImageRequest {

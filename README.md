@@ -182,6 +182,47 @@ Measured against a mock reproducing the exact failure: **one character went from
 calls to 3**, and a model whose thinking still overruns the raised ceiling recovers in one
 extra call with a clear trail, instead of three silent failures and a fallback.
 
+### Reading the reply the model actually sent
+
+A log from a real session looked like a temperature problem: the Actor kept falling back to a
+canned line, and generation and the Director kept retrying "well formed but empty" JSON. It
+was not temperature. The Director at 0.4 did it as often as the Actor at 0.8, and every
+failing reply was valid JSON with the right content in a different shape:
+- **Actor:** messages as a list of plain strings instead of `{"text": ...}`, and hidden fields
+  hoisted next to them under the model's own names (`hidden_thoughts`, `reflection`,
+  `current_activity`, a `meta` block, `photo_spice`). Every one was discarded, twice, and she
+  sent the fallback line. The photo and mood in them were lost too.
+- **Director:** update and ledger fields at the top level with no `update`, or dropped inside
+  `direction`.
+- **Generation:** a full dossier with no `real_name`, `name` instead of `real_name`, the whole
+  character wrapped in `{"character": {...}}`.
+
+Re-asking mostly got the same drift back. So the readers now take what came:
+- **The hook:** `completeJson` takes a `normalize` step that runs before its required-key
+  check, on the retry too. Small helpers for it live in `llm/shape.ts`.
+- **Actor** (`collectMessages`, `collectHidden`): messages as strings, objects or a single
+  string, under `messages`, `message` or `reply`. Hidden fields from `hidden`, `meta` or the
+  top level, with the aliases seen in logs mapped to ours. A photo filed under a key of its own
+  counts as a photo offer. Voice notes read the same way.
+- **Director** (`coerceDirectorReply`): update, ledger and direction fields are re-filed from
+  wherever they landed.
+- **Generation:** one wrapper object is unwrapped, `name` counts as `real_name`, and a missing
+  name is taken from the dossier's opening word ("Nayeli spends her day..."), which keeps the
+  prose and the name in step.
+- **Date beats:** the scene text is read from `text`, `beat`, `reply` or a list of lines.
+- **The chat prompt** says every hidden key is optional, so the model is not pushed to fill
+  nineteen fields a turn.
+
+Replayed against that log: the Actor goes from none of its eight replies usable to all eight,
+the Director from two of six to four, and generation from a third of its replies to 13 of 18.
+What still fails really is empty: a Director reply with no direction at all, or a character
+written as structured fields with no prose dossier. The retry and the fallbacks still handle
+those.
+
+The same log also had 503s with `all_fallbacks_failed`: the provider had no host for the model
+for a couple of minutes. That is outside the app; the retries wait, and past that she keeps her
+last direction or sends the fallback line.
+
 ### Headroom over truncation, everywhere
 
 The fix above still worked by recovering from a truncation after it happened - one extra
