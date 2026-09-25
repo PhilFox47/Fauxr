@@ -13,7 +13,6 @@ import { randInt } from './dice.js';
 import { ensureStack } from './matching.js';
 import { decayArousal } from './stage.js';
 import { refreshOneStatus } from './status.js';
-import { backfillOneTagline } from './coreline.js';
 
 const TICK_MS = 60_000;
 
@@ -91,8 +90,6 @@ export async function tick(): Promise<void> {
   decayPass();
   // Statuses are not her texting him, so they run whether or not unprompted messages are on.
   void refreshOneStatus().catch((err) => logger.error('scheduler', 'status refresh failed', { error: String(err) }));
-  // Characters from before taglines existed get theirs, one per tick (coreline.ts).
-  void backfillOneTagline().catch((err) => logger.error('scheduler', 'tagline backfill failed', { error: String(err) }));
   if (unpromptedAllowed()) {
     maybeDoubleText();
     maybeBeProactive();

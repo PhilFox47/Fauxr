@@ -75,8 +75,6 @@ export interface SwipeProfile {
   ethnicity: string;
   /** The three to five traits that define her, most defining first: "Style: Goth girl". */
   traits: { caption: string; label: string }[];
-  /** Her core in one sentence, without her name: "A girl who is a tsundere, ...". '' until written. */
-  tagline: string;
   bio: string;
   /** Not a photo - just the emoji she picked for herself, so cards are tellable apart. */
   avatar_emoji: string;
@@ -148,8 +146,6 @@ export interface CharacterProfile {
   username: string;
   display_name: string;
   bio: string;
-  /** "Kristina is a girl who ..." - '' until it has been written. */
-  tagline: string;
   /** What defines her, most defining first. */
   core: { caption: string; label: string }[];
   known: number;

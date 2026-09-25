@@ -16,7 +16,6 @@ import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.j
 import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
 import { coreTraits, pickCore } from './profilecard.js';
-import { writeTagline } from './coreline.js';
 
 /** Fields the Director may swap during the coherence pass. */
 const SWAPPABLE: Record<string, string> = {
@@ -1227,8 +1226,6 @@ export async function generateCharacter(): Promise<Character> {
   };
 
   character.bio = await writeBio(character, dossierIsReal);
-  // Her core in one sentence, once, for her card and the top of every prompt (coreline.ts).
-  character.seed.tagline = await writeTagline(character);
 
   insertCharacter(character);
   const rel = createRelationship(character.id, {

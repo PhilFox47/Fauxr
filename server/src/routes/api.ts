@@ -69,13 +69,6 @@ function publicCharacter(c: Character) {
   };
 }
 
-/** "Kristina is a girl who ..." -> "A girl who ...", for the card, where her name sits right above. */
-function taglineWithoutName(line: string, name: string): string {
-  const prefix = `${name} is `;
-  const rest = line.toLowerCase().startsWith(prefix.toLowerCase()) ? line.slice(prefix.length) : line;
-  return rest.charAt(0).toUpperCase() + rest.slice(1);
-}
-
 export async function registerApi(app: FastifyInstance): Promise<void> {
   // ------------------------------------------------------------- auth
   app.post<{ Body: { password?: string; remember?: boolean } }>('/api/login', async (req, reply) => {
@@ -170,8 +163,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         username: c.username,
         ethnicity: find('ethnicity', c.seed.ethnicity)?.label ?? '',
         traits: coreTraits(c.seed, c.id).map(({ caption, label }) => ({ caption, label })),
-        // "A girl who ..." - her one-line sentence without the name, which sits right above it.
-        tagline: taglineWithoutName(c.seed.tagline ?? '', c.real_name),
         bio: c.bio,
         avatar_emoji: avatarEmojiFor(c),
         age: c.seed.age,
@@ -262,7 +253,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       username: character.username,
       display_name: character.real_name,
       bio: character.bio,
-      tagline: character.seed.tagline ?? '',
       core: coreTraits(character.seed, character.id).map(({ caption, label }) => ({ caption, label })),
       ...profileView(character, rel),
     };

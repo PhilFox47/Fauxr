@@ -151,7 +151,6 @@ export function coreBlock(character: Character): string {
   const jobIsCore = traits.some((t) => t.category === 'occupation');
   const [lead, ...rest] = [traits.slice(0, 2), traits.slice(2)];
   return [
-    character.seed.tagline ? `In one line: ${character.seed.tagline}` : '',
     'These are the heart of you. They are what you bring up, what colours how you flirt and what he ' +
       'will remember you by. Above all:',
     ...lead.map((t) => `- ${t.caption}: ${t.label} - ${t.hint}`),

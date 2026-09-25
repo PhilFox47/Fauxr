@@ -175,8 +175,6 @@ export interface CharacterSeed {
   core?: CoreEntry[];
   /** 2 once her core is on the 3-5 scheme; a missing marker means an old three-trait core to extend. */
   core_v?: number;
-  /** Her core in one sentence: "Kristina is a girl who is a tsundere, ..." (coreline.ts). */
-  tagline?: string;
   fetishes: string[];
   hard_limits: string[];
 

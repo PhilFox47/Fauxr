@@ -2137,22 +2137,17 @@ and your day". Everyone came out as the same well-rounded person, and nobody sto
 Now three traits are **her core** (`seed.core`, picked in `engine/profilecard.ts`). They are
 on her swipe card and they shape every prompt; the rest of her seed is flavour.
 
-**Three to five of them, and one sentence.** Well-known characters can usually be summed up
-in a few traits: "Kristina is a girl who is a tsundere, loves wearing pantyhose and works as a
-scientist." That is the model here.
+**Three to five of them.** Well-known characters can usually be summed up in a handful of
+traits, and that is the model here.
 - **How many:** a quarter of characters have 3, nearly half have 4 and the rest 5
   (`coreCount`).
 - **Ranked:** the first two are what she is above all, and the rest support them.
-- **The sentence** (`seed.tagline`, `engine/coreline.ts`) is written once by the model from her
-  core, in order: "X is a girl who ...". It is not stitched from labels, because labels are
-  written to stand alone ("Refuses to grow up properly", "eloquent", "Her ass", "Riding him")
-  and any template joining them comes out broken for much of the cast. A reply that does not
-  start with her name, or runs long, is dropped.
-- **When the sentence is written:** new characters get it at generation. Existing ones get it
-  one per scheduler tick, matched characters first, and a failed one waits an hour before
-  trying again.
 - **Cores from the three-trait version** keep their three and grow to their count. The
   `core_v` marker tells an old core apart from a new one that happens to have three.
+
+(A one-sentence summary written by the model, "X is a girl who ...", was tried briefly and
+removed: the traits themselves are the description, and the sentence was not wanted in the
+app.)
 
 **The candidates are broad, so cores vary:**
 - a visible species
@@ -2184,14 +2179,11 @@ load, keyed on their id so it matches their card.
 
 **What it changes:**
 - **What defines you** (`coreBlock`) sits in her chat and date prompts and in the Director's.
-  It opens with her one-line sentence, then her first two traits ("Above all") and the rest
-  ("And just as much you"). She is told to rotate between them, one or two in a message and
+  It lists her first two traits ("Above all") and the rest ("And just as much you"). She is told to rotate between them, one or two in a message and
   never the same one message after message, so a five-trait core does not mean every message
   covers all five. Everything else is true but is flavour for when he asks or the moment calls
   for it. A job outside the core is explicitly a passing detail.
-- **Her swipe card** shows the sentence without her name ("A girl who ...") between the bio
-  and the traits, and her profile sheet opens with "What defines her": the sentence and her
-  traits as chips.
+- **Her profile sheet** opens with "What defines her": her traits as chips.
 - **Her life block** shows a non-core job as "Work (background - mention in passing, not a
   topic)". Interests are flavour; only a hobby that is part of her core gets its full
   description.
