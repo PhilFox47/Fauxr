@@ -14,6 +14,13 @@ type CloseFn = () => void;
 
 const stack: CloseFn[] = [];
 let installed = false;
+/**
+ * A back is in flight: history.back() is asynchronous, and until its popstate arrives the
+ * stack still shows the view as open. A second closeView() in that window used to issue a
+ * second back and close the view underneath too - the photo viewer's close button did exactly
+ * that, taking the whole chat with it.
+ */
+let backPending = false;
 
 function currentDepth(): number {
   const d = (window.history.state as { depth?: number } | null)?.depth;
@@ -27,6 +34,7 @@ function ensureInstalled(): void {
     window.history.replaceState({ depth: 0 }, '');
   }
   window.addEventListener('popstate', () => {
+    backPending = false;
     const target = currentDepth();
     // Usually pops exactly one, but a fast multi-step swipe-back gesture can jump more than
     // one level at once - closing everything in between rather than getting stuck is correct.
@@ -56,7 +64,10 @@ export function replaceTopView(onClose: CloseFn): void {
 
 /** A view's own back/close button - triggers the real back navigation and its popstate. */
 export function closeView(): void {
-  if (stack.length === 0) return;
+  if (stack.length === 0 || backPending) return;
+  backPending = true;
+  // Belt and braces: should a popstate ever not arrive, closing must not stay blocked.
+  window.setTimeout(() => { backPending = false; }, 1000);
   window.history.back();
 }
 

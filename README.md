@@ -751,6 +751,12 @@ and nothing capped their height. On a desktop:
   560px wide.
 Phone sizes are unchanged.
 
+Closing a photo with the viewer's X button closed the chat behind it too, on phone and desktop
+alike. The X sits on the viewer's backdrop, which also closes on click, so one click ran the
+close twice and the app went back two steps. The X no longer passes its click on, and
+`closeView()` in `nav.ts` ignores a second close while the first one's back step is still in
+flight, so a double click on any close button cannot take the view underneath with it.
+
 ## A failed photo can always be asked for again
 
 A log showed her profile picture failing on a provider outage (503 `all_fallbacks_failed`,

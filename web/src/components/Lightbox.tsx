@@ -48,7 +48,16 @@ export default function Lightbox({
 
   return (
     <div className="lightbox" onClick={onClose} role="dialog" aria-modal="true" aria-label="Photo">
-      <button className="lightbox-close iconbtn" onClick={onClose} aria-label="Close">
+      {/* stopPropagation: the backdrop behind it closes too, and the click reaching both sent
+          two "back"s - one for the photo and one for the chat under it. */}
+      <button
+        className="lightbox-close iconbtn"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        aria-label="Close"
+      >
         <Icon name="close" size={22} />
       </button>
 
