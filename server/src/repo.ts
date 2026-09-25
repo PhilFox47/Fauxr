@@ -603,6 +603,28 @@ export function recentMessages(characterId: string, limit = 40): StoredMessage[]
   return rows.reverse().map(hydrateMessage);
 }
 
+/**
+ * The photos she has sent him in the text chat since `sinceIso`, oldest first. Two she offered
+ * as a choice count as one send, and the one he did not pick is left out.
+ */
+export function herPhotosSince(characterId: string, sinceIso: string): StoredMessage[] {
+  const rows = db
+    .prepare(
+      `SELECT * FROM messages WHERE character_id = ? AND date_id IS NULL AND kind = 'image'
+         AND sender = 'character' AND sent_at >= ? ORDER BY id ASC`,
+    )
+    .all(characterId, sinceIso) as any[];
+  const seen = new Set<string>();
+  return rows.map(hydrateMessage).filter((m) => {
+    if (m.meta?.declined) return false;
+    const group = m.meta?.choice_group as string | undefined;
+    if (!group) return true;
+    if (seen.has(group)) return false;
+    seen.add(group);
+    return true;
+  });
+}
+
 export function messagesSince(characterId: string, sinceId: number): StoredMessage[] {
   const rows = db
     .prepare('SELECT * FROM messages WHERE character_id = ? AND date_id IS NULL AND id > ? ORDER BY id ASC')

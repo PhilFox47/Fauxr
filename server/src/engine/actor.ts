@@ -9,7 +9,7 @@ import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Rela
 import {
   appearanceBlock, communicationBlock, continuityBlock, directionBlock, fantasiesBlock, historyBlock,
   coreBlock, identityBlock, interestsBlock, languageBlock, ledgerBlock, lifeBlock, moodBlock, quirksBlock,
-  sexualBlock, spiceBlock, userBlock,
+  recentPhotosFact, sexualBlock, spiceBlock, userBlock,
 } from './blocks.js';
 import { describeHim } from './discovery.js';
 import { userCardBlock } from './usercard.js';
@@ -241,7 +241,7 @@ function buildPrompt(
     // Not a fiction she lives in: her picture simply has not been generated, which is his call
     // and costs money. She is not told why, so there is nothing for her to comment on.
     photo_status: canSendPhotos(relationship)
-      ? ''
+      ? recentPhotosFact(character.id)
       : 'You cannot send photos in this chat for now: leave "photo_offer" null. If he asks for ' +
         'one, put it off in your own way or describe it in words instead. Do not make a thing of it.',
     identity_block: identityBlock(character, flags),

@@ -1,5 +1,5 @@
 import { find } from '../db/attributes.js';
-import type { StoredMessage } from '../repo.js';
+import { herPhotosSince, type StoredMessage } from '../repo.js';
 import type { Character, CharacterSeed, DateSession, Direction, Flags, Ledger, UserProfile } from '../types.js';
 import { describeSeed } from './generator.js';
 import { freshThreads, pruneThreads } from './state.js';
@@ -478,6 +478,24 @@ export function spiceDirective(spice: number): string {
     return 'House pacing: hot. Characters are quick to flirt, quick to go sexual and quick to pitch their own ideas. Slow-burn types still burn, but hotter.';
   }
   return 'House pacing: default. Each character goes at her own pace - some all in from the start, some a slower burn - and all of them are into him and bring their own ideas.';
+}
+
+/**
+ * How recently she has sent him photos, as plain facts. Photos are meant to feel like an event;
+ * without this a model had no idea it had sent one forty minutes ago, and a log showed three in
+ * two and a half hours, two of them her own idea, while the chat itself kept circling back to
+ * pictures. Not a limit - she can send another straight away when there is a reason - just what
+ * she needs to judge whether there is one. Empty when she has sent none in the last day.
+ */
+export function recentPhotosFact(characterId: string, who: 'you' | 'she' = 'you'): string {
+  const photos = herPhotosSince(characterId, new Date(Date.now() - 24 * 3_600_000).toISOString());
+  if (!photos.length) return '';
+  const last = photos[photos.length - 1];
+  const minutes = Math.max(0, Math.round((Date.now() - Date.parse(last.sent_at)) / 60_000));
+  const ago = minutes < 2 ? 'just now' : minutes < 90 ? `${minutes} minutes ago` : `${Math.round(minutes / 60)} hours ago`;
+  const what = String(last.meta?.caption || last.meta?.description || '').trim();
+  const verb = who === 'you' ? 'You have sent him' : 'She has sent him';
+  return `${verb} ${photos.length} photo${photos.length === 1 ? '' : 's'} in the last day. The last one was ${ago}${what ? `: ${what}` : ''}.`;
 }
 
 /**

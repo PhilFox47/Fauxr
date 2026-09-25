@@ -714,6 +714,29 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## Photos are an event
+
+A log of one chat (Ines) had three photos in two and a half hours: one he asked for, one she
+sent after "I'd love to see it in person sometime", and one for a photo dare she had set up
+herself. The conversation around them kept circling back to pictures too: a "never have I
+ever about your pics" game, a "preview", a dare. The Director's goals read "Send him the kept
+pic" and "Deliver the photo. The photo is the move". Nothing told either of them that a photo
+should be rare, and neither knew when she had last sent one; the chat prompt opened its photo
+section with "You can send him a photo whenever you want to".
+
+Per AGENTS.md this is her judgment, not a limit, so she gets the guidance and the facts:
+- **The chat prompt** says a photo is an event, not punctuation: send one when there is a
+  reason (he asked, something specific to show off, a moment that has built to it). Several in
+  a row are fine when each has its own reason; otherwise words do it. The conversation is
+  about the two of them, not about pictures.
+- **The Director** gets the same rule (PHOTOS): plan one only for a reason, never as the
+  default reward, escalation or turn-filler.
+- **The facts**, per turn (`recentPhotosFact()` in `blocks.ts`, from `herPhotosSince()` in
+  `repo.ts`): "You have sent him 3 photos in the last day. The last one was 25 minutes ago:
+  selfie from above on the couch with wine." It shows under Photos in her prompt only when she
+  has sent one in the last day, and as "photos:" in the Director's RIGHT NOW. Two photos
+  offered as a choice count as one send, and the one he did not pick is left out.
+
 ## A desktop layout
 
 The app was built for a phone. On a desktop it showed as a 620px phone column in the middle of

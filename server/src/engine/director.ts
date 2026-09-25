@@ -8,7 +8,7 @@ import type { ActorHidden, Character, Direction, Relationship } from '../types.j
 import {
   coreBlock,
   dateHistoryFact, directionBlock, fantasiesBlock, historyBlock, ledgerBlock, seedBlock,
-  spiceDirective, userBlock,
+  recentPhotosFact, spiceDirective, userBlock,
 } from './blocks.js';
 import { describeArousal, describePace } from './stage.js';
 import { lifeBlockForDirector } from './life.js';
@@ -163,6 +163,7 @@ export async function runDirector(
       : opts.event ?? `(no actor report - triggered by: ${opts.reason})`,
     history_block: historyBlock(history, character, user),
     date_history: dateHistoryFact(listDates(character.id)),
+    recent_photos: recentPhotosFact(character.id, 'she') || 'none in the last day',
   });
 
   let parsed: { update?: DirectorUpdate; direction?: any; wakeup?: any };
