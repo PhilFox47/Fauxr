@@ -64,6 +64,42 @@ export function hasProfileImageJob(characterId: string): boolean {
  * she sends before one exists waits on this first. The profile picture lives on her profile;
  * it is not posted into the chat.
  */
+/**
+ * Where her profile picture stands. 'failed' means every attempt so far failed and none is
+ * running: the one state where he needs a button to ask again, because the button that started
+ * it is gone once pressed - a 503 from the provider used to leave her an emoji for good.
+ */
+export function profilePictureState(characterId: string): 'none' | 'working' | 'done' | 'failed' {
+  const live = db
+    .prepare("SELECT status FROM images WHERE character_id = ? AND kind = 'profile' AND status != 'failed' ORDER BY rowid ASC LIMIT 1")
+    .get(characterId) as { status: string } | undefined;
+  if (live) return live.status === 'done' ? 'done' : 'working';
+  const failed = db.prepare("SELECT 1 FROM images WHERE character_id = ? AND kind = 'profile' LIMIT 1").get(characterId);
+  return failed ? 'failed' : 'none';
+}
+
+/**
+ * A photo that failed before it had a bubble - preparing a chat photo, or a date's arrival
+ * photo - still gets one, marked as failed, so "Show photo" can try it again. Without it the
+ * failure was invisible: her message said a photo was coming and nothing ever arrived.
+ */
+function postFailedPlaceholder(job: ImageJob, characterId: string, caption: string, extraMeta: Record<string, unknown> = {}): void {
+  if (findMessageByImageId(job.id)) return;
+  const stored = addMessage({
+    character_id: characterId,
+    sender: job.kind === 'date' ? 'system' : 'character',
+    text: '',
+    kind: 'image',
+    meta: {
+      image_id: job.id, pending: true, caption, description: job.situation ?? caption, aspect: job.aspect,
+      render_error: 'That one did not come through. Try again.', ...extraMeta,
+    },
+    read_at: null,
+    date_id: job.date_id ?? null,
+  });
+  bus.emitEvent({ type: 'message', character_id: characterId, message: stored });
+}
+
 export async function ensureProfilePicture(characterId: string): Promise<void> {
   if (!photosEnabled()) return;
   const existing = db
@@ -153,6 +189,7 @@ async function preparePhoto(
   } catch (err) {
     logger.error('image', `preparing photo ${job.id} failed`, { error: String(err) });
     setStatus(job.id, 'failed', { error: String(err) });
+    postFailedPlaceholder(loaded.job, loaded.character.id, cleanCaption('', job.situation ?? ''), extraMeta);
   }
 }
 
@@ -167,7 +204,6 @@ export async function showPhoto(imageId: string): Promise<void> {
   if (!job) throw new Error('photo not found');
   if (job.status === 'done' || job.status === 'running') return;
   if (findMessageByImageId(imageId)?.meta?.declined) throw new Error('he already picked the other one');
-  if (!job.prompt) throw new Error('this photo was never prepared');
   const loaded = loadJob(imageId);
   if (!loaded) throw new Error(getImageJob(imageId)?.error ?? 'image generation is unavailable');
   const message = findMessageByImageId(imageId);
@@ -193,12 +229,12 @@ export async function showPhoto(imageId: string): Promise<void> {
   void (async () => {
     try {
       await ensureProfilePicture(loaded.character.id);
-      await renderImageJob(loaded.job, loaded.character, {
-        prompt: job.prompt,
-        negative: job.negative_prompt ?? '',
-        caption: job.caption ?? '',
-        situation: job.situation ?? '',
-      }, true);
+      // A photo whose preparation failed has no prompt yet: prepare it now, from what she
+      // said she was sending.
+      const shot = job.prompt
+        ? { prompt: job.prompt, negative: job.negative_prompt ?? '', caption: job.caption ?? '', situation: job.situation ?? '' }
+        : await assembleImageJob(loaded.job, loaded.character, job.situation ?? '');
+      await renderImageJob(loaded.job, loaded.character, shot, true);
     } catch (err) {
       logger.error('image', `showing photo ${imageId} failed`, { error: String(err) });
       setStatus(imageId, 'failed', { error: String(err) });
@@ -851,6 +887,11 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
   } catch (err) {
     logger.error('image', `image job ${id} failed`, { error: String(err) });
     setStatus(id, 'failed', { error: String(err) });
+    // Her profile picture is never a chat bubble; its retry is the camera button (see
+    // profilePictureState). Anything else that was meant to land in a chat gets a bubble.
+    if (postToChat && loaded.job.kind !== 'profile') {
+      postFailedPlaceholder(loaded.job, loaded.character.id, loaded.job.kind === 'date' ? 'Her photo as you arrive' : cleanCaption('', situation));
+    }
   }
 }
 
@@ -1083,7 +1124,9 @@ export async function retryImageJob(id: string): Promise<void> {
   // style suffix already baked in, not something fit to feed back into the assembler as a
   // fresh situation. A job that never got that far (failed before resolving one at all)
   // falls back to blank, which is what lets a profile job's lazy profilePicConcept() run.
-  await runImageJob(id, job.situation ?? '', true);
+  // Her profile picture was never a chat message; retrying it from the Settings list used to
+  // post it into her chat as a photo she sent.
+  await runImageJob(id, job.situation ?? '', job.kind !== 'profile');
 }
 
 /** Sized like PROFILE_PIC_TOKENS - one real paragraph, from a reasoning model. */

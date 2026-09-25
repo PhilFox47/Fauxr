@@ -136,6 +136,8 @@ export default function Chat({
   /** First tap arms it, second tap does it - it starts a paid image generation. */
   const [confirmPicture, setConfirmPicture] = useState(false);
   const [generatingPicture, setGeneratingPicture] = useState(false);
+  /** Asked for once already, and every attempt failed: the same button, as a retry. */
+  const retryPicture = !!character?.photos_exchanged && character?.profile_picture_state === 'failed';
   // One deduped set that both surfaces index into. A photo she sent in the chat is also in
   // her gallery, so concatenating the two blind would show it twice while paging.
   const allImages = [
@@ -436,15 +438,19 @@ export default function Chat({
           </span>
         </div>
         <div className="spacer" />
-        {character && !character.photos_exchanged && !blocked && (
+        {character && !blocked && (!character.photos_exchanged || character.profile_picture_state === 'failed') && (
           <button
             className={confirmPicture ? 'btn picture-confirm' : 'iconbtn'}
             onClick={() => void generateProfilePicture()}
             disabled={generatingPicture}
-            aria-label="Generate profile pic"
-            title="Generate profile pic - her picture, and from then on she can send photos"
+            aria-label={retryPicture ? 'Retry profile pic' : 'Generate profile pic'}
+            title={retryPicture
+              ? 'Her profile picture did not come through - try again'
+              : 'Generate profile pic - her picture, and from then on she can send photos'}
           >
-            {confirmPicture ? (generatingPicture ? 'Generating…' : 'Generate profile pic?') : <Icon name="camera" size={20} />}
+            {confirmPicture
+              ? (generatingPicture ? 'Generating…' : retryPicture ? 'Retry profile pic?' : 'Generate profile pic?')
+              : <Icon name={retryPicture ? 'refresh' : 'camera'} size={20} />}
           </button>
         )}
         {profile && (
@@ -629,7 +635,9 @@ export default function Chat({
                   >
                     {m.meta.rendering || showingPhotoIds.has(m.meta.image_id)
                       ? 'Developing…'
-                      : m.meta.choice_group
+                      : m.meta.render_error
+                        ? 'Try again'
+                        : m.meta.choice_group
                         ? 'Pick this one'
                         : 'Show photo'}
                   </button>
@@ -1142,6 +1150,7 @@ function DateRoom({
   const [deletingBeatId, setDeletingBeatId] = useState<number | null>(null);
   const [confirmDeleteBeatId, setConfirmDeleteBeatId] = useState<number | null>(null);
   const confirmDeleteBeatTimer = useRef<number | null>(null);
+  const [retryingPhotoId, setRetryingPhotoId] = useState<string | null>(null);
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -1339,6 +1348,31 @@ function DateRoom({
                   <div key={m.id} className="date-photo">
                     {m.image_url ? (
                       <img src={m.image_url} alt="" />
+                    ) : m.meta?.pending && m.meta?.image_id ? (
+                      // Her arrival photo failed (a provider outage, usually): it can be asked for again.
+                      <>
+                        <span className="tiny muted">
+                          {m.meta.rendering || retryingPhotoId === m.meta.image_id ? 'Developing…' : m.meta.render_error ?? 'Photo unavailable'}
+                        </span>
+                        {!m.meta.rendering && retryingPhotoId !== m.meta.image_id && (
+                          <button
+                            className="btn"
+                            onClick={async () => {
+                              setRetryingPhotoId(m.meta.image_id);
+                              try {
+                                await api.showPhoto(m.meta.image_id);
+                                await load();
+                              } catch (err) {
+                                setError(String(err instanceof Error ? err.message : err));
+                              } finally {
+                                setRetryingPhotoId(null);
+                              }
+                            }}
+                          >
+                            Try again
+                          </button>
+                        )}
+                      </>
                     ) : (
                       <span className="tiny muted">Photo unavailable</span>
                     )}

@@ -104,6 +104,8 @@ export interface MatchSummary {
   profile_picture: string | null;
   /** Her profile picture has been generated (or asked for) - the only thing that starts image generation for her. */
   photos_exchanged: boolean;
+  /** 'failed' means every attempt failed and none is running - the camera button comes back as a retry. */
+  profile_picture_state?: 'none' | 'working' | 'done' | 'failed';
   unread: number;
   last_message: { text: string; sender: string; sent_at: string } | null;
   last_activity: string | null;

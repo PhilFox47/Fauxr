@@ -714,6 +714,28 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## A failed photo can always be asked for again
+
+A log showed her profile picture failing on a provider outage (503 `all_fallbacks_failed`,
+three quick retries, then the job failed). The camera button had already disappeared when it
+was pressed, so there was no way to ask again and she stayed an emoji. Two other failures were
+just as final: a chat photo whose preparation failed never got a bubble, even though her
+message said one was coming, and a date's arrival photo that failed left nothing behind.
+
+Now every failure leaves a way back:
+- **Her profile picture:** the chat summary carries `profile_picture_state` (`none`, `working`,
+  `done`, `failed`, from `profilePictureState()`). While it is `failed` the camera button
+  comes back as "Retry profile pic" (a refresh icon). The same route accepts it
+  (`POST /api/chats/:id/profile-picture`), refuses while one is running or once one exists, and
+  does not post a second "You generated..." line.
+- **A chat photo that failed while being prepared** still gets its bubble, marked as failed,
+  with the caption taken from what she said she was sending. "Show photo" reads "Try again",
+  and on a photo that was never prepared it prepares it first, then renders it.
+- **A date's arrival photo** that failed leaves a placeholder in the date with "Try again",
+  which goes through the same path.
+- **Retrying a profile job from the Settings image list** no longer posts her profile picture
+  into her chat as a photo she sent.
+
 ## More regular selfies, fewer mirror selfies
 
 Her photos leaned hard on mirror selfies. Not because anyone asked for them: the prompts kept

@@ -19,7 +19,7 @@ import { bus } from '../events.js';
 import { blockCharacterByUser, deleteMessage, handleUserMessage, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
 import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import {
-  characterGallery, ensureProfilePicture, evaluateUserImage, hasSwapped, listImageJobs, regenerateImage, retryImageJob, showPhoto,
+  characterGallery, ensureProfilePicture, evaluateUserImage, hasSwapped, profilePictureState, listImageJobs, regenerateImage, retryImageJob, showPhoto,
 } from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji, rarityTier } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
@@ -64,6 +64,8 @@ function publicCharacter(c: Character) {
     avatar_emoji: avatarEmojiFor(c),
     profile_picture: picture ? `/media/${picture.path}` : null,
     photos_exchanged: hasSwapped(rel),
+    // 'failed' brings the camera button back as a retry (see profilePictureState).
+    profile_picture_state: profilePictureState(c.id),
     // Her WhatsApp-style status line, only while she is an active match (see engine/status.ts).
     status: c.state === 'matched' ? statusOf(rel)?.text ?? null : null,
   };
@@ -276,19 +278,26 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     const rel = getRelationship(req.params.id);
     if (!character || !rel) return reply.code(404).send({ error: 'not found' });
     if (character.state !== 'matched') return reply.code(400).send({ error: 'you are not matched with her' });
-    if (hasSwapped(rel)) return reply.code(400).send({ error: 'her profile picture has already been generated' });
+    // Asking again is allowed once every attempt so far has failed (or was pressed while image
+    // generation was off) - never while one is running or after one exists.
+    const state = profilePictureState(character.id);
+    if (hasSwapped(rel) && (state === 'working' || state === 'done')) {
+      return reply.code(400).send({ error: state === 'done' ? 'her profile picture has already been generated' : 'her profile picture is already on its way' });
+    }
 
-    // The flag keeps its old name; it now means "her picture was asked for".
-    rel.flags.state.photos_exchanged = true;
-    saveRelationship(rel);
-    // A line for him in the chat. historyBlock leaves it out of her prompt (meta type).
-    const msg = addMessage({
-      character_id: character.id,
-      sender: 'system',
-      text: `You generated ${character.real_name}'s profile picture.`,
-      meta: { type: 'photos_swapped' },
-    });
-    bus.emitEvent({ type: 'message', character_id: character.id, message: msg });
+    if (!hasSwapped(rel)) {
+      // The flag keeps its old name; it now means "her picture was asked for".
+      rel.flags.state.photos_exchanged = true;
+      saveRelationship(rel);
+      // A line for him in the chat. historyBlock leaves it out of her prompt (meta type).
+      const msg = addMessage({
+        character_id: character.id,
+        sender: 'system',
+        text: `You generated ${character.real_name}'s profile picture.`,
+        meta: { type: 'photos_swapped' },
+      });
+      bus.emitEvent({ type: 'message', character_id: character.id, message: msg });
+    }
     void ensureProfilePicture(character.id).catch((err) =>
       logger.error('image', 'profile picture failed', { error: String(err) }),
     );
