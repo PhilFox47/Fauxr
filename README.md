@@ -213,8 +213,8 @@ Re-asking mostly got the same drift back. So the readers now take what came:
 - **The chat prompt** says every hidden key is optional, so the model is not pushed to fill
   nineteen fields a turn.
 
-Replayed against that log: the Actor goes from none of its eight replies usable to all eight,
-the Director from two of six to four, and generation from a third of its replies to 13 of 18.
+Replayed against that log, usable replies before and after: the Actor 2 of 8 -> 8 of 8, the
+Director 2 of 6 -> 4 of 6, generation 7 of 18 -> 13 of 18.
 What still fails really is empty: a Director reply with no direction at all, or a character
 written as structured fields with no prose dossier. The retry and the fallbacks still handle
 those.
