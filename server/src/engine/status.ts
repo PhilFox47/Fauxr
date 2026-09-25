@@ -8,6 +8,7 @@ import type { Character, Relationship } from '../types.js';
 import { randInt } from './dice.js';
 import { coreTraits } from './profilecard.js';
 import { advanceThread, ensureLife, threadsForStatus } from './life.js';
+import { STATUS_WITH_THREAD, STATUS } from '../llm/schemas.js';
 
 /**
  * Her status, like a WhatsApp status: one short line she has "posted" about where she is or
@@ -112,6 +113,7 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
     const out = await completeJson<{ status?: string; location?: string; activity?: string; outfit?: string; thread?: number; happened?: string; resolved?: boolean }>({
       scope: 'director',
       label: `status:${character.username}`,
+      schema: threadList ? STATUS_WITH_THREAD : STATUS,
       config: { ...getSettings().models.director, max_tokens: 1000 },
       require: ['status'],
       messages: [{ role: 'user', content: prompt }],

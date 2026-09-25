@@ -210,8 +210,9 @@ Re-asking mostly got the same drift back. So the readers now take what came:
   name is taken from the dossier's opening word ("Nayeli spends her day..."), which keeps the
   prose and the name in step.
 - **Date beats:** the scene text is read from `text`, `beat`, `reply` or a list of lines.
-- **The chat prompt** says every hidden key is optional, so the model is not pushed to fill
-  nineteen fields a turn.
+- **The chat prompt** says a hidden key that does not apply is null, so the model is not
+  pushed to invent nineteen fields a turn (it first said "leave it out"; with Structured Output
+  below every key is always present, so null is the way to say nothing).
 
 Replayed against that log, usable replies before and after: the Actor 2 of 8 -> 8 of 8, the
 Director 2 of 6 -> 4 of 6, generation 7 of 18 -> 13 of 18.
@@ -222,6 +223,31 @@ those.
 The same log also had 503s with `all_fallbacks_failed`: the provider had no host for the model
 for a couple of minutes. That is outside the app; the retries wait, and past that she keeps her
 last direction or sends the fallback line.
+
+### Structured Output: the provider holds the shape
+
+The readers above repair drift after it happens. Models behind NanoGPT, including the GLM
+default, also support Structured Output: instead of `response_format: json_object` ("some
+valid JSON") the request carries the reply's exact JSON Schema, and the provider constrains
+the model to it. Wrong keys, strings for objects and hoisted fields can no longer come back.
+- **Schemas** live in `llm/schemas.ts`, one per reply type: the Actor's chat reply, voice note
+  and date beat, the Director's direction and date summary, character generation (with name,
+  handle, bio and fantasies), status, storylines, the date cast, the outfit, the photo
+  concepts and prompts, the review of his photos, and the location writers. All are
+  strict-mode: every key is required and `additionalProperties` is false, so a field that has
+  nothing this turn comes back as `null`. They must stay in step with the OUTPUT section of
+  their prompt.
+- **One switch:** Settings -> Models -> Structured output, on by default (`FAUXR_STRUCTURED_OUTPUTS=0`
+  starts with it off).
+- **Per-model fallback:** not every model behind a router supports it. When the provider
+  answers a schema request with an error naming the response format or schema (and not a
+  429), that model is remembered, the same call is re-sent at once in plain JSON mode, and it
+  stays on plain JSON until the server restarts. Other models keep their schemas. The log
+  says so once per model, and every call log shows which schema, if any, it was sent with.
+- **The readers stay** as the safety net, for a provider that accepts the schema and does not
+  enforce it, and for the plain-JSON fallback.
+
+The response format sits outside the prompt, so it does not affect prefix caching.
 
 ### Headroom over truncation, everywhere
 

@@ -184,6 +184,25 @@ function ModelsPane({ settings, patch, save, saved }: any) {
             onChange={(e) => patch(['api', 'image_api_key'], e.target.value)}
           />
         </label>
+        <label className="switch-row">
+          <span className="switch">
+            <input
+              type="checkbox"
+              checked={settings.api.structured_outputs !== false}
+              onChange={(e) => patch(['api', 'structured_outputs'], e.target.checked)}
+            />
+            <span className="track" />
+          </span>
+          <span className="small">
+            Structured output
+            <br />
+            <span className="tiny muted">
+              Sends the exact shape of every reply along with the request (JSON schema), so the
+              model cannot bend it. A model that does not support it is switched back to plain
+              JSON on its own.
+            </span>
+          </span>
+        </label>
       </div>
 
       {roles.map((role) => (

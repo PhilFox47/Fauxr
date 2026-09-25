@@ -55,6 +55,7 @@ import { randInt } from './dice.js';
 import { ensureFantasies } from './generator.js';
 import { fantasyLog } from './fantasies.js';
 import { hasSwapped } from './images.js';
+import { DIRECTOR } from '../llm/schemas.js';
 
 export interface DirectorResult {
   direction: Direction;
@@ -170,6 +171,7 @@ export async function runDirector(
     parsed = await completeJson({
       scope: 'director',
       label: `direction:${character.username}:${opts.reason}`,
+      schema: DIRECTOR,
       config: settings.models.director,
       messages: [{ role: 'user', content: prompt }],
       require: ['direction', 'update'],

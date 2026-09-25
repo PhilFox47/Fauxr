@@ -22,6 +22,7 @@ import { describeSeed } from './generator.js';
 import { chatPhotoLine, photoManner, profileHeat } from './photolevel.js';
 export { profileHeat, profileLevel, chatPhotoLevel, photoManner } from './photolevel.js';
 import type { Character, CharacterSeed, Relationship } from '../types.js';
+import { IMAGE_PROMPT, IMAGE_REVIEW, PHOTO_IDEA, PROFILE_PIC } from '../llm/schemas.js';
 
 /** Whether image generation is switched on at all. */
 export function photosEnabled(): boolean {
@@ -758,6 +759,7 @@ async function profilePicConcept(character: Character): Promise<string> {
     const out = await completeJson<{ profile_pic?: string }>({
       scope: 'image',
       label: `profile_pic_concept:${character.username}`,
+      schema: PROFILE_PIC,
       config: { ...getSettings().models.actor, max_tokens: PROFILE_PIC_TOKENS },
       require: ['profile_pic'],
       messages: [
@@ -913,6 +915,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   const assembled = await completeJson<{ prompt: string; negative_prompt?: string; caption?: string }>({
     scope: 'image',
     label: `assemble:${character.username}`,
+    schema: IMAGE_PROMPT,
     config: settings.models.director,
     require: ['prompt'],
     messages: [
@@ -1100,6 +1103,7 @@ async function freshPhotoIdea(
     const out = await completeJson<{ situation?: string; aspect?: string }>({
       scope: 'image',
       label: `photo_idea:${character.username}`,
+      schema: PHOTO_IDEA,
       config: { ...getSettings().models.actor, max_tokens: PHOTO_IDEA_TOKENS },
       require: ['situation'],
       messages: [
@@ -1220,6 +1224,7 @@ export async function evaluateUserImage(
   }>({
     scope: 'director',
     label: `evaluate_image:${character.username}`,
+    schema: IMAGE_REVIEW,
     config: settings.models.director,
     require: ['description'],
     messages: [

@@ -7,6 +7,7 @@ import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
 import { getCircle, setCircle } from '../repo.js';
 import type { Character, DateNpc, DateSession, Joiners, UserProfile } from '../types.js';
+import { DATE_CAST } from '../llm/schemas.js';
 
 /**
  * Other people on a date.
@@ -262,6 +263,7 @@ export async function castFromInvite(character: Character, date: DateSession, lo
     const out = await completeJson<{ people?: unknown[] }>({
       scope: 'director',
       label: `date_cast:${character.username}`,
+      schema: DATE_CAST,
       config: { ...getSettings().models.director, max_tokens: 900 },
       require: ['people'],
       messages: [

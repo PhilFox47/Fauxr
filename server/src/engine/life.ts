@@ -8,6 +8,7 @@ import { getLife, setLife } from '../repo.js';
 import type { Character, LifeThread } from '../types.js';
 import { describeSeed } from './generator.js';
 import { coreTraits } from './profilecard.js';
+import { LIFE_THREADS } from '../llm/schemas.js';
 
 /**
  * Her life keeps happening.
@@ -39,6 +40,7 @@ export async function ensureLife(character: Character): Promise<LifeThread[]> {
     const out = await completeJson<{ threads?: { title?: string; arc?: string; now?: string }[] }>({
       scope: 'director',
       label: `life:${character.username}`,
+      schema: LIFE_THREADS,
       config: { ...getSettings().models.director, max_tokens: 1200 },
       require: ['threads'],
       messages: [

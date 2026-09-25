@@ -19,6 +19,11 @@ export interface Settings {
     api_key: string;
     image_base_url: string;
     image_api_key: string;
+    /**
+     * Send each reply's JSON Schema (`response_format: json_schema`) instead of plain JSON
+     * mode. Falls back to plain JSON on its own for a model the provider will not do it for.
+     */
+    structured_outputs: boolean;
   };
   models: {
     actor: ModelConfig;
@@ -84,6 +89,7 @@ export const DEFAULT_SETTINGS: Settings = {
     api_key: process.env.FAUXR_API_KEY || '',
     image_base_url: process.env.FAUXR_IMAGE_BASE_URL || 'https://nano-gpt.com/api/v1',
     image_api_key: process.env.FAUXR_IMAGE_API_KEY || '',
+    structured_outputs: process.env.FAUXR_STRUCTURED_OUTPUTS !== '0',
   },
   models: {
     // The ceilings are deliberately well clear of the answer's own size. Reasoning models

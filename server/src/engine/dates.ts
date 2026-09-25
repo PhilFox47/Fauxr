@@ -29,6 +29,7 @@ import { fantasyLog } from './fantasies.js';
 import { userCardBlock } from './usercard.js';
 import { isObj, pick } from '../llm/shape.js';
 import { castFromInvite, castLine, circleBlock, groupRules, markLeft, mergeJoined, npcBlock, presentNpcs, rememberCast } from './npcs.js';
+import { DATE_BEAT, DATE_SUMMARY, OUTFIT } from '../llm/schemas.js';
 
 /**
  * Dates: the other half of the game.
@@ -277,6 +278,7 @@ async function runDateActor(
       raw = await complete({
         scope: 'actor',
         label: `date:${character.username}${attempt ? ':retry' : ''}`,
+        schema: DATE_BEAT,
         config: settings.models.actor,
         json: true,
         messages: correction ? [...base, { role: 'user', content: correction }] : base,
@@ -554,6 +556,7 @@ async function decideDateOutfit(character: Character, date: DateSession, locatio
     const out = await completeJson<{ outfit?: string }>({
       scope: 'image',
       label: `date_outfit:${character.username}`,
+      schema: OUTFIT,
       config: { ...getSettings().models.actor, max_tokens: OUTFIT_TOKENS },
       require: ['outfit'],
       messages: [
@@ -801,6 +804,7 @@ export async function endDate(dateId: string): Promise<DateSession> {
       const out = await completeJson<{ summary?: string; highlights?: string[]; update?: DirectorUpdate }>({
         scope: 'director',
         label: `date_summary:${character.username}`,
+        schema: DATE_SUMMARY,
         config: getSettings().models.director,
         require: ['summary'],
         messages: [{ role: 'user', content: summaryPrompt(character, rel, date) }],

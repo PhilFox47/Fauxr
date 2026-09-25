@@ -20,6 +20,7 @@ import { releaseBlock } from './release.js';
 import { detectQuizzingHim, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
 import { canSendPhotos, hasSwapped } from './images.js';
 import { fantasyLog } from './fantasies.js';
+import { ACTOR_CHAT, VOICE_NOTE } from '../llm/schemas.js';
 
 export { detectRoleplay };
 
@@ -352,6 +353,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       text = await complete({
         scope: 'actor',
         label: `chat:${ctx.character.username}${attempt ? ':retry' : ''}`,
+        schema: ACTOR_CHAT,
         config: settings.models.actor,
         json: true,
         messages: correction ? [...base, { role: 'user', content: correction }] : base,
@@ -506,6 +508,7 @@ export async function runActorVoice(ctx: ActorContext): Promise<VoiceOutput | nu
     const text = await complete({
       scope: 'actor',
       label: `voice:${ctx.character.username}`,
+      schema: VOICE_NOTE,
       config: settings.models.actor,
       json: true,
       messages: [{ role: 'user', content: prompt }],

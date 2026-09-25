@@ -8,6 +8,7 @@ import { IMAGE_SIZE } from './images.js';
 import { logger } from '../log.js';
 import { getLocation, saveLocation } from '../repo.js';
 import type { Location } from '../types.js';
+import { BACKDROP_PROMPT, LOCATION } from '../llm/schemas.js';
 
 /**
  * The places he writes himself and can then take someone to.
@@ -58,6 +59,7 @@ async function writeBackdropPrompt(location: Location): Promise<string> {
     const out = await completeJson<{ prompt?: string }>({
       scope: 'image',
       label: `location_prompt:${location.name}`,
+      schema: BACKDROP_PROMPT,
       config: getSettings().models.director,
       require: ['prompt'],
       messages: [
@@ -118,6 +120,7 @@ export async function expandLocationDraft(
   const out = await completeJson<{ name?: string; description?: string }>({
     scope: 'generator',
     label: `expand_location:${name}`,
+    schema: LOCATION,
     config: getSettings().models.director,
     require: ['name', 'description'],
     messages: [

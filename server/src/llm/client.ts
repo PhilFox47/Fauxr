@@ -3,6 +3,7 @@ import { db, nowIso } from '../db/index.js';
 import { getSettings, type ModelConfig } from '../config.js';
 import { logger } from '../log.js';
 import { loadTemplate } from '../prompts/render.js';
+import type { JsonSchemaSpec } from './schemas.js';
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
@@ -106,6 +107,12 @@ export interface CompletionOptions {
   config: ModelConfig;
   /** Ask the provider for a JSON object where supported. */
   json?: boolean;
+  /**
+   * The exact shape of the answer (schemas.ts). With `json` and the structured-output setting
+   * on, it is sent as `response_format: json_schema` and the provider holds the model to it;
+   * otherwise the call falls back to plain JSON mode.
+   */
+  schema?: JsonSchemaSpec;
   label?: string;
   timeoutMs?: number;
   /**
@@ -146,6 +153,21 @@ const DEFAULT_TIMEOUT_MS = 300_000;
  * is the only clock now.
  */
 const dispatcher = new Agent({ headersTimeout: 0, bodyTimeout: 0 });
+
+/**
+ * Models the provider has refused a JSON schema for, by base URL, model and backend. Not every
+ * model behind an OpenAI-compatible router supports Structured Output, and the setting is one
+ * switch for all of them, so a refusal is remembered per model: that one model goes back to
+ * plain JSON mode for the rest of the process and every other model keeps its schema.
+ */
+const schemaRefused = new Set<string>();
+
+function schemaKey(base: string, config: ModelConfig): string {
+  return `${base}|${config.model}|${config.provider ?? ''}`;
+}
+
+/** An error body that is about the response format rather than the request as a whole. */
+const SCHEMA_COMPLAINT = /response_format|json_schema|structured[ _-]?output|\bschema\b/i;
 
 /**
  * OpenAI-compatible chat completion. Nano-GPT is the default provider, but nothing here
@@ -228,7 +250,16 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
     top_p: opts.config.top_p,
     max_tokens: opts.config.max_tokens,
   };
-  if (opts.json) body.response_format = { type: 'json_object' };
+  const key = schemaKey(settings.api.base_url, opts.config);
+  const useSchema = !!(opts.json && opts.schema && settings.api.structured_outputs !== false && !schemaRefused.has(key));
+  if (useSchema) {
+    body.response_format = {
+      type: 'json_schema',
+      json_schema: { name: opts.schema!.name, strict: true, schema: opts.schema!.schema },
+    };
+  } else if (opts.json) {
+    body.response_format = { type: 'json_object' };
+  }
   // Pins an open-source model to one specific backend instead of leaving routing to the
   // provider. Omitted entirely when unset, which is the existing default behaviour.
   if (opts.config.provider) body.provider = opts.config.provider;
@@ -270,6 +301,19 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
     }
     const duration = Date.now() - started;
     const raw = await res.text();
+    // A model that cannot do Structured Output says so in a 4xx (sometimes a 5xx) naming the
+    // response format. That is not a failed call, just a feature this model lacks: remember it
+    // and ask again at once in plain JSON mode rather than failing or waiting out a "retry".
+    if (!res.ok && useSchema && res.status !== 429 && SCHEMA_COMPLAINT.test(raw)) {
+      schemaRefused.add(key);
+      logger.warn('api', `${opts.config.model} refused a JSON schema, using plain JSON mode for it from now on`, {
+        label: opts.label,
+        status: res.status,
+        response: raw.slice(0, 600),
+      });
+      clearTimeout(timer);
+      return callOnce(opts);
+    }
     if (!res.ok) {
       logger.error('api', `${opts.scope} call failed (${res.status})`, {
         label: opts.label,
@@ -310,6 +354,7 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
       max_tokens: cap,
       finish_reason: finish || null,
       truncated,
+      schema: useSchema ? opts.schema!.name : null,
       prompt: opts.messages,
       response: text,
     });

@@ -17,6 +17,7 @@ import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
 import { pick, unwrap } from '../llm/shape.js';
 import { coreTraits, pickCore } from './profilecard.js';
+import { BIO, CHARACTER, FANTASIES, REAL_NAME, USERNAME } from '../llm/schemas.js';
 
 /** Fields the Director may swap during the coherence pass. */
 const SWAPPABLE: Record<string, string> = {
@@ -884,6 +885,7 @@ async function rerollName(
     const out = await completeJson<{ real_name?: string }>({
       scope: 'generator',
       label: 'reroll_name',
+      schema: REAL_NAME,
       config: { ...getSettings().models.actor, max_tokens: NAME_TOKENS },
       require: ['real_name'],
       messages: [
@@ -1046,6 +1048,7 @@ async function writeUsername(
       const out = await completeJson<{ username?: string }>({
         scope: 'generator',
         label: attempt ? 'write_username:retry' : 'write_username',
+        schema: USERNAME,
         config: { ...getSettings().models.actor, max_tokens: NAME_TOKENS },
         require: ['username'],
         messages: correction
@@ -1144,6 +1147,7 @@ export async function generateCharacter(): Promise<Character> {
       pass = await completeJson<DirectorPass>({
         scope: 'generator',
         label: attempt ? 'generate_character:retry' : 'generate_character',
+        schema: CHARACTER,
         // Writing a character is a creative job, not an analytical one, so it goes to the
         // actor model like the bio does. The director model is picked for being cheap and
         // is typically also the censored one, which makes it a poor choice for something
@@ -1523,6 +1527,7 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
       const out = await completeJson<{ bio: string }>({
         scope: 'generator',
         label: attempt ? 'write_bio:retry' : 'write_bio',
+        schema: BIO,
         // The bio is in-voice writing rather than analysis, so it goes to the actor model.
         // The director still designs the character; it just does not write her lines.
         config: { ...settings.models.actor, max_tokens: BIO_TOKENS },
@@ -1612,6 +1617,7 @@ export function ensureFantasies(character: Character): Promise<void> {
       const out = await completeJson<{ fantasies?: string[] }>({
         scope: 'director',
         label: `fantasies:${character.username}`,
+        schema: FANTASIES,
         config: getSettings().models.director,
         require: ['fantasies'],
         messages: [{
