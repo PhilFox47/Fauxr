@@ -49,6 +49,8 @@ export interface UserProfile {
   kink_map: Record<string, KinkStance>;
   /** Which end you want, for the two-ended ones you are into or curious about. Unset = either. */
   kink_sides?: Record<string, KinkSide>;
+  /** Who may join in when someone else does on a date. Unset follows who you are looking for. */
+  joiners?: 'women' | 'men' | 'anyone' | '';
   /** Stands in for your photo when you have not uploaded one. */
   avatar_emoji: string;
   /** Everything else about you, same vocabulary the characters are built from. */
@@ -167,8 +169,25 @@ export interface DateSession {
   summary: string | null;
   /** What she decided to wear tonight - set once as the date opens. */
   outfit: string | null;
+  /** Everyone else who has been part of the evening; left_at is set once they are gone. */
+  npcs: DateNpc[];
+  /** Who else he asked for on the invite, as he wrote it. */
+  company: string;
   created_at: string;
   ended_at: string | null;
+}
+
+export interface DateNpc {
+  id: string;
+  name: string;
+  gender: 'woman' | 'man' | 'nonbinary';
+  age: number;
+  who: string;
+  look: string;
+  manner: string;
+  up_for: string;
+  source: 'invite' | 'scene';
+  left_at: string | null;
 }
 
 export interface DateView {
@@ -295,11 +314,13 @@ export const api = {
     request<{ active: DateSession | null; past: DateSession[]; locations: Location[] }>(
       `/api/chats/${characterId}/dates`,
     ),
-  startDate: (characterId: string, locationId: string, when: string) =>
+  startDate: (characterId: string, locationId: string, when: string, company = '') =>
     request<DateSession>(`/api/chats/${characterId}/dates`, {
       method: 'POST',
-      body: JSON.stringify({ location_id: locationId, when }),
+      body: JSON.stringify({ location_id: locationId, when, company }),
     }),
+  dismissNpc: (dateId: string, npcId: string) =>
+    request<DateSession>(`/api/dates/${dateId}/npcs/${npcId}/dismiss`, { method: 'POST' }),
   date: (dateId: string) => request<DateView>(`/api/dates/${dateId}`),
   fantasies: (characterId: string) => request<FantasyList>(`/api/chats/${characterId}/fantasies`),
   sendDateMessage: (dateId: string, text: string) =>

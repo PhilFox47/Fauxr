@@ -9,7 +9,7 @@ import { render } from '../prompts/render.js';
 import {
   activeDate, addMessage, clearWakeup, createDate, dateMessages, deleteMessages, finishDate,
   getCharacter, getDate, getLocation, getMessage, getRelationship, getUserProfile, listDates,
-  saveRelationship, setDateOutfit, type StoredMessage,
+  saveRelationship, setDateNpcs, setDateOutfit, type StoredMessage,
 } from '../repo.js';
 import type { Character, DateSession, Location, Relationship } from '../types.js';
 import {
@@ -27,6 +27,7 @@ import { describeHerMoment } from './moment.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { fantasyLog } from './fantasies.js';
 import { userCardBlock } from './usercard.js';
+import { castFromInvite, castLine, groupRules, markLeft, mergeJoined, npcBlock, presentNpcs } from './npcs.js';
 
 /**
  * Dates: the other half of the game.
@@ -157,7 +158,7 @@ export function directionBlock(direction: string): string {
 
 export interface DateTurnResult {
   text: string;
-  hidden: { thoughts: string; mood: string; wants: string; in_the_act?: boolean };
+  hidden: { thoughts: string; mood: string; wants: string; in_the_act?: boolean; joined?: unknown; left?: unknown };
 }
 
 // ------------------------------------------------------------------ prompt blocks
@@ -185,6 +186,13 @@ function buildDatePrompt(
     char_display_name: character.real_name,
     user_name: user?.display_name ?? 'him',
     location_block: locationBlock(date, date.location_id ? getLocation(date.location_id) : null),
+    npc_block: npcBlock(date),
+    // He asked for company on the invite and the casting call came back empty: she still
+    // knows who he wanted, so she can bring them in herself rather than the ask vanishing.
+    company_block: date.company && !(date.npcs ?? []).some((n) => n.source === 'invite')
+      ? `He asked for someone else to be part of tonight: "${date.company}". Bring them into the scene early, as a real person with a name.`
+      : '',
+    group_rules: groupRules(character, user),
     // Empty on the opening beat, which is what OPENING_NOTE replaces.
     history_block: transcript.length
       ? historyBlock(transcript, character, user)
@@ -349,9 +357,12 @@ async function runDateActor(
     }
     if (writesForHim(text)) {
       logger.warn('actor', 'date beat wrote his half of the scene', { character: character.username, text });
+      const men = presentNpcs(date).filter((n) => n.gender !== 'woman').map((n) => n.name);
       correction =
         'You wrote his actions or his feelings for him. Write only what SHE does, says and notices - ' +
-        'describe what she does TO him, and stop there. Write the beat again from scratch, same JSON shape.';
+        'describe what she does TO him, and stop there.' +
+        (men.length ? ` If that sentence was about ${men.join(' or ')}, start it with the name, never "he".` : '') +
+        ' Write the beat again from scratch, same JSON shape.';
       continue;
     }
     if (WRITER_PUNCTUATION.test(text)) {
@@ -394,6 +405,8 @@ async function runDateActor(
         mood: String(parsed?.hidden?.mood ?? ''),
         wants: String(parsed?.hidden?.wants ?? ''),
         in_the_act: parsed?.hidden?.in_the_act === true,
+        joined: parsed?.hidden?.joined,
+        left: parsed?.hidden?.left,
       },
     };
   }
@@ -432,6 +445,7 @@ async function takeDateTurn(dateId: string): Promise<void> {
       read_at: null,
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
+    updateCast(dateId, stored.id, result.hidden.joined, result.hidden.left);
 
     const fresh = getRelationship(character.id);
     if (fresh) {
@@ -452,6 +466,51 @@ async function takeDateTurn(dateId: string): Promise<void> {
   }
 }
 
+/**
+ * Who came and went in one of her beats, onto the date's cast. Tagged with the beat, so a
+ * reroll or a delete of it takes the arrival back out (see revertCast).
+ */
+function updateCast(dateId: string, beatId: number, joined: unknown, left: unknown): void {
+  const date = getDate(dateId);
+  if (!date) return;
+  const merged = mergeJoined(date.npcs ?? [], joined);
+  const arrived = new Set(merged.joined.map((n) => n.id));
+  let npcs = merged.npcs.map((n) => (arrived.has(n.id) ? { ...n, joined_in: beatId } : n));
+  const before = new Set(npcs.filter((n) => n.left_at).map((n) => n.id));
+  npcs = markLeft(npcs, left).map((n) => (n.left_at && !before.has(n.id) ? { ...n, left_in: beatId } : n));
+  if (JSON.stringify(npcs) === JSON.stringify(date.npcs ?? [])) return;
+  setDateNpcs(dateId, npcs);
+  if (merged.joined.length) logger.info('actor', 'someone joined the date', { date: dateId, joined: merged.joined.map((n) => `${n.name} (${n.who})`) });
+  bus.emitEvent({ type: 'date', character_id: date.character_id, date: getDate(dateId)! });
+}
+
+/** Undo whatever the given beats did to the cast: arrivals go, departures come back. */
+function revertCast(dateId: string, beatIds: number[]): void {
+  const date = getDate(dateId);
+  if (!date || !(date.npcs ?? []).length) return;
+  const ids = new Set(beatIds);
+  const npcs = (date.npcs ?? [])
+    .filter((n) => !(n.joined_in != null && ids.has(n.joined_in)))
+    .map((n) => (n.left_in != null && ids.has(n.left_in) ? { ...n, left_at: null, left_in: null } : n));
+  if (npcs.length !== date.npcs.length || npcs.some((n, i) => n !== date.npcs[i])) setDateNpcs(dateId, npcs);
+}
+
+/**
+ * He sends someone away from the date room. They leave in the scene on her next beat - the
+ * block tells her they are gone - rather than vanishing mid-sentence.
+ */
+export function dismissNpc(dateId: string, npcId: string): DateSession {
+  const date = getDate(dateId);
+  if (!date) throw new Error('date not found');
+  if (date.status !== 'active') throw new Error('that date has already ended');
+  const npc = (date.npcs ?? []).find((n) => n.id === npcId && !n.left_at);
+  if (!npc) throw new Error('they are not here');
+  setDateNpcs(dateId, markLeft(date.npcs, [npc.name]));
+  const fresh = getDate(dateId)!;
+  bus.emitEvent({ type: 'date', character_id: date.character_id, date: fresh });
+  return fresh;
+}
+
 // ------------------------------------------------------------------ lifecycle
 
 export interface StartDateInput {
@@ -459,6 +518,8 @@ export interface StartDateInput {
   locationId: string;
   /** Free text, exactly as he typed it: "tonight, 8pm", "Saturday afternoon". */
   when: string;
+  /** Anyone else he wants there, as he typed it: "her friend Jess". Empty for just the two of them. */
+  company?: string;
 }
 
 /** Sized like a photo idea call - one short, concrete paragraph, not a whole dossier. */
@@ -532,8 +593,14 @@ function arrivalSituation(character: Character, location: Location, outfit: stri
  * came with it.
  */
 async function openDate(character: Character, date: DateSession, location: Location): Promise<void> {
-  const outfit = await decideDateOutfit(character, date, location);
+  // The outfit and the company are independent small calls; both have to be settled before
+  // her first beat, which already has everyone in it.
+  const [outfit, cast] = await Promise.all([
+    decideDateOutfit(character, date, location),
+    date.company ? castFromInvite(character, date, locationBlock(date, location), date.company, getUserProfile()) : Promise.resolve([]),
+  ]);
   setDateOutfit(date.id, outfit);
+  if (cast.length) setDateNpcs(date.id, cast);
 
   if (getSettings().images_enabled) {
     enqueueImage({
@@ -572,6 +639,7 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
     when_at: input.when.trim(),
     where_at: location.name,
     location_id: location.id,
+    company: (input.company ?? '').trim().slice(0, 300),
   });
 
   // She is out with him: nothing may wake her up to send a text mid-date.
@@ -645,6 +713,7 @@ export async function regenerateLastDateBeat(dateId: string, messageId: number):
 
   const removedIds = trailing.map((m) => m.id);
   deleteMessages(removedIds);
+  revertCast(dateId, removedIds);
   bus.emitEvent({ type: 'messages_removed', character_id: character.id, message_ids: removedIds });
   logger.info('actor', `regenerating last date beat for ${character.username}`, { removed: removedIds });
 
@@ -662,6 +731,7 @@ export function deleteDateMessage(dateId: string, messageId: number): void {
   const message = getMessage(messageId);
   if (!message || message.date_id !== dateId) throw new Error('message not found');
   deleteMessage(date.character_id, messageId);
+  revertCast(dateId, [messageId]);
 }
 
 /**
@@ -690,7 +760,7 @@ function summaryPrompt(character: Character, rel: Relationship, date: DateSessio
   return render('director_date_summary', {
     user_block: userBlock(user),
     seed_block: seedBlock(character),
-    location_block: locationBlock(date, date.location_id ? getLocation(date.location_id) : null),
+    location_block: [locationBlock(date, date.location_id ? getLocation(date.location_id) : null), castLine(date)].filter(Boolean).join('\n'),
     arousal: rel.arousal,
     fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel)) || '(none)',
     history_block: historyBlock(withoutDirections(dateMessages(date.id)), character, user),

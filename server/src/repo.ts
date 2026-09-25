@@ -3,7 +3,7 @@ import { byCategory, find } from './db/attributes.js';
 import { newContext, roll } from './engine/dice.js';
 import { rollChatGames, rollDomainStance, rollKinkSides, wrongEnd } from './engine/kinks.js';
 import type {
-  Character, CharacterSeed, CharacterState, DateSession, Direction, Flags, KinkSide, Ledger,
+  Character, CharacterSeed, CharacterState, DateNpc, DateSession, Direction, Flags, KinkSide, Ledger,
   Location, Relationship, UserProfile,
 } from './types.js';
 
@@ -61,6 +61,7 @@ export function getUserProfile(): UserProfile | null {
     age_max: row.age_max ?? 42,
     kink_map: JSON.parse(row.kink_map ?? '{}'),
     kink_sides: JSON.parse(row.kink_sides ?? '{}'),
+    joiners: row.joiners ?? '',
     avatar_emoji: row.avatar_emoji ?? '',
     card: JSON.parse(row.card ?? '{}'),
     seeking: row.seeking,
@@ -70,12 +71,12 @@ export function getUserProfile(): UserProfile | null {
 export function saveUserProfile(p: UserProfile): UserProfile {
   const ts = nowIso();
   db.prepare(
-    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, kink_map, kink_sides, avatar_emoji, card, created_at, updated_at)
-     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @kink_map, @kink_sides, @avatar_emoji, @card, @ts, @ts)
+    `INSERT INTO user_profile (id, display_name, age, bio, photos, gender, seeking, age_min, age_max, kink_map, kink_sides, joiners, avatar_emoji, card, created_at, updated_at)
+     VALUES (1, @display_name, @age, @bio, @photos, @gender, @seeking, @age_min, @age_max, @kink_map, @kink_sides, @joiners, @avatar_emoji, @card, @ts, @ts)
      ON CONFLICT(id) DO UPDATE SET display_name = excluded.display_name, age = excluded.age,
        bio = excluded.bio, photos = excluded.photos, gender = excluded.gender,
        seeking = excluded.seeking, age_min = excluded.age_min, age_max = excluded.age_max,
-       kink_map = excluded.kink_map, kink_sides = excluded.kink_sides, avatar_emoji = excluded.avatar_emoji, card = excluded.card,
+       kink_map = excluded.kink_map, kink_sides = excluded.kink_sides, joiners = excluded.joiners, avatar_emoji = excluded.avatar_emoji, card = excluded.card,
        updated_at = excluded.updated_at`,
   ).run({
     ...p,
@@ -84,6 +85,7 @@ export function saveUserProfile(p: UserProfile): UserProfile {
     age_max: clampPreferredAge(p.age_max, 42),
     kink_map: JSON.stringify(p.kink_map ?? {}),
     kink_sides: JSON.stringify(p.kink_sides ?? {}),
+    joiners: p.joiners ?? '',
     avatar_emoji: p.avatar_emoji ?? '',
     card: JSON.stringify(p.card ?? {}),
     ts,
@@ -726,6 +728,8 @@ function hydrateDate(row: any): DateSession {
     location_id: row.location_id ?? null,
     summary: row.summary ?? null,
     outfit: row.outfit ?? null,
+    npcs: JSON.parse(row.npcs ?? '[]'),
+    company: row.company ?? '',
     created_at: row.created_at,
     ended_at: row.ended_at ?? null,
   };
@@ -737,11 +741,12 @@ export function createDate(d: {
   when_at: string;
   where_at: string;
   location_id: string | null;
+  company?: string;
 }): DateSession {
   db.prepare(
-    `INSERT INTO dates (id, character_id, status, when_at, where_at, location_id, created_at)
-     VALUES (@id, @character_id, 'active', @when_at, @where_at, @location_id, @created_at)`,
-  ).run({ ...d, created_at: nowIso() });
+    `INSERT INTO dates (id, character_id, status, when_at, where_at, location_id, company, created_at)
+     VALUES (@id, @character_id, 'active', @when_at, @where_at, @location_id, @company, @created_at)`,
+  ).run({ ...d, company: d.company ?? '', created_at: nowIso() });
   return getDate(d.id)!;
 }
 
@@ -753,6 +758,10 @@ export function getDate(id: string): DateSession | null {
 /** What she decided to wear tonight, set once as the date opens. */
 export function setDateOutfit(id: string, outfit: string): void {
   db.prepare('UPDATE dates SET outfit = ? WHERE id = ?').run(outfit, id);
+}
+
+export function setDateNpcs(id: string, npcs: DateNpc[]): void {
+  db.prepare('UPDATE dates SET npcs = ? WHERE id = ?').run(JSON.stringify(npcs), id);
 }
 
 /**

@@ -150,7 +150,7 @@
   {
     "id": "third_parties",
     "category": "hard_limit",
-    "label": "Anyone else involved",
+    "label": "Anyone else joining in, ever",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "",
@@ -2782,7 +2782,7 @@
     "label": "Being filled in both holes at once",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "him and a toy, or more - a specific and fairly particular want, real for her",
+    "prompt_hint": "him and a toy, or him and another man - a specific and fairly particular want, real for her",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
@@ -2795,30 +2795,33 @@
   {
     "id": "threesome_fantasy",
     "category": "fetish",
-    "label": "A third person, in fantasy or in reality",
+    "label": "A threesome with another woman",
     "weight": 1.0,
     "rarity": "uncommon",
-    "prompt_hint": "the idea itself is arousing whether or not it ever actually happens",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "watching_him_with_another",
-    "category": "fetish",
-    "label": "Him with someone else, while she watches",
-    "weight": 1.0,
-    "rarity": "rare",
-    "prompt_hint": "the wanting is the point rather than jealousy - a specific and fairly rare want",
+    "prompt_hint": "another woman in bed with the two of them, on him or on each other - in fantasy, or for real if the night allows",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "side": "his"
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "watching_him_with_another",
+    "category": "fetish",
+    "label": "Watching him with another woman",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "another woman on him while she watches from close by - the wanting is the point, not jealousy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "joiner": "woman"
     },
     "enabled": true
   },
@@ -3682,7 +3685,8 @@
         "tent_camping",
         "office_after_hours",
         "car_sex",
-        "voyeurism_watching"
+        "voyeurism_watching",
+        "watched_by_someone"
       ],
       "limits": [
         "public",
@@ -3709,7 +3713,11 @@
         "watching_him_with_another",
         "double_penetration",
         "group_sex_fantasy",
-        "cuckqueen_fantasy"
+        "cuckqueen_fantasy",
+        "threesome_mmf",
+        "her_friend_joins",
+        "another_couple",
+        "serving_them_both"
       ],
       "limits": [
         "third_parties",
@@ -5312,15 +5320,17 @@
   {
     "id": "group_sex_fantasy",
     "category": "fetish",
-    "label": "More than three, in fantasy",
+    "label": "Group sex, her in the middle of it",
     "weight": 0.6,
     "rarity": "extremely_rare",
-    "prompt_hint": "a whole group of it, purely as a fantasy to talk through",
+    "prompt_hint": "more than three bodies and her at the centre - a fantasy she loves talking through, and would try with the right people",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "joiner": "any"
+    },
     "enabled": true
   },
   {
@@ -5360,16 +5370,17 @@
   {
     "id": "cuckqueen_fantasy",
     "category": "fetish",
-    "label": "Cuckqueen fantasy",
+    "label": "Cuckqueen: him with another woman, and it stings",
     "weight": 0.5,
     "rarity": "extremely_rare",
-    "prompt_hint": "watching him with someone else, specifically, as her own thing",
+    "prompt_hint": "him with another woman in front of her, and the little sting of it is exactly what gets her off",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "side": "his"
+      "side": "his",
+      "joiner": "woman"
     },
     "enabled": true
   },
@@ -8016,7 +8027,11 @@
         "threesome_fantasy": 3.0,
         "group_sex_fantasy": 3.0,
         "watching_him_with_another": 3.0,
-        "cuckqueen_fantasy": 3.0
+        "cuckqueen_fantasy": 3.0,
+        "threesome_mmf": 3,
+        "her_friend_joins": 3,
+        "another_couple": 3,
+        "serving_them_both": 3
       },
       "pace": 1.2,
       "freak_shift": 1.0
@@ -13181,7 +13196,7 @@
   {
     "id": "another_woman",
     "category": "fantasy_scenario",
-    "label": "A third, another woman",
+    "label": "A third: another woman",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "a woman she picks, and the two of them focused on him or on each other",
@@ -13192,14 +13207,15 @@
     "extra": {
       "domains": [
         "sharing"
-      ]
+      ],
+      "joiner": "woman"
     },
     "enabled": true
   },
   {
     "id": "watching_him_with_her",
     "category": "fantasy_scenario",
-    "label": "Watching him with someone else",
+    "label": "Watching him with another woman",
     "weight": 1.0,
     "rarity": "rare",
     "prompt_hint": "from a chair, telling them both what to do",
@@ -13215,7 +13231,8 @@
       "dom_sub": 1,
       "sides": {
         "voyeurism": "his"
-      }
+      },
+      "joiner": "woman"
     },
     "enabled": true
   },
@@ -14188,6 +14205,173 @@
     "extra": {
       "dom_sub": 1,
       "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "threesome_mmf",
+    "category": "fetish",
+    "label": "Him sharing her with another man",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "two men on her at once, him and one more he picked or she did - she is the centre of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her",
+      "joiner": "man"
+    },
+    "enabled": true
+  },
+  {
+    "id": "her_friend_joins",
+    "category": "fetish",
+    "label": "Bringing her friend into bed with them",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "one specific friend of hers she has always wondered about, joining the two of them for a night",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "another_couple",
+    "category": "fetish",
+    "label": "Playing with another couple",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "another couple, side by side or swapped for a while - the thrill is that it is all four of them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "couple"
+    },
+    "enabled": true
+  },
+  {
+    "id": "serving_them_both",
+    "category": "fetish",
+    "label": "Being shared between him and another woman",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "the two of them using her together, her the one being passed between them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her",
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "watched_by_someone",
+    "category": "fetish",
+    "label": "Someone watching the two of them",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a stranger or someone they invited, in a chair, watching and not touching - being seen is the whole point",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "two_men",
+    "category": "fantasy_scenario",
+    "label": "Him and another man, both on her",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a night where he brings a friend, or they pick someone together, and she is the one they share",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing"
+      ],
+      "dom_sub": -1,
+      "joiner": "man"
+    },
+    "enabled": true
+  },
+  {
+    "id": "her_friend_stays",
+    "category": "fantasy_scenario",
+    "label": "Her friend stays the night",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "the friend she keeps mentioning, one drink too many at hers, and nobody goes home",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing"
+      ],
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "couple_at_the_bar",
+    "category": "fantasy_scenario",
+    "label": "The couple from the bar",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a couple who have been looking at them all night, and a hotel room upstairs",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing",
+        "exhibitionism"
+      ],
+      "joiner": "couple"
+    },
+    "enabled": true
+  },
+  {
+    "id": "someone_in_the_chair",
+    "category": "fantasy_scenario",
+    "label": "Someone in the chair, watching",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a third person invited only to watch, and told not to touch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism",
+        "voyeurism"
+      ],
+      "joiner": "any",
+      "sides": {
+        "voyeurism": "her"
+      }
     },
     "enabled": true
   }

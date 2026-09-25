@@ -1541,3 +1541,44 @@ input[type='range'] {
   margin-bottom: var(--s3);
   background: var(--surface-2);
 }
+
+/* Who else is in the scene on a date: a slim strip under the top bar, one chip each. */
+.date-cast {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 6px 16px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-elevated) 82%, transparent);
+  backdrop-filter: blur(10px);
+}
+.date-cast > .tiny { flex: none; }
+.cast-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  max-width: 70vw;
+  padding: 4px 6px 4px 11px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  font-size: 12.5px;
+}
+.cast-chip .tiny { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cast-x {
+  appearance: none;
+  border: none;
+  padding: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--r-full);
+  color: var(--muted);
+}
+.cast-x:hover { background: var(--surface-3); color: var(--text); }

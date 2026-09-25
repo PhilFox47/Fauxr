@@ -14,6 +14,7 @@ import { domSubLean, fitsSide, rollChatGames, rollFantasySeeds, rollKinkMap, rol
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
+import { joinerFits, joinersFor } from './npcs.js';
 
 /** Fields the Director may swap during the coherence pass. */
 const SWAPPABLE: Record<string, string> = {
@@ -365,9 +366,12 @@ export function rollSeed(): RolledSeed {
     }
   }
   const claimed = new Set<string>(domains.flatMap((d) => (d.extra?.fetishes as string[]) ?? []));
+  // A kink that needs a third person only if that person is someone he wants in the room:
+  // a man who only wants other women joining in never meets a woman whose kink is two men.
+  const joiners = joinersFor(getUserProfile());
   const allowedFetishes = new Set(
     byCategory('fetish')
-      .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) && speciesCanHave(f, species.id))
+      .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) && speciesCanHave(f, species.id) && joinerFits(f.extra?.joiner, joiners))
       .map((f) => f.id),
   );
   // Her first fetish always comes from a domain she is actually into, so every character has

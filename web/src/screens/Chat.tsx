@@ -951,6 +951,7 @@ function DatesSection({
   const [inviting, setInviting] = useState(false);
   const [locationId, setLocationId] = useState('');
   const [when, setWhen] = useState('tonight, 8pm');
+  const [company, setCompany] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -975,7 +976,7 @@ function DatesSection({
     setBusy(true);
     setError(null);
     try {
-      const date = await api.startDate(characterId, locationId, when.trim());
+      const date = await api.startDate(characterId, locationId, when.trim(), company.trim());
       onOpenDate(date.id);
     } catch (err) {
       setError(String(err instanceof Error ? err.message : err));
@@ -1022,6 +1023,20 @@ function DatesSection({
                 setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 250);
               }}
             />
+          </label>
+          <label className="field">
+            <span>Anyone else there? <span className="muted">(optional)</span></span>
+            <input
+              type="text"
+              value={company}
+              placeholder="just the two of you"
+              onChange={(e) => setCompany(e.target.value)}
+              onFocus={(e) => {
+                const el = e.currentTarget;
+                setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 250);
+              }}
+            />
+            <span className="tiny muted">Her friend, a woman you meet at the bar, another couple… Written as you like.</span>
           </label>
           <div className="row">
             <button className="btn ghost grow" onClick={() => setInviting(false)}>Cancel</button>
@@ -1122,6 +1137,22 @@ function DateRoom({
   }, []);
 
   const live = view?.date.status === 'active';
+  const here = (view?.date.npcs ?? []).filter((n) => !n.left_at);
+  const [dismissing, setDismissing] = useState<string | null>(null);
+
+  /** Sends someone away; they are gone from her next beat on. */
+  const dismiss = async (npcId: string) => {
+    if (dismissing) return;
+    setDismissing(npcId);
+    try {
+      await api.dismissNpc(dateId, npcId);
+      await load();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setDismissing(null);
+    }
+  };
 
   const send = async () => {
     const text = draft.trim();
@@ -1224,6 +1255,29 @@ function DateRoom({
           </button>
         )}
       </div>
+
+      {here.length > 0 && (
+        <div className="date-cast" aria-label="Also here">
+          <span className="tiny muted">Also here</span>
+          {here.map((n) => (
+            <span key={n.id} className="cast-chip" title={`${n.who}${n.up_for ? ` · ${n.up_for}` : ''}`}>
+              <strong>{n.name}</strong>
+              <span className="tiny muted">{n.who.split(/[,.;]/)[0]}</span>
+              {live && (
+                <button
+                  className="cast-x"
+                  onClick={() => void dismiss(n.id)}
+                  disabled={dismissing !== null}
+                  aria-label={`Send ${n.name} away`}
+                  title={`Send ${n.name} away`}
+                >
+                  <Icon name="close" size={12} />
+                </button>
+              )}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="chat-log date-log" ref={logRef}>
         <div className="chat-log-inner">

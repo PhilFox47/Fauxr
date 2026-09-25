@@ -79,7 +79,9 @@ Two model roles:
   fantasy she pitched, etc. It never sees numbers.
 
 Dates (`engine/dates.ts`, `actor_date.md`) are a separate in-person transcript with their
-own turn loop. The text chat is frozen while a date is active.
+own turn loop. The text chat is frozen while a date is active. Anyone else in a date scene is
+an NPC card on the date (`engine/npcs.ts`), played by the Actor in her beats; every card must
+carry an adult age, and `groupRules()` decides whether anyone else may join in sexually.
 
 ## Conventions
 

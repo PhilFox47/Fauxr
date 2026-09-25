@@ -2,6 +2,8 @@ import { byCategory, type Attribute } from '../db/attributes.js';
 import { getSettings } from '../config.js';
 import type { KinkSide, KinkStance } from '../types.js';
 import { newContext, rollMany } from './dice.js';
+import { getUserProfile } from '../repo.js';
+import { joinerFits, joinersFor } from './npcs.js';
 
 /**
  * Her standing position on one kink domain, decided before any specific fetish is drawn.
@@ -173,6 +175,7 @@ export function rollFantasySeeds(
     const domains = (s.extra?.domains as string[] | undefined) ?? [];
     const stances = domains.map((d) => seed.kink_map?.[d]);
     if (stances.includes('hard_no') || wrongEnd(s, seed.kink_sides)) continue;
+    if (!joinerFits(s.extra?.joiner, joinersFor(getUserProfile()))) continue;
     allowed.add(s.id);
     let m = lean[s.id] ?? 1;
     for (const st of stances) m *= st === 'into' ? 3 : st === 'curious' ? 1.5 : st === 'soft_no' ? 0.4 : 1;

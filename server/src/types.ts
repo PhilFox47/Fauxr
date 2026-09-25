@@ -378,6 +378,11 @@ export interface UserProfile {
   /** Which end he wants of a domain with two, in the same terms as hers: 'her' = done to her. */
   kink_sides?: Record<string, KinkSide>;
   /**
+   * When someone else joins in on a date, who they may be. Unset follows who he is looking for
+   * (a man looking for women gets women); see joinersFor() in npcs.ts.
+   */
+  joiners?: Joiners | '';
+  /**
    * The emoji standing in for his profile picture. This is what a character sees of him
    * until the two of them have actually swapped real pictures.
    */
@@ -418,6 +423,40 @@ export interface DateSession {
   summary: string | null;
   /** Decided once as the date opens; read fresh on every turn after that. Null until then. */
   outfit: string | null;
+  /** Everyone else who has been in the scene tonight, including those who have left. */
+  npcs: DateNpc[];
+  /** Who else he asked to be there, as he wrote it on the invite. '' for just the two of them. */
+  company: string;
   created_at: string;
   ended_at: string | null;
 }
+
+/**
+ * Someone other than the two of them, on a date: her friend, the bartender, the woman from
+ * the next table who ends up in the hotel room with them. Deliberately thin next to a real
+ * character - a name, a line of who they are, how they look and act, and what they are up
+ * for - because they exist for one evening and the Actor plays them in her beats.
+ */
+export interface DateNpc {
+  id: string;
+  name: string;
+  gender: 'woman' | 'man' | 'nonbinary';
+  /** Always 18 or over; a card without a stated adult age is refused (see npcs.ts). */
+  age: number;
+  /** Who they are and why they are here: "her flatmate, who was already at the bar". */
+  who: string;
+  look: string;
+  manner: string;
+  /** How far they will go tonight, or that they are not part of anything sexual. */
+  up_for: string;
+  /** 'invite' when he asked for them on the invite, 'scene' when the evening brought them in. */
+  source: 'invite' | 'scene';
+  joined_at: string;
+  left_at: string | null;
+  /** The beat that brought them in or took them out, so rerolling or deleting it undoes that. */
+  joined_in?: number | null;
+  left_in?: number | null;
+}
+
+/** Who may join in, sexually, when someone else does: his call (Settings -> Your profile). */
+export type Joiners = 'women' | 'men' | 'anyone';

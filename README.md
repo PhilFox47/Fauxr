@@ -3872,6 +3872,60 @@ surfaces an active negative flag to the Director (`flagsBlock()`, read generical
 already derive from that table's keys, so the very next text conversation after a bad date
 naturally knows about it, exactly like any other negative flag.
 
+### Other people on a date (NPCs)
+
+Most dates are the two of them, and that stays the default. But some of her kinks need a
+third person (a threesome, him with another woman, being watched), and a night out has other
+people in it anyway. Those people are NPCs: supporting parts for one evening, much thinner
+than a real character, stored on the date (`dates.npcs`) and played by the Actor inside her
+own beats (`engine/npcs.ts`).
+
+**How someone ends up there:**
+- **On the invite.** "Anyone else there?" is an optional field ("her friend Jess", "a woman we
+  meet at the bar", "another couple"). A small call (`director_date_cast.md`, run alongside
+  the outfit call) turns it into cards before her first beat, so the opening already has
+  them in it. If that call fails, she is told who you asked for and brings them in herself.
+- **In the scene.** Her beat can bring someone in: her fantasy, your (direction), the place.
+  She reports newcomers in `hidden.joined` and departures in `hidden.left`. Background people
+  (the waiter, the couple at the next table) stay background and are not recorded.
+- **Leaving.** Someone can leave in the scene, or you send them away with the ✕ on their chip.
+  The "Also here" strip under the date's top bar lists everyone present.
+
+**A card** is a name, gender, age, who they are and why they are here, a look, a manner and
+what they are up for tonight. They go in her prompt under WHO ELSE IS HERE. Everyone is an
+adult: a card with no stated age, an age under 18, or any wording that describes a minor is
+dropped, not repaired. At most four people besides the two of you are present at once.
+A newcomer is tagged with the beat that brought them in, so rerolling or deleting that beat
+takes them back out (and a departure comes back).
+
+**Writing them.** She stays the lead. Others get a line or an action when the moment gives
+them one, and she names them at the start of every sentence about them. The check that stops
+her writing your part still rejects any sentence that starts with "He", and when another man
+is present its correction tells her to start with his name instead. Quoted speech is hers
+unless it sits right after someone else's name.
+
+**Whether anyone joins in sexually** is `groupRules()`, rebuilt every beat:
+- "Anyone else joining in" is one of her hard limits, or she is a hard no on sharing: people
+  can be around, nobody touches either of you, and she says no if you steer there.
+- You are not into sharing (Settings -> Your profile): she never steers there herself. If
+  you take it there, you have changed your mind and she follows.
+- She is into it: she can bring someone in when the night is right for it, never as a
+  default and not in the first beats. Curious: she goes along if you steer there.
+  Not her thing: flirting or being watched is as far as she goes.
+- Anyone who joins in sexually is someone you want there. The "Other people" row in your
+  kink settings has **Who joins in: Women / Men / Anyone**. Unset follows who you are looking
+  for, so a man looking for women gets other women.
+
+**The group kinks say who the extra person is.** "A third person" became "A threesome with
+another woman", and there are new rows for "Him sharing her with another man", "Bringing her
+friend into bed with them", "Being shared between him and another woman", "Playing with
+another couple" and "Someone watching the two of them". There are also four new fantasy
+scenarios (two men, her friend stays the night, the couple from the bar, someone in the chair
+watching). Each carries `extra.joiner` (woman, man, couple or any), and generation never gives
+a character a kink or fantasy seed whose extra person you do not want (measured: none out of
+1500 rolls with women only, 51 with anyone). The summary she keeps of the date names everyone
+who was part of it.
+
 ### Steering a date from outside it: (directions)
 
 A date has no per-beat Director, which is what makes the scene drive itself — and also what

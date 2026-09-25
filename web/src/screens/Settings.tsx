@@ -705,14 +705,24 @@ const STANCES: { id: KinkStance; label: string }[] = [
  * Your own side of the kink map. Nothing here is shown to a character - they start knowing
  * none of it and find it out by talking to you, which is what makes them ask.
  */
+const JOINERS: { id: 'women' | 'men' | 'anyone'; label: string }[] = [
+  { id: 'women', label: 'Women' },
+  { id: 'men', label: 'Men' },
+  { id: 'anyone', label: 'Anyone' },
+];
+
 function KinkEditor({
   value,
   sides,
+  joiners,
   onChange,
+  onJoiners,
 }: {
   value: Record<string, KinkStance>;
   sides: Record<string, KinkSide>;
+  joiners: 'women' | 'men' | 'anyone' | '';
   onChange: (v: Record<string, KinkStance>, sides: Record<string, KinkSide>) => void;
+  onJoiners: (v: 'women' | 'men' | 'anyone' | '') => void;
 }) {
   const [domains, setDomains] = useState<KinkDomain[]>([]);
   useEffect(() => {
@@ -776,6 +786,23 @@ function KinkEditor({
                   onClick={() => setSide(d.id, id)}
                 >
                   {label.charAt(0).toUpperCase() + label.slice(1)}
+                </button>
+              ))}
+            </div>
+          )}
+          {d.id === 'sharing' && (value[d.id] === 'into' || value[d.id] === 'curious') && (
+            <div className="kink-stances kink-sides" role="group" aria-label="Who joins in">
+              <span className="tiny muted" style={{ alignSelf: 'center' }}>Who joins in</span>
+              {JOINERS.map((j) => (
+                <button
+                  key={j.id}
+                  type="button"
+                  className="chip"
+                  data-active={joiners === j.id}
+                  aria-pressed={joiners === j.id}
+                  onClick={() => onJoiners(joiners === j.id ? '' : j.id)}
+                >
+                  {j.label}
                 </button>
               ))}
             </div>
@@ -849,7 +876,9 @@ function ProfilePane({ profile, onSaved }: { profile: UserProfile | null; onSave
       <KinkEditor
         value={form.kink_map ?? {}}
         sides={form.kink_sides ?? {}}
+        joiners={form.joiners ?? ''}
         onChange={(kink_map, kink_sides) => setForm((f) => ({ ...f, kink_map, kink_sides }))}
+        onJoiners={(joiners) => setForm((f) => ({ ...f, joiners }))}
       />
       <label className="field">
         <span>Add a photo ({form.photos.length})</span>

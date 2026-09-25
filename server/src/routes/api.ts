@@ -28,7 +28,7 @@ import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
 import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
 import {
-  dateHistory, deleteDateMessage, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate,
+  dateHistory, deleteDateMessage, dismissNpc, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate,
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
 import { domainSides, TASTE_SECTIONS } from '../engine/kinks.js';
@@ -138,6 +138,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       // client sends can put junk in front of a model later.
       kink_map: sanitizeKinkMap(b.kink_map),
       kink_sides: sanitizeKinkSides(b.kink_sides, sanitizeKinkMap(b.kink_map)),
+      joiners: ['women', 'men', 'anyone'].includes(b.joiners) ? b.joiners : '',
       // Same validation the generated characters get, so his emoji cannot be ":)" either.
       avatar_emoji: sanitizeEmoji(b.avatar_emoji) ?? '',
       card: sanitizeCard(b.card),
@@ -460,7 +461,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     return { ...dateHistory(character.id), locations: listLocations().map(publicLocation) };
   });
 
-  app.post<{ Params: { id: string }; Body: { location_id?: string; when?: string } }>(
+  app.post<{ Params: { id: string }; Body: { location_id?: string; when?: string; company?: string } }>(
     '/api/chats/:id/dates',
     async (req, reply) => {
       try {
@@ -468,6 +469,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
           characterId: req.params.id,
           locationId: String(req.body?.location_id ?? ''),
           when: String(req.body?.when ?? '').slice(0, 120),
+          company: String(req.body?.company ?? '').slice(0, 300),
         });
       } catch (err) {
         return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
@@ -547,6 +549,15 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       }
     },
   );
+
+  /** Sends someone else in the scene away; they are gone from her next beat. */
+  app.post<{ Params: { dateId: string; npcId: string } }>('/api/dates/:dateId/npcs/:npcId/dismiss', async (req, reply) => {
+    try {
+      return dismissNpc(req.params.dateId, req.params.npcId);
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
 
   /** Ends the evening and writes the summary she will remember it by. */
   app.post<{ Params: { dateId: string } }>('/api/dates/:dateId/end', async (req, reply) => {
