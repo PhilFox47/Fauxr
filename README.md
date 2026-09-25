@@ -714,6 +714,32 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## A desktop layout
+
+The app was built for a phone. On a desktop it showed as a 620px phone column in the middle of
+the monitor, with bottom tabs, a chat list and a chat as two separate screens, and sheets
+sliding up from the bottom edge.
+
+From 1024px wide (`DESKTOP_QUERY` in `App.tsx`, the same width as the CSS) it lays out for the
+screen instead:
+- **A sidebar** with the brand and Discover / Chats / Settings replaces the bottom tabs; the
+  unread count sits on Chats.
+- **Chats is a split view:** the list on the left (360px), the open chat on the right, and "Pick
+  a chat" until one is open. The open row is highlighted, the chat has no back button, and
+  clicking another chat switches the pane in place (`replaceTopView`), so the browser's back
+  button still leaves the chat in one step. Leaving the Chats tab closes the chat. Dates open
+  in the same pane.
+- **Discover and Settings** stay one readable column (560px and 860px) in the middle.
+- **Long lines are capped:** the conversation is at most 860px wide and a bubble at most 560px,
+  so text does not run across a whole monitor.
+- **Sheets become dialogs:** her profile and a past date open as a centred dialog, not a
+  bottom sheet.
+- **Keyboard:** Enter sends and Shift+Enter starts a new line, in the chat and on a date.
+  Escape closes an open dialog but never the chat itself. Enter only sends on a wide screen
+  with a mouse or trackpad, so a phone keyboard keeps Enter as a new line.
+
+Below 1024px nothing changed: the phone layout, bottom tabs and bottom sheets are as before.
+
 ## A failed photo can always be asked for again
 
 A log showed her profile picture failing on a provider outage (503 `all_fallbacks_failed`,

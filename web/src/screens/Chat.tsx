@@ -97,6 +97,18 @@ function LegacyCard({ text }: { text: string }) {
   );
 }
 
+/**
+ * On a desktop keyboard Enter sends and Shift+Enter starts a new line, the way every desktop
+ * messenger works. On a phone Enter stays a new line - the keyboard has its own send button,
+ * and a stray Enter there would send half a message.
+ */
+function enterSends(e: React.KeyboardEvent<HTMLTextAreaElement>, send: () => void): void {
+  if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing) return;
+  if (!window.matchMedia('(min-width: 1024px) and (pointer: fine)').matches) return;
+  e.preventDefault();
+  send();
+}
+
 export default function Chat({
   characterId,
   typing,
@@ -427,7 +439,7 @@ export default function Chat({
   return (
     <div className="chat">
       <div className="topbar">
-        <button className="iconbtn" onClick={onBack} aria-label="Back">
+        <button className="iconbtn chat-back" onClick={onBack} aria-label="Back">
           <Icon name="back" size={22} />
         </button>
         <Avatar match={character} small />
@@ -804,6 +816,7 @@ export default function Chat({
             ref={inputRef}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => enterSends(e, () => void send())}
             placeholder="Message"
             rows={1}
           />
@@ -1444,6 +1457,7 @@ function DateRoom({
             ref={inputRef}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => enterSends(e, () => void send())}
             placeholder='Narrate · "speak" · *thought* · (direction)'
             rows={1}
           />

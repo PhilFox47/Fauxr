@@ -1649,3 +1649,134 @@ input[type='range'] {
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
+
+/* ---------------------------------------------------------------- desktop
+   From 1024px up the app stops being a phone column in the middle of a monitor: a sidebar
+   replaces the bottom tabs, Chats shows the list and the open chat side by side, and sheets
+   open as centred dialogs. App.tsx switches the layout at the same width (DESKTOP_QUERY). */
+.app.desktop {
+  max-width: none;
+  flex-direction: row;
+  border-inline: 0;
+}
+.rail {
+  width: 220px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  padding: var(--s5) var(--s3);
+  border-right: 1px solid var(--line);
+  background: var(--bg);
+}
+.rail-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  padding: 0 var(--s2) var(--s5);
+}
+.rail-brand .brand-mark { width: 34px; height: 34px; }
+.rail button {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  background: none;
+  border: 0;
+  border-radius: var(--r-md);
+  padding: 10px var(--s3);
+  color: var(--text-dim);
+  font-size: 14.5px;
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+.rail button:hover { background: var(--surface); color: var(--text); }
+.rail button[data-active='true'] { background: var(--accent-soft); color: var(--accent); }
+.rail button .glyph { display: grid; place-items: center; width: 22px; }
+.rail .rail-label { flex: 1; }
+.rail .badge {
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.desk-main {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  background: #07070a;
+}
+/* Discover and Settings: one readable column, edged like the phone layout's. */
+.desk-column {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border-inline: 1px solid var(--line);
+}
+.desk-column.wide { max-width: 860px; }
+
+.desk-split { flex: 1; min-width: 0; display: flex; height: 100%; background: var(--bg); }
+.desk-list {
+  width: 360px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+  min-height: 0;
+}
+.desk-detail { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; }
+.desk-detail > .chat { flex: 1; }
+.desk-empty {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+  color: var(--muted);
+  text-align: center;
+}
+.desk-empty strong { color: var(--text); font-size: 16px; }
+.match-row:hover { background: var(--surface); }
+.match-row.selected { background: var(--surface-2); }
+.match-row.selected::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent);
+}
+
+/* The chat pane is wide; a line of text across all of it is hard to read. */
+.app.desktop .chat-back { display: none; }
+.app.desktop .chat-log-inner { max-width: 860px; width: 100%; margin: 0 auto; padding-inline: var(--s5); }
+.app.desktop .bubble { max-width: min(78%, 560px); }
+.app.desktop .composer { padding-inline: max(var(--s4), calc((100% - 860px) / 2 + var(--s5))); }
+
+@media (min-width: 1024px) {
+  .sheet-backdrop { align-items: center; padding: var(--s6); }
+  .sheet {
+    border-bottom: 1px solid var(--line-strong);
+    border-radius: var(--r-xl);
+    max-width: 640px;
+    max-height: 86dvh;
+    padding-bottom: 0;
+    animation: pop var(--med) var(--ease-out);
+  }
+  .sheet::before { display: none; }
+}
+@keyframes pop { from { transform: scale(0.97); opacity: 0.6; } to { transform: none; opacity: 1; } }

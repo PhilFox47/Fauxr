@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api, ApiError, connectEvents, type AppState, type MatchSummary, type ServerEvent } from './api';
 import Icon, { type IconName } from './components/Icon';
-import { closeView, forceClose, openView } from './nav';
+import { closeView, forceClose, openView, replaceTopView } from './nav';
 import Onboarding from './screens/Onboarding';
 import Login from './screens/Login';
 import Swipe from './screens/Swipe';
@@ -17,6 +17,24 @@ const TABS: { id: Tab; label: string; icon: IconName }[] = [
   { id: 'settings', label: 'Settings', icon: 'settings' },
 ];
 
+/**
+ * Wide enough for a sidebar and a chat list next to an open chat. Below it the app is the
+ * phone layout it was built as; above it, a phone column in the middle of a monitor wasted
+ * the screen and made the chat list and the chat two separate trips.
+ */
+const DESKTOP_QUERY = '(min-width: 1024px)';
+
+function useDesktop(): boolean {
+  const [desktop, setDesktop] = useState(() => window.matchMedia(DESKTOP_QUERY).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(DESKTOP_QUERY);
+    const onChange = () => setDesktop(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return desktop;
+}
+
 /** Longest a turn can plausibly take: model call, retries, plus the delivery delays. */
 const TYPING_TIMEOUT_MS = 180_000;
 
@@ -31,6 +49,9 @@ export default function App() {
   /** Bumps only on new messages, so the read-marking below does not run on typing events. */
   const [messageSeq, setMessageSeq] = useState(0);
   const typingTimers = useRef<Record<string, number>>({});
+  const desktop = useDesktop();
+  const openChatRef = useRef<string | null>(null);
+  openChatRef.current = openChat;
 
   /**
    * The indicator is now held for a whole turn, which is seconds of model work rather
@@ -78,10 +99,15 @@ export default function App() {
   /** Opening a chat is a real drill-down - his back button should be able to step out of it. */
   const openChatFor = useCallback(
     (id: string) => {
-      openView(() => {
+      const close = () => {
         setOpenChat(null);
         void refreshMatches();
-      });
+      };
+      // On desktop the list stays beside the open chat, so picking another one switches in
+      // place: back still leaves the chat pane in one step rather than walking every chat
+      // he clicked through.
+      if (openChatRef.current) replaceTopView(close);
+      else openView(close);
       setOpenChat(id);
     },
     [refreshMatches],
@@ -167,6 +193,18 @@ export default function App() {
 
   const unread = useMemo(() => matches.reduce((n, m) => n + m.unread, 0), [matches]);
 
+  // Escape closes an open sheet (her profile, a past date) the way its own close button does.
+  // Only a sheet: Escape while typing in an open chat should not throw him out of it. The
+  // photo lightbox handles Escape itself.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape' || document.querySelector('.lightbox')) return;
+      if (document.querySelector('.sheet-backdrop')) closeView();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   if (needsLogin) {
     return (
       <div className="app">
@@ -201,6 +239,80 @@ export default function App() {
             setTab('swipe');
           }}
         />
+      </div>
+    );
+  }
+
+  if (desktop) {
+    // A chat is only ever open from the Chats tab; if one is open, that is the tab showing.
+    const deskTab: Tab = openChat ? 'matches' : tab;
+    const pickTab = (t: Tab) => {
+      if (t !== 'matches' && openChat) closeView();
+      setTab(t);
+    };
+    return (
+      <div className="app desktop">
+        <nav className="rail">
+          <div className="rail-brand">
+            <span className="brand-mark"><Icon name="spark" size={20} /></span>
+            <span>Fauxr</span>
+          </div>
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              data-active={deskTab === t.id}
+              onClick={() => pickTab(t.id)}
+              aria-current={deskTab === t.id ? 'page' : undefined}
+            >
+              <span className="glyph"><Icon name={t.icon} size={20} /></span>
+              <span className="rail-label">{t.label}</span>
+              {t.id === 'matches' && unread > 0 && (
+                <span className="badge">{unread > 99 ? '99+' : unread}</span>
+              )}
+            </button>
+          ))}
+        </nav>
+        <main className="desk-main">
+          {deskTab === 'swipe' && (
+            <div className="desk-column">
+              <Swipe onMatched={refreshMatches} />
+            </div>
+          )}
+          {deskTab === 'matches' && (
+            <div className="desk-split">
+              <div className="desk-list">
+                <Matches matches={matches} typing={typing} onOpen={openChatFor} onRefresh={refreshMatches} selectedId={openChat} />
+              </div>
+              <div className="desk-detail">
+                {openChat ? (
+                  <Chat
+                    key={openChat}
+                    characterId={openChat}
+                    typing={!!typing[openChat]}
+                    eventSeq={eventSeq}
+                    onBack={closeView}
+                  />
+                ) : (
+                  <div className="desk-empty">
+                    <Icon name="chat" size={34} />
+                    <strong>Pick a chat</strong>
+                    <span>Your conversations open here, next to the list.</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {deskTab === 'settings' && (
+            <div className="desk-column wide">
+              <Settings
+                profile={state.profile}
+                onProfileSaved={refreshState}
+                authEnabled={state.auth_enabled}
+                onLoggedOut={() => setNeedsLogin(true)}
+              />
+            </div>
+          )}
+        </main>
       </div>
     );
   }

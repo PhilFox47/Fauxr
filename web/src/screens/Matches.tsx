@@ -19,11 +19,14 @@ export default function Matches({
   typing,
   onOpen,
   onRefresh,
+  selectedId = null,
 }: {
   matches: MatchSummary[];
   typing: Record<string, boolean>;
   onOpen: (id: string) => void;
   onRefresh: () => void;
+  /** The chat open beside the list (desktop only). */
+  selectedId?: string | null;
 }) {
   const [query, setQuery] = useState('');
   const [confirmId, setConfirmId] = useState<string | null>(null);
@@ -89,7 +92,7 @@ export default function Matches({
     return (
       <div
         key={m.id}
-        className={`match-row${m.unread > 0 ? ' unreadrow' : ''}`}
+        className={`match-row${m.unread > 0 ? ' unreadrow' : ''}${m.id === selectedId ? ' selected' : ''}`}
         onClick={() => onOpen(m.id)}
         style={opts.archived ? { opacity: 0.5 } : undefined}
       >
