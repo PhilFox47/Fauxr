@@ -48,7 +48,7 @@ export function coerceDirectorReply(value: any): { update: any; direction: any; 
   }
   return { update, direction, wakeup: p.wakeup ?? null };
 }
-import { describeFetishProgress, describeHim, describeKinkHits, detectKinkHits, herCuriosity, undiscoveredKeys } from './discovery.js';
+import { describeFetishProgress, describeHim, describeKinkHits, detectKinkHits, undiscoveredKeys } from './discovery.js';
 import { userCardFullBlock } from './usercard.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { randInt } from './dice.js';
@@ -127,7 +127,6 @@ export async function runDirector(
   const prompt = render('director_direction', {
     pace: describePace(character),
     fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel)) || '(none written yet - she makes them up as she goes, from her kinks)',
-    her_curiosity: herCuriosity(character, rel),
     fetish_block: describeFetishProgress(character, rel),
     his_side: describeHim(rel),
     // Only his side of the exchange: this is about what HE brought up, not what she said.

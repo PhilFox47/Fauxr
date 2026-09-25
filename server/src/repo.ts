@@ -1,7 +1,7 @@
 import { db, nowIso } from './db/index.js';
 import { byCategory, find } from './db/attributes.js';
 import { newContext, roll } from './engine/dice.js';
-import { rollChatGames, rollDomainStance, rollKinkSides, wrongEnd } from './engine/kinks.js';
+import { rollDomainStance, rollKinkSides } from './engine/kinks.js';
 import { pickCore } from './engine/profilecard.js';
 import type {
   Character, CharacterSeed, CharacterState, DateNpc, DateSession, Direction, Flags, KinkSide, Ledger, LifeThread,
@@ -238,17 +238,9 @@ function kinkSidesDue(seed: CharacterSeed): boolean {
 function backfillIntimateDetails(characterId: string, seed: CharacterSeed): CharacterSeed {
   const domains = byCategory('kink_domain');
   const missingDomains = domains.filter((d) => !seed.kink_map?.[d.id]);
-  // A game that was removed from the table leaves a hole in her four, and so does one about the
-  // other end of a kink from hers ("Make me beg" for a woman who does the edging); she gets a
-  // new one in its place.
-  const keepGame = (id: string) => {
-    const g = find('chat_game', id);
-    return !!g && !wrongEnd(g, seed.kink_sides);
-  };
-  const staleGames = (seed.chat_games ?? []).some((id) => !keepGame(id));
   // Every two-ended domain she is open to needs her end of it (see rollKinkSides).
   const sidesDue = kinkSidesDue(seed);
-  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length && seed.chat_games?.length && !staleGames && !sidesDue) return seed;
+  if (seed.butt_size && seed.lingerie_style && seed.sleepwear && seed.intimate_grooming && !missingDomains.length && !sidesDue) return seed;
   if (!byCategory('lingerie_style').length) return seed; // attribute table not seeded yet
   const ctx = newContext();
   for (const id of [seed.body_type, seed.height, seed.clothing_style, seed.sexual_persona, seed.archetype]) if (id) ctx.drawn.add(id);
@@ -285,11 +277,6 @@ function backfillIntimateDetails(characterId: string, seed: CharacterSeed): Char
     kink_sides: seed.kink_sides,
     side_bias: find('sexual_persona', seed.sexual_persona)?.extra?.side_bias as any,
   });
-  if ((!seed.chat_games?.length || staleGames) && byCategory('chat_game').length) {
-    const kept = (seed.chat_games ?? []).filter(keepGame);
-    const fresh = rollChatGames({ kink_map: seed.kink_map ?? {}, dom_sub_leaning: seed.dom_sub_leaning ?? 0, sexual_persona: seed.sexual_persona, kink_sides: seed.kink_sides });
-    seed.chat_games = [...kept, ...fresh.filter((id) => !kept.includes(id))].slice(0, Math.max(fresh.length, kept.length));
-  }
   db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
   return seed;
 }

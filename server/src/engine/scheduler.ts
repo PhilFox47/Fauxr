@@ -234,7 +234,7 @@ export function maybeBeProactive(): void {
     setWakeup({
       character_id: character.id,
       scheduled_at: at.toISOString(),
-      reason: 'she felt like getting in touch - something on her mind, maybe one of her fantasies, maybe a photo',
+      reason: 'she felt like getting in touch - whatever is on her mind',
       cancel_if_user_writes: true,
     });
     rel.mood = { ...rel.mood, followed_up_unanswered: true, last_unprompted_at: nowIso() };

@@ -139,8 +139,6 @@ export interface CharacterSeed {
   intimate_grooming: string;
   /** fantasy_scenario ids the character pass adapted into some of her fantasies. */
   fantasy_seeds?: string[];
-  /** chat_game ids that are hers to suggest (see kinks.ts rollChatGames). */
-  chat_games?: string[];
   /** Who she is attracted to. Decides whether she can appear for this user at all. */
   orientation: string;
   /** How it shows when she is turned on, so warming up is not identical for everyone. */

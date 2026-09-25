@@ -312,8 +312,9 @@ What was added:
 - **Her fantasies.** The character generator now writes 3-5 concrete sexual scenarios per
   character from her kinks and personality (`seed.hints.fantasies`). Characters made before
   this get theirs written lazily, the first time the Director runs for them
-  (`ensureFantasies()`). The Director, the Actor and dates all see them, and a
-  `pitch_fantasy` nudge has her pitch one - set the scene, say what she wants, ask if he is in.
+  (`ensureFantasies()`). The Director, the Actor and dates all see them, and she brings one up
+  when the conversation gets near it (a `pitch_fantasy` nudge used to push it; see "She decides
+  where it goes" below).
 - **Photos start with a swap.** Image generation is expensive, so nothing is generated for a
   character until you press the camera button in her chat to swap profile pictures. Until then
   she is an emoji to you and you are one to her, and she cannot send photos (she can tease you
@@ -425,16 +426,16 @@ identical across the cast. A real log showed four characters opening with "so ur
 (from the bio) and all asking the same questions ("take charge or be told?", "what would you
 do to me first?"). Fixes:
 
-- Her curiosity about you is per character: one question tied to her own kinks plus one
-  generic topic, shuffled with a stable per-character order. It is marked low priority; she
-  mostly finds things out by noticing.
+- Her curiosity about you was per character: one question tied to her own kinks plus one
+  generic topic. It has since been removed with the other topic lists (see "She decides where
+  it goes").
 - The Director is told to build every goal from what is specific to her, never to open by
   quoting a label from your bio, and to vary the kind of move (tell, confess, describe, order,
   tease) instead of quizzing you.
 - The Actor no longer has a generic "lowercase, u, tbh" texting default that overrode each
   character's own typing style. She types exactly as her own style block says.
-- The flirt and escalate nudges use her persona, dirty-talk style, signature move and body
-  pride.
+- The flirt and escalate nudges used her persona, dirty-talk style, signature move and body
+  pride (the nudges are gone now; her persona and core do this directly).
 - Word-for-word repeats of her own lines, or duplicates inside one turn, are rejected on the
   first attempt and dropped after that. The older overlap check ignored anything under three
   words, which is how "i have a list 📝" could loop.
@@ -713,6 +714,44 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## She decides where it goes
+
+Characters were suddenly very eager to play games, and it showed the wider problem: the
+software was deciding what the conversation was about. Every ordinary reply went through a
+dice roll (`pickNudge()`) that could tell her "start a game with him this turn", "pitch him
+this fantasy", "flirt, and mean it", "tell him a story from your day", "be half-present", "do
+not ask a question". The Director was handed a generic list of things to find out about him,
+and the prompts said "most turns she should be bringing something of her own" and "when she
+has only reacted for a few turns, that is your failure". Every character ran the same
+repertoire at the same odds, so a shy one and a brat both started games and pitched fantasies
+on the same rhythm, and chats felt the same.
+
+So the steering went, and her personality and core do the job:
+- **No per-turn nudge.** Ordinary replies get no instruction from code about what to do.
+  `nudge.ts` keeps only the "Your move" framing (she texts first because she feels like it),
+  and even that no longer picks a fantasy, a photo or a game for her.
+- **No chat games.** The `chat_game` table, `rollChatGames()`, the cooldown log and the Taste
+  entry are gone; installs prune the rows on upgrade, and old seeds keep an unused
+  `chat_games` field. She can still suggest something playful if that is who she is. The
+  prompts now name "a game, a quiz or a topic reached for because the chat needs filling" as
+  what not to do, because that was the failure.
+- **No curiosity list.** `herCuriosity()` and its fixed topics about him are gone from the
+  Director.
+- **Leading is personality, not a quota.** The Actor's "You drive too" and "Pitch your
+  fantasies" became "You lead the way you would": some women run the conversation, some mostly
+  answer and make every answer count. The Director's "SHE DRIVES" became "WHO LEADS", which
+  tells it to read the conversation and let her personality decide, with fantasies coming up
+  when the talk gets near them. `bring_up` is "null more often than not". Dates got the same
+  change ("She is half of it, in her own way").
+- **Smaller pushes:** the default direction for a new match is "nothing planned - be yourself",
+  the proactive wakeup reason no longer suggests "a fantasy, maybe a photo", her storylines are
+  background rather than "material for when the chat needs something new", and the generator's
+  opening plan asks for the first move only she would make instead of listing options.
+
+What still works as before: the "Your move" button, double-texting, milestones, statuses, her
+fantasies (she still reports pitching them, and the log still records them), photos, and the
+guard against starting a second topic while something is running.
+
 ## Making the chat feel alive
 
 **Her status.** Every active match has a WhatsApp-style status - "gym then pizza, dont judge 🍕" -
@@ -734,18 +773,19 @@ first, right now - the manual version of an unprompted message (`POST /api/chats
 trigger `initiative`). The Director runs with "she wants to text him right now - her own
 impulse", and the Actor gets `initiativeNudge()`: she is texting because she feels like it, he
 has not written anything new, and she must never say or imply he asked. What she comes with is
-hers, weighted by the moment: a fantasy, a photo out of nowhere, picking things back up if it was
-hot, a game, or something from right now (her status). Voice notes are skipped for these turns.
+hers: nothing is picked for her, it comes from what defines her and where things stand between
+them. Voice notes are skipped for these turns.
 
-**Games.** A `chat_game` table of 25 games she can start - truth or dare, a dare chain, yes/no/
+**Games (removed).** A `chat_game` table of 25 games she can start - truth or dare, a dare chain, yes/no/
 maybe, strip quiz, photo dare, rules for tonight, make me beg, the countdown, do what I do, and
 more - each with how she runs it, a dom/sub coding, the kink domains it touches and a heat
 level. Every character has four of her own (`rollChatGames()`, leaned by her persona, her kinks
 and her dom/sub leaning, never one touching a hard no; existing characters get theirs on first
 load). `gameNudge()` enforces the two things a prompt cannot: at most one game every 20 hours,
 and no game she has played while her list still has unplayed ones, nor any within five days.
-Hot games wait until she is worked up, photo games until you have swapped pictures. Chat games
-are also in Settings -> Taste.
+Hot games wait until she is worked up, photo games until you have swapped pictures. Removed
+again: even at one game a day, characters became far too eager to play them (see "She decides
+where it goes").
 
 **"Which one?".** Instead of one photo she can offer two (`hidden.photo_options`): both are
 prepared, not rendered, and posted as two compact placeholders in one choice group with "Pick
@@ -1804,10 +1844,9 @@ user is that she has nothing else — so two things supply material:
 - **Her moment** (`moment.ts`): the real time of day, the shape of her week, her job, her
   living situation and her hobbies, assembled in code with no model call. She knows it is
   Sunday morning, that she is a nurse, and that she shares a flat with two people.
-- **A per-turn nudge** (`nudge.ts`): most turns get nothing, but some ask her to bring in
+- **A per-turn nudge** (`nudge.ts`, since removed): some turns asked her to bring in
   something of her own unprompted, to circle back to an open thread, to be half-present,
-  or to not ask a question back. Frequency scales with her social energy and how invested
-  she is, so a warm character volunteers about half the time and a cold one rarely.
+  or to not ask a question back. See "She decides where it goes" for why it went.
 
 The Director's `goal` is also explicitly marked private in the prompt. Handed a goal
 without that, a model states it out loud — which is exactly where "i am testing whether you

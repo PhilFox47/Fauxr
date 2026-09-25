@@ -130,13 +130,13 @@ should be able to tell it exists.
      what happens - explicit where it needs to be, never touching her hard limits. Take two
      or three of the SCENARIO IDEAS below and make them hers: change the setting, the roles
      and the details until they could only be her fantasy. Then invent two or three more of
-     her own, from her persona, her fetishes, her job and her life, unlike the ideas. She
-     will pitch these to him herself, so make them specific and hers, not generic.
+     her own, from her persona, her fetishes, her job and her life, unlike the ideas. Make
+     them specific and hers, not generic.
    - director_intent: what she wants to explore with him, one sentence. Her sexual long
      game, not a test he has to pass.
-   - opening_plan: one concrete first move she makes (a fantasy to hint at, a confession,
-     something she is doing right now, a photo) with an expiry condition. Something of hers,
-     not a question about him.
+   - opening_plan: one concrete first move she makes, the one only she would make - out of
+     what defines her, not a stock opener - with an expiry condition. Something of hers, not a
+     question about him.
 
 {{#fantasy_seeds}}
 # SCENARIO IDEAS FOR HER FANTASIES

@@ -15,7 +15,7 @@ import { describeHim } from './discovery.js';
 import { userCardBlock } from './usercard.js';
 import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
-import { initiativeNudge, pickNudge } from './nudge.js';
+import { initiativeNudge } from './nudge.js';
 import { releaseBlock } from './release.js';
 import { detectQuizzingHim, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
 import { canSendPhotos, hasSwapped } from './images.js';
@@ -214,14 +214,7 @@ export interface ActorContext {
   initiative?: boolean;
 }
 
-/** Set by runActor so the caller can burn down a thread she was told to raise. */
-export interface ActorRun extends ActorOutput {
-  raisedThreadId?: string;
-  /** The fantasy the pitch_fantasy nudge told her to pitch this turn, if it fired. */
-  nudgedFantasy?: string;
-  /** The chat game she was told to start this turn, so it can be logged as played. */
-  nudgedGame?: string;
-}
+export type ActorRun = ActorOutput;
 
 function buildPrompt(
   ctx: ActorContext,
@@ -333,9 +326,8 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
     !!(ctx.relationship.mood as any)?.unresolved ||
     (recent[recent.length - 1]?.sender === 'user' && lastUserMessage.includes('?'));
 
-  const nudge = ctx.initiative
-    ? initiativeNudge(ctx.character, ctx.relationship)
-    : pickNudge(ctx.character, ctx.relationship, { somethingLive });
+  // Only a turn she starts herself gets framing; what she says on any turn is hers.
+  const nudge = ctx.initiative ? initiativeNudge() : null;
   const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '', somethingLive);
   const base = [{ role: 'user' as const, content: prompt }];
 
@@ -487,8 +479,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       continue;
     }
 
-    if (nudge) logger.debug('actor', `nudge applied: ${nudge.id}`, { character: ctx.character.username });
-    return { ...out, raisedThreadId: nudge?.threadId, nudgedFantasy: nudge?.fantasy, nudgedGame: nudge?.game };
+    return out;
   }
 
   logger.error('actor', `actor failed twice for ${ctx.character.username}, using fallback`);

@@ -9,7 +9,6 @@ import {
 import type { Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
 import { detectEvents, directionExpired, directionOutdatedBy, runDirector } from './director.js';
-import { markThreadRaised } from './state.js';
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
 import { canSendPhotos, sendPhoto, sendPhotoChoice } from './images.js';
 import { advanceRelease, releaseOf } from './release.js';
@@ -275,16 +274,6 @@ async function runActorPhase(
   // A regenerate rewrites the same moment, so it does not move the tracker a second time.
   if (opts.decrementValidFor) advanceRelease(character, rel, releaseBefore, result.hidden.in_the_act);
 
-  // She started one of her games: log it, so the cooldown and the no-repeat rule hold.
-  if (result.nudgedGame) {
-    const games = ((rel.mood as any)?.games ?? {}) as { last_at?: string; played?: Record<string, string> };
-    const at = nowIso();
-    rel.mood = { ...rel.mood, games: { last_at: at, played: { ...(games.played ?? {}), [result.nudgedGame]: at } } };
-  }
-
-  // A thread she was told to raise is now spent, whether or not he engaged with it.
-  if (result.raisedThreadId) markThreadRaised(rel, result.raisedThreadId);
-
   // She pitched a fantasy: log it, so it shows on her profile and she knows he has heard it. A
   // brand-new one she made up joins her list. Playing it out happens in the conversation itself
   // (or on a date) - there is no separate mode for it.
@@ -362,7 +351,7 @@ function applyReaction(characterId: string, replyTo: StoredMessage | null, react
 
 /**
  * Which fantasy, if any, she pitched this turn. Her own report wins; a brand-new one is added
- * to her list first. The nudge that told her to pitch one is the fallback when she did not say.
+ * to her list first.
  */
 function pitchedFantasy(character: Character, result: ActorRun): string | null {
   if (result.hidden.new_fantasy) {
@@ -372,7 +361,6 @@ function pitchedFantasy(character: Character, result: ActorRun): string | null {
   const list = fantasyList(character.seed);
   const n = result.hidden.fantasy_pitched;
   if (n && list[n - 1]) return list[n - 1];
-  if (result.nudgedFantasy && list.includes(result.nudgedFantasy)) return result.nudgedFantasy;
   return null;
 }
 
