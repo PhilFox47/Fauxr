@@ -10,7 +10,7 @@ import { usageToday } from '../llm/client.js';
 import { logger } from '../log.js';
 import { exportLogs } from '../logexport.js';
 import {
-  activeDate, addMessage, characterIdsOnDate, dateMessages, deleteCharacter, deleteLocation, getCharacter, getDate,
+  activeDate, addMessage, characterIdsOnDate, dateMessages, deleteCharacter, deleteLocation, getCharacter, getCircle, getDate,
   getLocation, getRelationship, getUserProfile, getWakeup, lastMessage, listLocations,
   markCharacterMessagesRead, queryLogs, recentMessages, saveLocation, saveRelationship,
   saveUserProfile, unreadCount,
@@ -458,7 +458,12 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   app.get<{ Params: { id: string } }>('/api/chats/:id/dates', async (req, reply) => {
     const character = getCharacter(req.params.id);
     if (!character) return reply.code(404).send({ error: 'not found' });
-    return { ...dateHistory(character.id), locations: listLocations().map(publicLocation) };
+    return {
+      ...dateHistory(character.id),
+      locations: listLocations().map(publicLocation),
+      // People from her life he has met on earlier dates, offered as quick picks on the invite.
+      circle: getCircle(character.id).map((c) => ({ id: c.id, name: c.name, who: c.who })),
+    };
   });
 
   app.post<{ Params: { id: string }; Body: { location_id?: string; when?: string; company?: string } }>(

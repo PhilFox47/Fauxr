@@ -165,7 +165,7 @@ export function domSubLean(rows: Attribute[], leaning: number): Record<string, n
  * touches one she is a hard no on, and follows her dom/sub leaning like her kinks do.
  */
 export function rollFantasySeeds(
-  seed: { kink_map: Record<string, KinkStance>; dom_sub_leaning: number; kink_sides?: Record<string, KinkSide> },
+  seed: { kink_map: Record<string, KinkStance>; dom_sub_leaning: number; kink_sides?: Record<string, KinkSide>; relationship_status?: string },
   count = 3,
 ): string[] {
   const all = byCategory('fantasy_scenario');
@@ -181,7 +181,11 @@ export function rollFantasySeeds(
     for (const st of stances) m *= st === 'into' ? 3 : st === 'curious' ? 1.5 : st === 'soft_no' ? 0.4 : 1;
     lean[s.id] = m;
   }
-  return rollMany('fantasy_scenario', newContext(), count, { only: allowed, lean, transient: true }).map((a) => a.id);
+  // Her relationship status goes in as drawn, so "a night in with her polycule" needs her to
+  // have one (the row conflicts with the single statuses).
+  const ctx = newContext();
+  if (seed.relationship_status) ctx.drawn.add(seed.relationship_status);
+  return rollMany('fantasy_scenario', ctx, count, { only: allowed, lean, transient: true }).map((a) => a.id);
 }
 
 /**

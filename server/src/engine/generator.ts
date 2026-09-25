@@ -431,7 +431,7 @@ export function rollSeed(): RolledSeed {
   const lingerie_style = one('lingerie_style')!;
   const sleepwear = one('sleepwear')!;
   const intimate_grooming = one('intimate_grooming')!;
-  const fantasy_seeds = rollFantasySeeds({ kink_map, dom_sub_leaning, kink_sides });
+  const fantasy_seeds = rollFantasySeeds({ kink_map, dom_sub_leaning, kink_sides, relationship_status: relationship_status!.id });
   const chat_games = rollChatGames({ kink_map, dom_sub_leaning, sexual_persona: persona.id, kink_sides });
 
   const hints: Record<string, string> = {
@@ -1571,7 +1571,7 @@ export function ensureFantasies(character: Character): Promise<void> {
   if (character.seed.hints?.fantasies) return Promise.resolve();
   const seeds = character.seed.fantasy_seeds?.length
     ? character.seed.fantasy_seeds
-    : rollFantasySeeds({ kink_map: character.seed.kink_map ?? {}, dom_sub_leaning: character.seed.dom_sub_leaning ?? 0, kink_sides: character.seed.kink_sides });
+    : rollFantasySeeds({ kink_map: character.seed.kink_map ?? {}, dom_sub_leaning: character.seed.dom_sub_leaning ?? 0, kink_sides: character.seed.kink_sides, relationship_status: character.seed.relationship_status });
   const running = fantasyBackfills.get(character.id);
   if (running) return running;
   const job = (async () => {

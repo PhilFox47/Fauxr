@@ -3363,7 +3363,8 @@
         "free_use_fantasy",
         "primal_play",
         "slave_treatment_giving",
-        "slave_treatment_receiving"
+        "slave_treatment_receiving",
+        "passed_around"
       ],
       "limits": [
         "power_play"
@@ -3686,7 +3687,10 @@
         "office_after_hours",
         "car_sex",
         "voyeurism_watching",
-        "watched_by_someone"
+        "watched_by_someone",
+        "play_party",
+        "swingers_club",
+        "sex_in_front_of_a_crowd"
       ],
       "limits": [
         "public",
@@ -3717,7 +3721,14 @@
         "threesome_mmf",
         "her_friend_joins",
         "another_couple",
-        "serving_them_both"
+        "serving_them_both",
+        "orgy",
+        "gangbang_her",
+        "him_and_several_women",
+        "polycule_play",
+        "play_party",
+        "swingers_club",
+        "passed_around"
       ],
       "limits": [
         "third_parties",
@@ -8031,7 +8042,15 @@
         "threesome_mmf": 3,
         "her_friend_joins": 3,
         "another_couple": 3,
-        "serving_them_both": 3
+        "serving_them_both": 3,
+        "orgy": 2.5,
+        "gangbang_her": 2.5,
+        "him_and_several_women": 2.5,
+        "polycule_play": 2.5,
+        "play_party": 2.5,
+        "swingers_club": 2.5,
+        "sex_in_front_of_a_crowd": 2.5,
+        "passed_around": 2.5
       },
       "pace": 1.2,
       "freak_shift": 1.0
@@ -14374,5 +14393,329 @@
       }
     },
     "enabled": true
+  },
+  {
+    "id": "orgy",
+    "category": "fetish",
+    "label": "An orgy, bodies everywhere",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "a room of people all at it at once, her moving between them and always finding her way back to him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "gangbang_her",
+    "category": "fetish",
+    "label": "A gangbang, her at the centre",
+    "weight": 0.8,
+    "rarity": "extremely_rare",
+    "prompt_hint": "several men taking turns on her while he watches or joins in - she is the one they are all there for",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "man",
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "him_and_several_women",
+    "category": "fetish",
+    "label": "Him with several women at once",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "sharing him with two or three other women, a bed full of them and him in the middle",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "polycule_play",
+    "category": "fetish",
+    "label": "Bringing her partners in",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "her girlfriend, her boyfriend, the people she already sleeps with - all of them and him, together",
+    "image_prompt": null,
+    "affinities": [
+      "polycule",
+      "solo_poly",
+      "open_relationship_primary",
+      "girlfriend_open",
+      "boyfriend_open",
+      "open_marriage",
+      "married_and_exploring"
+    ],
+    "conflicts": [
+      "single",
+      "single_recently",
+      "newly_single",
+      "taking_a_break",
+      "separated",
+      "complicated"
+    ],
+    "modifies": {},
+    "extra": {
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "play_party",
+    "category": "fetish",
+    "label": "Going to a play party together",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "a sex party with rules and a door policy - watching, being watched, joining in when they feel like it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "swingers_club",
+    "category": "fetish",
+    "label": "A night at a swingers club",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "a club where everyone is there for the same reason, and the two of them deciding together how far to go",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "sex_in_front_of_a_crowd",
+    "category": "fetish",
+    "label": "Having sex in front of a crowd",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "a room watching the two of them and nobody touching - the more eyes the better",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "any",
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "passed_around",
+    "category": "fetish",
+    "label": "Being passed around a room",
+    "weight": 0.8,
+    "rarity": "extremely_rare",
+    "prompt_hint": "handed from one person to the next at a party, him deciding who gets her next",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "any",
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "play_party_night",
+    "category": "fantasy_scenario",
+    "label": "A play party, masks optional",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "a sex party in a big old house, rules at the door, and the two of them finding out what they will do there",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing",
+        "exhibitionism"
+      ],
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "her_polycule_night",
+    "category": "fantasy_scenario",
+    "label": "A night in with her polycule",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "her partners, a lot of wine, and him the new one everybody wants to meet properly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [
+      "single",
+      "single_recently",
+      "newly_single",
+      "taking_a_break",
+      "separated",
+      "complicated"
+    ],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing"
+      ],
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "several_men_for_her",
+    "category": "fantasy_scenario",
+    "label": "Several men, one room, all for her",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "him choosing who, her choosing how, and nobody leaving until she says",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing"
+      ],
+      "joiner": "man",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "room_full_of_women",
+    "category": "fantasy_scenario",
+    "label": "Him and a room full of women",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "her friends, a hen party that got out of hand, and him the only man there",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing"
+      ],
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "swingers_club_night",
+    "category": "fantasy_scenario",
+    "label": "A night at a swingers club",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "a first time at the club, the bar downstairs and the rooms upstairs",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing",
+        "exhibitionism"
+      ],
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "orgy_after_party",
+    "category": "fantasy_scenario",
+    "label": "The after-party that turns into an orgy",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "the last dozen people at a party, the lights going down, and nobody going home",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "sharing"
+      ],
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "party_regular",
+    "category": "sexual_persona",
+    "label": "Play-party regular",
+    "weight": 1.0,
+    "prompt_hint": "Groups are where she is most herself. She knows the etiquette of a play party, has a polycule or a crew she goes with, and talks about orgies the way other people talk about good restaurants - warmly, specifically, with recommendations. She wants him in on it, and she is the one who knows how it works.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "ranges": {
+        "libido": [
+          4,
+          5
+        ],
+        "sexual_confidence": [
+          4,
+          5
+        ],
+        "sexting_readiness": [
+          4,
+          5
+        ],
+        "dom_sub_leaning": [
+          -1,
+          1
+        ]
+      },
+      "kink_bias": {
+        "sharing": 3,
+        "exhibitionism": 1.5,
+        "voyeurism": 1
+      },
+      "weights": {
+        "orgy": 3,
+        "gangbang_her": 3,
+        "him_and_several_women": 3,
+        "polycule_play": 3,
+        "play_party": 3,
+        "swingers_club": 3,
+        "sex_in_front_of_a_crowd": 3,
+        "passed_around": 3,
+        "group_sex_fantasy": 3,
+        "threesome_fantasy": 2
+      },
+      "pace": 1.2,
+      "freak_shift": 1.0
+    },
+    "enabled": true,
+    "rarity": "rare"
   }
 ]

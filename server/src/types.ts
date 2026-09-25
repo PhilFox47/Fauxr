@@ -440,8 +440,14 @@ export interface DateSession {
 export interface DateNpc {
   id: string;
   name: string;
-  gender: 'woman' | 'man' | 'nonbinary';
-  /** Always 18 or over; a card without a stated adult age is refused (see npcs.ts). */
+  /** 'mixed' only for a group card of men and women. */
+  gender: 'woman' | 'man' | 'nonbinary' | 'mixed';
+  /**
+   * 1 for a person. More for a group played as one card - "the rest of the party, about a
+   * dozen" - so an orgy does not need a dozen cards.
+   */
+  count?: number;
+  /** Always 18 or over (for a group, the youngest of them); see npcs.ts. */
   age: number;
   /** Who they are and why they are here: "her flatmate, who was already at the bar". */
   who: string;

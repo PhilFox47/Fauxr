@@ -765,6 +765,24 @@ export function setDateNpcs(id: string, npcs: DateNpc[]): void {
 }
 
 /**
+ * The people from her life he has met on dates: her friend, her girlfriend, the rest of her
+ * polycule. Kept in its own column rather than on the Relationship object, so the many
+ * read-modify-write saves of a relationship can never drop it.
+ */
+export function getCircle(characterId: string): DateNpc[] {
+  const row = db.prepare('SELECT circle FROM relationships WHERE character_id = ?').get(characterId) as any;
+  try {
+    return JSON.parse(row?.circle ?? '[]');
+  } catch {
+    return [];
+  }
+}
+
+export function setCircle(characterId: string, circle: DateNpc[]): void {
+  db.prepare('UPDATE relationships SET circle = ? WHERE character_id = ?').run(JSON.stringify(circle), characterId);
+}
+
+/**
  * The one date currently running for this character, if any. Everything that has to stand
  * still while she is out with him - texting, wakeups, the scheduler's proactive passes -
  * checks this first.

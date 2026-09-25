@@ -3926,6 +3926,57 @@ a character a kink or fantasy seed whose extra person you do not want (measured:
 1500 rolls with women only, 51 with anyone). The summary she keeps of the date names everyone
 who was part of it.
 
+### Bigger than three: groups, orgies and her polycule
+
+Threesomes were the ceiling. Larger groups now work too, in the data and on a date.
+
+**The kinks.** New rows in "Other people" and "Being seen":
+- An orgy
+- A gangbang with her at the centre (the others are men)
+- Him with several women at once
+- Bringing her partners in (her polycule)
+- A play party
+- A swingers club
+- Having sex in front of a crowd
+- Being passed around a room
+
+There are six new fantasy scenarios: a play party, a night in with her polycule, several men
+for her, him in a room full of women, a swingers club, and an after-party that turns into an
+orgy. There is also a persona whose whole thing is groups, the **play-party regular**.
+Everything carries `extra.joiner`, so "Who joins in" filters it like the threesomes: with
+women only, nobody gets the gangbang or the room of men.
+
+**Polycule kinks need partners.** "Bringing her partners in" and the polycule night conflict
+with the single relationship statuses, and the kink is weighted towards polycule, solo poly
+and open statuses. Measured over 3000 rolls: never on a single woman. The fantasy-scenario
+roll now sees her relationship status too; it used to start from a blank context.
+
+**A group is one card.** An NPC card can stand for many people: `count` (up to 40), gender
+`women`, `men` or `mixed`, and `age` as the youngest of them. So an orgy is a few named
+people plus "the rest of the party, about twenty", not twenty cards. Up to five cards can
+be present, and a group counts as one. The date prompt tells her to keep a group scene
+readable: in any beat, her and two or three others doing something you can follow, the rest
+of the room as texture, and she keeps coming back to you. The "Also here" chip shows a group
+as "the party ×20".
+
+**Group rules.** If one of her kinks is a group kink, "bigger than a threesome is on the
+table". Otherwise she keeps it to one other person unless you clearly want more. In a mixed
+crowd, only the people you want joining in do.
+
+**Her circle.** Everyone named who was part of a date is remembered afterwards
+(`relationships.circle`, its own column so relationship saves never drop it). Groups are not
+remembered. Next time:
+- The invite offers them as quick picks ("+ Jess").
+- The casting call sees them and reuses the name.
+- A returning person keeps their look, manner and who they are, even if the model draws
+  them differently, so her girlfriend does not come back with new hair.
+- On a date, whoever from her circle is not there yet is listed as someone she could call or
+  bring in.
+
+The casting call also gets her relationship status, so "her girlfriend" or "her polycule"
+fits who she already is. Together that makes a polycule something that builds up across
+dates rather than being reinvented each time.
+
 ### Steering a date from outside it: (directions)
 
 A date has no per-beat Director, which is what makes the scene drive itself — and also what

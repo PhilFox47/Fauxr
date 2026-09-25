@@ -180,7 +180,9 @@ export interface DateSession {
 export interface DateNpc {
   id: string;
   name: string;
-  gender: 'woman' | 'man' | 'nonbinary';
+  gender: 'woman' | 'man' | 'nonbinary' | 'mixed';
+  /** More than 1 for a group played as one card. */
+  count?: number;
   age: number;
   who: string;
   look: string;
@@ -311,7 +313,7 @@ export const api = {
       body: JSON.stringify({ name, description }),
     }),
   dates: (characterId: string) =>
-    request<{ active: DateSession | null; past: DateSession[]; locations: Location[] }>(
+    request<{ active: DateSession | null; past: DateSession[]; locations: Location[]; circle: { id: string; name: string; who: string }[] }>(
       `/api/chats/${characterId}/dates`,
     ),
   startDate: (characterId: string, locationId: string, when: string, company = '') =>

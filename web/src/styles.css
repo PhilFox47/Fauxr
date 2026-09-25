@@ -1582,3 +1582,6 @@ input[type='range'] {
   color: var(--muted);
 }
 .cast-x:hover { background: var(--surface-3); color: var(--text); }
+/* People from her life he has met before, as quick picks under "Anyone else there?". */
+.circle-picks { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s2); }
+.circle-picks .chip { font-size: 12.5px; padding: 5px 10px; }

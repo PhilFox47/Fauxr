@@ -952,6 +952,7 @@ function DatesSection({
   const [locationId, setLocationId] = useState('');
   const [when, setWhen] = useState('tonight, 8pm');
   const [company, setCompany] = useState('');
+  const [circle, setCircle] = useState<{ id: string; name: string; who: string }[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -961,6 +962,7 @@ function DatesSection({
       setLocations(res.locations);
       setPast(res.past);
       setActive(res.active);
+      setCircle(res.circle ?? []);
       setLocationId((id) => id || res.locations[0]?.id || '');
     } catch {
       /* the sheet is still useful without this */
@@ -1036,7 +1038,24 @@ function DatesSection({
                 setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 250);
               }}
             />
-            <span className="tiny muted">Her friend, a woman you meet at the bar, another couple… Written as you like.</span>
+            <span className="tiny muted">Her friend, a woman you meet at the bar, another couple, a play party… Written as you like.</span>
+            {circle.length > 0 && (
+              <span className="circle-picks">
+                {circle.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    className="chip"
+                    title={c.who}
+                    onClick={() =>
+                      setCompany((v) => (v.toLowerCase().includes(c.name.toLowerCase()) ? v : v.trim() ? `${v.trim()}, ${c.name}` : c.name))
+                    }
+                  >
+                    + {c.name}
+                  </button>
+                ))}
+              </span>
+            )}
           </label>
           <div className="row">
             <button className="btn ghost grow" onClick={() => setInviting(false)}>Cancel</button>
@@ -1261,7 +1280,7 @@ function DateRoom({
           <span className="tiny muted">Also here</span>
           {here.map((n) => (
             <span key={n.id} className="cast-chip" title={`${n.who}${n.up_for ? ` · ${n.up_for}` : ''}`}>
-              <strong>{n.name}</strong>
+              <strong>{n.name}{(n.count ?? 1) > 1 ? ` ×${n.count}` : ''}</strong>
               <span className="tiny muted">{n.who.split(/[,.;]/)[0]}</span>
               {live && (
                 <button

@@ -315,7 +315,7 @@ const DOMAIN_TERMS: Record<string, string[]> = {
   praise: ['good girl', 'so good', 'praise', 'tell you how good'],
   feet: ['feet', 'foot', 'toes', 'soles', 'sockjob', 'shoejob', 'lick my boots', 'lick your boots'],
   exhibitionism: ['in public', 'somewhere public', 'get caught', 'car park', 'outdoors', 'someone might see'],
-  sharing: ['threesome', 'third person', 'watch you with', 'another guy', 'another girl', 'cuckold', 'cuckquean', 'cuck queen', 'share you', 'orgy', 'group sex'],
+  sharing: ['threesome', 'third person', 'watch you with', 'another guy', 'another girl', 'cuckold', 'cuckquean', 'cuck queen', 'share you', 'orgy', 'group sex', 'gangbang', 'gang bang', 'foursome', 'swingers', 'sex party', 'play party', 'polycule'],
   anal: ['anal', 'from behind properly', 'back door', 'pegging'],
   toys: ['toy', 'vibrator', 'dildo', 'plug'],
   roleplay: ['roleplay', 'role play', 'pretend to be', 'costume', 'uniform', 'nurse outfit', 'petplay', 'pet play', 'cosplay', 'hentai', 'affair', 'cheat on'],

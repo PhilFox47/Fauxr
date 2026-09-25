@@ -9,7 +9,7 @@ import { render } from '../prompts/render.js';
 import {
   activeDate, addMessage, clearWakeup, createDate, dateMessages, deleteMessages, finishDate,
   getCharacter, getDate, getLocation, getMessage, getRelationship, getUserProfile, listDates,
-  saveRelationship, setDateNpcs, setDateOutfit, type StoredMessage,
+  getCircle, saveRelationship, setDateNpcs, setDateOutfit, type StoredMessage,
 } from '../repo.js';
 import type { Character, DateSession, Location, Relationship } from '../types.js';
 import {
@@ -27,7 +27,7 @@ import { describeHerMoment } from './moment.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
 import { fantasyLog } from './fantasies.js';
 import { userCardBlock } from './usercard.js';
-import { castFromInvite, castLine, groupRules, markLeft, mergeJoined, npcBlock, presentNpcs } from './npcs.js';
+import { castFromInvite, castLine, circleBlock, groupRules, markLeft, mergeJoined, npcBlock, presentNpcs, rememberCast } from './npcs.js';
 
 /**
  * Dates: the other half of the game.
@@ -187,6 +187,7 @@ function buildDatePrompt(
     user_name: user?.display_name ?? 'him',
     location_block: locationBlock(date, date.location_id ? getLocation(date.location_id) : null),
     npc_block: npcBlock(date),
+    circle_block: circleBlock(character.id, date),
     // He asked for company on the invite and the casting call came back empty: she still
     // knows who he wanted, so she can bring them in herself rather than the ask vanishing.
     company_block: date.company && !(date.npcs ?? []).some((n) => n.source === 'invite')
@@ -473,7 +474,7 @@ async function takeDateTurn(dateId: string): Promise<void> {
 function updateCast(dateId: string, beatId: number, joined: unknown, left: unknown): void {
   const date = getDate(dateId);
   if (!date) return;
-  const merged = mergeJoined(date.npcs ?? [], joined);
+  const merged = mergeJoined(date.npcs ?? [], joined, getCircle(date.character_id));
   const arrived = new Set(merged.joined.map((n) => n.id));
   let npcs = merged.npcs.map((n) => (arrived.has(n.id) ? { ...n, joined_in: beatId } : n));
   const before = new Set(npcs.filter((n) => n.left_at).map((n) => n.id));
@@ -823,6 +824,8 @@ export async function endDate(dateId: string): Promise<DateSession> {
   };
   rel.flags.state.has_had_first_date = true;
   applyUpdate(character, rel, update);
+  // Whoever was part of it is someone he has met now, and can be asked for next time.
+  rememberCast(character.id, date);
 
   const ended = finishDate(date.id, summary)!;
 
