@@ -244,6 +244,67 @@ const AUDITION_PATTERNS: { re: RegExp; what: string }[] = [
   { re: /\b(?:that'?s|thats|it'?s|its) (?:not a \w+ (?:that'?s|thats|it'?s|its) )?a condition\b/i, what: 'setting him a condition' },
 ];
 
+/**
+ * The reframe: "That's not a machine, that's a diagnosis." "thats not confidence thats panic."
+ * "'tell me what u wanna try' is a question, not a move." It is the single most recognisable
+ * line a language model writes - the player named it as the example of AI-isms - and across 784
+ * replies in his logs it was the most common one. The subject is a thing or him ("that's",
+ * "it's", "you're"), never "I'm": "im not mad im just tired" is how people actually talk.
+ * "not that deep" and "not nearly as patient as" are a degree or a comparison, not a reframe,
+ * and are left alone.
+ */
+const REFRAME_PATTERNS: RegExp[] = [
+  // that's not X, that's Y / it's not about X, it's about Y / you're not X, you're Y
+  /\b(?:that'?s|thats|that is|it'?s|its|it is|this is|you'?re|ur|you are)\s+not\s+(?!(?:that|nearly|as|so|quite|too|very)\s)(?:a |an |the |just |about |even )?[^.,;!?\n"*]{1,40}?[,.;:!?]*\s+(?:that'?s|thats|that is|it'?s|its|it is|this is|you'?re|ur|you are)\s+(?:just\s+)?(?:a |an |the |about )?[a-z]/i,
+  // X is a question, not a move / it's a visual, not a gift
+  /\b(?:is|was|that'?s|thats|it'?s|its)\s+(?:a|an|the)\s+[a-z]+(?:\s[a-z]+)?,\s+not\s+(?:a|an|the)\s+[a-z]+/i,
+  // the countdown isn't a text thing. it's live
+  /\b(?:isn'?t|wasn'?t)\s+(?:a|an|about|just)\s[^.,;!?\n"*]{1,30}[,.]\s*(?:it'?s|its|that'?s|thats)\s+[a-z]/i,
+  // less X, more Y
+  /\bless\s+[a-z]+(?:\s[a-z]+)?[,.]\s+more\s+[a-z]+/i,
+];
+
+export function detectReframe(text: string): string | null {
+  for (const re of REFRAME_PATTERNS) {
+    const m = text.match(re);
+    if (m) return m[0].trim();
+  }
+  return null;
+}
+
+/**
+ * Stage business a model leans on in prose: the beat of silence, her voice going flat, doing
+ * something unhurried or without apology, the thought that opens on "Okay." In the date scenes
+ * of his logs "flat"/"deadpan" was in 11 of 27 beats and "a beat"/"a full second" in 9. Once is
+ * description; the same one beat after beat is a tic, so only a crutch she already used in one
+ * of her recent beats counts.
+ */
+const CRUTCHES: { re: RegExp; what: string }[] = [
+  { re: /\b(?:flat|flatly|flatter|flattest|deadpan)\b/i, what: 'her voice or face going "flat"/"deadpan"' },
+  { re: /\ba (?:full |long |half )?(?:beat|second|moment)(?: of silence| too long| longer than)?\b/i, what: '"a beat"/"a full second"' },
+  { re: /\b(?:unhurried|without apology|unbothered|unapologetic(?:ally)?)\b/i, what: '"unhurried"/"without apology"' },
+  { re: /\*(?:okay|ok|finally|noted|right|oh|well)\b[.,!]/i, what: 'a thought opening on "Okay."/"Finally."' },
+  { re: /\b(?:the way (?:someone|a person|people)|like someone (?:who|about|checking|calling))\b/i, what: 'a stock "the way someone..." simile' },
+];
+
+/**
+ * A crutch in this beat that she already used in at least `minEarlier` of the earlier ones.
+ * Dates pass 2: her prompt already names the crutches of her last few beats (crutchesIn), so a
+ * retry is only worth its cost for one she keeps reaching for anyway. With 1, 15 of 24 later
+ * beats in his logs would have been re-asked.
+ */
+export function detectRepeatedCrutch(text: string, earlier: string[], minEarlier = 1): string | null {
+  for (const c of CRUTCHES) {
+    if (c.re.test(text) && earlier.filter((e) => c.re.test(e)).length >= minEarlier) return c.what;
+  }
+  return null;
+}
+
+/** The crutches present in these beats, to name in her next prompt so she can leave them out. */
+export function crutchesIn(texts: string[]): string[] {
+  return CRUTCHES.filter((c) => texts.some((t) => c.re.test(t))).map((c) => c.what);
+}
+
 export function detectAuditionFrame(text: string): string | null {
   for (const p of AUDITION_PATTERNS) if (p.re.test(text)) return p.what;
   return null;

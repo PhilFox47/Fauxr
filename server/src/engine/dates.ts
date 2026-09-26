@@ -18,7 +18,7 @@ import {
   spiceBlock, userBlock,
 } from './blocks.js';
 import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
-import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice, detectScorekeepingTell, detectAuditionFrame } from './voice.js';
+import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice, detectScorekeepingTell, detectAuditionFrame, detectReframe, detectRepeatedCrutch, crutchesIn } from './voice.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage, photoSelfBlock } from './images.js';
@@ -130,6 +130,19 @@ export function standingDirection(transcript: StoredMessage[]): string {
  * it out and putting it immediately before OUTPUT makes it the last thing read before she
  * writes, without ever letting her treat it as something said in the room.
  */
+/**
+ * The stage business she leaned on in her last few beats, named so she can leave it out of the
+ * next one (see CRUTCHES in voice.ts). Cheaper than catching it afterwards: in his logs the same
+ * "flat" or "a beat" came back in most beats of a date.
+ */
+function avoidBlock(transcript: StoredMessage[]): string {
+  const recent = transcript.filter((m) => m.sender === 'character').slice(-3).map((m) => m.text);
+  const used = crutchesIn(recent);
+  if (!used.length) return '';
+  return `In your last few beats you already used: ${used.join('; ')}. Leave those out of this one - ` +
+    'show this moment with something specific to it.';
+}
+
 export function directionBlock(direction: string): string {
   if (!direction) return '';
   return [
@@ -234,6 +247,7 @@ function buildDatePrompt(
     // Empty unless he has actually written one. Deliberately the last block in the template,
     // immediately before OUTPUT - see directionBlock for why position matters here.
     direction_block: directionBlock(standingDirection(transcript)),
+    avoid_block: avoidBlock(transcript),
   });
 }
 
@@ -385,6 +399,23 @@ async function runDateActor(
         (men.length ? ` If that sentence was about ${men.join(' or ')}, start it with the name, never "he".` : '') +
         ' Write the beat again from scratch, same JSON shape.';
       continue;
+    }
+    // Machine-writing tells, first draft only so they can never land him on the fallback beat:
+    // the "not X, that's Y" reframe, and a piece of stage business she already leaned on in one
+    // of her last few beats (see detectRepeatedCrutch).
+    if (attempt === 0) {
+      const reframe = detectReframe(text);
+      const earlier = dateMessages(date.id).filter((m) => m.sender === 'character').slice(-3).map((m) => m.text);
+      const crutch = reframe ? null : detectRepeatedCrutch(text, earlier, 2);
+      if (reframe || crutch) {
+        logger.warn('actor', 'date beat used a machine-writing tell', { character: character.username, reframe, crutch });
+        correction = reframe
+          ? `You wrote "${reframe}" - the "that's not X, that's Y" reframe, the most recognisable ` +
+            'line a machine writes. Have her say the thing directly, or just react. Same JSON shape.'
+          : `You used ${crutch} again - she did the same in a recent beat, and repeated it reads as a ` +
+            'writing tic, not as her. Show this moment with something specific to it instead. Same JSON shape.';
+        continue;
+      }
     }
     if (WRITER_PUNCTUATION.test(text)) {
       logger.warn('actor', 'date beat used writer\'s punctuation', { character: character.username, text });

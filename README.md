@@ -714,6 +714,36 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## Fewer AI-isms
+
+The player flagged the lines that read as machine-written, with "That's not an order, that's
+lore" as the example. Measured over all 784 character replies in the exported logs rather than
+guessed:
+- **The reframe** ("that's not X, that's Y", "it's X, not Y", "isn't X. it's Y", "less X, more
+  Y") was the most common tell in the chat: "That's not a machine, that's a diagnosis", "thats
+  not confidence thats panic", "is a question, not a move", "that's not a flex it's a logistics
+  update".
+- **Stage business on repeat** in the 27 date beats: her voice or face going "flat"/"deadpan"
+  in 11, "a beat"/"a full second" in 9, a thought opening on "*Okay.*"/"*Finally.*" in 7,
+  "unhurried"/"without apology" in 6, stock similes ("the way someone checks a receipt").
+- The em-dash, already rejected in dates, only appears in logs from before that check.
+
+What changed:
+- **The prompts name them**, briefly, in the static half: the chat prompt's "Do not sound like
+  an assistant" gets the reframe with its own examples and the fix ("thats panic phil"); the
+  date prompt's "The thing that gives you away" gets the reframe and stage business on repeat.
+- **`detectReframe()`** (`voice.ts`) sends the first draft back with a fix, in the chat and on
+  dates. Over the 784 replies it matches 9 distinct lines, all real reframes; it leaves "im not
+  mad im just tired", "its not that deep", "ur not nearly as patient as ur profile says" and
+  similar ordinary speech alone. "I'm not X, I'm Y" is deliberately not matched.
+- **Dates name her recent crutches.** Each beat's prompt lists the stage business she used in
+  her last three beats ("Fresh this time"), so she can leave it out instead of being caught
+  afterwards. If she still reaches for one she used in two of those three, the first draft is
+  sent back (`detectRepeatedCrutch()`); on the logged dates that would have been 9 of 24 later
+  beats, before she was ever told.
+- Both checks only ever cost one retry on the first draft, never the fallback line, like the
+  existing quiz check.
+
 ## He is not auditioning
 
 A date with Kaoru read like an exam. It started in the chat: she was "considering you for" a

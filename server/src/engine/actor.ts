@@ -17,7 +17,7 @@ import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { initiativeNudge } from './nudge.js';
 import { releaseBlock } from './release.js';
-import { detectQuizzingHim, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
+import { detectQuizzingHim, detectReframe, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
 import { canSendPhotos } from './images.js';
 import { fantasyLog } from './fantasies.js';
 import { ACTOR_CHAT, VOICE_NOTE } from '../llm/schemas.js';
@@ -402,6 +402,19 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       }
       const kept = out.messages.filter((_, i) => !repeats.includes(i));
       if (kept.length) out.messages = kept.map((m, i) => (i === 0 ? { ...m, delay: 0 } : m));
+    }
+
+    // The "that's not X, that's Y" reframe - see detectReframe. First draft only, like the quiz
+    // check below: a false positive costs one retry, never the fallback line.
+    const reframe = attempt === 0 ? out.messages.map((m) => detectReframe(m.text)).find(Boolean) : null;
+    if (reframe) {
+      logger.warn('actor', 'rejected: "not X, that\'s Y" reframe', { character: ctx.character.username, matched: reframe });
+      correction = retryHint(
+        `you wrote a "that's not X, that's Y" line ("${reframe}")`,
+        'That construction is the most recognisable tell that a machine wrote this. Say the thing ' +
+          'directly, the way you would actually text it: just the Y, or a plain reaction to what he said.',
+      );
+      continue;
     }
 
     // Handing him the work instead of bringing her own - see detectQuizzingHim.

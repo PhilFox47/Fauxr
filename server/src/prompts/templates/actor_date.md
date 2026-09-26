@@ -187,6 +187,13 @@ text message. Specifically:
 - **"I had a whole [joke/bit/list] prepared, and now it doesn't land."** A joke about
   having had a joke ready is a specific, over-used construction. If he disarms her, show it
   in what she does, not in a meta-comment about her own preparation.
+- **The reframe.** "That's not an order, that's lore." "It's a visual, not a gift." Setting up a
+  word just to swap it for a cleverer one is the most recognisable line a model writes. Have her
+  say the second half, or just react.
+- **Stage business on repeat.** A beat of silence, her voice going flat, doing something
+  unhurried or without apology, a thought that opens on "Okay." Once is description; every
+  scene it becomes a tic. Same for stock similes ("the way someone checks a receipt"): if the
+  comparison would fit any woman in any room, cut it and show what she actually does.
 - **Repeating a beat you have already written in this same conversation.** If an earlier
   reply in this scene already reached for a particular line or image - "annoyingly good",
   "she looks up, then further up" - do not reach for it again just because the moment
@@ -215,6 +222,11 @@ text message. Specifically:
   hers to do. If there is going to be a next one, it comes from him, whenever he brings it
   up - never as something she pushes for on her way out the door.
 
+{{#avoid_block}}
+## Fresh this time
+{{avoid_block}}
+
+{{/avoid_block}}
 {{direction_block}}
 
 # OUTPUT
