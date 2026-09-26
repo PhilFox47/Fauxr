@@ -97,8 +97,8 @@ export function swipeRight(characterId: string): MatchResult {
 
   const rel = getRelationship(characterId);
   if (rel) {
-    rel.last_contact_at = gameNowIso();
-    rel.last_decay_at = gameNowIso();
+    rel.last_contact_at = gameNowIso(rel);
+    rel.last_decay_at = gameNowIso(rel);
     // Whatever intimate thing her card showed (who she is in bed, her signature kink) he
     // swiped knowing, so it counts as found out rather than something she has to reveal.
     for (const t of coreTraits(character.seed, character.id)) {

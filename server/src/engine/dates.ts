@@ -33,6 +33,7 @@ import { DATE_BEAT, DATE_SCENE, DATE_SUMMARY, OUTFIT } from '../llm/schemas.js';
 import { isAiCharacter } from './species.js';
 import { costumeMentionBlock } from './cosplay.js';
 import { duoPartnerNpc } from './duo.js';
+import { gameClockMs } from './clock.js';
 import { applyOutfitChanges, closetList, defaultOutfit, isOutfit, OUTFIT_EXAMPLE, outfitForImage, outfitFromPicks, outfitLines, outfitSentence, type Outfit, type OutfitChange } from './wardrobe.js';
 import { normalizeOutfitChanges } from './actor.js';
 
@@ -264,10 +265,10 @@ function buildDatePrompt(
       user ? userCardBlock(user) : '',
       describeHim(rel),
     ].filter(Boolean).join('\n\n'),
-    ledger_block: ledgerBlock(rel.ledger),
+    ledger_block: ledgerBlock(rel.ledger, gameClockMs(rel)),
     mood_block: moodBlock(rel.arousal, seed.hints.arousal_tell, 'in_person'),
     release_block: releaseBlock(character, rel, 'in_person'),
-    moment_block: describeHerMoment(character),
+    moment_block: describeHerMoment(character, rel),
     // Empty unless he has actually written one. Deliberately the last block in the template,
     // immediately before OUTPUT - see directionBlock for why position matters here.
     direction_block: directionBlock(standingDirection(transcript)),

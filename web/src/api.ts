@@ -341,9 +341,9 @@ export const api = {
   endDate: (dateId: string) => request<DateSession>(`/api/dates/${dateId}/end`, { method: 'POST' }),
   /** A picture of this moment of the date, from his point of view; arrives as an image in the date. */
   showScene: (dateId: string) => request<{ image_id: string }>(`/api/dates/${dateId}/scene`, { method: 'POST' }),
-  /** Everyone he has matched with lives through this many hours at once - see engine/timepass.ts. */
-  passTime: (hours: number) =>
-    request<{ hours: number; label: string; matches: number; reaching_out: string[] }>('/api/pass-time', {
+  /** This one chat lives through this many hours - see engine/timepass.ts. Chats never share a clock. */
+  passTime: (characterId: string, hours: number) =>
+    request<{ hours: number; label: string; reaching_out: boolean }>(`/api/chats/${characterId}/pass-time`, {
       method: 'POST',
       body: JSON.stringify({ hours }),
     }),

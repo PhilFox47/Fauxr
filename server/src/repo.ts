@@ -576,9 +576,23 @@ export function createRelationship(characterId: string, seedLedger?: Partial<Led
   return getRelationship(characterId)!;
 }
 
+/**
+ * Her own clock (engine/clock.ts) is seeded the first time a chat's relationship row is ever
+ * read - a brand new match right after createRelationship(), or an existing one loading it for
+ * the first time after this feature shipped - and never touched again after that. Persisted
+ * directly rather than through saveRelationship() so a plain read never has other, unrelated
+ * mood changes riding along with it.
+ */
+function backfillGameClock(characterId: string, rel: Relationship): Relationship {
+  if ((rel.mood as any)?.game_clock_ms !== undefined) return rel;
+  rel.mood = { ...rel.mood, game_clock_ms: Date.now() };
+  db.prepare('UPDATE relationships SET mood = ? WHERE character_id = ?').run(JSON.stringify(rel.mood), characterId);
+  return rel;
+}
+
 export function getRelationship(characterId: string): Relationship | null {
   const row = db.prepare('SELECT * FROM relationships WHERE character_id = ?').get(characterId) as any;
-  return row ? hydrateRelationship(row) : null;
+  return row ? backfillGameClock(characterId, hydrateRelationship(row)) : null;
 }
 
 export function saveRelationship(r: Relationship): void {

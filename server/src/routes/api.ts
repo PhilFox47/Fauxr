@@ -622,11 +622,11 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
    * "Pass time": the deliberate way the story's clock moves (engine/clock.ts, timepass.ts).
    * Nothing here happens on its own - see the module doc for why.
    */
-  app.post<{ Body: { hours?: number } }>('/api/pass-time', async (req, reply) => {
+  app.post<{ Params: { id: string }; Body: { hours?: number } }>('/api/chats/:id/pass-time', async (req, reply) => {
     const hours = Number(req.body?.hours);
     if (!Number.isFinite(hours) || hours <= 0) return reply.code(400).send({ error: 'hours must be a positive number' });
     try {
-      return await passTime(hours);
+      return await passTime(req.params.id, hours);
     } catch (err) {
       return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
     }

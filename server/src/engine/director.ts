@@ -56,7 +56,7 @@ import { ensureFantasies } from './generator.js';
 import { fantasyLog } from './fantasies.js';
 import { canSendPhotos } from './images.js';
 import { DIRECTOR } from '../llm/schemas.js';
-import { gameNow } from './clock.js';
+import { gameClockMs, gameNow } from './clock.js';
 
 export interface DirectorResult {
   direction: Direction;
@@ -153,12 +153,12 @@ export async function runDirector(
     core_block: coreBlock(character),
     life_block: lifeBlockForDirector(character.id),
     last_contact: rel.last_contact_at ?? 'never',
-    // The story's own clock (engine/clock.ts), not the real one.
-    now: gameNow().toLocaleString('en-GB'),
+    // This chat's own clock (engine/clock.ts), not the real one.
+    now: gameNow(rel).toLocaleString('en-GB'),
     spice_directive: spiceDirective(settings.spice),
     unprompted: settings.unprompted_messages ? '1' : '',
     replies_only: settings.unprompted_messages ? '' : '1',
-    ledger_block: ledgerBlock(rel.ledger, { full: true }) || '(empty)',
+    ledger_block: ledgerBlock(rel.ledger, gameClockMs(rel), { full: true }) || '(empty)',
     previous_direction: rel.active_direction ? directionBlock(rel.active_direction) : '(none yet)',
     actor_report: opts.actorReport
       ? JSON.stringify(opts.actorReport)

@@ -126,6 +126,7 @@ export default function Chat({
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [timeOpen, setTimeOpen] = useState(false);
   const [profile, setProfile] = useState<CharacterProfile | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [gallery, setGallery] = useState<GalleryImage[]>([]);
@@ -482,10 +483,31 @@ export default function Chat({
             })()}
           </button>
         )}
+        {character && !blocked && !activeDate && (
+          <button
+            className="iconbtn"
+            onClick={() => setTimeOpen((o) => !o)}
+            aria-label="Pass time"
+            title="Pass time"
+          >
+            <Icon name="clock" size={19} />
+          </button>
+        )}
         <button className="iconbtn" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
           <Icon name="more" size={20} />
         </button>
       </div>
+
+      {timeOpen && (
+        <PassTimePanel
+          characterId={characterId}
+          onDone={() => {
+            setTimeOpen(false);
+            void load();
+          }}
+          onClose={() => setTimeOpen(false)}
+        />
+      )}
 
       {profileOpen && profile && (
         <ProfileSheet
@@ -839,6 +861,99 @@ export default function Chat({
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+const PASS_TIME_PRESETS: { label: string; hours: number }[] = [
+  { label: '1 hour', hours: 1 },
+  { label: '4 hours', hours: 4 },
+  { label: 'Tonight', hours: 8 },
+  { label: '1 day', hours: 24 },
+  { label: '3 days', hours: 72 },
+  { label: '1 week', hours: 24 * 7 },
+];
+
+/**
+ * "Pass time": the only way this chat's clock moves (server/src/engine/clock.ts). Chats have
+ * no bearing on each other, so this always acts on just her - he decides how much of a gap
+ * just happened between the two of them, and she lives through it on her own.
+ */
+function PassTimePanel({
+  characterId,
+  onDone,
+  onClose,
+}: {
+  characterId: string;
+  onDone: () => void;
+  onClose: () => void;
+}) {
+  const [customAmount, setCustomAmount] = useState('1');
+  const [customUnit, setCustomUnit] = useState<'hours' | 'days'>('hours');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<string | null>(null);
+
+  const go = async (hours: number) => {
+    if (busy || !(hours > 0)) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await api.passTime(characterId, hours);
+      setResult(`${res.label} passed.${res.reaching_out ? ' She might text you about it.' : ''}`);
+      onDone();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="card">
+      <div className="section-title" style={{ padding: '0 0 6px' }}>Pass time</div>
+      <p className="tiny muted" style={{ margin: '0 0 14px' }}>
+        Nothing ages on its own here - this chat just picks up where you left it. Skip time on
+        purpose and she lives through it: her mood settles, her day moves on, and she may get
+        in touch about whatever happened while you were away. Only this chat - it has no
+        bearing on anyone else.
+      </p>
+      {result ? (
+        <p className="small" style={{ margin: '0 0 12px' }}>{result}</p>
+      ) : (
+        <>
+          <div className="row" style={{ flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+            {PASS_TIME_PRESETS.map((p) => (
+              <button key={p.label} className="chip" disabled={busy} onClick={() => void go(p.hours)}>
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <div className="row" style={{ gap: 8, marginBottom: 12 }}>
+            <input
+              type="number"
+              min="1"
+              inputMode="numeric"
+              value={customAmount}
+              onChange={(e) => setCustomAmount(e.target.value)}
+              style={{ width: 72 }}
+            />
+            <select value={customUnit} onChange={(e) => setCustomUnit(e.target.value as 'hours' | 'days')}>
+              <option value="hours">hours</option>
+              <option value="days">days</option>
+            </select>
+            <button
+              className="btn grow"
+              disabled={busy || !(Number(customAmount) > 0)}
+              onClick={() => void go(Number(customAmount) * (customUnit === 'days' ? 24 : 1))}
+            >
+              {busy ? 'Passing time…' : 'Pass time'}
+            </button>
+          </div>
+        </>
+      )}
+      {error && <p className="small" style={{ color: 'var(--err)' }}>{error}</p>}
+      <button className="btn ghost block" onClick={onClose}>Close</button>
     </div>
   );
 }

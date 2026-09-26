@@ -10,7 +10,7 @@ import { coreTraits } from './profilecard.js';
 import { advanceThread, ensureLife, threadsForStatus } from './life.js';
 import { STATUS_WITH_THREAD, STATUS } from '../llm/schemas.js';
 import { closetList, currentOutfit, OUTFIT_EXAMPLE, outfitFromPicks, outfitMood, outfitSentence } from './wardrobe.js';
-import { gameNow, gameNowMs } from './clock.js';
+import { gameClockMs, gameNow } from './clock.js';
 
 /**
  * Her status, like a WhatsApp status: one short line she has "posted" about where she is or
@@ -47,7 +47,7 @@ export function statusOf(rel: Relationship | null | undefined): CharacterStatus 
 export function statusDue(rel: Relationship): boolean {
   const s = (rel.mood as any)?.status;
   if (!s?.until) return true;
-  return Date.parse(s.until) <= gameNowMs();
+  return Date.parse(s.until) <= gameClockMs(rel);
 }
 
 /** Once per scheduler tick: refresh the single most overdue status, if any is due. */
@@ -78,8 +78,8 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
   if (!rel) return null;
   const seed = character.seed;
   const lab = (cat: string, id: string) => find(cat, id)?.label ?? id;
-  // The story's own clock, not the real one - see engine/clock.ts.
-  const now = gameNow();
+  // This chat's own clock, not the real one - see engine/clock.ts.
+  const now = gameNow(rel);
   const previous = statusOf(rel)?.text;
   const hours = randInt(MIN_HOURS, MAX_HOURS);
   // Her storylines ride along on this call: it already runs every few hours, so moving one of

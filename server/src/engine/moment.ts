@@ -1,5 +1,5 @@
 import { find } from '../db/attributes.js';
-import type { Character } from '../types.js';
+import type { Character, Relationship } from '../types.js';
 import { coreTraits, isCore } from './profilecard.js';
 import { lifeLinesForHer } from './life.js';
 import { gameNow } from './clock.js';
@@ -37,7 +37,7 @@ function dayShape(now: Date): string {
   return 'It is the middle of the working week.';
 }
 
-export function describeHerMoment(character: Character, now = gameNow()): string {
+export function describeHerMoment(character: Character, rel: Pick<Relationship, 'mood'>, now = gameNow(rel)): string {
   const seed = character.seed;
   const hour = now.getHours();
   const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || find(cat, id)?.label || id;

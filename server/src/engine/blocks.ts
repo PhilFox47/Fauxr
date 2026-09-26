@@ -305,7 +305,7 @@ export function languageBlock(seed: CharacterSeed): string {
 }
 
 /** The Actor gets a filtered ledger. Relevance beats completeness. */
-export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): string {
+export function ledgerBlock(ledger: Ledger, now: number, opts: { full?: boolean } = {}): string {
   const lines: string[] = [];
   // A memory phrased as a condition on him ("two orders and he earns the nickname") is left
   // out of every prompt: stored once, it was fed back on every turn and carried a whole chat's
@@ -333,7 +333,7 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
 
   // The Actor only sees threads she has not just been on about. Showing her the same one
   // every turn is how a passing remark turns into a fixation.
-  const threads = (opts.full ? pruneThreads(ledger.open_threads ?? []) : freshThreads(ledger.open_threads ?? []))
+  const threads = (opts.full ? pruneThreads(ledger.open_threads ?? [], now) : freshThreads(ledger.open_threads ?? [], now))
     .filter((t) => clean(t.text));
   if (threads.length) {
     lines.push(

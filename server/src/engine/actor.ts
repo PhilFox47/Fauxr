@@ -23,6 +23,7 @@ import { fantasyLog } from './fantasies.js';
 import { ACTOR_CHAT, VOICE_NOTE } from '../llm/schemas.js';
 import { isAiCharacter } from './species.js';
 import { costumeMentionBlock } from './cosplay.js';
+import { gameClockMs } from './clock.js';
 import { duoPartner } from './duo.js';
 import { currentOutfit, defaultOutfit, isOutfit, outfitMood } from './wardrobe.js';
 
@@ -284,11 +285,11 @@ function buildPrompt(
     pace: describePace(character),
     spice_block: spiceBlock(seed, relationship.arousal),
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
-    ledger_block: ledgerBlock(relationship.ledger),
+    ledger_block: ledgerBlock(relationship.ledger, gameClockMs(relationship)),
     direction_block: directionBlock(direction, somethingLive),
     mood_block: moodBlock(relationship.arousal, seed.hints.arousal_tell),
     release_block: releaseBlock(character, relationship),
-    moment_block: describeHerMoment(character),
+    moment_block: describeHerMoment(character, relationship),
     continuity_block: continuityBlock(relationship.mood, currentOutfit(relationship, seed)),
     costume_block: costumeMentionBlock(messages.slice(-8).map((m) => m.text), seed),
     turn_nudge: nudge,

@@ -1,57 +1,50 @@
-import { db } from '../db/index.js';
+import type { Relationship } from '../types.js';
 
 /**
- * The story's own clock - what day and time it is inside the fiction, entirely separate from
- * the real one. It never advances on its own, no matter how long the app sits idle or how long
- * he takes to reply: it only moves when he explicitly asks time to pass (see engine/timepass.ts,
- * the "Pass time" control in the app). Reply five seconds after her last message or come back
+ * Her own clock - what day and time it is for THIS chat, entirely separate from the real one
+ * and from every other chat's. Two matches have no bearing on each other, so each gets her own
+ * clock rather than one shared for the whole cast: skipping ahead with one woman says nothing
+ * about what has happened with anyone else.
+ *
+ * It never advances on its own, no matter how long the app sits idle or how long he takes to
+ * reply: it only moves when he explicitly passes time in THIS chat (see engine/timepass.ts, the
+ * "Pass time" control in the chat menu). Reply five seconds after her last message or come back
  * five real days later and, as far as she is concerned, nothing happened in between - which is
  * the point: nobody gets pinged for going quiet, and nothing quietly ages while he is just away.
  *
- * Anything that describes *when something is happening in the story* reads this instead of the
- * real clock: her sense of the current day and time (moment.ts, status.ts), how turned on she
- * still is, when her status or a milestone next comes due, whether a plan the Director wrote
- * still covers the moment. Real wall-clock time (Date.now()/nowIso()) stays in charge of
+ * Stored on the relationship itself (mood.game_clock_ms, an epoch-ms number), seeded to the real
+ * time the first time a chat's relationship row is ever read (repo.ts's backfillGameClock) and
+ * from then on moved only by advanceGameClock(). Anything that describes *when something is
+ * happening in this chat's story* reads this instead of the real clock: her sense of the current
+ * day and time (moment.ts), her status's set_at/until (status.ts), the Director's "time now" and
+ * "last contact" lines, last_contact_at, and how long an open thread has sat unaddressed before
+ * it is dropped (state.ts). Real wall-clock time (Date.now()/nowIso()) stays in charge of
  * everything actually about the real world: message timestamps, image and log bookkeeping,
  * typing-delay pacing, and per-day cost budgets - none of that should freeze.
- *
- * Stored in the same key-value `settings` table as everything else in config.ts, under its own
- * key so a config reset does not also rewind the story clock.
  */
 
-const KEY = 'game_clock_ms';
+type ClockBearer = Pick<Relationship, 'mood'>;
 
-let cachedMs: number | null = null;
-
-function load(): number {
-  if (cachedMs !== null) return cachedMs;
-  const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(KEY) as { value: string } | undefined;
-  cachedMs = row ? Number(row.value) : Date.now();
-  if (!row) persist(cachedMs);
-  return cachedMs;
+/** Assumes repo.ts's backfillGameClock has already run; Date.now() only covers a relationship this session created and has not yet reloaded. */
+export function gameClockMs(rel: ClockBearer): number {
+  const v = Number((rel.mood as any)?.game_clock_ms);
+  return Number.isFinite(v) ? v : Date.now();
 }
 
-function persist(ms: number): void {
-  db.prepare(
-    'INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
-  ).run(KEY, String(Math.round(ms)));
+export function gameNow(rel: ClockBearer): Date {
+  return new Date(gameClockMs(rel));
 }
 
-export function gameNowMs(): number {
-  return load();
+export function gameNowIso(rel: ClockBearer): string {
+  return gameNow(rel).toISOString();
 }
 
-export function gameNow(): Date {
-  return new Date(load());
-}
-
-export function gameNowIso(): string {
-  return gameNow().toISOString();
-}
-
-/** Only engine/timepass.ts's passTime() should ever call this. */
-export function advanceGameClock(hours: number): number {
-  cachedMs = load() + Math.round(hours * 3_600_000);
-  persist(cachedMs);
-  return cachedMs;
+/**
+ * Moves this chat's clock forward. Mutates rel.mood in place and returns the new value; saving
+ * rel is the caller's job, same as every other mood change in engine/timepass.ts.
+ */
+export function advanceGameClock(rel: ClockBearer, hours: number): number {
+  const next = gameClockMs(rel) + Math.round(hours * 3_600_000);
+  rel.mood = { ...rel.mood, game_clock_ms: next };
+  return next;
 }

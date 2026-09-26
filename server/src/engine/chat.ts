@@ -247,7 +247,7 @@ async function runActorPhase(
   }
   // The story's own clock (engine/clock.ts), not the real one: this is what lets the
   // Director see "last contact" and "time now" line up until he actually passes time.
-  rel.last_contact_at = gameNowIso();
+  rel.last_contact_at = gameNowIso(rel);
   if (result.hidden.new_fact) {
     rel.ledger.facts.about_user = [
       ...new Set([...(rel.ledger.facts.about_user ?? []), result.hidden.new_fact]),
