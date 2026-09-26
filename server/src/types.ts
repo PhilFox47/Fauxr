@@ -50,6 +50,17 @@ export interface CharacterSeed {
    * 'chat_only'), the same way a tattoo's position gates when it is seen.
    */
   species: string;
+  /**
+   * Only set alongside a superpower (a species row with extra.kind 'power'): public hero,
+   * secret identity, vigilante, ... Its extra.visibility decides whether the power is on her
+   * profile or hers to reveal (see species.ts).
+   */
+  hero_role?: string;
+  /**
+   * 'cis_woman' for almost everyone; rarely 'trans_woman' or 'trans_woman_post_op'. On her
+   * profile, never a secret. Characters from before the table read as cis (repo.ts).
+   */
+  transgender?: string;
   ethnicity: string;
   skin_tone: string;
   height: string;

@@ -23,6 +23,7 @@ import { chatPhotoLine, photoManner, profileHeat } from './photolevel.js';
 export { profileHeat, profileLevel, chatPhotoLevel, photoManner } from './photolevel.js';
 import type { Character, CharacterSeed, Relationship } from '../types.js';
 import { IMAGE_PROMPT, IMAGE_REVIEW, PHOTO_IDEA, PROFILE_PIC } from '../llm/schemas.js';
+import { speciesRow, speciesVisibility } from './species.js';
 
 /** Whether image generation is switched on at all. */
 export function photosEnabled(): boolean {
@@ -725,9 +726,10 @@ function visibleMarks(character: Character, kind: string, showsFaceInShot: boole
   // block, so it is not repeated here. 'chat_only' has no image tell at all. Only
   // 'later'/'private' species need adding per shot, exactly like a tattoo at that tier -
   // species has no "position" to run through vis() above, so this checks the tier directly.
-  if (character.seed.species && character.seed.species !== 'human') {
-    const species = find('species', character.seed.species);
-    const speciesVis = species?.extra?.visibility;
+  const species = speciesRow(character.seed);
+  if (species) {
+    // For a superpower the hero role decides the tier (species.ts).
+    const speciesVis = speciesVisibility(character.seed);
     const show = speciesVis === 'private' ? showPrivate : speciesVis === 'later' ? showLater : false;
     if (show && species?.image_prompt) parts.push(species.image_prompt);
   }

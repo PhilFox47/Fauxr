@@ -5,6 +5,7 @@ import { describeSeed } from './generator.js';
 import { freshThreads, pruneThreads } from './state.js';
 import { chatPhotoLine } from './photolevel.js';
 import { detectAuditionFrame } from './voice.js';
+import { heroRoleRow, isPower, speciesRow, speciesVisibility, transRow } from './species.js';
 import { sideDetail } from './kinks.js';
 import { coreTraits, isCore } from './profilecard.js';
 
@@ -39,11 +40,18 @@ function indefinite(word: string): string {
  * all, is hers to reveal whenever she feels like it - a bit of play, not a gate.
  */
 function speciesLine(s: CharacterSeed): string {
-  if (!s.species || s.species === 'human') return '';
-  const species = find('species', s.species);
+  const species = speciesRow(s);
   if (!species) return '';
   const hintText = species.prompt_hint || species.label;
-  const vis = species.extra?.visibility ?? 'profile';
+  const vis = speciesVisibility(s) ?? 'profile';
+  if (isPower(s)) {
+    const role = heroRoleRow(s);
+    const roleText = role ? ` Who you are with it: ${role.label.toLowerCase()} - ${role.prompt_hint}` : '';
+    return vis === 'profile'
+      ? `You have a superpower - ${species.label.toLowerCase()} - and it is no secret: it is on your profile, so he knows. ${hintText}${roleText}`
+      : `You have a superpower - ${species.label.toLowerCase()} - and almost nobody knows. When and how you let him in on ` +
+        `it is up to you: a slip, a show, part of a fantasy. Never deny it if he asks outright. ${hintText}${roleText}`;
+  }
   if (vis === 'profile') {
     return `You are not human - ${species.label.toLowerCase()}, in fact - and it shows in any photo of you. ${hintText}`;
   }
@@ -55,6 +63,15 @@ function speciesLine(s: CharacterSeed): string {
  * Almost always empty. A real, grounded thing she keeps to herself. It comes out when it
  * comes out - a slip, or her deciding to share - and only the Director marks it known.
  */
+/**
+ * Almost always empty. Being trans is on her profile, like it would be on a real one: never a
+ * secret, never a reveal, and not what she is about.
+ */
+function transLine(s: CharacterSeed): string {
+  const row = transRow(s);
+  return row ? `You are a trans woman, and it says so on your profile, so he knows. ${row.prompt_hint}` : '';
+}
+
 function bigSecretLine(s: CharacterSeed, flags: Flags): string {
   if (!s.big_secret || s.big_secret === 'none') return '';
   const secret = find('big_secret', s.big_secret);
@@ -68,11 +85,13 @@ function bigSecretLine(s: CharacterSeed, flags: Flags): string {
 export function identityBlock(character: Character, flags: Flags): string {
   const s = character.seed;
   const speciesText = speciesLine(s);
+  const transText = transLine(s);
   const secretText = bigSecretLine(s, flags);
   return [
     `Your name is ${character.real_name}. Your handle is @${character.username}. Use your name freely.`,
     `You are ${s.age}.`,
     ...(speciesText ? [speciesText] : []),
+    ...(transText ? [transText] : []),
     ...(secretText ? [secretText] : []),
     `Who you are: ${s.hints.one_line ?? hint('archetype', s.archetype)}`,
     `Core: ${hint('archetype', s.archetype)}`,
@@ -243,6 +262,10 @@ export function sexualBlock(seed: CharacterSeed): string {
     line('lingerie_style', seed.lingerie_style, 'What you wear underneath'),
     line('sleepwear', seed.sleepwear, 'What you sleep in'),
     line('intimate_grooming', seed.intimate_grooming, 'Down there'),
+    // Her anatomy decides what sexting with her is actually like, so it is said plainly.
+    seed.transgender === 'trans_woman'
+      ? 'Your body: you have a penis, and it is part of how you have sex - use it the way your kinks and his reactions call for. A kink or fantasy written for a pussy happens the way it would with your body.'
+      : '',
     `How far your photos to him usually go: ${chatPhotoLine(seed)}`,
     '',
     `Libido ${seed.libido}/5. Sexual confidence ${seed.sexual_confidence}/5. These are separate: you can want a lot and still be shy about saying so, or the other way round.`,

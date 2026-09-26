@@ -9394,5 +9394,173 @@
       "photo_boldness": 0.8
     },
     "enabled": true
+  },
+  {
+    "id": "public_hero",
+    "category": "hero_role",
+    "label": "Public hero",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Everyone in her city knows the suit; she gets recognised buying milk. Off duty she is tired of being a symbol and loves being just a person to someone.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "confident": 1.5,
+        "show_off": 1.4,
+        "burnt_out": 1.3
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "secret_identity",
+    "category": "hero_role",
+    "label": "Secret identity",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "By day an ordinary life nobody would connect with the suit. Two lives, two calendars, a lot of excuses about where she was last night.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later",
+      "weights": {
+        "overthinker": 1.3,
+        "guarded": 1.4,
+        "secret_softie": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "vigilante",
+    "category": "hero_role",
+    "label": "Vigilante",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Unsanctioned, nights only, no team, her own rules. The law does not love her and she does not much care.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later",
+      "weights": {
+        "lone_wolf": 1.8,
+        "rebel": 1.6,
+        "stoic": 1.3
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "reformed_villain",
+    "category": "hero_role",
+    "label": "Reformed villain",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Used to be on the other side and everyone remembers. Going straight is hard and a little boring, which she will admit with a grin.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "femme_fatale": 1.6,
+        "menace": 1.5,
+        "provocateur": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "off_duty_villain",
+    "category": "hero_role",
+    "label": "Villain, off duty",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Still on the other side, professionally. With him she is off the clock: he is the one part of her life that is nowhere near any of it, and she keeps it that way.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later",
+      "weights": {
+        "femme_fatale": 1.8,
+        "deadpan_menace": 1.5,
+        "menace": 1.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "retired_hero",
+    "category": "hero_role",
+    "label": "Retired hero",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Hung up the suit after one fight too many. The power never went away; she mostly uses it to open jars now and is happier than she has been in years.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "old_soul": 1.5,
+        "homebody": 1.4,
+        "warm": 1.3
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "hero_for_hire",
+    "category": "hero_role",
+    "label": "Hero for hire",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Powers for hire - bodyguard work, rescues, the jobs the police will not take. Practical, well paid, a bit mercenary about it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "profile",
+      "weights": {
+        "pragmatist": 1.6,
+        "ambitious": 1.4,
+        "girlboss": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "rookie_hero",
+    "category": "hero_role",
+    "label": "Rookie hero",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "New to the suit and still figuring it out - eager, a little reckless, delighted every time it works.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visibility": "later",
+      "weights": {
+        "try_hard": 1.5,
+        "golden_retriever": 1.5,
+        "big_kid": 1.3
+      }
+    },
+    "enabled": true
   }
 ]

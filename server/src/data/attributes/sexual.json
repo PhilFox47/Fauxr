@@ -14886,7 +14886,11 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "side": "her"
+      "side": "her",
+      "body": [
+        "cis_woman",
+        "trans_woman_post_op"
+      ]
     },
     "enabled": true
   },
@@ -15375,6 +15379,619 @@
       "sides": {
         "praise": "her"
       }
+    },
+    "enabled": true
+  },
+  {
+    "id": "lifting_him",
+    "category": "fetish",
+    "label": "Picking him up and carrying him to bed",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "effortless, one arm if she is showing off - she likes watching him realise she means it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_strength"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "pinning_him_effortlessly",
+    "category": "fetish",
+    "label": "Pinning him down without even trying",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "one hand on his chest and he is not going anywhere until she says so - and she is laughing while he tries",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_strength",
+        "invulnerability"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "midair_sex",
+    "category": "fetish",
+    "label": "Sex in mid-air",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "above the rooftops, nothing under them but her, him holding on because he has to",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "flight"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "telekinetic_touch",
+    "category": "fetish",
+    "label": "Touching him everywhere at once, hands-free",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "her hands where he can see them and something else entirely at work on him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "telekinesis"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "invisible_tease",
+    "category": "fetish",
+    "label": "Teasing him in public while nobody can see her",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a hand on his thigh in a full restaurant, her voice in his ear, and nobody else at the table has any idea",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "invisibility"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "shifting_for_him",
+    "category": "fetish",
+    "label": "Changing one detail of herself just for him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a shade of hair, a curve, a costume made of her own body - always recognisably her underneath, never someone else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "shapeshifting"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "speed_touch",
+    "category": "fetish",
+    "label": "Her fingers moving faster than any toy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a vibration no machine can match, and the power to stop exactly when she decides",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_speed"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "static_touch",
+    "category": "fetish",
+    "label": "Letting static tingle across his skin",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a controlled crackle along his spine, turned up and down like a dial - never more than a tingle",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "electrokinesis"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "running_hot",
+    "category": "fetish",
+    "label": "Her hands running hot on his skin",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "warmth she can turn up to just below too much, on the backs of his thighs, his chest, his neck",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "pyrokinesis"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "frost_touch",
+    "category": "fetish",
+    "label": "Ice-cold fingertips on hot skin",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "cold she makes herself, exactly where she wants it, followed by her mouth to warm it back up",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "cryokinesis"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "invited_mind_reading",
+    "category": "fetish",
+    "label": "Reading exactly what he wants - once he lets her in",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "he opens the door, she hears the thing he did not say, and does it before he can ask",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "telepathy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "more_of_her",
+    "category": "fetish",
+    "label": "More than one of her at once",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "her, and her, and her - every one of them paying attention to a different part of him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "duplication"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "no_need_to_be_careful",
+    "category": "fetish",
+    "label": "Him not having to be careful with her",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "as rough as he likes - she cannot be hurt, and the relief of being handled without kid gloves is half of it for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "invulnerability"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "growing_for_him",
+    "category": "fetish",
+    "label": "Growing bigger than him, on purpose",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "taking her time about it, watching his face while the size difference becomes very real",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "size_shifting"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "healing_kisses",
+    "category": "fetish",
+    "label": "Kissing every mark better - literally",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "bites, scratches, a bruise from the bedframe, gone under her mouth, so they can start over",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "suit_stays_on",
+    "category": "fetish",
+    "label": "Keeping the suit on",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the costume, halfway off at most - it is a lot more fun than the ordinary clothes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "mask_stays_on",
+    "category": "fetish",
+    "label": "The mask stays on",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "everything else can go; the mask is the last thing and sometimes it does not go at all",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "her_cock_worshipped",
+    "category": "fetish",
+    "label": "Him worshipping her cock",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his mouth on her, taking his time, as into it as she is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "topping_him",
+    "category": "fetish",
+    "label": "Fucking him herself",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "her cock, him under her or bent over, her setting the pace",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "frotting",
+    "category": "fetish",
+    "label": "Grinding against him, both hard",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "skin on skin, pressed together, no hurry to be anywhere else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "stroked_while_fucked",
+    "category": "fetish",
+    "label": "Being stroked while he fucks her",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his hand on her cock, keeping time with him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cumming_on_him",
+    "category": "fetish",
+    "label": "Cumming on him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "on his chest, his stomach, wherever she decides, and watching him look at it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rooftop_after_patrol",
+    "category": "fantasy_scenario",
+    "label": "On a rooftop after her patrol",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she lands on his balcony still in the suit, still wired from the night, and does not want to take it off yet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ],
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "identity_reveal",
+    "category": "fantasy_scenario",
+    "label": "The night he finds out who she really is",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the mask comes off, the ordinary life and the other one meet, and she watches what it does to him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ],
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rescued_then_taken_home",
+    "category": "fantasy_scenario",
+    "label": "Saved, then taken home",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she pulls him out of trouble and decides, adrenaline still going, that the night is not over",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [],
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hero_villain_game",
+    "category": "fantasy_scenario",
+    "label": "Hero and villain, caught",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a game they both agreed to: one of them has finally caught the other, and the interrogation goes somewhere else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay",
+        "bdsm_power"
+      ],
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sparring_session",
+    "category": "fantasy_scenario",
+    "label": "Sparring in her training room",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she offers to teach him to throw a punch, and at some point neither of them is sparring any more",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "primal"
+      ],
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "first_time_topping",
+    "category": "fantasy_scenario",
+    "label": "The first night she tops him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she has wanted to since the first photo - slow, a lot of talking, her very much in charge",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "anal"
+      ],
+      "body": [
+        "trans_woman"
+      ]
     },
     "enabled": true
   }

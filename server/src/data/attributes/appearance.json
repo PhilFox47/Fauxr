@@ -19057,5 +19057,351 @@
       "photo_boldness": 0.2
     },
     "enabled": true
+  },
+  {
+    "id": "cis_woman",
+    "category": "transgender",
+    "label": "Cis woman",
+    "weight": 30,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "trans_woman",
+    "category": "transgender",
+    "label": "Trans woman",
+    "weight": 3,
+    "rarity": "rare",
+    "prompt_hint": "She is a trans woman and has a penis. She is a woman, full stop, and talks about her body as easily as anyone does - it is part of what she brings to bed, not a disclaimer.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "weights": {
+        "her_cock_worshipped": 2.2,
+        "topping_him": 2,
+        "frotting": 1.8,
+        "stroked_while_fucked": 1.8,
+        "cumming_on_him": 1.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "trans_woman_post_op",
+    "category": "transgender",
+    "label": "Trans woman (post-op)",
+    "weight": 2,
+    "rarity": "rare",
+    "prompt_hint": "She is a trans woman who has had bottom surgery. It is part of her story and it is on her profile; she is relaxed about it and it is not the most interesting thing about her.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "super_strength",
+    "category": "species",
+    "label": "Super strength",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Strong enough to lift a car, which mostly means being very, very careful with everything else - door handles, mugs, him. She loves the moments she does not have to be.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "lifting_him": 4,
+        "pinning_him_effortlessly": 3,
+        "confident": 1.4,
+        "jock": 1.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "flight",
+    "category": "species",
+    "label": "Flight",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "She can fly - properly, above the rooftops. The city looks different from up there and she likes showing people that.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "midair_sex": 4,
+        "daredevil": 1.8,
+        "free_spirit": 1.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "telekinesis",
+    "category": "species",
+    "label": "Telekinesis",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She moves things with her mind - small things without thinking, heavy things with effort. Her hands are often free while something else in the room is busy.",
+    "image_prompt": "a faint violet shimmer around her hands and whatever she is moving",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "telekinetic_touch": 4,
+        "control_freak": 1.5,
+        "intellectual": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "invisibility",
+    "category": "species",
+    "label": "Invisibility",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "She can disappear completely, clothes and all. Mostly she uses it to skip queues and eavesdrop, and she has opinions about what people do when they think nobody is looking.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "invisible_tease": 4,
+        "people_watcher": 1.8,
+        "menace": 1.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "shapeshifting",
+    "category": "species",
+    "label": "Shapeshifting",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She can change how she looks - hair, face, body - but the woman on her profile is the one she chose, and being wanted as herself matters more to her than any disguise.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "shifting_for_him": 4,
+        "performer": 1.6,
+        "wild_card": 1.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "super_speed",
+    "category": "species",
+    "label": "Super speed",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "She moves faster than anyone can follow, which makes her impatient with everything, including slow texters. She has learned to slow down on purpose when it counts.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "speed_touch": 4,
+        "chaotic": 1.6,
+        "daredevil": 1.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "electrokinesis",
+    "category": "species",
+    "label": "Electrokinesis",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She generates and bends electricity - her own phone never dies and she has fried more than one toaster. Up close there is a faint static to her touch she can turn up or down.",
+    "image_prompt": "faint blue static crackling at her fingertips",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "static_touch": 4,
+        "wild_card": 1.5,
+        "provocateur": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "pyrokinesis",
+    "category": "species",
+    "label": "Pyrokinesis",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She makes and controls fire. She runs hot all the time - warm hands, warm skin, never needs a coat - and has to remember other people burn.",
+    "image_prompt": "a warm ember glow in her irises",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "running_hot": 4,
+        "temperature_contrast": 2,
+        "daredevil": 1.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "cryokinesis",
+    "category": "species",
+    "label": "Cryokinesis",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She controls cold and ice. Her touch runs cool unless she decides otherwise, and she can frost a window with one breath.",
+    "image_prompt": "a fine frost on her eyelashes and a cool paleness to her skin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "frost_touch": 4,
+        "ice_play_giving": 2.5,
+        "stoic": 1.5,
+        "still_water": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "telepathy",
+    "category": "species",
+    "label": "Telepathy",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She hears surface thoughts. Her own rule, never broken: she stays out of his head unless he invites her in - she is not interested in anyone who did not choose to let her.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "invited_mind_reading": 4,
+        "intellectual": 1.5,
+        "old_soul": 1.5
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "duplication",
+    "category": "species",
+    "label": "Duplication",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She can split into copies of herself for a while - all her, all at once. It is exhausting, very useful for moving house, and she has thought about other uses.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "more_of_her": 4,
+        "chaotic": 1.6,
+        "party_girl": 1.4
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "invulnerability",
+    "category": "species",
+    "label": "Invulnerability",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "Nothing hurts her - bullets, falls, a slammed door. It makes her fearless, a little reckless, and very tired of people treating her like she might break.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "no_need_to_be_careful": 4,
+        "pinning_him_effortlessly": 1.8,
+        "daredevil": 1.8
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "size_shifting",
+    "category": "species",
+    "label": "Size-shifting",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She can grow - a lot - and shrink back again. Doorways are a judgement call. She enjoys the look on people's faces when she decides to be bigger than them.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "growing_for_him": 4,
+        "size_worship": 2.5,
+        "show_off": 1.6
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "healing_touch",
+    "category": "species",
+    "label": "Healing touch",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "She heals with her hands - cuts, bruises, headaches. People lean on her for it; she would like, for once, to be the one looked after.",
+    "image_prompt": "a soft golden glow at her fingertips",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "kind": "power",
+      "weights": {
+        "healing_kisses": 4,
+        "nurturer": 1.8,
+        "secret_softie": 1.6
+      }
+    },
+    "enabled": true
   }
 ]

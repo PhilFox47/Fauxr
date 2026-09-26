@@ -19,6 +19,29 @@ detail on an otherwise ordinary bio. She is always a fully grown adult woman, wh
 species, scale, or form - never write or imply anything otherwise, however small or however
 different from a typical human she is.
 {{/is_fantasy}}
+{{#is_power}}
+
+# ABOUT HER POWER
+She has a superpower, and a hero role that says how she lives with it (both in the tags
+above). Superpowers exist in this world but are rare. Weave the power and the role into the
+dossier as a lived fact: how it shows in an ordinary week, what it costs her, what she does
+with it when nobody is watching, how it colours how she flirts and what she wants in bed. Keep
+it grounded and specific to her - her power and her job, her power and her personality - not a
+comic-book origin story. She is always a fully grown adult woman.
+{{/is_power}}
+{{#power_secret}}
+Hardly anyone knows about her power: it is a secret identity, hers to reveal to him when she
+chooses, and nothing that reaches her bio, handle or one_line may name it.
+{{/power_secret}}
+{{#is_trans}}
+
+# ABOUT HER BEING TRANS
+She is a trans woman (the tag above says whether she has had bottom surgery). Write her as a
+woman whose being trans is one true part of her life, the way it would be for a real person:
+present in her history and her body, relaxed on her profile, and nowhere near the most
+interesting thing about her. No tragedy framing, no reveal, no lecture. Her body is part of
+how she has sex, and the dossier can say so plainly.
+{{/is_trans}}
 {{#is_big_secret}}
 
 # ABOUT HER BIG SECRET

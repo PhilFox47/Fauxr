@@ -296,9 +296,30 @@ function backfillCore(characterId: string, seed: CharacterSeed): CharacterSeed {
   return seed;
 }
 
+/**
+ * Everyone generated before the gender table existed is recorded as cis - never re-rolled: her
+ * body is already established in every chat she has had. A power rolled for an old character
+ * by backfillSpecies() gets the hero role it needs, the same way a new one does.
+ */
+function backfillIdentity(characterId: string, seed: CharacterSeed): CharacterSeed {
+  const needsGender = !seed.transgender;
+  const species = seed.species ? find('species', seed.species) : undefined;
+  const needsRole = species?.extra?.kind === 'power' && !seed.hero_role;
+  if (!needsGender && !needsRole) return seed;
+  if (!byCategory('transgender').length) return seed; // attribute table not seeded yet
+  if (needsGender) seed.transgender = 'cis_woman';
+  if (needsRole) {
+    const role = roll('hero_role', newContext(), { ignoreArchetype: true });
+    if (role) seed.hero_role = role.id;
+  }
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
   let seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
   seed = backfillSpecies(row.id, seed);
+  seed = backfillIdentity(row.id, seed);
   seed = backfillCommStyles(row.id, seed);
   seed = backfillSexualProfile(row.id, seed);
   seed = backfillIntimateDetails(row.id, seed);

@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { find } from '../db/attributes.js';
 import type { CharacterSeed, CoreEntry } from '../types.js';
+import { speciesCaption, speciesRow, speciesVisibility, transRow } from './species.js';
 
 /**
  * Her core: the three to five things that define her - "Kristina is a girl who is a tsundere,
@@ -63,10 +64,15 @@ function unit(s: string): number {
 interface Option { category: string; id?: string; key: string; caption: string; group: string; lean: number; force?: boolean }
 
 function options(seed: CharacterSeed): Option[] {
-  const species = seed.species && seed.species !== 'human' ? find('species', seed.species) : undefined;
+  const species = speciesRow(seed);
   return [
-    ...(species && (species.extra?.visibility ?? 'profile') === 'profile'
-      ? [{ category: 'species', id: seed.species, key: 'species', caption: 'Species', group: 'identity', lean: 0, force: true }]
+    // A visible species or a publicly known power always makes the card; a hidden one never does.
+    ...(species && speciesVisibility(seed) === 'profile'
+      ? [{ category: 'species', id: seed.species, key: 'species', caption: speciesCaption(seed), group: 'identity', lean: 0, force: true }]
+      : []),
+    // On her profile like it would be on a real one; a strong candidate for the card, not forced.
+    ...(transRow(seed)
+      ? [{ category: 'transgender', id: seed.transgender!, key: 'transgender', caption: 'Gender', group: 'gender', lean: 1.2 }]
       : []),
     { category: 'archetype', id: seed.archetype, key: 'archetype', caption: 'Personality', group: 'identity', lean: 0.55 },
     { category: 'humor_type', id: seed.humor_type, key: 'humor_type', caption: 'Humour', group: 'voice', lean: 0.35 },

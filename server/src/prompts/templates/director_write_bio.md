@@ -171,7 +171,7 @@ start again from something only she would say.
   person" - these say nothing on their own. The specific thing behind whichever of these
   would honestly apply to her is what belongs in the bio, not the stock phrase itself.
 {{#hides_species}}
-- Naming what she actually is outright. She is something she keeps hidden day to day, and
+- Naming what she actually is, or what she can do, outright. She is something she keeps hidden day to day, and
   that reveal is not hers to make here - it happens later, on her own terms, in a photo or in
   chat. She may hint at it, write around it, or say something a reader would only understand
   in hindsight, exactly like anything else she is not ready to spell out yet. She may NOT

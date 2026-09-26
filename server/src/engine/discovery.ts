@@ -2,6 +2,7 @@ import { find } from '../db/attributes.js';
 import { getUserProfile } from '../repo.js';
 import type { Character, KinkSide, Relationship } from '../types.js';
 import { sideLabel } from './kinks.js';
+import { heroRoleRow, isPower, speciesCaption, speciesHidden, transRow } from './species.js';
 
 /**
  * Everything a player can learn about a character, and whether they have learned it yet.
@@ -47,6 +48,7 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   // ---- basics
   add('real_name', 'basics', 'Name', character.real_name, '');
   add('age', 'basics', 'Age', String(s.age), 'On her profile from the start.');
+  add('transgender', 'basics', 'Gender', transRow(s)?.label ?? '', 'On her profile from the start.');
   add('languages', 'basics', 'Languages', s.languages.map(langLabel).join(', '), 'On her profile from the start.');
   add('occupation', 'life', 'Work', label('occupation', s.occupation), 'Ask what she does. Or notice when she says it.');
   add('living_situation', 'life', 'Living', label('living_situation', s.living_situation), 'Where she is when she texts you.');
@@ -66,8 +68,9 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   // ---- looks: photos, or meeting her
   // Species is the one 'looks' fact that can also come out in conversation rather than only
   // a photo - see the exception for it in detectMentions() below.
-  add('species', 'looks', 'Species', s.species && s.species !== 'human' ? label('species', s.species) : '',
-    'Shows in a photo, or comes up on its own.');
+  add('species', 'looks', speciesCaption(s), s.species && s.species !== 'human' ? label('species', s.species) : '',
+    isPower(s) ? 'She will show you when she is ready.' : 'Shows in a photo, or comes up on its own.');
+  add('hero_role', 'personality', 'Hero role', heroRoleRow(s)?.label ?? '', 'Comes with the power.');
   add('hair', 'looks', 'Hair', `${label('hair_color', s.hair_color)}, ${label('hair_style', s.hair_style)}`, 'Needs a photo.');
   add('eyes', 'looks', 'Eyes', label('eye_color', s.eye_color), 'Needs a photo.');
   add('height', 'looks', 'Height', label('height', s.height), 'Needs a photo, or a date.');
@@ -121,8 +124,15 @@ export type DiscoveredMap = Record<string, string>;
  * Everything except the intimate side is known from the start. The profile is not a thing to
  * extract; the fun is finding out what she is into.
  */
-function knownFromStart(catalogue: DiscoverableFact[]): Set<string> {
-  return new Set(catalogue.filter((f) => f.category !== 'intimate').map((f) => f.key));
+function knownFromStart(catalogue: DiscoverableFact[], character: Character): Set<string> {
+  // A hidden species or a secret identity is hers to reveal. As a 'looks' fact it used to count
+  // as known from the start, so a secret succubus read "Species: Succubus" on her profile sheet.
+  const hidden = speciesHidden(character.seed);
+  return new Set(
+    catalogue
+      .filter((f) => f.category !== 'intimate' && !(hidden && (f.key === 'species' || f.key === 'hero_role')))
+      .map((f) => f.key),
+  );
 }
 
 export interface ProfileRow {
@@ -145,7 +155,7 @@ export interface ProfileView {
 export function profileView(character: Character, rel: Relationship): ProfileView {
   const catalogue = buildCatalogue(character);
   const discovered: DiscoveredMap = rel.discovered ?? {};
-  const implied = knownFromStart(catalogue);
+  const implied = knownFromStart(catalogue, character);
 
   const rows: ProfileRow[] = catalogue.map((f) => {
     const known = f.key in discovered || implied.has(f.key);
@@ -181,7 +191,7 @@ export function profileView(character: Character, rel: Relationship): ProfileVie
 export function undiscoveredKeys(character: Character, rel: Relationship): DiscoverableFact[] {
   const discovered = rel.discovered ?? {};
   const catalogue = buildCatalogue(character);
-  const implied = knownFromStart(catalogue);
+  const implied = knownFromStart(catalogue, character);
   return catalogue.filter((f) => !(f.key in discovered) && !implied.has(f.key));
 }
 

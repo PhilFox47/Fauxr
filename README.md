@@ -714,6 +714,51 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## Trans women and superheroes
+
+Two new kinds of character, and the kinks, scenarios and personality leans they open up.
+
+**Trans women** (`transgender` table: cis woman, trans woman, trans woman post-op). Rare: 2.2%
+of 20,000 rolled characters (1.4% trans woman, 0.8% post-op). Being trans is on her profile,
+the way it would be on a real one - a "Gender" row in Basics and a strong candidate for her
+card - never a secret or a reveal, and her prompt says so. Her sexual block states her anatomy
+plainly for a trans woman who has not had surgery ("you have a penis ... a kink written for a
+pussy happens the way it would with your body"), and the dossier prompt writes being trans as
+one true part of her life, not the headline. Five kinks need her anatomy and only reach her
+(`extra.body`: him worshipping her cock, fucking him herself, frotting, being stroked while he
+fucks her, cumming on him), plus a scenario ("the first night she tops him"); squirting is kept
+to the others. Everyone generated before the table is recorded as cis and never re-rolled: her
+body is established in every chat she has had.
+
+**Superheroes** are 14 species rows with `extra.kind: 'power'` - super strength, flight,
+telekinesis, invisibility, shapeshifting, super speed, electrokinesis, pyrokinesis,
+cryokinesis, telepathy, duplication, invulnerability, size-shifting, healing touch - so they
+get the fantastical beings' rarity (2.0% against 5.2% for fantastical beings) and all their
+machinery: image tells, kink weights, the handle and bio leak guards. A power comes with a
+**hero role** (`hero_role` table): public hero, secret identity, vigilante, reformed villain,
+villain off duty, retired hero, hero for hire, rookie. The role decides who knows: a public
+hero's power is on her card and profile, a secret identity is hers to reveal. Each role leans
+her personality (a vigilante tends lone wolf, a reformed villain femme fatale), each power has
+its own kink ("sex in mid-air", "teasing him in public while nobody can see her", "more than one
+of her at once", "reading exactly what he wants - once he lets her in"), and heroes share
+"keeping the suit on", "the mask stays on" and five scenarios (a rooftop after her patrol, the
+night he finds out who she is, a hero-and-villain game). Telepathy comes with her own rule: she
+stays out of his head unless he invites her in.
+
+How it hangs together:
+- `engine/species.ts` is the one place that decides what she is and who can see it
+  (`speciesVisibility`, `speciesHidden`, `speciesCaption`, `transRow`, `bodyFits`,
+  `speciesFits`). The prompts, the card, the profile sheet, the image tiers and the generator's
+  leak guards all read it instead of `extra.visibility` directly.
+- Fetishes and fantasy scenarios carry `extra.species` and/or `extra.body`; both are honoured
+  in generation, and a scenario written for exactly her kind of woman is leaned up so a hero
+  actually meets a hero scenario.
+- Settings -> Taste gets Gender, Species and superpowers, and Hero role, so any of it can be
+  made more likely, less likely, or Never.
+- Fixed on the way: everything but the intimate section counted as known from the start, so a
+  secret succubus read "Species: Succubus" on her profile sheet. A hidden species or secret
+  identity now stays unknown there until it comes out.
+
 ## Fewer AI-isms
 
 The player flagged the lines that read as machine-written, with "That's not an order, that's

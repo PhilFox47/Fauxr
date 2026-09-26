@@ -17,6 +17,7 @@ import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
 import { pick, unwrap } from '../llm/shape.js';
 import { coreTraits, pickCore } from './profilecard.js';
+import { bodyFits, isPower, speciesFits, speciesHidden, speciesRow, speciesVisibility, transRow } from './species.js';
 import { BIO, CHARACTER, FANTASIES, REAL_NAME, USERNAME } from '../llm/schemas.js';
 
 /** Fields the Director may swap during the coherence pass. */
@@ -50,8 +51,7 @@ function hintOf(a: Attribute | null | undefined): string {
  * same fetish be a strong pull for one species and a faint one for another sharing it.
  */
 function speciesCanHave(fetish: Attribute, speciesId: string): boolean {
-  const restrictedTo = fetish.extra?.species as string[] | undefined;
-  return !restrictedTo?.length || restrictedTo.includes(speciesId);
+  return speciesFits(fetish, speciesId);
 }
 
 /**
@@ -213,6 +213,11 @@ export function rollSeed(): RolledSeed {
   // (one heavily-weighted 'human' row against sixteen very_rare/extremely_rare ones). Rolled
   // with ignoreArchetype since nothing has set a personality yet to lean it.
   const species = roll('species', ctx, { ignoreArchetype: true })!;
+  // A superpower comes with a role that decides who knows about it; its extra.weights lean the
+  // personality rolled next (a vigilante tends lone wolf, a reformed villain femme fatale).
+  const hero_role = species.extra?.kind === 'power' ? roll('hero_role', ctx, { ignoreArchetype: true }) : null;
+  // Rare, and independent of everything else. Her own row leans the kinks her body opens up.
+  const transgender = roll('transgender', ctx, { ignoreArchetype: true });
 
   // ---- 2. who she is. The archetype re-weights everything after it; roll() merges its
   // extra.weights into the context on the way past, so nothing has to be applied by hand.
@@ -374,7 +379,8 @@ export function rollSeed(): RolledSeed {
   const joiners = joinersFor(getUserProfile());
   const allowedFetishes = new Set(
     byCategory('fetish')
-      .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) && speciesCanHave(f, species.id) && joinerFits(f.extra?.joiner, joiners))
+      .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) && speciesCanHave(f, species.id) &&
+        bodyFits(f, { transgender: transgender?.id }) && joinerFits(f.extra?.joiner, joiners))
       .map((f) => f.id),
   );
   // Her first fetish always comes from a domain she is actually into, so every character has
@@ -434,10 +440,15 @@ export function rollSeed(): RolledSeed {
   const lingerie_style = one('lingerie_style')!;
   const sleepwear = one('sleepwear')!;
   const intimate_grooming = one('intimate_grooming')!;
-  const fantasy_seeds = rollFantasySeeds({ kink_map, dom_sub_leaning, kink_sides, relationship_status: relationship_status!.id });
+  const fantasy_seeds = rollFantasySeeds({
+    kink_map, dom_sub_leaning, kink_sides, relationship_status: relationship_status!.id,
+    species: species.id, transgender: transgender?.id,
+  });
 
   const hints: Record<string, string> = {
     species: hintOf(species),
+    ...(hero_role ? { hero_role: hintOf(hero_role) } : {}),
+    ...(transgender && transgender.id !== 'cis_woman' ? { transgender: hintOf(transgender) } : {}),
     big_secret: hintOf(big_secret),
     archetype: hintOf(archetype),
     humor_type: hintOf(humor_type),
@@ -475,6 +486,8 @@ export function rollSeed(): RolledSeed {
   const seed: CharacterSeed = {
     age,
     species: species.id,
+    ...(hero_role ? { hero_role: hero_role.id } : {}),
+    transgender: transgender?.id ?? 'cis_woman',
     ethnicity: ethnicity!.id,
     skin_tone: skin_tone!.id,
     height: height!.id,
@@ -659,12 +672,8 @@ export function buildAppearancePrompt(seed: CharacterSeed): string {
   // is deliberately left out here: its tell is something she can conceal, or has none at all.
   // See blocks.ts's appearanceBlock() and images.ts's visibleMarks() for where those get
   // added only once she has actually chosen to reveal them.
-  if (seed.species && seed.species !== 'human') {
-    const species = find('species', seed.species);
-    if (species?.extra?.visibility === 'profile' && species.image_prompt) {
-      parts.push(species.image_prompt);
-    }
-  }
+  const species = speciesRow(seed);
+  if (species?.image_prompt && speciesVisibility(seed) === 'profile') parts.push(species.image_prompt);
   for (const [cat, id] of [
     ['skin_tone', seed.skin_tone],
     ['height', seed.height],
@@ -708,9 +717,14 @@ export function describeSeed(seed: CharacterSeed): string {
           seed.core.map((e) => `${e.caption}: ${label(e.category, e.id)}`).join('; ')}`]
       : []),
     `age: ${seed.age}`,
-    seed.species && seed.species !== 'human'
-      ? `species: ${label('species', seed.species)} - ${seed.hints.species}`
-      : `species: human`,
+    ...(isPower(seed)
+      ? [
+          `superpower: ${label('species', seed.species)} - ${seed.hints.species}`,
+          `hero role: ${seed.hero_role ? `${label('hero_role', seed.hero_role)} - ${seed.hints.hero_role ?? ''}` : 'none'}` +
+            (speciesHidden(seed) ? ' (a secret identity: hers to reveal, never in the bio or handle)' : ' (publicly known, on her profile)'),
+        ]
+      : [seed.species && seed.species !== 'human' ? `species: ${label('species', seed.species)} - ${seed.hints.species}` : 'species: human']),
+    ...(transRow(seed) ? [`gender: ${transRow(seed)!.label} - ${seed.hints.transgender ?? transRow(seed)!.prompt_hint} (on her profile, not a secret)`] : []),
     seed.big_secret && seed.big_secret !== 'none'
       ? `big secret (she keeps this genuinely hidden, never volunteers it, never let it reach the bio or handle): ${label('big_secret', seed.big_secret)} - ${seed.hints.big_secret}`
       : `big secret: none`,
@@ -992,8 +1006,7 @@ async function writeUsername(
   // the same dossier text this prompt is built from could just as easily leak it into the
   // handle as into the name. A 'profile'-tier species has nothing to protect: it is visible
   // in any photo regardless, so a handle referencing it is a stylistic choice, not a leak.
-  const species = seed.species && seed.species !== 'human' ? find('species', seed.species) : null;
-  const hiddenSpecies = species && species.extra?.visibility !== 'profile' ? species.label.toLowerCase() : null;
+  const hiddenSpecies = speciesHidden(seed) ? speciesRow(seed)!.label.toLowerCase() : null;
   const hasBigSecret = !!seed.big_secret && seed.big_secret !== 'none';
 
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -1126,7 +1139,10 @@ export async function generateCharacter(): Promise<Character> {
       role: 'user' as const,
       content: render('director_generate_character', {
         rolled_block: describeSeed(seed),
-        is_fantasy: seed.species && seed.species !== 'human' ? '1' : '',
+        is_fantasy: speciesRow(seed) && !isPower(seed) ? '1' : '',
+        is_power: isPower(seed) ? '1' : '',
+        power_secret: isPower(seed) && speciesHidden(seed) ? '1' : '',
+        is_trans: transRow(seed) ? '1' : '',
         is_big_secret: seed.big_secret && seed.big_secret !== 'none' ? '1' : '',
         age: seed.age,
         fantasy_seeds: fantasySeedList(seed.fantasy_seeds),
@@ -1486,9 +1502,6 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
     return pickFallbackBio(existing);
   }
 
-  const speciesVis = character.seed.species && character.seed.species !== 'human'
-    ? find('species', character.seed.species)?.extra?.visibility
-    : null;
 
   const prompt = render('director_write_bio', {
     username: character.username,
@@ -1509,7 +1522,7 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
     // freely-available knowledge would leak the species straight into the bio, discovered via
     // detectMentions() the moment the character is generated, before anyone has even swiped.
     // A 'profile'-tier species has nothing to protect: it is visible in any photo anyway.
-    hides_species: speciesVis === 'later' || speciesVis === 'private' || speciesVis === 'chat_only' ? '1' : '',
+    hides_species: speciesHidden(character.seed) ? '1' : '',
     // Same leak, higher stakes: a big secret has no visibility tier at all, so unlike species
     // there is no "fine, it's a profile-tier one" exception here - every character who has
     // one needs this guard.
@@ -1607,7 +1620,10 @@ export function ensureFantasies(character: Character): Promise<void> {
   if (character.seed.hints?.fantasies) return Promise.resolve();
   const seeds = character.seed.fantasy_seeds?.length
     ? character.seed.fantasy_seeds
-    : rollFantasySeeds({ kink_map: character.seed.kink_map ?? {}, dom_sub_leaning: character.seed.dom_sub_leaning ?? 0, kink_sides: character.seed.kink_sides, relationship_status: character.seed.relationship_status });
+    : rollFantasySeeds({
+        kink_map: character.seed.kink_map ?? {}, dom_sub_leaning: character.seed.dom_sub_leaning ?? 0, kink_sides: character.seed.kink_sides,
+        relationship_status: character.seed.relationship_status, species: character.seed.species, transgender: character.seed.transgender,
+      });
   const running = fantasyBackfills.get(character.id);
   if (running) return running;
   const job = (async () => {
