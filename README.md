@@ -996,15 +996,20 @@ double-text him or reach out on her own for having gone quiet. In practice this 
 two things - either he always replied quickly enough that none of it ever visibly did
 anything, or the one time he actually left it a few days, he came back to a character who had
 half-decided he was ignoring her. Both are wrong for an app built on there being nothing to
-win or lose. The fix: nothing ages here on its own any more. A chat picks up exactly where he
-left it, whether that was five seconds or five real days ago, and a **Pass time** control
-(the clock icon in a chat's own topbar) is the one deliberate way to move that conversation's
-story forward - by however many hours or days he actually chooses.
+win or lose. The fix: nothing ages here just from real time passing any more. Instead each
+chat has its own small, visible clock, shown as the weekday and time next to her name (e.g.
+"Mo - 13:12", no date - keeping it simple) so he can actually follow her routine and time a
+date sensibly. It moves two ways: a steady one-minute tick for every message either of you
+sends, so an ordinary conversation visibly drifts through an afternoon on its own; and a
+**Pass time** control (the clock icon in a chat's own topbar) for a much bigger, deliberate
+jump - by however many hours or days he actually chooses. Reply five seconds after her last
+message or come back five real days later without sending anything and, as far as she is
+concerned, nothing happened in between beyond whatever was actually said.
 
 The clock is per chat, not global. Two matches have no bearing on each other, so skipping
-ahead with one woman says nothing about what happened with anyone else - each relationship
-lives on its own independent clock, and Pass Time only ever touches the chat it was pressed
-in.
+ahead - or just chatting for a while - with one woman says nothing about what happened with
+anyone else. Each relationship lives on its own independent clock, moved only by messages
+sent in that one chat or by Pass Time pressed from that one chat.
 
 - **`engine/clock.ts`** is a chat's own clock: stored as `mood.game_clock_ms` on that
   relationship, seeded to the real time the first time the relationship is ever read
@@ -1017,7 +1022,15 @@ in.
   `last_contact_at`, and how long an open thread has been sitting unaddressed before it is
   dropped (`state.ts`). Real wall-clock time (`Date.now()`/`nowIso()`) still runs everything
   actually about the real world: message timestamps, image and log bookkeeping, typing-delay
-  pacing, and per-day cost budgets - none of that should freeze.
+  pacing, and per-day cost budgets - none of that should freeze or tick along with the story.
+- **`engine/chat.ts`** ticks the clock by exactly one minute (`MESSAGE_MINUTES`) for his
+  message the moment it is stored, and by another minute for her reply once it actually lands
+  - one tick per reply *block*, however many bubbles the Actor split it into, not one per
+  bubble. A regenerate does not tick a second time: it rewrites the words of a moment that
+  already happened, not a new one (the same guard, `decrementValidFor`, that already protects
+  the climax tracker and her direction's remaining uses from a reroll). The chat screen shows
+  the running total next to her name, so a long back-and-forth naturally carries the two of you
+  from lunch into evening without either of you doing anything deliberate.
 - **`engine/timepass.ts`**'s `passTime(characterId, hours)` is what a press of the button
   actually does, for that one match only:
   - her arousal fades by exactly that many hours (`decayArousal`, unchanged - it just no

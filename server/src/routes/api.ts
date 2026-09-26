@@ -35,6 +35,7 @@ import { fantasyView } from '../engine/fantasies.js';
 import { domainSides, TASTE_SECTIONS } from '../engine/kinks.js';
 import { coreTraits } from '../engine/profilecard.js';
 import { statusOf } from '../engine/status.js';
+import { gameClockMs } from '../engine/clock.js';
 import type { Character, KinkSide, KinkStance, Location } from '../types.js';
 
 /**
@@ -69,6 +70,10 @@ function publicCharacter(c: Character) {
     profile_picture_state: profilePictureState(c.id),
     // Her WhatsApp-style status line, only while she is an active match (see engine/status.ts).
     status: c.state === 'matched' ? statusOf(rel)?.text ?? null : null,
+    // This chat's own clock (engine/clock.ts) - shown next to her name so he can follow her
+    // routine and time dates sensibly. Never the real clock: hers alone, ticking with messages
+    // and with Pass Time.
+    game_clock_ms: rel ? gameClockMs(rel) : null,
   };
 }
 

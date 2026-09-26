@@ -162,6 +162,11 @@ button { cursor: pointer; }
   font-weight: 650;
   letter-spacing: -0.2px;
 }
+/* The chat screen's own clock sits next to her name - the name truncates first, the clock
+   never does, so a long name never pushes it off screen on a narrow phone. */
+.chat-name-row { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.chat-name-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-clock { flex: 0 0 auto; font-size: 12px; font-weight: 500; color: var(--muted); }
 .topbar .spacer { flex: 1; }
 .topbar .sub {
   font-size: 12px;

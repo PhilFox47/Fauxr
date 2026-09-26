@@ -6,11 +6,15 @@ import type { Relationship } from '../types.js';
  * clock rather than one shared for the whole cast: skipping ahead with one woman says nothing
  * about what has happened with anyone else.
  *
- * It never advances on its own, no matter how long the app sits idle or how long he takes to
- * reply: it only moves when he explicitly passes time in THIS chat (see engine/timepass.ts, the
- * "Pass time" control in the chat menu). Reply five seconds after her last message or come back
- * five real days later and, as far as she is concerned, nothing happened in between - which is
- * the point: nobody gets pinged for going quiet, and nothing quietly ages while he is just away.
+ * It never advances just because real time passes - the app sitting idle, or him taking hours
+ * to reply, moves it not at all. It only moves two ways: a small, steady tick of one minute for
+ * every message in the conversation (his or hers - see engine/chat.ts), so a long back-and-forth
+ * visibly drifts through an afternoon and she can sensibly reference what time it is or where
+ * she should be; and a deliberate, much bigger jump when he explicitly passes time in THIS chat
+ * (engine/timepass.ts, the "Pass time" control in the chat menu). Reply five seconds after her
+ * last message or come back five real days later without passing time and, as far as she is
+ * concerned, only however many messages were exchanged happened in between - which is the point:
+ * nobody gets pinged for going quiet, and nothing ages just because he stepped away.
  *
  * Stored on the relationship itself (mood.game_clock_ms, an epoch-ms number), seeded to the real
  * time the first time a chat's relationship row is ever read (repo.ts's backfillGameClock) and
@@ -18,9 +22,11 @@ import type { Relationship } from '../types.js';
  * happening in this chat's story* reads this instead of the real clock: her sense of the current
  * day and time (moment.ts), her status's set_at/until (status.ts), the Director's "time now" and
  * "last contact" lines, last_contact_at, and how long an open thread has sat unaddressed before
- * it is dropped (state.ts). Real wall-clock time (Date.now()/nowIso()) stays in charge of
- * everything actually about the real world: message timestamps, image and log bookkeeping,
- * typing-delay pacing, and per-day cost budgets - none of that should freeze.
+ * it is dropped (state.ts). It is also shown to him directly - the weekday and time next to her
+ * name in the chat (e.g. "Mo - 13:12"), so he can follow her routine and time dates sensibly.
+ * Real wall-clock time (Date.now()/nowIso()) stays in charge of everything actually about the
+ * real world: message timestamps, image and log bookkeeping, typing-delay pacing, and per-day
+ * cost budgets - none of that should freeze or tick along with the story.
  */
 
 type ClockBearer = Pick<Relationship, 'mood'>;

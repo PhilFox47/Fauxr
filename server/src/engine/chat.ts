@@ -15,10 +15,18 @@ import { advanceRelease, releaseOf } from './release.js';
 import { addInventedFantasy, markPitched } from './fantasies.js';
 import { fantasyList } from './blocks.js';
 import { applyOutfitChanges, currentOutfit, outfitMood } from './wardrobe.js';
-import { gameNowIso } from './clock.js';
+import { advanceGameClock, gameNowIso } from './clock.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
+
+/**
+ * How far one message nudges this chat's own clock (engine/clock.ts) - his message and her
+ * reply each count once, however many bubbles her reply comes as. Small and steady, distinct
+ * from a deliberate Pass Time jump: this is what lets a long conversation drift through an
+ * afternoon on its own, without turning an ordinary chat into a time skip.
+ */
+const MESSAGE_MINUTES = 1;
 
 /**
  * Bumped by a reset. A turn can sit in an API call or in a delivery delay for a minute or
@@ -94,6 +102,7 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
     meta: input.meta,
   });
   bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
+  advanceGameClock(rel, MESSAGE_MINUTES / 60);
 
   // Writing to her cancels the one scheduled wakeup, if it was set to be cancellable.
   const wakeup = getWakeup(character.id);
@@ -233,6 +242,10 @@ async function runActorPhase(
   const fresh = getRelationship(characterId);
   if (!fresh || epoch !== startedIn) return;
   rel = fresh;
+  // Her reply is a message too, so it ticks the clock the same one minute his did - but only
+  // for a genuine new turn: a regenerate rewrites the words of the same moment, not a new one,
+  // so it must not tick the clock a second time (mirrors decrementValidFor just below).
+  if (opts.decrementValidFor) advanceGameClock(rel, MESSAGE_MINUTES / 60);
   // What she has on after this turn: only her reported changes are applied (wardrobe.ts).
   // Before any photo from this turn is prepared, so a photo shows the outfit she just
   // described rather than the one before it.

@@ -12,6 +12,16 @@ function clock(iso: string): string {
   return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
+const WEEKDAYS_SHORT = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+
+/** Her own chat clock, next to her name: weekday and time only, no date - see engine/clock.ts. */
+function chatClockLabel(ms: number): string {
+  const d = new Date(ms);
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `${WEEKDAYS_SHORT[d.getDay()]} - ${hh}:${mm}`;
+}
+
 function sameDay(a: string, b: string): boolean {
   return new Date(a).toDateString() === new Date(b).toDateString();
 }
@@ -445,7 +455,14 @@ export default function Chat({
         </button>
         <Avatar match={character} small />
         <div style={{ minWidth: 0 }}>
-          <h1>{character?.display_name ?? '…'}</h1>
+          <h1 className="chat-name-row">
+            <span className="chat-name-text">{character?.display_name ?? '…'}</span>
+            {character?.game_clock_ms != null && (
+              <span className="chat-clock" title="Her own clock for this chat">
+                {chatClockLabel(character.game_clock_ms)}
+              </span>
+            )}
+          </h1>
           <span className={`sub${isTyping ? ' live' : ''}`}>
             {blocked ? 'You blocked her' : isTyping ? 'typing…' : character?.status || 'online'}
           </span>

@@ -113,6 +113,8 @@ export interface MatchSummary {
   on_date: boolean;
   /** Her WhatsApp-style status line, refreshed every 4-12 hours; null until she has one. */
   status?: string | null;
+  /** This chat's own clock (epoch ms) - see engine/clock.ts. Ticks with messages and Pass Time. */
+  game_clock_ms: number | null;
 }
 
 export interface Message {
