@@ -70,7 +70,9 @@ export interface CharacterSeed {
   /** The other woman on a duo profile; set only alongside a duo. */
   duo_partner?: DuoPartner;
   /** What she owns, by slot: wardrobe_item ids (wardrobe.ts). Background only - he never sees the list. */
-  wardrobe?: Partial<Record<'top' | 'bottom' | 'dress' | 'outer' | 'legwear' | 'shoes' | 'extras' | 'bra' | 'panties' | 'lingerie' | 'swim' | 'work', string[]>>;
+  wardrobe?: Partial<Record<'top' | 'bottom' | 'dress' | 'outer' | 'legwear' | 'shoes' | 'extras' | 'jewellery' | 'bra' | 'panties' | 'lingerie' | 'swim' | 'work', string[]>>;
+  /** carried_item ids: what she has on her (a sticker-covered phone case, keys on a carabiner). Flavour, not clothing. */
+  carries?: string[];
   /** The one piece with a story, written by the character pass ("her grandmother's cardigan"). */
   wardrobe_favourite?: string;
   /** cosplay_character ids she owns costumes for; empty unless something about her makes her a cosplayer. */

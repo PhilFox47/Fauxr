@@ -873,7 +873,7 @@ and a bra could come back after it had come off. Now there are two separate thin
 **Her wardrobe** is what she owns: `seed.wardrobe`, wardrobe_item ids by slot. It is
 background only - he sees her style, never the list.
 - Slots: top, bottom, dress (covers top and bottom), outer, legwear (socks, tights,
-  stockings, garters), shoes, extras (choker, belt, hat, gloves, harness), bra, panties,
+  stockings, garters), shoes, extras (belt, hat, gloves, harness, headphones), jewellery, bra, panties,
   lingerie (a teddy or bodysuit, covers bra and panties), swim and work. Swimwear and uniforms
   are sets: `extra.pieces` says which worn slots they fill.
 - The data is in `data/attributes/wardrobe.json` (474 pieces). Items hang off **style
@@ -899,12 +899,25 @@ background only - he sees her style, never the list.
   right legwear, whatever her style.
 - The character pass writes one **favourite piece** with a story ("her grandmother's
   moth-eaten cardigan").
-- Clothing-like accessories (thigh-high socks, fishnet tights, platform boots, Docs, a
-  varsity jacket, hats, scarves...) moved into the wardrobe under the same ids. Glasses,
-  jewellery and nails stay accessories and stay in the fixed look.
+- The accessory table was split by what each thing really is, keeping every id:
+  - clothing (thigh-high socks, fishnets, boots, a varsity jacket, hats, scarves) and hair or
+    eyewear pieces (headphones, sunglasses, hair clips, a headband) became wardrobe pieces;
+  - jewellery (necklaces, bracelets, earrings, anklets, chokers, a body chain, watches)
+    became its own wardrobe slot, **jewellery**, which holds several pieces at once. It is
+    what stays on when everything else comes off, so "nothing but her choker and the
+    thigh-highs" is a state the outfit can hold;
+  - things she carries (a tote, keys on a carabiner, a sticker-covered phone case, the lip
+    balm) became `carried_item`, a line of flavour in her prompt (`seed.carries`), not
+    clothing;
+  - only what is always on her stayed an accessory, and now reads that way ("Always on her"
+    on the profile sheet and in Taste): glasses she needs, her nails, the ring she never
+    takes off, the pale band where one was. That is all the fixed look still carries.
+  - His own profile card keeps its "Usually wearing" list (`his_accessory`, the old table
+    under the same ids), so nothing on it changed.
 - The fixed look (`engine/appearance.ts`) no longer carries the style's outfit line.
-- Existing characters get a closet on first load, their moved accessories go into it, and
-  their fixed look is rebuilt without the outfit line.
+- Existing characters get a closet on first load, their moved accessories go into it (or
+  into what they carry), a closet from before jewellery gets its jewellery, and their fixed
+  look is rebuilt without the outfit line and the moved pieces.
 
 **Her outfit** is what is on her body right now, slot by slot, each piece with a state: on,
 open, pushed up, pulled down, pulled aside, half off, off.

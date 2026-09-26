@@ -111,7 +111,7 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
     'For "outfit": what she is wearing now, for where she is and the time of day - every slot, ' +
       'each one of her own pieces from the closet (or something plausible that is not in it, like ' +
       'his hoodie), "none" for an empty slot. A dress fills top and bottom, so those are "none" ' +
-      'then; lingerie (a teddy, a bodysuit) fills bra and panties. Several extras go in one string ' +
+      'then; lingerie (a teddy, a bodysuit) fills bra and panties. Several extras or pieces of jewellery go in one string ' +
       'separated by ";". Asleep or in bed: what she sleeps in. Use null if she is plausibly still ' +
       'in what she had on before.',
     '',

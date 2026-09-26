@@ -114,8 +114,8 @@ for (const eth of byCategory.get('ethnicity') ?? []) {
 // slot and a family, and a new clothing style only needs its families - these checks catch a
 // typo in either, and a style whose pool is too small to fill its own counts.
 {
-  const OWNED = ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'bra', 'panties', 'lingerie', 'swim', 'work'];
-  const WORN = ['outer', 'top', 'bottom', 'dress', 'bra', 'panties', 'lingerie', 'legwear', 'shoes', 'extras'];
+  const OWNED = ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'jewellery', 'bra', 'panties', 'lingerie', 'swim', 'work'];
+  const WORN = ['outer', 'top', 'bottom', 'dress', 'bra', 'panties', 'lingerie', 'legwear', 'shoes', 'extras', 'jewellery'];
   const ids = (cat) => new Set((byCategory.get(cat) ?? []).map((r) => r.id));
   const families = ids('wardrobe_family');
   const lingerie = ids('lingerie_style');
@@ -142,7 +142,7 @@ for (const eth of byCategory.get('ethnicity') ?? []) {
     if (!fams.length) { errors.push(`clothing_style '${st.id}' has no wardrobe_families`); continue; }
     for (const f of fams) if (!families.has(f)) errors.push(`clothing_style '${st.id}': unknown wardrobe family '${f}'`);
     const counts = { ...countsOf('any'), ...countsOf(fams[0]), ...(st.extra?.wardrobe_counts ?? {}) };
-    for (const slot of ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'swim']) {
+    for (const slot of ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'jewellery', 'swim']) {
       const max = counts[slot]?.[1] ?? 0;
       const pool = items.filter((i) => i.extra?.slot === slot && (i.extra?.families ?? []).some((f) => f === 'any' || fams.includes(f)));
       if (pool.length < max) errors.push(`clothing_style '${st.id}': only ${pool.length} ${slot} pieces for up to ${max}`);

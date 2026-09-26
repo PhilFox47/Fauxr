@@ -216,7 +216,7 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
       { category: 'hair_color', label: 'Hair colour' },
       { category: 'hair_style', label: 'Hairstyle' },
       { category: 'makeup_style', label: 'Makeup' },
-      { category: 'accessory', label: 'Accessories' },
+      { category: 'accessory', label: 'Always on her (glasses, nails, a ring)' },
       // Only matters for the women who cosplay at all; leans which characters they own.
       { category: 'cosplay_character', label: 'Cosplays' },
     ],
@@ -233,10 +233,12 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
       { category: 'wardrobe_item', slot: 'dress', label: 'Dresses' },
       { category: 'wardrobe_item', slot: 'outer', label: 'Jackets and coats' },
       { category: 'wardrobe_item', slot: 'extras', label: 'Extras' },
+      { category: 'wardrobe_item', slot: 'jewellery', label: 'Jewellery' },
       { category: 'wardrobe_item', slot: 'bra', label: 'Bras' },
       { category: 'wardrobe_item', slot: 'panties', label: 'Panties' },
       { category: 'wardrobe_item', slot: 'lingerie', label: 'Lingerie pieces' },
       { category: 'wardrobe_item', slot: 'swim', label: 'Swimwear' },
+      { category: 'carried_item', label: 'Things she carries' },
     ],
   },
   {

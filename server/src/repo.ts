@@ -352,6 +352,36 @@ function backfillWardrobe(characterId: string, seed: CharacterSeed): CharacterSe
 }
 
 /**
+ * The accessory split: jewellery and hair pieces moved into the wardrobe, bags and keys into
+ * what she carries, and only what is always on her stayed. Everyone's old accessory ids move
+ * with them (same ids), a closet from before jewellery gets its jewellery, and her fixed look
+ * is rebuilt when anything left it. Idempotent: it only acts on ids that no longer are
+ * accessories and on fields that are missing.
+ */
+function backfillAccessorySplit(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (!seed.wardrobe || !byCategory('carried_item').length) return seed;
+  const moved = (seed.accessories ?? []).filter((id) => !find('accessory', id));
+  const needsJewellery = !seed.wardrobe.jewellery;
+  const needsCarries = !seed.carries;
+  if (!moved.length && !needsJewellery && !needsCarries) return seed;
+  if (needsJewellery) seed.wardrobe.jewellery = rollWardrobe(seed, ['jewellery']).jewellery ?? [];
+  seed.carries ??= [];
+  for (const id of moved) {
+    const piece = find('wardrobe_item', id);
+    if (piece) {
+      const slot = piece.extra?.slot as keyof NonNullable<CharacterSeed['wardrobe']>;
+      if (!(seed.wardrobe[slot] ?? []).includes(id)) seed.wardrobe[slot] = [id, ...(seed.wardrobe[slot] ?? [])];
+    } else if (find('carried_item', id) && !seed.carries.includes(id)) {
+      seed.carries.push(id);
+    }
+  }
+  seed.accessories = (seed.accessories ?? []).filter((id) => !moved.includes(id));
+  if (moved.length) seed.appearance_prompt = buildAppearancePrompt(seed);
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
+/**
  * Costumes (cosplay.ts) for anyone generated before the reference table. Unlike a layer this is
  * safe to add later: a woman who already cosplays already owns costumes, the table only names
  * them. Everyone else gets an empty list, so this runs once per character.
@@ -373,6 +403,7 @@ function hydrateCharacter(row: any): Character {
   seed = backfillIntimateDetails(row.id, seed);
   seed = backfillCore(row.id, seed);
   seed = backfillWardrobe(row.id, seed);
+  seed = backfillAccessorySplit(row.id, seed);
   seed = backfillCosplays(row.id, seed);
   return {
     id: row.id,

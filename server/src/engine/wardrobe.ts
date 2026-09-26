@@ -22,10 +22,10 @@ import { newContext, pickOne, randInt, rollMany, type DiceContext } from './dice
  * the checks in validate-attributes.mjs).
  */
 
-export const OWNED_SLOTS = ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'bra', 'panties', 'lingerie', 'swim', 'work'] as const;
+export const OWNED_SLOTS = ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'jewellery', 'bra', 'panties', 'lingerie', 'swim', 'work'] as const;
 export type OwnedSlot = (typeof OWNED_SLOTS)[number];
 /** Worn slots, in the order they are listed - outside in, top down. */
-export const WORN_SLOTS = ['outer', 'top', 'bottom', 'dress', 'bra', 'panties', 'lingerie', 'legwear', 'shoes', 'extras'] as const;
+export const WORN_SLOTS = ['outer', 'top', 'bottom', 'dress', 'bra', 'panties', 'lingerie', 'legwear', 'shoes', 'extras', 'jewellery'] as const;
 export type WornSlot = (typeof WORN_SLOTS)[number];
 export const PIECE_STATES = ['on', 'open', 'pushed up', 'pulled down', 'pulled aside', 'half off', 'off'] as const;
 export type PieceState = (typeof PIECE_STATES)[number];
@@ -48,8 +48,14 @@ const COVERS: Partial<Record<WornSlot, WornSlot[]>> = { dress: ['top', 'bottom']
 const ALWAYS_STATED: WornSlot[] = ['top', 'bottom', 'bra', 'panties', 'legwear', 'shoes'];
 const SLOT_WORD: Record<WornSlot, string> = {
   outer: 'outer layer', top: 'top', bottom: 'bottom', dress: 'dress', bra: 'bra', panties: 'panties',
-  lingerie: 'lingerie', legwear: 'legwear', shoes: 'shoes', extras: 'extras',
+  lingerie: 'lingerie', legwear: 'legwear', shoes: 'shoes', extras: 'extras', jewellery: 'jewellery',
 };
+/**
+ * Slots that hold several pieces at once. Jewellery is its own slot because it is what stays on
+ * when everything else comes off - "nothing but her choker and the thigh-highs" is a state the
+ * outfit can now hold exactly.
+ */
+const MULTI = new Set<WornSlot>(['extras', 'jewellery']);
 
 // ---------------------------------------------------------------- rolling a wardrobe
 
@@ -106,7 +112,7 @@ function wardrobeContext(seed: CharacterSeed): DiceContext {
  * Rolls what she owns. Through roll(), so his taste leans it too. Transient: nothing in a
  * closet should lean anything rolled after it.
  */
-export function rollWardrobe(seed: CharacterSeed): Wardrobe {
+export function rollWardrobe(seed: CharacterSeed, onlySlots?: OwnedSlot[]): Wardrobe {
   const ctx = wardrobeContext(seed);
   const items = byCategory('wardrobe_item');
   const fams = new Set([...styleFamilies(seed), 'any']);
@@ -118,7 +124,7 @@ export function rollWardrobe(seed: CharacterSeed): Wardrobe {
   const out: Wardrobe = {};
 
   for (const slot of OWNED_SLOTS) {
-    if (slot === 'work' || noSlots.has(slot)) continue;
+    if (slot === 'work' || noSlots.has(slot) || (onlySlots && !onlySlots.includes(slot))) continue;
     const underwear = slot === 'bra' || slot === 'panties' || slot === 'lingerie';
     // Her kinks can bring in pieces from outside her style: a sporty woman who is into
     // thigh-highs still owns a pair (anything her leans push up is eligible).
@@ -134,7 +140,7 @@ export function rollWardrobe(seed: CharacterSeed): Wardrobe {
   }
 
   // Real closets are not pure: sometimes one piece from outside her style.
-  if (Math.random() < 0.3) {
+  if (!onlySlots && Math.random() < 0.3) {
     const slot = pickOne(['top', 'bottom', 'dress', 'outer'] as const);
     if (!noSlots.has(slot)) {
       const stray = items.filter((i) => i.extra?.slot === slot && !inFamily(i) && (i.extra?.families as string[] | undefined)?.length);
@@ -145,7 +151,7 @@ export function rollWardrobe(seed: CharacterSeed): Wardrobe {
 
   // A job with a uniform comes with it.
   const uniform = items.find((i) => i.extra?.slot === 'work' && ((i.extra?.occupations as string[] | undefined) ?? []).includes(seed.occupation));
-  if (uniform) out.work = [uniform.id];
+  if (uniform && (!onlySlots || onlySlots.includes('work'))) out.work = [uniform.id];
   return out;
 }
 
@@ -158,7 +164,7 @@ export function itemText(id: string): string {
 
 const GROUPS: [OwnedSlot, string][] = [
   ['top', 'tops'], ['bottom', 'bottoms'], ['dress', 'dresses'], ['outer', 'outer'], ['legwear', 'legwear'],
-  ['shoes', 'shoes'], ['extras', 'extras'], ['bra', 'bras'], ['panties', 'panties'], ['lingerie', 'lingerie'],
+  ['shoes', 'shoes'], ['extras', 'extras'], ['jewellery', 'jewellery'], ['bra', 'bras'], ['panties', 'panties'], ['lingerie', 'lingerie'],
   ['swim', 'swimwear'], ['work', 'for work'],
 ];
 
@@ -220,10 +226,10 @@ function setPieces(pieces: Record<string, string> | undefined, id?: string): Wor
 
 /** Puts a piece on, taking off whatever it replaces or covers. Extras stack. */
 function wear(outfit: Outfit, piece: WornPiece): Outfit {
-  const displaced = new Set<WornSlot>(piece.slot === 'extras' ? [] : [piece.slot]);
+  const displaced = new Set<WornSlot>(MULTI.has(piece.slot) ? [] : [piece.slot]);
   for (const c of COVERS[piece.slot] ?? []) displaced.add(c);
   for (const [one, covered] of Object.entries(COVERS)) if (covered!.includes(piece.slot)) displaced.add(one as WornSlot);
-  const pieces = outfit.pieces.filter((p) => !displaced.has(p.slot) && !(p.slot === 'extras' && norm(p.text) === norm(piece.text)));
+  const pieces = outfit.pieces.filter((p) => !displaced.has(p.slot) && !(MULTI.has(p.slot) && norm(p.text) === norm(piece.text)));
   return { pieces: [...pieces, piece] };
 }
 
@@ -288,6 +294,9 @@ export function defaultOutfit(seed: CharacterSeed): Outfit {
   put('shoes', one('shoes'));
   if (Math.random() < 0.3) put('outer', one('outer'));
   if (Math.random() < 0.5) put('extras', one('extras'));
+  // Most days a piece or two of her jewellery.
+  const jewels = [...(w.jewellery ?? [])].sort(() => Math.random() - 0.5).slice(0, randInt(0, 2));
+  for (const id of jewels) put('jewellery', id);
   return outfit;
 }
 
@@ -409,7 +418,7 @@ export function isOutfit(v: unknown): v is Outfit {
 
 /** The JSON shape of a full outfit, for prompts that ask for one. */
 export const OUTFIT_EXAMPLE =
-  '{ "outer": "none", "top": "...", "bottom": "...", "dress": "none", "bra": "...", "panties": "...", "lingerie": "none", "legwear": "...", "shoes": "...", "extras": "none" }';
+  '{ "outer": "none", "top": "...", "bottom": "...", "dress": "none", "bra": "...", "panties": "...", "lingerie": "none", "legwear": "...", "shoes": "...", "extras": "none", "jewellery": "..." }';
 
 /**
  * What she has on in the chat right now (rel.mood.outfit_state). Anyone without one yet -

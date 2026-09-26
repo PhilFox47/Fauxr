@@ -91,7 +91,8 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   s.piercings.forEach((p, i) =>
     add(`piercing:${i}`, 'looks', 'Piercing', `${label('piercing_type', p.type)}, ${label('piercing_position', p.position)}`, 'Some are easier to see than others.'));
   s.accessories.forEach((a, i) =>
-    add(`accessory:${i}`, 'looks', 'Accessory', label('accessory', a), 'Needs a photo.'));
+    add(`accessory:${i}`, 'looks', 'Always on her', label('accessory', a), 'Needs a photo.'));
+  (s.carries ?? []).forEach((c) => add(`carries:${c}`, 'life', 'Carries', label('carried_item', c), 'You will notice it on a date.'));
 
   // ---- intimate: the part that is actually discovered
   add('sexual_persona', 'intimate', 'In bed', label('sexual_persona', s.sexual_persona), 'Becomes obvious once things get going.');

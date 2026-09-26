@@ -259,4 +259,4 @@ names of anyone from WHO ELSE IS HERE who left in this beat. Both are usually em
 slot: { "slot": "top", "state": "off", "item": null } to move a piece (on, open, pushed up,
 pulled down, pulled aside, half off, off), { "slot": "outer", "state": null, "item": "his
 jacket" } to put something on, "item": "none" to take a slot away entirely. Slots: outer, top,
-bottom, dress, bra, panties, lingerie, legwear, shoes, extras.
+bottom, dress, bra, panties, lingerie, legwear, shoes, extras, jewellery.

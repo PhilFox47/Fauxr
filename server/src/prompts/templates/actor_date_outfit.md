@@ -29,8 +29,8 @@ not a costume for one photo.
 
 Every slot gets an answer, "none" when it is empty - legwear and underwear included, because
 what is under the dress matters later. A dress fills top and bottom (those are "none" then);
-lingerie (a teddy, a bodysuit, a corset) fills bra and panties. Several extras go in one string
-separated by ";". "note" is one sentence for anything that is not a garment: what you did with
+lingerie (a teddy, a bodysuit, a corset) fills bra and panties. Several extras or pieces of
+jewellery go in one string separated by ";". "note" is one sentence for anything that is not a garment: what you did with
 your hair, your makeup, a perfume.
 
 Reply with exactly one JSON object and nothing else:

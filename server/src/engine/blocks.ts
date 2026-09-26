@@ -167,6 +167,7 @@ export function appearanceBlock(seed: CharacterSeed): string {
     tattoos.length ? `Tattoos: ${tattoos.join('; ')}` : 'No tattoos.',
     piercings.length ? `Piercings: ${piercings.join('; ')}` : '',
     seed.accessories.length ? `Always on you: ${seed.accessories.map((a) => label('accessory', a)).join(', ')}` : '',
+    seed.carries?.length ? `What you have on you, usually: ${seed.carries.map((c) => label('carried_item', c).toLowerCase()).join(', ')}` : '',
     closetBlock(seed),
   ].filter(Boolean).join('\n');
 }

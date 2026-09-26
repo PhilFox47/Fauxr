@@ -38,7 +38,7 @@ const npc = obj({ name: str, gender: str, age: int, count: nint, who: str, look:
 const thread = obj({ text: str, expires_when: str });
 /** A whole outfit, every worn slot stated ("none" when empty) - see wardrobe.ts. */
 const outfitPicks = obj({
-  outer: str, top: str, bottom: str, dress: str, bra: str, panties: str, lingerie: str, legwear: str, shoes: str, extras: str,
+  outer: str, top: str, bottom: str, dress: str, bra: str, panties: str, lingerie: str, legwear: str, shoes: str, extras: str, jewellery: str,
 });
 /** What changed on her this turn; never the whole outfit. */
 const outfitChanges = arr(obj({ slot: str, state: nstr, item: nstr }));

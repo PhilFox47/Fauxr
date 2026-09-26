@@ -238,7 +238,7 @@ on, open, pushed up, pulled down, pulled aside, half off, off), { "slot": "legwe
 null, "item": "white knee socks" } to put something on (from your closet, or anything else),
 "item": "none" to take a slot away entirely, or { "slot": "all", "item": "sleepwear" } (or
 "swimwear", "work", "nothing") to change into a whole set. Slots: outer, top, bottom, dress,
-bra, panties, lingerie, legwear, shoes, extras.
+bra, panties, lingerie, legwear, shoes, extras, jewellery.
 "unresolved" is set when something is still in play (a question, a bit, a scene); null when
 the floor is clear.
 "director_needed" is true if something big happened that your direction does not cover.

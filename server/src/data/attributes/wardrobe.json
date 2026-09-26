@@ -55,6 +55,10 @@
         "swim": [
           1,
           2
+        ],
+        "jewellery": [
+          1,
+          4
         ]
       }
     },
@@ -9639,6 +9643,1262 @@
         "bottom": "high-waisted studio leggings"
       }
     },
+    "enabled": true
+  },
+  {
+    "id": "thin_gold_chain",
+    "category": "wardrobe_item",
+    "label": "Thin gold chain",
+    "weight": 1.2,
+    "prompt_hint": "a thin gold chain necklace",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "basics",
+        "glam",
+        "tailored",
+        "beach"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "stacked_rings",
+    "category": "wardrobe_item",
+    "label": "Stacked rings",
+    "weight": 1.1,
+    "prompt_hint": "stacked silver rings on several fingers",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt",
+        "boho",
+        "street"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "beaded_bracelet",
+    "category": "wardrobe_item",
+    "label": "Beaded bracelet",
+    "weight": 0.8,
+    "prompt_hint": "a beaded friendship bracelet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "boho",
+        "beach",
+        "soft"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "watch",
+    "category": "wardrobe_item",
+    "label": "Watch",
+    "weight": 0.8,
+    "prompt_hint": "a plain wristwatch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "basics",
+        "tailored",
+        "sporty"
+      ]
+    },
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "layered_necklaces",
+    "category": "wardrobe_item",
+    "label": "Layered necklaces",
+    "weight": 0.7,
+    "prompt_hint": "several layered necklaces",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "boho",
+        "glam",
+        "street"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "anklet",
+    "category": "wardrobe_item",
+    "label": "Anklet",
+    "weight": 1.0,
+    "prompt_hint": "a thin anklet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "beach",
+        "boho",
+        "glam"
+      ]
+    },
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "locket",
+    "category": "wardrobe_item",
+    "label": "Locket",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a small locket she never opens",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "soft",
+        "retro"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hoops",
+    "category": "wardrobe_item",
+    "label": "Big hoop earrings",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "large gold hoop earrings",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "glam",
+        "street",
+        "retro"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "many_bracelets",
+    "category": "wardrobe_item",
+    "label": "Armful of bracelets",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "a stack of bracelets up one forearm",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "boho",
+        "alt",
+        "rave"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "pendant",
+    "category": "wardrobe_item",
+    "label": "Single pendant",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "one pendant she always wears",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "basics",
+        "soft",
+        "tailored"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "layered_rings",
+    "category": "wardrobe_item",
+    "label": "Layered rings on multiple fingers",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Layered rings on multiple fingers",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt",
+        "goth",
+        "boho"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "statement_earrings",
+    "category": "wardrobe_item",
+    "label": "Statement earrings",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "Statement earrings",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "glam",
+        "boho",
+        "retro"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "delicate_anklet",
+    "category": "wardrobe_item",
+    "label": "Delicate anklet",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Delicate anklet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "beach",
+        "soft",
+        "glam"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "charm_bracelet",
+    "category": "wardrobe_item",
+    "label": "Charm bracelet",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Charm bracelet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "soft",
+        "retro",
+        "basics"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "thin_choker",
+    "category": "wardrobe_item",
+    "label": "Thin choker necklace",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "Thin choker necklace",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "soft",
+        "alt",
+        "street",
+        "goth"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "layered_chains",
+    "category": "wardrobe_item",
+    "label": "Layered chain necklaces",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "Layered chain necklaces",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt",
+        "goth",
+        "street",
+        "rave"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "smart_watch",
+    "category": "wardrobe_item",
+    "label": "Smart watch",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "Smart watch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "sporty",
+        "basics"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "vintage_watch",
+    "category": "wardrobe_item",
+    "label": "Vintage watch",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "Vintage watch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "retro",
+        "tailored"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "layered_gold_rings",
+    "category": "wardrobe_item",
+    "label": "Layered gold rings",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Layered gold rings",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "glam",
+        "tailored",
+        "boho"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "vintage_brooch",
+    "category": "wardrobe_item",
+    "label": "Vintage brooch",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "Vintage brooch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "retro",
+        "tailored"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "ankle_bracelet_beaded",
+    "category": "wardrobe_item",
+    "label": "Beaded ankle bracelet",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Beaded ankle bracelet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "beach",
+        "boho"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "layered_bracelets_mixed",
+    "category": "wardrobe_item",
+    "label": "Mixed-metal layered bracelets",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Mixed-metal layered bracelets",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "street",
+        "boho",
+        "alt"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "delicate_body_chain",
+    "category": "wardrobe_item",
+    "label": "Delicate body chain",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "Delicate body chain",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "glam",
+        "beach",
+        "boho"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "thin_stacked_bangles",
+    "category": "wardrobe_item",
+    "label": "Thin stacked bangles",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Thin stacked bangles",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "boho",
+        "glam",
+        "soft"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "delicate_toe_ring",
+    "category": "wardrobe_item",
+    "label": "Delicate toe ring",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "Delicate toe ring",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "beach",
+        "boho"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "statement_watch_face",
+    "category": "wardrobe_item",
+    "label": "Oversized statement watch",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "Oversized statement watch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "glam",
+        "tailored",
+        "street"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "single_drop_earring",
+    "category": "wardrobe_item",
+    "label": "Single long drop earring",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "Single long drop earring",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "glam",
+        "alt",
+        "tailored"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "o_ring_choker",
+    "category": "wardrobe_item",
+    "label": "O-ring choker",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "black leather O-ring choker",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "goth",
+        "alt",
+        "rave"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "headphones",
+    "category": "wardrobe_item",
+    "label": "Headphones around neck",
+    "weight": 0.6,
+    "prompt_hint": "over-ear headphones around her neck",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "street",
+        "basics",
+        "sporty"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "sunglasses_on_head",
+    "category": "wardrobe_item",
+    "label": "Sunglasses pushed up on her head",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Sunglasses pushed up on her head",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "beach",
+        "glam",
+        "basics"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hair_clips_colourful",
+    "category": "wardrobe_item",
+    "label": "Colourful hair clips",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Colourful hair clips",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "soft",
+        "street"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "claw_clip",
+    "category": "wardrobe_item",
+    "label": "Claw clip",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Claw clip",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "basics",
+        "tailored",
+        "beach"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "statement_sunglasses",
+    "category": "wardrobe_item",
+    "label": "Statement sunglasses",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Statement sunglasses",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "glam",
+        "retro",
+        "street"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "chunky_headphones",
+    "category": "wardrobe_item",
+    "label": "Chunky over-ear headphones",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Chunky over-ear headphones",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "street",
+        "alt",
+        "rave"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "wide_headband",
+    "category": "wardrobe_item",
+    "label": "Wide fabric headband",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "Wide fabric headband",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "soft",
+        "retro",
+        "sporty"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "beaded_hair_string",
+    "category": "wardrobe_item",
+    "label": "Beaded string woven into hair",
+    "weight": 1.0,
+    "rarity": "rare",
+    "prompt_hint": "Beaded string woven into hair",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "boho",
+        "beach"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cat_ear_headphones",
+    "category": "wardrobe_item",
+    "label": "Cat-ear headphones",
+    "weight": 1.0,
+    "rarity": "uncommon",
+    "prompt_hint": "pastel cat-ear headphones",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "street",
+        "soft",
+        "rave"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "scrunchie_wrist",
+    "category": "wardrobe_item",
+    "label": "Scrunchie on wrist",
+    "weight": 1.0,
+    "prompt_hint": "a scrunchie around her wrist",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "extras",
+      "families": [
+        "basics",
+        "sporty",
+        "soft"
+      ]
+    },
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "tiny_silver_studs",
+    "category": "wardrobe_item",
+    "label": "Tiny silver stud earrings",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "tiny silver stud earrings",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "any"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "simple_gold_studs",
+    "category": "wardrobe_item",
+    "label": "Simple gold stud earrings",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "simple gold stud earrings",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "basics",
+        "tailored",
+        "sporty"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "pearl_necklace",
+    "category": "wardrobe_item",
+    "label": "Short pearl necklace",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "short pearl necklace",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "soft",
+        "retro",
+        "tailored"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "spiked_cuff_bracelet",
+    "category": "wardrobe_item",
+    "label": "Spiked leather cuff bracelet",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "spiked leather cuff bracelet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "goth",
+        "alt"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "silver_ankh_pendant",
+    "category": "wardrobe_item",
+    "label": "Silver ankh pendant",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "silver ankh pendant",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "goth",
+        "boho"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "neon_beaded_bracelets",
+    "category": "wardrobe_item",
+    "label": "Stack of neon beaded bracelets",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "stack of neon beaded bracelets",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "rave",
+        "street"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "fitness_tracker",
+    "category": "wardrobe_item",
+    "label": "Slim fitness tracker",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "slim fitness tracker",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "sporty"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "turquoise_ring",
+    "category": "wardrobe_item",
+    "label": "Chunky turquoise ring",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "chunky turquoise ring",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "boho",
+        "retro"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "diamond_tennis_bracelet",
+    "category": "wardrobe_item",
+    "label": "Thin diamond tennis bracelet",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "thin diamond tennis bracelet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "glam",
+        "tailored"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "shell_anklet",
+    "category": "wardrobe_item",
+    "label": "Shell anklet",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "shell anklet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "beach"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "crystal_pendant",
+    "category": "wardrobe_item",
+    "label": "Raw crystal pendant",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "raw crystal pendant",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "boho",
+        "costume"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "elven_ear_cuffs",
+    "category": "wardrobe_item",
+    "label": "Silver leaf ear cuffs",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "silver leaf ear cuffs",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "costume",
+        "boho"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "tote_bag",
+    "category": "carried_item",
+    "label": "Tote bag",
+    "weight": 0.8,
+    "prompt_hint": "",
+    "image_prompt": "a canvas tote bag",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "crossbody",
+    "category": "carried_item",
+    "label": "Tiny crossbody bag",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a tiny crossbody bag",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fanny_pack",
+    "category": "carried_item",
+    "label": "Bum bag",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "a bum bag worn across the chest",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "keys_carabiner",
+    "category": "carried_item",
+    "label": "Keys on a carabiner",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": "keys clipped to a belt loop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "crossbody_phone_case",
+    "category": "carried_item",
+    "label": "Crossbody phone case on a strap",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tote_bag_tote",
+    "category": "carried_item",
+    "label": "Canvas tote with something printed on it",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mini_backpack",
+    "category": "carried_item",
+    "label": "Mini backpack",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "phone_charm",
+    "category": "carried_item",
+    "label": "Phone charm",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "lip_balm_habit",
+    "category": "carried_item",
+    "label": "Never without lip balm in hand",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "keychain_collection",
+    "category": "carried_item",
+    "label": "A keychain covered in small collectibles",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "id_badge_lanyard",
+    "category": "carried_item",
+    "label": "Work lanyard she forgets to take off",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "reusable_water_bottle",
+    "category": "carried_item",
+    "label": "A specific, well-loved water bottle",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "phone_grip_pop",
+    "category": "carried_item",
+    "label": "Pop socket phone grip",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mini_purse_crossbody",
+    "category": "carried_item",
+    "label": "Tiny structured crossbody purse",
+    "weight": 1.0,
+    "rarity": "common",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "phone_case_sticker_covered",
+    "category": "carried_item",
+    "label": "Phone case covered in stickers",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cardholder_wallet",
+    "category": "carried_item",
+    "label": "Slim cardholder instead of a wallet",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
     "enabled": true
   }
 ]

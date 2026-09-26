@@ -46,7 +46,9 @@ export const CARD_SECTIONS: CardSection[] = [
       { key: 'clothing_style', category: 'clothing_style', label: 'How you dress' },
       { key: 'grooming', category: 'grooming', label: 'Grooming' },
       { key: 'distinctive_feature', category: 'distinctive_feature', label: 'Distinctive' },
-      { key: 'accessories', category: 'accessory', label: 'Usually wearing', multi: true, max: 4 },
+      // His own list: hers was split into wardrobe, carried things and what is always on her,
+      // and his card should not change under him. Same ids as the old accessory table.
+      { key: 'accessories', category: 'his_accessory', label: 'Usually wearing', multi: true, max: 4 },
     ],
   },
   {

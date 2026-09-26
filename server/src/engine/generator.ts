@@ -322,7 +322,12 @@ export function rollSeed(): RolledSeed {
     return { type: type?.id ?? 'stud', position: position?.id ?? 'earlobe' };
   });
 
-  const accessories = rollMany('accessory', ctx, drawCount(counts.accessories, 1)).map((a) => a.id);
+  // What is always on her: glasses she needs, her nails, a ring she never takes off. Only the
+  // body-bound things are left in this table - jewellery and hair pieces are in her wardrobe,
+  // bags and keys are what she carries - so it is fewer than the old accessory count.
+  const accessories = rollMany('accessory', ctx, Math.floor(drawCount(counts.accessories, 1) / 2)).map((a) => a.id);
+  // What she has on her: flavour, not clothing (see carried_item in wardrobe.json).
+  const carries = rollMany('carried_item', ctx, drawCount([0.35, 0.45, 0.2], 1), { transient: true }).map((a) => a.id);
 
   // ---- 4. what she is into, the non-sexual half. Turn-offs deliberately skip the archetype
   // filter so she can still surprise; turn-ons wait for her persona, below.
@@ -520,6 +525,7 @@ export function rollSeed(): RolledSeed {
     tattoos,
     piercings,
     accessories,
+    carries,
 
     archetype: archetype.id,
     humor_type: humor_type!.id,
@@ -629,6 +635,7 @@ function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }
     ['quirk', seed.quirks], ['interest', seed.interests], ['hobby', seed.hobbies],
     ['turn_on', seed.turn_ons], ['turn_off', seed.turn_offs],
     ['fetish', seed.fetishes], ['hard_limit', seed.hard_limits], ['accessory', seed.accessories],
+    ['carried_item', seed.carries ?? []],
     ['cosplay_character', seed.cosplays ?? []],
     // English says nothing about her - everyone speaks it, and it has no row in the table.
     ['language', seed.languages.filter((l) => l !== 'english')],
@@ -742,7 +749,8 @@ export function describeSeed(seed: CharacterSeed): string {
     `appearance: ${seed.appearance_prompt}`,
     `tattoos: ${seed.tattoos.map((t) => `${label('tattoo_motif', t.motif)} ${label('tattoo_position', t.position)}`).join('; ') || 'none'}`,
     `piercings: ${seed.piercings.map((p) => `${label('piercing_type', p.type)} ${label('piercing_position', p.position)}`).join('; ') || 'none'}`,
-    `accessories: ${labels('accessory', seed.accessories)}`,
+    `always on her: ${labels('accessory', seed.accessories)}`,
+    `carries: ${labels('carried_item', seed.carries ?? [])}`,
     '',
     `occupation: ${label('occupation', seed.occupation)} - ${seed.hints.occupation}`,
     `lives: ${label('living_situation', seed.living_situation)} - ${seed.hints.living_situation}`,
