@@ -343,12 +343,17 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
     const cap = opts.config.max_tokens;
     const out = Number(usage.completion_tokens ?? 0);
     const truncated = finish === 'length' || (cap > 0 && out >= cap);
+    // Generation speed, not overall throughput - prompt processing (prefill) is typically far
+    // faster than writing the answer out, so completion tokens over wall time is what actually
+    // says whether a model or provider is slow to write, as opposed to slow to start.
+    const tokensPerSecond = out > 0 && duration > 0 ? Math.round((out / (duration / 1000)) * 10) / 10 : null;
 
     logger.info(opts.scope === 'generator' ? 'generator' : opts.scope, opts.label ?? 'llm call', {
       model: opts.config.model,
       duration_ms: duration,
       tokens_in: usage.prompt_tokens ?? null,
       tokens_out: usage.completion_tokens ?? null,
+      tokens_per_second: tokensPerSecond,
       // Recorded on every call so a cap that is quietly too tight is visible in the export
       // before it becomes a wave of empty answers.
       max_tokens: cap,

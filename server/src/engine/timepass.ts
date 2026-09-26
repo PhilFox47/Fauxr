@@ -4,7 +4,7 @@ import { bus } from '../events.js';
 import { logger } from '../log.js';
 import { addMessage, activeDate, firstDateStartedAt, getCharacter, getRelationship, getWakeup, saveRelationship, setWakeup } from '../repo.js';
 import type { Character } from '../types.js';
-import { advanceGameClock } from './clock.js';
+import { advanceGameClock, gameClockMs } from './clock.js';
 import { decayArousal } from './stage.js';
 import { randInt } from './dice.js';
 import { refreshStatus, statusDue } from './status.js';
@@ -148,6 +148,7 @@ export async function passTime(characterId: string, hoursRequested: number): Pro
     sender: 'system',
     text: `${label.charAt(0).toUpperCase()}${label.slice(1)} passed.`,
     meta: { type: 'time_passed', hours },
+    game_clock_ms: gameClockMs(rel),
   });
   bus.emitEvent({ type: 'message', character_id: characterId, message: marker });
 

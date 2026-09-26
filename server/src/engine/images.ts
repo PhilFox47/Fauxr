@@ -27,6 +27,7 @@ import { speciesRow, speciesVisibility } from './species.js';
 import { cosplayImageBlock } from './cosplay.js';
 import { duoImageBlock } from './duo.js';
 import { closetBlock, currentOutfit, outfitForImage } from './wardrobe.js';
+import { gameClockMs } from './clock.js';
 
 /** Whether image generation is switched on at all. */
 export function photosEnabled(): boolean {
@@ -83,6 +84,16 @@ export function profilePictureState(characterId: string): 'none' | 'working' | '
 }
 
 /**
+ * This chat's own clock (engine/clock.ts), but only for a message posted into the text chat -
+ * a date beat runs on real time instead (see the type's own doc comment).
+ */
+function textChatClockMs(characterId: string, dateId: string | null | undefined): number | null {
+  if (dateId) return null;
+  const rel = getRelationship(characterId);
+  return rel ? gameClockMs(rel) : null;
+}
+
+/**
  * A photo that failed before it had a bubble - preparing a chat photo, or a date's arrival
  * photo - still gets one, marked as failed, so "Show photo" can try it again. Without it the
  * failure was invisible: her message said a photo was coming and nothing ever arrived.
@@ -100,6 +111,7 @@ function postFailedPlaceholder(job: ImageJob, characterId: string, caption: stri
     },
     read_at: null,
     date_id: job.date_id ?? null,
+    game_clock_ms: textChatClockMs(characterId, job.date_id),
   });
   bus.emitEvent({ type: 'message', character_id: characterId, message: stored });
 }
@@ -188,6 +200,7 @@ async function preparePhoto(
       meta: { image_id: job.id, pending: true, caption: shot.caption, description: shot.situation, aspect: job.aspect, ...extraMeta },
       read_at: null,
       date_id: null,
+      game_clock_ms: textChatClockMs(loaded.character.id, null),
     });
     bus.emitEvent({ type: 'message', character_id: loaded.character.id, message: stored });
   } catch (err) {
@@ -1153,6 +1166,7 @@ async function renderImageJob(job: ImageJob, character: Character, shot: Assembl
       meta: { image_id: id, path: relPath, description: situation },
       read_at: null,
       date_id: job.date_id,
+      game_clock_ms: textChatClockMs(character.id, job.date_id),
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
   }

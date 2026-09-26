@@ -813,6 +813,7 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
     sender: 'system',
     text: `You took ${character.real_name} to ${location.name}${date.when_at ? ` - ${date.when_at}` : ''}.`,
     meta: { type: 'date_started', date_id: date.id },
+    game_clock_ms: gameClockMs(rel),
   });
   bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
   bus.emitEvent({ type: 'date', character_id: character.id, date });
@@ -997,6 +998,7 @@ export async function endDate(dateId: string): Promise<DateSession> {
     sender: 'system',
     text: `The date at ${ended.where_at || 'the place you chose'} is over. ${summary}`,
     meta: { type: 'date_ended', date_id: ended.id },
+    game_clock_ms: gameClockMs(rel),
   });
   bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
   bus.emitEvent({ type: 'date', character_id: character.id, date: ended });

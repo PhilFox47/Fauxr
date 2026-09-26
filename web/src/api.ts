@@ -126,6 +126,8 @@ export interface Message {
   meta: Record<string, any>;
   sent_at: string;
   read_at: string | null;
+  /** This chat's own clock (engine/clock.ts) when sent - null for a date beat, or a message from before this field existed. */
+  game_clock_ms: number | null;
   image_url?: string | null;
 }
 

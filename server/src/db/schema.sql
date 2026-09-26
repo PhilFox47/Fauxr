@@ -69,7 +69,10 @@ CREATE TABLE IF NOT EXISTS messages (
   read_at       TEXT,
   -- NULL for the text chat. Set to a dates.id for anything said in person during a date,
   -- which is a separate transcript the texting history never mixes with.
-  date_id       TEXT REFERENCES dates(id) ON DELETE CASCADE
+  date_id       TEXT REFERENCES dates(id) ON DELETE CASCADE,
+  -- This chat's own clock (engine/clock.ts) when the message was sent. NULL for a date beat
+  -- (dates run on real time) and for any message older than this column.
+  game_clock_ms INTEGER
 );
 CREATE INDEX IF NOT EXISTS idx_messages_char ON messages(character_id, id);
 

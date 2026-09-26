@@ -1064,6 +1064,22 @@ sent in that one chat or by Pass Time pressed from that one chat.
   1 day, 3 days and 1 week, plus a custom hours/days field. It is disabled while she is out
   with him on a date. Photos taken during a date, and the date's own "how she remembers it"
   summary, are unaffected - a date is something happening live, in one sitting.
+- **Message timestamps show this in-game time, not the real one.** Once a chat has its own
+  clock, showing "9:41 PM" under a bubble while the header two lines up says "Mo - 13:12"
+  would read as two different chats. Every message stores the sender's game-clock reading at
+  the moment it was sent (`messages.game_clock_ms`), and the chat screen's stamp and day
+  separators ("Today", "Yesterday", a weekday) read that instead of `sent_at`. "Today" and
+  "Yesterday" are relative to the chat's own current moment, not the device's calendar, so a
+  chat that has skipped weeks ahead does not keep calling last week's messages "today" just
+  because the phone agrees. A date beat keeps its real timestamp - a date happens live, in
+  one sitting, on the real clock, same as its own screen always has - but the "you took her
+  to..." and "the date is over..." markers posted into the *text* chat pick up the game clock
+  like anything else there. Real time (`sent_at`) is still stored on every message and still
+  runs everything that must never freeze (log and image bookkeeping, typing-delay pacing,
+  per-day cost budgets); only what a message displays as changed. A message from before this
+  field existed has no `game_clock_ms` and falls back to showing its real time - the one
+  place old and new messages can read on two different clocks in the same scrollback, and
+  only ever right at that boundary.
 
 ## Fewer AI-isms
 
@@ -4859,11 +4875,18 @@ viewport exactly and the page no longer moves.
 Model endpoints, keys and sampling per role · a global activity multiplier for
 proactivity and wakeup frequency (start low) · the server uptime window · a daily call and
 cost budget with a usage readout · searchable logs filtered by scope, where every LLM call
-is stored with its full prompt, response, duration and token counts, and can be exported as
-Markdown · a separate image log with a per-job retry button · the places you can take someone
-on a date · your own profile · a reset.
+is stored with its full prompt, response, duration, token counts and generation speed
+(tokens/sec), and can be exported as Markdown · a separate image log with a per-job retry
+button · the places you can take someone on a date · your own profile · a reset.
 
 The log view is the main tuning tool. Use it.
+
+Every entry for an actual call shows its runtime and speed right on the row - `1.8s ·
+42 tok/s` - without expanding it, so a slow model or an overloaded provider stands out while
+skimming the feed rather than only after opening each entry. It is generation speed
+specifically (completion tokens over wall time), not overall throughput: prompt processing
+is normally far faster than writing the answer, so this is what actually says whether a
+model is slow to write, as opposed to slow to start.
 
 ### Getting the logs out
 
@@ -4885,7 +4908,7 @@ role, with the content printed as written. Dumped as raw JSON it arrives as esca
 between every line and the whole system block one unbroken string, which is precisely the part
 that needs reading.
 
-Each entry carries its call's vitals — model, duration, tokens in and out — and the header
+Each entry carries its call's vitals — model, duration, tokens in and out, tokens/sec — and the header
 carries both models with their sampling, the image model, and the tuning sliders, because a
 prompt problem is usually a settings problem and the answer is otherwise a round of
 questions. **No API key is in the file**: the header is built from named fields and the

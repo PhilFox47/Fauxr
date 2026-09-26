@@ -15,7 +15,7 @@ import { advanceRelease, releaseOf } from './release.js';
 import { addInventedFantasy, markPitched } from './fantasies.js';
 import { fantasyList } from './blocks.js';
 import { applyOutfitChanges, currentOutfit, outfitMood } from './wardrobe.js';
-import { advanceGameClock, gameNowIso } from './clock.js';
+import { advanceGameClock, gameClockMs, gameNowIso } from './clock.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -94,15 +94,18 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
   const rel = getRelationship(character.id);
   if (!rel) throw new Error('relationship missing');
 
+  // Ticked before the message is stored, so the bubble's own timestamp (shown in-game, not
+  // real time - see web/src/screens/Chat.tsx) already reflects the minute this message spent.
+  const sentAtGameMs = advanceGameClock(rel, MESSAGE_MINUTES / 60);
   const stored = addMessage({
     character_id: character.id,
     sender: 'user',
     text: input.text,
     kind: input.kind ?? 'text',
     meta: input.meta,
+    game_clock_ms: sentAtGameMs,
   });
   bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
-  advanceGameClock(rel, MESSAGE_MINUTES / 60);
 
   // Writing to her cancels the one scheduled wakeup, if it was set to be cancellable.
   const wakeup = getWakeup(character.id);
@@ -232,20 +235,25 @@ async function runActorPhase(
     result = output ?? (await runActor(ctx));
     if (epoch !== startedIn) return;
 
-    await deliver(character, result.messages, startedIn);
+    // Refetched before her reply is stored, not after: the actor call can take a while, and a
+    // message he sent in the meantime (with its own clock tick already saved) must not be
+    // clobbered by whatever `rel` looked like when this turn started.
+    const fresh = getRelationship(characterId);
+    if (!fresh || epoch !== startedIn) return;
+    rel = fresh;
+    // Her reply is a message too, so it ticks the clock the same one minute his did - but only
+    // for a genuine new turn: a regenerate rewrites the words of the same moment, not a new
+    // one, so it must not tick the clock a second time (mirrors decrementValidFor below). Every
+    // bubble of this reply shares that one resulting instant - one tick per block, not per bubble.
+    const deliveredAtGameMs = opts.decrementValidFor ? advanceGameClock(rel, MESSAGE_MINUTES / 60) : gameClockMs(rel);
+
+    await deliver(character, result.messages, startedIn, deliveredAtGameMs);
   } finally {
     // Every exit path clears it, including a thrown call or an abandoned turn. A stuck
     // indicator is worse than none.
     stopTyping();
   }
 
-  const fresh = getRelationship(characterId);
-  if (!fresh || epoch !== startedIn) return;
-  rel = fresh;
-  // Her reply is a message too, so it ticks the clock the same one minute his did - but only
-  // for a genuine new turn: a regenerate rewrites the words of the same moment, not a new one,
-  // so it must not tick the clock a second time (mirrors decrementValidFor just below).
-  if (opts.decrementValidFor) advanceGameClock(rel, MESSAGE_MINUTES / 60);
   // What she has on after this turn: only her reported changes are applied (wardrobe.ts).
   // Before any photo from this turn is prepared, so a photo shows the outfit she just
   // described rather than the one before it.
@@ -458,11 +466,16 @@ export function deleteMessage(characterId: string, messageId: number): void {
   bus.emitEvent({ type: 'messages_removed', character_id: characterId, message_ids: [messageId] });
 }
 
-/** Play the messages out over time with a typing indicator, the way a person types. */
+/**
+ * Play the messages out over time with a typing indicator, the way a person types. Every
+ * bubble in this call is one reply block in the fiction, so they all carry the same in-game
+ * timestamp (`gameClockMsAtDelivery`) even though they land seconds apart in real time.
+ */
 async function deliver(
   character: Character,
   messages: { text: string; delay: number; kind?: string; duration_seconds?: number; failed?: boolean; from?: string }[],
   startedIn: number,
+  gameClockMsAtDelivery: number | null,
 ): Promise<void> {
   for (const m of messages) {
     // The indicator is held on by the caller for the whole turn, so this only paces.
@@ -485,6 +498,7 @@ async function deliver(
         ...(m.from ? { from: m.from } : {}),
       },
       read_at: null,
+      game_clock_ms: gameClockMsAtDelivery,
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
   }

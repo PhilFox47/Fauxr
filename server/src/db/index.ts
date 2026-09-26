@@ -61,6 +61,8 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'images', column: 'caption', definition: 'TEXT' },
   // What she had on when the photo was prepared (wardrobe.ts), kept so "same idea" redraws it.
   { table: 'images', column: 'outfit', definition: 'TEXT' },
+  // This chat's own clock (engine/clock.ts) when the message was sent - see repo.ts's addMessage.
+  { table: 'messages', column: 'game_clock_ms', definition: 'INTEGER' },
 ];
 
 function addMissingColumns(): void {

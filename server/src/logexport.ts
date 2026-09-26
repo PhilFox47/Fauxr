@@ -40,7 +40,7 @@ interface PromptMessage {
 }
 
 /** Keys the LLM logger writes, rendered as sections rather than dumped as JSON. */
-const KNOWN = new Set(['model', 'duration_ms', 'tokens_in', 'tokens_out', 'prompt', 'response']);
+const KNOWN = new Set(['model', 'duration_ms', 'tokens_in', 'tokens_out', 'tokens_per_second', 'prompt', 'response']);
 
 function trim(text: string, detail: PromptDetail): string {
   if (detail !== 'trim' || text.length <= TRIM_CHARS) return text;
@@ -74,6 +74,7 @@ function renderEntry(entry: any, detail: PromptDetail): string {
     p.model && `model ${p.model}`,
     typeof p.duration_ms === 'number' && `${(p.duration_ms / 1000).toFixed(1)}s`,
     (p.tokens_in != null || p.tokens_out != null) && `${p.tokens_in ?? '?'} in / ${p.tokens_out ?? '?'} out`,
+    typeof p.tokens_per_second === 'number' && `${p.tokens_per_second} tok/s`,
   ].filter(Boolean);
   if (vitals.length) out.push('', vitals.join(' · '));
 

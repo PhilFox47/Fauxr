@@ -8,8 +8,19 @@ import Icon from '../components/Icon';
 import Lightbox from '../components/Lightbox';
 import { closeView, openView, replaceTopView } from '../nav';
 
-function clock(iso: string): string {
-  return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+/**
+ * When a message reads as having happened, for every display purpose (the stamp under a
+ * bubble, day separators): this chat's own clock (`game_clock_ms`, see engine/clock.ts) when
+ * the message has one, real time for anything older than that field. Never a mix of the two
+ * within one message - a message either lived entirely in-game or, for a handful of messages
+ * from before this existed, entirely in real time.
+ */
+function messageMs(m: Pick<Message, 'sent_at' | 'game_clock_ms'>): number {
+  return m.game_clock_ms ?? Date.parse(m.sent_at);
+}
+
+function clock(ms: number): string {
+  return new Date(ms).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 const WEEKDAYS_SHORT = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -22,14 +33,18 @@ function chatClockLabel(ms: number): string {
   return `${WEEKDAYS_SHORT[d.getDay()]} - ${hh}:${mm}`;
 }
 
-function sameDay(a: string, b: string): boolean {
+function sameDay(a: number, b: number): boolean {
   return new Date(a).toDateString() === new Date(b).toDateString();
 }
 
-/** "Today" and "Yesterday" read as a conversation; a bare date reads as a log file. */
-function dayLabel(iso: string): string {
-  const d = new Date(iso);
-  const today = new Date();
+/**
+ * "Today" and "Yesterday" read as a conversation; a bare date reads as a log file. `nowMs` is
+ * this chat's own current moment (its live game clock), not the real device clock - a skip
+ * ahead by days or weeks should not leave everything before it stuck calling itself "today".
+ */
+function dayLabel(ms: number, nowMs: number): string {
+  const d = new Date(ms);
+  const today = new Date(nowMs);
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
   if (d.toDateString() === today.toDateString()) return 'Today';
@@ -429,6 +444,10 @@ export default function Chat({
   };
 
   const blocked = character?.state === 'blocked_by_user';
+  // "Today"/"Yesterday" in the message log read against this chat's own current moment, not
+  // the device clock - a chat that has skipped weeks ahead should not still call last week's
+  // messages "today" just because the calendar on the phone agrees.
+  const nowMs = character?.game_clock_ms ?? Date.now();
   // Only the photo she sent most recently can be regenerated - an older one stays put, the
   // same restriction the text regen button already applies to her last reply.
   const lastHerImageId = [...messages].reverse().find((m) => m.kind === 'image' && m.sender === 'character')?.id ?? null;
@@ -609,7 +628,7 @@ export default function Chat({
         {messages.map((m, i) => {
           const mine = m.sender === 'user';
           const prev = messages[i - 1];
-          const showDay = !prev || !sameDay(prev.sent_at, m.sent_at);
+          const showDay = !prev || !sameDay(messageMs(prev), messageMs(m));
           const last = i === messages.length - 1;
           const showStamp = last || messages[i + 1]?.sender !== m.sender;
           // A run of messages from one person is one turn, so only its ends get the full
@@ -619,7 +638,7 @@ export default function Chat({
           if (m.sender === 'system' && m.meta?.type === 'exchange_request') {
             return (
               <div key={m.id} style={{ display: 'contents' }}>
-                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                {showDay && <div className="day-sep">{dayLabel(messageMs(m), nowMs)}</div>}
                 <LegacyCard text={m.text} />
               </div>
             );
@@ -631,7 +650,7 @@ export default function Chat({
           if (m.sender === 'system' && m.meta?.type === 'photos_swapped') {
             return (
               <div key={m.id} style={{ display: 'contents' }}>
-                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                {showDay && <div className="day-sep">{dayLabel(messageMs(m), nowMs)}</div>}
                 <LegacyCard text={m.text} />
               </div>
             );
@@ -640,7 +659,7 @@ export default function Chat({
           if (m.sender === 'system' && (m.meta?.type === 'date_started' || m.meta?.type === 'date_ended')) {
             return (
               <div key={m.id} style={{ display: 'contents' }}>
-                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                {showDay && <div className="day-sep">{dayLabel(messageMs(m), nowMs)}</div>}
                 <button className="date-marker" onClick={() => setOpenDateId(m.meta.date_id)}>
                   <span className="date-marker-head">
                     <Icon name="spark" size={14} />
@@ -655,7 +674,7 @@ export default function Chat({
           if (m.sender === 'system' && m.meta?.type === 'time_passed') {
             return (
               <div key={m.id} style={{ display: 'contents' }}>
-                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                {showDay && <div className="day-sep">{dayLabel(messageMs(m), nowMs)}</div>}
                 <div className="time-marker">
                   <Icon name="clock" size={13} />
                   {m.text}
@@ -667,7 +686,7 @@ export default function Chat({
           if (m.sender === 'system' && m.meta?.type === 'photo_offer') {
             return (
               <div key={m.id} style={{ display: 'contents' }}>
-                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                {showDay && <div className="day-sep">{dayLabel(messageMs(m), nowMs)}</div>}
                 <LegacyCard text={m.text} />
               </div>
             );
@@ -678,7 +697,7 @@ export default function Chat({
 
           return (
             <div key={m.id} style={{ display: 'contents' }}>
-              {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+              {showDay && <div className="day-sep">{dayLabel(messageMs(m), nowMs)}</div>}
               {m.kind === 'image' && m.meta?.pending && m.meta?.declined ? (
                 <div className={`bubble photo-pending declined ${mine ? 'me' : 'them'}`}>
                   {m.meta.caption && <p className="photo-pending-caption">{m.meta.caption}</p>}
@@ -752,7 +771,7 @@ export default function Chat({
                 <div className={`stamp ${mine ? 'me' : 'them'}`}>
                   {showStamp && (
                     <span>
-                      {clock(m.sent_at)}
+                      {clock(messageMs(m))}
                       {mine && (m.read_at ? ' · read' : ' · sent')}
                     </span>
                   )}

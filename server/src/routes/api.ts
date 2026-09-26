@@ -301,6 +301,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         sender: 'system',
         text: `You generated ${character.real_name}'s profile picture.`,
         meta: { type: 'photos_swapped' },
+        game_clock_ms: gameClockMs(rel),
       });
       bus.emitEvent({ type: 'message', character_id: character.id, message: msg });
     }

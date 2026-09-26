@@ -1038,8 +1038,9 @@ input[type='range'] {
   transition: background var(--fast) var(--ease);
 }
 .log-entry:active { background: var(--surface); }
-.log-entry .head { display: flex; gap: var(--s2); align-items: baseline; }
+.log-entry .head { display: flex; gap: var(--s2); align-items: baseline; flex-wrap: wrap; }
 .log-entry .scope { color: var(--accent); font-weight: 650; font-size: 11px; }
+.log-entry .log-vitals { margin-left: auto; white-space: nowrap; }
 .log-entry pre {
   background: var(--bg-elevated);
   border: 1px solid var(--line);

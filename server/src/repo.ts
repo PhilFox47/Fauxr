@@ -625,6 +625,12 @@ export interface StoredMessage {
   read_at: string | null;
   /** null for the text chat; a dates.id for a line spoken in person during that date. */
   date_id: string | null;
+  /**
+   * This chat's own clock (engine/clock.ts) at the moment this message was sent - null for a
+   * date beat (dates run on real time, not the text chat's clock) and for anything predating
+   * this field. The chat screen displays this instead of `sent_at` when it has one.
+   */
+  game_clock_ms: number | null;
 }
 
 function hydrateMessage(row: any): StoredMessage {
@@ -642,11 +648,13 @@ export function addMessage(m: {
   read_at?: string | null;
   /** Omit for the text chat. Set to put this line in a date's own transcript instead. */
   date_id?: string | null;
+  /** This chat's own clock (engine/clock.ts) at the moment of sending - omit for a date beat. */
+  game_clock_ms?: number | null;
 }): StoredMessage {
   const info = db
     .prepare(
-      `INSERT INTO messages (character_id, sender, text, kind, meta, sent_at, read_at, date_id)
-       VALUES (@character_id, @sender, @text, @kind, @meta, @sent_at, @read_at, @date_id)`,
+      `INSERT INTO messages (character_id, sender, text, kind, meta, sent_at, read_at, date_id, game_clock_ms)
+       VALUES (@character_id, @sender, @text, @kind, @meta, @sent_at, @read_at, @date_id, @game_clock_ms)`,
     )
     .run({
       character_id: m.character_id,
@@ -659,6 +667,7 @@ export function addMessage(m: {
       // caller left it out entirely.
       read_at: 'read_at' in m ? m.read_at ?? null : m.sender === 'character' ? nowIso() : null,
       date_id: m.date_id ?? null,
+      game_clock_ms: m.game_clock_ms ?? null,
     });
   return getMessage(Number(info.lastInsertRowid))!;
 }

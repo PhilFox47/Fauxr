@@ -1066,6 +1066,14 @@ function LogsPane() {
             <span className="tiny muted">{new Date(entry.ts).toLocaleTimeString()}</span>
             <span className="scope">{entry.scope}</span>
             <span className={`level-${entry.level}`}>{entry.message}</span>
+            {/* Runtime and generation speed for an AI call, visible without expanding the
+                entry - the whole point being asked for: which calls are slow at a glance. */}
+            {typeof entry.payload?.duration_ms === 'number' && (
+              <span className="tiny muted log-vitals">
+                {(entry.payload.duration_ms / 1000).toFixed(1)}s
+                {typeof entry.payload?.tokens_per_second === 'number' ? ` · ${entry.payload.tokens_per_second} tok/s` : ''}
+              </span>
+            )}
           </div>
           {open === entry.id && (
             <>
