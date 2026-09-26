@@ -30,6 +30,9 @@ import { userCardBlock } from './usercard.js';
 import { isObj, pick } from '../llm/shape.js';
 import { castFromInvite, castLine, circleBlock, groupRules, markLeft, mergeJoined, npcBlock, presentNpcs, rememberCast } from './npcs.js';
 import { DATE_BEAT, DATE_SUMMARY, OUTFIT } from '../llm/schemas.js';
+import { isAiCharacter } from './species.js';
+import { costumeMentionBlock } from './cosplay.js';
+import { duoPartnerNpc } from './duo.js';
 
 /**
  * Dates: the other half of the game.
@@ -226,6 +229,8 @@ function buildDatePrompt(
         `the scene itself changes it (a jacket comes off, shoes come off) - never have her in ` +
         `a different outfit than this without narrating an actual reason for the change.`
       : '',
+    // A costume named tonight (in his invite, her outfit or the scene) comes with the real look.
+    costume_block: costumeMentionBlock([date.outfit ?? '', date.company ?? '', ...transcript.slice(-8).map((m) => m.text)], seed),
     life_block: lifeBlock(seed),
     interests_block: interestsBlock(seed),
     sexual_block: sexualBlock(seed),
@@ -326,7 +331,7 @@ async function runDateActor(
     }
     // Before every style check below, because a beat that stepped out of the fiction is not
     // a style problem and naming it as one sends a useless correction.
-    const refusal = detectRefusal(text);
+    const refusal = detectRefusal(text, isAiCharacter(character.seed));
     if (refusal) {
       logger.warn('actor', `date beat broke character (${refusal})`, { character: character.username, text });
       budget = Math.min(3, budget + 1);
@@ -653,7 +658,10 @@ async function openDate(character: Character, date: DateSession, location: Locat
     date.company ? castFromInvite(character, date, locationBlock(date, location), date.company, getUserProfile()) : Promise.resolve([]),
   ]);
   setDateOutfit(date.id, outfit);
-  if (cast.length) setDateNpcs(date.id, cast);
+  // On a duo profile her partner is at every date from the start (duo.ts).
+  const partner = duoPartnerNpc(character.seed);
+  const everyone = [...(partner ? [partner] : []), ...cast];
+  if (everyone.length) setDateNpcs(date.id, everyone);
 
   if (getSettings().images_enabled) {
     enqueueImage({

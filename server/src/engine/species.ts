@@ -21,6 +21,11 @@ export function speciesRow(seed: CharacterSeed): Attribute | null {
   return find('species', seed.species) ?? null;
 }
 
+/** She is an AI inside the fiction (`extra.ai`), so talking about being one is her, not a refusal. */
+export function isAiCharacter(seed: CharacterSeed): boolean {
+  return speciesRow(seed)?.extra?.ai === true;
+}
+
 export function isPower(seed: CharacterSeed): boolean {
   return speciesRow(seed)?.extra?.kind === 'power';
 }
@@ -68,4 +73,16 @@ export function bodyFits(row: Attribute | undefined, seed: { transgender?: strin
 export function speciesFits(row: Attribute | undefined, speciesId: string | undefined): boolean {
   const allowed = row?.extra?.species as string[] | undefined;
   return !allowed?.length || allowed.includes(speciesId ?? 'human');
+}
+
+/**
+ * Every restriction a kink or scenario row can carry, in one check: `extra.species`,
+ * `extra.body`, and `extra.requires` - `{ seed field: [ids] }`, e.g. `{ double_life: ['spy'] }`
+ * for "an interrogation that goes somewhere else". A missing field reads as 'none'.
+ */
+export function fitsHer(row: Attribute | undefined, seed: Partial<CharacterSeed>): boolean {
+  if (!speciesFits(row, seed.species) || !bodyFits(row, seed)) return false;
+  const requires = row?.extra?.requires as Record<string, string[]> | undefined;
+  if (!requires) return true;
+  return Object.entries(requires).every(([field, ids]) => ids.includes(String((seed as any)[field] ?? 'none')));
 }

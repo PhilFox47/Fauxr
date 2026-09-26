@@ -6,6 +6,9 @@ import { freshThreads, pruneThreads } from './state.js';
 import { chatPhotoLine } from './photolevel.js';
 import { detectAuditionFrame } from './voice.js';
 import { heroRoleRow, isPower, speciesRow, speciesVisibility, transRow } from './species.js';
+import { cosplayBlock } from './cosplay.js';
+import { duoChatNote, duoLines, duoPartner } from './duo.js';
+import { layerLines, layerVoiceLines } from './layers.js';
 import { sideDetail } from './kinks.js';
 import { coreTraits, isCore } from './profilecard.js';
 
@@ -92,6 +95,8 @@ export function identityBlock(character: Character, flags: Flags): string {
     `You are ${s.age}.`,
     ...(speciesText ? [speciesText] : []),
     ...(transText ? [transText] : []),
+    ...layerLines(s),
+    ...duoLines(s),
     ...(secretText ? [secretText] : []),
     `Who you are: ${s.hints.one_line ?? hint('archetype', s.archetype)}`,
     `Core: ${hint('archetype', s.archetype)}`,
@@ -123,7 +128,10 @@ export function communicationBlock(seed: CharacterSeed): string {
     `Register: ${hint('slang_register', seed.slang_register)}`,
     `Pace: ${hint('response_speed', seed.response_speed)}`,
     `Texting persona: ${hint('texting_persona', seed.texting_persona)}`,
-  ].join('\n');
+    // A woman from 1925 does not text like one from now; a curse can reach her messages too.
+    ...layerVoiceLines(seed),
+    duoChatNote(seed),
+  ].filter(Boolean).join('\n');
 }
 
 /**
@@ -200,7 +208,8 @@ export function interestsBlock(seed: CharacterSeed): string {
   return [
     `Into (flavour): ${seed.interests.map((i) => label('interest', i)).join(', ')}`,
     `Does: ${seed.hobbies.map((h) => (h === coreHobby ? `${label('hobby', h)} (${hint('hobby', h)}) - this one is a big part of you` : label('hobby', h))).join('; ')}`,
-  ].join('\n');
+    cosplayBlock(seed),
+  ].filter(Boolean).join('\n');
 }
 
 const STANCE_WORD: Record<string, string> = {
@@ -559,7 +568,8 @@ export function historyBlock(
     // in her history she kept commenting on "the swap".
     .filter((m) => m.meta?.type !== 'fantasy_pitch' && m.meta?.type !== 'photos_swapped')
     .map((m) => {
-      const who = m.sender === 'user' ? him : m.sender === 'character' ? her : 'system';
+      // On a duo profile a message can be her partner's (meta.from), and she has to see whose.
+      const who = m.sender === 'user' ? him : m.sender === 'character' ? (m.meta?.from ? String(m.meta.from) : her) : 'system';
       const time = new Date(m.sent_at).toLocaleString('en-GB', {
         weekday: 'short', hour: '2-digit', minute: '2-digit',
       });

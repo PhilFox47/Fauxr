@@ -24,6 +24,8 @@ export { profileHeat, profileLevel, chatPhotoLevel, photoManner } from './photol
 import type { Character, CharacterSeed, Relationship } from '../types.js';
 import { IMAGE_PROMPT, IMAGE_REVIEW, PHOTO_IDEA, PROFILE_PIC } from '../llm/schemas.js';
 import { speciesRow, speciesVisibility } from './species.js';
+import { cosplayImageBlock } from './cosplay.js';
+import { duoImageBlock } from './duo.js';
 
 /** Whether image generation is switched on at all. */
 export function photosEnabled(): boolean {
@@ -994,6 +996,11 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
           is_spicy: isSpicy ? '1' : '',
           // Only her own photos lean on her style's usual photo world (clothing_style
           // extra.photo_scene) - a date's arrival photo is in the venue, not her room.
+          // A character named in the idea ("as Tifa") gets the costume from the reference
+          // table rather than the assembler's memory of it.
+          cosplay_block: cosplayImageBlock(situation),
+          // Her duo partner, when the idea puts her in the photo (duo.ts).
+          duo_block: duoImageBlock(character.seed, situation, isSpicy),
           photo_scene: isDate ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
           mode_seedream: promptStyle === 'seedream' ? '1' : '',
           mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',

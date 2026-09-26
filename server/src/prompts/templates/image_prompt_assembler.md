@@ -64,6 +64,18 @@ Situation: {{situation}}
 Where her photos usually happen: {{photo_scene}}. Draw on it when the situation puts her
 somewhere of her own and leaves the place open; the situation always wins.
 {{/photo_scene}}
+{{#cosplay_block}}
+
+**The costume.** The situation has her dressed as a character. Reproduce that costume exactly
+as written here - wig, colours, cut, props - because a near miss reads as a different
+character. It is a cosplay on her: her own face, skin, build and body stay as the fixed block
+says, and only her hair is replaced by the wig.
+{{cosplay_block}}
+{{/cosplay_block}}
+{{#duo_block}}
+
+**Someone else in the shot.** {{duo_block}}
+{{/duo_block}}
 {{#visible_marks}}
 Marks on her body that this stage of things allows you to show: {{visible_marks}}
 

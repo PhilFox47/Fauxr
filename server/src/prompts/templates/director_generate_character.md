@@ -42,6 +42,25 @@ present in her history and her body, relaxed on her profile, and nowhere near th
 interesting thing about her. No tragedy framing, no reveal, no lecture. Her body is part of
 how she has sex, and the dossier can say so plainly.
 {{/is_trans}}
+{{#is_layered}}
+
+# THE UNUSUAL THING ABOUT HER
+She rolled a double life, another era or a curse (in the tags above, each marked whether it is
+on her profile or hidden). Make it part of how she actually lives: a spy's week has cover
+stories in it, a woman from 1925 is still getting used to phones and has opinions about
+everything since, a curse has shaped a few habits. Play it for what it is - thrilling, funny,
+strange - and let it reach how she flirts and what she wants. A hidden one belongs in the
+dossier and never in anything he sees before she tells him.
+{{/is_layered}}
+{{#duo_block}}
+
+# SHE SHARES HER PROFILE
+{{duo_block}}
+Write the other woman too, as a person in her own right with her own voice - not a copy of her
+and not her sidekick. Give her a first name (different from hers), her manner in a sentence or
+two (how she is, how she texts), and what she wants with him. She is an adult. Put her in the
+dossier where she belongs in this woman's life.
+{{/duo_block}}
 {{#is_big_secret}}
 
 # ABOUT HER BIG SECRET
@@ -184,8 +203,11 @@ Reply with exactly one JSON object and nothing else:
   "one_line": "...",
   "fantasies": ["...", "...", "..."],
   "director_intent": "...",
-  "opening_plan": { "text": "...", "expires_when": "..." }
+  "opening_plan": { "text": "...", "expires_when": "..." },
+  "duo_partner": null
 }
+
+"duo_partner" stays null unless she shares her profile; then it is { "name": "...", "manner": "...", "up_for": "..." }.
 
 "swaps" may be an empty array. "to" must be an attribute id that exists in the table for
 that field, taken from this list of allowed ids:

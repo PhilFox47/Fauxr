@@ -56,8 +56,8 @@ function rarityWeight(a: Attribute): number {
  * His own taste from Settings -> Taste, keyed "category/id" because ids are only unique per
  * category ("average" is a height, a body type and a breast size). It sits on top of
  * everything else, including the deliberately surprising ignoreArchetype rolls: it is the
- * one lean that is his rather than the character's. 0 means never; the 0.0001 floor in
- * roll() still keeps a category from coming up empty.
+ * one lean that is his rather than the character's. 0 means never; roll() only falls back to
+ * even odds when he has vetoed every row in a pool, so a category never comes up empty.
  */
 export function tasteWeight(category: string, id: string): number {
   const t = getSettings().taste?.[`${category}/${id}`];
@@ -95,15 +95,22 @@ export function roll(category: string, ctx: DiceContext, opts: RollOptions = {})
   });
   if (pool.length === 0) return null;
 
-  const weights = pool.map((a) => {
+  const raw = pool.map((a) => {
     // Rarity always applies; only the archetype's own re-weighting is skipped.
     const base = opts.ignoreArchetype ? a.weight * rarityWeight(a) : effectiveWeight(a, ctx);
-    return Math.max(base * (opts.lean?.[a.id] ?? 1) * tasteWeight(a.category, a.id), 0.0001);
+    return Math.max(base * (opts.lean?.[a.id] ?? 1) * tasteWeight(a.category, a.id), 0);
   });
+  // A 0 (his taste set to Never) is a real never. This used to be a 0.0001 floor per row,
+  // which let a vetoed duo or trans woman through about once in tens of thousands of rolls;
+  // the whole pool falls back to even odds only when every row in it is vetoed, so a
+  // category still never comes up empty.
+  const weights = raw.some((w) => w > 0) ? raw : raw.map(() => 1);
   const total = weights.reduce((a, b) => a + b, 0);
   let r = Math.random() * total;
-  let chosen = pool[pool.length - 1];
+  // The fallback (float rounding at the very end) must not land on a vetoed row either.
+  let chosen = pool[weights.findLastIndex((w) => w > 0)];
   for (let i = 0; i < pool.length; i++) {
+    if (weights[i] <= 0) continue;
     r -= weights[i];
     if (r <= 0) {
       chosen = pool[i];

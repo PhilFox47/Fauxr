@@ -21,6 +21,9 @@ import { detectQuizzingHim, detectReframe, detectRoleplay, findVoiceProblem, isR
 import { canSendPhotos } from './images.js';
 import { fantasyLog } from './fantasies.js';
 import { ACTOR_CHAT, VOICE_NOTE } from '../llm/schemas.js';
+import { isAiCharacter } from './species.js';
+import { costumeMentionBlock } from './cosplay.js';
+import { duoPartner } from './duo.js';
 
 export { detectRoleplay };
 
@@ -190,17 +193,20 @@ export function collectMessages(parsed: any): unknown[] {
   return Array.isArray(raw) ? raw : [];
 }
 
-function normalizeMessages(raw: any): ActorMessage[] {
+function normalizeMessages(raw: any, partner: string | null = null): ActorMessage[] {
   const { max_messages_per_turn, max_delay_seconds } = getSettings().chat;
   const list = Array.isArray(raw) ? raw : [];
   const out: ActorMessage[] = [];
   for (const m of list.slice(0, max_messages_per_turn)) {
     const text = String(typeof m === 'string' ? m : pick(m, ['text', 'message', 'content', 'body']) ?? '').trim();
     if (!text) continue;
+    // Only her duo partner can write a message of her own; any other "from" is her.
+    const from = partner && typeof m === 'object' && String(m?.from ?? '').trim().toLowerCase() === partner.toLowerCase() ? partner : undefined;
     out.push({
       text,
       delay: out.length === 0 ? 0 : typingDelay(text, max_delay_seconds),
       kind: 'text',
+      ...(from ? { from } : {}),
     });
   }
   return out;
@@ -263,6 +269,7 @@ function buildPrompt(
     release_block: releaseBlock(character, relationship),
     moment_block: describeHerMoment(character),
     continuity_block: continuityBlock(relationship.mood),
+    costume_block: costumeMentionBlock(messages.slice(-8).map((m) => m.text), seed),
     turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),
     max_messages: settings.chat.max_messages_per_turn,
@@ -375,7 +382,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
     }
 
     const out: ActorOutput = {
-      messages: normalizeMessages(collectMessages(parsed)),
+      messages: normalizeMessages(collectMessages(parsed), duoPartner(ctx.character.seed)?.name ?? null),
       hidden: normalizeHidden(collectHidden(parsed)),
     };
     if (out.messages.length === 0) {
@@ -441,6 +448,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
           lastUserMessage,
           writesFormally: writesFormally(ctx.character),
           recentOwnMessages,
+          aiCharacter: isAiCharacter(ctx.character.seed),
           // Last attempt: two independently generated replies both reading as repetitive is
           // more likely a narrow-themed exchange than a model that is actually stuck, and
           // rejecting this one too would only spend the last retry on a fallback line.

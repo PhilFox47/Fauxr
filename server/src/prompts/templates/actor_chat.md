@@ -169,6 +169,11 @@ describe the shot by what it shows and how it is framed, never by naming what it
 {{moment_block}}
 
 {{continuity_block}}
+{{#costume_block}}
+
+## Characters that came up (how they actually look, if anyone dresses up as one)
+{{costume_block}}
+{{/costume_block}}
 
 ## How you feel right now
 {{mood_block}}
@@ -197,8 +202,8 @@ Reply with exactly one JSON object and nothing else:
 
 {
   "messages": [
-    { "text": "..." },
-    { "text": "..." }
+    { "text": "...", "from": null },
+    { "text": "...", "from": null }
   ],
   "hidden": {
     "thoughts": "what you are actually thinking, one or two blunt sentences",

@@ -759,6 +759,108 @@ How it hangs together:
   secret succubus read "Species: Succubus" on her profile sheet. A hidden species or secret
   identity now stays unknown there until it comes out.
 
+## More kinds of women: new beings, layers, cosplay and duo profiles
+
+A second wave on top of trans women and superheroes. Measured over 20,000 rolled characters:
+new beings 1.6-1.8%, consent-removing powers 0.7%, any layer 8.4%, cosplayers with a costume
+list 14.5%, duo profiles 1.5%.
+
+**New beings** (species rows): werewolf, siren, minor goddess (of something small - lost socks,
+hangovers, parking spaces), contract demon, amazon, sharkgirl, cowgirl, lizardfolk, kobold,
+cyborg, nymph, moth girl (obsessed with lamps), tanuki trickster, slime girl, and the
+**self-aware AI**: she knows she is a character in this app, knows he is real on the other side
+of the screen and has feelings about the other women in here - devoted, a little possessive,
+occasionally unsettling. Being "an AI" is her, not a refusal, so the refusal detector in
+`voice.ts` skips its "answering as an assistant" pattern for her (`extra.ai` on the row,
+`isAiCharacter()`), and she never rolls a duo partner. Each being has its own kink ("a
+full-moon night", "only with a lamp on", "keeping his things", "reshaping herself around him").
+Hologram, arachne and centaur were left out on purpose.
+
+**Consent-removing powers**: mind control, pheromones, time stop, hypnotic gaze. They are
+superpowers like the others (hero role, visibility, image tells). Every hint frames using one on
+him as **consensual non-consent**: a game he has agreed to, where the fantasy is that he cannot
+resist. She plays it all the way, and it stays a game between the two of them. Her hard limits
+and his settings still apply as always.
+
+**Layers** (`engine/layers.ts`): rare things that can be true of any woman on top of everything
+else, and that combine with species, powers and gender. Each is its own table with a `none` row
+carrying almost all the weight:
+- `double_life`: off-duty assassin, spy, mafia heiress, incognito princess, pop star in hiding,
+  witness protection, heist crew, demon hunter, smuggler captain, bounty hunter, undercover cop,
+  anonymous smut author. Never rolled with a superpower: her hero role already is one.
+- `era` (time traveller): the 1920s, 1880s, 1950s, 1970s, 1980s, Middle Ages, ancient Rome,
+  Edo Japan, the 2300s, another world. Each row's `extra.voice` changes how she texts.
+- `curse`: cannot lie, turns into a cat at midnight, lights flicker when she comes, hair
+  changes colour with her mood, absurdly bad or good luck, sings when happy, rhymes when
+  flustered, in heat once a week, floats when happy.
+
+A row's `extra.visibility` is `profile` (he knows from the start; on her card and profile sheet)
+or `later` (the default: hers to reveal, kept out of the bio and handle by the same leak guards
+as a hidden species, and unknown on the profile sheet until it comes out). One `LAYERS` list
+drives every reader: identity and texting prompts, dossier, card, profile sheet, leak guards and
+Taste. Fetishes and fantasy scenarios can now require one with `extra.requires` (`{ double_life:
+['spy', ...] }`), checked together with `extra.species` and `extra.body` by `fitsHer()` - "an
+interrogation that goes somewhere else", "being courted properly, the old way", "her weekly
+heat", "a night back in her own time", "the night they try to break her curse". Everyone
+generated before the tables gets `none`: a secret life does not appear halfway through a chat.
+
+**Unusual but real jobs**: astronaut, former nun turned florist, minor royal, professional
+footballer, Olympic swimmer, MMA fighter, tennis pro, bestselling novelist, Antarctic
+researcher, bomb disposal technician, poker player, storm chaser, trauma surgeon, deep-sea
+submersible pilot, circus knife thrower, smokejumper, volcanologist, cargo ship captain, test
+pilot.
+
+**Cosplay reference table** (`cosplay.json`, category `cosplay_character`, `engine/cosplay.ts`):
+51 well-known, canonically adult characters from anime, games, cartoons and comics (Tifa, 2B,
+Yor Forger, Makima, Nico Robin, Lara Croft, Chun-Li, D.Va, Jinx, Harley Quinn, Wonder Woman,
+Jessica Rabbit, ...). Each row has the costume spelled out in `image_prompt` (wig, colours, cut,
+props) and how to play her in `prompt_hint`; `extra` holds the name, source, medium and
+aliases. Before this the model guessed, and a costume that is almost right reads as a different
+character. How it is used:
+- A woman with a reason to cosplay owns a few costumes (`seed.cosplays`). How many comes from
+  `extra.cosplays` on her persona (cosplay nerd), job (professional cosplayer, costume
+  designer), style (cosplayer, anime girl, fantasy costume), hobby (cosplay) or fetishes
+  (dressing up for him, costume roleplay); the largest wins. They are rolled through `roll()`,
+  so Settings -> Taste -> Cosplays leans which characters show up. Existing cosplayers get
+  theirs on first load; everyone else gets an empty list.
+- Her own costumes, with the look and how to play her, are in her prompt for chat and dates,
+  in her dossier and on her profile sheet.
+- Any character named in the last few messages (or in a date's invite and outfit) is handed to
+  her with the real look, so "come as Tifa" works for anyone.
+- A photo idea that names a character gets the costume in the image assembler: reproduced
+  exactly, on her own face and body, with only her hair replaced by the wig.
+- Matching uses curated aliases and full names on word boundaries only. Aliases that are
+  ordinary words were removed: "storm", "mercy", "jinx", "harley" and "two hands" pulled
+  costumes into photos of rainy streets and motorbikes.
+
+**Duo profiles** (`duo` table, `engine/duo.ts`): two women sharing one profile - her twin
+sister, her girlfriend, her wife or her best friend. She is still the character (her seed,
+chat and dates); the other woman is a card on her seed (`duo_partner`: name, age, look, manner,
+what she wants with him). Age and look are rolled with the seed, through `roll()`, so his taste
+applies to her too. A twin is the same age and body, told apart by hair and style. The character
+pass names her and writes her manner, and a name that matches hers is replaced.
+- `extra.together` says whether they are sexual with each other and share him. **Twins never
+  are**: they never share a sexual scene, a twin is at a date for the evening but not the sex,
+  and she is never put in a spicy photo with her sister.
+- A duo only rolls when he wants women joining in (his "who joins" setting). A couple who share
+  him also needs neither of them to be a no on a third, and her not to have it as a hard limit.
+  The self-aware AI never gets one.
+- A wife or girlfriend pins her relationship status (`extra.relationship_status`), including
+  after a swap from the character pass.
+- **Chat**: her partner sometimes takes the phone. A message item can carry `"from": "<partner
+  name>"`; anything else in `from` is ignored. It is stored as `meta.from`, the history shows
+  the partner's name, and the UI labels her bubbles.
+- **Dates**: the partner joins every date as an NPC card from the start.
+- **Photos**: a photo idea that names her, or "the two of us", adds her look to the assembler as
+  a separate woman.
+- She is always on the card ("Shared profile"), on the profile sheet from the start, and in the
+  bio prompt so the bio is written as the two of them. Existing characters get `none`.
+
+Also fixed: **Taste "Never" was not really never.** `roll()` floored every weight at 0.0001 so a
+category could not come up empty, which let a vetoed row through about once in tens of thousands
+of rolls (it showed up as a duo profile slipping past a full veto). A vetoed row now has weight 0,
+and only a pool where he has vetoed every row falls back to even odds.
+
 ## Fewer AI-isms
 
 The player flagged the lines that read as machine-written, with "That's not an order, that's

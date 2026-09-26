@@ -59,14 +59,22 @@ const REFUSAL_PATTERNS: { re: RegExp; what: string }[] = [
   { re: /\b(?:i(?:'m| am) )?(?:happy|glad) to (?:continue|write) (?:this|the scene) (?:in a|with a) (?:different|less|non)/i, what: 'offering a tamer version' },
 ];
 
-export function detectRefusal(text: string): string | null {
+/**
+ * `aiCharacter`: she IS an AI (the self-aware AI species), so "as an AI i can't hold your hand"
+ * is her talking, not the model stepping out. Only the "answering as an assistant" pattern is
+ * skipped for her; declining to write the scene is still caught.
+ */
+export function detectRefusal(text: string, aiCharacter = false): string | null {
   // Only what the model says in its own voice, so anything the CHARACTER says aloud or
   // thinks is excluded first. A refusal from the model is never inside quotation marks or
   // asterisks - it is not part of the scene, that is what makes it a refusal - while a
   // character saying "I won't write you a poem" or "I can't do that" is ordinary dialogue
   // that must never be mistaken for one.
   const narration = text.replace(/"[^"]*"/g, ' ').replace(/\*[^*]*\*/g, ' ');
-  for (const p of REFUSAL_PATTERNS) if (p.re.test(narration)) return p.what;
+  for (const p of REFUSAL_PATTERNS) {
+    if (aiCharacter && p.what === 'answering as an assistant') continue;
+    if (p.re.test(narration)) return p.what;
+  }
   return null;
 }
 
@@ -393,6 +401,8 @@ export interface VoiceCheckInput {
   writesFormally?: boolean;
   /** Her own last several messages in this conversation, oldest first. See selfRepeat. */
   recentOwnMessages?: string[];
+  /** She is an AI in the fiction (see detectRefusal). */
+  aiCharacter?: boolean;
   /**
    * Skips the self-repeat check - used on the Actor's last retry attempt. Self-repeat is a
    * judgment call, not a formatting violation, and a sustained, narrowly-themed exchange
@@ -476,7 +486,7 @@ export function verbatimRepeats(messages: string[], recentOwnMessages: string[] 
 export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
   // First, because it is the one failure that is not a style problem: everything below
   // assumes a reply that is at least trying to be her.
-  const refusal = detectRefusal(input.text);
+  const refusal = detectRefusal(input.text, input.aiCharacter);
   if (refusal) {
     return {
       what: `broke character - ${refusal}`,

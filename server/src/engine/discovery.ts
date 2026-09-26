@@ -3,6 +3,8 @@ import { getUserProfile } from '../repo.js';
 import type { Character, KinkSide, Relationship } from '../types.js';
 import { sideLabel } from './kinks.js';
 import { heroRoleRow, isPower, speciesCaption, speciesHidden, transRow } from './species.js';
+import { herLayers, layerVisible } from './layers.js';
+import { duoPartner, partnerRelation } from './duo.js';
 
 /**
  * Everything a player can learn about a character, and whether they have learned it yet.
@@ -48,6 +50,8 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   // ---- basics
   add('real_name', 'basics', 'Name', character.real_name, '');
   add('age', 'basics', 'Age', String(s.age), 'On her profile from the start.');
+  add('duo', 'basics', 'Shares the profile with',
+    duoPartner(s) ? `${duoPartner(s)!.name}, ${partnerRelation(s)} (${duoPartner(s)!.age})` : '', 'On her profile from the start.');
   add('transgender', 'basics', 'Gender', transRow(s)?.label ?? '', 'On her profile from the start.');
   add('languages', 'basics', 'Languages', s.languages.map(langLabel).join(', '), 'On her profile from the start.');
   add('occupation', 'life', 'Work', label('occupation', s.occupation), 'Ask what she does. Or notice when she says it.');
@@ -64,6 +68,7 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   // ---- interests
   s.interests.forEach((i) => add(`interest:${i}`, 'interests', 'Into', label('interest', i), 'Get her talking about it.'));
   s.hobbies.forEach((h) => add(`hobby:${h}`, 'interests', 'Does', label('hobby', h), 'Ask what she does with her time.'));
+  (s.cosplays ?? []).forEach((c) => add(`cosplay:${c}`, 'interests', 'Cosplays as', label('cosplay_character', c), 'Ask about her costumes.'));
 
   // ---- looks: photos, or meeting her
   // Species is the one 'looks' fact that can also come out in conversation rather than only
@@ -71,6 +76,9 @@ export function buildCatalogue(character: Character): DiscoverableFact[] {
   add('species', 'looks', speciesCaption(s), s.species && s.species !== 'human' ? label('species', s.species) : '',
     isPower(s) ? 'She will show you when she is ready.' : 'Shows in a photo, or comes up on its own.');
   add('hero_role', 'personality', 'Hero role', heroRoleRow(s)?.label ?? '', 'Comes with the power.');
+  for (const { def, row } of herLayers(s)) {
+    add(def.field, 'personality', def.caption, row.label, layerVisible(row) ? 'On her profile from the start.' : 'She will tell you when she is ready.');
+  }
   add('hair', 'looks', 'Hair', `${label('hair_color', s.hair_color)}, ${label('hair_style', s.hair_style)}`, 'Needs a photo.');
   add('eyes', 'looks', 'Eyes', label('eye_color', s.eye_color), 'Needs a photo.');
   add('height', 'looks', 'Height', label('height', s.height), 'Needs a photo, or a date.');
@@ -128,9 +136,11 @@ function knownFromStart(catalogue: DiscoverableFact[], character: Character): Se
   // A hidden species or a secret identity is hers to reveal. As a 'looks' fact it used to count
   // as known from the start, so a secret succubus read "Species: Succubus" on her profile sheet.
   const hidden = speciesHidden(character.seed);
+  // Same for a double life, era or curse she keeps to herself.
+  const hiddenLayers = new Set(herLayers(character.seed).filter(({ row }) => !layerVisible(row)).map(({ def }) => def.field as string));
   return new Set(
     catalogue
-      .filter((f) => f.category !== 'intimate' && !(hidden && (f.key === 'species' || f.key === 'hero_role')))
+      .filter((f) => f.category !== 'intimate' && !(hidden && (f.key === 'species' || f.key === 'hero_role')) && !hiddenLayers.has(f.key))
       .map((f) => f.key),
   );
 }

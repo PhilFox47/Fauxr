@@ -672,7 +672,9 @@ export default function Chat({
               ) : m.kind === 'voice' ? (
                 <VoiceBubble message={m} mine={mine} />
               ) : (
-                <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}${m.meta?.reaction ? ' reacted' : ''}`}>
+                <div className={`bubble ${mine ? 'me' : 'them'}${mid ? ' mid' : ''}${m.meta?.reaction ? ' reacted' : ''}${m.meta?.from ? ' partner' : ''}`}>
+                  {/* On a duo profile her partner sometimes takes the phone. */}
+                  {m.meta?.from && <span className="bubble-from">{m.meta.from}</span>}
                   {m.text}
                   {m.meta?.reaction && (
                     <span className="bubble-reaction" title="Her reaction">{m.meta.reaction}</span>

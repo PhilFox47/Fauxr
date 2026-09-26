@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { find } from '../db/attributes.js';
 import type { CharacterSeed, CoreEntry } from '../types.js';
 import { speciesCaption, speciesRow, speciesVisibility, transRow } from './species.js';
+import { herLayers, layerVisible } from './layers.js';
 
 /**
  * Her core: the three to five things that define her - "Kristina is a girl who is a tsundere,
@@ -74,6 +75,13 @@ function options(seed: CharacterSeed): Option[] {
     ...(transRow(seed)
       ? [{ category: 'transgender', id: seed.transgender!, key: 'transgender', caption: 'Gender', group: 'gender', lean: 1.2 }]
       : []),
+    // A shared profile (duo.ts) is the first thing anyone swiping needs to know: always on the card.
+    ...(seed.duo && seed.duo !== 'none'
+      ? [{ category: 'duo', id: seed.duo, key: 'duo', caption: 'Shared profile', group: 'duo', lean: 0, force: true }]
+      : []),
+    // A layer on her profile (layers.ts) is exactly the kind of thing a card should lead with.
+    ...herLayers(seed).filter(({ row }) => layerVisible(row)).map(({ def, row }) => (
+      { category: def.field, id: row.id, key: def.field, caption: def.caption, group: `layer:${def.field}`, lean: 1.4 })),
     { category: 'archetype', id: seed.archetype, key: 'archetype', caption: 'Personality', group: 'identity', lean: 0.55 },
     { category: 'humor_type', id: seed.humor_type, key: 'humor_type', caption: 'Humour', group: 'voice', lean: 0.35 },
     { category: 'texting_persona', id: seed.texting_persona, key: 'texting_persona', caption: 'Texts like', group: 'voice', lean: 0.5 },

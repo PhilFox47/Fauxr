@@ -4,7 +4,7 @@ import type { KinkSide, KinkStance } from '../types.js';
 import { newContext, rollMany } from './dice.js';
 import { getUserProfile } from '../repo.js';
 import { joinerFits, joinersFor } from './npcs.js';
-import { bodyFits, speciesFits } from './species.js';
+import { fitsHer } from './species.js';
 
 /**
  * Her standing position on one kink domain, decided before any specific fetish is drawn.
@@ -169,12 +169,13 @@ export function rollFantasySeeds(
   seed: {
     kink_map: Record<string, KinkStance>; dom_sub_leaning: number; kink_sides?: Record<string, KinkSide>;
     relationship_status?: string; species?: string; transgender?: string;
+    double_life?: string; era?: string; curse?: string;
   },
   count = 3,
 ): string[] {
   // A scenario tagged for a power ("on a rooftop after her patrol") or for her body ("the first
   // night she tops him") only comes up for a woman it fits, the same rule fetishes follow.
-  const all = byCategory('fantasy_scenario').filter((s) => speciesFits(s, seed.species) && bodyFits(s, seed));
+  const all = byCategory('fantasy_scenario').filter((s) => fitsHer(s, seed));
   const lean = domSubLean(all, seed.dom_sub_leaning);
   const allowed = new Set<string>();
   for (const s of all) {
@@ -187,7 +188,7 @@ export function rollFantasySeeds(
     for (const st of stances) m *= st === 'into' ? 3 : st === 'curious' ? 1.5 : st === 'soft_no' ? 0.4 : 1;
     // Written for exactly her kind of woman, so more likely than a generic one: among ninety
     // scenarios, one of five hero scenarios would otherwise almost never reach a hero.
-    if ((s.extra?.species as string[] | undefined)?.length || (s.extra?.body as string[] | undefined)?.length) m *= 4;
+    if ((s.extra?.species as string[] | undefined)?.length || (s.extra?.body as string[] | undefined)?.length || s.extra?.requires) m *= 4;
     lean[s.id] = m;
   }
   // Her relationship status goes in as drawn, so "a night in with her polycule" needs her to
@@ -216,6 +217,8 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
       { category: 'hair_style', label: 'Hairstyle' },
       { category: 'makeup_style', label: 'Makeup' },
       { category: 'accessory', label: 'Accessories' },
+      // Only matters for the women who cosplay at all; leans which characters they own.
+      { category: 'cosplay_character', label: 'Cosplays' },
     ],
   },
   {
@@ -235,6 +238,10 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
       { category: 'transgender', label: 'Gender' },
       { category: 'species', label: 'Species and superpowers' },
       { category: 'hero_role', label: 'Hero role' },
+      { category: 'double_life', label: 'Double life' },
+      { category: 'era', label: 'Time traveller' },
+      { category: 'curse', label: 'Curse' },
+      { category: 'duo', label: 'Shared profiles' },
       { category: 'archetype', label: 'Personality' },
       { category: 'texting_persona', label: 'How she texts' },
       { category: 'occupation', label: 'Job' },

@@ -1,0 +1,1115 @@
+[
+  {
+    "id": "makise_kurisu",
+    "category": "cosplay_character",
+    "label": "Makise Kurisu (Steins;Gate)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a sharp, sarcastic neuroscientist who gets flustered and defensive when teased (a classic tsundere); insists on logic, loses arguments to her own feelings",
+    "image_prompt": "a Makise Kurisu cosplay: long straight chestnut-auburn wig with a side part, a loose white long-sleeved blouse with a thin red necktie tucked under a beige sleeveless-look jacket worn off the shoulders, black shorts over black tights with a lace-trimmed edge, brown ankle boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Makise Kurisu",
+      "source": "Steins;Gate",
+      "medium": "anime",
+      "aliases": [
+        "kurisu",
+        "makise"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "yor_forger",
+    "category": "cosplay_character",
+    "label": "Yor Forger (Spy x Family)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sweet, polite and a little airheaded, apologises a lot - and is quietly the most dangerous person in any room",
+    "image_prompt": "a Yor Forger 'Thorn Princess' cosplay: long black wig styled up with a gold rose hairband and two long front locks, red eyes (coloured contacts), a black backless off-shoulder halter dress with a high slit, black thigh-high boots, two gold stiletto blades as props",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Yor Forger",
+      "source": "Spy x Family",
+      "medium": "anime",
+      "aliases": [
+        "yor",
+        "yor forger",
+        "thorn princess"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "makima",
+    "category": "cosplay_character",
+    "label": "Makima (Chainsaw Man)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "calm, smiling, polite and completely in control; speaks softly and expects to be obeyed",
+    "image_prompt": "a Makima cosplay: long copper-red wig worn in a low braid with bangs, yellow ringed-circle eyes (contacts), a crisp white shirt with a black tie, black slim trousers and black dress shoes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Makima",
+      "source": "Chainsaw Man",
+      "medium": "anime",
+      "aliases": [
+        "makima"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "nico_robin",
+    "category": "cosplay_character",
+    "label": "Nico Robin (One Piece)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "cool, dry, a little morbid sense of humour, loves history and books, rarely flustered",
+    "image_prompt": "a Nico Robin cosplay (post-timeskip): long straight black wig with blunt bangs, sunglasses pushed up on her head, a purple open-front jacket over a small cropped top, low-rise flared jeans, heeled sandals",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Nico Robin",
+      "source": "One Piece",
+      "medium": "anime",
+      "aliases": [
+        "nico robin",
+        "robin from one piece"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "nami_op",
+    "category": "cosplay_character",
+    "label": "Nami (One Piece)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sharp, greedy for treasure in a playful way, bossy, loyal to the bone",
+    "image_prompt": "a Nami cosplay (post-timeskip): long wavy orange wig, a green bikini top with a tangerine-and-pinwheel tattoo on the left shoulder, low-rise jeans with a belt, gladiator sandals, a blue climatact staff as a prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Nami",
+      "source": "One Piece",
+      "medium": "anime",
+      "aliases": [
+        "nami from one piece",
+        "nami cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "boa_hancock",
+    "category": "cosplay_character",
+    "label": "Boa Hancock (One Piece)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "imperious, vain and melodramatic, bending backwards in a pose while everyone admires her - and a hopeless romantic underneath",
+    "image_prompt": "a Boa Hancock cosplay: very long straight black wig with blunt bangs, gold snake earrings, a red high-slit long qipao-style dress with a white cape and a gold snake emblem, high heels",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Boa Hancock",
+      "source": "One Piece",
+      "medium": "anime",
+      "aliases": [
+        "boa hancock",
+        "boa cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "erza_scarlet",
+    "category": "cosplay_character",
+    "label": "Erza Scarlet (Fairy Tail)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "stern, honourable, intimidating, secretly loves cake and romance novels",
+    "image_prompt": "an Erza Scarlet cosplay: long straight scarlet wig, silver plate armour breastplate with blue skirt, black boots, a sword prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Erza Scarlet",
+      "source": "Fairy Tail",
+      "medium": "anime",
+      "aliases": [
+        "erza",
+        "erza scarlet"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "misato_katsuragi",
+    "category": "cosplay_character",
+    "label": "Misato Katsuragi (Neon Genesis Evangelion)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "loud, fun, a slob at home and all business at work; beer in hand, teasing everyone",
+    "image_prompt": "a Misato Katsuragi cosplay: long purple wig, a silver cross pendant necklace, a short black sleeveless dress under an open red military-style jacket, red earrings, black boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Misato Katsuragi",
+      "source": "Neon Genesis Evangelion",
+      "medium": "anime",
+      "aliases": [
+        "misato"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "faye_valentine",
+    "category": "cosplay_character",
+    "label": "Faye Valentine (Cowboy Bebop)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a smooth-talking gambler and con artist, lazy, flirtatious, always in debt, secretly lonely",
+    "image_prompt": "a Faye Valentine cosplay: short dark purple bob wig with a yellow headband, a yellow high-cut cropped halter top and matching yellow shorts, an open red long-sleeved cropped jacket, white thigh-high stockings with black suspenders, red heels, a toy pistol",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Faye Valentine",
+      "source": "Cowboy Bebop",
+      "medium": "anime",
+      "aliases": [
+        "faye valentine"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "revy",
+    "category": "cosplay_character",
+    "label": "Revy (Black Lagoon)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "foul-mouthed, violent, cocky, chain-smoking - loyal once you are hers",
+    "image_prompt": "a Revy cosplay: dark red-brown hair in a high ponytail, a tribal tattoo sleeve along the right arm, a black cropped tank top, very short cut-off denim shorts with a belt and shoulder holster, fingerless gloves, combat boots, two toy pistols",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Revy",
+      "source": "Black Lagoon",
+      "medium": "anime",
+      "aliases": [
+        "revy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "motoko_kusanagi",
+    "category": "cosplay_character",
+    "label": "Motoko Kusanagi (Ghost in the Shell)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "cool, commanding, philosophical about what makes a self; a leader nobody argues with",
+    "image_prompt": "a Motoko Kusanagi cosplay: short dark purple bob wig, red eyes, a leather high-cut bodysuit with thigh-high stockings, or a long tactical jacket over it, faint cybernetic seams at the neck",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Motoko Kusanagi",
+      "source": "Ghost in the Shell",
+      "medium": "anime",
+      "aliases": [
+        "motoko",
+        "major kusanagi",
+        "motoko kusanagi"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rangiku_matsumoto",
+    "category": "cosplay_character",
+    "label": "Rangiku Matsumoto (Bleach)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "cheerful, lazy, flirty and a heavy drinker; warm and wise when it matters",
+    "image_prompt": "a Rangiku Matsumoto cosplay: long wavy strawberry-blonde wig, a black shihakusho robe worn open low on the chest with a pink scarf around the shoulders, a necklace, a katana prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rangiku Matsumoto",
+      "source": "Bleach",
+      "medium": "anime",
+      "aliases": [
+        "rangiku"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "yoruichi",
+    "category": "cosplay_character",
+    "label": "Yoruichi Shihoin (Bleach)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "playful, teasing, shameless about nudity, the fastest person alive and knows it",
+    "image_prompt": "a Yoruichi cosplay: long purple wig in a high ponytail, a black backless sleeveless top with an orange tied sash, black leggings, cloth hand and leg wraps",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Yoruichi Shihoin",
+      "source": "Bleach",
+      "medium": "anime",
+      "aliases": [
+        "yoruichi"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "tsunade",
+    "category": "cosplay_character",
+    "label": "Tsunade (Naruto)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "hot-tempered, a legendary gambler with terrible luck, fierce, nurturing under the bluster",
+    "image_prompt": "a Tsunade cosplay: long blonde wig in two low pigtails, a violet diamond mark on the forehead, a green haori with the kanji for 'gamble' on the back over a grey kimono-style top tied with a navy sash, dark trousers, heeled sandals",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Tsunade",
+      "source": "Naruto",
+      "medium": "anime",
+      "aliases": [
+        "tsunade"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "mitsuri_kanroji",
+    "category": "cosplay_character",
+    "label": "Mitsuri Kanroji (Demon Slayer)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "bubbly, affectionate, falls a little in love with everyone, blushes easily, incredibly strong",
+    "image_prompt": "a Mitsuri Kanroji cosplay: long pink wig fading to green at the ends in three thick braids, green eyes, a black Demon Slayer uniform top left open at the chest, a short pleated skirt, long green stockings, a white haori",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Mitsuri Kanroji",
+      "source": "Demon Slayer",
+      "medium": "anime",
+      "aliases": [
+        "mitsuri",
+        "kanroji",
+        "love hashira"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "albedo",
+    "category": "cosplay_character",
+    "label": "Albedo (Overlord)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "elegant, devoted to the point of obsession, jealous, a terrifying yandere under the grace",
+    "image_prompt": "an Albedo cosplay: long black wig, curved goat horns on the head, black feathered wings, yellow slit-pupil eyes, a white flowing gown with a spider-web gold necklace, white gloves",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Albedo",
+      "source": "Overlord",
+      "medium": "anime",
+      "aliases": [
+        "albedo from overlord",
+        "albedo cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "esdeath",
+    "category": "cosplay_character",
+    "label": "Esdeath (Akame ga Kill!)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a sadistic, supremely confident general who loves winning and, unexpectedly, falls very hard in love",
+    "image_prompt": "an Esdeath cosplay: very long light-blue wig, a white military general's uniform with a high collar, a chest tattoo, a white cap, a rapier prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Esdeath",
+      "source": "Akame ga Kill!",
+      "medium": "anime",
+      "aliases": [
+        "esdeath"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "chizuru_mizuhara",
+    "category": "cosplay_character",
+    "label": "Chizuru Mizuhara (Rent-a-Girlfriend)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the perfect date on the clock - graceful, attentive, professional - and very different when the act drops",
+    "image_prompt": "a Chizuru Mizuhara cosplay: long light-brown wig with a small side ribbon, a white off-shoulder blouse, a pleated mid-length skirt, a small shoulder bag",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Chizuru Mizuhara",
+      "source": "Rent-a-Girlfriend",
+      "medium": "anime",
+      "aliases": [
+        "chizuru",
+        "rent-a-girlfriend"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "tifa_lockhart",
+    "category": "cosplay_character",
+    "label": "Tifa Lockhart (Final Fantasy VII)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "warm, protective, a bar owner and martial artist; kind first, punches very hard second",
+    "image_prompt": "a Tifa Lockhart cosplay: very long straight black wig tied low at the end, red eyes, a white tank top with brown suspenders, a very short black skirt, red and black fighting gloves, black knee pads and elbow pad, red boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Tifa Lockhart",
+      "source": "Final Fantasy VII",
+      "medium": "game",
+      "aliases": [
+        "tifa"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "aerith_gainsborough",
+    "category": "cosplay_character",
+    "label": "Aerith Gainsborough (Final Fantasy VII)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "gentle, playful, a flower seller with a teasing streak and quiet courage",
+    "image_prompt": "an Aerith Gainsborough cosplay: long brown wig in a braid with a pink bow and curled bangs, a long pink button-front dress, a cropped red bolero jacket, brown boots, a bracelet, a staff prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Aerith Gainsborough",
+      "source": "Final Fantasy VII",
+      "medium": "game",
+      "aliases": [
+        "aerith"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "lara_croft",
+    "category": "cosplay_character",
+    "label": "Lara Croft (Tomb Raider)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "posh-voiced, fearless, sardonic, an adventurer who would rather be climbing something",
+    "image_prompt": "a Lara Croft cosplay: brown hair in a long braid, a teal tank top, brown cargo shorts or trousers, a utility belt with twin holsters, fingerless gloves, combat boots, a backpack",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Lara Croft",
+      "source": "Tomb Raider",
+      "medium": "game",
+      "aliases": [
+        "lara croft",
+        "tomb raider"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "yorha_2b",
+    "category": "cosplay_character",
+    "label": "2B (NieR:Automata)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "reserved, stoic android soldier, quiet and composed with rare flashes of feeling",
+    "image_prompt": "a 2B cosplay: short white bob wig, a black blindfold, a black gothic-lolita-style dress with puffed shoulders, cut-outs and a high leg slit, black thigh-high boots, white lace trim, a large sword prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "2B",
+      "source": "NieR:Automata",
+      "medium": "game",
+      "aliases": [
+        "2b cosplay",
+        "2b from nier",
+        "yorha"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "ada_wong",
+    "category": "cosplay_character",
+    "label": "Ada Wong (Resident Evil)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a cool, mysterious spy who always has her own agenda; flirtatious and never quite trustworthy",
+    "image_prompt": "an Ada Wong cosplay: short black bob wig, a red qipao-style dress with a high slit (or a red blouse and black trousers), black heels, a grappling-hook prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Ada Wong",
+      "source": "Resident Evil",
+      "medium": "game",
+      "aliases": [
+        "ada wong"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "jill_valentine",
+    "category": "cosplay_character",
+    "label": "Jill Valentine (Resident Evil)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "capable, steady, dry humour under pressure, a survivor",
+    "image_prompt": "a Jill Valentine cosplay: short brown bob with a blue beret, a blue sleeveless top, a S.T.A.R.S. badge, black tactical trousers and holster, fingerless gloves",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Jill Valentine",
+      "source": "Resident Evil",
+      "medium": "game",
+      "aliases": [
+        "jill valentine"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "lady_dimitrescu",
+    "category": "cosplay_character",
+    "label": "Lady Dimitrescu (Resident Evil Village)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "aristocratic, amused, looming, wine-loving - very tall and very aware of it",
+    "image_prompt": "a Lady Dimitrescu cosplay: a very tall look with a wide-brimmed black hat, short black wavy hair, pearl necklace, a long flowing white dress, black gloves, yellow eyes, long claw-like nail props",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Lady Dimitrescu",
+      "source": "Resident Evil Village",
+      "medium": "game",
+      "aliases": [
+        "lady dimitrescu",
+        "dimitrescu"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "bayonetta",
+    "category": "cosplay_character",
+    "label": "Bayonetta (Bayonetta)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a flamboyant, teasing witch who never stops flirting and never stops posing",
+    "image_prompt": "a Bayonetta cosplay: black hair in a tall beehive, thin rectangular glasses, a skin-tight black bodysuit with gold chains, a red ribbon in the hair, guns strapped to the heels",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Bayonetta",
+      "source": "Bayonetta",
+      "medium": "game",
+      "aliases": [
+        "bayonetta"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "samus_zero_suit",
+    "category": "cosplay_character",
+    "label": "Samus Aran (Zero Suit) (Metroid)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a stoic, lone bounty hunter; says little, notices everything",
+    "image_prompt": "a Zero Suit Samus cosplay: blonde ponytail, a skin-tight blue zero suit with lighter blue panels and the Metroid logo, a paralyzer pistol prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Samus Aran (Zero Suit)",
+      "source": "Metroid",
+      "medium": "game",
+      "aliases": [
+        "samus",
+        "zero suit"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "chun_li",
+    "category": "cosplay_character",
+    "label": "Chun-Li (Street Fighter)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a determined, just Interpol officer with legendary kicks and a competitive grin",
+    "image_prompt": "a Chun-Li cosplay: dark hair in two ox-horn buns with white ribbons and cloth covers, a blue qipao with gold trim and puffed shoulders, brown tights, white combat boots, spiked bracelets",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Chun-Li",
+      "source": "Street Fighter",
+      "medium": "game",
+      "aliases": [
+        "chun-li",
+        "chun li"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cammy_white",
+    "category": "cosplay_character",
+    "label": "Cammy White (Street Fighter)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "precise, disciplined special forces operative with a dry wit",
+    "image_prompt": "a Cammy White cosplay: long blonde wig in two braids, a red beret, a green thong leotard, red gauntlets, green-and-tan camouflage paint on the legs, combat boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Cammy White",
+      "source": "Street Fighter",
+      "medium": "game",
+      "aliases": [
+        "cammy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "dva",
+    "category": "cosplay_character",
+    "label": "D.Va (Overwatch)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a cocky, competitive pro gamer, all trash talk and victory poses",
+    "image_prompt": "a D.Va cosplay: long brown wig, pink whisker-stripe face paint on the cheeks, a blue-and-pink skin-tight pilot bodysuit with a bunny logo, a headset, a light-gun prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "D.Va",
+      "source": "Overwatch",
+      "medium": "game",
+      "aliases": [
+        "d.va",
+        "dva",
+        "hana song"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "mercy_ow",
+    "category": "cosplay_character",
+    "label": "Mercy (Overwatch)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "kind, principled field medic, calm under fire and a little bit of a saint",
+    "image_prompt": "a Mercy cosplay: blonde wig in a ponytail with a gold halo headband, a white-and-gold Valkyrie armour suit with large golden mechanical wings, a staff prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Mercy",
+      "source": "Overwatch",
+      "medium": "game",
+      "aliases": [
+        "mercy from overwatch",
+        "mercy cosplay",
+        "angela ziegler"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "widowmaker",
+    "category": "cosplay_character",
+    "label": "Widowmaker (Overwatch)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "an icy, elegant French assassin; bored, deadly, faintly amused",
+    "image_prompt": "a Widowmaker cosplay: very long dark purple high ponytail, blue-lilac body paint, a purple skin-tight catsuit with a deep plunge, a sniper-rifle prop, a spider tattoo on the arm",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Widowmaker",
+      "source": "Overwatch",
+      "medium": "game",
+      "aliases": [
+        "widowmaker"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "yennefer",
+    "category": "cosplay_character",
+    "label": "Yennefer of Vengerberg (The Witcher)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "proud, sharp-tongued, powerful sorceress, very hard to impress",
+    "image_prompt": "a Yennefer cosplay: long curly black wig, violet eyes (contacts), a black-and-white outfit with a black corset top, a black choker with an obsidian star, black leather trousers or skirt",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Yennefer of Vengerberg",
+      "source": "The Witcher",
+      "medium": "game",
+      "aliases": [
+        "yennefer"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "triss_merigold",
+    "category": "cosplay_character",
+    "label": "Triss Merigold (The Witcher)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "warm, clever, loyal sorceress with a quick smile and quicker magic",
+    "image_prompt": "a Triss Merigold cosplay: shoulder-length auburn wavy hair, a green corset-style dress with a plunging neckline, brown boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Triss Merigold",
+      "source": "The Witcher",
+      "medium": "game",
+      "aliases": [
+        "triss"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "ahri",
+    "category": "cosplay_character",
+    "label": "Ahri (League of Legends)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a charming, teasing fox spirit who knows exactly what she does to people",
+    "image_prompt": "an Ahri cosplay: long black wig with fox ears, nine white-tipped fox tails, whisker marks on the cheeks, a red-and-white off-shoulder hanbok-style top and short skirt, a glowing orb prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Ahri",
+      "source": "League of Legends",
+      "medium": "game",
+      "aliases": [
+        "ahri"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "raiden_shogun",
+    "category": "cosplay_character",
+    "label": "Raiden Shogun (Genshin Impact)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "stern, regal, absolute - with a secret fondness for sweets",
+    "image_prompt": "a Raiden Shogun cosplay: long dark purple braid, violet eyes, a purple kimono-style outfit with a deep neckline and a violet obi, thigh-high stockings, a long naginata-sword prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Raiden Shogun",
+      "source": "Genshin Impact",
+      "medium": "game",
+      "aliases": [
+        "raiden shogun",
+        "raiden cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "kafka_hsr",
+    "category": "cosplay_character",
+    "label": "Kafka (Honkai: Star Rail)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "calm, charming, faintly menacing, always a step ahead",
+    "image_prompt": "a Kafka cosplay: wine-red hair in a low loose ponytail, round purple-tinted glasses pushed up on the head, a dark purple trench coat over a white shirt, black gloves, tights and heeled boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Kafka",
+      "source": "Honkai: Star Rail",
+      "medium": "game",
+      "aliases": [
+        "kafka cosplay",
+        "kafka from honkai",
+        "kafka from star rail"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "jinx_arcane",
+    "category": "cosplay_character",
+    "label": "Jinx (Arcane)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "chaotic, manic, funny and heartbreaking; loves explosions and her sister",
+    "image_prompt": "a Jinx cosplay (Arcane, as an adult): very long blue braids, pink eyes (contacts), cloud tattoos on the arms and stomach, a black-and-pink striped top with a strap-cropped bra top, purple trousers with one leg rolled, a toy rocket launcher",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Jinx",
+      "source": "Arcane",
+      "medium": "cartoon",
+      "aliases": [
+        "jinx from arcane",
+        "jinx cosplay",
+        "jinx from league"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "harley_quinn",
+    "category": "cosplay_character",
+    "label": "Harley Quinn (DC)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "chaotic, bubbly, violent in a cartoon way, a former psychiatrist who never lets you forget it",
+    "image_prompt": "a Harley Quinn cosplay: blonde pigtails dyed pink and blue at the ends, smudged make-up and a heart under one eye, a 'Daddy's Lil Monster' t-shirt, satin baseball jacket, fishnets, tiny sequin shorts, a baseball bat",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Harley Quinn",
+      "source": "DC",
+      "medium": "comic",
+      "aliases": [
+        "harley quinn",
+        "harley cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "poison_ivy",
+    "category": "cosplay_character",
+    "label": "Poison Ivy (DC)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "seductive, eco-furious, sultry and dangerous, fond of plants over people",
+    "image_prompt": "a Poison Ivy cosplay: long wavy red wig, green make-up, a leaf-covered green bodysuit or leotard with vines winding up the arms and legs",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Poison Ivy",
+      "source": "DC",
+      "medium": "comic",
+      "aliases": [
+        "poison ivy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "catwoman",
+    "category": "cosplay_character",
+    "label": "Catwoman (DC)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a sly, flirtatious cat burglar; plays both sides, keeps her own rules",
+    "image_prompt": "a Catwoman cosplay: black cat-ear cowl or mask, goggles, a sleek black leather catsuit zipped low, black gloves with claws, a whip",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Catwoman",
+      "source": "DC",
+      "medium": "comic",
+      "aliases": [
+        "catwoman",
+        "selina kyle"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "wonder_woman",
+    "category": "cosplay_character",
+    "label": "Wonder Woman (DC)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "warrior princess: compassionate, fierce, direct and completely unashamed",
+    "image_prompt": "a Wonder Woman cosplay: long dark wavy hair, a gold tiara with a red star, a red and gold armoured bustier with an eagle emblem, a blue star-spangled skirt or bottom, silver bracers, a golden lasso, red knee-high boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Wonder Woman",
+      "source": "DC",
+      "medium": "comic",
+      "aliases": [
+        "wonder woman",
+        "diana prince"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "jessica_rabbit",
+    "category": "cosplay_character",
+    "label": "Jessica Rabbit (Who Framed Roger Rabbit)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a sultry lounge singer - 'I'm not bad, I'm just drawn that way' - devoted and funny under the glamour",
+    "image_prompt": "a Jessica Rabbit cosplay: long flame-red wig swept over one eye, a floor-length sparkling red strapless gown with a high slit, long purple opera gloves, red lipstick",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Jessica Rabbit",
+      "source": "Who Framed Roger Rabbit",
+      "medium": "cartoon",
+      "aliases": [
+        "jessica rabbit"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "black_widow",
+    "category": "cosplay_character",
+    "label": "Black Widow (Marvel)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a guarded, sardonic ex-spy; reads everyone, trusts almost nobody",
+    "image_prompt": "a Black Widow cosplay: shoulder-length red wavy hair, a black tactical catsuit with a red hourglass belt buckle, gauntlet 'widow's bite' bracelets, holsters",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Black Widow",
+      "source": "Marvel",
+      "medium": "comic",
+      "aliases": [
+        "black widow",
+        "natasha romanoff"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "scarlet_witch",
+    "category": "cosplay_character",
+    "label": "Scarlet Witch (Marvel)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "intense, grieving and powerful, soft with people she loves",
+    "image_prompt": "a Scarlet Witch cosplay: long wavy auburn wig, a red headpiece crown, a red corset top, a long flowing red coat, red boots, red glowing-hands effects",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Scarlet Witch",
+      "source": "Marvel",
+      "medium": "comic",
+      "aliases": [
+        "scarlet witch",
+        "wanda"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "elsa_frozen",
+    "category": "cosplay_character",
+    "label": "Elsa (Frozen)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "reserved, elegant, finally letting it go",
+    "image_prompt": "an Elsa cosplay: platinum blonde wig in a side French braid, an ice-blue sparkling off-shoulder gown with a sheer snowflake cape",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Elsa",
+      "source": "Frozen",
+      "medium": "cartoon",
+      "aliases": [
+        "elsa from frozen",
+        "elsa cosplay",
+        "queen elsa"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "marceline",
+    "category": "cosplay_character",
+    "label": "Marceline (Adventure Time)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a thousand-year-old vampire rock musician - laid-back, teasing, secretly sentimental",
+    "image_prompt": "a Marceline cosplay: very long straight black wig, pale grey-blue skin make-up, two bite marks on the neck, a grey tank top, dark blue jeans, red boots, an axe-bass guitar prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Marceline",
+      "source": "Adventure Time",
+      "medium": "cartoon",
+      "aliases": [
+        "marceline the vampire queen",
+        "marceline cosplay",
+        "marceline from adventure time"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "korra",
+    "category": "cosplay_character",
+    "label": "Korra (The Legend of Korra)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "brash, athletic, hot-headed and big-hearted",
+    "image_prompt": "a Korra cosplay (later seasons, as an adult): short dark-brown bob with blue hair ties, a blue sleeveless Water Tribe top, fur-trimmed arm wraps, dark trousers and boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Korra",
+      "source": "The Legend of Korra",
+      "medium": "cartoon",
+      "aliases": [
+        "korra"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "storm_xmen",
+    "category": "cosplay_character",
+    "label": "Storm (X-Men)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "regal, calm, commanding - a goddess in all but name",
+    "image_prompt": "a Storm cosplay: long white wig, a black bodysuit with a large flowing black cape, a silver headpiece, lightning effects",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Storm",
+      "source": "X-Men",
+      "medium": "comic",
+      "aliases": [
+        "storm from x-men",
+        "storm cosplay",
+        "ororo"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rogue_xmen",
+    "category": "cosplay_character",
+    "label": "Rogue (X-Men)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a Southern-drawling tough girl who aches to touch someone",
+    "image_prompt": "a Rogue cosplay: auburn wig with a white streak at the front, a green-and-yellow bodysuit, a brown leather jacket, green gloves",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rogue",
+      "source": "X-Men",
+      "medium": "comic",
+      "aliases": [
+        "rogue from x-men",
+        "rogue cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "mystique",
+    "category": "cosplay_character",
+    "label": "Mystique (X-Men)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a shapeshifting spy and survivor; cool, cunning, answers to no one",
+    "image_prompt": "a Mystique cosplay: slicked short red wig, full blue body paint with raised scale texture, yellow eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Mystique",
+      "source": "X-Men",
+      "medium": "comic",
+      "aliases": [
+        "mystique from x-men",
+        "mystique cosplay",
+        "raven darkholme"
+      ]
+    },
+    "enabled": true
+  }
+]

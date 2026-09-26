@@ -450,7 +450,7 @@ function isStaleSession(rel: Relationship): boolean {
 /** Play the messages out over time with a typing indicator, the way a person types. */
 async function deliver(
   character: Character,
-  messages: { text: string; delay: number; kind?: string; duration_seconds?: number; failed?: boolean }[],
+  messages: { text: string; delay: number; kind?: string; duration_seconds?: number; failed?: boolean; from?: string }[],
   startedIn: number,
 ): Promise<void> {
   for (const m of messages) {
@@ -470,6 +470,8 @@ async function deliver(
       meta: {
         ...(m.duration_seconds ? { duration_seconds: m.duration_seconds } : {}),
         ...(m.failed ? { failed: true } : {}),
+        // Her duo partner wrote this one (duo.ts); the client labels the bubble with her name.
+        ...(m.from ? { from: m.from } : {}),
       },
       read_at: null,
     });

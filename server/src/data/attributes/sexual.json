@@ -2070,7 +2070,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "cosplays": 1
+    },
     "enabled": true
   },
   {
@@ -5122,7 +5124,8 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "side": "her"
+      "side": "her",
+      "cosplays": 2
     },
     "enabled": true
   },
@@ -7139,7 +7142,8 @@
       "photo_boldness": 1.0,
       "side_bias": {
         "fetishwear": "her"
-      }
+      },
+      "cosplays": 3
     },
     "enabled": true,
     "rarity": "common"
@@ -15395,7 +15399,8 @@
     "modifies": {},
     "extra": {
       "species": [
-        "super_strength"
+        "super_strength",
+        "amazon"
       ]
     },
     "enabled": true
@@ -15679,7 +15684,11 @@
         "duplication",
         "invulnerability",
         "size_shifting",
-        "healing_touch"
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
       ]
     },
     "enabled": true
@@ -15710,7 +15719,11 @@
         "duplication",
         "invulnerability",
         "size_shifting",
-        "healing_touch"
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
       ]
     },
     "enabled": true
@@ -15834,7 +15847,11 @@
         "duplication",
         "invulnerability",
         "size_shifting",
-        "healing_touch"
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
       ]
     },
     "enabled": true
@@ -15868,7 +15885,11 @@
         "duplication",
         "invulnerability",
         "size_shifting",
-        "healing_touch"
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
       ]
     },
     "enabled": true
@@ -15900,7 +15921,11 @@
         "duplication",
         "invulnerability",
         "size_shifting",
-        "healing_touch"
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
       ]
     },
     "enabled": true
@@ -15935,7 +15960,11 @@
         "duplication",
         "invulnerability",
         "size_shifting",
-        "healing_touch"
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
       ]
     },
     "enabled": true
@@ -15969,7 +15998,11 @@
         "duplication",
         "invulnerability",
         "size_shifting",
-        "healing_touch"
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
       ]
     },
     "enabled": true
@@ -15992,6 +16025,792 @@
       "body": [
         "trans_woman"
       ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "full_moon_night",
+    "category": "fetish",
+    "label": "A full-moon night",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the one night a month she stops holding back - wilder, hungrier, with teeth",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "werewolf"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "singing_him_under",
+    "category": "fetish",
+    "label": "Singing to him until he forgets his own name",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "low, close, in his ear, and the way he goes soft and willing under it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "siren"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "only_her_tonight",
+    "category": "fetish",
+    "label": "Him closing every other chat for her",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "knowing that tonight, of everyone in here, he picked her - and asking him to prove it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "self_aware_ai"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_worshipped_as_goddess",
+    "category": "fetish",
+    "label": "Being worshipped, literally",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "offerings, kneeling, prayers that turn into something else - she has missed this",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "minor_goddess"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "making_a_deal",
+    "category": "fetish",
+    "label": "Striking a deal with him - and collecting",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "terms negotiated, signed in something more interesting than ink, and then paid in full",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "contract_demon"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "wrestling_him_down",
+    "category": "fetish",
+    "label": "Wrestling him down and winning",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a real contest, all of her strength, and the moment he stops fighting it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "amazon"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "careful_teeth",
+    "category": "fetish",
+    "label": "Teeth everywhere, carefully",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a mouth full of sharp teeth grazing him, never breaking the skin unless he asks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "sharkgirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "bell_collar",
+    "category": "fetish",
+    "label": "Wearing a bell collar for him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "it rings every time she moves, which is the point",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "cowgirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "warmth_seeking",
+    "category": "fetish",
+    "label": "Stealing his body heat",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she runs cold, he runs warm, and she wraps every part of herself around him to fix that",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "lizardfolk"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hoarding_his_things",
+    "category": "fetish",
+    "label": "Keeping his things",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his shirt, his hoodie, anything that smells of him goes into the hoard and does not come back",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "kobold"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cyborg_upgrades",
+    "category": "fetish",
+    "label": "Showing off an upgrade meant for him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a vibration setting, a temperature control, a part that was definitely not in the manual",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "cyborg"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "in_the_wild",
+    "category": "fetish",
+    "label": "Sex outside, in the grass, the real kind",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a riverbank, a meadow, the forest floor - somewhere that is hers",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "nymph"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "lamp_light",
+    "category": "fetish",
+    "label": "Only with a lamp on",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she cannot help drifting towards it, so the lamp stays on and she is very, very visible",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "mothgirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "trickster_disguise",
+    "category": "fetish",
+    "label": "Turning up disguised as someone else",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a prank that turns into a date, the reveal halfway through when she cannot keep a straight face",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "tanuki"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "shape_of_his_want",
+    "category": "fetish",
+    "label": "Reshaping herself around him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "whatever shape he likes best, and then a few he did not know he liked",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "slimegirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "all_over_him",
+    "category": "fetish",
+    "label": "Covering all of him at once",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "every inch of him at the same time, soft and cool and everywhere",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "slimegirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "controlled_by_her",
+    "category": "fetish",
+    "label": "Taking over his body, as a game he agreed to",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his hands doing what she tells them, his mouth saying what she wants, and the look on his face",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "mind_control"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "pheromone_haze",
+    "category": "fetish",
+    "label": "Letting her scent take him over",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "turning it all the way up for once and watching him lose the thread",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "pheromones"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "frozen_moment",
+    "category": "fetish",
+    "label": "Stopping time and doing whatever she likes",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the world frozen, him the only thing she lets move - or not",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "time_stop"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "interrogation_game",
+    "category": "fetish",
+    "label": "An interrogation that goes somewhere else",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a chair, a lamp, a question she will get the answer to one way or another",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "double_life": [
+          "spy",
+          "off_duty_assassin",
+          "bounty_hunter",
+          "undercover_cop"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "adrenaline_after_job",
+    "category": "fetish",
+    "label": "Adrenaline sex after a job goes right",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "still shaking, still wired, and nothing else will bring her down",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "double_life": [
+          "heist_crew",
+          "off_duty_assassin",
+          "bounty_hunter",
+          "demon_hunter",
+          "smuggler_captain"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "royal_commands",
+    "category": "fetish",
+    "label": "Giving orders like she was born to",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she was, and it turns out he likes being told",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "double_life": [
+          "incognito_princess",
+          "mafia_heiress"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_treated_like_nobody",
+    "category": "fetish",
+    "label": "Being treated like an ordinary girl for once",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "no titles, no fans, no bodyguards - just someone who wants her and not the name",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "double_life": [
+          "incognito_princess",
+          "popstar_in_hiding",
+          "mafia_heiress"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "risk_of_recognition",
+    "category": "fetish",
+    "label": "The risk of being recognised",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sunglasses off in the wrong place, and the thrill of someone almost clocking her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "double_life": [
+          "popstar_in_hiding",
+          "incognito_princess",
+          "witness_protection"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "research_for_the_book",
+    "category": "fetish",
+    "label": "Doing it for research",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "trying out a scene from the next book, notebook within reach, very thorough",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "double_life": [
+          "secret_author"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "shown_the_present",
+    "category": "fetish",
+    "label": "Him showing her something new about this century",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a first time for something everyone else takes for granted, and her face when it happens",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "era": [
+          "roaring_twenties",
+          "victorian",
+          "fifties",
+          "seventies",
+          "eighties",
+          "medieval",
+          "ancient_rome",
+          "edo_japan",
+          "far_future",
+          "fantasy_world"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "courted_the_old_way",
+    "category": "fetish",
+    "label": "Being courted properly, the old way",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "letters, flowers, the patience of someone from a slower time - and then very much not slow",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "era": [
+          "roaring_twenties",
+          "victorian",
+          "fifties",
+          "seventies",
+          "eighties",
+          "medieval",
+          "ancient_rome",
+          "edo_japan",
+          "far_future",
+          "fantasy_world"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "forced_confessions",
+    "category": "fetish",
+    "label": "Confessing everything she wants, because she has to",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "he asks, she cannot lie, and out it all comes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "curse": [
+          "truth_curse"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "curse_heat",
+    "category": "fetish",
+    "label": "Her weekly heat",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "one night a week she is feverish and desperate and he is the only cure she wants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "curse": [
+          "weekly_heat"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "safehouse_night",
+    "category": "fantasy_scenario",
+    "label": "A night in her safehouse",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "blinds down, a go-bag by the door, and nowhere either of them is supposed to be",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [],
+      "requires": {
+        "double_life": [
+          "spy",
+          "off_duty_assassin",
+          "bounty_hunter",
+          "undercover_cop",
+          "witness_protection"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "heist_night",
+    "category": "fantasy_scenario",
+    "label": "The night of the job",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "he is the lookout, she is the lockpick, and they celebrate before the getaway car has cooled",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ],
+      "requires": {
+        "double_life": [
+          "heist_crew"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "royal_escape",
+    "category": "fantasy_scenario",
+    "label": "Sneaking the princess out",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she slips her security for one night, and he gets to show her what ordinary people do",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ],
+      "requires": {
+        "double_life": [
+          "incognito_princess"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "backstage",
+    "category": "fantasy_scenario",
+    "label": "Backstage after the show",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "her dressing room, her real name, the crowd still roaring through the wall",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ],
+      "requires": {
+        "double_life": [
+          "popstar_in_hiding"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "stakeout",
+    "category": "fantasy_scenario",
+    "label": "A long stakeout in a parked car",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "hours of waiting, one of them is supposed to be watching the door, and neither of them is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "exhibitionism"
+      ],
+      "requires": {
+        "double_life": [
+          "spy",
+          "off_duty_assassin",
+          "bounty_hunter",
+          "undercover_cop"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "first_date_this_century",
+    "category": "fantasy_scenario",
+    "label": "Her first date in this century",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "he takes her somewhere ordinary and she is amazed by all of it, then very curious about the rest",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [],
+      "requires": {
+        "era": [
+          "roaring_twenties",
+          "victorian",
+          "fifties",
+          "seventies",
+          "eighties",
+          "medieval",
+          "ancient_rome",
+          "edo_japan",
+          "far_future",
+          "fantasy_world"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "a_night_in_her_time",
+    "category": "fantasy_scenario",
+    "label": "A night back in her own time",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "just for one evening, he gets to see the world she came from - and how she was in it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ],
+      "requires": {
+        "era": [
+          "roaring_twenties",
+          "victorian",
+          "fifties",
+          "seventies",
+          "eighties",
+          "medieval",
+          "ancient_rome",
+          "edo_japan",
+          "far_future",
+          "fantasy_world"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "breaking_the_curse",
+    "category": "fantasy_scenario",
+    "label": "The night they try to break her curse",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "every fairy tale has a theory - a kiss, a promise, something more thorough - and they test them all",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "domains": [
+        "roleplay"
+      ],
+      "requires": {
+        "curse": [
+          "truth_curse",
+          "midnight_cat",
+          "flicker_curse",
+          "mood_hair",
+          "bad_luck",
+          "good_luck",
+          "sings_when_happy",
+          "rhyme_when_flustered",
+          "weekly_heat",
+          "floats_when_happy"
+        ]
+      }
     },
     "enabled": true
   }

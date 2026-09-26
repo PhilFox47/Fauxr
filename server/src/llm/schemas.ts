@@ -38,7 +38,7 @@ const npc = obj({ name: str, gender: str, age: int, count: nint, who: str, look:
 const thread = obj({ text: str, expires_when: str });
 
 export const ACTOR_CHAT = spec('her_reply', obj({
-  messages: arr(obj({ text: str })),
+  messages: arr(obj({ text: str, from: nstr })),
   hidden: obj({
     thoughts: str,
     unresolved: nstr,
@@ -126,6 +126,7 @@ export const CHARACTER = spec('character', obj({
   fantasies: arr(str),
   director_intent: str,
   opening_plan: nullable(thread),
+  duo_partner: nullable(obj({ name: str, manner: str, up_for: str })),
 }));
 
 export const REAL_NAME = spec('real_name', obj({ real_name: str }));

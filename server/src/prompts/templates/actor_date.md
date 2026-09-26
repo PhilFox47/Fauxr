@@ -72,6 +72,11 @@ stranger's face and then order dessert like nothing happened."
 {{appearance_block}}
 
 {{outfit_block}}
+{{#costume_block}}
+
+Characters that came up (how they actually look, if anyone is dressed as one):
+{{costume_block}}
+{{/costume_block}}
 
 {{life_block}}
 

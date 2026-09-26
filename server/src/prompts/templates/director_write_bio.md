@@ -30,6 +30,11 @@ handle: {{username}}
 {{seed_block}}
 
 {{lead_block}}
+{{#duo_line}}
+
+This is a shared profile: {{duo_line}}. The bio is the two of them - written by one or both,
+and it makes plain there are two women here.
+{{/duo_line}}
 
 A bio that could belong to anyone has failed, so find two or three things that only she would
 have thought to mention - not one lone detail, and not the whole dossier either. Take them
@@ -177,6 +182,10 @@ start again from something only she would say.
   in hindsight, exactly like anything else she is not ready to spell out yet. She may NOT
   simply state it.
 {{/hides_species}}
+{{#hidden_layers}}
+- Naming any of this, which she keeps hidden day to day and reveals on her own terms: {{hidden_layers}}.
+  A wink a reader would only understand in hindsight is fine; saying it is not.
+{{/hidden_layers}}
 {{#hides_big_secret}}
 - Any reference, however oblique, to her one big hidden thing. This one is not a "reveal
   later" the way a species tell can be - a swiper should have no way to even suspect it

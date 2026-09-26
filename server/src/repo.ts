@@ -1,6 +1,7 @@
 import { db, nowIso } from './db/index.js';
 import { byCategory, find } from './db/attributes.js';
-import { newContext, roll } from './engine/dice.js';
+import { newContext, roll, rollMany } from './engine/dice.js';
+import { cosplayCount } from './engine/cosplay.js';
 import { rollDomainStance, rollKinkSides } from './engine/kinks.js';
 import { pickCore } from './engine/profilecard.js';
 import type {
@@ -303,15 +304,36 @@ function backfillCore(characterId: string, seed: CharacterSeed): CharacterSeed {
  */
 function backfillIdentity(characterId: string, seed: CharacterSeed): CharacterSeed {
   const needsGender = !seed.transgender;
+  // Layers (layers.ts) are 'none' for everyone generated before them - never added after the
+  // fact to a woman whose life is already established in a chat.
+  const needsLayers = !seed.double_life || !seed.era || !seed.curse || !seed.duo;
   const species = seed.species ? find('species', seed.species) : undefined;
   const needsRole = species?.extra?.kind === 'power' && !seed.hero_role;
-  if (!needsGender && !needsRole) return seed;
+  if (!needsGender && !needsRole && !needsLayers) return seed;
   if (!byCategory('transgender').length) return seed; // attribute table not seeded yet
   if (needsGender) seed.transgender = 'cis_woman';
+  seed.double_life ??= 'none';
+  seed.era ??= 'none';
+  seed.curse ??= 'none';
+  // Same for a duo: a partner never appears out of nowhere in a chat that already exists.
+  seed.duo ??= 'none';
   if (needsRole) {
     const role = roll('hero_role', newContext(), { ignoreArchetype: true });
     if (role) seed.hero_role = role.id;
   }
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
+/**
+ * Costumes (cosplay.ts) for anyone generated before the reference table. Unlike a layer this is
+ * safe to add later: a woman who already cosplays already owns costumes, the table only names
+ * them. Everyone else gets an empty list, so this runs once per character.
+ */
+function backfillCosplays(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.cosplays) return seed;
+  if (!byCategory('cosplay_character').length) return seed; // attribute table not seeded yet
+  seed.cosplays = rollMany('cosplay_character', newContext(), cosplayCount(seed), { ignoreArchetype: true }).map((a) => a.id);
   db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
   return seed;
 }
@@ -324,6 +346,7 @@ function hydrateCharacter(row: any): Character {
   seed = backfillSexualProfile(row.id, seed);
   seed = backfillIntimateDetails(row.id, seed);
   seed = backfillCore(row.id, seed);
+  seed = backfillCosplays(row.id, seed);
   return {
     id: row.id,
     username: row.username,

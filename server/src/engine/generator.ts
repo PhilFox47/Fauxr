@@ -11,13 +11,16 @@ import {
 } from '../repo.js';
 import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
 import { domSubLean, fitsSide, rollFantasySeeds, rollKinkMap, rollKinkSides, sideLabel } from './kinks.js';
+import { cosplayCount } from './cosplay.js';
+import { allowedDuos, duoDossierLines, duoPartner, duoRow, enforceDuoStatus, partnerRelation, rollPartnerBase } from './duo.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
 import { pick, unwrap } from '../llm/shape.js';
 import { coreTraits, pickCore } from './profilecard.js';
-import { bodyFits, isPower, speciesFits, speciesHidden, speciesRow, speciesVisibility, transRow } from './species.js';
+import { bodyFits, fitsHer, isAiCharacter, isPower, speciesFits, speciesHidden, speciesRow, speciesVisibility, transRow } from './species.js';
+import { LAYERS, hiddenLayerLabels, layerDossierLines, tellingWord } from './layers.js';
 import { BIO, CHARACTER, FANTASIES, REAL_NAME, USERNAME } from '../llm/schemas.js';
 
 /** Fields the Director may swap during the coherence pass. */
@@ -218,6 +221,14 @@ export function rollSeed(): RolledSeed {
   const hero_role = species.extra?.kind === 'power' ? roll('hero_role', ctx, { ignoreArchetype: true }) : null;
   // Rare, and independent of everything else. Her own row leans the kinks her body opens up.
   const transgender = roll('transgender', ctx, { ignoreArchetype: true });
+  // Layers (layers.ts): a double life, another era, a curse. Each almost always 'none'; their
+  // extra.weights lean the personality, style and kinks rolled after them. A hero's role is
+  // already her double life.
+  const layers: Partial<Record<(typeof LAYERS)[number]['field'], string>> = {};
+  for (const def of LAYERS) {
+    if (!def.withPower && species.extra?.kind === 'power') continue;
+    layers[def.field] = roll(def.field, ctx, { ignoreArchetype: true })?.id ?? 'none';
+  }
 
   // ---- 2. who she is. The archetype re-weights everything after it; roll() merges its
   // extra.weights into the context on the way past, so nothing has to be applied by hand.
@@ -379,8 +390,8 @@ export function rollSeed(): RolledSeed {
   const joiners = joinersFor(getUserProfile());
   const allowedFetishes = new Set(
     byCategory('fetish')
-      .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) && speciesCanHave(f, species.id) &&
-        bodyFits(f, { transgender: transgender?.id }) && joinerFits(f.extra?.joiner, joiners))
+      .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) &&
+        fitsHer(f, { species: species.id, transgender: transgender?.id, ...layers }) && joinerFits(f.extra?.joiner, joiners))
       .map((f) => f.id),
   );
   // Her first fetish always comes from a domain she is actually into, so every character has
@@ -442,7 +453,7 @@ export function rollSeed(): RolledSeed {
   const intimate_grooming = one('intimate_grooming')!;
   const fantasy_seeds = rollFantasySeeds({
     kink_map, dom_sub_leaning, kink_sides, relationship_status: relationship_status!.id,
-    species: species.id, transgender: transgender?.id,
+    species: species.id, transgender: transgender?.id, ...layers,
   });
 
   const hints: Record<string, string> = {
@@ -488,6 +499,9 @@ export function rollSeed(): RolledSeed {
     species: species.id,
     ...(hero_role ? { hero_role: hero_role.id } : {}),
     transgender: transgender?.id ?? 'cis_woman',
+    double_life: layers.double_life ?? 'none',
+    era: layers.era ?? 'none',
+    curse: layers.curse ?? 'none',
     ethnicity: ethnicity!.id,
     skin_tone: skin_tone!.id,
     height: height!.id,
@@ -560,6 +574,20 @@ export function rollSeed(): RolledSeed {
     image_seed: randInt(1, 2_000_000_000),
   };
 
+  // Duo profiles (duo.ts), once her kinks and limits are known: a couple who share him needs
+  // both of them to be open to a third. The self-aware AI lives in a phone and has no one to
+  // share it with.
+  const duo = isAiCharacter(seed)
+    ? null
+    : roll('duo', ctx, { only: allowedDuos(seed, getUserProfile(), byCategory('duo')), ignoreArchetype: true });
+  seed.duo = duo?.id ?? 'none';
+  if (duo && duo.id !== 'none') {
+    seed.duo_partner = rollPartnerBase(seed, duo);
+    enforceDuoStatus(seed);
+  }
+  // Her costumes, last, because what makes her a cosplayer (persona, job, style, hobbies,
+  // fetishes) has to be rolled first. Through roll() so his taste applies to them too.
+  seed.cosplays = rollMany('cosplay_character', ctx, cosplayCount(seed)).map((a) => a.id);
   seed.appearance_prompt = buildAppearancePrompt(seed);
   // The three things she is built around (profilecard.ts): picked once, here, so her card,
   // her dossier and every prompt after it agree on who she is.
@@ -590,12 +618,13 @@ function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }
     ['sexual_experience', seed.sexual_experience], ['body_pride', seed.body_pride], ['signature_move', seed.signature_move],
     ['lingerie_style', seed.lingerie_style], ['sleepwear', seed.sleepwear], ['intimate_grooming', seed.intimate_grooming],
     ['orientation', seed.orientation], ['arousal_tell', seed.arousal_tell],
-    ['big_secret', seed.big_secret],
+    ['big_secret', seed.big_secret], ['duo', seed.duo ?? 'none'],
   ];
   const plural: [string, string[]][] = [
     ['quirk', seed.quirks], ['interest', seed.interests], ['hobby', seed.hobbies],
     ['turn_on', seed.turn_ons], ['turn_off', seed.turn_offs],
     ['fetish', seed.fetishes], ['hard_limit', seed.hard_limits], ['accessory', seed.accessories],
+    ['cosplay_character', seed.cosplays ?? []],
     // English says nothing about her - everyone speaks it, and it has no row in the table.
     ['language', seed.languages.filter((l) => l !== 'english')],
   ];
@@ -724,6 +753,8 @@ export function describeSeed(seed: CharacterSeed): string {
             (speciesHidden(seed) ? ' (a secret identity: hers to reveal, never in the bio or handle)' : ' (publicly known, on her profile)'),
         ]
       : [seed.species && seed.species !== 'human' ? `species: ${label('species', seed.species)} - ${seed.hints.species}` : 'species: human']),
+    ...layerDossierLines(seed),
+    ...duoDossierLines(seed),
     ...(transRow(seed) ? [`gender: ${transRow(seed)!.label} - ${seed.hints.transgender ?? transRow(seed)!.prompt_hint} (on her profile, not a secret)`] : []),
     seed.big_secret && seed.big_secret !== 'none'
       ? `big secret (she keeps this genuinely hidden, never volunteers it, never let it reach the bio or handle): ${label('big_secret', seed.big_secret)} - ${seed.hints.big_secret}`
@@ -753,6 +784,7 @@ export function describeSeed(seed: CharacterSeed): string {
     `social energy: ${seed.social_energy}`,
     `interests: ${labels('interest', seed.interests)}`,
     `hobbies: ${labels('hobby', seed.hobbies)}`,
+    ...(seed.cosplays?.length ? [`cosplays as: ${labels('cosplay_character', seed.cosplays)}`] : []),
     `languages: ${seed.languages.join(', ')}`,
     '',
     `IN BED - her sexual persona: ${label('sexual_persona', seed.sexual_persona)} - ${hintFor(seed, 'sexual_persona')}`,
@@ -869,6 +901,8 @@ interface DirectorPass {
    * two women who rolled the same three tags produced suspiciously similar ones.
    */
   dossier?: string;
+  /** Only on a duo profile: the other woman's name, manner and what she wants with him. */
+  duo_partner?: { name?: string; manner?: string; up_for?: string } | null;
   /** 3-5 concrete sexual scenarios she wants to live out. Stored in seed.hints.fantasies. */
   fantasies?: string[];
   director_intent?: string;
@@ -1007,6 +1041,8 @@ async function writeUsername(
   // handle as into the name. A 'profile'-tier species has nothing to protect: it is visible
   // in any photo regardless, so a handle referencing it is a stylistic choice, not a leak.
   const hiddenSpecies = speciesHidden(seed) ? speciesRow(seed)!.label.toLowerCase() : null;
+  // A hidden double life, era or curse needs the same protection as a hidden species.
+  const hiddenLayers = hiddenLayerLabels(seed);
   const hasBigSecret = !!seed.big_secret && seed.big_secret !== 'none';
 
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -1040,6 +1076,11 @@ async function writeUsername(
           'She is also secretly not human, and keeps that hidden day to day - the handle must not hint',
           `at it either, directly or in code (nothing like "${hiddenSpecies}", a pun on it, or a related`,
           'creature/mythology word). That reveal is hers to make later, not something this handle gives away.',
+        ] : []),
+        ...(hiddenLayers.length ? [
+          '',
+          `She also keeps this hidden day to day: ${hiddenLayers.join('; ')}. The handle must not hint at it,`,
+          'directly or in code - that is hers to reveal later.',
         ] : []),
         ...(hasBigSecret ? [
           '',
@@ -1087,6 +1128,14 @@ async function writeUsername(
           `"${cleaned}" contains her real name "${realName}" - a dating-app handle has to be anonymous, ` +
           `which is the one rule that never bends. Pick something with no connection to her name at all. ` +
           `Same JSON, nothing else.`;
+        continue;
+      }
+      const leakedLayer = hiddenLayers.map(tellingWord).find((w) => w && cleaned.includes(w));
+      if (leakedLayer) {
+        logger.warn('generator', 'handle leaked a hidden layer, re-asking', { cleaned, leakedLayer });
+        correction =
+          `"${cleaned}" hints at something she keeps hidden day to day - pick something with no ` +
+          'connection to it at all. Same JSON, nothing else.';
         continue;
       }
       if (hiddenSpecies && cleaned.includes(hiddenSpecies)) {
@@ -1143,6 +1192,11 @@ export async function generateCharacter(): Promise<Character> {
         is_power: isPower(seed) ? '1' : '',
         power_secret: isPower(seed) && speciesHidden(seed) ? '1' : '',
         is_trans: transRow(seed) ? '1' : '',
+        is_layered: layerDossierLines(seed).length ? '1' : '',
+        // A duo profile: the character pass names her partner and writes who she is.
+        duo_block: duoRow(seed) && seed.duo_partner
+          ? `${duoRow(seed)!.label}. ${duoRow(seed)!.prompt_hint}\nThe partner, as rolled: ${seed.duo_partner.age}, ${seed.duo_partner.look}.`
+          : '',
         is_big_secret: seed.big_secret && seed.big_secret !== 'none' ? '1' : '',
         age: seed.age,
         fantasy_seeds: fantasySeedList(seed.fantasy_seeds),
@@ -1204,6 +1258,9 @@ export async function generateCharacter(): Promise<Character> {
     fieldIds[swap.field] = replacement.id;
     logger.debug('generator', `swapped ${swap.field} -> ${swap.to}`, { why: swap.why });
   }
+  // A swap may have touched her relationship status; a woman on a profile with her wife is
+  // still married to her.
+  enforceDuoStatus(seed);
   seed.appearance_prompt = buildAppearancePrompt(seed);
 
   // The fallback pool is only reached when the API is down, but it can repeat just as
@@ -1227,6 +1284,19 @@ export async function generateCharacter(): Promise<Character> {
       pass.dossier = renameInProse(pass.dossier, rejectedName, realName);
       pass.one_line = renameInProse(pass.one_line, rejectedName, realName);
     }
+  }
+
+  // Her partner's name and manner come from the pass; age and look stay as rolled. A name
+  // that collides with hers is replaced - two women called Mia on one profile is a bug.
+  if (seed.duo_partner) {
+    const dp = pass.duo_partner;
+    const name = String(dp?.name ?? '').trim().split(/\s+/)[0];
+    if (name && name.toLowerCase() !== realName.toLowerCase()) seed.duo_partner.name = name;
+    if (seed.duo_partner.name.toLowerCase() === realName.toLowerCase()) {
+      seed.duo_partner.name = rollPartnerBase(seed, duoRow(seed)!, realName).name;
+    }
+    if (dp?.manner?.trim()) seed.duo_partner.manner = dp.manner.trim();
+    if (dp?.up_for?.trim()) seed.duo_partner.up_for = dp.up_for.trim();
   }
 
   const fantasies = cleanFantasies(pass.fantasies);
@@ -1523,6 +1593,8 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
     // detectMentions() the moment the character is generated, before anyone has even swiped.
     // A 'profile'-tier species has nothing to protect: it is visible in any photo anyway.
     hides_species: speciesHidden(character.seed) ? '1' : '',
+    hidden_layers: hiddenLayerLabels(character.seed).join('; '),
+    duo_line: duoPartner(character.seed) ? `${character.real_name} and ${duoPartner(character.seed)!.name}, ${partnerRelation(character.seed)}` : '',
     // Same leak, higher stakes: a big secret has no visibility tier at all, so unlike species
     // there is no "fine, it's a profile-tier one" exception here - every character who has
     // one needs this guard.
@@ -1623,6 +1695,7 @@ export function ensureFantasies(character: Character): Promise<void> {
     : rollFantasySeeds({
         kink_map: character.seed.kink_map ?? {}, dom_sub_leaning: character.seed.dom_sub_leaning ?? 0, kink_sides: character.seed.kink_sides,
         relationship_status: character.seed.relationship_status, species: character.seed.species, transgender: character.seed.transgender,
+        double_life: character.seed.double_life, era: character.seed.era, curse: character.seed.curse,
       });
   const running = fantasyBackfills.get(character.id);
   if (running) return running;

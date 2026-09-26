@@ -61,6 +61,16 @@ export interface CharacterSeed {
    * profile, never a secret. Characters from before the table read as cis (repo.ts).
    */
   transgender?: string;
+  /** Layers (layers.ts), each 'none' for almost everyone: a double life, another era, a curse. */
+  double_life?: string;
+  era?: string;
+  curse?: string;
+  /** Duo profile (duo.ts): 'none' for almost everyone, else who shares the profile with her. */
+  duo?: string;
+  /** The other woman on a duo profile; set only alongside a duo. */
+  duo_partner?: DuoPartner;
+  /** cosplay_character ids she owns costumes for; empty unless something about her makes her a cosplayer. */
+  cosplays?: string[];
   ethnicity: string;
   skin_tone: string;
   height: string;
@@ -264,6 +274,18 @@ export interface Direction {
   length: string;
 }
 
+/** The other woman on a duo profile (duo.ts). Always an adult. */
+export interface DuoPartner {
+  name: string;
+  age: number;
+  /** How she looks, for prompts and photos. */
+  look: string;
+  /** How she is and how she talks. */
+  manner: string;
+  /** What she wants with him. */
+  up_for: string;
+}
+
 export interface ActorMessage {
   text: string;
   delay: number;
@@ -271,6 +293,8 @@ export interface ActorMessage {
   duration_seconds?: number;
   /** True when this is the canned line sent because generation genuinely failed twice. */
   failed?: boolean;
+  /** Set when her duo partner wrote this one (duo.ts); the partner's name. */
+  from?: string;
 }
 
 export interface ActorHidden {
