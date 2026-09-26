@@ -18,7 +18,7 @@ import {
   spiceBlock, userBlock,
 } from './blocks.js';
 import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
-import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice, detectScorekeepingTell } from './voice.js';
+import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice, detectScorekeepingTell, detectAuditionFrame } from './voice.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage, photoSelfBlock } from './images.js';
@@ -363,6 +363,17 @@ async function runDateActor(
         `You wrote ${scorekeeping} - literally tallying his performance. That is banter ` +
         `shaped like an exam. React to what he actually did, in your own words, without ` +
         'counting it against a running score. Same JSON shape.';
+      continue;
+    }
+    const audition = detectAuditionFrame(text);
+    if (audition) {
+      logger.warn('actor', `date beat auditioned him (${audition})`, { character: character.username, text });
+      correction =
+        `You wrote something that turns him into a candidate (${audition}): a test, a condition, ` +
+        'something he has to earn or prove. He is not auditioning and cannot get this evening ' +
+        'wrong - she already wants him. Keep the teasing and the play, drop the verdict: whatever ' +
+        'she was going to make him earn, she just gives him, or they play for it in a way he ' +
+        'cannot lose. Same JSON shape.';
       continue;
     }
     if (writesForHim(text)) {

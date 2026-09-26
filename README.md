@@ -714,6 +714,38 @@ her time", everything sexual kept for after the match) pointed straight at them.
 - The dossier's "invent specifics" examples and the avatar-emoji guidance no longer point at
   her job either (a goth picks a bat or a dead rose, not a coffee cup for her night shifts).
 
+## He is not auditioning
+
+A date with Kaoru read like an exam. It started in the chat: she was "considering you for" a
+slot on her ranked list, a "review board" met "without you", and she set a condition - "order a
+drink, then a second one. if the second order is good, you earn the nickname". The Director
+took it up ("first order is the audition"), and it was stored in her memory as open threads
+("two orders and he earns the nickname", "he has to earn the nickname to see it") that went
+into every prompt afterwards, including the date's. On the date: "it's a test", "you failed
+your own test", "you're on probation until you do better". Nothing in her seed asked for any
+of it. She is a nerd and taproom manager who builds running jokes; the model reached for the
+evaluator frame and her memory kept it alive. The player felt everything he did would be wrong.
+
+The chat prompt already banned grading him, but only by the tally phrases seen before ("0 for
+2"), the date prompt said nothing about it, and nothing stopped a condition being remembered.
+Now:
+- **The prompts say it plainly.** Chat: "He is not auditioning" - no tests, conditions,
+  rankings he is being considered for, nothing he has to earn or prove; when she would make
+  him earn something, she just gives it to him. The Director gets HE CANNOT FAIL, including
+  never recording a condition as a thread or plan. The date prompt's NEVER list starts with
+  testing him, and the date summary never records a condition as an open thread.
+- **A detector** (`detectAuditionFrame()` in `voice.ts`) catches the frame in her own words -
+  making him earn something, "it's a test", passing or failing him, probation, auditions,
+  "considering you for", "prove yourself", "that's a condition" - and sends the reply back
+  with a fix, in the chat (through `findVoiceProblem`) and on dates. Checked against every such
+  line in the log, and against nearby phrases it must leave alone ("i earn good tips", "you
+  passed the salt", "a ranked list").
+- **Her memory stops feeding it back.** `ledgerBlock()` leaves out any fact, thread, intent or
+  plan phrased that way, so Kaoru's stored "earn the nickname" threads no longer reach her
+  prompts. They stay in the ledger; they are just not read.
+
+Teasing, dares and games she genuinely likes are untouched. What goes is the verdict on him.
+
 ## Photos are an event
 
 A log of one chat (Ines) had three photos in two and a half hours: one he asked for, one she

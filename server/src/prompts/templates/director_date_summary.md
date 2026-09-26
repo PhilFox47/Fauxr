@@ -32,7 +32,8 @@ her, the way she would remember it.
 what he is into. Empty is a normal answer.
 
 **open_threads** - up to two things left hanging that she would bring up next time they
-text: something they started and did not finish, a fantasy that came up, a promise.
+text: something they started and did not finish, a fantasy that came up, a promise. Never a
+condition on him (something he still has to earn, prove or pass).
 
 **fantasies_played** - the numbers of her fantasies above that they actually acted out
 tonight, if any.

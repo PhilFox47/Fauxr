@@ -224,6 +224,32 @@ export function detectScorekeepingTell(text: string): string | null {
 }
 
 /**
+ * Her auditioning him: something he has to earn, a test he can pass or fail, a condition, a
+ * probation. A real log had a character build a whole courtship out of it - "considering you
+ * for" a slot on her ranked list, "two orders and you earn the nickname", "first order is the
+ * audition", then on the date "it's a test", "you failed your own test", "you're on
+ * probation" - and the player felt everything he did would be wrong. Nothing in her seed asked
+ * for it; the model invented it and her memory kept feeding it back. This app has nothing to
+ * win, so the frame itself is the failure, however playful the wording.
+ */
+const AUDITION_PATTERNS: { re: RegExp; what: string }[] = [
+  { re: /\b(?:you|u|he)(?:'ll|'ve| will| can| could| have to| has to| gotta| need to| needs to| have| has| just)? ?(?:earn|earned|earns) (?:it|the|a|an|my|your|his|that|this|some|yourself|himself)\b/i, what: 'making him earn something' },
+  { re: /\b(?:earn|earned|earning) (?:the|a|my|your|his) (?:nickname|name|spot|place|title|slot|number|photo|pic|reward|right)\b/i, what: 'making him earn something' },
+  { re: /\b(?:it'?s|its|this is|that'?s|thats|consider (?:it|this)) (?:a|your|my|the) (?:little )?test\b/i, what: '"it\'s a test"' },
+  { re: /\b(?:you|u|he) (?:just )?(?:passed|failed|pass|fail) (?:my|the|your|his|this|that|own)? ?(?:own )?(?:test|audition|exam|check|vibe check)\b/i, what: 'grading him pass/fail' },
+  { re: /\bprobation\b/i, what: '"probation"' },
+  { re: /\baudition(?:s|ing|ed)?\b/i, what: 'auditioning him' },
+  { re: /\bconsidering (?:you|u|him) for\b/i, what: '"considering you for"' },
+  { re: /\bprove (?:yourself|himself|you'?re worth|you are worth|you'?re worthy|you deserve)\b/i, what: 'making him prove himself' },
+  { re: /\b(?:that'?s|thats|it'?s|its) (?:not a \w+ (?:that'?s|thats|it'?s|its) )?a condition\b/i, what: 'setting him a condition' },
+];
+
+export function detectAuditionFrame(text: string): string | null {
+  for (const p of AUDITION_PATTERNS) if (p.re.test(text)) return p.what;
+  return null;
+}
+
+/**
  * Narrating back what he just did. "you opened with a greeting and a question about my
  * wellbeing" is an assistant restating the input, not a person replying to it.
  */
@@ -415,6 +441,13 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
     return {
       what: `scorekeeping (${scorekeeping})`,
       fix: `You wrote ${scorekeeping} - literally tallying his performance. That is banter shaped like an exam. React to what he actually did or said, in your own words, without counting it against a running score.`,
+    };
+  }
+  const audition = detectAuditionFrame(input.text);
+  if (audition) {
+    return {
+      what: `auditioning him (${audition})`,
+      fix: `You wrote something that turns him into a candidate (${audition}): a test, a condition, something he has to earn or prove. He is not auditioning and he cannot get this wrong - you already want him. Keep the teasing and the play, drop the verdict: whatever you were going to make him earn, just give it to him, or play for it together in a way he cannot lose.`,
     };
   }
   const rp = detectRoleplay(input.text);

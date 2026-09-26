@@ -4,6 +4,7 @@ import type { Character, CharacterSeed, DateSession, Direction, Flags, Ledger, U
 import { describeSeed } from './generator.js';
 import { freshThreads, pruneThreads } from './state.js';
 import { chatPhotoLine } from './photolevel.js';
+import { detectAuditionFrame } from './voice.js';
 import { sideDetail } from './kinks.js';
 import { coreTraits, isCore } from './profilecard.js';
 
@@ -271,7 +272,12 @@ export function languageBlock(seed: CharacterSeed): string {
 /** The Actor gets a filtered ledger. Relevance beats completeness. */
 export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): string {
   const lines: string[] = [];
-  const take = <T>(arr: T[], n: number) => (opts.full ? arr : arr.slice(-n));
+  // A memory phrased as a condition on him ("two orders and he earns the nickname") is left
+  // out of every prompt: stored once, it was fed back on every turn and carried a whole chat's
+  // audition into the date. The entry stays in the ledger; it just stops being read.
+  const clean = (s: string) => !detectAuditionFrame(s);
+  const take = <T>(arr: T[], n: number) =>
+    (opts.full ? arr : arr.slice(-n)).filter((x) => typeof x !== 'string' || clean(x));
 
   const aboutUser = take(ledger.facts?.about_user ?? [], 12);
   if (aboutUser.length) lines.push('What you know about him:\n' + aboutUser.map((f) => `- ${f}`).join('\n'));
@@ -292,7 +298,8 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
 
   // The Actor only sees threads she has not just been on about. Showing her the same one
   // every turn is how a passing remark turns into a fixation.
-  const threads = opts.full ? pruneThreads(ledger.open_threads ?? []) : freshThreads(ledger.open_threads ?? []);
+  const threads = (opts.full ? pruneThreads(ledger.open_threads ?? []) : freshThreads(ledger.open_threads ?? []))
+    .filter((t) => clean(t.text));
   if (threads.length) {
     lines.push(
       'Still hanging in the air (mention at most one of these, and only if it fits):\n' +
@@ -304,9 +311,10 @@ export function ledgerBlock(ledger: Ledger, opts: { full?: boolean } = {}): stri
 
   if (opts.full) {
     const notes = ledger.director_notes;
-    if (notes?.intent) lines.push(`Director intent (long game): ${notes.intent}`);
-    if (notes?.plans?.length) {
-      lines.push('Director plans:\n' + notes.plans.map((p) => `- ${p.text} (expires when: ${p.expires_when})`).join('\n'));
+    if (notes?.intent && clean(notes.intent)) lines.push(`Director intent (long game): ${notes.intent}`);
+    const plans = (notes?.plans ?? []).filter((p) => clean(p.text));
+    if (plans.length) {
+      lines.push('Director plans:\n' + plans.map((p) => `- ${p.text} (expires when: ${p.expires_when})`).join('\n'));
     }
   }
   return lines.join('\n\n');
