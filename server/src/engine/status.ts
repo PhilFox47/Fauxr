@@ -10,6 +10,7 @@ import { coreTraits } from './profilecard.js';
 import { advanceThread, ensureLife, threadsForStatus } from './life.js';
 import { STATUS_WITH_THREAD, STATUS } from '../llm/schemas.js';
 import { closetList, currentOutfit, OUTFIT_EXAMPLE, outfitFromPicks, outfitMood, outfitSentence } from './wardrobe.js';
+import { gameNow, gameNowMs } from './clock.js';
 
 /**
  * Her status, like a WhatsApp status: one short line she has "posted" about where she is or
@@ -40,10 +41,13 @@ export function statusOf(rel: Relationship | null | undefined): CharacterStatus 
   return s && typeof s.text === 'string' && s.text ? (s as CharacterStatus) : null;
 }
 
-function isDue(rel: Relationship): boolean {
+/** No status yet, or the (virtual) time it was due to be replaced has arrived. Anchored to
+ * the story clock, not the real one: her status only goes stale when he actually passes the
+ * time for it to, never just because the real world moved on while the app sat idle. */
+export function statusDue(rel: Relationship): boolean {
   const s = (rel.mood as any)?.status;
   if (!s?.until) return true;
-  return Date.parse(s.until) <= Date.now();
+  return Date.parse(s.until) <= gameNowMs();
 }
 
 /** Once per scheduler tick: refresh the single most overdue status, if any is due. */
@@ -52,7 +56,7 @@ export async function refreshOneStatus(): Promise<void> {
   const due = listActiveMatches()
     .filter((c) => !onDate.has(c.id))
     .map((c) => ({ c, rel: getRelationship(c.id) }))
-    .filter((x): x is { c: Character; rel: Relationship } => !!x.rel && isDue(x.rel))
+    .filter((x): x is { c: Character; rel: Relationship } => !!x.rel && statusDue(x.rel))
     .sort((a, b) => Date.parse((a.rel.mood as any)?.status?.until ?? 0) - Date.parse((b.rel.mood as any)?.status?.until ?? 0));
   if (due.length) await refreshStatus(due[0].c);
 }
@@ -74,7 +78,8 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
   if (!rel) return null;
   const seed = character.seed;
   const lab = (cat: string, id: string) => find(cat, id)?.label ?? id;
-  const now = new Date();
+  // The story's own clock, not the real one - see engine/clock.ts.
+  const now = gameNow();
   const previous = statusOf(rel)?.text;
   const hours = randInt(MIN_HOURS, MAX_HOURS);
   // Her storylines ride along on this call: it already runs every few hours, so moving one of

@@ -988,6 +988,62 @@ What changed:
 Existing characters keep their fantasies; the new wording has them play those out in the chat
 too, and new ones she invents follow the same rule.
 
+## Time only passes when he says so
+
+Everything used to run off the real clock: her arousal cooled over real hours, her status
+changed every real 4-12 hours, and if he genuinely stepped away for a while she could
+double-text him or reach out on her own for having gone quiet. In practice this meant one of
+two things - either he always replied quickly enough that none of it ever visibly did
+anything, or the one time he actually left it a few days, he came back to a character who had
+half-decided he was ignoring her. Both are wrong for an app built on there being nothing to
+win or lose. The fix: nothing ages here on its own any more. A chat picks up exactly where he
+left it, whether that was five seconds or five real days ago, and a **Pass time** control
+(the clock icon on the Chats screen) is the one deliberate way to move the story forward -
+by however many hours or days he actually chooses.
+
+- **`engine/clock.ts`** is the story's own clock: a single stored value, seeded to the real
+  time once and from then on moved only by `advanceGameClock()`. It never drifts with the
+  real one, however long the app sits idle. Everything that describes *when something is
+  happening in the fiction* now reads this instead: her sense of the current day and time
+  (`moment.ts`'s "right now it is..."), her status's `set_at`/`until` (`status.ts`), the
+  Director's "time now" and "last contact" lines, `last_contact_at`, and how long an open
+  thread has been sitting unaddressed before it is dropped (`state.ts`). Real wall-clock time
+  (`Date.now()`/`nowIso()`) still runs everything actually about the real world: message
+  timestamps, image and log bookkeeping, typing-delay pacing, per-day cost budgets, and the
+  30-minute "he replied to an old direction" heuristic - none of that should freeze.
+- **`engine/timepass.ts`** is what a press of the button actually does, for every match he
+  has (not just whichever chat is open), on the new clock time:
+  - her arousal fades by exactly that many hours (`decayArousal`, unchanged - it just no
+    longer runs on a real timer);
+  - the Director's current plan for her is torn up, so the next actual message gets a fresh
+    one built for the new moment instead of finishing out one written hours or days earlier;
+  - her status, mood, location, outfit and one of her storylines move on, but only once the
+    virtual 4-12 hour window she was already given has actually elapsed (`statusDue()` in
+    status.ts - now anchored to the story clock, so a five-minute skip does not force a new
+    status any more than it used to force one every tick);
+  - a match-anniversary or first-date milestone (one week, one month, ...) can land, counted
+    in a `days_since_match` figure on the relationship that is lazily seeded from how old the
+    match really is the first time this ever runs (so an existing conversation is not reset
+    to "just matched") and from then on only moves by what he passes;
+  - a plain marker - "6 hours passed.", "3 days passed." - lands in her chat like the
+    existing "you took her to..." date marker, so both he and the model reading history back
+    can see the gap;
+  - if **Settings -> unprompted messages** is on (off by default), she may reach out about
+    the gap on her own, queued as an ordinary wakeup a few minutes out for natural pacing -
+    scaled by how much time passed (a short skip rarely produces anything, a multi-day one
+    almost always does) and by how much of a texter she is. A milestone message takes
+    priority over a generic "time passed" one if both would fire. With the setting off,
+    nothing texts him first; only the marker and her updated situation show the gap.
+- **Removed, not repurposed:** the real-time double-text-after-30-minutes and
+  proactive-message-after-real-silence mechanics, and the periodic tick's own arousal decay
+  and milestone sweep. The scheduler's once-a-minute tick now only does things that are
+  genuinely about the real world regardless of story time: deliver a wakeup already
+  scheduled, pick up a message that somehow never got answered (a crash-recovery safety net,
+  unrelated to story time), and give a freshly matched character her very first status.
+- The picker offers 1 hour, 4 hours, "Tonight" (8h), 1 day, 3 days and 1 week, plus a custom
+  hours/days field. Photos taken during a date, and the date's own "how she remembers it"
+  summary, are unaffected - a date is something happening live, in one sitting.
+
 ## Fewer AI-isms
 
 The player flagged the lines that read as machine-written, with "That's not an order, that's

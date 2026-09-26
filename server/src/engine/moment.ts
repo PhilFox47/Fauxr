@@ -2,6 +2,7 @@ import { find } from '../db/attributes.js';
 import type { Character } from '../types.js';
 import { coreTraits, isCore } from './profilecard.js';
 import { lifeLinesForHer } from './life.js';
+import { gameNow } from './clock.js';
 
 /**
  * What is going on in her life at this exact moment, assembled in code from the clock and
@@ -36,7 +37,7 @@ function dayShape(now: Date): string {
   return 'It is the middle of the working week.';
 }
 
-export function describeHerMoment(character: Character, now = new Date()): string {
+export function describeHerMoment(character: Character, now = gameNow()): string {
   const seed = character.seed;
   const hour = now.getHours();
   const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || find(cat, id)?.label || id;

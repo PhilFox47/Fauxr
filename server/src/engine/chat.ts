@@ -15,6 +15,7 @@ import { advanceRelease, releaseOf } from './release.js';
 import { addInventedFantasy, markPitched } from './fantasies.js';
 import { fantasyList } from './blocks.js';
 import { applyOutfitChanges, currentOutfit, outfitMood } from './wardrobe.js';
+import { gameNowIso } from './clock.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -98,14 +99,6 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
   const wakeup = getWakeup(character.id);
   if (wakeup?.cancel_if_user_writes) clearWakeup(character.id);
 
-  // He replied - the silence that may have earned an unanswered follow-up (a double-text or
-  // a proactive check-in) is over, so a future one is fair game again. See maybeDoubleText()
-  // and maybeBeProactive() in scheduler.ts - both share this one flag so at most one
-  // unprompted follow-up ever goes out while he has not replied, not one of each.
-  if ((rel.mood as any)?.followed_up_unanswered) {
-    rel.mood = { ...rel.mood, followed_up_unanswered: false };
-  }
-
   // She only knows what he likes because he said it, and only in this conversation - the
   // match he told last week knows, the one he matched this morning does not.
   const learned = learnAboutHim(rel, input.text);
@@ -166,8 +159,7 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     outdated ||
     opts.trigger === 'wakeup' ||
     opts.trigger === 'match_opener' ||
-    opts.trigger === 'initiative' ||
-    isStaleSession(rel);
+    opts.trigger === 'initiative';
 
   if (needsDirector) {
     await runDirector(character, rel, {
@@ -253,7 +245,9 @@ async function runActorPhase(
   if (opts.decrementValidFor && rel.active_direction) {
     rel.active_direction.valid_for = Math.max(0, rel.active_direction.valid_for - 1);
   }
-  rel.last_contact_at = nowIso();
+  // The story's own clock (engine/clock.ts), not the real one: this is what lets the
+  // Director see "last contact" and "time now" line up until he actually passes time.
+  rel.last_contact_at = gameNowIso();
   if (result.hidden.new_fact) {
     rel.ledger.facts.about_user = [
       ...new Set([...(rel.ledger.facts.about_user ?? []), result.hidden.new_fact]),
@@ -449,11 +443,6 @@ export function deleteMessage(characterId: string, messageId: number): void {
   }
   deleteMessages([messageId]);
   bus.emitEvent({ type: 'messages_removed', character_id: characterId, message_ids: [messageId] });
-}
-
-function isStaleSession(rel: Relationship): boolean {
-  if (!rel.last_contact_at) return true;
-  return Date.now() - Date.parse(rel.last_contact_at) > 6 * 3_600_000;
 }
 
 /** Play the messages out over time with a typing indicator, the way a person types. */

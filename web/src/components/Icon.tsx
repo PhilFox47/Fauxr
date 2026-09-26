@@ -27,7 +27,8 @@ export type IconName =
   | 'check'
   | 'camera'
   | 'search'
-  | 'trash';
+  | 'trash'
+  | 'clock';
 
 /** 24x24 grid, 1.75 stroke, round caps - one consistent drawing style for all of them. */
 const PATHS: Record<IconName, ReactNode> = {
@@ -95,6 +96,12 @@ const PATHS: Record<IconName, ReactNode> = {
     <>
       <path d="M5 7h14M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M8 7l.8 12.1A1 1 0 0 0 9.8 20h4.4a1 1 0 0 0 1-.9L16 7" />
       <path d="M10.3 11v5.5M13.7 11v5.5" />
+    </>
+  ),
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3.2 2" />
     </>
   ),
 };

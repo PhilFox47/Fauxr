@@ -613,6 +613,18 @@ export default function Chat({
             );
           }
 
+          if (m.sender === 'system' && m.meta?.type === 'time_passed') {
+            return (
+              <div key={m.id} style={{ display: 'contents' }}>
+                {showDay && <div className="day-sep">{dayLabel(m.sent_at)}</div>}
+                <div className="time-marker">
+                  <Icon name="clock" size={13} />
+                  {m.text}
+                </div>
+              </div>
+            );
+          }
+
           if (m.sender === 'system' && m.meta?.type === 'photo_offer') {
             return (
               <div key={m.id} style={{ display: 'contents' }}>

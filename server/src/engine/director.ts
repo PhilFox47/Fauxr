@@ -56,6 +56,7 @@ import { ensureFantasies } from './generator.js';
 import { fantasyLog } from './fantasies.js';
 import { canSendPhotos } from './images.js';
 import { DIRECTOR } from '../llm/schemas.js';
+import { gameNow } from './clock.js';
 
 export interface DirectorResult {
   direction: Direction;
@@ -152,7 +153,8 @@ export async function runDirector(
     core_block: coreBlock(character),
     life_block: lifeBlockForDirector(character.id),
     last_contact: rel.last_contact_at ?? 'never',
-    now: new Date().toLocaleString('en-GB'),
+    // The story's own clock (engine/clock.ts), not the real one.
+    now: gameNow().toLocaleString('en-GB'),
     spice_directive: spiceDirective(settings.spice),
     unprompted: settings.unprompted_messages ? '1' : '',
     replies_only: settings.unprompted_messages ? '' : '1',

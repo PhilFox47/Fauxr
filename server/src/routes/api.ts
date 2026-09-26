@@ -24,6 +24,7 @@ import {
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji, rarityTier } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
+import { passTime } from '../engine/timepass.js';
 import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
 import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
@@ -615,6 +616,20 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       reason: 'she wants to text him right now - her own impulse, not a reply to anything',
     }).catch((err) => logger.error('actor', 'your-move turn failed', { error: String(err) }));
     return { ok: true };
+  });
+
+  /**
+   * "Pass time": the deliberate way the story's clock moves (engine/clock.ts, timepass.ts).
+   * Nothing here happens on its own - see the module doc for why.
+   */
+  app.post<{ Body: { hours?: number } }>('/api/pass-time', async (req, reply) => {
+    const hours = Number(req.body?.hours);
+    if (!Number.isFinite(hours) || hours <= 0) return reply.code(400).send({ error: 'hours must be a positive number' });
+    try {
+      return await passTime(hours);
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
   });
 
   // "Show photo" on a photo she sent: renders the prompt prepared when she sent it. Returns as

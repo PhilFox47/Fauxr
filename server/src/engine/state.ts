@@ -1,4 +1,5 @@
 import { nowIso } from '../db/index.js';
+import { gameNowIso, gameNowMs } from './clock.js';
 import { logger } from '../log.js';
 import { saveRelationship } from '../repo.js';
 import type { Character, Ledger, OpenThread, Relationship } from '../types.js';
@@ -51,11 +52,11 @@ const THREAD_MAX_AGE_HOURS = 72;
  * when a person mentions something and the other person does not bite.
  */
 export function pruneThreads(threads: OpenThread[]): OpenThread[] {
-  const now = Date.now();
+  const now = gameNowMs();
   return threads
     .filter((t) => (t.raised ?? 0) < MAX_RAISES)
     .filter((t) => {
-      const age = now - Date.parse(t.created_at ?? new Date().toISOString());
+      const age = now - Date.parse(t.created_at ?? gameNowIso());
       return !Number.isFinite(age) || age < THREAD_MAX_AGE_HOURS * 3_600_000;
     })
     .slice(-MAX_THREADS);
@@ -66,13 +67,13 @@ export function markThreadRaised(rel: Relationship, threadId: string): void {
   const thread = rel.ledger.open_threads?.find((t) => t.id === threadId);
   if (!thread) return;
   thread.raised = (thread.raised ?? 0) + 1;
-  thread.last_raised_at = nowIso();
+  thread.last_raised_at = gameNowIso();
   rel.ledger.open_threads = pruneThreads(rel.ledger.open_threads);
 }
 
 /** Threads she has not touched recently, i.e. the ones worth coming back to. */
 export function freshThreads(threads: OpenThread[], cooldownHours = 8): OpenThread[] {
-  const now = Date.now();
+  const now = gameNowMs();
   return pruneThreads(threads).filter((t) => {
     if (!t.last_raised_at) return true;
     return now - Date.parse(t.last_raised_at) > cooldownHours * 3_600_000;
@@ -113,7 +114,7 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger']): Ledger {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       text,
       expires_when: t.expires_when ?? 'when it comes up',
-      created_at: nowIso(),
+      created_at: gameNowIso(),
     });
   }
   const closing = new Set((patch.open_threads_close ?? []).map((s) => String(s).trim().toLowerCase()));

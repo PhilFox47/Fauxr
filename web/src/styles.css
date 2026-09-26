@@ -1556,6 +1556,23 @@ input[type='range'] {
 }
 .date-marker-body { font-size: 13.5px; line-height: 1.55; color: var(--text-dim); }
 
+/* A "Pass time" skip, marked in the log the same way a day divider is - informational, not
+   something to tap. */
+.time-marker {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 550;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 5px 13px;
+  border-radius: var(--r-full);
+  margin: var(--s2) 0;
+}
+
 /* The armed state of the profile-picture button. "Generate profile pic?" on one line pushed a
    390px-wide phone into sideways scrolling, so it wraps to two short lines instead. */
 .topbar .picture-confirm { white-space: normal; max-width: 112px; padding: 5px 10px; font-size: 12px; line-height: 1.15; text-align: center; box-shadow: none; }
