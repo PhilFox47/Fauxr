@@ -446,6 +446,9 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, medium: 'text' 
       'Sext the way people actually do on a phone: first person, short bursts, the specific thing',
       'rather than a vague one, in your own typing style. Tease, stop short, make him ask. No',
       'asterisk actions, no narration, no third person - only what you would type.',
+      'It is happening now, between two phones: what you are doing this minute, where your hands',
+      'are, what you have on, what you want him to do right now. Not a list of what you will do to',
+      'him when you meet.',
     );
   }
   lines.push(
@@ -468,6 +471,7 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, medium: 'text' 
 export function fantasiesBlock(
   seed: CharacterSeed,
   log: Record<string, { status: string; played?: number }> = {},
+  medium: 'text' | 'in_person' = 'text',
 ): string {
   const items = fantasyList(seed);
   if (!items.length) return '';
@@ -477,9 +481,15 @@ export function fantasiesBlock(
     if (e.status === 'played') return ` (you have played this one out with him${(e.played ?? 1) > 1 ? ` ${e.played} times` : ''} - build on it, take it further, or riff on it)`;
     return ' (you have already told him about this one)';
   };
+  const how = medium === 'in_person'
+    ? ['Fantasies you have. Tonight you are in the same place: one that needs a room and two bodies',
+      'can happen now. Adapt them to what you learn about him; invent new ones too.']
+    : ['Fantasies you have. Pitch one - describe it, ask if he is in - and start it right here: in the',
+      'chat it is played out in texts, photos and voice notes, as it happens, not planned for later.',
+      'One that needs you both in the same room can wait for a date he sets up. Adapt them to what',
+      'you learn about him; invent new ones too.'];
   return [
-    'Fantasies you have and want to actually play out with someone. Pitch them - describe one, ask',
-    'if he is in, start it. Adapt them to what you learn about him; invent new ones too.',
+    ...how,
     ...items.map((f, i) => `${i + 1}. ${f}${note(f)}`),
   ].join('\n');
 }
@@ -550,7 +560,8 @@ export function recentPhotosFact(characterId: string, who: 'you' | 'she' = 'you'
  */
 export function dateHistoryFact(dates: DateSession[]): string {
   const ended = dates.filter((d) => d.status === 'ended').sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
-  if (ended.length === 0) return 'You have never actually met up with him in person.';
+  // Worded so it is not a gap to close: "never met up" read as the thing to fix next.
+  if (ended.length === 0) return 'No dates so far; everything between you has happened in the chat.';
   const last = ended[0];
   const hours = (Date.now() - Date.parse(last.ended_at ?? last.created_at)) / 3_600_000;
   const ago =

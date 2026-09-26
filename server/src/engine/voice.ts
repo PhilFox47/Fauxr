@@ -226,6 +226,33 @@ export function detectQuizzingHim(messages: string[]): string | null {
   return null;
 }
 
+/**
+ * Sexting deferred to a meeting: "when we meet I'll...", "next time I see you", "can't wait to
+ * get my hands on you". The player found the whole chat turning into a list of what she would do
+ * to him on a date - the chat as a waiting room instead of its own thing. Only checked when he
+ * did not bring up meeting himself (hisLast), so she can still answer "when can I see you".
+ */
+const MEETUP_PATTERNS: RegExp[] = [
+  /\bwhen (?:we|i|u|you) (?:finally |actually )?(?:meet|see (?:you|u|each other)|get (?:you|u) (?:alone|home|in person)|link up)\b/i,
+  /\bnext time (?:i|we) (?:see|meet)\b/i,
+  /\b(?:can'?t|cannot) wait (?:to|til|till|until) (?:meet|see (?:you|u)|we meet|i see (?:you|u)|get my hands on)\b/i,
+  /\b(?:wait|just wait) (?:til|till|until) (?:i|we) (?:see|meet|get (?:you|u))\b/i,
+  /\bwhen i (?:finally )?get my hands on (?:you|u)\b/i,
+  /\bin person\b.{0,40}\b(?:i'?ll|im gonna|i'?m going to|gonna)\b/i,
+];
+const HE_RAISED_MEETING = /\b(meet|date|see you|see u|come over|in person|hang out|drink|dinner|coffee)\b/i;
+
+export function detectMeetupDeferral(messages: string[], hisLast: string): string | null {
+  if (HE_RAISED_MEETING.test(hisLast)) return null;
+  for (const text of messages) {
+    for (const re of MEETUP_PATTERNS) {
+      const m = text.match(re);
+      if (m) return m[0];
+    }
+  }
+  return null;
+}
+
 export function detectScorekeepingTell(text: string): string | null {
   for (const p of SCOREKEEPING_PATTERNS) if (p.re.test(text)) return p.what;
   return null;

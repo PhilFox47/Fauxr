@@ -173,7 +173,8 @@ should be able to tell it exists.
      or three of the SCENARIO IDEAS below and make them hers: change the setting, the roles
      and the details until they could only be her fantasy. Then invent two or three more of
      her own, from her persona, her fetishes, her job and her life, unlike the ideas. Make
-     them specific and hers, not generic.
+     them specific and hers, not generic. At least two of them happen over the phone while they are
+     apart - in texts, photos, voice notes or a call - and are written that way.
    - favourite_piece: the one piece of clothing she owns that has a story - worn to death,
      inherited, stolen, bought with her first paycheck - in a sentence. It fits her style
      and her life (her closet, for reference: {{closet}}). Not something sexy by default.

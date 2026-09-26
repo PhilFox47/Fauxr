@@ -950,6 +950,44 @@ Photos in a date are kept out of her own history, so she never reacts to "a phot
 photo posted after her beat no longer stops that beat from being rerolled. Pressing the
 button is his action, so no image is spent that he did not ask for.
 
+## The chat is its own thing
+
+Chatting and sexting had turned into "what I want to do to you when we meet up": a waiting room
+for a date instead of something happening now. It came from the prompts themselves:
+- her brief told her to tell him "what you would do to him";
+- every fantasy she had was an in-person scene she wanted "to play out with someone";
+- "You have never actually met up with him in person" sat in the Director's view as a gap
+  to close.
+
+What changed:
+- **Chat prompt.** A short "the chat is its own thing" point: what happens here happens now,
+  on their phones - the banter, her day, and the sex too: what she is doing this minute, what
+  she has on right now, the photo she just took, the dare she just did, tonight's game.
+  "When we meet I'll..." is an aside at most, and meeting up is his to suggest. "What you
+  would do to him" became "what you are doing right now".
+- **Sexting** (spice block, text only): it is happening now, between two phones, not a list
+  of what she will do when they meet.
+- **Fantasies.** In chat, a fantasy is started right there and played out in texts, photos
+  and voice notes as it happens. One that needs a room waits for a date he sets up. On a
+  date the block says the opposite: tonight they are in the same place.
+- **Phone-native fantasy ideas.** Thirteen new `fantasy_scenario` rows are made for the chat:
+  edging him (or being edged) over text, dares through his workday, a dare she does in public
+  and reports back, touching herself while her typing falls apart, a scene written together
+  line by line, a slow strip in selfies, a countdown he types, a voice note of her finishing,
+  sexting from somewhere she should not. They carry `extra.medium: "text"`, as do five older
+  ones (calls, voice notes, a cam show, a day of filthy texts - no longer "before they meet").
+  Every character gets at least one among her scenario ideas, and the character pass writes
+  at least two of her fantasies as things that happen over the phone.
+- **Director.** Goals are about now; meeting up is never the goal or the payoff. "No dates so
+  far; everything between you has happened in the chat" replaces "never actually met up".
+- **One safety net** (`detectMeetupDeferral` in voice.ts): a first draft that pushes it to a
+  meeting ("when we meet", "next time I see you", "can't wait to get my hands on you") is sent
+  back once with the fix named - unless he brought up meeting himself, so "when can I see
+  you" still gets a real answer.
+
+Existing characters keep their fantasies; the new wording has them play those out in the chat
+too, and new ones she invents follow the same rule.
+
 ## Fewer AI-isms
 
 The player flagged the lines that read as machine-written, with "That's not an order, that's

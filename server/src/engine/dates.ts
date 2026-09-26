@@ -253,7 +253,7 @@ function buildDatePrompt(
     life_block: lifeBlock(seed),
     interests_block: interestsBlock(seed),
     sexual_block: sexualBlock(seed),
-    fantasies_block: fantasiesBlock(seed, fantasyLog(rel)),
+    fantasies_block: fantasiesBlock(seed, fantasyLog(rel), 'in_person'),
     // 'in_person': the texting version of this block forbids narration and asterisk actions
     // and demands phone-typing habits, which flatly contradicts actor_date.md's own format -
     // feeding it in unmodified used to hand the model two contradictory rule sets at once.
@@ -924,7 +924,7 @@ function summaryPrompt(character: Character, rel: Relationship, date: DateSessio
     seed_block: seedBlock(character),
     location_block: [locationBlock(date, date.location_id ? getLocation(date.location_id) : null), castLine(date)].filter(Boolean).join('\n'),
     arousal: rel.arousal,
-    fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel)) || '(none)',
+    fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel), 'in_person') || '(none)',
     history_block: historyBlock(withoutDirections(dateMessages(date.id)), character, user),
   });
 }

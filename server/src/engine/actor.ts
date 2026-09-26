@@ -17,7 +17,7 @@ import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { initiativeNudge } from './nudge.js';
 import { releaseBlock } from './release.js';
-import { detectQuizzingHim, detectReframe, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
+import { detectMeetupDeferral, detectQuizzingHim, detectReframe, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
 import { canSendPhotos } from './images.js';
 import { fantasyLog } from './fantasies.js';
 import { ACTOR_CHAT, VOICE_NOTE } from '../llm/schemas.js';
@@ -455,8 +455,25 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       correction = retryHint(
         `you handed the work to him (${quiz})`,
         'He is here to hear your fantasies and your side of things, not to guess at you or write the ' +
-          'scene himself. Say it yourself instead: what you would do, what you have on, what you want, ' +
+          'scene himself. Say it yourself instead: what you are doing, what you have on, what you want, ' +
           'what happened - specific and yours. It is fine to end on a statement.',
+      );
+      continue;
+    }
+
+    // Sex postponed to a meeting - see detectMeetupDeferral. The chat is its own thing.
+    const hisLast = [...recent].reverse().find((m) => m.sender === 'user')?.text ?? '';
+    const deferral = attempt === 0 ? detectMeetupDeferral(out.messages.map((m) => m.text), hisLast) : null;
+    if (deferral) {
+      logger.warn('actor', `rejected: deferring to a meeting ("${deferral}")`, {
+        character: ctx.character.username,
+        messages: out.messages.map((m) => m.text),
+      });
+      correction = retryHint(
+        `you pushed it to when you meet ("${deferral}")`,
+        'This chat is its own thing, not the run-up to a date. Keep it here and now: what you are doing ' +
+          'this minute, what you have on, what you want from him tonight over the phone, a photo, a dare, ' +
+          'a game. Same heat, present tense.',
       );
       continue;
     }

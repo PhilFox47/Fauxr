@@ -195,7 +195,15 @@ export function rollFantasySeeds(
   // have one (the row conflicts with the single statuses).
   const ctx = newContext();
   if (seed.relationship_status) ctx.drawn.add(seed.relationship_status);
-  return rollMany('fantasy_scenario', ctx, count, { only: allowed, lean, transient: true }).map((a) => a.id);
+  // At least one idea is made for the chat itself (extra.medium 'text': edging him over text,
+  // a dare she reports back on, a voice note). Without one, every fantasy was an in-person
+  // scene, and sexting turned into a list of what she would do to him when they met.
+  const phone = new Set([...allowed].filter((id) => all.find((s) => s.id === id)?.extra?.medium === 'text'));
+  const first = phone.size ? rollMany('fantasy_scenario', ctx, 1, { only: phone, lean, transient: true }) : [];
+  const rest = rollMany('fantasy_scenario', ctx, Math.max(0, count - first.length), {
+    only: allowed, lean, exclude: new Set(first.map((a) => a.id)), transient: true,
+  });
+  return [...first, ...rest].map((a) => a.id);
 }
 
 /**
