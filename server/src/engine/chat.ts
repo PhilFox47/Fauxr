@@ -14,6 +14,7 @@ import { canSendPhotos, sendPhoto, sendPhotoChoice } from './images.js';
 import { advanceRelease, releaseOf } from './release.js';
 import { addInventedFantasy, markPitched } from './fantasies.js';
 import { fantasyList } from './blocks.js';
+import { applyOutfitChanges, currentOutfit, outfitMood } from './wardrobe.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -240,6 +241,15 @@ async function runActorPhase(
   const fresh = getRelationship(characterId);
   if (!fresh || epoch !== startedIn) return;
   rel = fresh;
+  // What she has on after this turn: only her reported changes are applied (wardrobe.ts).
+  // Before any photo from this turn is prepared, so a photo shows the outfit she just
+  // described rather than the one before it.
+  rel.mood = {
+    ...rel.mood,
+    ...outfitMood(applyOutfitChanges(character.seed, currentOutfit(rel, character.seed), result.hidden.outfit_changes)),
+  };
+  // Saved now: a photo from this turn starts preparing synchronously below and reads it.
+  saveRelationship(rel);
   if (opts.decrementValidFor && rel.active_direction) {
     rel.active_direction.valid_for = Math.max(0, rel.active_direction.valid_for - 1);
   }
@@ -318,7 +328,6 @@ async function runActorPhase(
     // reported no change, not that she has nowhere/nothing/no plans, so it falls back to
     // whatever was already stored rather than wiping it.
     location: result.hidden.location || (rel.mood as any)?.location || '',
-    outfit: result.hidden.outfit || (rel.mood as any)?.outfit || '',
     activity: result.hidden.activity || (rel.mood as any)?.activity || '',
     // Left over from the old consent cards; cleared so nothing reads them again.
     pending_photo: null,

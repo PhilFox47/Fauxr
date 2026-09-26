@@ -339,6 +339,8 @@ export const api = {
   sendDateMessage: (dateId: string, text: string) =>
     request<Message>(`/api/dates/${dateId}/messages`, { method: 'POST', body: JSON.stringify({ text }) }),
   endDate: (dateId: string) => request<DateSession>(`/api/dates/${dateId}/end`, { method: 'POST' }),
+  /** A picture of this moment of the date, from his point of view; arrives as an image in the date. */
+  showScene: (dateId: string) => request<{ image_id: string }>(`/api/dates/${dateId}/scene`, { method: 'POST' }),
   regenerateDateBeat: (dateId: string, messageId: number) =>
     request<{ removed_ids: number[] }>(`/api/dates/${dateId}/regenerate`, {
       method: 'POST',

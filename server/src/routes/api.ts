@@ -28,7 +28,7 @@ import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
 import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
 import {
-  dateHistory, deleteDateMessage, dismissNpc, endDate, handleUserDateMessage, regenerateLastDateBeat, startDate,
+  dateHistory, deleteDateMessage, dismissNpc, endDate, handleUserDateMessage, regenerateLastDateBeat, showCurrentScene, startDate,
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
 import { domainSides, TASTE_SECTIONS } from '../engine/kinks.js';
@@ -583,6 +583,15 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     }
   });
 
+  /** "Show current scene": a picture of this moment of the date, from his point of view. */
+  app.post<{ Params: { dateId: string } }>('/api/dates/:dateId/scene', async (req, reply) => {
+    try {
+      return await showCurrentScene(req.params.dateId);
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
+
   /** Ends the evening and writes the summary she will remember it by. */
   app.post<{ Params: { dateId: string } }>('/api/dates/:dateId/end', async (req, reply) => {
     try {
@@ -711,7 +720,10 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       title: section.title,
       categories: section.categories.map((c) => ({
         ...c,
-        options: byCategory(c.category).map((a) => ({ id: a.id, label: a.label, hint: a.prompt_hint })),
+        options: byCategory(c.category)
+          .filter((a) => !c.slot || a.extra?.slot === c.slot)
+          // A clothing piece's hint is its label again; showing it twice is noise.
+          .map((a) => ({ id: a.id, label: a.label, hint: a.prompt_hint.toLowerCase() === a.label.toLowerCase() ? '' : a.prompt_hint })),
       })),
     })));
 

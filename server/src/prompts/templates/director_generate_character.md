@@ -174,6 +174,9 @@ should be able to tell it exists.
      and the details until they could only be her fantasy. Then invent two or three more of
      her own, from her persona, her fetishes, her job and her life, unlike the ideas. Make
      them specific and hers, not generic.
+   - favourite_piece: the one piece of clothing she owns that has a story - worn to death,
+     inherited, stolen, bought with her first paycheck - in a sentence. It fits her style
+     and her life (her closet, for reference: {{closet}}). Not something sexy by default.
    - director_intent: what she wants to explore with him, one sentence. Her sexual long
      game, not a test he has to pass.
    - opening_plan: one concrete first move she makes, the one only she would make - out of
@@ -204,6 +207,7 @@ Reply with exactly one JSON object and nothing else:
   "fantasies": ["...", "...", "..."],
   "director_intent": "...",
   "opening_plan": { "text": "...", "expires_when": "..." },
+  "favourite_piece": "...",
   "duo_partner": null
 }
 

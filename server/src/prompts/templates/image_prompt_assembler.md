@@ -64,6 +64,14 @@ Situation: {{situation}}
 Where her photos usually happen: {{photo_scene}}. Draw on it when the situation puts her
 somewhere of her own and leaves the place open; the situation always wins.
 {{/photo_scene}}
+{{#wearing}}
+
+**What she has on right now:** {{wearing}}
+This is what is actually on her as the photo is taken - draw it as written, piece by piece,
+legwear and anything half-off included, as far as the framing shows it. Where the situation
+clearly puts her in something else (a photo from another day, she changed for it), the
+situation wins.
+{{/wearing}}
 {{#cosplay_block}}
 
 **The costume.** The situation has her dressed as a character. Reproduce that costume exactly
@@ -222,6 +230,22 @@ how the fabric sits on her. She is caught mid-moment (arriving, turning, spottin
 than holding still, and the look on her face is for him. Real skin and texture, no studio
 polish or beauty-filter smoothing, and none of the handheld phone-grain look either.
 {{/is_date}}
+{{#is_scene}}
+This is **what he is looking at right now**, in the middle of their date - through his own
+eyes, from exactly where he is in the scene. First person: the camera is his head. His own
+hands, arms, knees or chest can sit at the near edge of the frame when the moment puts them
+there (reaching for her, her on his lap); his face never appears. It is not a photo either of
+them took and not a posed portrait.
+
+The point of this picture is the situation, not her outfit: where they are in the place, what
+she is doing this second, her expression and body language, anyone else there and what they
+are doing, the light of the place. Clothes appear exactly as far as the scene shows them.
+
+If what is happening is sexual, render it frankly and specifically - bodies, positions, skin,
+the state she is in - with the same one exception as always: the area right between her legs
+stays out of view through the angle, the pose, a hand, fabric or the crop. Do not write the word
+for what is kept out of view anywhere in the prompt.
+{{/is_scene}}
 {{#is_spicy}}
 
 # THE SPICY PHOTO

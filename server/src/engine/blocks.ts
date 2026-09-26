@@ -8,6 +8,7 @@ import { detectAuditionFrame } from './voice.js';
 import { heroRoleRow, isPower, speciesRow, speciesVisibility, transRow } from './species.js';
 import { cosplayBlock } from './cosplay.js';
 import { duoChatNote, duoLines, duoPartner } from './duo.js';
+import { closetBlock, outfitLines, type Outfit } from './wardrobe.js';
 import { layerLines, layerVoiceLines } from './layers.js';
 import { sideDetail } from './kinks.js';
 import { coreTraits, isCore } from './profilecard.js';
@@ -165,7 +166,8 @@ export function appearanceBlock(seed: CharacterSeed): string {
     seed.butt_size ? `Your butt: ${label('butt_size', seed.butt_size)} - ${hint('butt_size', seed.butt_size)}` : '',
     tattoos.length ? `Tattoos: ${tattoos.join('; ')}` : 'No tattoos.',
     piercings.length ? `Piercings: ${piercings.join('; ')}` : '',
-    seed.accessories.length ? `You usually wear: ${seed.accessories.map((a) => label('accessory', a)).join(', ')}` : '',
+    seed.accessories.length ? `Always on you: ${seed.accessories.map((a) => label('accessory', a)).join(', ')}` : '',
+    closetBlock(seed),
   ].filter(Boolean).join('\n');
 }
 
@@ -384,33 +386,36 @@ export function moodBlock(arousal: number, tell?: string, medium: 'text' | 'in_p
  * for exactly this reason: a field she is instructed to keep private is one she can act from
  * without narrating, the same relationship "hidden.thoughts" already has to what she says.
  */
-export function continuityBlock(mood: Record<string, unknown>): string {
+export function continuityBlock(mood: Record<string, unknown>, outfit?: Outfit): string {
   const location = String(mood?.location ?? '').trim();
-  const outfit = String(mood?.outfit ?? '').trim();
   const activity = String(mood?.activity ?? '').trim();
   const status = String((mood as any)?.status?.text ?? '').trim();
   const statusLine = status
     ? `Your status right now, which he can see under your name: "${status}". It is yours - you can mention it, and he may ask about it.`
     : '';
-  if (!location && !outfit && !activity) {
-    return (
-      'You have not settled where you physically are, what you are wearing, or what you are ' +
-      'doing right now. Pick something concrete and ordinary for the moment - not a blank ' +
-      'backdrop - and report it in "hidden" so it holds for next time.'
-    );
+  const wearing = outfit ? outfitLines(outfit) : [];
+  if (!location && !activity) {
+    return [
+      'You have not settled where you physically are or what you are doing right now. Pick ' +
+        'something concrete and ordinary for the moment - not a blank backdrop - and report it ' +
+        'in "hidden" so it holds for next time.',
+      ...(wearing.length ? ['What you have on right now:', ...wearing] : []),
+    ].join('\n');
   }
   return [
     statusLine,
     'Your actual physical situation right now, unless something below has clearly moved on ' +
       'since:',
     location ? `- Where you are: ${location}` : '',
-    outfit ? `- What you have on: ${outfit}` : '',
     activity ? `- What you are actually doing: ${activity}` : '',
+    // Every slot, stated: the socks are on until something takes them off.
+    ...(wearing.length ? ['What you have on right now, piece by piece (yours to keep track of):', ...wearing.map((l) => `  ${l}`)] : []),
     'This is background, not a line to deliver - do not announce it or work it into every ' +
-      'reply. It only surfaces when it is genuinely the reason for something: a slow reply, a ' +
-      'short one, him asking what you are up to. Keep it consistent turn to turn and update ' +
-      '"hidden" only when something real actually changed it - time passing, you saying you ' +
-      'are heading somewhere, tidying up for bed. Otherwise report the same thing back unchanged.',
+      'reply, and never list what you are wearing. It only surfaces when it is genuinely the ' +
+      'reason for something: a slow reply, a short one, him asking what you are up to or what ' +
+      'you have on, a piece coming off. Keep it consistent turn to turn and update "hidden" only ' +
+      'when something real actually changed it - time passing, you saying you are heading ' +
+      'somewhere, getting changed, getting undressed.',
   ].filter(Boolean).join('\n');
 }
 

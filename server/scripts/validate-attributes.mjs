@@ -110,6 +110,46 @@ for (const eth of byCategory.get('ethnicity') ?? []) {
   }
 }
 
+// Wardrobes (engine/wardrobe.ts). Items hang off style families, so a new item only needs a
+// slot and a family, and a new clothing style only needs its families - these checks catch a
+// typo in either, and a style whose pool is too small to fill its own counts.
+{
+  const OWNED = ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'bra', 'panties', 'lingerie', 'swim', 'work'];
+  const WORN = ['outer', 'top', 'bottom', 'dress', 'bra', 'panties', 'lingerie', 'legwear', 'shoes', 'extras'];
+  const ids = (cat) => new Set((byCategory.get(cat) ?? []).map((r) => r.id));
+  const families = ids('wardrobe_family');
+  const lingerie = ids('lingerie_style');
+  const occupations = ids('occupation');
+  const items = byCategory.get('wardrobe_item') ?? [];
+  if (!families.has('any')) errors.push("wardrobe_family 'any' is missing: every closet starts from it");
+  for (const it of items) {
+    const x = it.extra ?? {};
+    const where = `${it.id} (${it._file})`;
+    if (!OWNED.includes(x.slot)) errors.push(`${where}: wardrobe_item slot '${x.slot}' is not one of ${OWNED.join(', ')}`);
+    for (const f of x.families ?? []) if (!families.has(f)) errors.push(`${where}: unknown wardrobe family '${f}'`);
+    for (const l of x.lingerie ?? []) if (!lingerie.has(l)) errors.push(`${where}: unknown lingerie_style '${l}'`);
+    for (const o of x.occupations ?? []) if (!occupations.has(o)) errors.push(`${where}: unknown occupation '${o}'`);
+    if (!(x.families?.length || x.lingerie?.length || x.occupations?.length)) errors.push(`${where}: needs families, lingerie or occupations, or nobody can own it`);
+    if ((x.slot === 'swim' || x.slot === 'work') && !x.pieces) errors.push(`${where}: a ${x.slot} set needs extra.pieces`);
+    for (const k of Object.keys(x.pieces ?? {})) if (!WORN.includes(k)) errors.push(`${where}: piece slot '${k}' is not a worn slot`);
+  }
+  for (const r of byCategory.get('sleepwear') ?? []) {
+    for (const k of Object.keys(r.extra?.pieces ?? {})) if (!WORN.includes(k)) errors.push(`${r.id} (${r._file}): sleepwear piece slot '${k}' is not a worn slot`);
+  }
+  const countsOf = (id) => (byCategory.get('wardrobe_family') ?? []).find((f) => f.id === id)?.extra?.counts ?? {};
+  for (const st of byCategory.get('clothing_style') ?? []) {
+    const fams = st.extra?.wardrobe_families ?? [];
+    if (!fams.length) { errors.push(`clothing_style '${st.id}' has no wardrobe_families`); continue; }
+    for (const f of fams) if (!families.has(f)) errors.push(`clothing_style '${st.id}': unknown wardrobe family '${f}'`);
+    const counts = { ...countsOf('any'), ...countsOf(fams[0]), ...(st.extra?.wardrobe_counts ?? {}) };
+    for (const slot of ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'swim']) {
+      const max = counts[slot]?.[1] ?? 0;
+      const pool = items.filter((i) => i.extra?.slot === slot && (i.extra?.families ?? []).some((f) => f === 'any' || fams.includes(f)));
+      if (pool.length < max) errors.push(`clothing_style '${st.id}': only ${pool.length} ${slot} pieces for up to ${max}`);
+    }
+  }
+}
+
 console.log(`${all.length} entries across ${byCategory.size} categories in ${files.length} files.`);
 if (errors.length) {
   console.log(`\n${errors.length} error(s):`);

@@ -692,7 +692,14 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "side": "her"
+      "side": "her",
+      "weights": {
+        "thigh_high_socks": 3,
+        "black_stockings_garter": 4,
+        "white_thigh_highs_bows": 3,
+        "striped_thigh_highs": 3,
+        "nude_stockings": 2
+      }
     },
     "enabled": true
   },
@@ -5007,7 +5014,14 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "side": "her"
+      "side": "her",
+      "weights": {
+        "white_crew_socks": 3,
+        "striped_knee_socks": 3,
+        "thigh_high_socks": 2,
+        "white_knee_socks": 3,
+        "lace_ankle_socks": 2
+      }
     },
     "enabled": true
   },
@@ -5206,7 +5220,12 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "side": "her"
+      "side": "her",
+      "weights": {
+        "sheer_black_tights": 4,
+        "nude_sheer_tights": 4,
+        "black_opaque_tights": 3
+      }
     },
     "enabled": true
   },

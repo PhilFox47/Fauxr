@@ -861,6 +861,82 @@ category could not come up empty, which let a vetoed row through about once in t
 of rolls (it showed up as a duo profile slipping past a full veto). A vetoed row now has weight 0,
 and only a pool where he has vetoed every row falls back to even odds.
 
+## Wardrobes, outfits and "Show current scene"
+
+Her clothes used to be two things that did not fit together: her clothing style's one stock
+outfit line, baked into the fixed look block of every image ("dark alternative goth outfit,
+black clothing, chunky boots", in the shower too), and one free-text line the model rewrote
+every turn. Anything nobody bothered to repeat - socks above all - quietly stopped existing,
+and a bra could come back after it had come off. Now there are two separate things
+(`engine/wardrobe.ts`):
+
+**Her wardrobe** is what she owns: `seed.wardrobe`, wardrobe_item ids by slot. It is
+background only - he sees her style, never the list.
+- Slots: top, bottom, dress (covers top and bottom), outer, legwear (socks, tights,
+  stockings, garters), shoes, extras (choker, belt, hat, gloves, harness), bra, panties,
+  lingerie (a teddy or bodysuit, covers bra and panties), swim and work. Swimwear and uniforms
+  are sets: `extra.pieces` says which worn slots they fill.
+- The data is in `data/attributes/wardrobe.json` (474 pieces). Items hang off **style
+  families** (`wardrobe_family`: basics, street, sporty, goth, alt, soft, boho, tailored,
+  glam, retro, beach, rave, costume, plus `any` for the universal basics), and every
+  clothing style lists its families in `extra.wardrobe_families`. A new piece needs a slot
+  and a family, and a new style needs only its families. `validate-attributes.mjs` checks
+  slots, families, lingerie styles, occupations and set pieces, and that every style's pool
+  can fill its own counts.
+- How many per slot: `extra.counts` on the families (defaults on `any`, overrides on her
+  main family), her lingerie style's `extra.wardrobe_counts` ("usually nothing underneath"
+  owns at most one bra) and the style's own `extra.wardrobe_counts`. A closet comes out at
+  about 27 pieces.
+- Bras, panties and lingerie come mostly from her lingerie style (items tagged
+  `extra.lingerie`). A job with a uniform (`extra.occupations`: scrubs, a flight suit,
+  chef's whites, a stage outfit...) comes with it. A mermaid or lamia owns no bottoms,
+  legwear or shoes (`extra.no_slots` on the species). About one closet in three gets one
+  piece from outside her style.
+- Rolled through `roll()`, so Settings -> Taste has a **Clothes** section split by slot
+  ("Socks, tights and stockings", "Shoes", ...). Her style's and her kinks' `extra.weights`
+  lean it too, and a leaned piece is eligible even outside her families: "wearing
+  thigh-highs", "wearing pantyhose" and "a footjob in her socks" make sure she owns the
+  right legwear, whatever her style.
+- The character pass writes one **favourite piece** with a story ("her grandmother's
+  moth-eaten cardigan").
+- Clothing-like accessories (thigh-high socks, fishnet tights, platform boots, Docs, a
+  varsity jacket, hats, scarves...) moved into the wardrobe under the same ids. Glasses,
+  jewellery and nails stay accessories and stay in the fixed look.
+- The fixed look (`engine/appearance.ts`) no longer carries the style's outfit line.
+- Existing characters get a closet on first load, their moved accessories go into it, and
+  their fixed look is rebuilt without the outfit line.
+
+**Her outfit** is what is on her body right now, slot by slot, each piece with a state: on,
+open, pushed up, pulled down, pulled aside, half off, off.
+- Her prompt lists every slot, with "none" where one is empty, so the socks are on until
+  something takes them off. Her closet sits in the cached half of the prompt, framed as
+  something to dress from, never to recite.
+- The model reports only **what changed** (`outfit_changes`: a slot and a state, a piece
+  put on from her closet or anything else, "none", or `slot: "all"` for her sleepwear,
+  swimwear, work clothes or nothing). The server keeps the outfit, so one sloppy turn cannot
+  put a bra back on. Tights come off before panties because the model sees what is left.
+- **Chat**: stored on the relationship (`mood.outfit_state`). Her status every few hours
+  picks a whole fresh outfit from her closet, or keeps the old one.
+- **Dates**: the outfit call picks every slot from her closet, plus a note for hair and
+  makeup. Each of her beats stores the outfit after it (`meta.outfit`), so rerolling or
+  deleting a beat takes its clothes changes back.
+- **Photos**: a chat or spicy photo gets the outfit as it is after that turn, as the image
+  model needs it. What is off is left out, and "no bra" is said outright. The outfit is
+  stored on the image, so a "same idea" redraw keeps the same clothes. The arrival photo is
+  built from the date outfit. Profile pictures and fresh photo ideas get her closet, so she
+  describes her own pieces.
+
+**Show current scene** is a camera button in the date header. A small call reads the last
+ten beats, who else is there and what she has on right now, and describes the picture of
+this exact moment as he sees it: where everyone is, what she is doing, her face, what is in
+the foreground. That goes to the image assembler as a new `scene` kind: first person
+through his eyes, his hands at the edge of the frame at most, focused on the situation
+rather than the outfit. When the moment is sexual it is drawn frankly, under the usual
+framing rule. The picture lands in the date as a system image, like the arrival photo.
+Photos in a date are kept out of her own history, so she never reacts to "a photo", and a
+photo posted after her beat no longer stops that beat from being rerolled. Pressing the
+button is his action, so no image is spent that he did not ask for.
+
 ## Fewer AI-isms
 
 The player flagged the lines that read as machine-written, with "That's not an order, that's

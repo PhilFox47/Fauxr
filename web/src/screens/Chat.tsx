@@ -1166,6 +1166,8 @@ function DateRoom({
   const [confirmDeleteBeatId, setConfirmDeleteBeatId] = useState<number | null>(null);
   const confirmDeleteBeatTimer = useRef<number | null>(null);
   const [retryingPhotoId, setRetryingPhotoId] = useState<string | null>(null);
+  // "Show current scene": the job he asked for, until its picture (or its failure) lands.
+  const [scene, setScene] = useState<{ imageId: string | null; since: number } | null>(null);
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -1208,6 +1210,26 @@ function DateRoom({
 
   const live = view?.date.status === 'active';
   const here = (view?.date.npcs ?? []).filter((n) => !n.left_at);
+
+  // The scene is done once its image message shows up; four minutes is the give-up point.
+  useEffect(() => {
+    if (!scene?.imageId) return;
+    const landed = view?.messages.some((m) => m.kind === 'image' && m.meta?.image_id === scene.imageId);
+    if (landed || Date.now() - scene.since > 240_000) setScene(null);
+  }, [view?.messages, scene]);
+
+  const showScene = async () => {
+    if (scene) return;
+    setScene({ imageId: null, since: Date.now() });
+    try {
+      const res = await api.showScene(dateId);
+      setScene({ imageId: res.image_id, since: Date.now() });
+    } catch (err) {
+      setScene(null);
+      setError(String(err instanceof Error ? err.message : err));
+    }
+  };
+  const hasBeat = (view?.messages ?? []).some((m) => m.sender === 'character' && m.kind !== 'image');
   const [dismissing, setDismissing] = useState<string | null>(null);
 
   /** Sends someone away; they are gone from her next beat on. */
@@ -1319,6 +1341,18 @@ function DateRoom({
           </span>
         </div>
         <div className="spacer" />
+        {live && hasBeat && (
+          <button
+            className="iconbtn"
+            onClick={() => void showScene()}
+            disabled={!!scene}
+            aria-label="Show current scene"
+            title={scene ? 'Developing the scene…' : 'Show current scene'}
+            data-busy={scene ? 'true' : undefined}
+          >
+            <Icon name="camera" size={20} />
+          </button>
+        )}
         {live && (
           <button className="btn ghost" onClick={() => void end()} disabled={ending}>
             {ending ? 'Ending…' : 'End date'}
@@ -1356,7 +1390,9 @@ function DateRoom({
           )}
           {(() => {
             const messages = view?.messages ?? [];
-            const lastMessageId = messages[messages.length - 1]?.id;
+            // A photo posted after her beat (the arrival shot, a scene he asked for) does not
+            // stop that beat from being her last one.
+            const lastMessageId = [...messages].reverse().find((m) => !(m.kind === 'image' && m.sender === 'system'))?.id;
             return messages.map((m) => {
               if (m.kind === 'image') {
                 return (
@@ -1448,6 +1484,12 @@ function DateRoom({
         <div className="toast err" role="status">
           <span className="ico"><Icon name="alert" size={16} /></span>
           <span className="grow">{error}</span>
+        </div>
+      )}
+      {scene && (
+        <div className="toast" role="status">
+          <span className="ico"><Icon name="camera" size={16} /></span>
+          <span className="grow">Capturing the scene…</span>
         </div>
       )}
 

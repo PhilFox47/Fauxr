@@ -674,7 +674,7 @@ function TastePane({ settings, patch, save, saved }: any) {
             if (!options.length) return null;
             const changed = cat.options.filter((o) => levelOf(taste[`${cat.category}/${o.id}`]) !== 1).length;
             return (
-              <details key={cat.category} className="card-section" open={!!q}>
+              <details key={`${cat.category}:${cat.label}`} className="card-section" open={!!q}>
                 <summary>{cat.label}{changed ? ` · ${changed} set` : ''}</summary>
                 {options.map((o) => {
                   const key = `${cat.category}/${o.id}`;

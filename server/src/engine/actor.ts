@@ -3,7 +3,7 @@ import { find } from '../db/attributes.js';
 import { complete, extractJson } from '../llm/client.js';
 import { isObj, pick } from '../llm/shape.js';
 import { logger } from '../log.js';
-import { getUserProfile, recentMessages } from '../repo.js';
+import { getUserProfile, recentMessages, saveRelationship } from '../repo.js';
 import { render } from '../prompts/render.js';
 import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Relationship } from '../types.js';
 import {
@@ -24,6 +24,7 @@ import { ACTOR_CHAT, VOICE_NOTE } from '../llm/schemas.js';
 import { isAiCharacter } from './species.js';
 import { costumeMentionBlock } from './cosplay.js';
 import { duoPartner } from './duo.js';
+import { currentOutfit, defaultOutfit, isOutfit, outfitMood } from './wardrobe.js';
 
 export { detectRoleplay };
 
@@ -64,7 +65,7 @@ function fallbackOutput(): ActorOutput {
       unresolved: null,
       mood: 'neutral',
       location: '',
-      outfit: '',
+      outfit_changes: [],
       activity: '',
       goal_fulfilled: false,
       new_fact: null,
@@ -97,7 +98,7 @@ const HIDDEN_ALIASES: Record<string, string[]> = {
   unresolved: ['unresolved', 'waiting_on', 'open_loop'],
   mood: ['mood', 'current_mood', 'feeling'],
   location: ['location', 'current_location', 'where'],
-  outfit: ['outfit', 'current_outfit', 'wearing'],
+  outfit_changes: ['outfit_changes', 'clothes', 'clothing_changes', 'outfit_change'],
   activity: ['activity', 'current_activity', 'doing'],
   new_fact: ['new_fact', 'new_information', 'last_fact_learned', 'fact_learned'],
   open_thread: ['open_thread', 'open_loops'],
@@ -114,7 +115,7 @@ export function collectHidden(parsed: any): any {
   const out: any = { ...pool };
   for (const [key, aliases] of Object.entries(HIDDEN_ALIASES)) {
     const v = pick(pool, aliases);
-    if (v !== undefined) out[key] = Array.isArray(v) && key !== 'photo_options' ? v.join('; ') : v;
+    if (v !== undefined) out[key] = Array.isArray(v) && key !== 'photo_options' && key !== 'outfit_changes' ? v.join('; ') : v;
   }
   // A photo she clearly meant to send, filed under a name of its own ("photo_spice": "the open
   // bottle of red on her counter") - without this it was silently dropped.
@@ -134,7 +135,7 @@ function normalizeHidden(raw: any): ActorHidden {
     unresolved: raw?.unresolved ? String(raw.unresolved) : null,
     mood: String(raw?.mood ?? ''),
     location: String(raw?.location ?? '').trim().slice(0, 200),
-    outfit: String(raw?.outfit ?? '').trim().slice(0, 200),
+    outfit_changes: normalizeOutfitChanges(raw?.outfit_changes),
     activity: String(raw?.activity ?? '').trim().slice(0, 200),
     goal_fulfilled: !!raw?.goal_fulfilled,
     new_fact: raw?.new_fact ? String(raw.new_fact) : null,
@@ -154,6 +155,20 @@ function normalizeHidden(raw: any): ActorHidden {
       : null,
     in_the_act: raw?.in_the_act === true,
   };
+}
+
+/** Her outfit changes, as a list of {slot, state, item}; a single object is taken as a list of one. */
+export function normalizeOutfitChanges(raw: unknown): { slot: string; state: string | null; item: string | null }[] {
+  const list = Array.isArray(raw) ? raw : isObj(raw) ? [raw] : [];
+  return list
+    .filter(isObj)
+    .map((c: any) => ({
+      slot: String(c.slot ?? '').trim().toLowerCase(),
+      state: c.state ? String(c.state).trim().slice(0, 30) : null,
+      item: c.item ? String(c.item).trim().slice(0, 100) : null,
+    }))
+    .filter((c) => c.slot && (c.state || c.item))
+    .slice(0, 12);
 }
 
 /** The first emoji of whatever came back, or null - a reaction is one emoji, never text. */
@@ -235,6 +250,12 @@ function buildPrompt(
   const flags = relationship.flags;
 
   const messages = recentMessages(character.id, settings.chat.context_messages);
+  // Her first outfit, for anyone without one yet, is stored right away: the turn that reads it
+  // back to apply her changes has to see the same pieces this prompt showed her.
+  if (!isOutfit(relationship.mood?.outfit_state)) {
+    relationship.mood = { ...relationship.mood, ...outfitMood(defaultOutfit(seed)) };
+    saveRelationship(relationship);
+  }
 
   return render(template, {
     char_display_name: character.real_name,
@@ -268,7 +289,7 @@ function buildPrompt(
     mood_block: moodBlock(relationship.arousal, seed.hints.arousal_tell),
     release_block: releaseBlock(character, relationship),
     moment_block: describeHerMoment(character),
-    continuity_block: continuityBlock(relationship.mood),
+    continuity_block: continuityBlock(relationship.mood, currentOutfit(relationship, seed)),
     costume_block: costumeMentionBlock(messages.slice(-8).map((m) => m.text), seed),
     turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),

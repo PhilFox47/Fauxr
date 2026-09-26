@@ -203,7 +203,7 @@ export function rollFantasySeeds(
  * is rolled through roll(), so a "category/id" multiplier in settings.taste reaches it; kink
  * domains are read by rollDomainStance() instead, and "lean/dom_sub" by the persona roll.
  */
-export const TASTE_SECTIONS: { title: string; categories: { category: string; label: string }[] }[] = [
+export const TASTE_SECTIONS: { title: string; categories: { category: string; label: string; slot?: string }[] }[] = [
   {
     title: 'Looks',
     categories: [
@@ -219,6 +219,24 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
       { category: 'accessory', label: 'Accessories' },
       // Only matters for the women who cosplay at all; leans which characters they own.
       { category: 'cosplay_character', label: 'Cosplays' },
+    ],
+  },
+  {
+    // What is in their closets (wardrobe.ts). Split by slot, since one list of every piece of
+    // clothing in the table is unusable; the keys are still wardrobe_item/<id>.
+    title: 'Clothes',
+    categories: [
+      { category: 'wardrobe_item', slot: 'legwear', label: 'Socks, tights and stockings' },
+      { category: 'wardrobe_item', slot: 'shoes', label: 'Shoes' },
+      { category: 'wardrobe_item', slot: 'top', label: 'Tops' },
+      { category: 'wardrobe_item', slot: 'bottom', label: 'Bottoms' },
+      { category: 'wardrobe_item', slot: 'dress', label: 'Dresses' },
+      { category: 'wardrobe_item', slot: 'outer', label: 'Jackets and coats' },
+      { category: 'wardrobe_item', slot: 'extras', label: 'Extras' },
+      { category: 'wardrobe_item', slot: 'bra', label: 'Bras' },
+      { category: 'wardrobe_item', slot: 'panties', label: 'Panties' },
+      { category: 'wardrobe_item', slot: 'lingerie', label: 'Lingerie pieces' },
+      { category: 'wardrobe_item', slot: 'swim', label: 'Swimwear' },
     ],
   },
   {

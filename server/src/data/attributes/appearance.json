@@ -2323,7 +2323,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true,
     "rarity": "uncommon"
   },
@@ -2337,7 +2341,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "street"
+      ]
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -2352,7 +2360,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "a pastel bedroom, fluffy blankets, a heart-shaped mirror"
+      "photo_scene": "a pastel bedroom, fluffy blankets, a heart-shaped mirror",
+      "wardrobe_families": [
+        "soft"
+      ]
     },
     "enabled": true,
     "rarity": "common"
@@ -2391,7 +2402,11 @@
         "tattoos": 1.0,
         "piercings": 1.0
       },
-      "photo_scene": "a dark bedroom lit by one red lamp, black sheets, a mirror covered in band stickers"
+      "photo_scene": "a dark bedroom lit by one red lamp, black sheets, a mirror covered in band stickers",
+      "wardrobe_families": [
+        "goth",
+        "alt"
+      ]
     },
     "enabled": true,
     "rarity": "common"
@@ -2407,7 +2422,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "the gym mirror, a running track, the car after a session"
+      "photo_scene": "the gym mirror, a running track, the car after a session",
+      "wardrobe_families": [
+        "sporty"
+      ]
     },
     "enabled": true,
     "rarity": "common"
@@ -2423,7 +2441,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "a hotel suite, a restaurant bathroom mirror, a balcony at night"
+      "photo_scene": "a hotel suite, a restaurant bathroom mirror, a balcony at night",
+      "wardrobe_families": [
+        "tailored"
+      ]
     },
     "enabled": true,
     "rarity": "common"
@@ -2438,7 +2459,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho",
+        "retro"
+      ]
+    },
     "enabled": true,
     "rarity": "common"
   },
@@ -2452,7 +2478,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored"
+      ]
+    },
     "enabled": true,
     "rarity": "uncommon"
   },
@@ -2467,7 +2497,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "a flash-heavy mirror selfie, butterfly clips, a flip-phone aesthetic bedroom"
+      "photo_scene": "a flash-heavy mirror selfie, butterfly clips, a flip-phone aesthetic bedroom",
+      "wardrobe_families": [
+        "street"
+      ]
     },
     "enabled": true,
     "rarity": "common"
@@ -2482,7 +2515,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true,
     "rarity": "uncommon"
   },
@@ -3563,20 +3600,6 @@
     "rarity": "common"
   },
   {
-    "id": "chunky_boots",
-    "category": "accessory",
-    "label": "Chunky boots",
-    "weight": 1.1,
-    "prompt_hint": "",
-    "image_prompt": "chunky platform boots",
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "common"
-  },
-  {
     "id": "beaded_bracelet",
     "category": "accessory",
     "label": "Beaded bracelet",
@@ -3611,20 +3634,6 @@
     "weight": 0.8,
     "prompt_hint": "",
     "image_prompt": "a canvas tote bag",
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true,
-    "rarity": "rare"
-  },
-  {
-    "id": "baseball_cap",
-    "category": "accessory",
-    "label": "Baseball cap",
-    "weight": 0.8,
-    "prompt_hint": "",
-    "image_prompt": "a worn baseball cap",
     "affinities": [],
     "conflicts": [],
     "modifies": {},
@@ -5671,7 +5680,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "street",
+        "sporty"
+      ]
+    },
     "enabled": true
   },
   {
@@ -5685,7 +5699,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -5703,7 +5721,10 @@
       "adds": {
         "tattoos": 1.0
       },
-      "photo_scene": "a vintage car, a retro diner booth, a vanity with bulbs"
+      "photo_scene": "a vintage car, a retro diner booth, a vanity with bulbs",
+      "wardrobe_families": [
+        "retro"
+      ]
     },
     "enabled": true
   },
@@ -5719,7 +5740,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "a hotel suite with a fur throw, gold everything, a big mirror"
+      "photo_scene": "a hotel suite with a fur throw, gold everything, a big mirror",
+      "wardrobe_families": [
+        "glam"
+      ]
     },
     "enabled": true
   },
@@ -5734,7 +5758,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -5748,7 +5776,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "street"
+      ]
+    },
     "enabled": true
   },
   {
@@ -5762,7 +5794,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "street",
+        "rave"
+      ]
+    },
     "enabled": true
   },
   {
@@ -5776,7 +5813,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho"
+      ]
+    },
     "enabled": true
   },
   {
@@ -5790,7 +5831,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "goth"
+      ]
+    },
     "enabled": true
   },
   {
@@ -5804,7 +5849,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true
   },
   {
@@ -6537,20 +6586,6 @@
     "enabled": true
   },
   {
-    "id": "bandana",
-    "category": "accessory",
-    "label": "Bandana",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "",
-    "image_prompt": "a bandana in her hair",
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "crossbody",
     "category": "accessory",
     "label": "Tiny crossbody bag",
@@ -6558,34 +6593,6 @@
     "rarity": "rare",
     "prompt_hint": "",
     "image_prompt": "a tiny crossbody bag",
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "doc_martens",
-    "category": "accessory",
-    "label": "Docs",
-    "weight": 1.1,
-    "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": "scuffed Dr Martens",
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "varsity",
-    "category": "accessory",
-    "label": "Varsity jacket",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "",
-    "image_prompt": "a worn varsity jacket",
     "affinities": [],
     "conflicts": [],
     "modifies": {},
@@ -7876,7 +7883,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics",
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -7890,7 +7902,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho",
+        "glam"
+      ]
+    },
     "enabled": true
   },
   {
@@ -7904,7 +7921,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -7918,7 +7939,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "soft",
+        "boho"
+      ]
+    },
     "enabled": true
   },
   {
@@ -7932,7 +7958,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "street"
+      ]
+    },
     "enabled": true
   },
   {
@@ -7946,7 +7976,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "beach"
+      ]
+    },
     "enabled": true
   },
   {
@@ -7960,7 +7994,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true
   },
   {
@@ -7995,7 +8033,10 @@
         "tattoos": 0.6,
         "piercings": 1.0
       },
-      "photo_scene": "a bedroom full of posters and fairy lights, a high-angle selfie with the flash on"
+      "photo_scene": "a bedroom full of posters and fairy lights, a high-angle selfie with the flash on",
+      "wardrobe_families": [
+        "alt"
+      ]
     },
     "enabled": true
   },
@@ -8010,7 +8051,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "street"
+      ]
+    },
     "enabled": true
   },
   {
@@ -8024,7 +8069,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "soft"
+      ]
+    },
     "enabled": true
   },
   {
@@ -8038,7 +8087,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true
   },
   {
@@ -8052,7 +8105,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho",
+        "retro"
+      ]
+    },
     "enabled": true
   },
   {
@@ -8067,7 +8125,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "the gym mirror, her kitchen after a run, a yoga mat by the window"
+      "photo_scene": "the gym mirror, her kitchen after a run, a yoga mat by the window",
+      "wardrobe_families": [
+        "sporty"
+      ]
     },
     "enabled": true
   },
@@ -8082,7 +8143,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -8096,7 +8161,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho",
+        "rave"
+      ]
+    },
     "enabled": true
   },
   {
@@ -8110,7 +8180,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true
   },
   {
@@ -8145,7 +8219,10 @@
         "tattoos": 0.6,
         "piercings": 0.6
       },
-      "photo_scene": "an unmade bed, fairy lights, a cracked mirror, a lot of eyeliner"
+      "photo_scene": "an unmade bed, fairy lights, a cracked mirror, a lot of eyeliner",
+      "wardrobe_families": [
+        "alt"
+      ]
     },
     "enabled": true
   },
@@ -8160,7 +8237,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "beach"
+      ]
+    },
     "enabled": true
   },
   {
@@ -8175,7 +8256,11 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "a club bathroom mirror, a smoking area at 3am, glitter and flash"
+      "photo_scene": "a club bathroom mirror, a smoking area at 3am, glitter and flash",
+      "wardrobe_families": [
+        "street",
+        "rave"
+      ]
     },
     "enabled": true
   },
@@ -8190,7 +8275,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -12507,53 +12596,11 @@
     "enabled": true
   },
   {
-    "id": "silk_scarf_neck",
-    "category": "accessory",
-    "label": "Silk scarf around her neck",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "crossbody_phone_case",
     "category": "accessory",
     "label": "Crossbody phone case on a strap",
     "weight": 0.8,
     "rarity": "rare",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "beanie",
-    "category": "accessory",
-    "label": "Beanie",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "wide_brim_hat",
-    "category": "accessory",
-    "label": "Wide-brim hat",
-    "weight": 1.0,
-    "rarity": "uncommon",
     "prompt_hint": "",
     "image_prompt": null,
     "affinities": [],
@@ -12608,48 +12655,6 @@
     "id": "phone_charm",
     "category": "accessory",
     "label": "Phone charm",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "statement_belt",
-    "category": "accessory",
-    "label": "Statement belt",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "ankle_boots_signature",
-    "category": "accessory",
-    "label": "Signature ankle boots",
-    "weight": 1.0,
-    "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "chunky_sneakers",
-    "category": "accessory",
-    "label": "Chunky sneakers",
     "weight": 1.0,
     "rarity": "common",
     "prompt_hint": "",
@@ -13553,7 +13558,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics",
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -13567,7 +13577,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -13581,7 +13595,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "soft"
+      ]
+    },
     "enabled": true
   },
   {
@@ -13595,7 +13613,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "street"
+      ]
+    },
     "enabled": true
   },
   {
@@ -13609,7 +13631,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "glam"
+      ]
+    },
     "enabled": true
   },
   {
@@ -13623,7 +13649,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored",
+        "glam"
+      ]
+    },
     "enabled": true
   },
   {
@@ -13637,7 +13668,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho"
+      ]
+    },
     "enabled": true
   },
   {
@@ -13651,7 +13686,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true
   },
   {
@@ -13688,34 +13727,6 @@
     "label": "Statement sunglasses",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "bucket_hat",
-    "category": "accessory",
-    "label": "Bucket hat",
-    "weight": 0.8,
-    "rarity": "rare",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "mesh_gloves",
-    "category": "accessory",
-    "label": "Mesh fingerless gloves",
-    "weight": 1.0,
-    "rarity": "uncommon",
     "prompt_hint": "",
     "image_prompt": null,
     "affinities": [],
@@ -13786,20 +13797,6 @@
     "label": "Tiny structured crossbody purse",
     "weight": 1.0,
     "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "statement_scarf",
-    "category": "accessory",
-    "label": "Statement patterned scarf",
-    "weight": 1.0,
-    "rarity": "uncommon",
     "prompt_hint": "",
     "image_prompt": null,
     "affinities": [],
@@ -15618,7 +15615,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "tailored"
+      ]
+    },
     "enabled": true
   },
   {
@@ -15632,7 +15633,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "beach"
+      ]
+    },
     "enabled": true
   },
   {
@@ -15646,7 +15651,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true
   },
   {
@@ -15660,7 +15669,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "glam"
+      ]
+    },
     "enabled": true
   },
   {
@@ -15674,7 +15687,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "basics"
+      ]
+    },
     "enabled": true
   },
   {
@@ -15720,20 +15737,6 @@
     "enabled": true
   },
   {
-    "id": "oversized_scarf",
-    "category": "accessory",
-    "label": "Oversized scarf worn as an accessory",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
     "id": "delicate_toe_ring",
     "category": "accessory",
     "label": "Delicate toe ring",
@@ -15751,20 +15754,6 @@
     "id": "statement_watch_face",
     "category": "accessory",
     "label": "Oversized statement watch",
-    "weight": 1.0,
-    "rarity": "uncommon",
-    "prompt_hint": "",
-    "image_prompt": null,
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "mesh_top_layer",
-    "category": "accessory",
-    "label": "Sheer mesh layering piece",
     "weight": 1.0,
     "rarity": "uncommon",
     "prompt_hint": "",
@@ -16329,7 +16318,12 @@
         "tattoos": 0.5,
         "piercings": 0.8
       },
-      "photo_scene": "her bedroom lit pink and purple by LED strips, a ring light, a gaming chair and a sticker-covered mirror"
+      "photo_scene": "her bedroom lit pink and purple by LED strips, a ring light, a gaming chair and a sticker-covered mirror",
+      "wardrobe_families": [
+        "street",
+        "alt",
+        "rave"
+      ]
     },
     "enabled": true
   },
@@ -16351,7 +16345,12 @@
         "anime": 2.0
       },
       "photo_scene": "wigs on stands, a ring light and a backdrop she set up herself, or a convention hall",
-      "cosplays": 2
+      "cosplays": 2,
+      "wardrobe_families": [
+        "street",
+        "soft",
+        "costume"
+      ]
     },
     "enabled": true
   },
@@ -16374,7 +16373,11 @@
         "gaming": 2.5,
         "sim_racing": 2.0
       },
-      "photo_scene": "her desk setup glowing with RGB, a headset round her neck, a gaming chair she half-sits on"
+      "photo_scene": "her desk setup glowing with RGB, a headset round her neck, a gaming chair she half-sits on",
+      "wardrobe_families": [
+        "basics",
+        "street"
+      ]
     },
     "enabled": true
   },
@@ -16397,7 +16400,11 @@
         "comic_artist": 2.0
       },
       "photo_scene": "a room of figures and posters, fairy lights, a ring light and a tall mirror",
-      "cosplays": 1
+      "cosplays": 1,
+      "wardrobe_families": [
+        "street",
+        "soft"
+      ]
     },
     "enabled": true
   },
@@ -16440,7 +16447,10 @@
         "tattoos": 1.0,
         "piercings": 1.0
       },
-      "photo_scene": "a dim room of candles and black sheets, dried flowers, an old tall mirror with a tarnished frame"
+      "photo_scene": "a dim room of candles and black sheets, dried flowers, an old tall mirror with a tarnished frame",
+      "wardrobe_families": [
+        "goth"
+      ]
     },
     "enabled": true
   },
@@ -16480,7 +16490,10 @@
         "tattoos": 0.6,
         "piercings": 1.0
       },
-      "photo_scene": "her bedroom with band posters and fairy lights, a phone-flash mirror selfie"
+      "photo_scene": "her bedroom with band posters and fairy lights, a phone-flash mirror selfie",
+      "wardrobe_families": [
+        "alt"
+      ]
     },
     "enabled": true
   },
@@ -16496,7 +16509,11 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "cosplays": 1
+      "cosplays": 1,
+      "wardrobe_families": [
+        "boho",
+        "costume"
+      ]
     },
     "enabled": true
   },
@@ -16532,7 +16549,10 @@
         "tattoos": 1.4,
         "piercings": 1.2
       },
-      "photo_scene": "a tattoo studio chair, a gig bathroom mirror, her flat full of records and plants"
+      "photo_scene": "a tattoo studio chair, a gig bathroom mirror, her flat full of records and plants",
+      "wardrobe_families": [
+        "alt"
+      ]
     },
     "enabled": true
   },
@@ -16571,7 +16591,10 @@
         "tattoos": 0.4,
         "piercings": 0.8
       },
-      "photo_scene": "a festival field under UV light, a club bathroom mirror, glitter everywhere"
+      "photo_scene": "a festival field under UV light, a club bathroom mirror, glitter everywhere",
+      "wardrobe_families": [
+        "rave"
+      ]
     },
     "enabled": true
   },
@@ -16587,7 +16610,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "a pastel room full of plushies and lace, a white vanity"
+      "photo_scene": "a pastel room full of plushies and lace, a white vanity",
+      "wardrobe_families": [
+        "soft"
+      ]
     },
     "enabled": true
   },
@@ -16627,7 +16653,10 @@
         "tattoos": 1.2,
         "piercings": 1.2
       },
-      "photo_scene": "a graffitied bathroom mirror at a gig, a leather sofa, a flat full of records"
+      "photo_scene": "a graffitied bathroom mirror at a gig, a leather sofa, a flat full of records",
+      "wardrobe_families": [
+        "alt"
+      ]
     },
     "enabled": true
   },
@@ -16643,7 +16672,11 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "a sunny balcony, a beach, a picnic blanket"
+      "photo_scene": "a sunny balcony, a beach, a picnic blanket",
+      "wardrobe_families": [
+        "soft",
+        "beach"
+      ]
     },
     "enabled": true
   },
@@ -16659,7 +16692,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "white sheets, soft window light, feathers and pearls"
+      "photo_scene": "white sheets, soft window light, feathers and pearls",
+      "wardrobe_families": [
+        "soft"
+      ]
     },
     "enabled": true
   },
@@ -16696,7 +16732,11 @@
         "piercings": 0.6
       },
       "photo_scene": "red light, black lace, candles, a tall mirror",
-      "photo_boldness": 0.5
+      "photo_boldness": 0.5,
+      "wardrobe_families": [
+        "goth",
+        "glam"
+      ]
     },
     "enabled": true
   },
@@ -16711,7 +16751,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "glam"
+      ]
+    },
     "enabled": true
   },
   {
@@ -16725,7 +16769,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "glam"
+      ]
+    },
     "enabled": true
   },
   {
@@ -16739,7 +16787,12 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho",
+        "retro"
+      ]
+    },
     "enabled": true
   },
   {
@@ -16753,7 +16806,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho"
+      ]
+    },
     "enabled": true
   },
   {
@@ -16767,7 +16824,13 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "soft",
+        "boho",
+        "costume"
+      ]
+    },
     "enabled": true
   },
   {
@@ -16807,7 +16870,12 @@
         "piercings": 1.0
       },
       "photo_scene": "a dark room washed in red light, a leather chair, a tall mirror",
-      "photo_boldness": 1.0
+      "photo_boldness": 1.0,
+      "wardrobe_families": [
+        "goth",
+        "alt",
+        "rave"
+      ]
     },
     "enabled": true
   },
@@ -16822,7 +16890,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_families": [
+        "boho"
+      ]
+    },
     "enabled": true
   },
   {
@@ -16837,7 +16909,10 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
-      "photo_scene": "a room of hearts and pink light, a heart-shaped mirror"
+      "photo_scene": "a room of hearts and pink light, a heart-shaped mirror",
+      "wardrobe_families": [
+        "soft"
+      ]
     },
     "enabled": true
   },
@@ -17199,7 +17274,12 @@
         "still_water": 2.2,
         "cool_girl": 1.4,
         "coil_binding": 4.0
-      }
+      },
+      "no_slots": [
+        "bottom",
+        "legwear",
+        "shoes"
+      ]
     },
     "enabled": true
   },
@@ -17253,7 +17333,12 @@
         "open_water": 2.5,
         "sea_swimming": 2.5,
         "wild_swimming_group": 1.8
-      }
+      },
+      "no_slots": [
+        "bottom",
+        "legwear",
+        "shoes"
+      ]
     },
     "enabled": true
   },
@@ -17526,7 +17611,10 @@
         "guarded": 1.6,
         "homebody": 1.6,
         "loyal": 1.6
-      }
+      },
+      "no_slots": [
+        "shoes"
+      ]
     },
     "enabled": true
   },
@@ -17820,7 +17908,10 @@
         "makeup_artist": 2.0
       },
       "photo_scene": "a bathroom vanity with a ring light, a hotel mirror, a car-seat selfie with her nails on the wheel",
-      "photo_boldness": 0.5
+      "photo_boldness": 0.5,
+      "wardrobe_families": [
+        "glam"
+      ]
     },
     "enabled": true
   },
@@ -17850,7 +17941,10 @@
         "fashion": 2.0
       },
       "photo_scene": "everything pink - a fluffy rug, a vanity with bulbs, a pink-lit mirror, a white bed",
-      "photo_boldness": 1.0
+      "photo_boldness": 1.0,
+      "wardrobe_families": [
+        "glam"
+      ]
     },
     "enabled": true
   },
@@ -17879,7 +17973,10 @@
         "burlesque": 3.0,
         "bartender_cocktail": 2.0
       },
-      "photo_scene": "a vintage vanity, a retro armchair, a polka-dot bedspread, a red-lipstick mirror"
+      "photo_scene": "a vintage vanity, a retro armchair, a polka-dot bedspread, a red-lipstick mirror",
+      "wardrobe_families": [
+        "retro"
+      ]
     },
     "enabled": true
   },
@@ -17907,50 +18004,11 @@
         "boxing": 2.0,
         "competitive_powerlifting": 2.0
       },
-      "photo_scene": "the gym mirror between sets, a locker room, a car selfie straight after a session"
+      "photo_scene": "the gym mirror between sets, a locker room, a car selfie straight after a session",
+      "wardrobe_families": [
+        "sporty"
+      ]
     },
-    "enabled": true
-  },
-  {
-    "id": "fishnet_tights",
-    "category": "accessory",
-    "label": "Fishnet tights",
-    "weight": 1.4,
-    "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": "fishnet tights",
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "thigh_high_socks",
-    "category": "accessory",
-    "label": "Thigh-high socks",
-    "weight": 1.1,
-    "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": "thigh-high socks",
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
-    "enabled": true
-  },
-  {
-    "id": "platform_boots",
-    "category": "accessory",
-    "label": "Platform boots",
-    "weight": 1.1,
-    "rarity": "common",
-    "prompt_hint": "",
-    "image_prompt": "black platform boots",
-    "affinities": [],
-    "conflicts": [],
-    "modifies": {},
-    "extra": {},
     "enabled": true
   },
   {
@@ -18365,7 +18423,14 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_counts": {
+        "lingerie": [
+          1,
+          2
+        ]
+      }
+    },
     "enabled": true
   },
   {
@@ -18449,7 +18514,18 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_counts": {
+        "bra": [
+          0,
+          1
+        ],
+        "panties": [
+          0,
+          1
+        ]
+      }
+    },
     "enabled": true
   },
   {
@@ -18468,7 +18544,14 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_counts": {
+        "lingerie": [
+          1,
+          2
+        ]
+      }
+    },
     "enabled": true
   },
   {
@@ -18486,7 +18569,14 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "wardrobe_counts": {
+        "lingerie": [
+          1,
+          2
+        ]
+      }
+    },
     "enabled": true
   },
   {
@@ -18500,7 +18590,9 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {}
+    },
     "enabled": true
   },
   {
@@ -18514,7 +18606,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized t-shirt"
+      }
+    },
     "enabled": true
   },
   {
@@ -18531,7 +18627,12 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "top": "silk cami",
+        "bottom": "matching silk shorts"
+      }
+    },
     "enabled": true
   },
   {
@@ -18548,7 +18649,11 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "lingerie": "her lingerie"
+      }
+    },
     "enabled": true
   },
   {
@@ -18567,7 +18672,12 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "top": "a faded band tee",
+        "panties": "cotton underwear"
+      }
+    },
     "enabled": true
   },
   {
@@ -18585,7 +18695,12 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "top": "a button-up pyjama top",
+        "bottom": "matching pyjama shorts"
+      }
+    },
     "enabled": true
   },
   {
@@ -18603,7 +18718,12 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "top": "a cropped cotton top",
+        "panties": "cotton boyshorts"
+      }
+    },
     "enabled": true
   },
   {
@@ -18621,7 +18741,12 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "top": "a huge hoodie",
+        "panties": "underwear"
+      }
+    },
     "enabled": true
   },
   {
@@ -18638,7 +18763,11 @@
     ],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "dress": "a short nightie"
+      }
+    },
     "enabled": true
   },
   {
@@ -18652,7 +18781,11 @@
     "affinities": [],
     "conflicts": [],
     "modifies": {},
-    "extra": {},
+    "extra": {
+      "pieces": {
+        "panties": "a thong"
+      }
+    },
     "enabled": true
   },
   {
@@ -18676,7 +18809,10 @@
         "pastel_frills": 3
       },
       "photo_scene": "a pink bedroom with fairy lights and a vanity full of perfume bottles, a lace-curtained window",
-      "photo_boldness": 0.2
+      "photo_boldness": 0.2,
+      "wardrobe_families": [
+        "soft"
+      ]
     },
     "enabled": true
   },
@@ -18699,7 +18835,10 @@
         "small_gold_hoops": 3
       },
       "photo_scene": "a bright white bathroom with plants, a pilates studio mirror, a sunny kitchen with an iced coffee",
-      "photo_boldness": 0.2
+      "photo_boldness": 0.2,
+      "wardrobe_families": [
+        "basics"
+      ]
     },
     "enabled": true
   },
@@ -18723,7 +18862,10 @@
         "marketing": 2
       },
       "photo_scene": "an empty office after hours, a glass meeting room, a lift mirror in a corporate building",
-      "photo_boldness": 0.6
+      "photo_boldness": 0.6,
+      "wardrobe_families": [
+        "tailored"
+      ]
     },
     "enabled": true
   },
@@ -18747,7 +18889,12 @@
         "skater": 1.5
       },
       "photo_scene": "a skatepark at dusk, her messy room with a games console, a garage with a half-fixed motorbike",
-      "photo_boldness": 0.3
+      "photo_boldness": 0.3,
+      "wardrobe_families": [
+        "basics",
+        "street",
+        "sporty"
+      ]
     },
     "enabled": true
   },
@@ -18770,7 +18917,11 @@
         "nail_art": 3
       },
       "photo_scene": "a neon purikura photo booth, a karaoke room, a crowded shopping street at night",
-      "photo_boldness": 0.5
+      "photo_boldness": 0.5,
+      "wardrobe_families": [
+        "street",
+        "glam"
+      ]
     },
     "enabled": true
   },
@@ -18793,7 +18944,11 @@
         "dancer_build": 1.5
       },
       "photo_scene": "a dance practice room with a wall of mirrors, a concert light-stick glow, a bedroom with posters and a ring light",
-      "photo_boldness": 0.4
+      "photo_boldness": 0.4,
+      "wardrobe_families": [
+        "street",
+        "soft"
+      ]
     },
     "enabled": true
   },
@@ -18819,7 +18974,10 @@
       "adds": {
         "tattoos": 0.5,
         "piercings": 0.5
-      }
+      },
+      "wardrobe_families": [
+        "alt"
+      ]
     },
     "enabled": true
   },
@@ -18845,7 +19003,11 @@
       "photo_boldness": 0.5,
       "adds": {
         "piercings": 0.6
-      }
+      },
+      "wardrobe_families": [
+        "street",
+        "rave"
+      ]
     },
     "enabled": true
   },
@@ -18867,7 +19029,11 @@
         "sun_kissed": 2
       },
       "photo_scene": "a beach at golden hour with a board, a van with the back doors open, an outdoor shower",
-      "photo_boldness": 0.6
+      "photo_boldness": 0.6,
+      "wardrobe_families": [
+        "sporty",
+        "beach"
+      ]
     },
     "enabled": true
   },
@@ -18893,7 +19059,10 @@
       "photo_boldness": 0.6,
       "adds": {
         "tattoos": 1
-      }
+      },
+      "wardrobe_families": [
+        "alt"
+      ]
     },
     "enabled": true
   },
@@ -18916,7 +19085,11 @@
         "flirty_texting": 2
       },
       "photo_scene": "a hot-pink bedroom full of mirrors, a mall bathroom with bad lighting and good angles",
-      "photo_boldness": 0.6
+      "photo_boldness": 0.6,
+      "wardrobe_families": [
+        "street",
+        "glam"
+      ]
     },
     "enabled": true
   },
@@ -18941,7 +19114,11 @@
       "photo_boldness": 0.6,
       "adds": {
         "tattoos": 0.6
-      }
+      },
+      "wardrobe_families": [
+        "alt",
+        "glam"
+      ]
     },
     "enabled": true
   },
@@ -18961,7 +19138,11 @@
         "swimming": 2.5
       },
       "photo_scene": "a sea cave, a bath full of bubbles and candles, a pool lit blue at night",
-      "photo_boldness": 0.5
+      "photo_boldness": 0.5,
+      "wardrobe_families": [
+        "boho",
+        "beach"
+      ]
     },
     "enabled": true
   },
@@ -18987,7 +19168,11 @@
       "photo_boldness": 0.4,
       "adds": {
         "piercings": 0.6
-      }
+      },
+      "wardrobe_families": [
+        "goth",
+        "soft"
+      ]
     },
     "enabled": true
   },
@@ -19010,7 +19195,11 @@
         "bold_lip": 3
       },
       "photo_scene": "a velvet armchair and a tall gilt mirror, a champagne bar, a vintage bathroom with pink tiles",
-      "photo_boldness": 0.4
+      "photo_boldness": 0.4,
+      "wardrobe_families": [
+        "glam",
+        "retro"
+      ]
     },
     "enabled": true
   },
@@ -19036,7 +19225,11 @@
       "photo_boldness": 0.3,
       "adds": {
         "piercings": 0.4
-      }
+      },
+      "wardrobe_families": [
+        "goth",
+        "boho"
+      ]
     },
     "enabled": true
   },
@@ -19058,7 +19251,10 @@
         "cute_texter": 2
       },
       "photo_scene": "a colourful bedroom stacked with plushies, a purikura booth, a crosswalk in Harajuku",
-      "photo_boldness": 0.2
+      "photo_boldness": 0.2,
+      "wardrobe_families": [
+        "soft"
+      ]
     },
     "enabled": true
   },

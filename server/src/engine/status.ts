@@ -9,6 +9,7 @@ import { randInt } from './dice.js';
 import { coreTraits } from './profilecard.js';
 import { advanceThread, ensureLife, threadsForStatus } from './life.js';
 import { STATUS_WITH_THREAD, STATUS } from '../llm/schemas.js';
+import { closetList, currentOutfit, OUTFIT_EXAMPLE, outfitFromPicks, outfitMood, outfitSentence } from './wardrobe.js';
 
 /**
  * Her status, like a WhatsApp status: one short line she has "posted" about where she is or
@@ -81,6 +82,7 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
   const threads = await ensureLife(character);
   const threadList = threadsForStatus(threads);
 
+  const before = currentOutfit(rel, seed);
   // Deliberately small: a handful of her own facts, the clock and her last status. The
   // dossier would make this ten times the price for a one-line answer.
   const prompt = [
@@ -102,15 +104,26 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
     '',
     threadList ? `Things going on in her life:\n${threadList}\nPick the one that has moved on since her last status and say, in one sentence, what just happened in it - a small real development, not a summary. The status can be about it, or about something else.` : '',
     '',
+    // What she has on moves with her day. Picked from her own closet, slot by slot, so the
+    // chat after this knows every piece - socks included.
+    `Her closet:\n${closetList(seed)}`,
+    `What she had on before: ${outfitSentence(before)}`,
+    'For "outfit": what she is wearing now, for where she is and the time of day - every slot, ' +
+      'each one of her own pieces from the closet (or something plausible that is not in it, like ' +
+      'his hoodie), "none" for an empty slot. A dress fills top and bottom, so those are "none" ' +
+      'then; lingerie (a teddy, a bodysuit) fills bra and panties. Several extras go in one string ' +
+      'separated by ";". Asleep or in bed: what she sleeps in. Use null if she is plausibly still ' +
+      'in what she had on before.',
+    '',
     'Reply with exactly one JSON object and nothing else:',
     threadList
-      ? '{ "status": "...", "location": "where she physically is", "activity": "what she is doing", "outfit": "what she has on", "thread": 1, "happened": "what just happened in it", "resolved": false }'
-      : '{ "status": "...", "location": "where she physically is", "activity": "what she is doing", "outfit": "what she has on" }',
+      ? `{ "status": "...", "location": "where she physically is", "activity": "what she is doing", "outfit": ${OUTFIT_EXAMPLE}, "thread": 1, "happened": "what just happened in it", "resolved": false }`
+      : `{ "status": "...", "location": "where she physically is", "activity": "what she is doing", "outfit": ${OUTFIT_EXAMPLE} }`,
   ].filter(Boolean).join('\n');
 
   const fresh = getRelationship(character.id) ?? rel;
   try {
-    const out = await completeJson<{ status?: string; location?: string; activity?: string; outfit?: string; thread?: number; happened?: string; resolved?: boolean }>({
+    const out = await completeJson<{ status?: string; location?: string; activity?: string; outfit?: Record<string, unknown> | null; thread?: number; happened?: string; resolved?: boolean }>({
       scope: 'director',
       label: `status:${character.username}`,
       schema: threadList ? STATUS_WITH_THREAD : STATUS,
@@ -131,7 +144,9 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
       // The status is where she is now, so her chat picks up from it.
       location: String(out.location ?? '').trim().slice(0, 200) || (fresh.mood as any)?.location || '',
       activity: String(out.activity ?? '').trim().slice(0, 200) || (fresh.mood as any)?.activity || '',
-      outfit: String(out.outfit ?? '').trim().slice(0, 200) || (fresh.mood as any)?.outfit || '',
+      ...outfitMood(
+        out.outfit && typeof out.outfit === 'object' ? outfitFromPicks(seed, out.outfit) : before,
+      ),
     };
     saveRelationship(fresh);
     advanceThread(character.id, threads, out.thread, out.happened, out.resolved);

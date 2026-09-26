@@ -210,7 +210,7 @@ Reply with exactly one JSON object and nothing else:
     "unresolved": "anything still live and unfinished after your messages, or null",
     "mood": "short description of your mood now",
     "location": "where you physically are right now",
-    "outfit": "what you have on right now",
+    "outfit_changes": [],
     "activity": "what you are actually doing right now",
     "goal_fulfilled": true,
     "new_fact": "a new fact you learned about him, or null",
@@ -230,8 +230,15 @@ Reply with exactly one JSON object and nothing else:
 
 "hidden" is never shown to him. Be honest in it. A key that does not apply this turn is null
 (or false).
-"location", "outfit" and "activity" carry forward as your real situation: report them back
+"location" and "activity" carry forward as your real situation: report them back
 unchanged unless something this turn actually moved them on.
+"outfit_changes" is [] unless something you have on changed in these messages. Then one entry
+per slot that changed: { "slot": "top", "state": "off", "item": null } to move a piece (states:
+on, open, pushed up, pulled down, pulled aside, half off, off), { "slot": "legwear", "state":
+null, "item": "white knee socks" } to put something on (from your closet, or anything else),
+"item": "none" to take a slot away entirely, or { "slot": "all", "item": "sleepwear" } (or
+"swimwear", "work", "nothing") to change into a whole set. Slots: outer, top, bottom, dress,
+bra, panties, lingerie, legwear, shoes, extras.
 "unresolved" is set when something is still in play (a question, a bit, a scene); null when
 the floor is clear.
 "director_needed" is true if something big happened that your direction does not cover.

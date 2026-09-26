@@ -11,7 +11,9 @@ import {
 } from '../repo.js';
 import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
 import { domSubLean, fitsSide, rollFantasySeeds, rollKinkMap, rollKinkSides, sideLabel } from './kinks.js';
+import { buildAppearancePrompt } from './appearance.js';
 import { cosplayCount } from './cosplay.js';
+import { closetList, rollWardrobe } from './wardrobe.js';
 import { allowedDuos, duoDossierLines, duoPartner, duoRow, enforceDuoStatus, partnerRelation, rollPartnerBase } from './duo.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
@@ -585,6 +587,9 @@ export function rollSeed(): RolledSeed {
     seed.duo_partner = rollPartnerBase(seed, duo);
     enforceDuoStatus(seed);
   }
+  // What she owns (wardrobe.ts), once her style, lingerie, job, body and kinks are all known -
+  // each of them decides some of it.
+  seed.wardrobe = rollWardrobe(seed);
   // Her costumes, last, because what makes her a cosplayer (persona, job, style, hobbies,
   // fetishes) has to be rolled first. Through roll() so his taste applies to them too.
   seed.cosplays = rollMany('cosplay_character', ctx, cosplayCount(seed)).map((a) => a.id);
@@ -690,52 +695,13 @@ export function rarityTier(seed: CharacterSeed): { tier: RarityTier; label: stri
   return { tier, label: RARITY_LABEL[tier] };
 }
 
-/** Fixed appearance block assembled from the image_prompt fields of the appearance tags. */
-export function buildAppearancePrompt(seed: CharacterSeed): string {
-  const parts: string[] = [];
-  const img = (cat: string, id: string) => find(cat, id)?.image_prompt;
-  parts.push(`${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`);
-  // A species with a permanent, unhideable tell (cat ears, a giant's actual scale, ...)
-  // belongs in the fixed block like any other constant fact about her - see it early, since
-  // it can dominate framing (a giantess or a fairy). A 'later'/'private'/'chat_only' species
-  // is deliberately left out here: its tell is something she can conceal, or has none at all.
-  // See blocks.ts's appearanceBlock() and images.ts's visibleMarks() for where those get
-  // added only once she has actually chosen to reveal them.
-  const species = speciesRow(seed);
-  if (species?.image_prompt && speciesVisibility(seed) === 'profile') parts.push(species.image_prompt);
-  for (const [cat, id] of [
-    ['skin_tone', seed.skin_tone],
-    ['height', seed.height],
-    ['body_type', seed.body_type],
-    ['breast_size', seed.breast_size],
-    ['butt_size', seed.butt_size],
-    ['hair_color', seed.hair_color],
-    ['hair_style', seed.hair_style],
-    ['eye_color', seed.eye_color],
-    ['distinctive_feature', seed.distinctive_feature],
-    ['makeup_style', seed.makeup_style],
-    ['grooming', seed.grooming],
-    ['clothing_style', seed.clothing_style],
-  ] as const) {
-    const v = img(cat, id);
-    if (v) parts.push(v);
-  }
-  // Accessories are a multi-select (glasses, jewellery, a bag she's holding...), unlike
-  // every category above - rolled as an array rather than one id, and previously never
-  // reached the image prompt at all, so a character who rolled glasses would never
-  // actually be drawn wearing them.
-  for (const accessoryId of seed.accessories) {
-    const v = img('accessory', accessoryId);
-    if (v) parts.push(v);
-  }
-  return parts.filter(Boolean).join(', ');
-}
-
 /** A stored hint, or the attribute's own prompt_hint for a field rolled before hints existed. */
 function hintFor(seed: CharacterSeed, category: keyof CharacterSeed & string): string {
   const id = String(seed[category] ?? '');
   return seed.hints?.[category] || find(category, id)?.prompt_hint || '';
 }
+
+export { buildAppearancePrompt };
 
 export function describeSeed(seed: CharacterSeed): string {
   const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
@@ -903,6 +869,8 @@ interface DirectorPass {
   dossier?: string;
   /** Only on a duo profile: the other woman's name, manner and what she wants with him. */
   duo_partner?: { name?: string; manner?: string; up_for?: string } | null;
+  /** The one piece of clothing with a story (wardrobe.ts). */
+  favourite_piece?: string | null;
   /** 3-5 concrete sexual scenarios she wants to live out. Stored in seed.hints.fantasies. */
   fantasies?: string[];
   director_intent?: string;
@@ -1198,6 +1166,7 @@ export async function generateCharacter(): Promise<Character> {
           ? `${duoRow(seed)!.label}. ${duoRow(seed)!.prompt_hint}\nThe partner, as rolled: ${seed.duo_partner.age}, ${seed.duo_partner.look}.`
           : '',
         is_big_secret: seed.big_secret && seed.big_secret !== 'none' ? '1' : '',
+        closet: closetList(seed).replace(/\n/g, ' '),
         age: seed.age,
         fantasy_seeds: fantasySeedList(seed.fantasy_seeds),
         allowed_swaps: allowedSwapList(),
@@ -1261,6 +1230,10 @@ export async function generateCharacter(): Promise<Character> {
   // A swap may have touched her relationship status; a woman on a profile with her wife is
   // still married to her.
   enforceDuoStatus(seed);
+  // A new style or job means a different closet.
+  if ((pass.swaps ?? []).slice(0, 2).some((sw) => sw?.field === 'clothing_style' || sw?.field === 'occupation')) {
+    seed.wardrobe = rollWardrobe(seed);
+  }
   seed.appearance_prompt = buildAppearancePrompt(seed);
 
   // The fallback pool is only reached when the API is down, but it can repeat just as
@@ -1298,6 +1271,9 @@ export async function generateCharacter(): Promise<Character> {
     if (dp?.manner?.trim()) seed.duo_partner.manner = dp.manner.trim();
     if (dp?.up_for?.trim()) seed.duo_partner.up_for = dp.up_for.trim();
   }
+
+  const favourite = String(pass.favourite_piece ?? '').trim();
+  if (favourite) seed.wardrobe_favourite = favourite.slice(0, 200);
 
   const fantasies = cleanFantasies(pass.fantasies);
   if (fantasies.length) seed.hints.fantasies = fantasies.join('\n');

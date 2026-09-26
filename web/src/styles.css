@@ -1797,3 +1797,7 @@ input[type='range'] {
 /* A generated image in Settings -> Images. Width alone kept it phone-sized on a phone and made
    a portrait one about 830 x 1240 in the desktop settings column. */
 .job-image { display: block; max-width: 100%; max-height: min(60dvh, 480px); width: auto; height: auto; border-radius: 12px; margin-top: 10px; }
+
+/* "Show current scene" while its picture develops. */
+.iconbtn[data-busy='true'] { opacity: 0.55; animation: scene-pulse 1.4s ease-in-out infinite; }
+@keyframes scene-pulse { 50% { opacity: 0.25; } }

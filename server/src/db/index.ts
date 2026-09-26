@@ -38,6 +38,9 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'user_profile', column: 'joiners', definition: "TEXT NOT NULL DEFAULT ''" },
   { table: 'dates', column: 'npcs', definition: "TEXT NOT NULL DEFAULT '[]'" },
   { table: 'dates', column: 'company', definition: "TEXT NOT NULL DEFAULT ''" },
+  // What she arrived in, slot by slot (wardrobe.ts). Her current outfit on a date is the
+  // snapshot on her latest beat, falling back to this - so rerolling a beat undoes its clothes.
+  { table: 'dates', column: 'outfit_state', definition: 'TEXT' },
   { table: 'relationships', column: 'circle', definition: "TEXT NOT NULL DEFAULT '[]'" },
   { table: 'relationships', column: 'life', definition: "TEXT NOT NULL DEFAULT '[]'" },
   { table: 'user_profile', column: 'avatar_emoji', definition: "TEXT NOT NULL DEFAULT ''" },
@@ -56,6 +59,8 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'images', column: 'date_id', definition: 'TEXT' },
   { table: 'images', column: 'negative_prompt', definition: 'TEXT' },
   { table: 'images', column: 'caption', definition: 'TEXT' },
+  // What she had on when the photo was prepared (wardrobe.ts), kept so "same idea" redraws it.
+  { table: 'images', column: 'outfit', definition: 'TEXT' },
 ];
 
 function addMissingColumns(): void {

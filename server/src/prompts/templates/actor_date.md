@@ -237,7 +237,7 @@ text message. Specifically:
 # OUTPUT
 Reply with exactly one JSON object and nothing else:
 
-{ "text": "...", "hidden": { "thoughts": "...", "mood": "...", "wants": "...", "in_the_act": false, "joined": [], "left": [] } }
+{ "text": "...", "hidden": { "thoughts": "...", "mood": "...", "wants": "...", "in_the_act": false, "joined": [], "left": [], "outfit_changes": [] } }
 
 "text" is the whole reply, written in the three-part format above - narration, "speech" and
 *hidden thoughts* together, exactly as she experiences the beat. "hidden.thoughts" is a
@@ -254,3 +254,9 @@ will go tonight" }. A group is one entry with "count" (how many) and "gender" "w
 or "mixed", and "age" the youngest of them. Someone from your life he has already met keeps
 the name you know them by. Everyone is an adult, with a stated age of 18 or over. "left" lists the
 names of anyone from WHO ELSE IS HERE who left in this beat. Both are usually empty.
+
+"outfit_changes" is [] unless something she has on changed in this beat. Then one entry per
+slot: { "slot": "top", "state": "off", "item": null } to move a piece (on, open, pushed up,
+pulled down, pulled aside, half off, off), { "slot": "outer", "state": null, "item": "his
+jacket" } to put something on, "item": "none" to take a slot away entirely. Slots: outer, top,
+bottom, dress, bra, panties, lingerie, legwear, shoes, extras.

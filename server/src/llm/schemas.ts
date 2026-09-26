@@ -36,6 +36,12 @@ const spec = (name: string, schema: S): JsonSchemaSpec => ({ name, schema });
 
 const npc = obj({ name: str, gender: str, age: int, count: nint, who: str, look: str, manner: str, up_for: str });
 const thread = obj({ text: str, expires_when: str });
+/** A whole outfit, every worn slot stated ("none" when empty) - see wardrobe.ts. */
+const outfitPicks = obj({
+  outer: str, top: str, bottom: str, dress: str, bra: str, panties: str, lingerie: str, legwear: str, shoes: str, extras: str,
+});
+/** What changed on her this turn; never the whole outfit. */
+const outfitChanges = arr(obj({ slot: str, state: nstr, item: nstr }));
 
 export const ACTOR_CHAT = spec('her_reply', obj({
   messages: arr(obj({ text: str, from: nstr })),
@@ -44,7 +50,7 @@ export const ACTOR_CHAT = spec('her_reply', obj({
     unresolved: nstr,
     mood: str,
     location: str,
-    outfit: str,
+    outfit_changes: outfitChanges,
     activity: str,
     goal_fulfilled: bool,
     new_fact: nstr,
@@ -69,7 +75,7 @@ export const VOICE_NOTE = spec('voice_note', obj({
 
 export const DATE_BEAT = spec('date_beat', obj({
   text: str,
-  hidden: obj({ thoughts: str, mood: str, wants: str, in_the_act: bool, joined: arr(npc), left: arr(str) }),
+  hidden: obj({ thoughts: str, mood: str, wants: str, in_the_act: bool, joined: arr(npc), left: arr(str), outfit_changes: outfitChanges }),
 }));
 
 const ledger = obj({
@@ -127,20 +133,22 @@ export const CHARACTER = spec('character', obj({
   director_intent: str,
   opening_plan: nullable(thread),
   duo_partner: nullable(obj({ name: str, manner: str, up_for: str })),
+  favourite_piece: nstr,
 }));
 
 export const REAL_NAME = spec('real_name', obj({ real_name: str }));
 export const USERNAME = spec('username', obj({ username: str }));
 export const BIO = spec('bio', obj({ bio: str }));
 export const FANTASIES = spec('fantasies', obj({ fantasies: arr(str) }));
-export const OUTFIT = spec('outfit', obj({ outfit: str }));
+export const OUTFIT = spec('outfit', obj({ outfit: outfitPicks, note: str }));
+export const DATE_SCENE = spec('date_scene', obj({ situation: str, shows_face: bool, aspect: { type: 'string', enum: ['square', 'portrait', 'landscape'] } }));
 export const PROFILE_PIC = spec('profile_pic', obj({ profile_pic: str }));
 export const IMAGE_PROMPT = spec('image_prompt', obj({ prompt: str, negative_prompt: str, caption: str }));
 export const LIFE_THREADS = spec('storylines', obj({ threads: arr(obj({ title: str, arc: str, now: str })) }));
 export const DATE_CAST = spec('date_cast', obj({ people: arr(npc) }));
-export const STATUS = spec('status', obj({ status: str, location: str, activity: str, outfit: str }));
+export const STATUS = spec('status', obj({ status: str, location: str, activity: str, outfit: nullable(outfitPicks) }));
 export const STATUS_WITH_THREAD = spec('status', obj({
-  status: str, location: str, activity: str, outfit: str, thread: nint, happened: nstr, resolved: nbool,
+  status: str, location: str, activity: str, outfit: nullable(outfitPicks), thread: nint, happened: nstr, resolved: nbool,
 }));
 export const PHOTO_IDEA = spec('photo_idea', obj({ situation: str, aspect: { type: 'string', enum: ['square', 'portrait', 'landscape'] } }));
 export const IMAGE_REVIEW = spec('image_review', obj({ description: str, arousal_delta: num, ledger_fact: nstr, reaction_hint: str }));

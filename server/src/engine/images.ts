@@ -26,6 +26,7 @@ import { IMAGE_PROMPT, IMAGE_REVIEW, PHOTO_IDEA, PROFILE_PIC } from '../llm/sche
 import { speciesRow, speciesVisibility } from './species.js';
 import { cosplayImageBlock } from './cosplay.js';
 import { duoImageBlock } from './duo.js';
+import { closetBlock, currentOutfit, outfitForImage } from './wardrobe.js';
 
 /** Whether image generation is switched on at all. */
 export function photosEnabled(): boolean {
@@ -90,7 +91,7 @@ function postFailedPlaceholder(job: ImageJob, characterId: string, caption: stri
   if (findMessageByImageId(job.id)) return;
   const stored = addMessage({
     character_id: characterId,
-    sender: job.kind === 'date' ? 'system' : 'character',
+    sender: job.kind === 'date' || job.kind === 'scene' ? 'system' : 'character',
     text: '',
     kind: 'image',
     meta: {
@@ -329,6 +330,23 @@ const DATE_SUFFIX: Record<PromptStyle, string> = {
     'distance, real depth into the room behind her - not a phone selfie, not a posed studio ' +
     'portrait.',
 };
+
+/**
+ * "Show current scene": not a photo anyone took, but what he is looking at this second, from
+ * where he is - his own hands or knees can be at the edge of the frame, never his face. The
+ * point is the situation (where they are, what she is doing, who else is there), not her
+ * outfit, which is what the arrival photo is for.
+ */
+const SCENE_SUFFIX: Record<PromptStyle, string> = {
+  seedream:
+    'Seen through his own eyes, first person, in the actual place and its actual light - not a ' +
+    'phone photo, not a posed portrait, not a staged set.',
+  z_image_turbo:
+    'Seen through his own eyes, first person, in the actual place and its actual light - not a ' +
+    'phone photo, not a posed portrait, not a staged set.',
+};
+
+const SCENE_NEGATIVE = 'No studio lighting, no posed model styling, no staged set, no camera or phone in her hand unless the scene has one.';
 
 /**
  * A spicy photo is still a phone photo, but not an accident: she took it for him, on purpose,
@@ -650,6 +668,8 @@ export interface ImageJob {
   negative_prompt: string | null;
   /** One short sentence for the placeholder bubble. */
   caption: string | null;
+  /** What she had on when it was prepared, as the image model gets it (wardrobe.ts). */
+  outfit: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -756,7 +776,7 @@ function referenceImage(characterId: string): string | null {
  * proudest of, what she wears underneath, or where a woman with her style takes her pictures
  * (see clothing_style extra.photo_scene).
  */
-export function photoSelfBlock(seed: CharacterSeed, opts: { profile?: boolean } = {}): string {
+export function photoSelfBlock(seed: CharacterSeed, opts: { profile?: boolean; closet?: boolean } = {}): string {
   const label = (cat: string, id: string | undefined) => (id ? find(cat, id)?.label ?? id : '');
   const hintOf = (cat: string, id: string | undefined) => (id ? find(cat, id)?.prompt_hint ?? '' : '');
   const style = find('clothing_style', seed.clothing_style);
@@ -774,6 +794,8 @@ export function photoSelfBlock(seed: CharacterSeed, opts: { profile?: boolean } 
     metal.length ? `Piercings: ${metal.join('; ')}` : '',
     `In bed: ${label('sexual_persona', seed.sexual_persona)}`,
     `How you come across in photos: ${photoManner(seed)}`,
+    // So the photo she describes is in her own clothes, named closely enough to be matched.
+    opts.closet ? closetBlock(seed) : '',
     // Her chat level only - her profile picture has its own, tamer one (profileHeat).
     opts.profile ? '' : `How far your photos to him usually go: ${chatPhotoLine(seed)}`,
   ].filter(Boolean).join('\n');
@@ -808,7 +830,7 @@ async function profilePicConcept(character: Character): Promise<string> {
           content: render('actor_profile_pic', {
             real_name: character.real_name,
             dossier: character.seed.hints.dossier || describeSeed(character.seed),
-            photo_self: photoSelfBlock(character.seed, { profile: true }),
+            photo_self: photoSelfBlock(character.seed, { profile: true, closet: true }),
             profile_heat: profileHeat(character.seed),
           }),
         },
@@ -827,9 +849,11 @@ async function profilePicConcept(character: Character): Promise<string> {
 
 type ImageJobOptions = {
   characterId: string;
-  kind: 'profile' | 'chat' | 'spicy' | 'date';
-  /** Only for a 'date' kind job: which date's own transcript the result posts into. */
+  kind: 'profile' | 'chat' | 'spicy' | 'date' | 'scene';
+  /** Only for a 'date' or 'scene' job: which date's own transcript the result posts into. */
   dateId?: string | null;
+  /** What she has on, as the image model gets it (wardrobe.ts), when the caller knows it. */
+  outfit?: string | null;
   situation: string;
   /** Ignored for a profile picture, which is always square. Defaults to portrait. */
   aspect?: PhotoAspect | null;
@@ -843,11 +867,11 @@ function insertImageJob(opts: ImageJobOptions): ImageJob {
   // Fixed by kind where the kind decides it - see IMAGE_SIZE.
   const aspect = opts.kind === 'profile' ? 'square' : opts.kind === 'date' ? 'portrait' : opts.aspect ?? 'portrait';
   db.prepare(
-    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, shows_face, situation, date_id, created_at, updated_at)
-     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, shows_face, situation, date_id, outfit, created_at, updated_at)
+     VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?, ?, ?, ?, ?)`,
   ).run(
     id, opts.characterId, opts.kind, aspect, opts.showsFace === false ? 0 : 1, opts.situation,
-    opts.dateId ?? null, nowIso(), nowIso(),
+    opts.dateId ?? null, opts.outfit ?? null, nowIso(), nowIso(),
   );
   return getImageJob(id)!;
 }
@@ -894,7 +918,11 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     // Her profile picture is never a chat bubble; its retry is the camera button (see
     // profilePictureState). Anything else that was meant to land in a chat gets a bubble.
     if (postToChat && loaded.job.kind !== 'profile') {
-      postFailedPlaceholder(loaded.job, loaded.character.id, loaded.job.kind === 'date' ? 'Her photo as you arrive' : cleanCaption('', situation));
+      postFailedPlaceholder(
+        loaded.job,
+        loaded.character.id,
+        loaded.job.kind === 'date' ? 'Her photo as you arrive' : loaded.job.kind === 'scene' ? 'The scene right now' : cleanCaption('', situation),
+      );
     }
   }
 }
@@ -920,12 +948,24 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   const isProfile = job.kind === 'profile';
   const isDate = job.kind === 'date';
   const isSpicy = job.kind === 'spicy';
+  // "Show current scene" on a date: what he sees this second, through his own eyes.
+  const isScene = job.kind === 'scene';
   if (isProfile && !situation.trim()) {
     situation = await profilePicConcept(character);
   }
   // Resolved once here - persisted so a later regenerate ("same idea") has the actual
   // idea to reassemble from, not the blank a profile job may have started with.
   db.prepare('UPDATE images SET situation = ? WHERE id = ?').run(situation, id);
+
+  // What she has on, for a photo from inside the chat: her tracked outfit, fixed the first time
+  // the photo is prepared so a "same idea" redraw keeps the same clothes. A profile picture is
+  // her own account of a photo she chose; a date photo carries its outfit in its situation.
+  let wearing = job.outfit ?? '';
+  if (!wearing && (job.kind === 'chat' || job.kind === 'spicy')) {
+    const rel = getRelationship(character.id);
+    if (rel) wearing = outfitForImage(currentOutfit(rel, character.seed));
+    db.prepare('UPDATE images SET outfit = ? WHERE id = ?').run(wearing, id);
+  }
 
   const facesCamera = isProfile || showsFace(job);
   const promptStyle: PromptStyle = settings.models.image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream';
@@ -944,11 +984,13 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
     ? `${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`
     : isDate
       ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
+      : isScene
+      ? `${BASE_SUFFIX[promptStyle]} ${SCENE_SUFFIX[promptStyle]}`
       : isSpicy
         ? `${BASE_SUFFIX[promptStyle]} ${SPICY_SUFFIX[promptStyle]}`
         : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
   // Drawn per shot rather than left to the assembler's taste - see LIGHT_CONDITIONS.
-  const conditions = shootingConditions(isProfile ? 'profile' : isDate ? 'date' : isSpicy ? 'spicy' : 'moment');
+  const conditions = shootingConditions(isProfile ? 'profile' : isDate || isScene ? 'date' : isSpicy ? 'spicy' : 'moment');
   // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
   // characters - not a soft quality preference, an actual request error. That leaves the
   // assembler only whatever headroom styleSuffix does not already spend, plus a safety
@@ -983,7 +1025,8 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
           is_profile: isProfile ? '1' : '',
           // A spicy photo is posed on purpose and gets its own section (is_spicy); the
           // "unposed, caught in the moment" rules are for an ordinary chat photo only.
-          is_moment: !isProfile && !isDate && !isSpicy ? '1' : '',
+          is_moment: !isProfile && !isDate && !isSpicy && !isScene ? '1' : '',
+          is_scene: isScene ? '1' : '',
           // Not a photo either of them took: how he actually sees her, right now, in the
           // room - see image_prompt_assembler.md's is_date section for the framing this
           // maps to.
@@ -998,10 +1041,11 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
           // extra.photo_scene) - a date's arrival photo is in the venue, not her room.
           // A character named in the idea ("as Tifa") gets the costume from the reference
           // table rather than the assembler's memory of it.
+          wearing,
           cosplay_block: cosplayImageBlock(situation),
           // Her duo partner, when the idea puts her in the photo (duo.ts).
           duo_block: duoImageBlock(character.seed, situation, isSpicy),
-          photo_scene: isDate ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
+          photo_scene: isDate || isScene ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
           mode_seedream: promptStyle === 'seedream' ? '1' : '',
           mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
           z_char_budget: zCharBudget,
@@ -1041,7 +1085,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   const negative =
     promptStyle === 'z_image_turbo'
       ? ''
-      : [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : isSpicy ? SPICY_NEGATIVE : CANDID_NEGATIVE]
+      : [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : isSpicy ? SPICY_NEGATIVE : isScene ? SCENE_NEGATIVE : CANDID_NEGATIVE]
           .filter(Boolean)
           .join(' ');
   const caption = cleanCaption(assembled.caption, situation);
@@ -1053,7 +1097,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
 async function renderImageJob(job: ImageJob, character: Character, shot: AssembledShot, postToChat: boolean): Promise<void> {
   const id = job.id;
   const isProfile = job.kind === 'profile';
-  const isDate = job.kind === 'date';
+  const isDate = job.kind === 'date' || job.kind === 'scene';
   const facesCamera = isProfile || showsFace(job);
   const { prompt, negative, situation } = shot;
   // Forcing her face to match a reference photo is exactly wrong for a shot that is not
@@ -1164,7 +1208,7 @@ async function freshPhotoIdea(
           content: render('actor_photo_idea', {
             real_name: character.real_name,
             dossier: character.seed.hints.dossier || describeSeed(character.seed),
-            photo_self: photoSelfBlock(character.seed),
+            photo_self: photoSelfBlock(character.seed, { closet: true }),
             is_spicy: kind === 'spicy' ? '1' : '',
             is_chat: kind === 'chat' ? '1' : '',
           }),
@@ -1197,7 +1241,7 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
   if (!job) throw new Error('image job not found');
   const character = job.character_id ? getCharacter(job.character_id) : null;
   if (!character) throw new Error('character not found');
-  const kind = job.kind as 'profile' | 'chat' | 'spicy' | 'date';
+  const kind = job.kind as 'profile' | 'chat' | 'spicy' | 'date' | 'scene';
 
   let situation: string;
   let aspect = job.aspect;
@@ -1208,6 +1252,8 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
       const idea = await freshPhotoIdea(character, kind);
       situation = idea.situation;
       aspect = idea.aspect;
+      // A different photo is taken now, in whatever she has on now.
+      db.prepare('UPDATE images SET outfit = NULL WHERE id = ?').run(id);
     } else {
       // A date's arrival photo has no separate "fresh idea" - what she is wearing is
       // decided once for the whole evening (dates.ts's decideDateOutfit), not per photo, so
@@ -1240,11 +1286,12 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
 }
 
 /** Used only when the Actor left no concrete detail to work from. */
-const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date', string> = {
+const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date' | 'scene', string> = {
   profile: 'a flirty close selfie held high in something low-cut, looking up into the lens',
   chat: 'a casual photo of whatever she is doing right now',
   spicy: 'a selfie from above, lying on her bed in just her underwear, one arm across her chest, taken for him',
   date: 'how she looks as he arrives, whatever she decided to wear tonight',
+  scene: 'what he sees right now across the table from her',
 };
 
 /**

@@ -11,7 +11,7 @@ import {
   getCharacter, getDate, getLocation, getMessage, getRelationship, getUserProfile, listDates,
   getCircle, saveRelationship, setDateNpcs, setDateOutfit, type StoredMessage,
 } from '../repo.js';
-import type { Character, DateSession, Location, Relationship } from '../types.js';
+import type { Character, CharacterSeed, DateSession, Location, Relationship } from '../types.js';
 import {
   appearanceBlock, fantasiesBlock, historyBlock, coreBlock, identityBlock, interestsBlock, languageBlock,
   ledgerBlock, lifeBlock, moodBlock, quirksBlock, seedBlock, sexualBlock, speechStyleBlock,
@@ -29,10 +29,12 @@ import { fantasyLog } from './fantasies.js';
 import { userCardBlock } from './usercard.js';
 import { isObj, pick } from '../llm/shape.js';
 import { castFromInvite, castLine, circleBlock, groupRules, markLeft, mergeJoined, npcBlock, presentNpcs, rememberCast } from './npcs.js';
-import { DATE_BEAT, DATE_SUMMARY, OUTFIT } from '../llm/schemas.js';
+import { DATE_BEAT, DATE_SCENE, DATE_SUMMARY, OUTFIT } from '../llm/schemas.js';
 import { isAiCharacter } from './species.js';
 import { costumeMentionBlock } from './cosplay.js';
 import { duoPartnerNpc } from './duo.js';
+import { applyOutfitChanges, closetList, defaultOutfit, isOutfit, OUTFIT_EXAMPLE, outfitForImage, outfitFromPicks, outfitLines, outfitSentence, type Outfit, type OutfitChange } from './wardrobe.js';
+import { normalizeOutfitChanges } from './actor.js';
 
 /**
  * Dates: the other half of the game.
@@ -176,10 +178,31 @@ export function directionBlock(direction: string): string {
 
 export interface DateTurnResult {
   text: string;
-  hidden: { thoughts: string; mood: string; wants: string; in_the_act?: boolean; joined?: unknown; left?: unknown };
+  hidden: { thoughts: string; mood: string; wants: string; in_the_act?: boolean; joined?: unknown; left?: unknown; outfit_changes?: OutfitChange[] };
 }
 
 // ------------------------------------------------------------------ prompt blocks
+
+/**
+ * What she has on right now, piece by piece. Undressing happens here: the scene changes a
+ * piece's state and the next beat sees what is left - tights before panties, the socks still
+ * on, never a bra that already came off.
+ */
+function outfitBlock(date: DateSession, seed: CharacterSeed): string {
+  const outfit = dateOutfit(date, seed);
+  if (!outfit) {
+    return date.outfit
+      ? `What she is wearing tonight: ${date.outfit}\nThis holds for the whole evening unless the scene itself changes it.`
+      : '';
+  }
+  return [
+    'What she has on right now, piece by piece (hers to keep track of, never to list):',
+    ...outfitLines(outfit),
+    'It holds unless the scene changes it - a jacket comes off, a strap slips, a skirt gets pushed ' +
+      'up - and every change goes in "outfit_changes". Never have her in something different ' +
+      'without narrating why.',
+  ].join('\n');
+}
 
 /** Where they are, as she experiences it. His own description of the place, plus the time. */
 export function locationBlock(date: DateSession, location: Location | null): string {
@@ -224,11 +247,7 @@ function buildDatePrompt(
     // Decided once in openDate(), read fresh here on every single turn - so the opening
     // beat, every later beat and the arrival photo all agree on what she is wearing rather
     // than three separate guesses.
-    outfit_block: date.outfit
-      ? `What she is wearing tonight: ${date.outfit}\nThis holds for the whole evening unless ` +
-        `the scene itself changes it (a jacket comes off, shoes come off) - never have her in ` +
-        `a different outfit than this without narrating an actual reason for the change.`
-      : '',
+    outfit_block: outfitBlock(date, seed),
     // A costume named tonight (in his invite, her outfit or the scene) comes with the real look.
     costume_block: costumeMentionBlock([date.outfit ?? '', date.company ?? '', ...transcript.slice(-8).map((m) => m.text)], seed),
     life_block: lifeBlock(seed),
@@ -279,7 +298,9 @@ async function runDateActor(
   date: DateSession,
 ): Promise<DateTurnResult> {
   const settings = getSettings();
-  const prompt = buildDatePrompt(character, rel, date, dateMessages(date.id));
+  // Photos in the date (the arrival shot, "show current scene") are his view of the evening,
+  // not something that happened in it - she would only start reacting to "a photo".
+  const prompt = buildDatePrompt(character, rel, date, dateMessages(date.id).filter((m) => m.kind !== 'image'));
   const base = [{ role: 'user' as const, content: prompt }];
   let correction: string | null = null;
 
@@ -464,6 +485,7 @@ async function runDateActor(
         in_the_act: hiddenRaw.in_the_act === true,
         joined: hiddenRaw.joined,
         left: hiddenRaw.left,
+        outfit_changes: normalizeOutfitChanges(pick(hiddenRaw, ['outfit_changes', 'clothes', 'outfit_change'])),
       },
     };
   }
@@ -493,12 +515,16 @@ async function takeDateTurn(dateId: string): Promise<void> {
     if (currentEpoch() !== startedIn) return;
     if (getDate(dateId)?.status !== 'active') return;
 
+    // What she has on after this beat rides on the beat itself (meta.outfit), so the next beat
+    // reads it back and a reroll or delete of this one takes its clothes changes with it.
+    const before = dateOutfit(getDate(dateId)!, character.seed);
+    const after = before ? applyOutfitChanges(character.seed, before, result.hidden.outfit_changes) : null;
     const stored = addMessage({
       character_id: character.id,
       sender: 'character',
       text: result.text,
       date_id: dateId,
-      meta: result.text === FALLBACK_BEAT ? { failed: true } : {},
+      meta: { ...(result.text === FALLBACK_BEAT ? { failed: true } : {}), ...(after ? { outfit: after } : {}) },
       read_at: null,
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
@@ -579,28 +605,99 @@ export interface StartDateInput {
   company?: string;
 }
 
-/** Sized like a photo idea call - one short, concrete paragraph, not a whole dossier. */
-const OUTFIT_TOKENS = 600;
+/** Ten short slot answers and a note - a little more than the old one-paragraph outfit. */
+const OUTFIT_TOKENS = 1000;
 
-/** Used only when the outfit call fails outright - close to her usual style, nothing specific. */
-function fallbackOutfit(character: Character): string {
-  const style = find('clothing_style', character.seed.clothing_style)?.image_prompt
-    ?? find('clothing_style', character.seed.clothing_style)?.label
-    ?? 'something she feels good in';
-  return `Something in her usual style tonight - ${style.toLowerCase()}.`;
+const SCENE_TOKENS = 1500;
+
+/**
+ * "Show current scene": a picture of this moment of the date, as he sees it. A small call reads
+ * the last few beats and writes the shot (where everyone is, what she is doing, her face); the
+ * image is then assembled like any other, from his point of view, and posted into the date.
+ * Her outfit rides along from the tracked state, so the picture shows what is actually still
+ * on her. Pressing the button is his action, so it costs nothing he did not ask for.
+ */
+export async function showCurrentScene(dateId: string): Promise<{ image_id: string }> {
+  const date = getDate(dateId);
+  if (!date) throw new Error('date not found');
+  if (date.status !== 'active') throw new Error('that date has already ended');
+  if (!getSettings().images_enabled) throw new Error('image generation is turned off in settings');
+  const character = getCharacter(date.character_id);
+  if (!character) throw new Error('character not found');
+  const transcript = withoutDirections(dateMessages(date.id)).filter((m) => m.kind !== 'image');
+  const beats = transcript.filter((m) => m.sender === 'character');
+  if (!beats.length) throw new Error('nothing has happened yet');
+
+  const outfit = dateOutfit(date, character.seed);
+  const wearing = outfit ? outfitForImage(outfit) : date.outfit ?? '';
+  const location = date.location_id ? getLocation(date.location_id) : null;
+  let situation = '';
+  let aspect: 'square' | 'portrait' | 'landscape' = 'portrait';
+  let showsFace = true;
+  try {
+    const out = await completeJson<{ situation?: string; shows_face?: boolean; aspect?: string }>({
+      scope: 'image',
+      label: `date_scene:${character.username}`,
+      schema: DATE_SCENE,
+      // The actor model: the scene can be explicit, and this has to describe it as it is.
+      config: { ...getSettings().models.actor, max_tokens: SCENE_TOKENS },
+      require: ['situation'],
+      messages: [
+        {
+          role: 'user',
+          content: render('actor_date_scene', {
+            real_name: character.real_name,
+            age: character.seed.age,
+            appearance: character.seed.appearance_prompt,
+            wearing: wearing || 'not settled',
+            location_block: locationBlock(date, location),
+            others: npcBlock(date),
+            history_block: historyBlock(transcript.slice(-10), character, getUserProfile()),
+          }),
+        },
+      ],
+    });
+    situation = String(out.situation ?? '').trim();
+    if (out.aspect === 'square' || out.aspect === 'landscape' || out.aspect === 'portrait') aspect = out.aspect;
+    showsFace = out.shows_face !== false;
+  } catch (err) {
+    logger.warn('actor', 'scene description failed, using her last beat', { character: character.username, error: String(err) });
+  }
+  // Without a description the moment itself still says enough to draw.
+  if (!situation) situation = `The moment right now, as he sees it: ${beats[beats.length - 1].text.slice(0, 600)}`;
+
+  const job = enqueueImage({
+    characterId: character.id,
+    dateId: date.id,
+    kind: 'scene',
+    situation,
+    aspect,
+    showsFace,
+    outfit: wearing || null,
+  });
+  return { image_id: job.id };
 }
 
 /**
- * What she is actually wearing tonight, decided once as the date opens and then read fresh
- * on every turn after that (see outfit_block in buildDatePrompt) - so the opening beat, every
- * later beat and the arrival photo all agree on the same outfit instead of each guessing its
- * own. Mirrors profilePicConcept()/freshPhotoIdea() in images.ts: a small, cheap call asking
- * her rather than deciding for her, so the answer actually varies with who she is and where
- * she is going rather than always landing on the same generic "cute outfit".
+ * What she has on right now on this date: the snapshot on her latest beat, or what she arrived
+ * in. Null only for a date from before outfits were tracked, which keeps its one-line outfit.
  */
-async function decideDateOutfit(character: Character, date: DateSession, location: Location): Promise<string> {
+export function dateOutfit(date: DateSession, seed: CharacterSeed): Outfit | null {
+  const beats = dateMessages(date.id).filter((m) => m.sender === 'character');
+  for (let i = beats.length - 1; i >= 0; i--) if (isOutfit(beats[i].meta?.outfit)) return beats[i].meta.outfit;
+  return isOutfit(date.outfit_state) ? (date.outfit_state as Outfit) : null;
+}
+
+/**
+ * What she is actually wearing tonight, decided once as the date opens, piece by piece from her
+ * own closet. Every later beat reads it back (see outfit_block in buildDatePrompt) and the
+ * arrival photo is built from it, so they all agree on the same outfit. A small call asking her
+ * rather than deciding for her; the note carries what is not a piece of clothing (her hair up,
+ * red lipstick). If the call fails she comes in an outfit rolled from her closet.
+ */
+async function decideDateOutfit(character: Character, date: DateSession, location: Location): Promise<{ outfit: Outfit; note: string }> {
   try {
-    const out = await completeJson<{ outfit?: string }>({
+    const out = await completeJson<{ outfit?: Record<string, unknown>; note?: string }>({
       scope: 'image',
       label: `date_outfit:${character.username}`,
       schema: OUTFIT,
@@ -614,26 +711,28 @@ async function decideDateOutfit(character: Character, date: DateSession, locatio
             dossier: character.seed.hints.dossier || describeSeed(character.seed),
             photo_self: photoSelfBlock(character.seed),
             location_block: locationBlock(date, location),
+            closet: closetList(character.seed),
+            outfit_example: OUTFIT_EXAMPLE,
           }),
         },
       ],
     });
-    const outfit = (out.outfit ?? '').trim();
-    if (outfit) return outfit;
+    const outfit = out.outfit && typeof out.outfit === 'object' ? outfitFromPicks(character.seed, out.outfit) : null;
+    if (outfit?.pieces.length) return { outfit, note: String(out.note ?? '').trim().slice(0, 300) };
   } catch (err) {
-    logger.warn('actor', 'date outfit call failed, using a generic default', {
+    logger.warn('actor', 'date outfit call failed, using one from her closet', {
       character: character.username,
       error: String(err),
     });
   }
-  return fallbackOutfit(character);
+  return { outfit: defaultOutfit(character.seed), note: '' };
 }
 
 /** The situation handed to the image assembler for the arrival photo - see images.ts's is_date. */
-function arrivalSituation(character: Character, location: Location, outfit: string): string {
+function arrivalSituation(character: Character, location: Location, outfit: Outfit, note: string): string {
   return [
     `He has just arrived and is seeing ${character.real_name} for the first time tonight, at ${location.name}.`,
-    `She is wearing: ${outfit}`,
+    `She is wearing: ${outfitForImage(outfit)}${note ? ` ${note}` : ''}`,
     'She dressed for him tonight and she looks hot in it, and she knows it: she has just seen ' +
       'him, and the look she gives him says she is glad she came.',
     'This is the moment he first spots her, or she first comes into view - a full-length shot, ' +
@@ -657,7 +756,7 @@ async function openDate(character: Character, date: DateSession, location: Locat
     decideDateOutfit(character, date, location),
     date.company ? castFromInvite(character, date, locationBlock(date, location), date.company, getUserProfile()) : Promise.resolve([]),
   ]);
-  setDateOutfit(date.id, outfit);
+  setDateOutfit(date.id, [outfitSentence(outfit.outfit), outfit.note].filter(Boolean).join('. '), outfit.outfit);
   // On a duo profile her partner is at every date from the start (duo.ts).
   const partner = duoPartnerNpc(character.seed);
   const everyone = [...(partner ? [partner] : []), ...cast];
@@ -668,7 +767,7 @@ async function openDate(character: Character, date: DateSession, location: Locat
       characterId: character.id,
       dateId: date.id,
       kind: 'date',
-      situation: arrivalSituation(character, location, outfit),
+      situation: arrivalSituation(character, location, outfit.outfit, outfit.note),
       aspect: 'portrait',
       showsFace: true,
     });
@@ -762,6 +861,8 @@ export async function regenerateLastDateBeat(dateId: string, messageId: number):
   const all = dateMessages(dateId);
   const trailing: StoredMessage[] = [];
   for (let i = all.length - 1; i >= 0; i--) {
+    // A scene photo he asked for after her beat does not make the beat any less her last one.
+    if (all[i].kind === 'image' && all[i].sender === 'system') continue;
     if (all[i].sender !== 'character') break;
     trailing.unshift(all[i]);
   }

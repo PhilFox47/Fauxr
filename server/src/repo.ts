@@ -2,6 +2,8 @@ import { db, nowIso } from './db/index.js';
 import { byCategory, find } from './db/attributes.js';
 import { newContext, roll, rollMany } from './engine/dice.js';
 import { cosplayCount } from './engine/cosplay.js';
+import { rollWardrobe } from './engine/wardrobe.js';
+import { buildAppearancePrompt } from './engine/appearance.js';
 import { rollDomainStance, rollKinkSides } from './engine/kinks.js';
 import { pickCore } from './engine/profilecard.js';
 import type {
@@ -326,6 +328,30 @@ function backfillIdentity(characterId: string, seed: CharacterSeed): CharacterSe
 }
 
 /**
+ * A closet (wardrobe.ts) for anyone generated before wardrobes. Safe to add later: she always
+ * owned clothes, the table only names them. Two things move with it:
+ * - clothing-like accessories (thigh-high socks, platform boots, a varsity jacket...) became
+ *   wardrobe pieces under the same ids, so hers leave her accessories and join her closet;
+ * - her fixed look is rebuilt without the clothing style's stock outfit line, which used to
+ *   be in every photo of her.
+ */
+function backfillWardrobe(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.wardrobe) return seed;
+  if (!byCategory('wardrobe_item').length) return seed; // attribute table not seeded yet
+  const moved = (seed.accessories ?? []).filter((id) => !find('accessory', id) && find('wardrobe_item', id));
+  seed.accessories = (seed.accessories ?? []).filter((id) => !moved.includes(id));
+  seed.wardrobe = rollWardrobe(seed);
+  for (const id of moved) {
+    const slot = find('wardrobe_item', id)!.extra?.slot as keyof NonNullable<CharacterSeed['wardrobe']>;
+    const owned = seed.wardrobe[slot] ?? [];
+    if (!owned.includes(id)) seed.wardrobe[slot] = [id, ...owned];
+  }
+  seed.appearance_prompt = buildAppearancePrompt(seed);
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
+/**
  * Costumes (cosplay.ts) for anyone generated before the reference table. Unlike a layer this is
  * safe to add later: a woman who already cosplays already owns costumes, the table only names
  * them. Everyone else gets an empty list, so this runs once per character.
@@ -346,6 +372,7 @@ function hydrateCharacter(row: any): Character {
   seed = backfillSexualProfile(row.id, seed);
   seed = backfillIntimateDetails(row.id, seed);
   seed = backfillCore(row.id, seed);
+  seed = backfillWardrobe(row.id, seed);
   seed = backfillCosplays(row.id, seed);
   return {
     id: row.id,
@@ -798,6 +825,7 @@ function hydrateDate(row: any): DateSession {
     location_id: row.location_id ?? null,
     summary: row.summary ?? null,
     outfit: row.outfit ?? null,
+    outfit_state: row.outfit_state ? JSON.parse(row.outfit_state) : null,
     npcs: JSON.parse(row.npcs ?? '[]'),
     company: row.company ?? '',
     created_at: row.created_at,
@@ -826,8 +854,8 @@ export function getDate(id: string): DateSession | null {
 }
 
 /** What she decided to wear tonight, set once as the date opens. */
-export function setDateOutfit(id: string, outfit: string): void {
-  db.prepare('UPDATE dates SET outfit = ? WHERE id = ?').run(outfit, id);
+export function setDateOutfit(id: string, outfit: string, state?: unknown): void {
+  db.prepare('UPDATE dates SET outfit = ?, outfit_state = ? WHERE id = ?').run(outfit, state ? JSON.stringify(state) : null, id);
 }
 
 export function setDateNpcs(id: string, npcs: DateNpc[]): void {

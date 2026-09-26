@@ -12,6 +12,7 @@ export type TemplateName =
   | 'actor_voice'
   | 'actor_date'
   | 'actor_date_outfit'
+  | 'actor_date_scene'
   | 'director_date_cast'
   | 'director_life_threads'
   | 'actor_profile_pic'

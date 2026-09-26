@@ -69,6 +69,10 @@ export interface CharacterSeed {
   duo?: string;
   /** The other woman on a duo profile; set only alongside a duo. */
   duo_partner?: DuoPartner;
+  /** What she owns, by slot: wardrobe_item ids (wardrobe.ts). Background only - he never sees the list. */
+  wardrobe?: Partial<Record<'top' | 'bottom' | 'dress' | 'outer' | 'legwear' | 'shoes' | 'extras' | 'bra' | 'panties' | 'lingerie' | 'swim' | 'work', string[]>>;
+  /** The one piece with a story, written by the character pass ("her grandmother's cardigan"). */
+  wardrobe_favourite?: string;
   /** cosplay_character ids she owns costumes for; empty unless something about her makes her a cosplayer. */
   cosplays?: string[];
   ethnicity: string;
@@ -315,7 +319,10 @@ export interface ActorHidden {
    * never wiped.
    */
   location: string;
-  outfit: string;
+  /** @deprecated the whole outfit as one line; outfits are now tracked slot by slot (wardrobe.ts). */
+  outfit?: string;
+  /** What changed on her this turn (wardrobe.ts): a slot, a new state, or a piece put on. */
+  outfit_changes?: { slot: string; state?: string | null; item?: string | null }[];
   activity: string;
   goal_fulfilled: boolean;
   new_fact: string | null;
@@ -487,6 +494,8 @@ export interface DateSession {
   summary: string | null;
   /** Decided once as the date opens; read fresh on every turn after that. Null until then. */
   outfit: string | null;
+  /** What she arrived in, slot by slot (wardrobe.ts Outfit); null for dates from before outfits. */
+  outfit_state?: { pieces: { slot: string; text: string; id?: string; state: string }[] } | null;
   /** Everyone else who has been in the scene tonight, including those who have left. */
   npcs: DateNpc[];
   /** Who else he asked to be there, as he wrote it on the invite. '' for just the two of them. */
