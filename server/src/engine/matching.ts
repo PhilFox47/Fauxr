@@ -10,6 +10,7 @@ import { generateCharacter } from './generator.js';
 import { randInt } from './dice.js';
 import { coreTraits } from './profilecard.js';
 import { gameNowIso } from './clock.js';
+import { takeTurn } from './chat.js';
 
 export const STACK_SIZE = 10;
 
@@ -67,13 +68,16 @@ export interface MatchResult {
   instant: boolean;
   /** When the match becomes visible. Equal to now for instant matches. */
   at: string;
-  who_writes_first: 'user' | 'character';
 }
 
 /**
- * Every right swipe matches, but not at the same speed. An instant match means she had
- * already liked him - so the ball is in his court. A delayed match means she saw him after
- * the fact, and she opens.
+ * Every right swipe matches, but not at the same speed - and either way, she is the one who
+ * opens (see AGENTS.md: characters drive, they do not wait to be spoken to). An instant match
+ * means she had already liked him, so she is quick about it - the opener fires right away
+ * rather than waiting for the scheduler's own once-a-minute tick, since a "she already liked
+ * you" match reading as instant matters more here than anywhere else. A delayed match means
+ * she saw him after the fact: the match itself stays invisible until then, and she opens the
+ * moment it lands, exactly as before.
  */
 export function swipeRight(characterId: string): MatchResult {
   const character = getCharacter(characterId);
@@ -85,7 +89,11 @@ export function swipeRight(characterId: string): MatchResult {
 
   setCharacterState(characterId, 'matched', { matched_at: at.toISOString(), reappear_at: null });
 
-  if (!instant) {
+  if (instant) {
+    void takeTurn(characterId, { trigger: 'match_opener', forceDirector: true }).catch((err) =>
+      logger.error('actor', 'match opener turn failed', { error: String(err) }),
+    );
+  } else {
     // She writes first, once the match lands.
     setWakeup({
       character_id: characterId,
@@ -115,7 +123,6 @@ export function swipeRight(characterId: string): MatchResult {
     matched: true,
     instant,
     at: at.toISOString(),
-    who_writes_first: instant ? 'user' : 'character',
   };
 }
 

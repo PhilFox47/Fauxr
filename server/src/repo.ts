@@ -394,6 +394,29 @@ function backfillCosplays(characterId: string, seed: CharacterSeed): CharacterSe
   return seed;
 }
 
+/**
+ * Characters made before conversation_starter existed get one on first load. Seeded with her
+ * archetype, fetishes and non-'none' layers so the same affinities a fresh roll would use (a
+ * hypnosis fetish leaning toward "will hypnotize you via text", an era layer toward "stuck
+ * here from another time") apply here too, not a flat random pick disconnected from who she
+ * already is.
+ */
+function backfillConversationStarter(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.conversation_starter && find('conversation_starter', seed.conversation_starter)) return seed;
+  if (!byCategory('conversation_starter').length) return seed; // attribute table not seeded yet
+  const ctx = newContext();
+  for (const id of [seed.archetype, seed.double_life, seed.era, seed.curse, ...(seed.fetishes ?? [])]) {
+    if (id && id !== 'none') ctx.drawn.add(id);
+  }
+  const chosen = roll('conversation_starter', ctx) ?? byCategory('conversation_starter')[0];
+  if (chosen) {
+    seed.conversation_starter = chosen.id;
+    seed.hints = { ...(seed.hints ?? {}), conversation_starter: chosen.prompt_hint };
+    db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  }
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
   let seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
   seed = backfillSpecies(row.id, seed);
@@ -405,6 +428,7 @@ function hydrateCharacter(row: any): Character {
   seed = backfillWardrobe(row.id, seed);
   seed = backfillAccessorySplit(row.id, seed);
   seed = backfillCosplays(row.id, seed);
+  seed = backfillConversationStarter(row.id, seed);
   return {
     id: row.id,
     username: row.username,

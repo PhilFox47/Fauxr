@@ -143,6 +143,13 @@ export interface CharacterSeed {
   search_motive: string;
   turn_ons: string[];
   turn_offs: string[];
+  /**
+   * How she actually breaks the ice - the flavour of her very first message to him, from an
+   * ordinary "hey" through cheesy pickup lines and named kinks to the genuinely out-there
+   * ("I have chosen you as my test subject"). Hidden from every screen; it only ever shapes
+   * the opening message itself (see nudge.ts's openerNudge()), never a recurring bit.
+   */
+  conversation_starter: string;
 
   // sexual
   /**

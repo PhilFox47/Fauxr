@@ -15,7 +15,7 @@ import { describeHim } from './discovery.js';
 import { userCardBlock } from './usercard.js';
 import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
-import { initiativeNudge } from './nudge.js';
+import { initiativeNudge, openerNudge } from './nudge.js';
 import { releaseBlock } from './release.js';
 import { detectMeetupDeferral, detectQuizzingHim, detectReframe, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
 import { canSendPhotos } from './images.js';
@@ -234,6 +234,8 @@ export interface ActorContext {
   direction: Direction | null;
   /** She is texting first, on her own impulse ("your move") - not answering anything. */
   initiative?: boolean;
+  /** Her very first message ever, right after matching - see CharacterSeed.conversation_starter. */
+  opener?: boolean;
 }
 
 export type ActorRun = ActorOutput;
@@ -357,7 +359,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
     (recent[recent.length - 1]?.sender === 'user' && lastUserMessage.includes('?'));
 
   // Only a turn she starts herself gets framing; what she says on any turn is hers.
-  const nudge = ctx.initiative ? initiativeNudge() : null;
+  const nudge = ctx.initiative ? initiativeNudge() : ctx.opener ? openerNudge(ctx.character.seed) : null;
   const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '', somethingLive);
   const base = [{ role: 'user' as const, content: prompt }];
 

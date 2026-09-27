@@ -182,7 +182,12 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     character = getCharacter(characterId)!;
   }
 
-  await runActorPhase(character, rel, { startedIn, decrementValidFor: true, initiative: opts.trigger === 'initiative' });
+  await runActorPhase(character, rel, {
+    startedIn,
+    decrementValidFor: true,
+    initiative: opts.trigger === 'initiative',
+    opener: opts.trigger === 'match_opener',
+  });
 }
 
 /**
@@ -193,7 +198,7 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
 async function runActorPhase(
   character: Character,
   rel: Relationship,
-  opts: { startedIn: number; decrementValidFor: boolean; initiative?: boolean },
+  opts: { startedIn: number; decrementValidFor: boolean; initiative?: boolean; opener?: boolean },
 ): Promise<void> {
   const characterId = character.id;
   const { startedIn } = opts;
@@ -226,9 +231,12 @@ async function runActorPhase(
   try {
     showTyping();
 
-    // The initiative nudge is written for a text turn; a voice note would drop it.
-    const useVoice = !opts.initiative && wantsVoiceMessage(character);
-    const ctx = { character, relationship: rel, direction: rel.active_direction, initiative: opts.initiative };
+    // The initiative/opener nudges are written for a text turn; a voice note would drop them.
+    const useVoice = !opts.initiative && !opts.opener && wantsVoiceMessage(character);
+    const ctx = {
+      character, relationship: rel, direction: rel.active_direction,
+      initiative: opts.initiative, opener: opts.opener,
+    };
     const output = useVoice
       ? await runActorVoice(ctx).then((v) => (v ? { messages: [v.message], hidden: v.hidden } : null))
       : null;

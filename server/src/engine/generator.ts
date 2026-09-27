@@ -462,6 +462,10 @@ export function rollSeed(): RolledSeed {
     kink_map, dom_sub_leaning, kink_sides, relationship_status: relationship_status!.id,
     species: species.id, transgender: transgender?.id, ...layers,
   });
+  // Last of the personality/sexual cascade, so its affinities can react to anything about her
+  // - a fetish, an era layer, a double life, an exotic species - and not just her archetype.
+  // See nudge.ts's openerNudge() for where this actually reaches her first message.
+  const conversation_starter = one('conversation_starter')!;
 
   const hints: Record<string, string> = {
     species: hintOf(species),
@@ -485,6 +489,7 @@ export function rollSeed(): RolledSeed {
     clothing_style: hintOf(clothing_style),
     grooming: hintOf(grooming),
     search_motive: hintOf(search_motive),
+    conversation_starter: hintOf(conversation_starter),
     sexual_persona: hintOf(persona),
     dirty_talk: hintOf(dirty_talk),
     sexual_experience: hintOf(sexual_experience),
@@ -553,6 +558,7 @@ export function rollSeed(): RolledSeed {
     big_secret: big_secret.id,
 
     search_motive: search_motive.id,
+    conversation_starter: conversation_starter.id,
     turn_ons,
     turn_offs,
 
@@ -763,6 +769,7 @@ export function describeSeed(seed: CharacterSeed): string {
     '',
     `IN BED - her sexual persona: ${label('sexual_persona', seed.sexual_persona)} - ${hintFor(seed, 'sexual_persona')}`,
     `why she is on the app: ${label('search_motive', seed.search_motive)} - ${hintFor(seed, 'search_motive')}`,
+    `how she tends to break the ice with a first message: ${label('conversation_starter', seed.conversation_starter)} - ${hintFor(seed, 'conversation_starter')}`,
     `how she talks dirty: ${label('dirty_talk', seed.dirty_talk)} - ${hintFor(seed, 'dirty_talk')}`,
     `experience: ${label('sexual_experience', seed.sexual_experience)} - ${hintFor(seed, 'sexual_experience')}`,
     `proudest of: ${label('body_pride', seed.body_pride)} - ${hintFor(seed, 'body_pride')}`,

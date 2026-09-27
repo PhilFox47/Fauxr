@@ -63,8 +63,8 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
       if (direction === 'right') {
         setToast(
           result.instant
-            ? "It's a match — she liked you first. Your move."
-            : 'Liked. If it lands, she might write first.',
+            ? "It's a match — she already liked you. She's texting you now."
+            : "Liked. If it lands, she'll text you first.",
         );
         onMatched();
       } else if (result.gone) {

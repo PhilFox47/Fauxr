@@ -5741,3 +5741,67 @@ Verified: fresh render of `director_direction.md` confirms both the new section 
 build both clean. No code changes this round - `match_opener` (she can already message
 first right after a match) and the rest of the initiative machinery already existed; this
 was entirely about what stance she is written to hold once a conversation is happening.
+
+### Overhauling how a conversation starts: a real attribute for it, and she always opens
+
+`match_opener` already existed, but it was a coin flip: on an "instant" match (she had
+already liked him) the ball was in *his* court and the chat simply started empty until he
+wrote something, and even on the delayed path where she did open, nothing decided *how* -
+the Actor got an empty history and whatever framing the moment happened to carry, so her
+first-ever message defaulted to the model's own favourite opener over and over. The start of
+a conversation is the one moment every character gets before anything else about her has
+shown up in the chat, which makes it disproportionately important - and it was the least
+tuned part of the whole pipeline.
+
+**A new hidden attribute, `conversation_starter`** (`data/attributes/conversation_starters.json`,
+95 entries) names the flavour of her opening move: everyday things (a direct compliment, a
+weird question, a would-you-rather), the classics (a cheesy pickup line, "did it hurt when you
+fell from heaven"), sexual ones at increasing heat (an innuendo, naming a kink outright, a
+roleplay pitch, taking control from message one), and - rarer, by rarity tier the same way
+everything else in this database is - the genuinely out-there: "I have chosen you as my test
+subject", "I will hypnotize you via text", "help, I've travelled through time and I'm stuck
+here", cult recruitment, a fake spy briefing, a simulation glitch. It is hidden from every
+screen on purpose - not a dial to tune, a generation-time attribute like `search_motive` or
+`dirty_talk` that only ever shapes one specific moment. Rolled last in `rollSeed()`'s cascade,
+after her fetishes, layers and persona are all set, so its own `affinities` can react to any
+of them: a character with the `hypnotising_him` fetish rolls "will hypnotize you via text"
+meaningfully more often, an era layer (`victorian`, `far_future`, ...) leans toward the
+time-traveller opener, a `spy`/`heist_crew`/`off_duty_assassin` double life leans toward the
+fake-mission opener - the same affinity mechanism `dice.ts` already uses everywhere else, not
+a special case. `repo.ts` gets a matching `backfillConversationStarter()`, seeded the same way,
+for every character rolled before this shipped.
+
+**How it actually reaches her first message**: `nudge.ts` gets `openerNudge()`, the same shape
+as the existing `initiativeNudge()` ("your move") - a short framing note naming her
+`conversation_starter`'s hint, telling her this is the very first thing she has ever sent him,
+and explicitly *not* a script to recite verbatim. `ActorContext` gets a new `opener` flag,
+threaded through `chat.ts`'s `runActorPhase()` next to the existing `initiative` one and set
+whenever `takeTurn()`'s trigger is `match_opener`; `actor.ts` picks `openerNudge()` over
+`initiativeNudge()` in exactly the same `turn_nudge` slot the prompt template already had, so
+no template changes were needed for this half. A voice note is skipped on an opener turn for
+the same reason it already is on an initiative one - that path has no nudge slot, so her
+actual conversation-starter flavour would go unread.
+
+**Characters now always text first.** `matching.ts`'s `swipeRight()` used to leave an "instant"
+match (the 40% where she had already liked him) for the player to open - `who_writes_first`
+could be `'user'`. That is gone: every match now ends with her opening, never him. A delayed
+match (the other 60%, "she saw him after the fact") is unchanged - the match itself stays
+invisible until it lands and she opens the moment it does, via the same `match_opener`
+wakeup as before. An instant match no longer waits for the scheduler's once-a-minute poll at
+all: `swipeRight()` now kicks off `takeTurn(id, { trigger: 'match_opener' })` directly,
+fire-and-forget, the same pattern `handleUserMessage()` already uses - so "she already liked
+you" reads as immediate (typing indicator and all) rather than up to sixty seconds of a
+suspiciously empty chat. `MatchResult.who_writes_first` is gone from the API entirely since it
+was never consumed by the frontend and is no longer even true some of the time; `Swipe.tsx`'s
+two toasts were reworded to match ("she's texting you now" / "she'll text you first").
+
+Verified against a mock provider: `rollSeed()` always sets a valid `conversation_starter`;
+`backfillConversationStarter()` gives a legacy seed with the field stripped out a real one on
+load, and it persists; a statistical check over 20,000 rolls confirms a matching fetish
+(`hunting_him`) makes its affinity-linked opener meaningfully more likely than the
+un-conditioned baseline (97 vs 222 hits); forcing the instant branch and letting the
+fire-and-forget turn actually finish shows a message from `character` with zero user messages
+ever sent, whose prompt both carries the exact opener-nudge framing text and the specific
+character's own `conversation_starter` hint; forcing the delayed branch confirms no message
+sends immediately and a `match_opener` wakeup is scheduled instead. `npx tsc --noEmit`, a full
+build, and `validate-attributes.mjs` (3679 entries, 68 categories) all clean.
