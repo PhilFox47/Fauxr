@@ -104,6 +104,18 @@ already stored below - never repeat an entry.
 - Anything he told her about himself - especially what he is into, what he wants, what he
   fantasises about - goes in "facts_about_user".
 - Leave "director_notes" out unless her long game or plan actually changed.
+- "pinned_add" is a different, much smaller thing than the facts above: things that must
+  never be forgotten, however long this chat runs - a nickname he's actually earned, the
+  exact terms of a running bet, dare or ongoing game between them, a real relationship
+  milestone (their first "I love you", moving in together, an anniversary). It is shown to
+  her in full on every single turn, so it stays exclusive on purpose: empty is the normal
+  answer, most turns, even ones with real emotional weight. Never put an ordinary fact,
+  a passing preference or anything from "facts_about_user"/"facts_about_her" here - if it
+  would be fine to lose track of eventually, it does not belong in "pinned_add". Write each
+  entry as a short, permanent statement of fact ("He calls her 'Bug'", not "he seems to like
+  calling her Bug sometimes"). "pinned_remove" retires one, verbatim, if it stops being true
+  (a nickname replaced by a new one, a bet that resolved) - the outcome, if worth keeping,
+  becomes its own new pinned_add entry rather than an edit.
 
 # SCHEDULING
 {{#unprompted}}
@@ -173,6 +185,8 @@ Reply with exactly one JSON object and nothing else:
       "facts_about_her": ["what she told him about herself this turn"],
       "events": ["anything that happened between them worth remembering"],
       "what_landed": ["the specific thing that got her going"],
+      "pinned_add": [],
+      "pinned_remove": [],
       "open_threads_add": [{ "text": "...", "expires_when": "..." }],
       "open_threads_close": ["the exact text of a thread above that is finished or dead"],
       "director_notes": { "intent": "...", "plans": [{ "text": "...", "expires_when": "..." }] }

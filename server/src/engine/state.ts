@@ -26,6 +26,8 @@ export interface DirectorUpdate {
     facts_about_her?: string[];
     events?: string[];
     what_landed?: string[];
+    pinned_add?: string[];
+    pinned_remove?: string[];
     open_threads_add?: { text: string; expires_when?: string }[];
     open_threads_close?: string[];
     director_notes?: { intent?: string; plans?: { text: string; expires_when?: string }[] };
@@ -37,6 +39,13 @@ const MAX_EVENTS = 50;
 /** Short on purpose: this is the shortlist she reaches back into, not a transcript. */
 const MAX_LANDED = 12;
 const MAX_THREADS = 4;
+/**
+ * Deliberately small: this list is shown to the Actor in FULL on every turn (never windowed
+ * like `facts`), so its whole value is staying short enough to actually read that way. A
+ * relationship genuinely accumulating more than this many permanent, never-forget facts -
+ * nicknames, running deals, real milestones - is the rare exception, not the norm.
+ */
+const MAX_PINNED = 15;
 /** A thread she has raised this many times is spent, whether or not he engaged. */
 const MAX_RAISES = 2;
 const THREAD_MAX_AGE_HOURS = 72;
@@ -88,6 +97,7 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger'], now: numbe
     },
     events: [...(ledger.events ?? [])],
     what_landed: [...(ledger.what_landed ?? [])],
+    pinned: [...(ledger.pinned ?? [])],
     open_threads: [...(ledger.open_threads ?? [])],
     director_notes: {
       intent: ledger.director_notes?.intent ?? '',
@@ -105,6 +115,14 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger'], now: numbe
   pushUnique(next.facts.about_her, patch.facts_about_her);
   pushUnique(next.events, patch.events);
   pushUnique(next.what_landed as string[], patch.what_landed);
+  pushUnique(next.pinned as string[], patch.pinned_add);
+
+  // Retiring a pinned fact (a nickname that changed, a deal that concluded) works the same
+  // way closing an open thread does: match on the text itself, case-insensitive.
+  const unpinning = new Set((patch.pinned_remove ?? []).map((s) => String(s).trim().toLowerCase()));
+  if (unpinning.size) {
+    next.pinned = (next.pinned ?? []).filter((p) => !unpinning.has(p.trim().toLowerCase()));
+  }
 
   for (const t of patch.open_threads_add ?? []) {
     const text = String(t?.text ?? '').trim();
@@ -136,6 +154,7 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger'], now: numbe
   next.facts.about_her = next.facts.about_her.slice(-MAX_FACTS);
   next.events = next.events.slice(-MAX_EVENTS);
   next.what_landed = (next.what_landed ?? []).slice(-MAX_LANDED);
+  next.pinned = (next.pinned ?? []).slice(-MAX_PINNED);
   next.open_threads = next.open_threads.slice(-MAX_THREADS);
   return next;
 }

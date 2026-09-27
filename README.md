@@ -5870,3 +5870,52 @@ distribution check over 30,000 neutral rolls confirms common openers land roughl
 often than extremely-rare ones and every tier still gets drawn; the full existing regression
 suite (outfit fixes, log fixes, the opener/match-first batch above) still passes unchanged.
 `npx tsc --noEmit` and a full build both clean.
+
+### Nicknames, running deals and real milestones were never actually permanent
+
+Raised directly: does the Director have a way to write down something that must never be
+forgotten - a nickname, an ongoing bet or game, a relationship milestone - so it survives a
+chat too long for the raw message history to still cover? It did not, not really.
+`Ledger.facts` (`about_user`/`about_her`) looked like the answer, but it is a rolling window
+twice over: `state.ts` caps storage at 60 entries each (oldest silently dropped), and
+`blocks.ts`'s `ledgerBlock()` only ever shows the Actor the *last 12/10* of whichever list -
+the Director sees the full 60 when writing direction, but that only ever compresses into a
+short, disposable "goal" for the current moment. A nickname recorded on message ten would
+already be invisible to the Actor by message twenty-five, in an otherwise ordinary chat.
+`open_threads` looked like the other candidate, but it is deliberately the opposite of
+permanent: it expires after 2 mentions or 72 hours by design (`MAX_RAISES`,
+`THREAD_MAX_AGE_HOURS`) so a passing remark does not turn into a fixation - exactly wrong for
+something that should last the whole relationship.
+
+**`Ledger.pinned`** (`types.ts`) is a new, separate list for exactly the narrow set of things
+that must never drop out: a nickname, the exact terms of a running bet or game, a real
+milestone (a first "I love you", moving in together). Unlike `facts`, it is small by
+construction (`state.ts`'s `MAX_PINNED = 15`) and shown to the Actor **in full, every single
+turn** (`blocks.ts`'s `ledgerBlock()`, under "Never forget these...", never windowed) -
+staying short is exactly what buys it the right to always be there instead of getting cut for
+space. The Director writes to it through `ledger.pinned_add`/`pinned_remove` in its own JSON
+output (`llm/schemas.ts`, `director_direction.md`), instructed explicitly that this is a much
+smaller, much rarer thing than an ordinary fact - empty most turns, "if it would be fine to
+eventually lose track of, it does not belong here." `pinned_remove` retires a stale entry (a
+nickname replaced, a bet that resolved) the same way `open_threads_close` already retires a
+thread; the outcome, if worth keeping, becomes its own fresh `pinned_add` rather than an edit
+in place. `director_date_summary.md` and `DATE_SUMMARY`'s schema get a trimmed version of the
+same field, since dates are where a real milestone most often actually happens.
+
+One milestone is guaranteed in code rather than left to the summary call's judgement: her
+first date. `dates.ts`'s `endDate()` already set `has_had_first_date` unconditionally on
+every date, a flag nothing had ever actually read - it now reads its own value first, and on
+a genuine first date pins "Their first date was at {location}." before setting it. Everything
+past the first date is the Director's own call, same as a nickname or a running bet.
+
+Verified against a mock provider: a Director-written nickname lands in `rel.ledger.pinned`
+and shows up in the Actor's own ledger block, correctly framed; flooding the same relationship
+with 30 more ordinary facts afterwards confirms the nickname is still there while the earliest
+plain fact has already scrolled out of the windowed section, proving the two lists behave
+differently on purpose; 20 `pinned_add` calls in a row confirm the list holds at exactly 15
+and keeps the most recent ones; a `pinned_remove` call is confirmed to retire a resolved bet
+while a fresh `pinned_add` records its outcome; running a real date through `dates.ts`
+directly (bypassing the LLM entirely, since a date with no messages skips that call) confirms
+the first date auto-pins a milestone and a second date to the same place does not re-pin it.
+The full existing regression suite still passes. `npx tsc --noEmit` and a full build both
+clean.

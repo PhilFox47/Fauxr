@@ -271,6 +271,16 @@ export interface Ledger {
    * that is remembered rather than counted. Optional: older saves have no such array.
    */
   what_landed?: string[];
+  /**
+   * Things that must never be forgotten, however long the chat runs: a nickname he's
+   * earned, the exact terms of a running bet or deal, a real relationship milestone. `facts`
+   * above is a rolling window - the Actor only ever sees the last dozen or so of it
+   * (blocks.ts's ledgerBlock), so anything older quietly stops reaching her prompt once
+   * enough newer facts pile up. This list is deliberately small and curated by the Director
+   * (state.ts's MAX_PINNED) and, unlike `facts`, shown to the Actor in full, every turn.
+   * Optional: older saves have no such array.
+   */
+  pinned?: string[];
   open_threads: OpenThread[];
   director_notes: DirectorNotes;
 }

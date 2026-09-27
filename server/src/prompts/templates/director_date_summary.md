@@ -31,6 +31,12 @@ her, the way she would remember it.
 **facts_about_user** - anything genuinely new he revealed about himself tonight, especially
 what he is into. Empty is a normal answer.
 
+**pinned_add** - only for something that must never be forgotten, however long they keep
+seeing each other: a real milestone from tonight (their first time meeting in person, a
+first "I love you", moving in together), or a nickname or running deal born tonight that is
+clearly going to stick. Shown to her in full on every future turn, so it stays exclusive -
+empty is the normal answer even after a date that mattered.
+
 **open_threads** - up to two things left hanging that she would bring up next time they
 text: something they started and did not finish, a fantasy that came up, a promise. Never a
 condition on him (something he still has to earn, prove or pass).
@@ -54,6 +60,7 @@ Reply with exactly one JSON object and nothing else:
     "fantasies_played": [],
     "ledger": {
       "facts_about_user": [],
+      "pinned_add": [],
       "open_threads_add": [{ "text": "...", "expires_when": "..." }]
     }
   }

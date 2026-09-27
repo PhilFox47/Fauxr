@@ -986,6 +986,15 @@ export async function endDate(dateId: string): Promise<DateSession> {
     ...update.ledger,
     events: [...(update.ledger?.events ?? []), `Date at ${date.where_at || 'a place he chose'}: ${summary}`],
   };
+  // A real milestone, guaranteed rather than left to the summary call's own judgement: it
+  // is pinned deterministically, in code, the same way has_had_first_date itself already
+  // gets set unconditionally below - this just finally gives that flag something to do.
+  if (!rel.flags.state.has_had_first_date) {
+    update.ledger.pinned_add = [
+      ...(update.ledger.pinned_add ?? []),
+      `Their first date was at ${date.where_at || 'a place he chose'}.`,
+    ];
+  }
   rel.flags.state.has_had_first_date = true;
   applyUpdate(character, rel, update);
   // Whoever was part of it is someone he has met now, and can be asked for next time.

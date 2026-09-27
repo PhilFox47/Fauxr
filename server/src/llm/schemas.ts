@@ -83,6 +83,8 @@ const ledger = obj({
   facts_about_her: arr(str),
   events: arr(str),
   what_landed: arr(str),
+  pinned_add: arr(str),
+  pinned_remove: arr(str),
   open_threads_add: arr(thread),
   open_threads_close: arr(str),
   director_notes: nullable(obj({ intent: str, plans: arr(thread) })),
@@ -119,7 +121,7 @@ export const DATE_SUMMARY = spec('date_summary', obj({
     reason: str,
     discovered: arr(str),
     fantasies_played: arr(int),
-    ledger: obj({ facts_about_user: arr(str), open_threads_add: arr(thread) }),
+    ledger: obj({ facts_about_user: arr(str), pinned_add: arr(str), open_threads_add: arr(thread) }),
   }),
 }));
 

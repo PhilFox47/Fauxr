@@ -314,6 +314,15 @@ export function ledgerBlock(ledger: Ledger, now: number, opts: { full?: boolean 
   const take = <T>(arr: T[], n: number) =>
     (opts.full ? arr : arr.slice(-n)).filter((x) => typeof x !== 'string' || clean(x));
 
+  // Unlike everything else here, never windowed: this list is small by construction
+  // (state.ts's MAX_PINNED) precisely so it can afford to always show in full, on every
+  // turn, however long the chat has run - a nickname or a running deal from message ten
+  // must not go silent once a hundred more ordinary facts have piled up after it.
+  const pinned = (ledger.pinned ?? []).filter(clean);
+  if (pinned.length) {
+    lines.push('Never forget these, no matter how long it has been:\n' + pinned.map((p) => `- ${p}`).join('\n'));
+  }
+
   const aboutUser = take(ledger.facts?.about_user ?? [], 12);
   if (aboutUser.length) lines.push('What you know about him:\n' + aboutUser.map((f) => `- ${f}`).join('\n'));
 
