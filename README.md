@@ -811,12 +811,14 @@ submersible pilot, circus knife thrower, smokejumper, volcanologist, cargo ship 
 pilot.
 
 **Cosplay reference table** (`cosplay.json`, category `cosplay_character`, `engine/cosplay.ts`):
-51 well-known, canonically adult characters from anime, games, cartoons and comics (Tifa, 2B,
-Yor Forger, Makima, Nico Robin, Lara Croft, Chun-Li, D.Va, Jinx, Harley Quinn, Wonder Woman,
-Jessica Rabbit, ...). Each row has the costume spelled out in `image_prompt` (wig, colours, cut,
-props) and how to play her in `prompt_hint`; `extra` holds the name, source, medium and
-aliases. Before this the model guessed, and a costume that is almost right reads as a different
-character. How it is used:
+89 well-known, canonically adult characters from anime, games, cartoons, comics and movies
+(Tifa, 2B, Yor Forger, Makima, Nico Robin, Lara Croft, Chun-Li, D.Va, Jinx, Harley Quinn,
+Wonder Woman, Jessica Rabbit, Sailor Moon, Nezuko, Mikasa, Morrigan Aensland, Mai Shiranui,
+Tracer, Vi, Ciri, Aloy, Power Girl, Zatanna, Slave Leia, Spider-Gwen, ...) - leaned towards
+whoever actually turns up at a convention, not just the ones easiest to describe. Each row has
+the costume spelled out in `image_prompt` (wig, colours, cut, props) and how to play her in
+`prompt_hint`; `extra` holds the name, source, medium and aliases. Before this the model
+guessed, and a costume that is almost right reads as a different character. How it is used:
 - A woman with a reason to cosplay owns a few costumes (`seed.cosplays`). How many comes from
   `extra.cosplays` on her persona (cosplay nerd), job (professional cosplayer, costume
   designer), style (cosplayer, anime girl, fantasy costume), hobby (cosplay) or fetishes

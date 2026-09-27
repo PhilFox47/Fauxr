@@ -1111,5 +1111,879 @@
       ]
     },
     "enabled": true
+  },
+  {
+    "id": "sailor_moon",
+    "category": "cosplay_character",
+    "label": "Sailor Moon (Sailor Moon)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "melodramatic, cries easily, fiercely loyal to her friends, clumsy until it actually matters - then suddenly every inch the hero",
+    "image_prompt": "a Sailor Moon cosplay: long twin-tailed blonde wig with two meatball-shaped buns, a white sailor-collar leotard with a red bow and blue pleated mini skirt, elbow-length white gloves, red knee-high boots, a golden tiara with a red jewel",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Sailor Moon",
+      "source": "Sailor Moon",
+      "medium": "anime",
+      "aliases": [
+        "sailor moon",
+        "usagi tsukino",
+        "usagi"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "nezuko_kamado",
+    "category": "cosplay_character",
+    "label": "Nezuko Kamado (Demon Slayer)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sweet and protective underneath a muffled growl, mostly silent, fiercely gentle with anyone she has decided is hers to guard",
+    "image_prompt": "a Nezuko Kamado cosplay: long pink-tipped black wig in a loose ponytail with an orange hair ribbon, a bamboo muzzle prop worn loose around the neck, a pink kimono with a hemp-leaf pattern under a green-and-black haori, straw sandals",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Nezuko Kamado",
+      "source": "Demon Slayer",
+      "medium": "anime",
+      "aliases": [
+        "nezuko",
+        "nezuko kamado",
+        "nezuko cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "asuka_langley",
+    "category": "cosplay_character",
+    "label": "Asuka Langley (Neon Genesis Evangelion)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "loudly confident, competitive to a fault, prickly about being praised and worse about being pitied",
+    "image_prompt": "an Asuka Langley cosplay: shoulder-length orange wig with a signature side clip, a skin-tight red plugsuit with white panel accents and a chest-mounted connector prop, an orange interface headset, white knee-high boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Asuka Langley",
+      "source": "Neon Genesis Evangelion",
+      "medium": "anime",
+      "aliases": [
+        "asuka",
+        "asuka langley",
+        "asuka soryu",
+        "asuka cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rukia_kuchiki",
+    "category": "cosplay_character",
+    "label": "Rukia Kuchiki (Bleach)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "stern and formal on the surface, secretly soft-hearted, gives orders like she is used to being obeyed",
+    "image_prompt": "a Rukia Kuchiki cosplay: short black bob wig with one long strand hanging in front, a black shihakusho kimono robe tied with a white obi sash, a wooden katana prop at the hip, white tabi socks with black sandals",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rukia Kuchiki",
+      "source": "Bleach",
+      "medium": "anime",
+      "aliases": [
+        "rukia",
+        "rukia kuchiki",
+        "rukia cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "marin_kitagawa",
+    "category": "cosplay_character",
+    "label": "Marin Kitagawa (My Dress-Up Darling)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "loud, upbeat and unapologetically enthusiastic about her hobby, drags people into it whether they meant to be dragged or not",
+    "image_prompt": "a Marin Kitagawa cosplay (as her favourite heroine): long twin-drill pink wig, a frilly magical-girl dress in pink and white with oversized bow accents, thigh-high striped socks, a plastic wand prop, glittery stage makeup",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Marin Kitagawa",
+      "source": "My Dress-Up Darling",
+      "medium": "anime",
+      "aliases": [
+        "marin kitagawa",
+        "marin",
+        "marin cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "zero_two",
+    "category": "cosplay_character",
+    "label": "Zero Two (Darling in the Franxx)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "feral and possessive under a flirtatious tease, calls him 'darling' and means to keep him",
+    "image_prompt": "a Zero Two cosplay: long pink wig with two curved red horns, red contact lenses, a skin-tight white-and-red pilot suit unzipped at the chest, thigh-high red stockings layered over the suit's boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Zero Two",
+      "source": "Darling in the Franxx",
+      "medium": "anime",
+      "aliases": [
+        "zero two",
+        "code 002",
+        "zero two cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rem_rezero",
+    "category": "cosplay_character",
+    "label": "Rem (Re:Zero)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "devoted past the point of reason, calm and competent, says his name like it is a vow",
+    "image_prompt": "a Rem cosplay: short sky-blue wig with a flower-shaped hairpin over one ear, a black-and-white French maid dress with a short skirt, white apron and headband, a floating spiked-mace prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rem",
+      "source": "Re:Zero",
+      "medium": "anime",
+      "aliases": [
+        "rem from re:zero",
+        "rem cosplay",
+        "rem maid"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "mikasa_ackerman",
+    "category": "cosplay_character",
+    "label": "Mikasa Ackerman (Attack on Titan)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "quiet, unshakeable, terrifyingly competent, softens completely for the one person she has decided to protect",
+    "image_prompt": "a Mikasa Ackerman cosplay: shoulder-length black wig, the Scout Regiment's tan harness straps crossing a white shirt and green cloak with a wings-of-freedom emblem, a red scarf knotted at the throat, brown thigh boots, twin blade-hilt props",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Mikasa Ackerman",
+      "source": "Attack on Titan",
+      "medium": "anime",
+      "aliases": [
+        "mikasa",
+        "mikasa ackerman",
+        "mikasa cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "power_csm",
+    "category": "cosplay_character",
+    "label": "Power (Chainsaw Man)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "loud, self-important, gleefully chaotic, secretly desperate to be liked and terrible at hiding it",
+    "image_prompt": "a Power cosplay: long blonde wig with two curved horns and sharp red-and-yellow contact lenses, a fitted grey sailor-style top with a red neckerchief, black shorts, thigh-high boots, an exaggerated sharp-toothed grin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Power",
+      "source": "Chainsaw Man",
+      "medium": "anime",
+      "aliases": [
+        "power cosplay",
+        "power from chainsaw man",
+        "blood fiend power"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "nobara_kugisaki",
+    "category": "cosplay_character",
+    "label": "Nobara Kugisaki (Jujutsu Kaisen)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "blunt, vain about her looks, picks fights she is fully prepared to win, unbothered by other people's opinions",
+    "image_prompt": "a Nobara Kugisaki cosplay: shoulder-length orange wig with a single spiked ahoge, the black-and-red Tokyo Jujutsu High uniform jacket over a short pleated skirt, a hammer-and-nail prop set, knee-high boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Nobara Kugisaki",
+      "source": "Jujutsu Kaisen",
+      "medium": "anime",
+      "aliases": [
+        "nobara",
+        "nobara kugisaki",
+        "nobara cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "mai_sakurajima",
+    "category": "cosplay_character",
+    "label": "Mai Sakurajima (Rascal Does Not Dream of Bunny Girl Senpai)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "dry, deadpan, quietly affectionate once she trusts someone, unbothered by being looked at",
+    "image_prompt": "a Mai Sakurajima bunny-girl cosplay: long black wig, a black satin bunny-suit leotard with a white collar and cuffs, sheer black tights, a bunny-ears headband, a fluffy tail clip",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Mai Sakurajima",
+      "source": "Rascal Does Not Dream of Bunny Girl Senpai",
+      "medium": "anime",
+      "aliases": [
+        "mai sakurajima",
+        "bunny girl senpai",
+        "mai bunny cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hinata_hyuga",
+    "category": "cosplay_character",
+    "label": "Hinata Hyuga (Naruto)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "shy and soft-spoken at first, steadier and braver than she gives herself credit for once she decides to act",
+    "image_prompt": "a Hinata Hyuga cosplay: long indigo wig with blunt bangs, pale lavender contact lenses, a cream-and-lavender high-collar jacket over black shorts, a blue forehead protector, bandaged forearms",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Hinata Hyuga",
+      "source": "Naruto",
+      "medium": "anime",
+      "aliases": [
+        "hinata",
+        "hinata hyuga",
+        "hinata cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sakura_haruno",
+    "category": "cosplay_character",
+    "label": "Sakura Haruno (Naruto)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sharp-tempered and hardworking, quick to swing between soft and terrifying depending on how she is provoked",
+    "image_prompt": "a Sakura Haruno cosplay: short pink bob wig, a red sleeveless qipao-style top over black shorts, a medical pouch belt, pink fingerless gloves, a forehead protector worn as a headband",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Sakura Haruno",
+      "source": "Naruto",
+      "medium": "anime",
+      "aliases": [
+        "sakura",
+        "sakura haruno",
+        "sakura cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rias_gremory",
+    "category": "cosplay_character",
+    "label": "Rias Gremory (High School DxD)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "confident, possessive, teasing in a way that is really a dare, treats what is hers as worth fighting for",
+    "image_prompt": "a Rias Gremory cosplay: very long crimson wig, a fitted academy blazer over a short pleated skirt, knee-high socks, a small bat-wing prop clip",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rias Gremory",
+      "source": "High School DxD",
+      "medium": "anime",
+      "aliases": [
+        "rias",
+        "rias gremory",
+        "rias cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "emilia_rezero",
+    "category": "cosplay_character",
+    "label": "Emilia (Re:Zero)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "gentle and idealistic, tries hard to be fair to everyone, gets flustered fast when someone is actually kind to her",
+    "image_prompt": "an Emilia cosplay: long silver-white wig, pointed elf-style ear tips, a pale blue off-shoulder gown with fur trim, a small crystal pendant, white opera gloves",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Emilia",
+      "source": "Re:Zero",
+      "medium": "anime",
+      "aliases": [
+        "emilia from re:zero",
+        "emilia cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "morrigan_aensland",
+    "category": "cosplay_character",
+    "label": "Morrigan Aensland (Darkstalkers)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "wickedly confident succubus energy, toys with people for the fun of it, never in a hurry to close the deal",
+    "image_prompt": "a Morrigan Aensland cosplay: long teal-green wig, a skin-tight green latex bodysuit cut high at the hips with a heart-shaped chest cutout, a large feathered bat-wing prop on the back, thigh-high boots, a small bat hair clip",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Morrigan Aensland",
+      "source": "Darkstalkers",
+      "medium": "game",
+      "aliases": [
+        "morrigan aensland",
+        "morrigan cosplay",
+        "morrigan darkstalkers"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "mai_shiranui",
+    "category": "cosplay_character",
+    "label": "Mai Shiranui (Fatal Fury / King of Fighters)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "playful and flirtatious, proud of her fighting skill and just as proud of the reaction her outfit gets",
+    "image_prompt": "a Mai Shiranui cosplay: long straight reddish-brown wig tied high with a large red bow, a red backless qipao-cut fighting outfit with a plunging halter neckline, white fur trim, thigh-high white stockings, oversized red fans as props",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Mai Shiranui",
+      "source": "Fatal Fury / King of Fighters",
+      "medium": "game",
+      "aliases": [
+        "mai shiranui",
+        "mai from fatal fury",
+        "mai from king of fighters"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "ivy_valentine",
+    "category": "cosplay_character",
+    "label": "Ivy Valentine (Soulcalibur)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "icy and aristocratic, calculating, treats every conversation like a negotiation she intends to win",
+    "image_prompt": "an Ivy Valentine cosplay: long straight platinum-blonde wig, an elaborate black-and-crimson corseted leather bodysuit with exposed hip straps and a high collar, thigh-high boots, a coiled whip-sword prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Ivy Valentine",
+      "source": "Soulcalibur",
+      "medium": "game",
+      "aliases": [
+        "ivy valentine",
+        "isabella valentine",
+        "ivy from soulcalibur"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "kitana",
+    "category": "cosplay_character",
+    "label": "Kitana (Mortal Kombat)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "regal and composed, a warrior princess who is done taking orders from anyone but herself",
+    "image_prompt": "a Kitana cosplay: long straight black wig pulled into a high ponytail, a sheer blue veil worn over the lower face, a blue-and-black armored halter top over fitted trousers, twin steel-fan props",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Kitana",
+      "source": "Mortal Kombat",
+      "medium": "game",
+      "aliases": [
+        "kitana",
+        "kitana cosplay",
+        "kitana mortal kombat"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rikku_ffx",
+    "category": "cosplay_character",
+    "label": "Rikku (Final Fantasy X)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "bubbly, mischievous, talks fast and thinks faster, always halfway through a scheme",
+    "image_prompt": "a Rikku cosplay: two long blonde braids under a green bandana headband, a green halter crop top with a yellow scarf, a layered mini skirt over shorts with mismatched thigh-high stockings, goggles pushed up on her forehead",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rikku",
+      "source": "Final Fantasy X",
+      "medium": "game",
+      "aliases": [
+        "rikku",
+        "rikku from final fantasy",
+        "rikku ffx"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "tracer_ow",
+    "category": "cosplay_character",
+    "label": "Tracer (Overwatch)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "relentlessly upbeat, talks a mile a minute, treats every risk like it is obviously going to work out",
+    "image_prompt": "a Tracer cosplay: short spiky brown wig, orange-tinted flight goggles pushed up, a fitted brown-and-orange bomber jacket over a tan bodysuit, a glowing chest-harness chronal-accelerator prop, twin pistol props holstered at the hips",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Tracer",
+      "source": "Overwatch",
+      "medium": "game",
+      "aliases": [
+        "tracer from overwatch",
+        "lena oxton",
+        "tracer cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "vi_arcane",
+    "category": "cosplay_character",
+    "label": "Vi (Arcane / League of Legends)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "loud, hot-tempered, punches first, fiercely protective of the people she has decided are hers",
+    "image_prompt": "a Vi cosplay: short choppy pink wig shaved at the sides, a cropped fur-trimmed jacket over a bound chest wrap and cargo trousers, tattooed-look forearm sleeves, oversized metal gauntlet props",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Vi",
+      "source": "Arcane / League of Legends",
+      "medium": "game",
+      "aliases": [
+        "vi from arcane",
+        "vi cosplay",
+        "violet arcane"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "caitlyn_arcane",
+    "category": "cosplay_character",
+    "label": "Caitlyn (Arcane / League of Legends)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "prim and precise, speaks like she has already thought three moves ahead, thaws slowly and completely once she does",
+    "image_prompt": "a Caitlyn cosplay: long blue wig braided over one shoulder, a purple tailcoat over a corseted vest and high-waisted shorts, a wide-brimmed hat, thigh-high boots, a long sniper-rifle prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Caitlyn",
+      "source": "Arcane / League of Legends",
+      "medium": "game",
+      "aliases": [
+        "caitlyn from arcane",
+        "caitlyn kiramman",
+        "caitlyn cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "ciri_witcher",
+    "category": "cosplay_character",
+    "label": "Ciri (The Witcher)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "restless and sharp-tongued, trained to fight and hates being told to sit it out, softer than she lets on",
+    "image_prompt": "a Ciri cosplay: short choppy ash-blonde wig, a fitted grey-and-brown leather jacket over dark trousers, a sword harness worn across the back, a thin scar painted across one cheek",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Ciri",
+      "source": "The Witcher",
+      "medium": "game",
+      "aliases": [
+        "ciri",
+        "ciri from the witcher",
+        "cirilla"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "aloy_horizon",
+    "category": "cosplay_character",
+    "label": "Aloy (Horizon Zero Dawn)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "self-reliant and blunt, grew up an outcast and still expects to have to prove herself",
+    "image_prompt": "an Aloy cosplay: long red braided wig with beaded accents, a tan-and-blue tribal-patterned leather outfit with a fur shoulder wrap, a beaded choker, a bow prop slung across the back",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Aloy",
+      "source": "Horizon Zero Dawn",
+      "medium": "game",
+      "aliases": [
+        "aloy",
+        "aloy from horizon",
+        "aloy cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "princess_zelda",
+    "category": "cosplay_character",
+    "label": "Princess Zelda (The Legend of Zelda)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "composed and regal in public, warmer and more stubborn than the crown ever lets her show",
+    "image_prompt": "a Princess Zelda cosplay: long blonde wig under a jeweled circlet, a lavender-and-white gown with gold trim and a modest neckline, elbow-length gloves, a small triangular pendant",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Princess Zelda",
+      "source": "The Legend of Zelda",
+      "medium": "game",
+      "aliases": [
+        "zelda",
+        "princess zelda",
+        "zelda cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "juri_han",
+    "category": "cosplay_character",
+    "label": "Juri Han (Street Fighter)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sadistic and gleeful about it, picks fights for the thrill, laughs when things get rough",
+    "image_prompt": "a Juri Han cosplay: short choppy dark-teal wig, a purple crop-top fighting halter with an exposed midriff, tight shorts, a mechanical prosthetic-look eyepiece prop over one eye, thigh-high boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Juri Han",
+      "source": "Street Fighter",
+      "medium": "game",
+      "aliases": [
+        "juri han",
+        "juri street fighter",
+        "juri cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sombra_ow",
+    "category": "cosplay_character",
+    "label": "Sombra (Overwatch)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sly and mocking, always a step ahead in the conversation, treats secrets like currency",
+    "image_prompt": "a Sombra cosplay: shoulder-length lilac-streaked black wig, a fitted purple-and-black tech-suit with a hooded jacket, glowing violet circuit-line makeup down one arm, fingerless tech gloves",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Sombra",
+      "source": "Overwatch",
+      "medium": "game",
+      "aliases": [
+        "sombra from overwatch",
+        "sombra cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "emma_frost",
+    "category": "cosplay_character",
+    "label": "Emma Frost (Marvel)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "icy, superior, effortlessly in control of a room, drops the frost only for the very few she respects",
+    "image_prompt": "an Emma Frost 'White Queen' cosplay: long straight platinum-blonde wig, an all-white corseted bustier with a high collared cape, white thigh-high boots, elbow-length white gloves",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Emma Frost",
+      "source": "Marvel",
+      "medium": "comic",
+      "aliases": [
+        "emma frost",
+        "white queen",
+        "emma frost cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "power_girl",
+    "category": "cosplay_character",
+    "label": "Power Girl (DC)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "brash, confident, rolls her eyes at anyone who underestimates her, secretly a soft touch for anyone actually in trouble",
+    "image_prompt": "a Power Girl cosplay: shoulder-length blonde wig, a white long-sleeved bodysuit with a distinctive chest cutout window, a short blue cape, blue boots and gloves, a red belt with a yellow emblem",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Power Girl",
+      "source": "DC",
+      "medium": "comic",
+      "aliases": [
+        "power girl",
+        "kara zor-l",
+        "power girl cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "supergirl",
+    "category": "cosplay_character",
+    "label": "Supergirl (DC)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "earnest and a little idealistic, tries to do the right thing even when it is inconvenient, brightens fast around someone she likes",
+    "image_prompt": "a Supergirl cosplay: long blonde wig with a short cape, a blue bodysuit with a red-and-yellow shield emblem, a red mini skirt, red knee-high boots",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Supergirl",
+      "source": "DC",
+      "medium": "comic",
+      "aliases": [
+        "supergirl",
+        "kara danvers",
+        "supergirl cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "zatanna",
+    "category": "cosplay_character",
+    "label": "Zatanna (DC)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "theatrical and quick-witted, treats flirting like another kind of showmanship, always has one more trick",
+    "image_prompt": "a Zatanna cosplay: long straight black wig, a black fishnet-and-corset magician's leotard with a white bowtie and cuffs, a black top hat, fishnet stockings, a magic wand prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Zatanna",
+      "source": "DC",
+      "medium": "comic",
+      "aliases": [
+        "zatanna",
+        "zatanna zatara",
+        "zatanna cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "starfire",
+    "category": "cosplay_character",
+    "label": "Starfire (Teen Titans)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "warm and openly affectionate, unfamiliar with human subtlety and completely unbothered by that",
+    "image_prompt": "a Starfire cosplay: long straight orange-red wig, a purple halter crop top and matching mini skirt, elbow-length purple gloves, thigh-high purple boots, glowing green contact lenses",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Starfire",
+      "source": "Teen Titans",
+      "medium": "cartoon",
+      "aliases": [
+        "starfire from teen titans",
+        "koriand'r",
+        "starfire cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "leia_organa",
+    "category": "cosplay_character",
+    "label": "Princess Leia (Star Wars)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "regal and razor-sharp, gives orders like she was born doing it, has zero patience for being underestimated",
+    "image_prompt": "a Princess Leia 'slave' cosplay: long brown wig styled in twin coiled side buns, a metallic bronze bikini-style outfit with a thin gold waist chain, a sheer red hip wrap, a chain-link neck-collar prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Princess Leia",
+      "source": "Star Wars",
+      "medium": "movie",
+      "aliases": [
+        "princess leia",
+        "leia organa",
+        "slave leia",
+        "leia cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rey_starwars",
+    "category": "cosplay_character",
+    "label": "Rey (Star Wars)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "self-taught and stubborn, more comfortable fighting than talking about her feelings, fiercely loyal once she commits",
+    "image_prompt": "a Rey cosplay: brown wig styled in three looped buns, a beige desert-scavenger wrap top over cropped trousers, arm wraps, a wide belt with a canteen prop, a long quarterstaff prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rey",
+      "source": "Star Wars",
+      "medium": "movie",
+      "aliases": [
+        "rey",
+        "rey skywalker",
+        "rey from star wars"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "spider_gwen",
+    "category": "cosplay_character",
+    "label": "Spider-Gwen (Marvel)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "quick-witted and a little reckless, cracks jokes mid-crisis because it is easier than sitting with how scared she actually is",
+    "image_prompt": "a Spider-Gwen cosplay: a white-and-pink hooded spider suit with black web-line detailing, the hood pulled back to show a short blonde wig, white boots and gloves, a small web-shooter prop on each wrist",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Spider-Gwen",
+      "source": "Marvel",
+      "medium": "comic",
+      "aliases": [
+        "spider-gwen",
+        "gwen stacy",
+        "ghost-spider"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "black_cat_marvel",
+    "category": "cosplay_character",
+    "label": "Black Cat (Marvel)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "flirtatious and light-fingered, treats every encounter like a heist she has already half-won",
+    "image_prompt": "a Black Cat cosplay: long silver-white wig, a skin-tight black catsuit unzipped at the chest, a domino mask, white fur-trimmed gloves and boots, a coiled grappling-hook prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Black Cat",
+      "source": "Marvel",
+      "medium": "comic",
+      "aliases": [
+        "black cat",
+        "felicia hardy",
+        "black cat cosplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "she_hulk",
+    "category": "cosplay_character",
+    "label": "She-Hulk (Marvel)",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "blunt, confident and unbothered by her own size, quick to laugh and quicker to call out nonsense",
+    "image_prompt": "a She-Hulk cosplay: green body paint on visible skin, a short dark wig, a purple-and-white one-shoulder bodysuit with a torn hemline, gold cuff bracelets",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "She-Hulk",
+      "source": "Marvel",
+      "medium": "comic",
+      "aliases": [
+        "she-hulk",
+        "jennifer walters",
+        "she hulk cosplay"
+      ]
+    },
+    "enabled": true
   }
 ]
