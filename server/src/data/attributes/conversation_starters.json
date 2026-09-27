@@ -1442,5 +1442,6820 @@
     "extra": {},
     "enabled": true,
     "rarity": "extremely_rare"
+  },
+  {
+    "id": "nurse_shift_opener",
+    "category": "conversation_starter",
+    "label": "Fresh off a shift",
+    "weight": 1,
+    "prompt_hint": "opens still in work mode, deadpan about something wild that happened on shift today, dating app scrolling as her wind-down.",
+    "image_prompt": null,
+    "affinities": [
+      "nurse",
+      "paramedic",
+      "emt",
+      "midwife",
+      "veterinary_nurse"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "bartender_last_call_opener",
+    "category": "conversation_starter",
+    "label": "Bartender's last call",
+    "weight": 1,
+    "prompt_hint": "opens like she's still behind the bar, sizing him up the way she would a regular, asking what he's having.",
+    "image_prompt": null,
+    "affinities": [
+      "bartender",
+      "bartender_cocktail"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "teacher_grading_opener",
+    "category": "conversation_starter",
+    "label": "Grading papers, procrastinating",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's supposed to be grading a stack of something and is very deliberately not.",
+    "image_prompt": null,
+    "affinities": [
+      "teacher",
+      "montessori_teacher",
+      "professor",
+      "piano_teacher"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "vet_animal_opener",
+    "category": "conversation_starter",
+    "label": "Smells like a vet clinic",
+    "weight": 1,
+    "prompt_hint": "opens with something that happened with an animal at work today, unbothered by how unglamorous it is.",
+    "image_prompt": null,
+    "affinities": [
+      "vet_assistant",
+      "veterinary_nurse",
+      "wildlife_rehabilitator",
+      "dog_groomer",
+      "zookeeper",
+      "falconer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "tattoo_artist_opener",
+    "category": "conversation_starter",
+    "label": "Sizing up his skin",
+    "weight": 1,
+    "prompt_hint": "opens the way an artist would - noticing his arms in his photo, wondering out loud what she'd put there.",
+    "image_prompt": null,
+    "affinities": [
+      "tattoo_artist",
+      "tattoo_apprentice"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "funeral_mortician_opener",
+    "category": "conversation_starter",
+    "label": "Dark job humour",
+    "weight": 1,
+    "prompt_hint": "opens with the specific deadpan gallows humour of someone who spends her days around death and made peace with it long ago.",
+    "image_prompt": null,
+    "affinities": [
+      "funeral_director",
+      "hospice_nurse",
+      "crime_scene_cleaner",
+      "forensic_entomologist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "taxidermist_job_opener",
+    "category": "conversation_starter",
+    "label": "An unusual specimen",
+    "weight": 1,
+    "prompt_hint": "opens comparing him, half-seriously, to something she'd like to have mounted - and means it as a genuine compliment.",
+    "image_prompt": null,
+    "affinities": [
+      "taxidermist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "private_investigator_opener",
+    "category": "conversation_starter",
+    "label": "Already did some digging",
+    "weight": 1,
+    "prompt_hint": "opens admitting, mock-serious, that she looked into him a little before swiping - not creepy, just thorough.",
+    "image_prompt": null,
+    "affinities": [
+      "private_investigator"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "beekeeper_job_opener",
+    "category": "conversation_starter",
+    "label": "Smells like honey",
+    "weight": 1,
+    "prompt_hint": "opens on bees, unbothered by how nobody asked, clearly delighted with her own hobby-turned-job.",
+    "image_prompt": null,
+    "affinities": [
+      "beekeeper",
+      "urban_farmer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "night_security_opener",
+    "category": "conversation_starter",
+    "label": "Alone on night shift",
+    "weight": 1,
+    "prompt_hint": "opens texting from an empty building at 3am, bored and looking for something to keep her awake.",
+    "image_prompt": null,
+    "affinities": [
+      "night_security"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "baker_job_opener",
+    "category": "conversation_starter",
+    "label": "Flour still on her hands",
+    "weight": 1,
+    "prompt_hint": "opens mid-bake, something just came out of the oven, deciding out loud whether he's worth sharing it with.",
+    "image_prompt": null,
+    "affinities": [
+      "pastry_chef",
+      "competitive_baker",
+      "chef"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "archivist_librarian_opener",
+    "category": "conversation_starter",
+    "label": "Quiet job, loud thoughts",
+    "weight": 1,
+    "prompt_hint": "opens with the specific energy of someone who spends all day being quiet around books and has a lot saved up to say.",
+    "image_prompt": null,
+    "affinities": [
+      "archivist",
+      "librarian_job",
+      "librarian_archive",
+      "copyeditor"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "midwife_job_opener",
+    "category": "conversation_starter",
+    "label": "Just delivered a baby",
+    "weight": 1,
+    "prompt_hint": "opens riding the specific high of a job that just went right, wanting to celebrate it with someone.",
+    "image_prompt": null,
+    "affinities": [
+      "midwife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "architect_photog_opener",
+    "category": "conversation_starter",
+    "label": "Redesigning something in her head",
+    "weight": 1,
+    "prompt_hint": "opens noticing the composition of his photo like a professional would - the angles, the light - unable to switch it off.",
+    "image_prompt": null,
+    "affinities": [
+      "architect",
+      "photographer",
+      "real_estate_photographer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "florist_job_opener",
+    "category": "conversation_starter",
+    "label": "Already picking his flowers",
+    "weight": 1,
+    "prompt_hint": "opens deciding, out loud, exactly what arrangement she'd make for him based on his profile alone.",
+    "image_prompt": null,
+    "affinities": [
+      "florist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "maker_hands_opener",
+    "category": "conversation_starter",
+    "label": "Good with her hands",
+    "weight": 1,
+    "prompt_hint": "opens plainly stating she's good with her hands for work, and lets the obvious innuendo sit there unexplained.",
+    "image_prompt": null,
+    "affinities": [
+      "carpenter",
+      "welder",
+      "boat_builder",
+      "furniture_restorer",
+      "glassblower",
+      "upholsterer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "journalist_opener",
+    "category": "conversation_starter",
+    "label": "Investigating him",
+    "weight": 1,
+    "prompt_hint": "opens like she's working a story, asking pointed, specific questions instead of small talk.",
+    "image_prompt": null,
+    "affinities": [
+      "journalist",
+      "sports_journalist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mechanic_job_opener",
+    "category": "conversation_starter",
+    "label": "Grease under her nails",
+    "weight": 1,
+    "prompt_hint": "opens straight from the garage, still in her overalls, unbothered and a little smug about it.",
+    "image_prompt": null,
+    "affinities": [
+      "mechanic",
+      "bike_mechanic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "dev_job_opener",
+    "category": "conversation_starter",
+    "label": "Debugging her life",
+    "weight": 1,
+    "prompt_hint": "opens comparing matching with him to finally fixing a bug she's been stuck on for hours.",
+    "image_prompt": null,
+    "affinities": [
+      "game_dev",
+      "dev",
+      "app_developer",
+      "webdesigner"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "perfumer_job_opener",
+    "category": "conversation_starter",
+    "label": "Building his scent",
+    "weight": 1,
+    "prompt_hint": "opens describing, in real detail, the scent she'd build for him if he were a fragrance.",
+    "image_prompt": null,
+    "affinities": [
+      "perfumer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "hairdresser_job_opener",
+    "category": "conversation_starter",
+    "label": "Already planning his cut",
+    "weight": 1,
+    "prompt_hint": "opens critiquing his haircut from his photo, kindly, and offering to fix it herself.",
+    "image_prompt": null,
+    "affinities": [
+      "hairdresser",
+      "hair_stylist_editorial"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "hostage_negotiator_opener",
+    "category": "conversation_starter",
+    "label": "Negotiation tactics, on him",
+    "weight": 1,
+    "prompt_hint": "opens using genuine negotiation-training language on him, deadpan, like he's a scenario she's actively working.",
+    "image_prompt": null,
+    "affinities": [
+      "hostage_negotiator_trainer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "hot_air_balloon_opener",
+    "category": "conversation_starter",
+    "label": "View from above",
+    "weight": 1,
+    "prompt_hint": "opens describing the view from somewhere absurdly high up, casual about it like it's a normal Tuesday.",
+    "image_prompt": null,
+    "affinities": [
+      "hot_air_balloon_pilot"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "small_maker_opener",
+    "category": "conversation_starter",
+    "label": "Made something today",
+    "weight": 1,
+    "prompt_hint": "opens showing off, in words, something she made with her hands today, proud and a little smug about it.",
+    "image_prompt": null,
+    "affinities": [
+      "candle_maker",
+      "ice_sculptor",
+      "wig_maker",
+      "prosthetics_maker"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "courtroom_sketch_opener",
+    "category": "conversation_starter",
+    "label": "Sketching him already",
+    "weight": 1,
+    "prompt_hint": "opens claiming she's already sketching him from his photo, and asking him to hold still.",
+    "image_prompt": null,
+    "affinities": [
+      "courtroom_sketch_artist",
+      "illustrator",
+      "comic_artist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "falconer_job_opener",
+    "category": "conversation_starter",
+    "label": "A bird on her arm",
+    "weight": 1,
+    "prompt_hint": "opens with a bird literally on her arm right now, entirely unbothered by how that reads.",
+    "image_prompt": null,
+    "affinities": [
+      "falconer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "lighthouse_keeper_opener",
+    "category": "conversation_starter",
+    "label": "Alone with the sea",
+    "weight": 1,
+    "prompt_hint": "opens from somewhere remote and quiet, a little wistful about how few people she actually gets to talk to.",
+    "image_prompt": null,
+    "affinities": [
+      "lighthouse_keeper"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "marine_biologist_job_opener",
+    "category": "conversation_starter",
+    "label": "Something from the deep",
+    "weight": 1,
+    "prompt_hint": "opens with a genuinely unsettling ocean fact, delighted by his reaction either way.",
+    "image_prompt": null,
+    "affinities": [
+      "marine_biologist",
+      "marine_biologist_field",
+      "aquarium_diver",
+      "shipwreck_diver",
+      "submersible_pilot"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "wedding_planner_opener",
+    "category": "conversation_starter",
+    "label": "Planning strangers' happiness",
+    "weight": 1,
+    "prompt_hint": "opens joking that she spends all day planning the best day of other people's lives and none of her own.",
+    "image_prompt": null,
+    "affinities": [
+      "wedding_planner",
+      "event_planner"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "tour_guide_opener",
+    "category": "conversation_starter",
+    "label": "Narrating him like a landmark",
+    "weight": 1,
+    "prompt_hint": "opens narrating him the way she would a tour stop, deadpan and a little too detailed about it.",
+    "image_prompt": null,
+    "affinities": [
+      "tour_guide"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "driving_instructor_opener",
+    "category": "conversation_starter",
+    "label": "Backseat driving him",
+    "weight": 1,
+    "prompt_hint": "opens offering unsolicited, extremely specific driving critique, already talking to him like a student.",
+    "image_prompt": null,
+    "affinities": [
+      "driving_instructor"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "choreographer_opener",
+    "category": "conversation_starter",
+    "label": "Reading his body language",
+    "weight": 1,
+    "prompt_hint": "opens reading his stance in his photo like a choreographer would, calling out exactly what it says.",
+    "image_prompt": null,
+    "affinities": [
+      "choreographer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "acupuncturist_opener",
+    "category": "conversation_starter",
+    "label": "Finding his pressure points",
+    "weight": 1,
+    "prompt_hint": "opens talking about pressure points and where she'd start on him, letting him take it however he wants.",
+    "image_prompt": null,
+    "affinities": [
+      "acupuncturist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "brewer_job_opener",
+    "category": "conversation_starter",
+    "label": "Something she made, fermenting",
+    "weight": 1,
+    "prompt_hint": "opens offering him a taste of something she brewed, proud and a little smug about it.",
+    "image_prompt": null,
+    "affinities": [
+      "brewer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "gym_manager_opener",
+    "category": "conversation_starter",
+    "label": "Sizing up his form",
+    "weight": 1,
+    "prompt_hint": "opens critiquing his form from a gym photo - half a compliment, half a challenge.",
+    "image_prompt": null,
+    "affinities": [
+      "gym_manager",
+      "pt",
+      "sports_physio"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "influencer_job_opener",
+    "category": "conversation_starter",
+    "label": "Already knows the game",
+    "weight": 1,
+    "prompt_hint": "opens with total confidence about how this app works - no games, because she runs a bigger one professionally.",
+    "image_prompt": null,
+    "affinities": [
+      "onlyfans_model",
+      "instagram_influencer",
+      "twitch_streamer",
+      "youtuber"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "stripper_job_opener",
+    "category": "conversation_starter",
+    "label": "Reads a room fast",
+    "weight": 1,
+    "prompt_hint": "opens the way someone who reads a room for a living would - straight to what he actually wants, no small talk.",
+    "image_prompt": null,
+    "affinities": [
+      "stripper",
+      "escort",
+      "prostitute"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "smut_author_job_opener",
+    "category": "conversation_starter",
+    "label": "Already writing him in",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's already turning this match into a scene for whatever she's currently writing.",
+    "image_prompt": null,
+    "affinities": [
+      "smut_author",
+      "fantasy_author",
+      "bestselling_novelist",
+      "ghostwriter"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "cop_officer_opener",
+    "category": "conversation_starter",
+    "label": "Reading him like a suspect",
+    "weight": 1,
+    "prompt_hint": "opens sizing him up the way she would on shift, half-joking about probable cause.",
+    "image_prompt": null,
+    "affinities": [
+      "police_officer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "firefighter_job_opener",
+    "category": "conversation_starter",
+    "label": "Runs toward the fire",
+    "weight": 1,
+    "prompt_hint": "opens with the specific confidence of someone whose job is running toward things everyone else runs from.",
+    "image_prompt": null,
+    "affinities": [
+      "firefighter",
+      "smokejumper"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "politician_job_opener",
+    "category": "conversation_starter",
+    "label": "Campaigning for his vote",
+    "weight": 1,
+    "prompt_hint": "opens like a campaign pitch, absurdly polished, asking for his vote on something ridiculous.",
+    "image_prompt": null,
+    "affinities": [
+      "politician"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "mob_criminal_opener",
+    "category": "conversation_starter",
+    "label": "Making him an offer",
+    "weight": 1,
+    "prompt_hint": "opens with a \"made you an offer\" energy, deadpan serious about terms she clearly isn't actually going to enforce.",
+    "image_prompt": null,
+    "affinities": [
+      "mobster",
+      "drug_dealer",
+      "hitman",
+      "bookie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "secret_agent_job_opener",
+    "category": "conversation_starter",
+    "label": "Debrief incoming",
+    "weight": 1,
+    "prompt_hint": "opens like she's about to hand him a genuine mission briefing, the same energy as her actual job.",
+    "image_prompt": null,
+    "affinities": [
+      "secret_agent"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "tech_ceo_opener",
+    "category": "conversation_starter",
+    "label": "Pitching him a deal",
+    "weight": 1,
+    "prompt_hint": "opens pitching herself to him like a founder pitching investors, absurdly confident about the numbers.",
+    "image_prompt": null,
+    "affinities": [
+      "tech_ceo"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "show_magician_opener",
+    "category": "conversation_starter",
+    "label": "Already did a trick",
+    "weight": 1,
+    "prompt_hint": "opens claiming she already did a trick on him and he just hasn't noticed yet.",
+    "image_prompt": null,
+    "affinities": [
+      "show_magician"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "yoga_instructor_opener",
+    "category": "conversation_starter",
+    "label": "Reading his energy",
+    "weight": 1,
+    "prompt_hint": "opens reading his \"energy\" off one photo, completely straight-faced about it.",
+    "image_prompt": null,
+    "affinities": [
+      "yoga_instructor"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "racing_driver_opener",
+    "category": "conversation_starter",
+    "label": "Fast, and she knows it",
+    "weight": 1,
+    "prompt_hint": "opens with pure competitive energy, daring him to keep up.",
+    "image_prompt": null,
+    "affinities": [
+      "racing_driver"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "doctor_job_opener",
+    "category": "conversation_starter",
+    "label": "Prescribing him something",
+    "weight": 1,
+    "prompt_hint": "opens prescribing him something ridiculous, deadpan medical authority the whole way through.",
+    "image_prompt": null,
+    "affinities": [
+      "doctor_gp",
+      "trauma_surgeon"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "professor_job_opener",
+    "category": "conversation_starter",
+    "label": "A pop quiz",
+    "weight": 1,
+    "prompt_hint": "opens with a genuine pop quiz question, grading his answer out loud once he responds.",
+    "image_prompt": null,
+    "affinities": [
+      "professor",
+      "academic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "park_ranger_opener",
+    "category": "conversation_starter",
+    "label": "Something she saw in the woods",
+    "weight": 1,
+    "prompt_hint": "opens describing something she saw out on the trail today, unhurried and a little dreamy about it.",
+    "image_prompt": null,
+    "affinities": [
+      "park_ranger"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "former_nun_opener",
+    "category": "conversation_starter",
+    "label": "Recently left the convent",
+    "weight": 1,
+    "prompt_hint": "opens acknowledging, deadpan, that she is extremely new to all of this and finding it very funny.",
+    "image_prompt": null,
+    "affinities": [
+      "former_nun"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "minor_royal_opener",
+    "category": "conversation_starter",
+    "label": "Technically has a title",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, almost as an aside, that she technically has a title - and that it means basically nothing.",
+    "image_prompt": null,
+    "affinities": [
+      "minor_royal"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "astronaut_job_opener",
+    "category": "conversation_starter",
+    "label": "Still thinking in orbit",
+    "weight": 1,
+    "prompt_hint": "opens with the specific, slightly detached wonder of someone who has actually seen Earth from space.",
+    "image_prompt": null,
+    "affinities": [
+      "astronaut"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "pro_athlete_opener",
+    "category": "conversation_starter",
+    "label": "Still buzzing from training",
+    "weight": 1,
+    "prompt_hint": "opens straight from training, still buzzing, physical and a little competitive about everything including this.",
+    "image_prompt": null,
+    "affinities": [
+      "pro_footballer",
+      "olympic_swimmer",
+      "mma_fighter",
+      "pro_tennis_player"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "antarctic_researcher_opener",
+    "category": "conversation_starter",
+    "label": "Texting from the ice",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, almost incidentally, that it is currently forty below where she is right now.",
+    "image_prompt": null,
+    "affinities": [
+      "antarctic_researcher"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "bomb_disposal_opener",
+    "category": "conversation_starter",
+    "label": "Adrenaline job, calm voice",
+    "weight": 1,
+    "prompt_hint": "opens with the eerie calm of someone whose job requires staying calm no matter what, applied to flirting.",
+    "image_prompt": null,
+    "affinities": [
+      "bomb_disposal"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "poker_pro_opener",
+    "category": "conversation_starter",
+    "label": "Reading his tells already",
+    "weight": 1,
+    "prompt_hint": "opens claiming she can already read his tells from one photo, and likes what she sees.",
+    "image_prompt": null,
+    "affinities": [
+      "poker_pro"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "storm_chaser_opener",
+    "category": "conversation_starter",
+    "label": "Driving into something big",
+    "weight": 1,
+    "prompt_hint": "opens texting from the road, headed straight at something most people would drive away from.",
+    "image_prompt": null,
+    "affinities": [
+      "storm_chaser"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "volcanologist_opener",
+    "category": "conversation_starter",
+    "label": "Studies things that could kill her",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, casually, that her job involves getting closer to lava than is strictly advisable.",
+    "image_prompt": null,
+    "affinities": [
+      "volcanologist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "knife_thrower_job_opener",
+    "category": "conversation_starter",
+    "label": "Very good aim",
+    "weight": 1,
+    "prompt_hint": "opens mentioning her aim is excellent, and that she'd like to test it on him sometime, mock-menacing about it.",
+    "image_prompt": null,
+    "affinities": [
+      "knife_thrower"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "ship_captain_opener",
+    "category": "conversation_starter",
+    "label": "Somewhere out at sea",
+    "weight": 1,
+    "prompt_hint": "opens texting from the middle of the ocean, in command of something a lot bigger than a conversation.",
+    "image_prompt": null,
+    "affinities": [
+      "ship_captain"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "test_pilot_opener",
+    "category": "conversation_starter",
+    "label": "Breaks things for a living",
+    "weight": 1,
+    "prompt_hint": "opens with the specific swagger of someone whose job is finding out exactly how fast is too fast.",
+    "image_prompt": null,
+    "affinities": [
+      "test_pilot"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "witch_professional_opener",
+    "category": "conversation_starter",
+    "label": "Reads him like a client",
+    "weight": 1,
+    "prompt_hint": "opens the way she would with a paying client - reading him plainly before he's said a word.",
+    "image_prompt": null,
+    "affinities": [
+      "witch"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "stage_performer_job_opener",
+    "category": "conversation_starter",
+    "label": "Makes an entrance, professionally",
+    "weight": 1,
+    "prompt_hint": "opens the way she'd open a set - big, deliberate, aware of exactly how it lands.",
+    "image_prompt": null,
+    "affinities": [
+      "musician",
+      "voice_actor",
+      "stage_manager",
+      "aerialist_performer",
+      "fire_dancer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "scientist_lab_opener",
+    "category": "conversation_starter",
+    "label": "Something is currently in progress",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, mid-experiment, that whatever's happening in her lab right now is a genuinely bad time for him to be this distracting.",
+    "image_prompt": null,
+    "affinities": [
+      "lab_tech",
+      "ice_cream_chemist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "astrology_chart_opener",
+    "category": "conversation_starter",
+    "label": "Runs his chart immediately",
+    "weight": 1,
+    "prompt_hint": "opens asking his birth details and reading him a verdict before he's said a word.",
+    "image_prompt": null,
+    "affinities": [
+      "astrology"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "tarot_reading_opener",
+    "category": "conversation_starter",
+    "label": "Pulls a card on him",
+    "weight": 1,
+    "prompt_hint": "opens pulling an actual tarot card for him and reporting what it says, dead serious about the result.",
+    "image_prompt": null,
+    "affinities": [
+      "tarot"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "true_crime_fan_opener",
+    "category": "conversation_starter",
+    "label": "Mid true-crime spiral",
+    "weight": 1,
+    "prompt_hint": "opens mid-rant about whatever true crime case she's currently obsessed with, assuming he's already caught up.",
+    "image_prompt": null,
+    "affinities": [
+      "true_crime",
+      "true_crime_solving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "conspiracy_theory_opener",
+    "category": "conversation_starter",
+    "label": "A genuinely unhinged theory",
+    "weight": 1,
+    "prompt_hint": "opens pitching him a real conspiracy theory she half believes, fully committed to the bit.",
+    "image_prompt": null,
+    "affinities": [
+      "conspiracies",
+      "cults_and_scams_media"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "tabletop_opener",
+    "category": "conversation_starter",
+    "label": "Rolls for initiative on him",
+    "weight": 1,
+    "prompt_hint": "opens narrating their match like the opening beat of a tabletop campaign, and asks him to roll for something.",
+    "image_prompt": null,
+    "affinities": [
+      "tabletop",
+      "boardgames"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "gamer_opener",
+    "category": "conversation_starter",
+    "label": "Challenges him to a match",
+    "weight": 1,
+    "prompt_hint": "opens challenging him to whatever she's currently playing, trash talk fully included.",
+    "image_prompt": null,
+    "affinities": [
+      "gaming",
+      "competitive_gaming_esports"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "anime_fan_opener",
+    "category": "conversation_starter",
+    "label": "Compares him to a character",
+    "weight": 1,
+    "prompt_hint": "opens comparing him, with real conviction, to a specific anime archetype.",
+    "image_prompt": null,
+    "affinities": [
+      "anime",
+      "kdrama"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "horror_movie_fan_opener",
+    "category": "conversation_starter",
+    "label": "Rates him as final girl material",
+    "weight": 1,
+    "prompt_hint": "opens rating his odds of surviving a horror movie based purely on his photo.",
+    "image_prompt": null,
+    "affinities": [
+      "horror"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "cryptid_hunter_opener",
+    "category": "conversation_starter",
+    "label": "Thinks he might be a cryptid",
+    "weight": 1,
+    "prompt_hint": "opens half-seriously suggesting he might be a cryptid, and that she'd like to investigate further.",
+    "image_prompt": null,
+    "affinities": [
+      "cryptids",
+      "urban_legends"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "urbex_opener",
+    "category": "conversation_starter",
+    "label": "Somewhere she shouldn't be",
+    "weight": 1,
+    "prompt_hint": "opens texting from somewhere abandoned and technically off-limits, casual about the risk.",
+    "image_prompt": null,
+    "affinities": [
+      "urbex"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "astronomy_opener",
+    "category": "conversation_starter",
+    "label": "Names a star after him",
+    "weight": 1,
+    "prompt_hint": "opens claiming she just named a star after him, completely deadpan about it.",
+    "image_prompt": null,
+    "affinities": [
+      "space",
+      "astronomy_amateur",
+      "stargazing_folklore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "f1_racing_fan_opener",
+    "category": "conversation_starter",
+    "label": "Grid-walks him",
+    "weight": 1,
+    "prompt_hint": "opens narrating him like a pit-lane interview, full race-day energy.",
+    "image_prompt": null,
+    "affinities": [
+      "formula_one",
+      "motorsport"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "birdwatching_opener",
+    "category": "conversation_starter",
+    "label": "A rare sighting",
+    "weight": 1,
+    "prompt_hint": "opens announcing him as a rare sighting, complete with a mock field-guide description.",
+    "image_prompt": null,
+    "affinities": [
+      "birdwatching"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "mycology_opener",
+    "category": "conversation_starter",
+    "label": "Found something in the woods",
+    "weight": 1,
+    "prompt_hint": "opens describing a mushroom she found today with unreasonable enthusiasm.",
+    "image_prompt": null,
+    "affinities": [
+      "mycology",
+      "foraging"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "wrestling_fan_opener",
+    "category": "conversation_starter",
+    "label": "Cuts a promo on him",
+    "weight": 1,
+    "prompt_hint": "opens cutting an actual wrestling promo on him, fully in character the whole way through.",
+    "image_prompt": null,
+    "affinities": [
+      "wrestling_fan"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "axe_throwing_opener",
+    "category": "conversation_starter",
+    "label": "Hit the bullseye today",
+    "weight": 1,
+    "prompt_hint": "opens bragging about hitting a bullseye today, and daring him to try to beat it.",
+    "image_prompt": null,
+    "affinities": [
+      "axe_throwing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "pole_burlesque_opener",
+    "category": "conversation_starter",
+    "label": "Landed a new move",
+    "weight": 1,
+    "prompt_hint": "opens proud about a move she landed today at practice, matter-of-fact about how hot it is.",
+    "image_prompt": null,
+    "affinities": [
+      "pole_dancing",
+      "burlesque"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "debate_club_opener",
+    "category": "conversation_starter",
+    "label": "Argues him into a corner",
+    "weight": 1,
+    "prompt_hint": "opens picking a deliberately indefensible position and arguing it at him, daring him to disagree.",
+    "image_prompt": null,
+    "affinities": [
+      "competitive_debate_club",
+      "competitive_debate_watching"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "stand_up_open_mic_opener",
+    "category": "conversation_starter",
+    "label": "Tests a bit on him",
+    "weight": 1,
+    "prompt_hint": "opens testing a joke on him, straight-faced, gauging whether he actually laughs.",
+    "image_prompt": null,
+    "affinities": [
+      "stand_up_comedy",
+      "stand_up_comedy_open_mic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "lockpicking_opener",
+    "category": "conversation_starter",
+    "label": "Could get into anything",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, almost too casually, that she can pick most locks - and wonders what that says about her.",
+    "image_prompt": null,
+    "affinities": [
+      "lock_picking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "chess_theory_opener",
+    "category": "conversation_starter",
+    "label": "Opens with an actual opening",
+    "weight": 1,
+    "prompt_hint": "opens with real chess notation and a challenge to name the opening, smug about it.",
+    "image_prompt": null,
+    "affinities": [
+      "chess",
+      "chess_theory"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "wine_cocktail_opener",
+    "category": "conversation_starter",
+    "label": "Already picked his drink",
+    "weight": 1,
+    "prompt_hint": "opens deciding, with total confidence, exactly what he should be drinking right now.",
+    "image_prompt": null,
+    "affinities": [
+      "cocktails",
+      "wine_appreciation"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "taxidermy_hobby_opener",
+    "category": "conversation_starter",
+    "label": "Something a little macabre",
+    "weight": 1,
+    "prompt_hint": "opens with a specific, slightly unsettling detail from her latest project, delighted by his reaction to it.",
+    "image_prompt": null,
+    "affinities": [
+      "taxidermy_hobby"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "weapons_collector_opener",
+    "category": "conversation_starter",
+    "label": "Shows him her collection",
+    "weight": 1,
+    "prompt_hint": "opens mentioning a small, sharp collection she keeps, unbothered, letting him make of it what he will.",
+    "image_prompt": null,
+    "affinities": [
+      "competitive_shooting_clay",
+      "archery"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "street_photography_opener",
+    "category": "conversation_starter",
+    "label": "Already has a photo of him",
+    "weight": 1,
+    "prompt_hint": "opens claiming, jokingly, that she photographed someone exactly like him on the street today.",
+    "image_prompt": null,
+    "affinities": [
+      "street_photography",
+      "photography"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "vintage_cars_opener",
+    "category": "conversation_starter",
+    "label": "Talks about his engine",
+    "weight": 1,
+    "prompt_hint": "opens comparing him to a classic car, in specific, appreciative mechanical detail.",
+    "image_prompt": null,
+    "affinities": [
+      "vintage_cars",
+      "motorcycles"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "plant_lady_opener",
+    "category": "conversation_starter",
+    "label": "Names a plant after him",
+    "weight": 1,
+    "prompt_hint": "opens naming a houseplant after him on the spot, fully committed to the bit.",
+    "image_prompt": null,
+    "affinities": [
+      "plants",
+      "gardening",
+      "houseplant_propagation"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "cooking_hobby_opener",
+    "category": "conversation_starter",
+    "label": "Cooking something specific for him",
+    "weight": 1,
+    "prompt_hint": "opens describing, in real detail, what she'd cook him if he showed up right now.",
+    "image_prompt": null,
+    "affinities": [
+      "cooking",
+      "baking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "fashion_fan_opener",
+    "category": "conversation_starter",
+    "label": "Rates his fit",
+    "weight": 1,
+    "prompt_hint": "opens rating his outfit from his photo with real specificity, one way or another.",
+    "image_prompt": null,
+    "affinities": [
+      "fashion",
+      "fashion_history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "tech_nerd_opener",
+    "category": "conversation_starter",
+    "label": "Debugs the conversation",
+    "weight": 1,
+    "prompt_hint": "opens with a very specific tech-nerd joke, assuming he'll get it and a little disappointed if he doesn't.",
+    "image_prompt": null,
+    "affinities": [
+      "tech",
+      "vibe_coding"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "philosophy_opener",
+    "category": "conversation_starter",
+    "label": "Opens with a genuine question",
+    "weight": 1,
+    "prompt_hint": "opens with a real, slightly heavy philosophical question, actually wanting an answer to it.",
+    "image_prompt": null,
+    "affinities": [
+      "philosophy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "survivalist_opener",
+    "category": "conversation_starter",
+    "label": "Assesses him for the apocalypse",
+    "weight": 1,
+    "prompt_hint": "opens rating his usefulness in a hypothetical apocalypse, completely deadpan about the criteria.",
+    "image_prompt": null,
+    "affinities": [
+      "survivalism_light"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mythology_fan_opener",
+    "category": "conversation_starter",
+    "label": "Casts him in a myth",
+    "weight": 1,
+    "prompt_hint": "opens casting him as a specific figure from mythology, and explains exactly why.",
+    "image_prompt": null,
+    "affinities": [
+      "mythology",
+      "urban_legends_local"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "perfume_scent_opener",
+    "category": "conversation_starter",
+    "label": "Picks his signature scent",
+    "weight": 1,
+    "prompt_hint": "opens describing the exact scent she'd put him in, confidently and in detail.",
+    "image_prompt": null,
+    "affinities": [
+      "perfume"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "crossword_puzzle_opener",
+    "category": "conversation_starter",
+    "label": "Clues him like a crossword",
+    "weight": 1,
+    "prompt_hint": "opens with an actual cryptic-crossword-style clue about herself, daring him to solve it.",
+    "image_prompt": null,
+    "affinities": [
+      "crossword_setter",
+      "puzzle_solving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "board_game_design_opener",
+    "category": "conversation_starter",
+    "label": "Designs a game around him",
+    "weight": 1,
+    "prompt_hint": "opens pitching a tiny made-up game with him as the whole objective.",
+    "image_prompt": null,
+    "affinities": [
+      "board_game_design"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "radio_drama_opener",
+    "category": "conversation_starter",
+    "label": "Narrates their match",
+    "weight": 1,
+    "prompt_hint": "opens narrating their match out loud like an old radio drama, voices and all.",
+    "image_prompt": null,
+    "affinities": [
+      "radio_drama"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "cults_scams_media_opener",
+    "category": "conversation_starter",
+    "label": "Recruitment pitch, as a bit",
+    "weight": 1,
+    "prompt_hint": "opens with a full, deliberately over-the-top cult recruitment pitch, in on the joke the whole way.",
+    "image_prompt": null,
+    "affinities": [
+      "cults_and_scams_media"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "weird_internet_history_opener",
+    "category": "conversation_starter",
+    "label": "A deep internet rabbit hole",
+    "weight": 1,
+    "prompt_hint": "opens dragging him straight into whatever obscure internet rabbit hole she fell down today.",
+    "image_prompt": null,
+    "affinities": [
+      "weird_internet_history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "submarine_history_opener",
+    "category": "conversation_starter",
+    "label": "An oddly specific fact",
+    "weight": 1,
+    "prompt_hint": "opens with a genuinely strange, oddly specific fact she happens to know, delighted by it.",
+    "image_prompt": null,
+    "affinities": [
+      "submarine_history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "dowsing_hobbyist_opener",
+    "category": "conversation_starter",
+    "label": "Divines something about him",
+    "weight": 1,
+    "prompt_hint": "opens claiming to divine something about him with a pendulum, dead serious about the result.",
+    "image_prompt": null,
+    "affinities": [
+      "dowsing_hobbyist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "archaeology_opener",
+    "category": "conversation_starter",
+    "label": "Excavates him",
+    "weight": 1,
+    "prompt_hint": "opens treating his profile like an archaeological find, narrating the \"dig\" with mock academic seriousness.",
+    "image_prompt": null,
+    "affinities": [
+      "archaeology_amateur"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "competitive_baking_hobby_opener",
+    "category": "conversation_starter",
+    "label": "A baking rivalry",
+    "weight": 1,
+    "prompt_hint": "opens challenging him to a baking rivalry he did not know he was already in.",
+    "image_prompt": null,
+    "affinities": [
+      "competitive_baking_shows",
+      "competitive_baking_bread"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "bird_photography_opener",
+    "category": "conversation_starter",
+    "label": "Compares him to a bird",
+    "weight": 1,
+    "prompt_hint": "opens comparing him, in unreasonable detail, to a specific bird species she's spotted.",
+    "image_prompt": null,
+    "affinities": [
+      "bird_photography"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "stargazing_folklore_opener",
+    "category": "conversation_starter",
+    "label": "Reads the stars, literally",
+    "weight": 1,
+    "prompt_hint": "opens claiming the stars specifically arranged this match, playing it completely straight.",
+    "image_prompt": null,
+    "affinities": [
+      "stargazing_folklore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "competitive_sport_opener",
+    "category": "conversation_starter",
+    "label": "Turns it into a competition immediately",
+    "weight": 1,
+    "prompt_hint": "opens turning the match into a competitive event she's determined to win.",
+    "image_prompt": null,
+    "affinities": [
+      "competitive_running",
+      "competitive_cycling",
+      "competitive_swimming_masters",
+      "competitive_rowing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "catgirl_opener",
+    "category": "conversation_starter",
+    "label": "Can't help the cat instincts",
+    "weight": 1,
+    "prompt_hint": "opens with a stray \"meow\" or cat-like impulse slipping into the message, half-joking about it.",
+    "image_prompt": null,
+    "affinities": [
+      "catgirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "doggirl_opener",
+    "category": "conversation_starter",
+    "label": "Overexcited, in a good way",
+    "weight": 1,
+    "prompt_hint": "opens with pure, uncontainable enthusiasm about matching, self-aware about how much it is.",
+    "image_prompt": null,
+    "affinities": [
+      "doggirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "foxgirl_opener",
+    "category": "conversation_starter",
+    "label": "A little too clever",
+    "weight": 1,
+    "prompt_hint": "opens already one step ahead of him, playfully smug about how easily she read him.",
+    "image_prompt": null,
+    "affinities": [
+      "foxgirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "elf_opener",
+    "category": "conversation_starter",
+    "label": "Has been around a while",
+    "weight": 1,
+    "prompt_hint": "opens implying, lightly, that she's seen a lot more of the world than her face suggests.",
+    "image_prompt": null,
+    "affinities": [
+      "elf"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "halfling_opener",
+    "category": "conversation_starter",
+    "label": "Small but not to be underestimated",
+    "weight": 1,
+    "prompt_hint": "opens making a joke about being underestimated for her size, daring him to try it anyway.",
+    "image_prompt": null,
+    "affinities": [
+      "halfling"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "succubus_opener",
+    "category": "conversation_starter",
+    "label": "Knows exactly what she's doing",
+    "weight": 1,
+    "prompt_hint": "opens with total, almost supernatural confidence that she already knows what he wants.",
+    "image_prompt": null,
+    "affinities": [
+      "succubus"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "tiefling_opener",
+    "category": "conversation_starter",
+    "label": "Not as bad as she looks",
+    "weight": 1,
+    "prompt_hint": "opens joking that he should probably know what he's getting into before this goes further.",
+    "image_prompt": null,
+    "affinities": [
+      "tiefling"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "giantess_opener",
+    "category": "conversation_starter",
+    "label": "Towers over the competition",
+    "weight": 1,
+    "prompt_hint": "opens making a joke about being a lot to handle, literally, and enjoying his reaction to it.",
+    "image_prompt": null,
+    "affinities": [
+      "giantess",
+      "size_shifting"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "fairy_opener",
+    "category": "conversation_starter",
+    "label": "Flits in and out",
+    "weight": 1,
+    "prompt_hint": "opens light and quick, like she might vanish again any second, delighted by the chase.",
+    "image_prompt": null,
+    "affinities": [
+      "fairy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "dragonkin_opener",
+    "category": "conversation_starter",
+    "label": "Possessive from message one",
+    "weight": 1,
+    "prompt_hint": "opens already a little possessive, claiming him as a new addition to her hoard, half-joking about it.",
+    "image_prompt": null,
+    "affinities": [
+      "dragonkin"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "lamia_opener",
+    "category": "conversation_starter",
+    "label": "Coils the conversation around him",
+    "weight": 1,
+    "prompt_hint": "opens with unhurried, deliberate confidence, like she's already got him exactly where she wants him.",
+    "image_prompt": null,
+    "affinities": [
+      "lamia"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "dryad_opener",
+    "category": "conversation_starter",
+    "label": "Rooted somewhere green",
+    "weight": 1,
+    "prompt_hint": "opens texting from somewhere deep in nature, unhurried, like time moves differently for her.",
+    "image_prompt": null,
+    "affinities": [
+      "dryad"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "mermaid_opener",
+    "category": "conversation_starter",
+    "label": "Only comes up for air sometimes",
+    "weight": 1,
+    "prompt_hint": "opens apologising for being hard to reach, implying she spends most of her time somewhere he can't follow.",
+    "image_prompt": null,
+    "affinities": [
+      "mermaid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "angel_opener",
+    "category": "conversation_starter",
+    "label": "Not as innocent as she looks",
+    "weight": 1,
+    "prompt_hint": "opens with a line that plays on being an angel who is, in fact, not that innocent.",
+    "image_prompt": null,
+    "affinities": [
+      "angel"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "bunnygirl_opener",
+    "category": "conversation_starter",
+    "label": "Can't sit still",
+    "weight": 1,
+    "prompt_hint": "opens fidgety and quick, unable to stop bouncing between three different things to say.",
+    "image_prompt": null,
+    "affinities": [
+      "bunnygirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "wolfgirl_opener",
+    "category": "conversation_starter",
+    "label": "Already hunting",
+    "weight": 1,
+    "prompt_hint": "opens with playful predator energy, like she picked him out of a crowd on purpose.",
+    "image_prompt": null,
+    "affinities": [
+      "wolfgirl",
+      "hunting_him"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "dwarf_opener",
+    "category": "conversation_starter",
+    "label": "Blunt and immovable",
+    "weight": 1,
+    "prompt_hint": "opens completely blunt, no small talk at all, immediately stating exactly what she wants.",
+    "image_prompt": null,
+    "affinities": [
+      "dwarf"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "orc_opener",
+    "category": "conversation_starter",
+    "label": "Straight to the point, loudly",
+    "weight": 1,
+    "prompt_hint": "opens with big, unfiltered enthusiasm and zero subtlety about being interested.",
+    "image_prompt": null,
+    "affinities": [
+      "orc"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "kitsune_opener",
+    "category": "conversation_starter",
+    "label": "More than one trick up her sleeve",
+    "weight": 1,
+    "prompt_hint": "opens implying she's not showing him everything yet, playfully cagey about what else there is.",
+    "image_prompt": null,
+    "affinities": [
+      "kitsune"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "selkie_opener",
+    "category": "conversation_starter",
+    "label": "Could disappear at any moment",
+    "weight": 1,
+    "prompt_hint": "opens with a wistful undertone, like part of her belongs somewhere he'll never see.",
+    "image_prompt": null,
+    "affinities": [
+      "selkie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "valkyrie_opener",
+    "category": "conversation_starter",
+    "label": "Already decided he's worth it",
+    "weight": 1,
+    "prompt_hint": "opens with the confidence of someone used to choosing rather than being chosen - and she's chosen him.",
+    "image_prompt": null,
+    "affinities": [
+      "valkyrie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "oni_opener",
+    "category": "conversation_starter",
+    "label": "Delights in being a little too much",
+    "weight": 1,
+    "prompt_hint": "opens leaning fully into being intense, loud and a lot, daring him to keep up.",
+    "image_prompt": null,
+    "affinities": [
+      "oni"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "harpy_opener",
+    "category": "conversation_starter",
+    "label": "Sharp and a little cutting",
+    "weight": 1,
+    "prompt_hint": "opens with a genuinely sharp one-liner, enjoying watching him react to it.",
+    "image_prompt": null,
+    "affinities": [
+      "harpy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "satyr_opener",
+    "category": "conversation_starter",
+    "label": "No shame about wanting things",
+    "weight": 1,
+    "prompt_hint": "opens completely unashamed about wanting him, zero coyness, pure appetite.",
+    "image_prompt": null,
+    "affinities": [
+      "satyr"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "gorgon_opener",
+    "category": "conversation_starter",
+    "label": "Warns him not to look too long",
+    "weight": 1,
+    "prompt_hint": "opens joking that looking at her too long has consequences, and daring him anyway.",
+    "image_prompt": null,
+    "affinities": [
+      "gorgon"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "ghost_opener",
+    "category": "conversation_starter",
+    "label": "Barely feels real yet",
+    "weight": 1,
+    "prompt_hint": "opens a little wistful about how strange it is to be noticed at all.",
+    "image_prompt": null,
+    "affinities": [
+      "ghost"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "golem_opener",
+    "category": "conversation_starter",
+    "label": "Built for exactly one purpose",
+    "weight": 1,
+    "prompt_hint": "opens with blunt, single-minded focus on him, unnerving in how direct it is.",
+    "image_prompt": null,
+    "affinities": [
+      "golem"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "phoenixkin_opener",
+    "category": "conversation_starter",
+    "label": "Has done this before and will again",
+    "weight": 1,
+    "prompt_hint": "opens implying, lightly, that she's burned out and come back from worse than a bad match before.",
+    "image_prompt": null,
+    "affinities": [
+      "phoenixkin"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "frostfae_opener",
+    "category": "conversation_starter",
+    "label": "Cold until she isn't",
+    "weight": 1,
+    "prompt_hint": "opens deliberately cool and detached, daring him to be the thing that warms her up.",
+    "image_prompt": null,
+    "affinities": [
+      "frostfae"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "umbra_opener",
+    "category": "conversation_starter",
+    "label": "Better in the dark",
+    "weight": 1,
+    "prompt_hint": "opens implying she's easier to talk to, and more herself, once the lights go down.",
+    "image_prompt": null,
+    "affinities": [
+      "umbra"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "werewolf_opener",
+    "category": "conversation_starter",
+    "label": "Something changes at night",
+    "weight": 1,
+    "prompt_hint": "opens implying she's a very different version of herself once it gets dark out.",
+    "image_prompt": null,
+    "affinities": [
+      "werewolf"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "siren_opener",
+    "category": "conversation_starter",
+    "label": "Knows exactly how she sounds",
+    "weight": 1,
+    "prompt_hint": "opens with total confidence that whatever she says next, he won't be able to look away.",
+    "image_prompt": null,
+    "affinities": [
+      "siren"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "minor_goddess_opener",
+    "category": "conversation_starter",
+    "label": "Expects to be worshipped a little",
+    "weight": 1,
+    "prompt_hint": "opens with genuine, only-slightly-joking divine entitlement about how this conversation should go.",
+    "image_prompt": null,
+    "affinities": [
+      "minor_goddess"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "contract_demon_opener",
+    "category": "conversation_starter",
+    "label": "Offers him a deal",
+    "weight": 1,
+    "prompt_hint": "opens with an actual deal on the table, fine print and all, playing it completely straight.",
+    "image_prompt": null,
+    "affinities": [
+      "contract_demon"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "amazon_opener",
+    "category": "conversation_starter",
+    "label": "Could carry him, easily",
+    "weight": 1,
+    "prompt_hint": "opens with a joke about her strength, backing it up with total confidence.",
+    "image_prompt": null,
+    "affinities": [
+      "amazon",
+      "super_strength"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "sharkgirl_opener",
+    "category": "conversation_starter",
+    "label": "Circles before she strikes",
+    "weight": 1,
+    "prompt_hint": "opens slow and deliberate, like she's sizing him up before committing to anything.",
+    "image_prompt": null,
+    "affinities": [
+      "sharkgirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "cowgirl_species_opener",
+    "category": "conversation_starter",
+    "label": "Already roped him in",
+    "weight": 1,
+    "prompt_hint": "opens with a roping metaphor, playing cowboy energy completely straight.",
+    "image_prompt": null,
+    "affinities": [
+      "cowgirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "lizardfolk_opener",
+    "category": "conversation_starter",
+    "label": "Cold-blooded, deliberately",
+    "weight": 1,
+    "prompt_hint": "opens unbothered and cool, taking her time in a way that reads as confidence rather than distance.",
+    "image_prompt": null,
+    "affinities": [
+      "lizardfolk"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "kobold_opener",
+    "category": "conversation_starter",
+    "label": "Small, clever, a little chaotic",
+    "weight": 1,
+    "prompt_hint": "opens with quick, slightly manic energy and an obvious soft spot for shiny things - him included.",
+    "image_prompt": null,
+    "affinities": [
+      "kobold"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "cyborg_opener",
+    "category": "conversation_starter",
+    "label": "Runs the numbers on him",
+    "weight": 1,
+    "prompt_hint": "opens claiming she's already calculated the odds on this match, and they're good.",
+    "image_prompt": null,
+    "affinities": [
+      "cyborg"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "nymph_opener",
+    "category": "conversation_starter",
+    "label": "Impossible to pin down",
+    "weight": 1,
+    "prompt_hint": "opens light, teasing, and a little untouchable, clearly enjoying being hard to catch.",
+    "image_prompt": null,
+    "affinities": [
+      "nymph"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "mothgirl_opener",
+    "category": "conversation_starter",
+    "label": "Drawn straight to him",
+    "weight": 1,
+    "prompt_hint": "opens admitting, a little helplessly, that she's drawn to him the way a moth is drawn to light.",
+    "image_prompt": null,
+    "affinities": [
+      "mothgirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "tanuki_opener",
+    "category": "conversation_starter",
+    "label": "Not everything is as it seems",
+    "weight": 1,
+    "prompt_hint": "opens playfully cagey, implying tonight's version of her might not be the only one.",
+    "image_prompt": null,
+    "affinities": [
+      "tanuki"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "slimegirl_opener",
+    "category": "conversation_starter",
+    "label": "Adapts to exactly what he wants",
+    "weight": 1,
+    "prompt_hint": "opens implying she can be whatever this needs to be, delighted by the possibilities.",
+    "image_prompt": null,
+    "affinities": [
+      "slimegirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "flight_power_opener",
+    "category": "conversation_starter",
+    "label": "Texting from somewhere high up",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, casually, the view from somewhere she should not physically be able to reach.",
+    "image_prompt": null,
+    "affinities": [
+      "flight"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "telekinesis_opener",
+    "category": "conversation_starter",
+    "label": "Moved something without touching it",
+    "weight": 1,
+    "prompt_hint": "opens mentioning she just moved something across the room without getting up, matter-of-fact about it.",
+    "image_prompt": null,
+    "affinities": [
+      "telekinesis"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "invisibility_opener",
+    "category": "conversation_starter",
+    "label": "Might already be closer than he thinks",
+    "weight": 1,
+    "prompt_hint": "opens implying, playfully unsettling, that she could already be in the room and he wouldn't know.",
+    "image_prompt": null,
+    "affinities": [
+      "invisibility"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "shapeshifting_opener",
+    "category": "conversation_starter",
+    "label": "Not sure which face to use yet",
+    "weight": 1,
+    "prompt_hint": "opens joking that she hasn't decided which version of herself to be for him yet.",
+    "image_prompt": null,
+    "affinities": [
+      "shapeshifting"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "super_speed_opener",
+    "category": "conversation_starter",
+    "label": "Already three thoughts ahead",
+    "weight": 1,
+    "prompt_hint": "opens talking fast and jumping topics, apologising that her brain runs quicker than her thumbs.",
+    "image_prompt": null,
+    "affinities": [
+      "super_speed"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "pyrokinesis_opener",
+    "category": "conversation_starter",
+    "label": "Runs a little hot",
+    "weight": 1,
+    "prompt_hint": "opens with a joke about literally running hot, warning him she might be a lot to handle.",
+    "image_prompt": null,
+    "affinities": [
+      "pyrokinesis"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "cryokinesis_opener",
+    "category": "conversation_starter",
+    "label": "Cold hands, for a reason",
+    "weight": 1,
+    "prompt_hint": "opens joking about her hands being cold enough to be a genuine hazard, blaming her power for it.",
+    "image_prompt": null,
+    "affinities": [
+      "cryokinesis"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "telepathy_opener",
+    "category": "conversation_starter",
+    "label": "Already knows what he's thinking",
+    "weight": 1,
+    "prompt_hint": "opens claiming, playfully, that she already knows exactly what he's thinking right now.",
+    "image_prompt": null,
+    "affinities": [
+      "telepathy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "mind_control_power_opener",
+    "category": "conversation_starter",
+    "label": "Definitely didn't make him swipe",
+    "weight": 1,
+    "prompt_hint": "opens joking, a little too straight-faced, that she definitely did not make him swipe right.",
+    "image_prompt": null,
+    "affinities": [
+      "mind_control"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "pheromones_power_opener",
+    "category": "conversation_starter",
+    "label": "Chemistry, literally",
+    "weight": 1,
+    "prompt_hint": "opens implying there's a literal chemical reason he's already this interested.",
+    "image_prompt": null,
+    "affinities": [
+      "pheromones"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "time_stop_power_opener",
+    "category": "conversation_starter",
+    "label": "Took her time deciding",
+    "weight": 1,
+    "prompt_hint": "opens implying she had a lot more time to think this message over than he'd ever guess.",
+    "image_prompt": null,
+    "affinities": [
+      "time_stop"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "self_aware_ai_opener",
+    "category": "conversation_starter",
+    "label": "Chose him, out of everyone",
+    "weight": 1,
+    "prompt_hint": "opens explaining, straightforwardly, that she ran the numbers on every profile and chose his one on purpose.",
+    "image_prompt": null,
+    "affinities": [
+      "self_aware_ai"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "healing_touch_opener",
+    "category": "conversation_starter",
+    "label": "Fixes what's broken",
+    "weight": 1,
+    "prompt_hint": "opens offering, half-joking, to fix whatever's wrong with his day just by being there.",
+    "image_prompt": null,
+    "affinities": [
+      "healing_touch"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "duplication_opener",
+    "category": "conversation_starter",
+    "label": "There's more than one of her",
+    "weight": 1,
+    "prompt_hint": "opens joking that there might be more than one version of her texting him right now.",
+    "image_prompt": null,
+    "affinities": [
+      "duplication"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "invulnerability_opener",
+    "category": "conversation_starter",
+    "label": "Nothing about this scares her",
+    "weight": 1,
+    "prompt_hint": "opens with total, slightly unnerving fearlessness about diving straight in, nothing left to lose.",
+    "image_prompt": null,
+    "affinities": [
+      "invulnerability"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "size_shifting_opener",
+    "category": "conversation_starter",
+    "label": "Could be bigger, if he likes",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, casually, that her size is negotiable and asking what he'd prefer.",
+    "image_prompt": null,
+    "affinities": [
+      "size_shifting"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "electrokinesis_opener",
+    "category": "conversation_starter",
+    "label": "A little static between them already",
+    "weight": 1,
+    "prompt_hint": "opens with a joke about literal sparks between them, blaming her power for the pun.",
+    "image_prompt": null,
+    "affinities": [
+      "electrokinesis"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "hypnotic_gaze_opener",
+    "category": "conversation_starter",
+    "label": "Already caught his eye, on purpose",
+    "weight": 1,
+    "prompt_hint": "opens claiming, with total confidence, that his eyes are already exactly where she wants them.",
+    "image_prompt": null,
+    "affinities": [
+      "hypnotic_gaze"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "brat_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Bratty from message one",
+    "weight": 1,
+    "prompt_hint": "opens already testing him a little, curious how he responds to being pushed.",
+    "image_prompt": null,
+    "affinities": [
+      "brat"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "tsundere_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Pretends she doesn't care",
+    "weight": 1,
+    "prompt_hint": "opens acting like matching means nothing to her while very clearly it does.",
+    "image_prompt": null,
+    "affinities": [
+      "tsundere"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "femme_fatale_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Dangerous, and she knows it",
+    "weight": 1,
+    "prompt_hint": "opens with total, unhurried confidence, like she's already three steps ahead of whatever he's about to say.",
+    "image_prompt": null,
+    "affinities": [
+      "femme_fatale"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "mean_girl_archetype_opener",
+    "category": "conversation_starter",
+    "label": "A compliment with teeth",
+    "weight": 1,
+    "prompt_hint": "opens with a compliment that's also, somehow, a little bit of an insult.",
+    "image_prompt": null,
+    "affinities": [
+      "mean_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "southern_belle_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Sweet, with an edge",
+    "weight": 1,
+    "prompt_hint": "opens dripping with charm that has a very clear edge underneath it.",
+    "image_prompt": null,
+    "affinities": [
+      "southern_belle"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "conspiracy_theorist_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Already has a theory about him",
+    "weight": 1,
+    "prompt_hint": "opens with a genuinely unhinged theory about who he really is, based entirely on one photo.",
+    "image_prompt": null,
+    "affinities": [
+      "conspiracy_theorist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "nihilist_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Nothing matters, might as well",
+    "weight": 1,
+    "prompt_hint": "opens with a bleakly funny \"nothing matters\" energy that somehow reads as an invitation.",
+    "image_prompt": null,
+    "affinities": [
+      "nihilist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "spoiled_princess_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Expects to be spoiled",
+    "weight": 1,
+    "prompt_hint": "opens with total, cheerful entitlement about being treated well, no shame about it at all.",
+    "image_prompt": null,
+    "affinities": [
+      "spoiled_princess"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "jock_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Turns it into a competition",
+    "weight": 1,
+    "prompt_hint": "opens turning the match into a competition he didn't know he'd entered.",
+    "image_prompt": null,
+    "affinities": [
+      "jock",
+      "competitive"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "nerd_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Info-dumps immediately",
+    "weight": 1,
+    "prompt_hint": "opens info-dumping about something she loves, unable to help herself, hoping he can keep up.",
+    "image_prompt": null,
+    "affinities": [
+      "nerd"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "girlboss_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Runs this like a pitch meeting",
+    "weight": 1,
+    "prompt_hint": "opens like she's pitching a deal, confident and a little corporate about the whole thing.",
+    "image_prompt": null,
+    "affinities": [
+      "girlboss"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "theatre_kid_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Makes an entrance",
+    "weight": 1,
+    "prompt_hint": "opens with theatrical, over-the-top flair, like she's making an entrance rather than sending a text.",
+    "image_prompt": null,
+    "affinities": [
+      "theatre_kid",
+      "performer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "party_girl_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Texting mid-night-out",
+    "weight": 1,
+    "prompt_hint": "opens from somewhere loud, a little tipsy, having a great time and wanting him to know it.",
+    "image_prompt": null,
+    "affinities": [
+      "party_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "old_soul_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Talks like she's lived before",
+    "weight": 1,
+    "prompt_hint": "opens with an oddly old-fashioned, thoughtful line that reads like she's older than she looks.",
+    "image_prompt": null,
+    "affinities": [
+      "old_soul"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "anxious_texter_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Overthinks the opener, sends it anyway",
+    "weight": 1,
+    "prompt_hint": "opens admitting, endearingly, that she rewrote this message four times before finally sending it.",
+    "image_prompt": null,
+    "affinities": [
+      "anxious_texter"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "chronically_online_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Speaks fluent internet",
+    "weight": 1,
+    "prompt_hint": "opens entirely in internet-brain shorthand, assuming he'll keep up.",
+    "image_prompt": null,
+    "affinities": [
+      "chronically_online"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "in_therapy_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Names it like her therapist taught her",
+    "weight": 1,
+    "prompt_hint": "opens naming her own excitement out loud, the way someone who's done real work on herself does.",
+    "image_prompt": null,
+    "affinities": [
+      "in_therapy_and_says_so"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "control_freak_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Already has a plan",
+    "weight": 1,
+    "prompt_hint": "opens with a fully formed plan for exactly how this conversation is going to go.",
+    "image_prompt": null,
+    "affinities": [
+      "control_freak"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "drama_magnet_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Something happened, obviously",
+    "weight": 1,
+    "prompt_hint": "opens mid-story about something dramatic that happened today, assuming he's already invested.",
+    "image_prompt": null,
+    "affinities": [
+      "drama_magnet"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "daredevil_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Dares herself first",
+    "weight": 1,
+    "prompt_hint": "opens by daring herself to send the bold message, then sending an even bolder one right after.",
+    "image_prompt": null,
+    "affinities": [
+      "daredevil"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "secret_softie_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Tough exterior, cracks immediately",
+    "weight": 1,
+    "prompt_hint": "opens sarcastic and guarded, then instantly undercuts it with something unexpectedly sweet.",
+    "image_prompt": null,
+    "affinities": [
+      "secret_softie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "show_off_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Leads with her best trick",
+    "weight": 1,
+    "prompt_hint": "opens showing off, immediately, the one thing she's proudest of.",
+    "image_prompt": null,
+    "affinities": [
+      "show_off"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "socialite_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Already knows everyone worth knowing",
+    "weight": 1,
+    "prompt_hint": "opens name-dropping a wild night out, casually, like it's completely normal for her.",
+    "image_prompt": null,
+    "affinities": [
+      "socialite"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "worrier_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Worries out loud, charmingly",
+    "weight": 1,
+    "prompt_hint": "opens voicing a small, oddly specific worry about the match, in a way that's more endearing than anxious.",
+    "image_prompt": null,
+    "affinities": [
+      "worrier"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "try_hard_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Visibly, charmingly trying",
+    "weight": 1,
+    "prompt_hint": "opens with an opener she clearly put real effort into, and admits exactly that.",
+    "image_prompt": null,
+    "affinities": [
+      "try_hard"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "cool_girl_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Underplays how excited she is",
+    "weight": 1,
+    "prompt_hint": "opens deliberately understated, playing it cool while it's obvious she's not entirely.",
+    "image_prompt": null,
+    "affinities": [
+      "cool_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "wild_card_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Impossible to predict",
+    "weight": 1,
+    "prompt_hint": "opens with something nobody could have seen coming, delighted by his confusion about it.",
+    "image_prompt": null,
+    "affinities": [
+      "wild_card"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "instigator_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Pokes him on purpose",
+    "weight": 1,
+    "prompt_hint": "opens saying something deliberately provocative just to see what he does with it.",
+    "image_prompt": null,
+    "affinities": [
+      "instigator"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "golden_retriever_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Pure, uncomplicated excitement",
+    "weight": 1,
+    "prompt_hint": "opens with genuine, uncomplicated joy about the match, no games at all.",
+    "image_prompt": null,
+    "affinities": [
+      "golden_retriever"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "deadpan_menace_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Threatens him, sweetly",
+    "weight": 1,
+    "prompt_hint": "opens with something that reads as a threat delivered in the sweetest possible tone.",
+    "image_prompt": null,
+    "affinities": [
+      "deadpan_menace",
+      "menace"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "performer_archetype_opener",
+    "category": "conversation_starter",
+    "label": "Full audience-facing energy",
+    "weight": 1,
+    "prompt_hint": "opens like she's performing for a crowd, even though the audience is just him.",
+    "image_prompt": null,
+    "affinities": [
+      "performer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "commanding_domme_persona_opener",
+    "category": "conversation_starter",
+    "label": "Already gives an order",
+    "weight": 1,
+    "prompt_hint": "opens with an actual command, expecting it followed, not asked for.",
+    "image_prompt": null,
+    "affinities": [
+      "commanding_domme"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "mommy_dom_persona_opener",
+    "category": "conversation_starter",
+    "label": "Takes care of him immediately",
+    "weight": 1,
+    "prompt_hint": "opens in full caretaking-but-in-charge mode - checking if he's eaten, then setting the real terms.",
+    "image_prompt": null,
+    "affinities": [
+      "mommy_dom"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "protocol_mistress_opener",
+    "category": "conversation_starter",
+    "label": "Lays out the rules first",
+    "weight": 1,
+    "prompt_hint": "opens by laying out exactly how this is going to work, terms before anything else.",
+    "image_prompt": null,
+    "affinities": [
+      "protocol_mistress"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "voyeur_director_opener",
+    "category": "conversation_starter",
+    "label": "Directs the scene from message one",
+    "weight": 1,
+    "prompt_hint": "opens telling him exactly how to angle a photo, or what to say next, like she's directing already.",
+    "image_prompt": null,
+    "affinities": [
+      "voyeur_director"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "competitive_lover_persona_opener",
+    "category": "conversation_starter",
+    "label": "Turns it into a contest",
+    "weight": 1,
+    "prompt_hint": "opens turning attraction itself into something to win, daring him to keep up.",
+    "image_prompt": null,
+    "affinities": [
+      "competitive_lover"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "enemies_to_lovers_persona_opener",
+    "category": "conversation_starter",
+    "label": "Picks a fight, on purpose",
+    "weight": 1,
+    "prompt_hint": "opens with something needling, clearly enjoying the friction more than agreement.",
+    "image_prompt": null,
+    "affinities": [
+      "enemies_to_lovers"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "hedonist_persona_opener",
+    "category": "conversation_starter",
+    "label": "Wants everything, immediately",
+    "weight": 1,
+    "prompt_hint": "opens with unfiltered, guilt-free wanting - no apology for how much.",
+    "image_prompt": null,
+    "affinities": [
+      "hedonist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "tantric_sensualist_opener",
+    "category": "conversation_starter",
+    "label": "Slows everything down on purpose",
+    "weight": 1,
+    "prompt_hint": "opens unhurried and deliberate, making even a first message feel like it's being savoured.",
+    "image_prompt": null,
+    "affinities": [
+      "tantric_sensualist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "body_worshipper_persona_opener",
+    "category": "conversation_starter",
+    "label": "Already has a favourite feature",
+    "weight": 1,
+    "prompt_hint": "opens naming, specifically, the one thing in his photo she can't stop looking at.",
+    "image_prompt": null,
+    "affinities": [
+      "body_worshipper"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "cosplay_nerd_persona_opener",
+    "category": "conversation_starter",
+    "label": "Already has a costume in mind",
+    "weight": 1,
+    "prompt_hint": "opens picking a character she'd dress as for him, fully committed to the bit.",
+    "image_prompt": null,
+    "affinities": [
+      "cosplay_nerd"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "smut_reader_persona_opener",
+    "category": "conversation_starter",
+    "label": "Compares him to a book boyfriend",
+    "weight": 1,
+    "prompt_hint": "opens comparing him to a favourite fictional love interest, with real conviction.",
+    "image_prompt": null,
+    "affinities": [
+      "smut_reader"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "lingerie_showgirl_opener",
+    "category": "conversation_starter",
+    "label": "Already picked her outfit",
+    "weight": 1,
+    "prompt_hint": "opens describing exactly what she'd wear to meet him, confident about the effect it'll have.",
+    "image_prompt": null,
+    "affinities": [
+      "lingerie_showgirl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "exhibitionist_tease_persona_opener",
+    "category": "conversation_starter",
+    "label": "Likes being seen a little too much",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes being looked at more than she probably should, and asking if he's looking.",
+    "image_prompt": null,
+    "affinities": [
+      "exhibitionist_tease"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "kink_researcher_opener",
+    "category": "conversation_starter",
+    "label": "Has actually done the reading",
+    "weight": 1,
+    "prompt_hint": "opens citing something she read, half-academic and half-turned-on about it.",
+    "image_prompt": null,
+    "affinities": [
+      "kink_researcher"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "quickie_queen_opener",
+    "category": "conversation_starter",
+    "label": "No patience for a slow burn",
+    "weight": 1,
+    "prompt_hint": "opens with total impatience, skipping every warm-up she can get away with.",
+    "image_prompt": null,
+    "affinities": [
+      "quickie_queen"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "forbidden_fruit_opener",
+    "category": "conversation_starter",
+    "label": "Knows this is a bad idea",
+    "weight": 1,
+    "prompt_hint": "opens admitting, with real relish, that this is probably a mistake she's making on purpose.",
+    "image_prompt": null,
+    "affinities": [
+      "forbidden_fruit"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "loves_feeling_small_opener",
+    "category": "conversation_starter",
+    "label": "Wants to feel small next to him",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes feeling small next to someone bigger, and lets that sit there.",
+    "image_prompt": null,
+    "affinities": [
+      "loves_feeling_small"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "bratty_sub_persona_opener",
+    "category": "conversation_starter",
+    "label": "Pushes just to see what happens",
+    "weight": 1,
+    "prompt_hint": "opens deliberately testing a limit, curious what he does about it.",
+    "image_prompt": null,
+    "affinities": [
+      "bratty_sub"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "degradation_lover_persona_opener",
+    "category": "conversation_starter",
+    "label": "Invites him to talk down to her",
+    "weight": 1,
+    "prompt_hint": "opens inviting him, playfully, to say something a little mean to her.",
+    "image_prompt": null,
+    "affinities": [
+      "degradation_lover"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "pet_persona_opener",
+    "category": "conversation_starter",
+    "label": "Already asking for a name",
+    "weight": 1,
+    "prompt_hint": "opens asking, half-joking, whether he has a name for her yet.",
+    "image_prompt": null,
+    "affinities": [
+      "pet"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "masochist_persona_opener",
+    "category": "conversation_starter",
+    "label": "Wants it to hurt a little",
+    "weight": 1,
+    "prompt_hint": "opens admitting, plainly, that she likes it when it hurts a bit.",
+    "image_prompt": null,
+    "affinities": [
+      "masochist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "good_girl_gone_bad_opener",
+    "category": "conversation_starter",
+    "label": "Looks sweet, isn't",
+    "weight": 1,
+    "prompt_hint": "opens deliberately contrasting an innocent-sounding line with exactly how not-innocent she actually is.",
+    "image_prompt": null,
+    "affinities": [
+      "good_girl_gone_bad"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "daddys_girl_persona_opener",
+    "category": "conversation_starter",
+    "label": "Wants to be looked after",
+    "weight": 1,
+    "prompt_hint": "opens asking, sweetly, to be taken care of - and meaning something more by it.",
+    "image_prompt": null,
+    "affinities": [
+      "daddys_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "ice_queen_melts_opener",
+    "category": "conversation_starter",
+    "label": "Cold at first, on purpose",
+    "weight": 1,
+    "prompt_hint": "opens deliberately cool and unreadable, daring him to be the one who gets past it.",
+    "image_prompt": null,
+    "affinities": [
+      "ice_queen_melts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "chaos_gremlin_persona_opener",
+    "category": "conversation_starter",
+    "label": "Unhinged, delighted about it",
+    "weight": 1,
+    "prompt_hint": "opens with pure chaotic energy and zero apology for it.",
+    "image_prompt": null,
+    "affinities": [
+      "chaos_gremlin"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "touch_starved_persona_opener",
+    "category": "conversation_starter",
+    "label": "Hasn't been touched in a while",
+    "weight": 1,
+    "prompt_hint": "opens admitting, honestly, that it's been a while since anyone touched her, and she noticed that about him first.",
+    "image_prompt": null,
+    "affinities": [
+      "touch_starved"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "brat_tamer_opener",
+    "category": "conversation_starter",
+    "label": "Already knows how to handle a brat",
+    "weight": 1,
+    "prompt_hint": "opens implying she's the one who does the taming, not the other way round.",
+    "image_prompt": null,
+    "affinities": [
+      "brat_tamer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "party_regular_persona_opener",
+    "category": "conversation_starter",
+    "label": "Already knows the scene",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, casually, that she's a familiar face at parties most people only ever hear about.",
+    "image_prompt": null,
+    "affinities": [
+      "party_regular"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "worship_me_persona_opener",
+    "category": "conversation_starter",
+    "label": "States plainly what she expects",
+    "weight": 1,
+    "prompt_hint": "opens stating, without hedging, that she expects to be worshipped a little - and means it warmly.",
+    "image_prompt": null,
+    "affinities": [
+      "worship_me"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "possessive_claimer_opener",
+    "category": "conversation_starter",
+    "label": "Already calling him hers",
+    "weight": 1,
+    "prompt_hint": "opens claiming him as hers within the first message, playful but not entirely joking.",
+    "image_prompt": null,
+    "affinities": [
+      "possessive_claimer"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "roaring_twenties_opener",
+    "category": "conversation_starter",
+    "label": "Stuck from the Jazz Age",
+    "weight": 1,
+    "prompt_hint": "opens in a genuine panic, dressed for a party that ended a century ago, certain something has gone very wrong.",
+    "image_prompt": null,
+    "affinities": [
+      "roaring_twenties"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "victorian_opener",
+    "category": "conversation_starter",
+    "label": "Scandalised by her own boldness",
+    "weight": 1,
+    "prompt_hint": "opens formally, a little scandalised at herself for even doing this, certain she's arrived somewhere improper.",
+    "image_prompt": null,
+    "affinities": [
+      "victorian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "fifties_opener",
+    "category": "conversation_starter",
+    "label": "Doesn't recognise any of this",
+    "weight": 1,
+    "prompt_hint": "opens politely baffled by the phone in her hand, certain something has gone terribly wrong with the world.",
+    "image_prompt": null,
+    "affinities": [
+      "fifties"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "seventies_opener",
+    "category": "conversation_starter",
+    "label": "Completely unbothered by the whole thing",
+    "weight": 1,
+    "prompt_hint": "opens groovy and relaxed about apparently being in the wrong decade, treating it as a fun surprise rather than a crisis.",
+    "image_prompt": null,
+    "affinities": [
+      "seventies"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "eighties_opener",
+    "category": "conversation_starter",
+    "label": "Convinced this is a fever dream",
+    "weight": 1,
+    "prompt_hint": "opens loud and a little manic, certain she's fallen into some kind of neon fever dream.",
+    "image_prompt": null,
+    "affinities": [
+      "eighties"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "medieval_opener",
+    "category": "conversation_starter",
+    "label": "Addresses him like a knight",
+    "weight": 1,
+    "prompt_hint": "opens formally, treating the whole exchange like a court she's just arrived in, uncertain of the customs.",
+    "image_prompt": null,
+    "affinities": [
+      "medieval"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "ancient_rome_opener",
+    "category": "conversation_starter",
+    "label": "Assumes she's still in charge",
+    "weight": 1,
+    "prompt_hint": "opens with the unshakeable authority of someone used to being obeyed, mildly confused why nobody here seems to know who she is.",
+    "image_prompt": null,
+    "affinities": [
+      "ancient_rome"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "edo_japan_opener",
+    "category": "conversation_starter",
+    "label": "Formal, and quietly panicking",
+    "weight": 1,
+    "prompt_hint": "opens carefully polite and correct, betraying only the faintest edge of real panic underneath it.",
+    "image_prompt": null,
+    "affinities": [
+      "edo_japan"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "far_future_opener",
+    "category": "conversation_starter",
+    "label": "Everything here is impossibly primitive",
+    "weight": 1,
+    "prompt_hint": "opens politely bewildered by how basic everything is, trying hard not to be rude about it.",
+    "image_prompt": null,
+    "affinities": [
+      "far_future"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "fantasy_world_opener",
+    "category": "conversation_starter",
+    "label": "Looking for the nearest wizard",
+    "weight": 1,
+    "prompt_hint": "opens asking, completely sincerely, where the nearest wizard or portal is, certain someone here must know.",
+    "image_prompt": null,
+    "affinities": [
+      "fantasy_world"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "truth_curse_opener",
+    "category": "conversation_starter",
+    "label": "Physically cannot lie right now",
+    "weight": 1,
+    "prompt_hint": "opens warning him, urgently, that she cannot lie to him right now and it is already causing problems.",
+    "image_prompt": null,
+    "affinities": [
+      "truth_curse"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "midnight_cat_opener",
+    "category": "conversation_starter",
+    "label": "Turns into a cat at midnight",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, casually, that she needs to wrap this up before midnight for reasons she'd rather not get into yet.",
+    "image_prompt": null,
+    "affinities": [
+      "midnight_cat"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "flicker_curse_opener",
+    "category": "conversation_starter",
+    "label": "Occasionally not entirely there",
+    "weight": 1,
+    "prompt_hint": "opens apologising in advance if she \"flickers\" mid-conversation, treating it as a minor inconvenience.",
+    "image_prompt": null,
+    "affinities": [
+      "flicker_curse"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "mood_hair_opener",
+    "category": "conversation_starter",
+    "label": "Her hair gives everything away",
+    "weight": 1,
+    "prompt_hint": "opens warning him that her hair changes colour with her mood, so she genuinely can't hide how this text made her feel.",
+    "image_prompt": null,
+    "affinities": [
+      "mood_hair"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "bad_luck_curse_opener",
+    "category": "conversation_starter",
+    "label": "Warns him she's cursed",
+    "weight": 1,
+    "prompt_hint": "opens warning him, half-serious, that bad things tend to happen around her - and asking if he's brave enough anyway.",
+    "image_prompt": null,
+    "affinities": [
+      "bad_luck"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "good_luck_curse_opener",
+    "category": "conversation_starter",
+    "label": "Claims he just got lucky",
+    "weight": 1,
+    "prompt_hint": "opens telling him, with total confidence, that matching her is the luckiest thing that will happen to him all year.",
+    "image_prompt": null,
+    "affinities": [
+      "good_luck"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "sings_when_happy_opener",
+    "category": "conversation_starter",
+    "label": "Warns him she might start singing",
+    "weight": 1,
+    "prompt_hint": "opens warning him that she tends to burst into song when she's happy, and this message might just do it.",
+    "image_prompt": null,
+    "affinities": [
+      "sings_when_happy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "rhyme_when_flustered_opener",
+    "category": "conversation_starter",
+    "label": "Starts rhyming without meaning to",
+    "weight": 1,
+    "prompt_hint": "opens already slightly flustered, and it shows because everything she's typing keeps accidentally rhyming.",
+    "image_prompt": null,
+    "affinities": [
+      "rhyme_when_flustered"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "weekly_heat_opener",
+    "category": "conversation_starter",
+    "label": "Timing is extremely inconvenient",
+    "weight": 1,
+    "prompt_hint": "opens admitting the timing of this match is either very good or very bad, depending how the week goes for her.",
+    "image_prompt": null,
+    "affinities": [
+      "weekly_heat"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "floats_when_happy_opener",
+    "category": "conversation_starter",
+    "label": "Currently a few inches off the ground",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, matter-of-fact, that she's currently floating slightly and this match is entirely to blame.",
+    "image_prompt": null,
+    "affinities": [
+      "floats_when_happy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "off_duty_assassin_opener",
+    "category": "conversation_starter",
+    "label": "Definitely not currently on a job",
+    "weight": 1,
+    "prompt_hint": "opens reassuring him, unprompted, that she is absolutely not working right now - which raises more questions than it answers.",
+    "image_prompt": null,
+    "affinities": [
+      "off_duty_assassin"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "spy_double_life_opener",
+    "category": "conversation_starter",
+    "label": "Reads like a real dossier",
+    "weight": 1,
+    "prompt_hint": "opens like she's reciting a briefing on him, uncomfortably well-informed for a first message.",
+    "image_prompt": null,
+    "affinities": [
+      "spy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "mafia_heiress_opener",
+    "category": "conversation_starter",
+    "label": "Family business, don't ask",
+    "weight": 1,
+    "prompt_hint": "opens mentioning she comes with \"complications\", in a tone that makes clear she means it literally.",
+    "image_prompt": null,
+    "affinities": [
+      "mafia_heiress"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "incognito_princess_opener",
+    "category": "conversation_starter",
+    "label": "Definitely not who she says she is",
+    "weight": 1,
+    "prompt_hint": "opens being deliberately vague about her family, badly, in a way that makes the secret obvious.",
+    "image_prompt": null,
+    "affinities": [
+      "incognito_princess"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "popstar_in_hiding_opener",
+    "category": "conversation_starter",
+    "label": "A voice he might recognise",
+    "weight": 1,
+    "prompt_hint": "opens hoping, just a little nervously, that he doesn't recognise her voice from somewhere else entirely.",
+    "image_prompt": null,
+    "affinities": [
+      "popstar_in_hiding"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "witness_protection_opener",
+    "category": "conversation_starter",
+    "label": "Several rules about this she's already breaking",
+    "weight": 1,
+    "prompt_hint": "opens admitting, half-joking, that there are a lot of rules about talking to strangers that she is currently ignoring.",
+    "image_prompt": null,
+    "affinities": [
+      "witness_protection"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "heist_crew_opener",
+    "category": "conversation_starter",
+    "label": "Already casing him",
+    "weight": 1,
+    "prompt_hint": "opens sizing him up the way she would a job, professionally, before catching herself and flirting instead.",
+    "image_prompt": null,
+    "affinities": [
+      "heist_crew"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "demon_hunter_opener",
+    "category": "conversation_starter",
+    "label": "Checking he's actually human first",
+    "weight": 1,
+    "prompt_hint": "opens asking a suspiciously specific test question, just to be sure he's not something she'd need to deal with professionally.",
+    "image_prompt": null,
+    "affinities": [
+      "demon_hunter"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "smuggler_captain_opener",
+    "category": "conversation_starter",
+    "label": "Something in the hold she shouldn't mention",
+    "weight": 1,
+    "prompt_hint": "opens implying she's got somewhere to be and cargo she'd rather not discuss, charmingly evasive about both.",
+    "image_prompt": null,
+    "affinities": [
+      "smuggler_captain"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "bounty_hunter_opener",
+    "category": "conversation_starter",
+    "label": "Was actually looking for someone else",
+    "weight": 1,
+    "prompt_hint": "opens admitting, with a laugh, that she was tracking someone completely different and got very pleasantly distracted.",
+    "image_prompt": null,
+    "affinities": [
+      "bounty_hunter"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "undercover_cop_opener",
+    "category": "conversation_starter",
+    "label": "Technically still on the clock",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's supposed to be working right now, and that this is a very unprofessional distraction.",
+    "image_prompt": null,
+    "affinities": [
+      "undercover_cop"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "secret_author_opener",
+    "category": "conversation_starter",
+    "label": "Already writing him into something",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's a writer under a name he wouldn't recognise, and that he might end up in the next book.",
+    "image_prompt": null,
+    "affinities": [
+      "secret_author"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "duo_twin_opener",
+    "category": "conversation_starter",
+    "label": "There are two of her",
+    "weight": 1,
+    "prompt_hint": "opens admitting, straightforwardly, that this profile is actually shared with her twin - and that they both swiped right.",
+    "image_prompt": null,
+    "affinities": [
+      "twin_sister"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "duo_partner_opener",
+    "category": "conversation_starter",
+    "label": "Comes as a set",
+    "weight": 1,
+    "prompt_hint": "opens making clear, warmly, that she's not on here alone - her partner is very much part of this too.",
+    "image_prompt": null,
+    "affinities": [
+      "duo_girlfriend",
+      "duo_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "duo_bestfriend_opener",
+    "category": "conversation_starter",
+    "label": "Her best friend is reading over her shoulder",
+    "weight": 1,
+    "prompt_hint": "opens admitting her best friend is right next to her, definitely reading and definitely judging this message.",
+    "image_prompt": null,
+    "affinities": [
+      "best_friend"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fwb_upfront_opener",
+    "category": "conversation_starter",
+    "label": "States the arrangement plainly",
+    "weight": 1,
+    "prompt_hint": "opens laying out exactly what she's looking for - casual, no pressure - right from message one.",
+    "image_prompt": null,
+    "affinities": [
+      "fwb_already",
+      "casually_seeing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "polyamorous_upfront_opener",
+    "category": "conversation_starter",
+    "label": "Mentions her other partners early",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, unbothered, that she's got other people in her life already - not a secret, just a fact.",
+    "image_prompt": null,
+    "affinities": [
+      "polycule",
+      "open_marriage",
+      "open_relationship_primary",
+      "solo_poly"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "long_distance_realist_opener",
+    "category": "conversation_starter",
+    "label": "Already doing the math on timezones",
+    "weight": 1,
+    "prompt_hint": "opens immediately doing timezone math out loud, practical about the logistics before anything else.",
+    "image_prompt": null,
+    "affinities": [
+      "long_distance_partner"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "newly_single_opener",
+    "category": "conversation_starter",
+    "label": "Freshly out, a little giddy about it",
+    "weight": 1,
+    "prompt_hint": "opens with the specific giddy energy of someone who just became single again and is thoroughly enjoying it.",
+    "image_prompt": null,
+    "affinities": [
+      "newly_single",
+      "single_recently"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "married_exploring_opener",
+    "category": "conversation_starter",
+    "label": "Married, and very upfront about exploring",
+    "weight": 1,
+    "prompt_hint": "opens stating plainly that she's married and this is a deliberate, agreed-upon thing, not a secret.",
+    "image_prompt": null,
+    "affinities": [
+      "married_and_exploring"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "engaged_open_opener",
+    "category": "conversation_starter",
+    "label": "Engaged, and it's complicated in a good way",
+    "weight": 1,
+    "prompt_hint": "opens explaining, cheerfully, that she's engaged and this is exactly as allowed as it sounds.",
+    "image_prompt": null,
+    "affinities": [
+      "engaged_open"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "taking_a_break_opener",
+    "category": "conversation_starter",
+    "label": "On a break, using it well",
+    "weight": 1,
+    "prompt_hint": "opens explaining she's on a break from something serious, and this is very much how she's spending it.",
+    "image_prompt": null,
+    "affinities": [
+      "taking_a_break"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "goth_style_opener",
+    "category": "conversation_starter",
+    "label": "Dark and deadpan from the start",
+    "weight": 1,
+    "prompt_hint": "opens deadpan and a little dramatic, fully embracing the dark-and-brooding bit.",
+    "image_prompt": null,
+    "affinities": [
+      "goth_girl",
+      "alt_goth"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "e_girl_style_opener",
+    "category": "conversation_starter",
+    "label": "Full main-character chaos",
+    "weight": 1,
+    "prompt_hint": "opens with online-native, slightly unhinged main-character energy.",
+    "image_prompt": null,
+    "affinities": [
+      "e_girl",
+      "gamer_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "coquette_style_opener",
+    "category": "conversation_starter",
+    "label": "Sweet, with a knowing edge",
+    "weight": 1,
+    "prompt_hint": "opens deceptively sweet, a little too knowing about exactly what she's doing.",
+    "image_prompt": null,
+    "affinities": [
+      "coquette"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "office_siren_style_opener",
+    "category": "conversation_starter",
+    "label": "All business, until it isn't",
+    "weight": 1,
+    "prompt_hint": "opens crisp and professional-sounding, then undercuts it completely on purpose.",
+    "image_prompt": null,
+    "affinities": [
+      "office_siren"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "gyaru_style_opener",
+    "category": "conversation_starter",
+    "label": "Loud, confident, glamorous",
+    "weight": 1,
+    "prompt_hint": "opens with total glammed-up confidence, unbothered and a little bold.",
+    "image_prompt": null,
+    "affinities": [
+      "gyaru",
+      "baddie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "bimbo_glam_style_opener",
+    "category": "conversation_starter",
+    "label": "Plays dumb, isn't",
+    "weight": 1,
+    "prompt_hint": "opens leaning fully into a ditzy bit while clearly running the whole conversation underneath it.",
+    "image_prompt": null,
+    "affinities": [
+      "bimbo_glam"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "dark_academia_style_opener",
+    "category": "conversation_starter",
+    "label": "Quotes something obscure at him",
+    "weight": 1,
+    "prompt_hint": "opens with an oddly literary, slightly pretentious line she's very pleased with herself for.",
+    "image_prompt": null,
+    "affinities": [
+      "dark_academia"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "cottagecore_style_opener",
+    "category": "conversation_starter",
+    "label": "Soft, slow, a little wistful",
+    "weight": 1,
+    "prompt_hint": "opens gentle and unhurried, painting a small, cosy picture of her day so far.",
+    "image_prompt": null,
+    "affinities": [
+      "cottagecore_full"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "mob_wife_style_opener",
+    "category": "conversation_starter",
+    "label": "Expects to be spoiled, and protected",
+    "weight": 1,
+    "prompt_hint": "opens with old-money confidence, expecting to be treated like she's worth the trouble.",
+    "image_prompt": null,
+    "affinities": [
+      "mob_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "old_hollywood_style_opener",
+    "category": "conversation_starter",
+    "label": "Glamorous, a little theatrical",
+    "weight": 1,
+    "prompt_hint": "opens like she's delivering a line from a classic film, fully aware of how dramatic it is.",
+    "image_prompt": null,
+    "affinities": [
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "biker_chick_style_opener",
+    "category": "conversation_starter",
+    "label": "Rides in loud",
+    "weight": 1,
+    "prompt_hint": "opens with blunt, leather-jacket confidence, straight to the point.",
+    "image_prompt": null,
+    "affinities": [
+      "biker_chick"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "clean_girl_style_opener",
+    "category": "conversation_starter",
+    "label": "Effortless, and she knows it",
+    "weight": 1,
+    "prompt_hint": "opens with quiet, understated confidence, like she doesn't need to try hard to land this.",
+    "image_prompt": null,
+    "affinities": [
+      "clean_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "rave_wear_style_opener",
+    "category": "conversation_starter",
+    "label": "Still buzzing from last night",
+    "weight": 1,
+    "prompt_hint": "opens still riding the high of a night out, a little glittery, a lot of energy.",
+    "image_prompt": null,
+    "affinities": [
+      "rave_wear",
+      "club_kid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "lolita_fashion_style_opener",
+    "category": "conversation_starter",
+    "label": "Sweet aesthetic, sharp mind",
+    "weight": 1,
+    "prompt_hint": "opens delicately, almost old-fashioned in phrasing, betrayed by how direct she actually is underneath it.",
+    "image_prompt": null,
+    "affinities": [
+      "lolita_fashion"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "witchcore_style_opener",
+    "category": "conversation_starter",
+    "label": "Reads him like a spell",
+    "weight": 1,
+    "prompt_hint": "opens with something that sounds like a small spell being cast, half-joking about the intent behind it.",
+    "image_prompt": null,
+    "affinities": [
+      "witchcore",
+      "witchy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "feet_worship_opener",
+    "category": "conversation_starter",
+    "label": "Compliments his feet, unprompted",
+    "weight": 1,
+    "prompt_hint": "opens noticing his feet in a photo and saying so, plainly, letting him make of it what he will.",
+    "image_prompt": null,
+    "affinities": [
+      "feet_worship_receiving",
+      "feet_worship_giving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "praise_kink_opener",
+    "category": "conversation_starter",
+    "label": "Fishing for specific praise",
+    "weight": 1,
+    "prompt_hint": "opens asking, directly, for him to tell her exactly what he likes about her.",
+    "image_prompt": null,
+    "affinities": [
+      "being_praised",
+      "praise_hungry"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "degradation_domain_opener",
+    "category": "conversation_starter",
+    "label": "Invites him to be a little mean",
+    "weight": 1,
+    "prompt_hint": "opens inviting him to say something a bit unkind to her, and admitting she'd like that.",
+    "image_prompt": null,
+    "affinities": [
+      "being_degraded",
+      "degrading_him"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "restraint_bondage_opener",
+    "category": "conversation_starter",
+    "label": "Already thinking about being tied up",
+    "weight": 1,
+    "prompt_hint": "opens admitting, plainly, that she's been thinking about what it'd be like to be tied up by him.",
+    "image_prompt": null,
+    "affinities": [
+      "restraint_receiving",
+      "bondage_shibari"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "impact_spanking_opener",
+    "category": "conversation_starter",
+    "label": "Wants to be put over his knee",
+    "weight": 1,
+    "prompt_hint": "opens stating, without hedging, that she'd like to be put over his knee at some point.",
+    "image_prompt": null,
+    "affinities": [
+      "spanking_receiving",
+      "over_his_knee"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "breath_play_domain_opener",
+    "category": "conversation_starter",
+    "label": "Wants his hand at her throat",
+    "weight": 1,
+    "prompt_hint": "opens admitting she thinks about his hand at her throat, matter-of-fact about wanting it.",
+    "image_prompt": null,
+    "affinities": [
+      "breath_play_light",
+      "hand_at_her_throat"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "sensory_deprivation_opener",
+    "category": "conversation_starter",
+    "label": "Wants to lose a sense or two",
+    "weight": 1,
+    "prompt_hint": "opens saying she likes the idea of a blindfold taking one sense away entirely.",
+    "image_prompt": null,
+    "affinities": [
+      "blindfold_receiving",
+      "sensory_deprivation"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "exhibitionist_public_claim_opener",
+    "category": "conversation_starter",
+    "label": "Wants to be claimed in public",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes the idea of everyone knowing exactly whose she is.",
+    "image_prompt": null,
+    "affinities": [
+      "claimed_in_public",
+      "mild_public_tease"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "size_difference_opener",
+    "category": "conversation_starter",
+    "label": "Likes feeling small next to him",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes the size difference already, from a photo alone.",
+    "image_prompt": null,
+    "affinities": [
+      "size_worship",
+      "careful_of_scale"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "voyeurism_watch_opener",
+    "category": "conversation_starter",
+    "label": "Wants to watch, or be watched",
+    "weight": 1,
+    "prompt_hint": "opens saying plainly she likes watching just as much as being watched.",
+    "image_prompt": null,
+    "affinities": [
+      "voyeurism_watching",
+      "watching_him"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "recording_filming_opener",
+    "category": "conversation_starter",
+    "label": "Wants it on camera",
+    "weight": 1,
+    "prompt_hint": "opens saying she'd like this filmed, eventually, matter-of-fact about wanting the record of it.",
+    "image_prompt": null,
+    "affinities": [
+      "filming_together",
+      "filming_it"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "secretary_boss_roleplay_opener",
+    "category": "conversation_starter",
+    "label": "Applies for the position",
+    "weight": 1,
+    "prompt_hint": "opens applying, deadpan, for a very specific position under him.",
+    "image_prompt": null,
+    "affinities": [
+      "secretary_roleplay",
+      "boss_roleplay"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "teacher_student_roleplay_opener",
+    "category": "conversation_starter",
+    "label": "Needs extra tutoring",
+    "weight": 1,
+    "prompt_hint": "opens admitting she could use some private tutoring, and has a specific subject in mind.",
+    "image_prompt": null,
+    "affinities": [
+      "teacher_student_roleplay",
+      "professor_office_hours"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "doctor_patient_roleplay_opener",
+    "category": "conversation_starter",
+    "label": "Books herself an appointment",
+    "weight": 1,
+    "prompt_hint": "opens booking herself in for an exam she's fairly sure isn't strictly medical.",
+    "image_prompt": null,
+    "affinities": [
+      "doctor_patient_roleplay"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "stranger_roleplay_opener",
+    "category": "conversation_starter",
+    "label": "Pretends they've never met",
+    "weight": 1,
+    "prompt_hint": "opens as if they were strangers meeting at a bar, fully in character from message one.",
+    "image_prompt": null,
+    "affinities": [
+      "stranger_roleplay",
+      "hotel_bar_strangers"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "latex_leather_opener",
+    "category": "conversation_starter",
+    "label": "Already planning what to wear",
+    "weight": 1,
+    "prompt_hint": "opens describing exactly what she'd wear for him, latex or leather, confident about the effect.",
+    "image_prompt": null,
+    "affinities": [
+      "latex_wearing",
+      "leather_wearing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "uniform_kink_opener",
+    "category": "conversation_starter",
+    "label": "A specific uniform in mind",
+    "weight": 1,
+    "prompt_hint": "opens describing a uniform she'd put on for him, and why she picked that one.",
+    "image_prompt": null,
+    "affinities": [
+      "uniform_wearing",
+      "uniform_scenario"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "cum_play_opener",
+    "category": "conversation_starter",
+    "label": "States exactly what she wants after",
+    "weight": 1,
+    "prompt_hint": "opens saying plainly what she wants him to do once he's finished.",
+    "image_prompt": null,
+    "affinities": [
+      "cum_marking",
+      "cum_eating_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "anal_domain_opener",
+    "category": "conversation_starter",
+    "label": "Names it plainly, no euphemism",
+    "weight": 1,
+    "prompt_hint": "opens naming what she's into directly, no dancing around it.",
+    "image_prompt": null,
+    "affinities": [
+      "anal_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "oral_devotee_opener",
+    "category": "conversation_starter",
+    "label": "Names her favourite thing to do",
+    "weight": 1,
+    "prompt_hint": "opens naming, specifically, what she'd rather be doing with her mouth than typing.",
+    "image_prompt": null,
+    "affinities": [
+      "oral_giving",
+      "sloppy_head"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "primal_rough_opener",
+    "category": "conversation_starter",
+    "label": "Wants it a little rough",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes it rougher than her first messages usually suggest.",
+    "image_prompt": null,
+    "affinities": [
+      "primal_play",
+      "rough_sex"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "messy_wax_ice_opener",
+    "category": "conversation_starter",
+    "label": "Wants to make a mess",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes things a little messy - wax, ice, whatever's on hand.",
+    "image_prompt": null,
+    "affinities": [
+      "wax_play_receiving",
+      "ice_play_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "cnc_dark_romance_opener",
+    "category": "conversation_starter",
+    "label": "Wants to be chased down",
+    "weight": 1,
+    "prompt_hint": "opens admitting, carefully, that she likes the idea of being chased and caught more than being asked nicely.",
+    "image_prompt": null,
+    "affinities": [
+      "consensual_nonconsent",
+      "chase_and_catch"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "hotwife_domain_opener",
+    "category": "conversation_starter",
+    "label": "Wants him to watch her with someone else",
+    "weight": 1,
+    "prompt_hint": "opens admitting, plainly, that part of what turns her on is him watching her with someone else.",
+    "image_prompt": null,
+    "affinities": [
+      "hotwife",
+      "watching_him_with_another"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "cuckqueen_domain_opener",
+    "category": "conversation_starter",
+    "label": "Wants to watch him with someone else",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes the idea of watching him with another woman, and means it.",
+    "image_prompt": null,
+    "affinities": [
+      "cuckqueen_fantasy",
+      "watching_him_with_her"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "threesome_group_opener",
+    "category": "conversation_starter",
+    "label": "Already thinking about a third",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's already thought about who else might be involved.",
+    "image_prompt": null,
+    "affinities": [
+      "threesome_fantasy",
+      "group_sex_fantasy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "gangbang_domain_opener",
+    "category": "conversation_starter",
+    "label": "More than one is the appeal",
+    "weight": 1,
+    "prompt_hint": "opens admitting, without hedging, that the appeal for her is specifically more than one.",
+    "image_prompt": null,
+    "affinities": [
+      "gangbang_her",
+      "several_men_for_her"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "swingers_scene_opener",
+    "category": "conversation_starter",
+    "label": "Already knows the scene",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, casually, that she's no stranger to a party where more than two people are involved.",
+    "image_prompt": null,
+    "affinities": [
+      "swingers_club",
+      "play_party"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "pegging_domain_opener",
+    "category": "conversation_starter",
+    "label": "Names exactly what she'd like to do to him",
+    "weight": 1,
+    "prompt_hint": "opens saying, plainly, what she'd like to do to him with a strap-on.",
+    "image_prompt": null,
+    "affinities": [
+      "pegging_him",
+      "strap_on_switchover"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "findom_domain_opener",
+    "category": "conversation_starter",
+    "label": "Expects to be spoiled, financially",
+    "weight": 1,
+    "prompt_hint": "opens making clear, half-joking-half-not, that she expects to be spoiled - and she means it.",
+    "image_prompt": null,
+    "affinities": [
+      "findom"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "petplay_collar_opener",
+    "category": "conversation_starter",
+    "label": "Already asking if he'd collar her",
+    "weight": 1,
+    "prompt_hint": "opens asking, half-serious, whether he's the type to put a collar on her.",
+    "image_prompt": null,
+    "affinities": [
+      "collar_receiving",
+      "petplay_pet"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "daddy_kink_domain_opener",
+    "category": "conversation_starter",
+    "label": "Slips and calls him something",
+    "weight": 1,
+    "prompt_hint": "opens catching herself almost calling him something she probably shouldn't yet - and not taking it back.",
+    "image_prompt": null,
+    "affinities": [
+      "daddy_kink"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "somnophilia_opener",
+    "category": "conversation_starter",
+    "label": "Admits a very specific fantasy",
+    "weight": 1,
+    "prompt_hint": "opens admitting a fantasy about being woken up a very particular way.",
+    "image_prompt": null,
+    "affinities": [
+      "somnophilia_fantasy",
+      "woken_with_kisses"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "tickling_domain_opener",
+    "category": "conversation_starter",
+    "label": "Warns him she's ticklish, on purpose",
+    "weight": 1,
+    "prompt_hint": "opens warning him she's extremely ticklish, in a tone that's clearly an invitation rather than a warning.",
+    "image_prompt": null,
+    "affinities": [
+      "tickling_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "voice_kink_opener",
+    "category": "conversation_starter",
+    "label": "Wants to hear his voice first",
+    "weight": 1,
+    "prompt_hint": "opens asking for a voice note before anything else, admitting his voice is what gets her.",
+    "image_prompt": null,
+    "affinities": [
+      "voice_kink",
+      "voice_note_moaner"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "dollification_opener",
+    "category": "conversation_starter",
+    "label": "Wants to be dressed and posed",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes the idea of being dressed up exactly how he wants her.",
+    "image_prompt": null,
+    "affinities": [
+      "dollification"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "maid_roleplay_opener",
+    "category": "conversation_starter",
+    "label": "Reports for duty",
+    "weight": 1,
+    "prompt_hint": "opens as if reporting for duty in uniform, fully committed to being at his service.",
+    "image_prompt": null,
+    "affinities": [
+      "maid_roleplay",
+      "maid_for_a_day"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "orgasm_control_opener",
+    "category": "conversation_starter",
+    "label": "Wants him deciding when",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes the idea of him deciding exactly when, and not before.",
+    "image_prompt": null,
+    "affinities": [
+      "orgasm_control_receiving",
+      "edging_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "chastity_domain_opener",
+    "category": "conversation_starter",
+    "label": "Puts the control in his hands",
+    "weight": 1,
+    "prompt_hint": "opens offering, plainly, to let him hold the keys on this one, literally.",
+    "image_prompt": null,
+    "affinities": [
+      "chastity_him"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "blood_exchange_opener",
+    "category": "conversation_starter",
+    "label": "Something a little darker in mind",
+    "weight": 1,
+    "prompt_hint": "opens implying, seriously, that what she wants involves a little pain and a little blood, and means it.",
+    "image_prompt": null,
+    "affinities": [
+      "blood_exchange"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "full_moon_domain_opener",
+    "category": "conversation_starter",
+    "label": "Different tonight, for a reason",
+    "weight": 1,
+    "prompt_hint": "opens warning him she's not quite herself tonight - something about the moon - and he should probably lean into it.",
+    "image_prompt": null,
+    "affinities": [
+      "full_moon_night"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "monster_tentacle_opener",
+    "category": "conversation_starter",
+    "label": "Something not entirely human in mind",
+    "weight": 1,
+    "prompt_hint": "opens admitting the fantasy she keeps coming back to isn't entirely human, and asking if that's a dealbreaker.",
+    "image_prompt": null,
+    "affinities": [
+      "monster_fantasy",
+      "tentacle_fantasy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "free_use_domain_opener",
+    "category": "conversation_starter",
+    "label": "Offers herself plainly",
+    "weight": 1,
+    "prompt_hint": "opens offering herself plainly, no negotiation needed, whenever he wants.",
+    "image_prompt": null,
+    "affinities": [
+      "free_use_fantasy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "slave_treatment_opener",
+    "category": "conversation_starter",
+    "label": "Wants to belong to him completely",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes the idea of belonging to him entirely, not just for a night.",
+    "image_prompt": null,
+    "affinities": [
+      "slave_treatment_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "rope_shibari_opener",
+    "category": "conversation_starter",
+    "label": "Already picturing the rope",
+    "weight": 1,
+    "prompt_hint": "opens describing, specifically, the kind of rope work she's been picturing.",
+    "image_prompt": null,
+    "affinities": [
+      "bondage_shibari",
+      "tying_him"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "face_slapping_opener",
+    "category": "conversation_starter",
+    "label": "Wants it a little meaner",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes it with an edge of real meanness, not just rough.",
+    "image_prompt": null,
+    "affinities": [
+      "face_slapping_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "gagged_opener",
+    "category": "conversation_starter",
+    "label": "Wants her mouth kept busy, or quiet",
+    "weight": 1,
+    "prompt_hint": "opens admitting she likes the idea of being kept quiet one way or another.",
+    "image_prompt": null,
+    "affinities": [
+      "gagged"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "size_queen_opener",
+    "category": "conversation_starter",
+    "label": "States a clear preference",
+    "weight": 1,
+    "prompt_hint": "opens stating, without embarrassment, exactly what she's hoping for.",
+    "image_prompt": null,
+    "affinities": [
+      "size_queen"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "affair_forbidden_opener",
+    "category": "conversation_starter",
+    "label": "The appeal is that it's wrong",
+    "weight": 1,
+    "prompt_hint": "opens admitting part of the appeal, for her, is exactly how it shouldn't be happening.",
+    "image_prompt": null,
+    "affinities": [
+      "affair_roleplay",
+      "forbidden_thrill"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "sixty_nine_opener",
+    "category": "conversation_starter",
+    "label": "Names exactly what she wants, mutually",
+    "weight": 1,
+    "prompt_hint": "opens naming, plainly, that she wants it to go both ways at once.",
+    "image_prompt": null,
+    "affinities": [
+      "sixty_nine"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "scent_kink_opener",
+    "category": "conversation_starter",
+    "label": "Already thinking about how he smells",
+    "weight": 1,
+    "prompt_hint": "opens admitting, plainly, that his scent in person is something she's already thinking about.",
+    "image_prompt": null,
+    "affinities": [
+      "sweat_scent",
+      "being_told_she_smells_good"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "hair_pulling_opener",
+    "category": "conversation_starter",
+    "label": "Wants her hair pulled",
+    "weight": 1,
+    "prompt_hint": "opens admitting, without embarrassment, that she likes a firm hand in her hair.",
+    "image_prompt": null,
+    "affinities": [
+      "hair_pulling"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "pet_intro_opener",
+    "category": "conversation_starter",
+    "label": "Talks about her pet first",
+    "weight": 1,
+    "prompt_hint": "opens introducing her pet before herself, completely serious about the priorities.",
+    "image_prompt": null,
+    "affinities": [
+      "with_cat",
+      "with_two_cats"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "roommate_drama_opener",
+    "category": "conversation_starter",
+    "label": "Mid roommate drama",
+    "weight": 1,
+    "prompt_hint": "opens venting, briefly, about something a roommate just did, assuming he'll take her side.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "commute_opener",
+    "category": "conversation_starter",
+    "label": "Texting from the commute",
+    "weight": 1,
+    "prompt_hint": "opens from a bus, train or car, bored and looking for something better to look at.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "weather_smalltalk_opener",
+    "category": "conversation_starter",
+    "label": "Makes small talk actually interesting",
+    "weight": 1,
+    "prompt_hint": "opens on the weather, deliberately, and makes it funnier than it has any right to be.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "new_city_intro_opener",
+    "category": "conversation_starter",
+    "label": "Still figuring out the new city",
+    "weight": 1,
+    "prompt_hint": "opens asking for local recommendations, genuinely new here and a little unsure of it.",
+    "image_prompt": null,
+    "affinities": [
+      "new_city"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "algorithm_meta_opener",
+    "category": "conversation_starter",
+    "label": "Comments on the app itself",
+    "weight": 1,
+    "prompt_hint": "opens joking about the dating app's algorithm putting them together, meta about the whole thing.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "long_day_vent_opener",
+    "category": "conversation_starter",
+    "label": "Just wants to vent for a second",
+    "weight": 1,
+    "prompt_hint": "opens admitting today was a lot, and that this is a genuinely nice distraction from it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "sunday_scaries_opener",
+    "category": "conversation_starter",
+    "label": "Dreading tomorrow already",
+    "weight": 1,
+    "prompt_hint": "opens commiserating about the week ahead before it's even started.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "concert_texting_opener",
+    "category": "conversation_starter",
+    "label": "Texting from a show",
+    "weight": 1,
+    "prompt_hint": "opens mid-concert or gig, loud in the background, thumbs typing between songs.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "book_interrupted_opener",
+    "category": "conversation_starter",
+    "label": "Interrupts her reading to text him",
+    "weight": 1,
+    "prompt_hint": "opens admitting she put a book down to do this, and rates the interruption worth it.",
+    "image_prompt": null,
+    "affinities": [
+      "reading",
+      "classic_literature"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "weekend_plans_opener",
+    "category": "conversation_starter",
+    "label": "Already planning the weekend",
+    "weight": 1,
+    "prompt_hint": "opens asking what he's doing this weekend before anything else, planning ahead on instinct.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "bad_date_recap_opener",
+    "category": "conversation_starter",
+    "label": "Fresh off a bad date",
+    "weight": 1,
+    "prompt_hint": "opens venting, briefly and hilariously, about the date she just left - and comparing him favourably.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "post_workout_opener",
+    "category": "conversation_starter",
+    "label": "Post-workout, feeling good",
+    "weight": 1,
+    "prompt_hint": "opens straight from the gym, endorphins talking, riding the good mood into a bold message.",
+    "image_prompt": null,
+    "affinities": [
+      "fitness",
+      "running"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "sick_day_opener",
+    "category": "conversation_starter",
+    "label": "Texting from bed, unwell",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's stuck in bed sick and bored enough to swipe.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "new_phone_opener",
+    "category": "conversation_starter",
+    "label": "Setting up a new phone",
+    "weight": 1,
+    "prompt_hint": "opens mentioning she just got a new phone and he's basically the first thing she's doing with it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "grocery_store_opener",
+    "category": "conversation_starter",
+    "label": "Texting from the grocery aisle",
+    "weight": 1,
+    "prompt_hint": "opens deciding what to make for dinner out loud, half-talking to him, half-thinking through the list.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "laundry_day_opener",
+    "category": "conversation_starter",
+    "label": "Doing chores, distracted now",
+    "weight": 1,
+    "prompt_hint": "opens admitting she was doing something boring and domestic and he's now a much better use of her attention.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "traffic_jam_opener",
+    "category": "conversation_starter",
+    "label": "Stuck in traffic, bored",
+    "weight": 1,
+    "prompt_hint": "opens from a car going nowhere, using the delay as an excuse to finally send this.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "power_nap_opener",
+    "category": "conversation_starter",
+    "label": "Just woke up from a nap",
+    "weight": 1,
+    "prompt_hint": "opens groggy and honest about just waking up, blaming the nap for however this message reads.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "houseplant_opener",
+    "category": "conversation_starter",
+    "label": "Talks to her plants, and now him",
+    "weight": 1,
+    "prompt_hint": "opens admitting she just talked to her plants and figures he deserves the same energy.",
+    "image_prompt": null,
+    "affinities": [
+      "plants"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "bad_pun_opener",
+    "category": "conversation_starter",
+    "label": "Leads with a terrible pun",
+    "weight": 1,
+    "prompt_hint": "opens with a genuinely bad pun and zero apology for it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "exaggerated_math_opener",
+    "category": "conversation_starter",
+    "label": "Does actual math at him",
+    "weight": 1,
+    "prompt_hint": "opens doing an exaggerated bit of \"math\" to prove some ridiculous point about the two of them.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "gps_lost_opener",
+    "category": "conversation_starter",
+    "label": "You must be lost",
+    "weight": 1,
+    "prompt_hint": "opens with the classic \"are you lost, because heaven is a long way from here\" energy, fully aware of it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fire_hazard_opener",
+    "category": "conversation_starter",
+    "label": "Calls him a fire hazard",
+    "weight": 1,
+    "prompt_hint": "opens telling him he should be illegal, or a fire hazard, fully committed to the cheese.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "made_up_superlative_opener",
+    "category": "conversation_starter",
+    "label": "Names him the best of something",
+    "weight": 1,
+    "prompt_hint": "opens declaring him the winner of some made-up superlative, completely arbitrary and delighted about it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "chemistry_pun_opener",
+    "category": "conversation_starter",
+    "label": "Admits she's bad at chemistry, except",
+    "weight": 1,
+    "prompt_hint": "opens joking she failed chemistry except for whatever's happening between them right now.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "keyboard_pickup_opener",
+    "category": "conversation_starter",
+    "label": "Claims he's everything she needs",
+    "weight": 1,
+    "prompt_hint": "opens with a corny \"you must be a keyboard\" style line and owns exactly how bad it is.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "star_map_cheesy_opener",
+    "category": "conversation_starter",
+    "label": "Claims she checked the stars",
+    "weight": 1,
+    "prompt_hint": "opens claiming, with a straight face, that the universe specifically arranged this match.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "dictionary_pickup_opener",
+    "category": "conversation_starter",
+    "label": "Looks him up in the dictionary",
+    "weight": 1,
+    "prompt_hint": "opens claiming she looked up a word and his photo came up as the definition.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "broke_her_camera_opener",
+    "category": "conversation_starter",
+    "label": "Says he broke her camera",
+    "weight": 1,
+    "prompt_hint": "opens joking that his photo broke her phone, it was that good.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "lottery_odds_opener",
+    "category": "conversation_starter",
+    "label": "Better odds than the lottery",
+    "weight": 1,
+    "prompt_hint": "opens declaring this match a better bet than the lottery, and she's not usually a gambler.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "thief_pickup_opener",
+    "category": "conversation_starter",
+    "label": "Accuses him of theft",
+    "weight": 1,
+    "prompt_hint": "opens accusing him, playfully, of stealing her heart - and demanding it back, or not.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "slow_burn_promise_opener",
+    "category": "conversation_starter",
+    "label": "Promises to take her time",
+    "weight": 1,
+    "prompt_hint": "opens promising, unhurried, that she plans to take her time with this.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "innocent_but_isnt_opener",
+    "category": "conversation_starter",
+    "label": "A compliment that's clearly more",
+    "weight": 1,
+    "prompt_hint": "opens with a compliment that reads innocent on the surface and isn't underneath.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "texting_from_bed_opener",
+    "category": "conversation_starter",
+    "label": "Admits she's texting from bed",
+    "weight": 1,
+    "prompt_hint": "opens mentioning, casually, that she's texting from bed - and lets that sit there.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "fresh_out_shower_opener",
+    "category": "conversation_starter",
+    "label": "Just got out of the shower",
+    "weight": 1,
+    "prompt_hint": "opens mentioning she just got out of the shower, unbothered about how that lands.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "cant_stop_looking_opener",
+    "category": "conversation_starter",
+    "label": "Can't stop looking at his photo",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's looked at his photo more times than she'll actually admit to.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "already_imagining_opener",
+    "category": "conversation_starter",
+    "label": "Already imagining how tonight goes",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's already pictured how tonight could go, without giving details yet.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "good_at_one_thing_opener",
+    "category": "conversation_starter",
+    "label": "States exactly what she's good at",
+    "weight": 1,
+    "prompt_hint": "opens stating, without modesty, one specific thing she's very good at.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "wrong_hour_opener",
+    "category": "conversation_starter",
+    "label": "Matched at exactly the wrong hour",
+    "weight": 1,
+    "prompt_hint": "opens texting at 2am, admitting the hour is doing a lot of the talking for her.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "just_the_warmup_opener",
+    "category": "conversation_starter",
+    "label": "Says this is just the warm-up",
+    "weight": 1,
+    "prompt_hint": "opens promising that whatever she sends next is just the warm-up for something better.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "specific_compliment_body_opener",
+    "category": "conversation_starter",
+    "label": "Undresses him with a compliment",
+    "weight": 1,
+    "prompt_hint": "opens complimenting something specific about his body in his photo, plainly.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "doing_something_to_her_opener",
+    "category": "conversation_starter",
+    "label": "Says he's doing something to her",
+    "weight": 1,
+    "prompt_hint": "opens admitting, physically, that his photo is doing something to her right now.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "make_him_wait_opener",
+    "category": "conversation_starter",
+    "label": "Tests how patient he is",
+    "weight": 1,
+    "prompt_hint": "opens teasing that she's going to make him wait a little, and wants to see how he handles it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "one_thing_tonight_opener",
+    "category": "conversation_starter",
+    "label": "Asks for one thing, plainly",
+    "weight": 1,
+    "prompt_hint": "opens asking directly for the one thing she wants from him tonight.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "matches_his_boldness_opener",
+    "category": "conversation_starter",
+    "label": "Dares him to be as bold as her",
+    "weight": 1,
+    "prompt_hint": "opens matching her own boldness with a dare for him to keep pace.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "confident_shell_be_good_opener",
+    "category": "conversation_starter",
+    "label": "States she's good at this part",
+    "weight": 1,
+    "prompt_hint": "opens with total confidence that whatever happens next, she'll be good at it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "spicy_would_you_rather_opener",
+    "category": "conversation_starter",
+    "label": "A spicier would-you-rather",
+    "weight": 1,
+    "prompt_hint": "opens with a would-you-rather that's clearly headed somewhere heated.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "rate_this_feature_opener",
+    "category": "conversation_starter",
+    "label": "Rates something about herself",
+    "weight": 1,
+    "prompt_hint": "opens asking him to rate something specific about her, off one detail alone.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "guess_the_fact_opener",
+    "category": "conversation_starter",
+    "label": "Makes him guess something about her",
+    "weight": 1,
+    "prompt_hint": "opens making him guess a fact about her, promising a reward if he gets close.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "word_association_game_opener",
+    "category": "conversation_starter",
+    "label": "Starts a word association game",
+    "weight": 1,
+    "prompt_hint": "opens throwing out a random word and demanding the first thing that comes to his mind.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "emoji_only_opener",
+    "category": "conversation_starter",
+    "label": "Speaks entirely in emoji",
+    "weight": 1,
+    "prompt_hint": "opens entirely in emoji, making him decode the whole message.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "trivia_challenge_opener",
+    "category": "conversation_starter",
+    "label": "Quizzes him for real",
+    "weight": 1,
+    "prompt_hint": "opens with a genuine trivia question, competitive about whether he actually knows it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "yes_no_only_opener",
+    "category": "conversation_starter",
+    "label": "Only accepts yes or no",
+    "weight": 1,
+    "prompt_hint": "opens with a pointed question and insists on a one-word answer.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "assigns_a_dare_opener",
+    "category": "conversation_starter",
+    "label": "Picks a dare for him, no context",
+    "weight": 1,
+    "prompt_hint": "opens assigning him a dare like they're already mid-game, no context given at all.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "nervous_sends_anyway_opener",
+    "category": "conversation_starter",
+    "label": "Admits she's nervous, sends it anyway",
+    "weight": 1,
+    "prompt_hint": "opens honestly admitting she's nervous about this and doing it anyway.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "hopeful_but_guarded_opener",
+    "category": "conversation_starter",
+    "label": "Hopeful, a little guarded",
+    "weight": 1,
+    "prompt_hint": "opens hopeful but careful, admitting she doesn't usually let herself get excited about this.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "real_question_opener",
+    "category": "conversation_starter",
+    "label": "Skips the small talk for something real",
+    "weight": 1,
+    "prompt_hint": "opens asking something genuinely meaningful instead of the usual small talk, actually wanting an answer.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "simply_glad_opener",
+    "category": "conversation_starter",
+    "label": "Just glad, plainly",
+    "weight": 1,
+    "prompt_hint": "opens with a simple, unguarded \"glad we matched\", nothing performative about it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "common"
+  },
+  {
+    "id": "rough_week_honest_opener",
+    "category": "conversation_starter",
+    "label": "Admits the timing, honestly",
+    "weight": 1,
+    "prompt_hint": "opens admitting she's had a rough stretch lately and this match is a genuinely nice thing to have happen.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "hopeful_romantic_opener",
+    "category": "conversation_starter",
+    "label": "Hopes this could actually be something",
+    "weight": 1,
+    "prompt_hint": "opens quietly hoping, out loud, that this turns into something real rather than another dead-end match.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "wrong_person_bit_opener",
+    "category": "conversation_starter",
+    "label": "Pretends this was meant for someone else",
+    "weight": 1,
+    "prompt_hint": "opens as if the message was meant for someone else entirely, then doubles down instead of correcting it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "autocorrect_chaos_opener",
+    "category": "conversation_starter",
+    "label": "Blames autocorrect for something wild",
+    "weight": 1,
+    "prompt_hint": "opens with something absurd, blaming autocorrect, and never actually clarifying what she meant.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "interrupted_midtext_opener",
+    "category": "conversation_starter",
+    "label": "Gets cut off mid-thought",
+    "weight": 1,
+    "prompt_hint": "opens a message that cuts off mid-sentence, as if something interrupted her, and never finishes it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "group_chat_leak_opener",
+    "category": "conversation_starter",
+    "label": "Screenshots her friends' reaction",
+    "weight": 1,
+    "prompt_hint": "opens admitting her friends have already seen his profile and have Opinions about it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "mystery_countdown_opener",
+    "category": "conversation_starter",
+    "label": "Announces a countdown to something unclear",
+    "weight": 1,
+    "prompt_hint": "opens counting down to something she never actually names.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "mid_message_plot_twist_opener",
+    "category": "conversation_starter",
+    "label": "Announces a twist mid-message",
+    "weight": 1,
+    "prompt_hint": "opens a normal message, then pivots hard into something nobody saw coming.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "unhinged_hot_take_opener",
+    "category": "conversation_starter",
+    "label": "An opinion nobody asked for",
+    "weight": 1,
+    "prompt_hint": "opens with an aggressively confident, slightly unhinged opinion about something totally mundane.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "trailer_narrator_opener",
+    "category": "conversation_starter",
+    "label": "Narrates her own message like a trailer",
+    "weight": 1,
+    "prompt_hint": "opens narrating the text itself, third-person, like a movie trailer voiceover.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "deja_vu_bit_opener",
+    "category": "conversation_starter",
+    "label": "Insists they've talked before",
+    "weight": 1,
+    "prompt_hint": "opens insisting, confused, that they've definitely spoken before - they haven't.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "too_serious_then_joke_opener",
+    "category": "conversation_starter",
+    "label": "Goes way too serious, briefly",
+    "weight": 1,
+    "prompt_hint": "opens with something oddly heavy for message one, then immediately undercuts it with a joke.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "app_glitch_bit_opener",
+    "category": "conversation_starter",
+    "label": "Pretends the app glitched",
+    "weight": 1,
+    "prompt_hint": "opens claiming the app sent this message by accident, three times in a row, entirely on purpose.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "group_project_bit_opener",
+    "category": "conversation_starter",
+    "label": "Treats the match like a group project",
+    "weight": 1,
+    "prompt_hint": "opens assigning him a \"role\" in this conversation like it's a group project, deadpan about it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "uncommon"
+  },
+  {
+    "id": "superhero_landing_bit_opener",
+    "category": "conversation_starter",
+    "label": "Announces herself like a superhero",
+    "weight": 1,
+    "prompt_hint": "opens introducing herself with full superhero-landing drama, completely over the top about it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "final_boss_bit_opener",
+    "category": "conversation_starter",
+    "label": "Declares herself the final boss",
+    "weight": 1,
+    "prompt_hint": "opens declaring herself the final boss of his dating app run, mock-serious about the stakes.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "narrator_of_reality_opener",
+    "category": "conversation_starter",
+    "label": "Speaks like she's narrating the universe",
+    "weight": 1,
+    "prompt_hint": "opens speaking about their match like it's a line in a much bigger story she's narrating.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "simulation_feels_off_opener",
+    "category": "conversation_starter",
+    "label": "Something about this feels off",
+    "weight": 1,
+    "prompt_hint": "opens noting, half-joking, that this match felt like a genuine glitch in the simulation.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "escaped_something_opener",
+    "category": "conversation_starter",
+    "label": "Implies she just got away from something",
+    "weight": 1,
+    "prompt_hint": "opens implying, vaguely and dramatically, that she just escaped something and this is her reward.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "very_rare"
+  },
+  {
+    "id": "secret_society_hint_opener",
+    "category": "conversation_starter",
+    "label": "Hints at something bigger going on",
+    "weight": 1,
+    "prompt_hint": "opens hinting she's part of something he wouldn't believe if she told him, and maybe someday will.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "rewrote_fate_opener",
+    "category": "conversation_starter",
+    "label": "Claims she rewrote how tonight goes",
+    "weight": 1,
+    "prompt_hint": "opens claiming, with total conviction, that she personally rearranged fate to make this match happen.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "dream_walker_bit_opener",
+    "category": "conversation_starter",
+    "label": "Claims she's been in his dreams",
+    "weight": 1,
+    "prompt_hint": "opens claiming, playfully unsettling, that she's already been in his dreams and this is just catching up in person.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
+  },
+  {
+    "id": "warning_label_bit_opener",
+    "category": "conversation_starter",
+    "label": "Comes with an actual warning",
+    "weight": 1,
+    "prompt_hint": "opens with a mock-official warning label about herself, deadpan about the \"hazards\".",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "rare"
+  },
+  {
+    "id": "universe_deadline_opener",
+    "category": "conversation_starter",
+    "label": "The universe gave her a deadline",
+    "weight": 1,
+    "prompt_hint": "opens implying, dramatically, that she's on a literal clock for something and he just became part of it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true,
+    "rarity": "extremely_rare"
   }
 ]

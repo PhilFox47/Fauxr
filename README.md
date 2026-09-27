@@ -5805,3 +5805,68 @@ ever sent, whose prompt both carries the exact opener-nudge framing text and the
 character's own `conversation_starter` hint; forcing the delayed branch confirms no message
 sends immediately and a `match_opener` wakeup is scheduled instead. `npx tsc --noEmit`, a full
 build, and `validate-attributes.mjs` (3679 entries, 68 categories) all clean.
+
+### 95 conversation starters wasn't enough combinatorial room - 521 is
+
+The feedback on the batch above: with this many other attributes now feeding
+`conversation_starter`'s affinities (occupation alone is 245 rows, species 70, fetish 341), 95
+entries left most of that surface untouched - the "out there" tier in particular is supposed to
+read as *this specific character's* opener, not a generic wildcard, and that needs real
+coverage of the combinations that can actually produce her.
+
+`conversation_starters.json` grew from 95 to 521 rows, almost entirely new dedicated openers
+tied to attributes the first pass never touched:
+
+- **Occupation** (~60 rows): a nurse fresh off shift, a bartender's last call, a tattoo artist
+  sizing up his arms, a funeral director's specific gallows humour, a hitman's "made you an
+  offer" energy, a witch reading him like a paying client, an astronaut still thinking in
+  orbit, a volcanologist mentioning she works closer to lava than is advisable. Similar jobs
+  share one row (`nurse`/`paramedic`/`emt`/`midwife` all lean the same shift-worker opener)
+  rather than each getting a near-identical one.
+- **Hobby and interest** (~45 rows): tarot, true crime, conspiracy theories, a D&D-flavoured
+  "rolls for initiative on him", axe throwing, wrestling promos, lock-picking, chess notation,
+  cryptid hunting, dowsing.
+- **Species and superpower** (~60 rows): a dedicated opener per exotic species this database
+  already had and the first pass never used - catgirl, succubus, dragonkin, siren, cyborg,
+  self-aware AI, contract demon - and one per superpower (flight, telepathy, pheromones, time
+  stop, hypnotic gaze), each phrased to *imply* rather than flatly assert ("opens implying
+  she's been around far longer than her face suggests"), so it reads as true for the rare
+  matching character and as a knowing bit for anyone else who happens to roll it.
+- **Era, curse and double life, one each instead of lumped together**: the first pass had one
+  generic "time traveller" row covering all ten `era` values and one generic "cursed you"
+  row covering all ten `curse` values. Every one now gets its own specific opener - Victorian
+  scandalised propriety reads nothing like far-future bewilderment at how primitive
+  everything is, and `truth_curse` panicking about being unable to lie reads nothing like
+  `floats_when_happy` mentioning she's currently a few inches off the ground. Same for all
+  twelve `double_life` values - a spy's uncomfortably well-informed dossier, a smuggler's
+  evasiveness about what's in the hold.
+- **Sexual persona** (~30 rows) and **kink domain** (~55 rows): dedicated openers for personas
+  the first pass left out entirely (`protocol_mistress`, `voyeur_director`, `forbidden_fruit`,
+  `brat_tamer`) and for kink territory beyond the three fetishes already wired in - feet,
+  praise, restraint, breath play, hotwife, cuckqueening, pegging, findom, petplay, somnophilia,
+  chastity, blood exchange, monster/tentacle fantasy - each tied to the actual fetish ids that
+  make it true for her.
+- **Archetype, clothing style and relationship shape** (~65 rows): a brat testing him from
+  message one, a tsundere pretending she doesn't care, a goth's deadpan drama, a coquette's
+  sweet-but-knowing edge, a duo character admitting the profile is shared with her twin, a
+  polyamorous character mentioning her other partners upfront, someone freshly single and
+  giddy about it.
+- **Everyday variety** (~95 rows across the mundane, cheesy, non-explicit-sexual, games,
+  vulnerable and chaotic buckets from the first pass): more topics, more games, more
+  small, human ways to break the ice, so an ordinary human character's most common draw still
+  has real range instead of repeating the same fifteen options.
+
+Every new row follows the same rule the first batch established: affinities point at ids that
+land in `ctx.drawn` when they're actually true of her (a fetish, an era/curse/double-life
+value, a species, an occupation, an interest), never at anything that would make an unrelated
+character's roll read as a factual contradiction.
+
+Verified: `validate-attributes.mjs` clean at 521 rows with zero dangling affinity references;
+a statistical check (20,000 rolls per case) confirms seven representative affinity ties across
+occupation, era, double life, species and interest categories all measurably boost their
+matching opener over a neutral baseline (e.g. `nurse` occupation: 120→298 hits on
+`nurse_shift_opener`; `far_future` era: 1→6 hits on `far_future_opener`); a rarity-tier
+distribution check over 30,000 neutral rolls confirms common openers land roughly 80x more
+often than extremely-rare ones and every tier still gets drawn; the full existing regression
+suite (outfit fixes, log fixes, the opener/match-first batch above) still passes unchanged.
+`npx tsc --noEmit` and a full build both clean.
