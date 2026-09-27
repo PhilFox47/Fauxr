@@ -197,7 +197,10 @@ const words = (t: string) => new Set(norm(t).split(' ').filter((w) => w.length >
 /**
  * Her piece that a model's words most likely mean, within one slot; null if none fits. The
  * model shortens freely ("the plaid mini" for "red-and-black plaid pleated mini skirt"), so a
- * match is two or more shared words covering most of the shorter of the two names.
+ * match is two or more shared words covering most of the shorter of the two names - but also
+ * a real chunk of the longer one, or a fresh one-off item (a costume, a borrowed dress)
+ * described in a full sentence coincidentally shares two generic words ("white", "dress")
+ * with some unrelated owned item and gets silently swapped in for it.
  */
 function ownedMatch(seed: CharacterSeed, slots: OwnedSlot[], text: string): string | null {
   const t = norm(text);
@@ -211,7 +214,8 @@ function ownedMatch(seed: CharacterSeed, slots: OwnedSlot[], text: string): stri
       const mine = words(itemText(id));
       const hit = [...said].filter((w) => mine.has(w)).length;
       const score = hit / Math.max(Math.min(mine.size, said.size), 1);
-      if (hit >= 2 && score >= 0.6 && score > (best?.score ?? 0)) best = { id, score };
+      const coverage = hit / Math.max(Math.max(mine.size, said.size), 1);
+      if (hit >= 2 && score >= 0.6 && coverage >= 0.3 && score > (best?.score ?? 0)) best = { id, score };
     }
   }
   return best?.id ?? null;

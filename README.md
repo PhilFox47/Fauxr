@@ -943,6 +943,17 @@ open, pushed up, pulled down, pulled aside, half off, off.
   one-piece" rule for exactly those - a *separate*, later turn's "top off" (the dress already
   on from before) still takes it off as before, and an explicit same-turn "dress: off" naming
   the dress itself still works too.
+- **Bug, found while stress-testing the fix above:** the fuzzy matcher that resolves a
+  reported item back to one of her own wardrobe pieces (`ownedMatch()`, meant to catch a
+  shorthand like "the plaid mini" for "red-and-black plaid pleated mini skirt") could also
+  fire on a full, one-off item description that was never meant to resolve to anything she
+  owns - a costume like "Lady Dimitrescu costume - white dress, hat, gloves, claw props" only
+  needed to share two generic words ("white", "dress") with some unrelated owned dress to get
+  silently swapped for it, discarding the costume text an image prompt then needed. The score
+  was computed only against the shorter of the two word sets, so a long, specific description
+  could satisfy it by chance. Fixed by also requiring a real share of the longer set's words
+  (`coverage`, `>= 0.3`) - shorthand still matches its full canonical name, but an unrelated
+  long description no longer does.
 - **Chat**: stored on the relationship (`mood.outfit_state`). Her status every few hours
   picks a whole fresh outfit from her closet, or keeps the old one.
 - **Dates**: the outfit call picks every slot from her closet, plus a note for hair and
