@@ -3664,6 +3664,16 @@ against a mock: the final prompt sent to the image endpoint reads as continuous 
 bare comma-tag tail, and the negative prompt carries the assembler's own text plus the
 shortened standing set, space-joined rather than comma-glued.
 
+**Checked against fal.ai's own published Seedream 5.0 Lite prompting guide** (subject > setting
+> style > lighting > technical, 2-4 sentences, paragraph not tags, quality-booster words as
+noise, a short plain-language negative prompt): everything above already matched it. The one
+real gap was the guide's note that this model renders in-image text correctly when it is
+quoted, and gets it wrong left to invent it - nothing in `image_prompt_assembler.md` said so.
+Added one sentence to the Seedream half of the template asking for exact words in quotation
+marks whenever a shot calls for something actually legible (a name tag, a phone screen, a
+sign, a tattoo with lettering) - Z Image Turbo's own instructions are untouched, since nothing
+in its guidance makes the same claim.
+
 ### Only what the shot actually shows
 
 The fixed appearance block used to be dumped into every prompt whole, and the reference

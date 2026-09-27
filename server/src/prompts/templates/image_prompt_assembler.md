@@ -8,7 +8,10 @@ distinction is the whole difference between output that reads as a photo and out
 reads as a shoot. Tag-stacking and
 quality-booster words ("masterpiece", "8K", "ultra-detailed", "best quality") are noise to
 this model; they crowd out the actual description and make the result worse, not better. Do
-not write that way here. Aim for one solid paragraph - concise, not a page.
+not write that way here. Aim for one solid paragraph - concise, not a page. If anything in the
+shot needs actual legible words on it - a name tag, a phone screen, a sign, a birthday cake, a
+tattoo with lettering - put those exact words in quotation marks in the prompt; this model
+renders quoted text correctly and gets it wrong left to invent it.
 {{/mode_seedream}}
 {{#mode_z_image}}
 The model this goes to has no classifier-free guidance at inference, which means it does not
