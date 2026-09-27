@@ -313,6 +313,14 @@ export interface OutfitChange {
  */
 export function applyOutfitChanges(seed: CharacterSeed, outfit: Outfit, changes: OutfitChange[] | null | undefined): Outfit {
   let out: Outfit = { pieces: outfit.pieces.map((p) => ({ ...p })) };
+  // A one-piece put ON this same turn already covers the slots it covers - the schema asks for
+  // "one entry per slot that changed", and a model that just put a dress on regularly also
+  // reports "top: off"/"bottom: off" alongside it, confirming there is no separate top rather
+  // than asking to undo the dress. Without tracking this, that same-turn "top off" fell through
+  // to the "a state on a covered slot moves the one-piece" rule below and immediately took the
+  // dress back off in the very turn it was put on - a real log caught exactly this: she reported
+  // putting on a full costume and her own outfit_state ended up with the dress "off".
+  const justWornCovering = new Set<WornSlot>();
   for (const c of changes ?? []) {
     const slot = String(c?.slot ?? '').trim().toLowerCase();
     const item = String(c?.item ?? '').trim();
@@ -330,12 +338,18 @@ export function applyOutfitChanges(seed: CharacterSeed, outfit: Outfit, changes:
         continue;
       }
       const id = ownedMatch(seed, [s as OwnedSlot], item);
-      out = wear(out, { slot: s, text: id ? itemText(id) : item.slice(0, 80), ...(id ? { id } : {}), state: state ?? 'on' });
+      const pieceState = state ?? 'on';
+      out = wear(out, { slot: s, text: id ? itemText(id) : item.slice(0, 80), ...(id ? { id } : {}), state: pieceState });
+      if (pieceState === 'on' && COVERS[s]) justWornCovering.add(s);
       continue;
     }
     if (!state) continue;
-    // A state on a slot a one-piece covers moves the one-piece: "top off" in a dress is the dress.
-    const target = out.pieces.some((p) => p.slot === s) ? s : (Object.entries(COVERS).find(([, c]) => c!.includes(s))?.[0] as WornSlot | undefined);
+    // A state on a slot a one-piece covers moves the one-piece: "top off" in a dress is the
+    // dress - but only when that dress was already on from before this turn, not one this same
+    // turn just put on (see justWornCovering above).
+    const direct = out.pieces.some((p) => p.slot === s);
+    const target = direct ? s : (Object.entries(COVERS).find(([, c]) => c!.includes(s))?.[0] as WornSlot | undefined);
+    if (!direct && target && justWornCovering.has(target)) continue;
     if (target) out = { pieces: out.pieces.map((p) => (p.slot === target ? { ...p, state } : p)) };
   }
   return out;

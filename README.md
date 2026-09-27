@@ -930,6 +930,19 @@ open, pushed up, pulled down, pulled aside, half off, off.
   put on from her closet or anything else, "none", or `slot: "all"` for her sleepwear,
   swimwear, work clothes or nothing). The server keeps the outfit, so one sloppy turn cannot
   put a bra back on. Tights come off before panties because the model sees what is left.
+- **Bug, found from a real log:** putting on a one-piece (a dress, lingerie) and, in the same
+  turn's `outfit_changes`, also reporting the slots it covers as "off" - which the schema's
+  own "one entry per slot that changed" wording invites, and a model regularly does, purely
+  as confirmation that there is no separate top under the dress - undid the one-piece it had
+  just put on two entries earlier. The rule that makes "top off" while already in a dress
+  mean "take the dress off" (`applyOutfitChanges()`) does not know the dress in front of it
+  was only added a moment ago in the very same batch, so it took it straight back off; a real
+  photo then rendered from an outfit_state that had gone back to "no dress" seconds after she
+  said she put one on. Fixed by tracking, within one call, which covering slots were put on
+  by an item change in that same batch, and skipping the "state on a covered slot moves the
+  one-piece" rule for exactly those - a *separate*, later turn's "top off" (the dress already
+  on from before) still takes it off as before, and an explicit same-turn "dress: off" naming
+  the dress itself still works too.
 - **Chat**: stored on the relationship (`mood.outfit_state`). Her status every few hours
   picks a whole fresh outfit from her closet, or keeps the old one.
 - **Dates**: the outfit call picks every slot from her closet, plus a note for hair and
