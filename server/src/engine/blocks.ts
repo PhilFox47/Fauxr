@@ -587,7 +587,13 @@ export function historyBlock(
     .map((m) => {
       // On a duo profile a message can be her partner's (meta.from), and she has to see whose.
       const who = m.sender === 'user' ? him : m.sender === 'character' ? (m.meta?.from ? String(m.meta.from) : her) : 'system';
-      const time = new Date(m.sent_at).toLocaleString('en-GB', {
+      // This chat's own clock (engine/clock.ts), not the real one - otherwise this timestamp
+      // and the "right now it is" line a few paragraphs down (moment.ts, also the game clock)
+      // disagree inside the very same prompt, which is exactly what let a real conversation's
+      // last message read as sent at 00:44 while "now" was already mid-morning. Falls back to
+      // the real time only for a message from before this field existed.
+      const ms = m.game_clock_ms ?? Date.parse(m.sent_at);
+      const time = new Date(ms).toLocaleString('en-GB', {
         weekday: 'short', hour: '2-digit', minute: '2-digit',
       });
       const described = m.meta?.description ? `: ${m.meta.description}` : '';

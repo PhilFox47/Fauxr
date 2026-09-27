@@ -1082,6 +1082,34 @@ sent in that one chat or by Pass Time pressed from that one chat.
   field existed has no `game_clock_ms` and falls back to showing its real time - the one
   place old and new messages can read on two different clocks in the same scrollback, and
   only ever right at that boundary.
+- **Bug, found from a real log:** `historyBlock()` (`engine/blocks.ts`), the conversation
+  history the Actor and Director actually read, was still stamping every past message with
+  its real `sent_at` time - missed when the message-tick feature above shipped, since only the
+  chat screen's own display was updated at the time. The result: the "right now it is ..."
+  line (moment.ts, on the game clock) and the history a few paragraphs below it (still on
+  real time) disagreed inside the same prompt. A real conversation showed it exactly: "Right
+  now it is Sunday, 10:36" next to a history whose last line read "[Sun 00:44] Phil: Morning
+  Kaoru" - a ten-hour gap that never happened in the story - and the Director duly reasoned
+  about him texting "at 00:44" and "just now surfacing", which had nothing to do with when he
+  actually sent it. Fixed the same way the display was: each line now reads
+  `message.game_clock_ms`, falling back to `sent_at` only for a message from before the field
+  existed.
+
+## The Actor narrating a photo instead of sending one
+
+A real log caught the Actor writing one of her own messages as a bracketed
+`[photo: close-up from below under the hat brim, full Dimitrescu makeup, ...]` tag - in the
+same turn it also correctly set `photo_offer`, so a real photo arrived right after a bubble
+that read like a stage direction describing one. The source is `historyBlock()` itself: a
+stored photo renders back to her, in her own history, as `[photo: description]` (a voice note
+as `[voice message]`), and the model reached for the same notation when trying to send a new
+one instead of using the `photo_offer`/`kind` mechanism the prompt actually asks for. None of
+the existing checks in `engine/voice.ts` caught it - the bracketed-stage-direction detector is
+anchored to `she`/`he`/`they`, and this starts with `photo`. Added `MIMICS_MEDIA_TAG`, the
+same shape as the existing `MIMICS_SYSTEM_LINE` check for the old consent-card text: any
+message matching `[photo|image|pic|picture|selfie|voice message|voice note ...]` is rejected
+and the turn retried, the same one-retry mechanism every other voice-tell in that file already
+uses.
 
 ## Fewer AI-isms
 

@@ -366,6 +366,18 @@ const META_COMMENTARY =
 const MIMICS_SYSTEM_LINE =
   /^\s*system\s*:|\bwants to (?:send you (?:a|another) photo|swap profile pictures)\b/i;
 
+/**
+ * A bracketed "[photo: ...]" or "[voice message]" tag, copied from how her own past photos and
+ * voice notes are rendered back to her in the conversation history (historyBlock() in
+ * blocks.ts formats a stored image as `[photo: description]` and a voice note as `[voice
+ * message]`) - never something she would actually type. Sending is done entirely through
+ * photo_offer/kind; a real exported log showed her writing one of these tags as one of her own
+ * messages in the same turn she also correctly set photo_offer, so the bubble read as a stage
+ * direction describing a photo instead of a line of text, on top of the real photo that then
+ * arrived separately.
+ */
+const MIMICS_MEDIA_TAG = /\[\s*(?:photo|image|pic|picture|selfie|voice message|voice note)\b[^\]]*\]/i;
+
 /** Saying the quiet part out loud: announcing that she is evaluating him. */
 const ANNOUNCES_AGENDA =
   /\b(?:i(?:'m| am) testing (?:you|whether|if)|i(?:'m| am) seeing (?:if|whether) you|this is a test|consider this a test|let(?:'s| us) see (?:if|whether) you|i want to see (?:if|whether) you (?:can|could|will)|i(?:'m| am) (?:currently )?(?:evaluating|assessing|judging) (?:you|whether)|you(?:'re| are) being tested|testing whether you)\b/i;
@@ -571,6 +583,16 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
     return {
       what: "writing the app's own system message as if it were her text",
       fix: 'You wrote something like "system: X wants to send you a photo" or described yourself in the third person wanting to send/swap a photo - that is the app\'s own consent-card text, not something you would ever type. If you are sending a photo, just say so in your own voice ("ok look"), and set photo_offer - never write out a system line.',
+    };
+  }
+  if (MIMICS_MEDIA_TAG.test(input.text)) {
+    return {
+      what: 'writing a "[photo: ...]" or "[voice message]" tag as if it were her own message',
+      fix: 'You wrote a bracketed "[photo: ...]" or "[voice message]" tag as one of your messages - that ' +
+        'is how a photo or voice note you already sent shows up afterwards in your own history, not ' +
+        'something you type. If you are sending a photo or voice note this turn, say so in your own ' +
+        'words ("sending u something", "hang on, sending a voice note") and set photo_offer or kind - it ' +
+        'arrives on its own a moment later, never narrated inline as a message.',
     };
   }
   if (ANNOUNCES_AGENDA.test(input.text)) {
