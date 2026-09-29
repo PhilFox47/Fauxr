@@ -12,6 +12,7 @@ import { detectEvents, directionExpired, directionOutdatedBy, runDirector } from
 import { buildCatalogue, detectMentions, learnAboutHim, recordDiscoveries } from './discovery.js';
 import { canSendPhotos, sendPhoto, sendPhotoChoice } from './images.js';
 import { advanceRelease, releaseOf } from './release.js';
+import { clearSteering, consumeCallback, normalizeScene, steeringToken } from './roleplay.js';
 import { addInventedFantasy, markPitched } from './fantasies.js';
 import { fantasyList } from './blocks.js';
 import { applyOutfitChanges, currentOutfit, outfitMood } from './wardrobe.js';
@@ -88,9 +89,9 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
   const character = getCharacter(input.characterId);
   if (!character) throw new Error('character not found');
   if (character.state !== 'matched') throw new Error(`cannot write to a character in state ${character.state}`);
-  // She is sitting across from him. Texting her from the same table is the one thing the
-  // date mechanic exists to prevent - the text chat stays readable, but it is frozen.
-  if (activeDate(character.id)) throw new Error('you are on a date with her - end it to go back to texting');
+  // A live date or call owns her attention. The text history stays readable, but is frozen.
+  const live = activeDate(character.id);
+  if (live) throw new Error(`you are on a ${live.kind} with her - end it to go back to texting`);
   const rel = getRelationship(character.id);
   if (!rel) throw new Error('relationship missing');
 
@@ -149,10 +150,10 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   if (!character || !rel) return;
   if (character.state !== 'matched') return;
 
-  // She is out with him in person. Whatever queued this turn - a wakeup that survived the
-  // start of the date, a catch-up sweep - she is not going to text him from the table.
-  if (activeDate(characterId)) {
-    logger.debug('actor', `${character.username} is on a date, no text messages`);
+  // A live roleplay owns this channel. Whatever queued this turn is not also answered by text.
+  const live = activeDate(characterId);
+  if (live) {
+    logger.debug('actor', `${character.username} is on a ${live.kind}, no text messages`);
     return;
   }
 
@@ -162,7 +163,7 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
 
   const messages = recentMessages(character.id, getSettings().chat.context_messages);
   const events = detectEvents(messages);
-  const check = directionExpired(rel, null, events);
+  const check = directionExpired(rel, events);
   const lastUser = [...messages].reverse().find((m) => m.sender === 'user');
   const outdated = opts.trigger === 'user_message' && !!lastUser && directionOutdatedBy(rel, Date.parse(lastUser.sent_at));
   const needsDirector =
@@ -223,6 +224,7 @@ async function runActorPhase(
 
   // Where the climax tracker stood when her prompt was built - see engine/release.ts.
   const releaseBefore = releaseOf(rel);
+  const roleplaySteeringAt = steeringToken(rel, 'chat');
   // The message she is answering, if the last word was his - the only thing a reaction can land on.
   const answering = recentMessages(characterId, 1)[0];
   const replyTo = answering?.sender === 'user' ? answering : null;
@@ -253,7 +255,10 @@ async function runActorPhase(
     // for a genuine new turn: a regenerate rewrites the words of the same moment, not a new
     // one, so it must not tick the clock a second time (mirrors decrementValidFor below). Every
     // bubble of this reply shares that one resulting instant - one tick per block, not per bubble.
-    const deliveredAtGameMs = opts.decrementValidFor ? advanceGameClock(rel, MESSAGE_MINUTES / 60) : gameClockMs(rel);
+    const hasRealReply = result.messages.some((message) => !message.failed);
+    const deliveredAtGameMs = opts.decrementValidFor && hasRealReply
+      ? advanceGameClock(rel, MESSAGE_MINUTES / 60)
+      : gameClockMs(rel);
 
     await deliver(character, result.messages, startedIn, deliveredAtGameMs);
   } finally {
@@ -261,6 +266,11 @@ async function runActorPhase(
     // indicator is worse than none.
     stopTyping();
   }
+
+  // A canned recovery bubble is marked failed in the UI and is not something she actually
+  // said. Do not let it spend a direction, alter her mood, advance sexual continuity, or
+  // trigger another Director pass. The next real turn starts from the last real state.
+  if (result.messages.every((message) => message.failed)) return;
 
   // What she has on after this turn: only her reported changes are applied (wardrobe.ts).
   // Before any photo from this turn is prepared, so a photo shows the outfit she just
@@ -277,22 +287,6 @@ async function runActorPhase(
   // The story's own clock (engine/clock.ts), not the real one: this is what lets the
   // Director see "last contact" and "time now" line up until he actually passes time.
   rel.last_contact_at = gameNowIso(rel);
-  if (result.hidden.new_fact) {
-    rel.ledger.facts.about_user = [
-      ...new Set([...(rel.ledger.facts.about_user ?? []), result.hidden.new_fact]),
-    ].slice(-60);
-  }
-  if (result.hidden.open_thread && !rel.ledger.open_threads.some((t) => t.text === result.hidden.open_thread)) {
-    rel.ledger.open_threads = [
-      ...rel.ledger.open_threads,
-      {
-        id: `${Date.now()}-a`,
-        text: result.hidden.open_thread,
-        expires_when: 'when it comes up',
-        created_at: nowIso(),
-      },
-    ].slice(-8);
-  }
   // Deterministic backstop for the obvious reveals - if she named her job, he knows it,
   // whether or not the director thought to report it.
   const said = result.messages.map((m) => m.text).join(' ');
@@ -320,12 +314,16 @@ async function runActorPhase(
   // prompt, a caption) and posted as a placeholder he can choose to open - see sendPhoto.
   const photoKind = result.hidden.photo_offer;
   const options = result.hidden.photo_options ?? [];
+  const photoLocation = result.hidden.location || String((rel.mood as any)?.location ?? '');
+  const situatedPhoto = (situation: string) => photoLocation && situation
+    ? `Location: ${photoLocation}. Photo: ${situation}`
+    : situation;
   if (photoKind && canSendPhotos(rel) && options.length === 2) {
     // "Which one?" - two placeholders, he picks the one he sees.
     void sendPhotoChoice({
       characterId: character.id,
       kind: photoKind,
-      options,
+      options: options.map(situatedPhoto),
       aspect: result.hidden.photo_aspect ?? 'portrait',
       showsFace: result.hidden.photo_shows_face ?? true,
     }).catch((err) => logger.error('image', 'photo choice failed', { error: String(err) }));
@@ -334,7 +332,7 @@ async function runActorPhase(
     void sendPhoto({
       characterId: character.id,
       kind: photoKind,
-      situation: result.hidden.photo_situation ?? '',
+      situation: situatedPhoto(result.hidden.photo_situation ?? ''),
       aspect: result.hidden.photo_aspect ?? 'portrait',
       showsFace: result.hidden.photo_shows_face ?? true,
     }).catch((err) => logger.error('image', 'photo failed', { error: String(err) }));
@@ -345,26 +343,22 @@ async function runActorPhase(
     ...rel.mood,
     actor_mood: result.hidden.mood,
     thoughts: result.hidden.thoughts,
-    // Carried to the next turn so nothing opens a second topic on top of a live one.
-    unresolved: result.hidden.unresolved,
+    // Old saves may contain this field. Null it rather than letting a model-authored
+    // "unfinished" label turn a passing bit into a mandatory loop on every later turn.
+    unresolved: null,
     // Real continuity, read back by continuityBlock() next turn - an empty string means she
     // reported no change, not that she has nowhere/nothing/no plans, so it falls back to
     // whatever was already stored rather than wiping it.
     location: result.hidden.location || (rel.mood as any)?.location || '',
     activity: result.hidden.activity || (rel.mood as any)?.activity || '',
+    scene: normalizeScene(result.hidden.scene, (rel.mood as any)?.scene),
     // Left over from the old consent cards; cleared so nothing reads them again.
     pending_photo: null,
     pending_exchange: null,
   };
+  clearSteering(rel, 'chat', roleplaySteeringAt);
+  consumeCallback(rel, result.hidden.callback_used);
   saveRelationship(rel);
-
-  if (result.hidden.director_needed) {
-    await runDirector(character, getRelationship(characterId)!, {
-      reason: 'actor_requested',
-      actorReport: result.hidden,
-      origin: 'user',
-    });
-  }
 }
 
 /**

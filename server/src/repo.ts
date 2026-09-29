@@ -2,10 +2,12 @@ import { db, nowIso } from './db/index.js';
 import { byCategory, find } from './db/attributes.js';
 import { newContext, roll, rollMany } from './engine/dice.js';
 import { cosplayCount } from './engine/cosplay.js';
-import { rollWardrobe } from './engine/wardrobe.js';
-import { buildAppearancePrompt } from './engine/appearance.js';
+import { rollWardrobe, WARDROBE_ACCESSORY_IDS } from './engine/wardrobe.js';
+import { buildAppearancePrompt, buildVisualCore } from './engine/appearance.js';
+import { heightFitsSpecies, rollHeight } from './engine/height.js';
 import { rollDomainStance, rollKinkSides } from './engine/kinks.js';
 import { pickCore } from './engine/profilecard.js';
+import { buildCharacterBlueprint } from './engine/blueprint.js';
 import type {
   Character, CharacterSeed, CharacterState, DateNpc, DateSession, Direction, Flags, KinkSide, Ledger, LifeThread,
   Location, Relationship, UserProfile,
@@ -352,6 +354,76 @@ function backfillWardrobe(characterId: string, seed: CharacterSeed): CharacterSe
 }
 
 /**
+ * Fairies and giants used to carry two contradictory facts: their species prompt named a
+ * hand-sized or nine-foot body while the independent height roll still said 1.65m. Once per
+ * affected existing character, replace that generic row with one from her species' dedicated
+ * scale pool and rebuild the derived appearance prompt around the corrected source of truth.
+ */
+function backfillSpeciesHeight(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (heightFitsSpecies(seed.height, seed.species)) return seed;
+  if (!byCategory('height').length) return seed;
+  const ctx = newContext();
+  for (const id of [seed.species, seed.body_type, seed.ethnicity]) if (id) ctx.drawn.add(id);
+  const chosen = rollHeight(seed.species, ctx);
+  if (!chosen) return seed;
+  seed.height = chosen.id;
+  seed.appearance_prompt = buildAppearancePrompt(seed);
+  // Rebuild at the normal end-of-hydration stage, after any other legacy fields were filled.
+  delete seed.blueprint;
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
+/** Existing characters gain a blueprint made only from their established attributes. */
+function backfillBlueprint(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.blueprint?.version === 1) return seed;
+  seed.blueprint = buildCharacterBlueprint(seed);
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
+/** Preserve old faces: record only appearance anchors the character already had, never roll new geometry. */
+function backfillVisualCore(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.visual_core?.version === 1) return seed;
+  seed.visual_core = buildVisualCore(seed);
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
+/**
+ * Permanent piercing records and wardrobe accessories used to describe the same metal twice.
+ * Existing records become owned body jewellery, so outfit state is the sole image source.
+ */
+function backfillPiercingsToWardrobe(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (!seed.wardrobe || !(seed.piercings ?? []).length) return seed;
+  const byPosition: Record<string, string> = {
+    earlobe: 'small_gold_hoops', second_lobe: 'small_gold_hoops', third_lobe: 'small_gold_hoops',
+    high_lobe: 'cartilage_hoop_jewellery', upper_lobe_stack: 'cartilage_hoop_jewellery',
+    helix: 'cartilage_hoop_jewellery', forward_helix: 'cartilage_hoop_jewellery',
+    tragus: 'cartilage_hoop_jewellery', industrial: 'cartilage_hoop_jewellery',
+    conch: 'cartilage_hoop_jewellery', outer_conch: 'cartilage_hoop_jewellery',
+    inner_conch: 'cartilage_hoop_jewellery', daith: 'cartilage_hoop_jewellery',
+    rook: 'cartilage_hoop_jewellery', orbital: 'cartilage_hoop_jewellery',
+    snug: 'cartilage_hoop_jewellery', flat: 'cartilage_hoop_jewellery',
+    nose: 'nose_ring_delicate', nasallang: 'nose_ring_delicate', bridge: 'nose_ring_delicate',
+    septum: 'septum_ring_jewelry', eyebrow: 'eyebrow_bar_jewellery', anti_eyebrow: 'eyebrow_bar_jewellery',
+    lip: 'lip_ring_jewellery', medusa: 'lip_ring_jewellery', monroe: 'lip_ring_jewellery',
+    smiley: 'lip_ring_jewellery', vertical_labret: 'lip_ring_jewellery', dahlia: 'lip_ring_jewellery',
+    tongue: 'tongue_bar_jewellery', navel: 'navel_bar_jewellery', bellybutton_double: 'navel_bar_jewellery',
+    nipple: 'nipple_bar_jewellery', clavicle: 'clavicle_dermal_jewellery',
+  };
+  const jewellery = [...(seed.wardrobe.jewellery ?? [])];
+  for (const piercing of seed.piercings) {
+    const id = byPosition[piercing.position] ?? 'cartilage_hoop_jewellery';
+    if (find('wardrobe_item', id) && !jewellery.includes(id)) jewellery.push(id);
+  }
+  seed.wardrobe.jewellery = jewellery;
+  seed.piercings = [];
+  db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  return seed;
+}
+
+/**
  * The accessory split: jewellery and hair pieces moved into the wardrobe, bags and keys into
  * what she carries, and only what is always on her stayed. Everyone's old accessory ids move
  * with them (same ids), a closet from before jewellery gets its jewellery, and her fixed look
@@ -360,7 +432,7 @@ function backfillWardrobe(characterId: string, seed: CharacterSeed): CharacterSe
  */
 function backfillAccessorySplit(characterId: string, seed: CharacterSeed): CharacterSeed {
   if (!seed.wardrobe || !byCategory('carried_item').length) return seed;
-  const moved = (seed.accessories ?? []).filter((id) => !find('accessory', id));
+  const moved = (seed.accessories ?? []).filter((id) => !find('accessory', id) || WARDROBE_ACCESSORY_IDS.has(id));
   const needsJewellery = !seed.wardrobe.jewellery;
   const needsCarries = !seed.carries;
   if (!moved.length && !needsJewellery && !needsCarries) return seed;
@@ -418,17 +490,21 @@ function backfillConversationStarter(characterId: string, seed: CharacterSeed): 
 }
 
 function hydrateCharacter(row: any): Character {
-  let seed = backfillBreastSize(row.id, JSON.parse(row.seed) as CharacterSeed);
-  seed = backfillSpecies(row.id, seed);
+  let seed = backfillSpecies(row.id, JSON.parse(row.seed) as CharacterSeed);
+  seed = backfillSpeciesHeight(row.id, seed);
+  seed = backfillBreastSize(row.id, seed);
   seed = backfillIdentity(row.id, seed);
   seed = backfillCommStyles(row.id, seed);
   seed = backfillSexualProfile(row.id, seed);
   seed = backfillIntimateDetails(row.id, seed);
   seed = backfillCore(row.id, seed);
   seed = backfillWardrobe(row.id, seed);
+  seed = backfillPiercingsToWardrobe(row.id, seed);
   seed = backfillAccessorySplit(row.id, seed);
   seed = backfillCosplays(row.id, seed);
   seed = backfillConversationStarter(row.id, seed);
+  seed = backfillBlueprint(row.id, seed);
+  seed = backfillVisualCore(row.id, seed);
   return {
     id: row.id,
     username: row.username,
@@ -542,6 +618,27 @@ export function listActiveMatches(): Character[] {
   return rows.map(hydrateCharacter);
 }
 
+/** Matches whose delayed-match timestamp has arrived, newest matches first. */
+export function listVisibleMatches(at = nowIso()): Character[] {
+  const rows = db
+    .prepare(
+      `SELECT * FROM characters
+       WHERE state IN ('matched','blocked_by_user')
+         AND (matched_at IS NULL OR matched_at <= ?)
+       ORDER BY matched_at DESC`,
+    )
+    .all(at) as any[];
+  return rows.map(hydrateCharacter);
+}
+
+/** The first successfully rendered profile picture is her stable visual reference. */
+export function profilePicturePath(characterId: string): string | null {
+  const row = db
+    .prepare("SELECT path FROM images WHERE character_id = ? AND kind = 'profile' AND status = 'done' ORDER BY rowid ASC LIMIT 1")
+    .get(characterId) as { path: string } | undefined;
+  return row?.path ?? null;
+}
+
 /**
  * Deletes a character outright, so a cluttered chat list can actually be cleaned up. The
  * relationship, messages, wakeups, dates and image rows all reference the character with
@@ -550,11 +647,18 @@ export function listActiveMatches(): Character[] {
  * before they become unreachable.
  */
 export function deleteCharacter(id: string): string[] {
-  const rows = db
+  const generated = db
     .prepare(`SELECT path FROM images WHERE character_id = ? AND path IS NOT NULL`)
     .all(id) as { path: string }[];
+  const uploads = db
+    .prepare(
+      `SELECT json_extract(meta, '$.path') AS path FROM messages
+       WHERE character_id = ? AND sender = 'user' AND kind = 'image'
+         AND json_extract(meta, '$.path') IS NOT NULL`,
+    )
+    .all(id) as { path: string }[];
   db.prepare('DELETE FROM characters WHERE id = ?').run(id);
-  return rows.map((r) => r.path);
+  return [...new Set([...generated, ...uploads].map((r) => r.path))];
 }
 
 // ---------------------------------------------------------------- relationships
@@ -840,7 +944,22 @@ export function dateMessages(dateId: string): StoredMessage[] {
 // ---------------------------------------------------------------- locations
 
 function hydrateLocation(row: any): Location {
-  return { ...row, image_path: row.image_path ?? null };
+  let affordances = {
+    sensory: [], private_spaces: [], background_people: [], social_openings: [],
+    interruptions: [], transitions: [], constraints: [],
+  } as Location['affordances'];
+  try {
+    const raw = JSON.parse(row.affordances ?? '{}');
+    const list = (key: keyof Location['affordances']) => Array.isArray(raw[key])
+      ? raw[key].map((v: unknown) => String(v).trim()).filter(Boolean).slice(0, 8)
+      : [];
+    affordances = {
+      sensory: list('sensory'), private_spaces: list('private_spaces'),
+      background_people: list('background_people'), social_openings: list('social_openings'),
+      interruptions: list('interruptions'), transitions: list('transitions'), constraints: list('constraints'),
+    };
+  } catch { /* an old malformed row simply has no affordances */ }
+  return { ...row, image_path: row.image_path ?? null, affordances };
 }
 
 export function listLocations(): Location[] {
@@ -858,21 +977,27 @@ export function saveLocation(l: {
   name: string;
   description: string;
   image_path?: string | null;
+  affordances?: Location['affordances'];
 }): Location {
   const ts = nowIso();
   db.prepare(
-    `INSERT INTO locations (id, name, description, image_path, created_at, updated_at)
-     VALUES (@id, @name, @description, @image_path, @ts, @ts)
+    `INSERT INTO locations (id, name, description, image_path, affordances, created_at, updated_at)
+     VALUES (@id, @name, @description, @image_path, @affordances, @ts, @ts)
      ON CONFLICT(id) DO UPDATE SET name = excluded.name, description = excluded.description,
        -- Only replaced when a new one is actually supplied, so editing the description of a
        -- place does not silently drop the backdrop already generated for it.
        image_path = COALESCE(excluded.image_path, locations.image_path),
+       affordances = excluded.affordances,
        updated_at = excluded.updated_at`,
   ).run({
     id: l.id,
     name: l.name,
     description: l.description,
     image_path: l.image_path ?? null,
+    affordances: JSON.stringify(l.affordances ?? getLocation(l.id)?.affordances ?? {
+      sensory: [], private_spaces: [], background_people: [], social_openings: [],
+      interruptions: [], transitions: [], constraints: [],
+    }),
     ts,
   });
   return getLocation(l.id)!;
@@ -897,11 +1022,15 @@ function hydrateDate(row: any): DateSession {
   return {
     id: row.id,
     character_id: row.character_id,
+    kind: row.kind === 'call' ? 'call' : 'date',
     status: row.status === 'active' ? 'active' : 'ended',
     when_at: row.when_at ?? '',
     where_at: row.where_at ?? '',
     location_id: row.location_id ?? null,
     summary: row.summary ?? null,
+    duration_minutes: row.duration_minutes == null || !Number.isFinite(Number(row.duration_minutes))
+      ? null
+      : Number(row.duration_minutes),
     outfit: row.outfit ?? null,
     outfit_state: row.outfit_state ? JSON.parse(row.outfit_state) : null,
     npcs: JSON.parse(row.npcs ?? '[]'),
@@ -914,15 +1043,16 @@ function hydrateDate(row: any): DateSession {
 export function createDate(d: {
   id: string;
   character_id: string;
+  kind?: 'date' | 'call';
   when_at: string;
   where_at: string;
   location_id: string | null;
   company?: string;
 }): DateSession {
   db.prepare(
-    `INSERT INTO dates (id, character_id, status, when_at, where_at, location_id, company, created_at)
-     VALUES (@id, @character_id, 'active', @when_at, @where_at, @location_id, @company, @created_at)`,
-  ).run({ ...d, company: d.company ?? '', created_at: nowIso() });
+    `INSERT INTO dates (id, character_id, kind, status, when_at, where_at, location_id, company, created_at)
+     VALUES (@id, @character_id, @kind, 'active', @when_at, @where_at, @location_id, @company, @created_at)`,
+  ).run({ ...d, kind: d.kind ?? 'date', company: d.company ?? '', created_at: nowIso() });
   return getDate(d.id)!;
 }
 
@@ -973,9 +1103,9 @@ export function setLife(characterId: string, threads: LifeThread[]): void {
 }
 
 /**
- * The one date currently running for this character, if any. Everything that has to stand
- * still while she is out with him - texting, wakeups, the scheduler's proactive passes -
- * checks this first.
+ * The one live date or call currently running for this character, if any. Everything that
+ * has to stand still while she is with him - texting, wakeups, the scheduler's proactive
+ * passes - checks this first. The old name is retained because it is the public repository API.
  */
 export function activeDate(characterId: string): DateSession | null {
   const row = db
@@ -984,10 +1114,16 @@ export function activeDate(characterId: string): DateSession | null {
   return row ? hydrateDate(row) : null;
 }
 
-/** Any character currently mid-date, for the scheduler's per-tick sweep. */
+/** Any character currently in a live date or call, for the scheduler's per-tick sweep. */
 export function characterIdsOnDate(): Set<string> {
   const rows = db.prepare("SELECT DISTINCT character_id FROM dates WHERE status = 'active'").all() as any[];
   return new Set(rows.map((r) => r.character_id as string));
+}
+
+/** Which live register each busy character is in, for accurate chat-list labels. */
+export function activeSessionKinds(): Map<string, 'date' | 'call'> {
+  const rows = db.prepare("SELECT character_id, kind FROM dates WHERE status = 'active'").all() as any[];
+  return new Map(rows.map((r) => [String(r.character_id), r.kind === 'call' ? 'call' as const : 'date' as const]));
 }
 
 export function listDates(characterId: string): DateSession[] {
@@ -1000,14 +1136,14 @@ export function listDates(characterId: string): DateSession[] {
 /** When the very first date with her began, if there has been one - for the anniversary check. */
 export function firstDateStartedAt(characterId: string): string | null {
   const row = db
-    .prepare('SELECT created_at FROM dates WHERE character_id = ? ORDER BY created_at ASC LIMIT 1')
+    .prepare("SELECT created_at FROM dates WHERE character_id = ? AND kind = 'date' ORDER BY created_at ASC LIMIT 1")
     .get(characterId) as { created_at: string } | undefined;
   return row?.created_at ?? null;
 }
 
-export function finishDate(id: string, summary: string): DateSession | null {
-  db.prepare("UPDATE dates SET status = 'ended', summary = ?, ended_at = ? WHERE id = ?")
-    .run(summary, nowIso(), id);
+export function finishDate(id: string, summary: string, durationMinutes: number): DateSession | null {
+  db.prepare("UPDATE dates SET status = 'ended', summary = ?, duration_minutes = ?, ended_at = ? WHERE id = ?")
+    .run(summary, durationMinutes, nowIso(), id);
   return getDate(id);
 }
 

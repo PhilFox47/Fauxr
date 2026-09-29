@@ -1,6 +1,6 @@
 import { db, nowIso } from './db/index.js';
 
-export type LogScope = 'director' | 'actor' | 'image' | 'scheduler' | 'api' | 'app' | 'generator';
+export type LogScope = 'director' | 'actor' | 'evaluator' | 'image' | 'scheduler' | 'api' | 'app' | 'generator';
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 const MAX_LOG_ROWS = 5000;

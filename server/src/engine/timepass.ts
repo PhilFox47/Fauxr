@@ -78,7 +78,8 @@ export async function passTime(characterId: string, hoursRequested: number): Pro
   const character = getCharacter(characterId);
   if (!character) throw new Error('character not found');
   if (character.state !== 'matched') throw new Error('you are not matched with her');
-  if (activeDate(characterId)) throw new Error('she is out with you right now');
+  const live = activeDate(characterId);
+  if (live) throw new Error(`she is on a ${live.kind} with you right now`);
   const rel = getRelationship(characterId);
   if (!rel) throw new Error('relationship missing');
 
@@ -134,15 +135,9 @@ export async function passTime(characterId: string, hoursRequested: number): Pro
   rel.mood = mood;
   saveRelationship(rel);
 
-  // Her situation may have moved on - a fresh status, a new location, a different outfit,
-  // one of her storylines nudged forward - but only once the (virtual) time she was due for
-  // one has actually arrived; see statusDue() in status.ts.
-  if (statusDue(rel)) {
-    await refreshStatus(character).catch((err) =>
-      logger.warn('scheduler', 'status refresh during a time skip failed', { character: character.username, error: String(err) }),
-    );
-  }
-
+  // Store the clock marker before any model-backed status refresh. Otherwise he can send a
+  // message while that slow call is running and the older "20 hours passed" marker is then
+  // inserted after his newer message, giving every later prompt time in the wrong order.
   const marker = addMessage({
     character_id: characterId,
     sender: 'system',
@@ -151,6 +146,15 @@ export async function passTime(characterId: string, hoursRequested: number): Pro
     game_clock_ms: gameClockMs(rel),
   });
   bus.emitEvent({ type: 'message', character_id: characterId, message: marker });
+
+  // Her situation may have moved on - a fresh status, a new location, a different outfit,
+  // one of her storylines nudged forward - but only once the (virtual) time she was due for
+  // one has actually arrived; see statusDue() in status.ts.
+  if (statusDue(rel)) {
+    await refreshStatus(character).catch((err) =>
+      logger.warn('scheduler', 'status refresh during a time skip failed', { character: character.username, error: String(err) }),
+    );
+  }
 
   let reaching_out = false;
   if (settings.unprompted_messages && !getWakeup(characterId)) {

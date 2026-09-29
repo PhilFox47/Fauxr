@@ -1,9 +1,9 @@
-import { db, nowIso } from '../db/index.js';
+import { nowIso } from '../db/index.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
   countPoolAvailable, getCharacter, getRelationship, saveRelationship,
-  setCharacterState, setWakeup, swipeStack,
+  listVisibleMatches, setCharacterState, setWakeup, swipeStack,
 } from '../repo.js';
 import type { Character } from '../types.js';
 import { generateCharacter } from './generator.js';
@@ -146,13 +146,5 @@ export function swipeLeft(characterId: string): { gone: boolean; reappear_at: st
 
 /** Matches whose delay has elapsed. Delayed matches are invisible until then. */
 export function visibleMatches(): Character[] {
-  const rows = db
-    .prepare(
-      `SELECT id FROM characters
-       WHERE state IN ('matched','blocked_by_user')
-         AND (matched_at IS NULL OR matched_at <= ?)
-       ORDER BY matched_at DESC`,
-    )
-    .all(nowIso()) as { id: string }[];
-  return rows.map((r) => getCharacter(r.id)!).filter(Boolean);
+  return listVisibleMatches(nowIso());
 }

@@ -96,6 +96,22 @@ for (const e of all) {
       if (!['her', 'his', 'both'].includes(side)) errors.push(`${e.id} (${e._file}): side_bias.${dom} must be her, his or both`);
     }
   }
+  if (e.category === 'height' && e.extra?.species) {
+    const speciesIds = new Set((byCategory.get('species') ?? []).map((s) => s.id));
+    if (!Array.isArray(e.extra.species) || !e.extra.species.length) {
+      errors.push(`${e.id} (${e._file}): height.extra.species must be a non-empty array`);
+    } else {
+      for (const ref of e.extra.species) {
+        if (!speciesIds.has(ref)) errors.push(`${e.id} (${e._file}): height references unknown species '${ref}'`);
+      }
+    }
+    if (e.extra.character_only !== true) {
+      errors.push(`${e.id} (${e._file}): species-specific height must set extra.character_only`);
+    }
+  }
+  if (e.category === 'species' && e.extra?.image_style !== undefined && e.extra.image_style !== 'anime_2d') {
+    errors.push(`${e.id} (${e._file}): unsupported species image_style '${e.extra.image_style}'`);
+  }
 }
 
 // Every ethnicity must leave at least one option in each of the looks rolled after it.
@@ -118,8 +134,15 @@ for (const eth of byCategory.get('ethnicity') ?? []) {
   const WORN = ['outer', 'top', 'bottom', 'dress', 'bra', 'panties', 'lingerie', 'legwear', 'shoes', 'extras', 'jewellery'];
   const ids = (cat) => new Set((byCategory.get(cat) ?? []).map((r) => r.id));
   const families = ids('wardrobe_family');
+  const styles = ids('clothing_style');
   const lingerie = ids('lingerie_style');
   const occupations = ids('occupation');
+  const adaptations = new Set((byCategory.get('wardrobe_lean') ?? []).flatMap((s) => s.extra?.adaptations ?? []));
+  for (const lean of byCategory.get('wardrobe_lean') ?? []) {
+    const sourceIds = ids(lean.extra?.source_category);
+    if (!sourceIds.has(lean.extra?.source_id)) errors.push(`${lean.id} (${lean._file}): unknown ${lean.extra?.source_category} source '${lean.extra?.source_id}'`);
+    for (const id of Object.keys(lean.extra?.weights ?? {})) if (!styles.has(id)) errors.push(`${lean.id} (${lean._file}): unknown clothing style weight '${id}'`);
+  }
   const items = byCategory.get('wardrobe_item') ?? [];
   if (!families.has('any')) errors.push("wardrobe_family 'any' is missing: every closet starts from it");
   for (const it of items) {
@@ -127,9 +150,11 @@ for (const eth of byCategory.get('ethnicity') ?? []) {
     const where = `${it.id} (${it._file})`;
     if (!OWNED.includes(x.slot)) errors.push(`${where}: wardrobe_item slot '${x.slot}' is not one of ${OWNED.join(', ')}`);
     for (const f of x.families ?? []) if (!families.has(f)) errors.push(`${where}: unknown wardrobe family '${f}'`);
+    for (const s of x.styles ?? []) if (!styles.has(s)) errors.push(`${where}: unknown clothing style '${s}'`);
     for (const l of x.lingerie ?? []) if (!lingerie.has(l)) errors.push(`${where}: unknown lingerie_style '${l}'`);
     for (const o of x.occupations ?? []) if (!occupations.has(o)) errors.push(`${where}: unknown occupation '${o}'`);
-    if (!(x.families?.length || x.lingerie?.length || x.occupations?.length)) errors.push(`${where}: needs families, lingerie or occupations, or nobody can own it`);
+    for (const a of x.adaptations ?? []) if (!adaptations.has(a)) errors.push(`${where}: unknown wardrobe adaptation '${a}'`);
+    if (!(x.families?.length || x.styles?.length || x.lingerie?.length || x.occupations?.length || x.adaptations?.length)) errors.push(`${where}: needs families, styles, lingerie, occupations or adaptations, or nobody can own it`);
     if ((x.slot === 'swim' || x.slot === 'work') && !x.pieces) errors.push(`${where}: a ${x.slot} set needs extra.pieces`);
     for (const k of Object.keys(x.pieces ?? {})) if (!WORN.includes(k)) errors.push(`${where}: piece slot '${k}' is not a worn slot`);
   }
@@ -144,8 +169,15 @@ for (const eth of byCategory.get('ethnicity') ?? []) {
     const counts = { ...countsOf('any'), ...countsOf(fams[0]), ...(st.extra?.wardrobe_counts ?? {}) };
     for (const slot of ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'jewellery', 'swim']) {
       const max = counts[slot]?.[1] ?? 0;
-      const pool = items.filter((i) => i.extra?.slot === slot && (i.extra?.families ?? []).some((f) => f === 'any' || fams.includes(f)));
+      const pool = items.filter((i) => i.extra?.slot === slot && (
+        (i.extra?.families ?? []).some((f) => f === 'any' || fams.includes(f)) || (i.extra?.styles ?? []).includes(st.id)
+      ));
       if (pool.length < max) errors.push(`clothing_style '${st.id}': only ${pool.length} ${slot} pieces for up to ${max}`);
+    }
+    const capsule = items.filter((i) => (i.extra?.styles ?? []).includes(st.id));
+    if (capsule.length < 20 || capsule.length > 40) errors.push(`clothing_style '${st.id}': style capsule has ${capsule.length} pieces, expected 20-40`);
+    for (const slot of ['top', 'bottom', 'dress', 'outer', 'shoes', 'extras', 'jewellery']) {
+      if (!capsule.some((i) => i.extra?.slot === slot)) errors.push(`clothing_style '${st.id}': style capsule has no ${slot}`);
     }
   }
 }

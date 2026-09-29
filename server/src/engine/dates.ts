@@ -9,7 +9,7 @@ import { render } from '../prompts/render.js';
 import {
   activeDate, addMessage, clearWakeup, createDate, dateMessages, deleteMessages, finishDate,
   getCharacter, getDate, getLocation, getMessage, getRelationship, getUserProfile, listDates,
-  getCircle, saveRelationship, setDateNpcs, setDateOutfit, type StoredMessage,
+  getCircle, recentMessages, saveRelationship, setDateNpcs, setDateOutfit, type StoredMessage,
 } from '../repo.js';
 import type { Character, CharacterSeed, DateSession, Location, Relationship } from '../types.js';
 import {
@@ -18,7 +18,7 @@ import {
   spiceBlock, userBlock,
 } from './blocks.js';
 import { claimTurn, currentEpoch, deleteMessage, isRunning, releaseTurn } from './chat.js';
-import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice, detectScorekeepingTell, detectAuditionFrame, detectReframe, detectRepeatedCrutch, crutchesIn } from './voice.js';
+import { WRITER_PUNCTUATION, detectRefusal, detectFadeToBlack, detectEuphemism, detectCaseFileVoice, detectScorekeepingTell, detectAuditionFrame, detectTransactionalGate, detectReframe, detectRepeatedCrutch, crutchesIn } from './voice.js';
 import { describeHim } from './discovery.js';
 import { describeSeed } from './generator.js';
 import { enqueueImage, photoSelfBlock } from './images.js';
@@ -29,13 +29,14 @@ import { fantasyLog } from './fantasies.js';
 import { userCardBlock } from './usercard.js';
 import { isObj, pick } from '../llm/shape.js';
 import { castFromInvite, castLine, circleBlock, groupRules, markLeft, mergeJoined, npcBlock, presentNpcs, rememberCast } from './npcs.js';
-import { DATE_BEAT, DATE_SCENE, DATE_SUMMARY, OUTFIT } from '../llm/schemas.js';
+import { CALL_BEAT, CALL_SUMMARY, DATE_BEAT, DATE_SCENE, DATE_SUMMARY, OUTFIT } from '../llm/schemas.js';
 import { isAiCharacter } from './species.js';
 import { costumeMentionBlock } from './cosplay.js';
 import { duoPartnerNpc } from './duo.js';
-import { gameClockMs } from './clock.js';
+import { advanceGameClock, gameClockMs } from './clock.js';
 import { applyOutfitChanges, closetList, defaultOutfit, isOutfit, OUTFIT_EXAMPLE, outfitForImage, outfitFromPicks, outfitLines, outfitSentence, type Outfit, type OutfitChange } from './wardrobe.js';
 import { normalizeOutfitChanges } from './actor.js';
+import { clearSteering, consumeCallback, EMPTY_SCENE, normalizeScene, sceneBlock, steeringBlock, steeringToken } from './roleplay.js';
 
 /**
  * Dates: the other half of the game.
@@ -58,10 +59,10 @@ const OPENING_NOTE = 'The date has just begun. Open the scene: arrive, or be fou
  * Used when the model fails twice. Deliberately in register - a canned "sorry, my phone did
  * something weird" would be nonsense from someone sitting in front of him - and flagged so
  * the client can mark it as a failed generation rather than a beat she actually played. Plain
- * narration, no markup: see actor_date.md for the three-part syntax this has to stay valid
- * under (plain text narrates, "quotes" speak, *asterisks* are a hidden private thought).
+ * narration, no markup: plain text is valid visible scene text on a date.
  */
 const FALLBACK_BEAT = 'Something catches her attention across the room, and she loses the thread of what she was about to say.';
+const FALLBACK_CALL = 'Sorry—my brain just completely dropped the sentence I was saying.';
 
 /** How much of a beat is actually enforced to be short - see MAX_VISIBLE_WORDS below. */
 function countWords(text: string): number {
@@ -69,11 +70,9 @@ function countWords(text: string): number {
 }
 
 /**
- * What the beat leaves behind once her private thoughts - the *asterisk* spans neither he
- * nor the player ever sees - are stripped back out. Used both to catch a turn that is
- * nothing but a hidden thought (which would render as a blank bubble) and to measure the
- * length that actually matters: the visible part is what has to stay short, not the thought
- * riding along with it.
+ * What legacy inline private thoughts leave behind once their *asterisk* spans are stripped.
+ * New prompts put her thoughts in structured hidden state, but old transcripts and tolerant
+ * provider output still use this markup, so visible validation remains backwards compatible.
  */
 function visibleContent(text: string): string {
   return text.replace(/\*[^*]*\*/g, ' ').replace(/\s+/g, ' ').trim();
@@ -86,7 +85,33 @@ function visibleContent(text: string): string {
  * first attempt: a slightly-too-long second attempt still beats spending both retries on
  * wordcount and landing on the fallback line instead.
  */
-const MAX_VISIBLE_WORDS = 220;
+const MAX_VISIBLE_WORDS = 160;
+
+/**
+ * A compositional nudge, not progression or a content gate. Dates otherwise converge on the
+ * same oversized beat: joke, movement, interruption, tease, question. The newest player move
+ * chooses the obvious cases; a small cycle varies the open floor without storing a score.
+ */
+export function dateBeatGuidance(transcript: StoredMessage[]): string {
+  const lastUser = [...transcript].reverse().find((message) => message.sender === 'user')?.text.toLowerCase() ?? '';
+  if (/\b(?:confused|don'?t understand|do not understand|not sure (?:i|what)|what do you want|what are you asking)\b/.test(lastUser)) {
+    return 'Shape for this beat: clarify simply and warmly. Let plain meaning replace performance; do not attach a new demand to the clarification.';
+  }
+  if (/\b(?:yes|yeah|okay|ok|please|go ahead|i want|i would like|i\'?d like|happy to|further into|sounds good)\b/.test(lastUser)) {
+    return 'Shape for this beat: payoff. He has leaned in, so let her do the thing the scene prepared for instead of announcing another condition, delay, or reward beyond this beat. End on a natural physical pause rather than requiring another verbal answer.';
+  }
+  if (lastUser.includes('?')) {
+    return 'Shape for this beat: answer the real question first, plainly in her own voice. One physical detail may accompany it; do not bury the answer inside a performance.';
+  }
+  const beats = transcript.filter((message) => message.sender === 'character').length;
+  return [
+    'Shape for this beat: respond directly and leave a little air around the exchange; one useful move is enough.',
+    'Shape for this beat: linger in proximity or sensation. Let a small physical change carry the moment without forcing dialogue.',
+    'Shape for this beat: volunteer one sincere or revealing thing that is hers, then let it land without asking him to evaluate it.',
+    'Shape for this beat: if the place offers it, make one natural transition or let a real interruption change the energy.',
+    'Shape for this beat: allow humour or imperfection, then return to the immediate connection rather than building a new challenge.',
+  ][beats % 5];
+}
 
 /**
  * The date's fourth syntax, and the only one that is his alone: a note in round brackets,
@@ -152,34 +177,20 @@ function avoidBlock(transcript: StoredMessage[]): string {
 export function directionBlock(direction: string): string {
   if (!direction) return '';
   return [
-    '# WHERE HE WANTS THIS TO GO',
-    `Out of character, in round brackets, he has written: (${direction})`,
+    '# OPTIONAL PLAYER DIRECTION',
+    `Private production note: (${direction})`,
     '',
-    'Nobody spoke this and nothing about it happened in the room. She does not know it ' +
-      'exists. Do not answer it, quote it, paraphrase it back, or let her react to it, and ' +
-      'do not write round brackets of your own anywhere in your reply.',
-    '',
-    'Do steer the scene towards it, starting with this beat. It stands until he writes a ' +
-      'different one, so keep playing towards it for as many beats as it honestly takes - ' +
-      'and get there through things that actually happen, what she says and does and ' +
-      'decides, never by narrating that the evening has changed direction.',
-    '',
-    'If it asks for the evening to wind down or end, that means stop opening new threads ' +
-      'and start closing the ones already open: let her check the time, settle up, gather ' +
-      'her things, say the thing people actually say when they are about to leave. Do not ' +
-      'sour a good evening to end it, and do not manufacture a reason - she can simply be ' +
-      'ready to go.',
-    '',
-    'A direction changes where this is heading, never who she is. It does not override her ' +
-      'hard limits, does not make her feel something the evening has given her no reason to ' +
-      'feel, and does not survive being flatly contradicted by what he then actually does ' +
-      'in the scene.',
+    'Nobody spoke this and she cannot perceive it. Never quote, answer, or paraphrase it, and ' +
+      'never write round brackets yourself. Let it gently influence what she chooses when it ' +
+      'fits; it is not a checklist and never overrides her identity, hard limits, or the newest ' +
+      'thing he actually says or does. If it asks to end the date or call, begin a natural wind-down ' +
+      'instead of opening something new.',
   ].join('\n');
 }
 
 export interface DateTurnResult {
   text: string;
-  hidden: { thoughts: string; mood: string; wants: string; in_the_act?: boolean; joined?: unknown; left?: unknown; outfit_changes?: OutfitChange[] };
+  hidden: { thoughts: string; mood: string; wants: string; scene: ReturnType<typeof normalizeScene>; callback_used: string | null; in_the_act?: boolean; joined?: unknown; left?: unknown; outfit_changes?: OutfitChange[] };
 }
 
 // ------------------------------------------------------------------ prompt blocks
@@ -209,7 +220,18 @@ function outfitBlock(date: DateSession, seed: CharacterSeed): string {
 export function locationBlock(date: DateSession, location: Location | null): string {
   const lines = [`Place: ${location?.name || date.where_at || 'somewhere the two of you agreed on'}`];
   const description = location?.description?.trim();
-  if (description) lines.push(description);
+  if (description) lines.push(`Venue texture: ${description}`);
+  if (location) {
+    const a = location.affordances;
+    if (a.sensory.length) lines.push(`Live sensory handles (pick only when useful): ${a.sensory.join('; ')}`);
+    if (a.private_spaces.length) lines.push(`Plausible private corners: ${a.private_spaces.join('; ')}`);
+    if (a.background_people.length) lines.push(`Ambient people (background only unless deliberately engaged): ${a.background_people.join('; ')}`);
+    if (a.social_openings.length) lines.push(`Optional social openings (use only if this scene actively chooses one): ${a.social_openings.join('; ')}`);
+    if (a.interruptions.length) lines.push(`Believable interruptions: ${a.interruptions.join('; ')}`);
+    if (a.transitions.length) lines.push(`Natural ways the evening could move: ${a.transitions.join('; ')}`);
+    if (a.constraints.length) lines.push(`Practical limits and norms: ${a.constraints.join('; ')}`);
+    lines.push('These are possibilities, never required beats. Use at most what the immediate moment needs. A person named in the venue description or ambient list is background truth, not cast, foreshadowing or a promise that they will appear. Only involve them when the player or the scene deliberately engages them.');
+  }
   if (date.when_at) lines.push(`When: ${date.when_at}`);
   return lines.join('\n');
 }
@@ -223,6 +245,32 @@ function buildDatePrompt(
   const user = getUserProfile();
   const seed = character.seed;
   const flags = rel.flags;
+  const cleanTranscript = transcript.filter((message) => !message.meta?.failed);
+  const sceneWindow = cleanTranscript.length > 14
+    ? [
+        ...cleanTranscript.slice(0, 2),
+        {
+          ...cleanTranscript[0],
+          id: -1,
+          sender: 'system' as const,
+          text: '[The middle of the date is omitted here. Current state and the latest beats are authoritative.]',
+        },
+        ...cleanTranscript.slice(-12),
+      ]
+    : cleanTranscript;
+  const chatHandoff = recentMessages(character.id, 14)
+    .filter((message) => !message.date_id && message.sender !== 'system' && !message.meta?.failed)
+    .slice(-8);
+  const openingHistory = [
+    chatHandoff.length ? 'Recent chat leading into tonight:\n' + historyBlock(chatHandoff, character, user) : '',
+    OPENING_NOTE,
+  ].filter(Boolean).join('\n\n');
+  // date_wants is continuity inside this date only. Relationship mood survives between
+  // dates, so never carry the final desire from a previous evening into a new opening.
+  const hasDateBeat = cleanTranscript.some((message) => message.sender === 'character');
+  const previousMood = hasDateBeat ? String((rel.mood as any)?.actor_mood ?? '').trim() : '';
+  const previousWant = hasDateBeat ? String((rel.mood as any)?.date_wants ?? '').trim() : '';
+  const latestScene = [...cleanTranscript].reverse().find((message) => message.sender === 'character' && message.meta?.scene)?.meta?.scene;
 
   return render('actor_date', {
     char_display_name: character.real_name,
@@ -237,14 +285,15 @@ function buildDatePrompt(
       : '',
     group_rules: groupRules(character, user),
     // Empty on the opening beat, which is what OPENING_NOTE replaces.
-    history_block: transcript.length
-      ? historyBlock(transcript, character, user)
-      : OPENING_NOTE,
+    history_block: sceneWindow.length
+      ? historyBlock(sceneWindow, character, user)
+      : openingHistory,
     identity_block: identityBlock(character, flags),
     core_block: coreBlock(character),
     speech_style_block: speechStyleBlock(seed),
     quirks_block: quirksBlock(seed),
-    appearance_block: appearanceBlock(seed),
+    // Her date outfit is fixed below; the rest of the closet is irrelevant in this scene.
+    appearance_block: appearanceBlock(seed, false),
     // Decided once in openDate(), read fresh here on every single turn - so the opening
     // beat, every later beat and the arrival photo all agree on what she is wearing rather
     // than three separate guesses.
@@ -269,16 +318,26 @@ function buildDatePrompt(
     mood_block: moodBlock(rel.arousal, seed.hints.arousal_tell, 'in_person'),
     release_block: releaseBlock(character, rel, 'in_person'),
     moment_block: describeHerMoment(character, rel),
+    date_continuity_block: previousMood || previousWant
+      ? [
+          previousMood ? `At the end of her last beat she felt: ${previousMood}` : '',
+          previousWant ? `She wanted: ${previousWant}` : '',
+          'This is continuity, not a task. The newest thing he does can change either immediately.',
+        ].filter(Boolean).join('\n')
+      : '',
+    scene_block: sceneBlock(latestScene ?? (rel.mood as any)?.date_scene),
+    steering_block: steeringBlock(rel, 'date'),
     // Empty unless he has actually written one. Deliberately the last block in the template,
     // immediately before OUTPUT - see directionBlock for why position matters here.
     direction_block: directionBlock(standingDirection(transcript)),
     avoid_block: avoidBlock(transcript),
+    beat_guidance: dateBeatGuidance(cleanTranscript),
   });
 }
 
 /**
  * The one thing that ruins a roleplay scene faster than bad prose: writing his half of it.
- * Narration is plain text now (see actor_date.md's three-part syntax), so this checks each
+ * Narration is plain text, so this checks each
  * narrated sentence - the bits outside quoted speech and hidden thoughts - for one that
  * opens on him as its subject, plus the blatant "you feel/decide" tell that means the same
  * thing wherever it lands. Leaves the rest ("she takes your hand") alone, which is the point:
@@ -299,9 +358,11 @@ async function runDateActor(
   date: DateSession,
 ): Promise<DateTurnResult> {
   const settings = getSettings();
+  const isCall = date.kind === 'call';
   // Photos in the date (the arrival shot, "show current scene") are his view of the evening,
   // not something that happened in it - she would only start reacting to "a photo".
-  const prompt = buildDatePrompt(character, rel, date, dateMessages(date.id).filter((m) => m.kind !== 'image'));
+  const transcript = dateMessages(date.id).filter((m) => m.kind !== 'image');
+  const prompt = isCall ? buildCallPrompt(character, rel, transcript) : buildDatePrompt(character, rel, date, transcript);
   const base = [{ role: 'user' as const, content: prompt }];
   let correction: string | null = null;
 
@@ -318,8 +379,8 @@ async function runDateActor(
     try {
       raw = await complete({
         scope: 'actor',
-        label: `date:${character.username}${attempt ? ':retry' : ''}`,
-        schema: DATE_BEAT,
+        label: `${isCall ? 'call' : 'date'}:${character.username}${attempt ? ':retry' : ''}`,
+        schema: isCall ? CALL_BEAT : DATE_BEAT,
         config: settings.models.actor,
         json: true,
         messages: correction ? [...base, { role: 'user', content: correction }] : base,
@@ -344,11 +405,12 @@ async function runDateActor(
       ? rawText.map((m: any) => (typeof m === 'string' ? m : pick(m, ['text', 'message', 'content']) ?? '')).join('\n\n')
       : String(rawText ?? '')).trim();
     const hiddenRaw = { ...parsed, ...(isObj(parsed?.meta) ? parsed.meta : {}), ...(isObj(parsed?.hidden) ? parsed.hidden : {}) };
-    if (!text || !visibleContent(text)) {
+    const audible = isCall ? text.replace(/\*/g, '').trim() : visibleContent(text);
+    if (!text || !audible) {
       correction =
         'Your reply contained no visible scene - a hidden thought on its own renders as a blank ' +
-        'message. Write one beat of the date: narration, or speech, or both, with a thought riding ' +
-        'along if it wants to, not a thought standing in for the beat.';
+        `message. Write one audible turn of the ${isCall ? 'call' : 'date'}, with a thought riding ` +
+        'along if it wants to, not a thought standing in for the reply.';
       continue;
     }
     // Before every style check below, because a beat that stepped out of the fiction is not
@@ -417,7 +479,7 @@ async function runDateActor(
         'cannot lose. Same JSON shape.';
       continue;
     }
-    if (writesForHim(text)) {
+    if (!isCall && writesForHim(text)) {
       logger.warn('actor', 'date beat wrote his half of the scene', { character: character.username, text });
       const men = presentNpcs(date).filter((n) => n.gender !== 'woman').map((n) => n.name);
       correction =
@@ -427,30 +489,24 @@ async function runDateActor(
         ' Write the beat again from scratch, same JSON shape.';
       continue;
     }
-    // Machine-writing tells, first draft only so they can never land him on the fallback beat:
-    // the "not X, that's Y" reframe, and a piece of stage business she already leaned on in one
-    // of her last few beats (see detectRepeatedCrutch).
-    if (attempt === 0) {
-      const reframe = detectReframe(text);
-      const earlier = dateMessages(date.id).filter((m) => m.sender === 'character').slice(-3).map((m) => m.text);
-      const crutch = reframe ? null : detectRepeatedCrutch(text, earlier, 2);
-      if (reframe || crutch) {
-        logger.warn('actor', 'date beat used a machine-writing tell', { character: character.username, reframe, crutch });
-        correction = reframe
-          ? `You wrote "${reframe}" - the "that's not X, that's Y" reframe, the most recognisable ` +
-            'line a machine writes. Have her say the thing directly, or just react. Same JSON shape.'
-          : `You used ${crutch} again - she did the same in a recent beat, and repeated it reads as a ` +
-            'writing tic, not as her. Show this moment with something specific to it instead. Same JSON shape.';
-        continue;
-      }
+    // Style tells remain observable in logs, but are not grounds for throwing away a coherent
+    // beat. In real logs the rewrite was often flatter or failed outright, so the cure did
+    // more damage than the occasional reframe or repeated gesture.
+    const reframe = detectReframe(text);
+    const earlier = dateMessages(date.id).filter((m) => m.sender === 'character').slice(-3).map((m) => m.text);
+    const crutch = reframe ? null : detectRepeatedCrutch(text, earlier, 2);
+    if (reframe || crutch) {
+      logger.debug('actor', 'date style diagnostic: machine-writing tell', { character: character.username, reframe, crutch });
+    }
+    if (isCall && attempt === 0 && /(?:^|\n)\s*she\s+(?:laughs|smiles|grins|nods|leans|moves|touches|looks|walks|sits|stands)\b/i.test(text)) {
+      logger.warn('actor', 'call turn used visual stage direction', { character: character.username, text });
+      correction =
+        'That included third-person visual narration. This is audio only: use spoken words plus ' +
+        '*brief audible cues* for what the phone carries. Same JSON shape.';
+      continue;
     }
     if (WRITER_PUNCTUATION.test(text)) {
-      logger.warn('actor', 'date beat used writer\'s punctuation', { character: character.username, text });
-      correction =
-        'You used an em-dash or a semicolon. Both are one of the single most recognisable tells that ' +
-        'this was generated rather than actually written - use a comma, a full stop, or trail off with ' +
-        '"..." instead. Write the beat again, same JSON shape.';
-      continue;
+      logger.debug('actor', 'date style diagnostic: writer\'s punctuation', { character: character.username });
     }
     // Round brackets are his syntax alone, so anything she writes in them is either her
     // echoing a direction back at him - the one failure that would make the whole mechanic
@@ -461,19 +517,29 @@ async function runDateActor(
       correction =
         'You wrote text in (round brackets). That syntax belongs to him alone - it is how he ' +
         'gives directions from outside the scene, and she cannot see or answer one. Write the ' +
-        'beat again with no round brackets anywhere: narration plain, speech in "quotes", any ' +
-        'private thought of hers in *asterisks*. Same JSON shape.';
+        'beat again with no round brackets anywhere: narration plain, speech in "quotes", and ' +
+        'private thought only in hidden.thoughts. Same JSON shape.';
       continue;
     }
-    if (attempt === 0 && countWords(visibleContent(text)) > MAX_VISIBLE_WORDS) {
-      logger.warn('actor', 'date beat ran long, re-requesting', {
+    const maxWords = isCall ? 90 : MAX_VISIBLE_WORDS;
+    const countedText = isCall ? text.replace(/\*/g, '') : visibleContent(text);
+    if (attempt === 0 && countWords(countedText) > maxWords) {
+      logger.debug('actor', 'date style diagnostic: beat ran long', {
         character: character.username,
-        words: countWords(visibleContent(text)),
+        words: countWords(countedText),
       });
       correction =
-        `That ran long even for a full beat - he needs room to actually reply, not a whole scene to ` +
-        `read first. Two or three paragraphs at most, ${MAX_VISIBLE_WORDS} words or under not counting ` +
-        `any hidden thought. Write it again, tighter, same JSON shape.`;
+        `That played too much of the scene at once (${countWords(countedText)} words). ` +
+        `Write one focused ${isCall ? 'spoken turn' : 'beat'} under ${maxWords} words: answer or ` +
+        `${isCall ? 'say one meaningful thing' : 'make one meaningful physical move'}, and stop at a natural opening. Same JSON shape.`;
+      continue;
+    }
+    const transactionalGate = detectTransactionalGate(text);
+    if (transactionalGate) {
+      logger.warn('actor', `date beat used transactional gating (${transactionalGate})`, { character: character.username, text });
+      correction =
+        `The playful premise became a real prerequisite (${transactionalGate}). Keep its voice, ` +
+        'but let the prepared moment pay off now without another fee, debt, compliance check or delay. Same JSON shape.';
       continue;
     }
 
@@ -483,6 +549,8 @@ async function runDateActor(
         thoughts: String(pick(hiddenRaw, ['thoughts', 'hidden_thoughts', 'reflection']) ?? ''),
         mood: String(hiddenRaw.mood ?? ''),
         wants: String(pick(hiddenRaw, ['wants', 'want', 'wants_next']) ?? ''),
+        scene: isCall ? { ...EMPTY_SCENE } : normalizeScene(hiddenRaw.scene, (rel.mood as any)?.date_scene),
+        callback_used: hiddenRaw.callback_used ? String(hiddenRaw.callback_used).trim().slice(0, 300) : null,
         in_the_act: hiddenRaw.in_the_act === true,
         joined: hiddenRaw.joined,
         left: hiddenRaw.left,
@@ -491,8 +559,8 @@ async function runDateActor(
     };
   }
 
-  logger.error('actor', `date actor failed twice for ${character.username}, using fallback`);
-  return { text: FALLBACK_BEAT, hidden: { thoughts: 'fallback beat, the model failed', mood: '', wants: '' } };
+  logger.error('actor', `${isCall ? 'call' : 'date'} actor failed twice for ${character.username}, using fallback`);
+  return { text: isCall ? FALLBACK_CALL : FALLBACK_BEAT, hidden: { thoughts: 'fallback beat, the model failed', mood: '', wants: '', scene: { ...EMPTY_SCENE }, callback_used: null } };
 }
 
 /**
@@ -506,9 +574,11 @@ async function takeDateTurn(dateId: string): Promise<void> {
   const rel = getRelationship(date.character_id);
   if (!character || !rel) return;
   if (!claimTurn(character.id)) return;
+  const isCall = date.kind === 'call';
 
   const startedIn = currentEpoch();
   const releaseBefore = releaseOf(rel);
+  const roleplaySteeringAt = steeringToken(rel, 'date');
   bus.emitEvent({ type: 'typing', character_id: character.id, on: true });
   try {
     const result = await runDateActor(character, rel, date);
@@ -518,18 +588,25 @@ async function takeDateTurn(dateId: string): Promise<void> {
 
     // What she has on after this beat rides on the beat itself (meta.outfit), so the next beat
     // reads it back and a reroll or delete of this one takes its clothes changes with it.
-    const before = dateOutfit(getDate(dateId)!, character.seed);
+    const before = isCall ? null : dateOutfit(getDate(dateId)!, character.seed);
     const after = before ? applyOutfitChanges(character.seed, before, result.hidden.outfit_changes) : null;
     const stored = addMessage({
       character_id: character.id,
       sender: 'character',
       text: result.text,
       date_id: dateId,
-      meta: { ...(result.text === FALLBACK_BEAT ? { failed: true } : {}), ...(after ? { outfit: after } : {}) },
+      meta: {
+        ...(result.text === (isCall ? FALLBACK_CALL : FALLBACK_BEAT) ? { failed: true } : {}),
+        ...(after ? { outfit: after } : {}),
+        ...(!isCall ? { scene: result.hidden.scene } : {}),
+      },
       read_at: null,
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
-    updateCast(dateId, stored.id, result.hidden.joined, result.hidden.left);
+    // Like a failed chat bubble, this is UI recovery rather than part of the fiction. It is
+    // excluded from later prompts and must not alter cast, clothing, mood, or release state.
+    if (stored.meta.failed) return;
+    if (!isCall) updateCast(dateId, stored.id, result.hidden.joined, result.hidden.left);
 
     const fresh = getRelationship(character.id);
     if (fresh) {
@@ -537,8 +614,12 @@ async function takeDateTurn(dateId: string): Promise<void> {
         ...fresh.mood,
         actor_mood: result.hidden.mood || fresh.mood.actor_mood,
         thoughts: result.hidden.thoughts,
-        date_wants: result.hidden.wants,
+        ...(isCall
+          ? { call_wants: result.hidden.wants }
+          : { date_wants: result.hidden.wants, date_scene: normalizeScene(result.hidden.scene, (fresh.mood as any)?.date_scene) }),
       };
+      clearSteering(fresh, 'date', roleplaySteeringAt);
+      consumeCallback(fresh, result.hidden.callback_used);
       // Same tracker as the chat: sex on a date gets the same build, edge, climax and afterglow.
       advanceRelease(character, fresh, releaseBefore, !!result.hidden.in_the_act);
       fresh.last_contact_at = nowIso();
@@ -586,6 +667,7 @@ function revertCast(dateId: string, beatIds: number[]): void {
 export function dismissNpc(dateId: string, npcId: string): DateSession {
   const date = getDate(dateId);
   if (!date) throw new Error('date not found');
+  if (date.kind === 'call') throw new Error('there is nobody else in this private call');
   if (date.status !== 'active') throw new Error('that date has already ended');
   const npc = (date.npcs ?? []).find((n) => n.id === npcId && !n.left_at);
   if (!npc) throw new Error('they are not here');
@@ -621,6 +703,7 @@ const SCENE_TOKENS = 1500;
 export async function showCurrentScene(dateId: string): Promise<{ image_id: string }> {
   const date = getDate(dateId);
   if (!date) throw new Error('date not found');
+  if (date.kind === 'call') throw new Error('a phone call has no shared scene to photograph');
   if (date.status !== 'active') throw new Error('that date has already ended');
   if (!getSettings().images_enabled) throw new Error('image generation is turned off in settings');
   const character = getCharacter(date.character_id);
@@ -789,7 +872,7 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
   if (character.state !== 'matched') throw new Error('you are not matched with her');
   const rel = getRelationship(character.id);
   if (!rel) throw new Error('relationship missing');
-  if (activeDate(character.id)) throw new Error('you are already on a date with her');
+  if (activeDate(character.id)) throw new Error('you already have a live date or call with her');
 
   const location = getLocation(input.locationId);
   if (!location) throw new Error('location not found');
@@ -797,11 +880,18 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
   const date = createDate({
     id: randomUUID(),
     character_id: character.id,
+    kind: 'date',
     when_at: input.when.trim(),
     where_at: location.name,
     location_id: location.id,
     company: (input.company ?? '').trim().slice(0, 300),
   });
+
+  // Date embodiment is local to one evening. Never carry a sofa position or physical contact
+  // from the last date into a new arrival; aftermath and durable memories remain separate.
+  rel.mood = { ...rel.mood, date_scene: { ...EMPTY_SCENE }, date_wants: '' };
+  clearSteering(rel, 'date');
+  saveRelationship(rel);
 
   // She is out with him: nothing may wake her up to send a text mid-date.
   clearWakeup(character.id);
@@ -825,11 +915,52 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
   return date;
 }
 
+/**
+ * Starts a live voice call. It uses the date transcript/lock infrastructure, but its Actor
+ * branch is audio-only: no shared room, outfit state, cast, location image or scene photo.
+ */
+export async function startCall(characterId: string): Promise<DateSession> {
+  const character = getCharacter(characterId);
+  if (!character) throw new Error('character not found');
+  if (character.state !== 'matched') throw new Error('you are not matched with her');
+  const rel = getRelationship(character.id);
+  if (!rel) throw new Error('relationship missing');
+  if (activeDate(character.id)) throw new Error('you already have a live date or call with her');
+
+  const call = createDate({
+    id: randomUUID(), character_id: character.id, kind: 'call', when_at: 'now',
+    where_at: 'Phone call', location_id: null, company: '',
+  });
+  rel.mood = { ...rel.mood, call_wants: '' };
+  clearSteering(rel, 'date');
+  saveRelationship(rel);
+  clearWakeup(character.id);
+
+  const marker = addMessage({
+    character_id: character.id,
+    sender: 'system',
+    text: `You called ${character.real_name}.`,
+    meta: { type: 'call_started', date_id: call.id },
+    game_clock_ms: gameClockMs(rel),
+  });
+  bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
+  bus.emitEvent({ type: 'date', character_id: character.id, date: call });
+  logger.info('actor', `call started with ${character.username}`);
+
+  void takeDateTurn(call.id).catch((err) => logger.error('actor', 'opening call turn failed', { error: String(err) }));
+  return call;
+}
+
 /** His half of a beat. Same shape as handleUserMessage, into the date transcript instead. */
 export async function handleUserDateMessage(input: { dateId: string; text: string }): Promise<StoredMessage> {
   const date = getDate(input.dateId);
   if (!date) throw new Error('date not found');
   if (date.status !== 'active') throw new Error('that date has already ended');
+  // Unlike text chat, a date is one continuous scene: accepting another line while her
+  // previous beat (or the end-of-date summary) is still being written lets two snapshots of
+  // the same transcript race. The loser can strand an unanswered line or overwrite the
+  // winner's relationship changes. Keep the whole room strictly one beat at a time.
+  if (isRunning(date.character_id)) throw new Error('she is still responding - give her a moment');
 
   const stored = addMessage({
     character_id: date.character_id,
@@ -909,6 +1040,7 @@ export function deleteDateMessage(dateId: string, messageId: number): void {
  */
 function withoutDirections(messages: StoredMessage[]): StoredMessage[] {
   return messages
+    .filter((m) => !m.meta?.failed)
     .map((m) =>
       m.sender === 'user' && HAS_DIRECTION.test(m.text)
         ? { ...m, text: m.text.replace(DIRECTION_SPAN, ' ').replace(/[ \t]+/g, ' ').replace(/ *\n */g, '\n').trim() }
@@ -921,99 +1053,184 @@ function withoutDirections(messages: StoredMessage[]): StoredMessage[] {
 
 function summaryPrompt(character: Character, rel: Relationship, date: DateSession): string {
   const user = getUserProfile();
-  return render('director_date_summary', {
+  return render(date.kind === 'call' ? 'director_call_summary' : 'director_date_summary', {
     user_block: userBlock(user),
     seed_block: seedBlock(character),
-    location_block: [locationBlock(date, date.location_id ? getLocation(date.location_id) : null), castLine(date)].filter(Boolean).join('\n'),
+    location_block: date.kind === 'date'
+      ? [locationBlock(date, date.location_id ? getLocation(date.location_id) : null), castLine(date)].filter(Boolean).join('\n')
+      : '',
     arousal: rel.arousal,
-    fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel), 'in_person') || '(none)',
+    fantasies_block: fantasiesBlock(character.seed, fantasyLog(rel), date.kind === 'call' ? 'call' : 'in_person') || '(none)',
     history_block: historyBlock(withoutDirections(dateMessages(date.id)), character, user),
   });
 }
 
 /**
- * The evening, compressed into the one paragraph she keeps.
+ * The date or call, compressed into the small memory she keeps.
  *
- * This is the whole reason the transcript is separate: the date is not in her texting
+ * This is the whole reason the transcript is separate: the live session is not in her texting
  * history and never will be, so without a summary written back into the chat she would
  * genuinely have no idea they had ever met. The summary is posted as a system line in the
  * text chat, which puts it in the Actor's context from the next message onwards.
  */
 export async function endDate(dateId: string): Promise<DateSession> {
-  const date = getDate(dateId);
+  let date = getDate(dateId);
   if (!date) throw new Error('date not found');
   if (date.status !== 'active') return date;
-  const character = getCharacter(date.character_id);
-  const rel = getRelationship(date.character_id);
-  if (!character || !rel) throw new Error('character not found');
+  if (!claimTurn(date.character_id)) throw new Error('she is still responding - give her a moment');
 
-  const transcript = dateMessages(date.id);
-  let summary = '';
-  let update: DirectorUpdate = {};
+  try {
+    // Re-read only after taking the same per-character lock used by date beats. The summary
+    // call can take minutes; without the lock a beat could land during it, be omitted from the
+    // summary, and then have its relationship state overwritten by this older snapshot.
+    date = getDate(dateId)!;
+    if (date.status !== 'active') return date;
+    const character = getCharacter(date.character_id);
+    const rel = getRelationship(date.character_id);
+    if (!character || !rel) throw new Error('character not found');
 
-  // A date with nothing in it is not worth an LLM call.
-  if (transcript.some((m) => m.sender === 'user')) {
-    try {
-      const out = await completeJson<{ summary?: string; highlights?: string[]; update?: DirectorUpdate }>({
-        scope: 'director',
-        label: `date_summary:${character.username}`,
-        schema: DATE_SUMMARY,
-        config: getSettings().models.director,
-        require: ['summary'],
-        messages: [{ role: 'user', content: summaryPrompt(character, rel, date) }],
-      });
-      summary = String(out.summary ?? '').trim();
-      update = out.update ?? {};
-      const highlights = (out.highlights ?? []).map((h) => String(h)).filter(Boolean);
-      if (highlights.length) {
-        update.ledger = { ...update.ledger, what_landed: [...(update.ledger?.what_landed ?? []), ...highlights] };
+    const transcript = dateMessages(date.id);
+    let summary = '';
+    let durationMinutes = sessionDurationMinutes(date, transcript);
+    let update: DirectorUpdate = {};
+
+    // A date with nothing in it is not worth an LLM call.
+    if (transcript.some((m) => m.sender === 'user')) {
+      try {
+        const out = await completeJson<{ summary?: string; duration_minutes?: number; highlights?: string[]; update?: DirectorUpdate }>({
+          scope: 'director',
+          label: `${date.kind}_summary:${character.username}`,
+          schema: date.kind === 'call' ? CALL_SUMMARY : DATE_SUMMARY,
+          config: getSettings().models.director,
+          require: ['summary'],
+          messages: [{ role: 'user', content: summaryPrompt(character, rel, date) }],
+        });
+        summary = String(out.summary ?? '').trim();
+        durationMinutes = sessionDurationMinutes(date, transcript, out.duration_minutes);
+        update = out.update ?? {};
+        const highlights = (out.highlights ?? []).map((h) => String(h)).filter(Boolean);
+        if (highlights.length) {
+          update.ledger = { ...update.ledger, what_landed: [...(update.ledger?.what_landed ?? []), ...highlights] };
+        }
+      } catch (err) {
+        // The date still ended. Losing the summary is survivable; leaving her stuck on a
+        // date because one call failed is not.
+        logger.error('director', `${date.kind} summary failed for ${character.username}`, { error: String(err) });
       }
-    } catch (err) {
-      // The date still ended. Losing the summary is survivable; leaving her stuck on a
-      // date because one call failed is not.
-      logger.error('director', `date summary failed for ${character.username}`, { error: String(err) });
     }
+
+    if (!summary) {
+      summary = date.kind === 'call'
+        ? `You and ${character.real_name} talked on the phone.`
+        : `You met ${character.real_name} at ${date.where_at || 'the place you had agreed on'}${date.when_at ? ` (${date.when_at})` : ''}.`;
+    }
+
+    // Recorded as the evening itself, so it reads as a memory in the ledger rather than a note.
+    update.ledger = {
+      ...update.ledger,
+      events: [...(update.ledger?.events ?? []), date.kind === 'call'
+        ? `Phone call: ${summary}`
+        : `Date at ${date.where_at || 'a place he chose'}: ${summary}`],
+    };
+    // A real milestone, guaranteed rather than left to the summary call's own judgement: it
+    // is pinned deterministically, in code, the same way has_had_first_date itself already
+    // gets set unconditionally below - this just finally gives that flag something to do.
+    if (date.kind === 'date' && !rel.flags.state.has_had_first_date) {
+      update.ledger.pinned_add = [
+        ...(update.ledger.pinned_add ?? []),
+        `Their first date was at ${date.where_at || 'a place he chose'}.`,
+      ];
+    }
+    if (date.kind === 'date') rel.flags.state.has_had_first_date = true;
+    // Session beats do not each charge a chat-minute. Advance once by the transcript-based
+    // estimate so a whole evening or involved call cannot happen in a frozen minute.
+    advanceGameClock(rel, durationMinutes / 60);
+    applyUpdate(character, rel, update);
+    // Whoever was part of it is someone he has met now, and can be asked for next time.
+    if (date.kind === 'date') rememberCast(character.id, date);
+
+    const ended = finishDate(date.id, summary, durationMinutes)!;
+
+    const marker = addMessage({
+      character_id: character.id,
+      sender: 'system',
+      text: date.kind === 'call'
+        ? `The call with ${character.real_name} ended. ${summary}`
+        : `The date at ${ended.where_at || 'the place you chose'} is over. ${summary}`,
+      meta: { type: date.kind === 'call' ? 'call_ended' : 'date_ended', date_id: ended.id, duration_minutes: durationMinutes },
+      game_clock_ms: gameClockMs(rel),
+    });
+    bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
+    bus.emitEvent({ type: 'date', character_id: character.id, date: ended });
+    logger.info('director', `${date.kind} ended with ${character.username}`, { summary });
+
+    return ended;
+  } finally {
+    releaseTurn(date.character_id);
   }
+}
 
-  if (!summary) {
-    summary = `You met ${character.real_name} at ${date.where_at || 'the place you had agreed on'}${
-      date.when_at ? ` (${date.when_at})` : ''
-    }.`;
-  }
+/** Estimate elapsed story time, with a deterministic fallback when the summary call fails. */
+export function sessionDurationMinutes(date: Pick<DateSession, 'kind'>, transcript: StoredMessage[], estimate?: unknown): number {
+  const turns = transcript.filter((message) => !message.meta?.failed && message.sender !== 'system').length;
+  const fallback = date.kind === 'call'
+    ? Math.max(3, 3 + Math.ceil(turns / 2) * 4)
+    : Math.max(30, 30 + Math.ceil(turns / 2) * 12);
+  const value = Math.round(Number(estimate));
+  const chosen = Number.isFinite(value) && value > 0 ? value : fallback;
+  return date.kind === 'call'
+    ? Math.max(1, Math.min(180, chosen))
+    // A "date" can be a weekend away or another continuous multi-day scene. Keep only a
+    // generous corruption guard; ordinary and overnight durations come from the transcript.
+    : Math.max(15, Math.min(43_200, chosen));
+}
 
-  // Recorded as the evening itself, so it reads as a memory in the ledger rather than a note.
-  update.ledger = {
-    ...update.ledger,
-    events: [...(update.ledger?.events ?? []), `Date at ${date.where_at || 'a place he chose'}: ${summary}`],
-  };
-  // A real milestone, guaranteed rather than left to the summary call's own judgement: it
-  // is pinned deterministically, in code, the same way has_had_first_date itself already
-  // gets set unconditionally below - this just finally gives that flag something to do.
-  if (!rel.flags.state.has_had_first_date) {
-    update.ledger.pinned_add = [
-      ...(update.ledger.pinned_add ?? []),
-      `Their first date was at ${date.where_at || 'a place he chose'}.`,
-    ];
-  }
-  rel.flags.state.has_had_first_date = true;
-  applyUpdate(character, rel, update);
-  // Whoever was part of it is someone he has met now, and can be asked for next time.
-  rememberCast(character.id, date);
+/** The live-audio register: spoken, remote and deliberately lighter than an embodied date. */
+function buildCallPrompt(character: Character, rel: Relationship, transcript: StoredMessage[]): string {
+  const user = getUserProfile();
+  const seed = character.seed;
+  const clean = transcript.filter((message) => !message.meta?.failed);
+  const window = clean.length > 18 ? clean.slice(-18) : clean;
+  const chatHandoff = recentMessages(character.id, 12)
+    .filter((message) => !message.date_id && message.sender !== 'system' && !message.meta?.failed)
+    .slice(-6);
+  const hasBeat = clean.some((message) => message.sender === 'character');
+  const previousMood = hasBeat ? String((rel.mood as any)?.actor_mood ?? '').trim() : '';
+  const previousWant = hasBeat ? String((rel.mood as any)?.call_wants ?? '').trim() : '';
+  const opening = [
+    chatHandoff.length ? `Recent chat before the call:\n${historyBlock(chatHandoff, character, user)}` : '',
+    '[The call connects. She speaks first.]',
+  ].filter(Boolean).join('\n\n');
 
-  const ended = finishDate(date.id, summary)!;
-
-  const marker = addMessage({
-    character_id: character.id,
-    sender: 'system',
-    text: `The date at ${ended.where_at || 'the place you chose'} is over. ${summary}`,
-    meta: { type: 'date_ended', date_id: ended.id },
-    game_clock_ms: gameClockMs(rel),
+  return render('actor_call', {
+    char_display_name: character.real_name,
+    user_name: user?.display_name ?? 'him',
+    identity_block: identityBlock(character, rel.flags),
+    core_block: coreBlock(character),
+    speech_style_block: speechStyleBlock(seed),
+    quirks_block: quirksBlock(seed),
+    life_block: lifeBlock(seed),
+    interests_block: interestsBlock(seed),
+    sexual_block: sexualBlock(seed),
+    fantasies_block: fantasiesBlock(seed, fantasyLog(rel), 'call'),
+    language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
+    user_block: [userBlock(user), user ? userCardBlock(user) : '', describeHim(rel)].filter(Boolean).join('\n\n'),
+    ledger_block: ledgerBlock(rel.ledger, gameClockMs(rel)),
+    moment_block: describeHerMoment(character, rel),
+    call_continuity_block: previousMood || previousWant
+      ? [
+          previousMood ? `At the end of her last turn she felt: ${previousMood}` : '',
+          previousWant ? `She wanted: ${previousWant}` : '',
+          'This is continuity, not a task. His newest words can change either immediately.',
+        ].filter(Boolean).join('\n')
+      : '',
+    mood_block: moodBlock(rel.arousal, seed.hints.arousal_tell, 'call'),
+    release_block: releaseBlock(character, rel, 'call'),
+    spice_block: spiceBlock(seed, rel.arousal, 'call'),
+    steering_block: steeringBlock(rel, 'date'),
+    direction_block: directionBlock(standingDirection(clean)),
+    history_block: window.length ? historyBlock(window, character, user) : opening,
   });
-  bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
-  bus.emitEvent({ type: 'date', character_id: character.id, date: ended });
-  logger.info('director', `date ended with ${character.username}`, { summary });
-
-  return ended;
 }
 
 /** Everything the chat screen needs to render the invite menu and the past-dates list. */

@@ -64,9 +64,10 @@ function parseCookies(header: string | undefined): Record<string, string> {
  * own embedded expiry (SESSION_SECONDS) is the backstop for a browser that keeps it around
  * longer than that anyway (tab restore, a browser that never really closes).
  */
-function cookieHeader(token: string, maxAgeSeconds?: number): string {
+function cookieHeader(token: string, maxAgeSeconds?: number, secure = false): string {
   const parts = [`${COOKIE_NAME}=${encodeURIComponent(token)}`, 'Path=/', 'HttpOnly', 'SameSite=Lax'];
   if (maxAgeSeconds !== undefined) parts.push(`Max-Age=${maxAgeSeconds}`);
+  if (secure) parts.push('Secure');
   return parts.join('; ');
 }
 
@@ -74,14 +75,19 @@ export function isAuthedRequest(req: FastifyRequest): boolean {
   return verifyToken(parseCookies(req.headers.cookie as string | undefined)[COOKIE_NAME]);
 }
 
-export function logIn(reply: FastifyReply, remember: boolean): void {
-  const seconds = remember ? REMEMBER_SECONDS : SESSION_SECONDS;
-  const token = issueToken(Date.now() + seconds * 1000);
-  reply.header('set-cookie', cookieHeader(token, remember ? seconds : undefined));
+export function isSecureRequest(req: FastifyRequest): boolean {
+  const forwarded = String(req.headers['x-forwarded-proto'] ?? '').split(',')[0].trim().toLowerCase();
+  return process.env.FAUXR_SECURE_COOKIE === '1' || req.protocol === 'https' || forwarded === 'https';
 }
 
-export function logOut(reply: FastifyReply): void {
-  reply.header('set-cookie', cookieHeader('', 0));
+export function logIn(reply: FastifyReply, remember: boolean, secure = false): void {
+  const seconds = remember ? REMEMBER_SECONDS : SESSION_SECONDS;
+  const token = issueToken(Date.now() + seconds * 1000);
+  reply.header('set-cookie', cookieHeader(token, remember ? seconds : undefined, secure));
+}
+
+export function logOut(reply: FastifyReply, secure = false): void {
+  reply.header('set-cookie', cookieHeader('', 0, secure));
 }
 
 /** Paths reachable with no session at all - the login call itself, and the health check. */

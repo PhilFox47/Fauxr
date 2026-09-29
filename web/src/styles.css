@@ -279,6 +279,16 @@ button { cursor: pointer; }
 .tiny { font-size: 11px; }
 .center { text-align: center; }
 .row { display: flex; gap: var(--s3); align-items: center; }
+.row.wrap { flex-wrap: wrap; align-items: flex-end; }
+
+.attribute-list { display: grid; gap: var(--s2); }
+.attribute-row { margin-bottom: 0; }
+.attribute-hint { margin: var(--s2) 0 0; white-space: pre-wrap; }
+.attribute-editor .code-input {
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  tab-size: 2;
+}
 .col { display: flex; flex-direction: column; gap: var(--s3); }
 .grow { flex: 1; }
 
@@ -541,54 +551,6 @@ input[type='range'] {
   color: var(--accent-bright);
 }
 .swipe-traits .value { font-size: 14.5px; font-weight: 560; color: var(--text); line-height: 1.35; }
-/**
- * A spoiler-free grade on how unusual her rolled traits are as a whole - see rarityTier()
- * server-side. Common is deliberately understated (grey, no glow) so it reads as the quiet
- * baseline; each tier up gets a distinct hue and, at the top, a glow - the same visual
- * language a loot rarity system uses, which is exactly the intuition this is borrowing.
- */
-.swipe-card .rarity-badge {
-  position: absolute;
-  top: var(--s5);
-  right: var(--s5);
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 5px 11px;
-  border-radius: var(--r-full);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-  border: 1px solid var(--line-strong);
-  background: var(--surface-2);
-  color: var(--text-dim);
-}
-.swipe-card .rarity-badge[data-tier='uncommon'] {
-  color: var(--ok);
-  border-color: rgba(52, 211, 153, 0.35);
-  background: rgba(52, 211, 153, 0.1);
-}
-.swipe-card .rarity-badge[data-tier='rare'] {
-  color: var(--accent-bright);
-  border-color: var(--accent-line);
-  background: var(--accent-soft);
-}
-.swipe-card .rarity-badge[data-tier='very_rare'] {
-  color: var(--warn);
-  border-color: rgba(251, 191, 36, 0.4);
-  background: rgba(251, 191, 36, 0.12);
-  box-shadow: 0 0 14px rgba(251, 191, 36, 0.3);
-}
-/* The one tier above gold - a distinct hue rather than a brighter gold, so it reads as a
-   genuinely different rung rather than "very rare but more so". */
-.swipe-card .rarity-badge[data-tier='extremely_rare'] {
-  color: #d9a8ff;
-  border-color: rgba(192, 132, 252, 0.5);
-  background: rgba(192, 132, 252, 0.14);
-  box-shadow: 0 0 18px rgba(192, 132, 252, 0.4);
-}
-
 /* The verdict stamps that fade in as you drag, so a half-swipe tells you what it will do. */
 .verdict {
   position: absolute;
@@ -1160,24 +1122,7 @@ input[type='range'] {
   white-space: nowrap;
 }
 
-/* ---------------------------------------------------------------- discovery sheet */
-.iconbtn.known-count {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  padding: 0 12px;
-  width: auto;
-  height: 34px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r-full);
-  background: var(--surface-2);
-  color: var(--text-dim);
-}
-.iconbtn.known-count .glyph { color: var(--accent); display: flex; }
-
+/* ---------------------------------------------------------------- profile sheet */
 .sheet-backdrop {
   position: fixed;
   inset: 0;
@@ -1231,21 +1176,6 @@ input[type='range'] {
 .sheet-head h2 { margin: 0 0 2px; font-size: 19px; font-weight: 650; letter-spacing: -0.2px; }
 .sheet-head .iconbtn { margin-left: auto; }
 
-.progress {
-  height: 4px;
-  background: var(--surface-2);
-  margin: 0 var(--s5);
-  border-radius: var(--r-full);
-  overflow: hidden;
-}
-.progress span {
-  display: block;
-  height: 100%;
-  border-radius: var(--r-full);
-  background: linear-gradient(90deg, var(--accent-deep), var(--accent-bright));
-  transition: width var(--med) var(--ease-out);
-}
-
 .bio-quote {
   margin: var(--s4) var(--s5) var(--s1);
   padding-left: var(--s3);
@@ -1256,8 +1186,8 @@ input[type='range'] {
 }
 
 /**
- * The one scrolling region for everything under the header - progress bar, bio, gallery,
- * her known/unknown facts and the Dates section all live in here now. `flex: 1 1 auto` plus
+ * The one scrolling region for everything under the header - bio, gallery, known facts and
+ * the Dates section all live in here now. `flex: 1 1 auto` plus
  * `min-height: 0` is the actual fix: a flex child's default min-height is `auto` (its
  * content size), which let this box grow to fit everything and never actually overflow -
  * .sheet as a whole did instead, past its own max-height, with nothing able to scroll to
@@ -1433,6 +1363,20 @@ input[type='range'] {
 .date-room .composer {
   background: color-mix(in srgb, var(--bg) 72%, transparent);
 }
+
+/* Calls have no shared photographic place. A quiet pulse distinguishes the audio-only room
+   without implying that the app is rendering a video feed or an actual waveform. */
+.call-room {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(167, 151, 232, 0.13), transparent 35%),
+    radial-gradient(circle at 50% 42%, transparent 0 22%, rgba(239, 104, 120, 0.07) 22.3% 22.8%, transparent 23.1% 33%, rgba(167, 151, 232, 0.05) 33.3% 33.7%, transparent 34%),
+    var(--bg);
+}
+.call-room .topbar,
+.call-room .date-composer-wrap { background: color-mix(in srgb, var(--bg) 88%, transparent); }
+.call-room .date-log .chat-log-inner { width: min(100%, 680px); margin-inline: auto; }
+.call-room .date-beat { border-radius: 18px; line-height: 1.55; }
+.call-room .date-beat.them { border-color: color-mix(in srgb, var(--plum) 28%, var(--line)); }
 .date-log .chat-log-inner { gap: var(--s4); }
 
 .date-beat {
@@ -1453,9 +1397,11 @@ input[type='range'] {
   background: color-mix(in srgb, var(--accent-soft) 60%, var(--surface-2) 40%);
 }
 /* Spoken lines - "quoted" in the model's own output - get the app's accent colour, the same
-   pink a message bubble uses; narration around them stays the plain text colour. Anything
-   between *asterisks* never reaches this far - renderBeat() strips it before it renders. */
+   pink a message bubble uses; narration around them stays plain. Date thoughts in *asterisks*
+   are hidden outside speech, while quoted emphasis stays visible. Call cues use their own style. */
 .date-beat .speech { color: var(--accent-bright); font-weight: 550; }
+.date-beat .speech em { font-style: italic; color: var(--text); }
+.date-beat .call-cue { color: var(--muted); font-style: italic; }
 /* His out-of-character direction: (the date comes to a close). It is not in the scene and
    she never hears it, so it must not read like narration sitting next to it - dimmed,
    italic, and set off by a rule rather than tinted, since the accent colour already means
@@ -1578,10 +1524,6 @@ input[type='range'] {
   border-radius: var(--r-full);
   margin: var(--s2) 0;
 }
-
-/* The armed state of the profile-picture button. "Generate profile pic?" on one line pushed a
-   390px-wide phone into sideways scrolling, so it wraps to two short lines instead. */
-.topbar .picture-confirm { white-space: normal; max-width: 112px; padding: 5px 10px; font-size: 12px; line-height: 1.15; text-align: center; box-shadow: none; }
 
 /* One of her fantasies on the profile sheet. */
 .fantasy-row {
@@ -1824,3 +1766,344 @@ input[type='range'] {
 /* "Show current scene" while its picture develops. */
 .iconbtn[data-busy='true'] { opacity: 0.55; animation: scene-pulse 1.4s ease-in-out infinite; }
 @keyframes scene-pulse { 50% { opacity: 0.25; } }
+
+/* ---------------------------------------------------------------- 2026 product refresh
+ * A quieter, character-first visual layer. The app keeps the compact mechanics that work on
+ * phones, but people and conversations now carry the hierarchy instead of counters, borders,
+ * or rarity cues.
+ */
+:root {
+  --bg: #09090d;
+  --bg-elevated: #0f0f15;
+  --surface: #14141b;
+  --surface-2: #1a1a23;
+  --surface-3: #242431;
+  --line: #202029;
+  --line-strong: #343440;
+  --text: #f4f1f5;
+  --text-dim: #c7c0ca;
+  --muted: #948c9b;
+  --faint: #655f6e;
+  --accent: #ef6878;
+  --accent-bright: #f58b96;
+  --accent-deep: #ce4f61;
+  --accent-soft: rgba(239, 104, 120, 0.12);
+  --accent-line: rgba(239, 104, 120, 0.3);
+  --accent-glow: rgba(239, 104, 120, 0.2);
+  --plum: #a797e8;
+  --amber: #d6a65d;
+}
+
+body {
+  background:
+    radial-gradient(900px 520px at 82% -10%, rgba(128, 78, 120, 0.09), transparent 62%),
+    #07070a;
+}
+
+.topbar {
+  min-height: 64px;
+  border-bottom-color: color-mix(in srgb, var(--line) 72%, transparent);
+}
+.topbar h1 { font-size: 21px; font-weight: 680; letter-spacing: -0.45px; }
+.card { box-shadow: none; }
+.btn {
+  background: var(--accent);
+  box-shadow: none;
+  border-radius: 12px;
+}
+.btn:hover:not(:disabled) { background: var(--accent-bright); }
+.btn.ghost { background: var(--surface-2); border-color: var(--line); }
+.brand-mark { background: var(--accent); box-shadow: none; }
+
+/* Discover reads as one editorial profile, not a collectible card. */
+.swipe-area { padding-top: var(--s3); gap: var(--s4); }
+.swipe-card {
+  background:
+    radial-gradient(95% 62% at 0% 0%, rgba(167, 151, 232, 0.1), transparent 60%),
+    var(--surface);
+  border-color: var(--line);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+  padding: var(--s6);
+  gap: var(--s4);
+}
+.swipe-deck.stacked::before { background: var(--surface-2); border-color: var(--line); }
+.swipe-intro { display: flex; align-items: center; gap: var(--s3); margin-top: auto; }
+.swipe-emoji {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  flex: 0 0 auto;
+  margin: 0;
+  border-radius: 50%;
+  font-size: 28px;
+  background: var(--surface-3);
+  border: 1px solid var(--line-strong);
+}
+.swipe-card .real-name { padding-right: 0; font-size: 30px; }
+.swipe-age { color: var(--text-dim); font-weight: 450; }
+.swipe-card .swipe-meta { margin: -8px 0 0 67px; }
+.swipe-card .bio { font-size: 17px; line-height: 1.65; color: var(--text-dim); }
+.swipe-signals { margin-bottom: auto; }
+.swipe-signals-title {
+  display: block;
+  margin-bottom: var(--s2);
+  color: var(--muted);
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+.swipe-traits { margin: 0; gap: 0; }
+.swipe-traits li {
+  padding: 9px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+}
+.swipe-traits li:last-child { border-bottom: 0; }
+.swipe-traits .caption { color: var(--plum); width: 88px; }
+.swipe-actions button { width: 58px; height: 58px; box-shadow: none; background: var(--surface); }
+.stack-count { letter-spacing: 0.15px; }
+
+/* Conversation list actions stay out of the scan path until the row is engaged. */
+.match-trash { opacity: 0; transition: opacity var(--fast) var(--ease), color var(--fast) var(--ease); }
+.match-row:hover .match-trash,
+.match-row:focus-within .match-trash { opacity: 1; }
+.match-row:focus-visible { outline-offset: -2px; }
+
+/* The identity is the profile affordance. The rest of the header remains conversational. */
+.chat-identity {
+  all: unset;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  cursor: pointer;
+  border-radius: var(--r-md);
+}
+.chat-identity:disabled { cursor: default; }
+.chat-identity .avatar { transition: border-color var(--fast) var(--ease); }
+.chat-identity:hover .avatar { border-color: var(--accent-line); }
+.chat-menu {
+  position: absolute;
+  z-index: 14;
+  top: 58px;
+  right: var(--s3);
+  width: min(290px, calc(100% - 24px));
+  padding: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--surface-2) 94%, transparent);
+  box-shadow: var(--sh-3);
+  backdrop-filter: blur(18px);
+}
+.chat-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-dim);
+  text-align: left;
+}
+.chat-menu-item:hover { background: var(--surface-3); color: var(--text); }
+.chat-menu-item.danger { color: var(--err); }
+.chat-menu .row { padding: 4px; }
+.chat-menu > p { margin: 8px 10px; }
+
+.photo-unlock-card {
+  align-self: center;
+  width: min(100%, 520px);
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin: var(--s3) 0 var(--s5);
+  padding: var(--s3);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface));
+}
+.photo-unlock-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: var(--accent-bright);
+  background: var(--accent-soft);
+}
+.photo-unlock-card strong { display: block; font-size: 13.5px; }
+.photo-unlock-card .grow > span { display: block; margin-top: 2px; color: var(--muted); font-size: 11.5px; line-height: 1.4; }
+.photo-unlock-card .btn { flex: 0 0 auto; padding: 8px 12px; font-size: 12.5px; }
+.photo-unlock-card .picture-confirm { max-width: 100px; white-space: normal; line-height: 1.2; }
+
+/* Editing tools are available without being permanent visual furniture. */
+@media (hover: hover) and (pointer: fine) {
+  .stamp .regen-btn,
+  .stamp .regen-menu,
+  .stamp .msg-del,
+  .date-beat-actions { opacity: 0; transition: opacity var(--fast) var(--ease); }
+  .stamp:hover .regen-btn,
+  .stamp:hover .regen-menu,
+  .stamp:hover .msg-del,
+  .stamp:focus-within .regen-btn,
+  .stamp:focus-within .regen-menu,
+  .stamp:focus-within .msg-del,
+  .date-beat-wrap:hover .date-beat-actions,
+  .date-beat-wrap:focus-within .date-beat-actions { opacity: 1; }
+}
+
+/* Known information only: profiles no longer advertise locked rows or completion state. */
+.profile-sheet .sheet-head { padding-bottom: var(--s4); }
+.profile-sheet .sheet-head h2 { font-size: 25px; letter-spacing: -0.5px; }
+.profile-sheet .fact { border-bottom-color: color-mix(in srgb, var(--line) 75%, transparent); }
+.profile-sheet .fact-label { color: var(--muted); }
+.profile-sheet .section-title { color: var(--text-dim); }
+
+/* Dates are a reading room. Help is present, but not baked into the writing prompt. */
+.date-composer-wrap {
+  flex: 0 0 auto;
+  background: color-mix(in srgb, var(--bg) 76%, transparent);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(20px) saturate(150%);
+}
+.date-composer-wrap .composer { border-top: 0; background: transparent; }
+.date-writing-help { padding: 6px var(--s4) 0; color: var(--muted); font-size: 11px; }
+.date-writing-help summary { width: fit-content; cursor: pointer; color: var(--text-dim); }
+.date-writing-help span { display: block; max-width: 680px; margin-top: 4px; line-height: 1.45; }
+.date-beat { border-color: color-mix(in srgb, var(--line) 70%, transparent); background: rgba(20, 20, 27, 0.72); }
+
+.roleplay-steering {
+  flex: 0 0 auto;
+  position: relative;
+  padding: 5px var(--s4);
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  color: var(--muted);
+  font-size: 11px;
+}
+.roleplay-steering summary { width: fit-content; cursor: pointer; color: var(--text-dim); list-style: none; }
+.roleplay-steering summary::-webkit-details-marker { display: none; }
+.roleplay-steering summary::before { content: '◇'; margin-right: 7px; color: var(--plum); }
+.roleplay-steering-menu { padding: 9px 0 5px; }
+.roleplay-steering-menu > p { margin: 0 0 var(--s2); }
+.roleplay-steering-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.roleplay-steering-options button { padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--text-dim); text-align: left; }
+.roleplay-steering-options button:hover { border-color: var(--line-strong); background: var(--surface-2); }
+.roleplay-steering-options button[data-active='true'] { border-color: var(--accent-line); background: var(--accent-soft); }
+.roleplay-steering-options strong, .roleplay-steering-options span { display: block; }
+.roleplay-steering-options strong { font-size: 11.5px; }
+.roleplay-steering-options span { margin-top: 1px; color: var(--muted); font-size: 9.5px; line-height: 1.35; }
+.date-composer-wrap > .roleplay-steering { border-top: 0; background: transparent; }
+
+/* Settings are two products: the experience most people tune, and the system they maintain. */
+.settings-layout { flex: 1; min-height: 0; display: flex; }
+.settings-nav {
+  width: 240px;
+  flex: 0 0 auto;
+  overflow-y: auto;
+  padding: var(--s4) var(--s3);
+  border-right: 1px solid var(--line);
+}
+.settings-nav-group + .settings-nav-group { margin-top: var(--s6); }
+.settings-nav-label {
+  padding: 0 10px var(--s2);
+  color: var(--faint);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+.settings-nav button {
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-dim);
+  text-align: left;
+}
+.settings-nav button:hover { background: var(--surface); color: var(--text); }
+.settings-nav button[data-active='true'] { background: var(--surface-2); color: var(--text); }
+.settings-nav button > span { display: block; font-size: 13.5px; font-weight: 620; }
+.settings-nav button small { display: block; margin-top: 1px; color: var(--muted); font-size: 10.5px; }
+.settings-content { min-width: 0; padding-top: var(--s2); }
+.settings-content > .card { max-width: 720px; }
+
+/* Onboarding explains why the profile matters and previews the information hierarchy. */
+.onboarding-layout { display: flex; flex-direction: column; min-width: 0; }
+.onboarding-intro { min-width: 0; padding: var(--s8) var(--s5) var(--s3); }
+.onboarding-intro .eyebrow { color: var(--accent-bright); font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; }
+.onboarding-intro h2 { margin: 8px 0 10px; max-width: 390px; font-size: 30px; line-height: 1.08; letter-spacing: -0.8px; }
+.onboarding-intro > p { max-width: 450px; margin: 0; color: var(--muted); }
+.onboarding-preview { min-width: 0; display: flex; align-items: center; gap: var(--s3); margin-top: var(--s6); padding: var(--s4); border-radius: var(--r-lg); background: var(--surface); }
+.onboarding-preview > div { min-width: 0; }
+.onboarding-preview strong, .onboarding-preview span { display: block; }
+.onboarding-preview span { color: var(--muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.onboarding-avatar { width: 46px; height: 46px; display: grid !important; place-items: center; flex: 0 0 auto; border-radius: 50%; background: var(--surface-3); color: var(--plum) !important; font-size: 18px !important; font-weight: 700; }
+.onboarding-form { min-width: 0; }
+
+@media (max-width: 719px) {
+  .settings-layout { flex-direction: column; }
+  .settings-nav {
+    width: 100%;
+    display: flex;
+    gap: var(--s2);
+    padding: var(--s2) var(--s4);
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .settings-nav-group { display: contents; }
+  .settings-nav-group + .settings-nav-group { margin: 0; }
+  .settings-nav-label, .settings-nav button small { display: none; }
+  .settings-nav button { width: auto; flex: 0 0 auto; padding: 7px 12px; border: 1px solid var(--line); border-radius: var(--r-full); }
+  .settings-nav button[data-active='true'] { border-color: var(--accent-line); background: var(--accent-soft); color: var(--accent-bright); }
+  .photo-unlock-card { align-items: flex-start; flex-wrap: wrap; }
+  .photo-unlock-card .btn { margin-left: 50px; }
+  .roleplay-steering-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .app.onboarding-app { max-width: none; border-inline: 0; }
+  .rail {
+    width: 92px;
+    align-items: center;
+    padding: var(--s5) 10px;
+    background: #0b0b10;
+  }
+  .rail-brand { padding: 0 0 var(--s6); }
+  .rail-brand > span:last-child { display: none; }
+  .rail button { width: 68px; flex-direction: column; gap: 4px; padding: 9px 4px; text-align: center; font-size: 10.5px; }
+  .rail button .glyph { height: 23px; }
+  .rail .rail-label { flex: none; }
+  .rail .badge { position: absolute; margin: -26px 0 0 26px; padding: 1px 5px; border: 2px solid #0b0b10; }
+  .desk-column.discover-column { max-width: 980px; border-inline: 0; background: transparent; }
+  .discover-column .swipe-area { width: min(100%, 760px); margin: 0 auto; padding-inline: var(--s8); }
+  .discover-column .swipe-deck { max-height: 640px; }
+  .desk-column.wide { max-width: 1180px; border-right: 0; }
+  .desk-list { width: 340px; background: #0b0b10; }
+  .profile-backdrop { justify-content: flex-end; align-items: stretch; padding: 0; background: rgba(0, 0, 0, 0.35); }
+  .profile-backdrop .profile-sheet {
+    width: 430px;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    border-width: 0 0 0 1px;
+    animation: profile-slide var(--med) var(--ease-out);
+  }
+  .onboarding-screen { display: flex; flex-direction: column; }
+  .onboarding-layout { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr); align-items: center; gap: var(--s8); padding: var(--s8); overflow-y: auto; }
+  .onboarding-intro { padding: var(--s6); justify-self: end; }
+  .onboarding-intro h2 { font-size: 48px; }
+  .onboarding-form { width: min(100%, 560px); margin: 0; padding: var(--s6); }
+}
+
+@keyframes profile-slide { from { transform: translateX(24px); opacity: 0.5; } to { transform: none; opacity: 1; } }

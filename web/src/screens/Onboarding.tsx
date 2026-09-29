@@ -54,7 +54,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
   };
 
   return (
-    <div className="screen">
+    <div className="screen onboarding-screen">
       <div className="topbar">
         <span className="brand-mark"><Icon name="spark" size={22} /></span>
         <div>
@@ -63,11 +63,24 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
         </div>
       </div>
 
-      <div className="card">
-        <p className="small muted" style={{ marginTop: 0 }}>
-          This is what everyone you match with will see, and what they will assume about you.
-          Take it seriously — they will read it.
-        </p>
+      <div className="onboarding-layout">
+        <aside className="onboarding-intro">
+          <span className="eyebrow">Your private world</span>
+          <h2>Make the first impression yours.</h2>
+          <p>
+            Characters read this profile and carry it into every conversation. You can change
+            it later, and nothing here is public.
+          </p>
+          <div className="onboarding-preview" aria-label="Profile preview">
+            <span className="onboarding-avatar">{displayName.trim().slice(0, 1).toUpperCase() || '?'}</span>
+            <div>
+              <strong>{displayName.trim() || 'Your name'}{age ? `, ${age}` : ''}</strong>
+              <span>{bio.trim() || 'A few honest lines about you will appear here.'}</span>
+            </div>
+          </div>
+        </aside>
+
+      <div className="card onboarding-form">
 
         <label className="field">
           <span>Name</span>
@@ -106,6 +119,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
         <label className="field">
           <span>Photos ({photos.length})</span>
           <input type="file" accept="image/*" onChange={(e) => void addPhoto(e.target.files?.[0])} />
+          <span className="tiny muted">Optional. Uploaded photos stay on this self-hosted instance.</span>
         </label>
 
         {error && <div className="banner warn">{error}</div>}
@@ -113,6 +127,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
         <button className="btn block" onClick={submit} disabled={busy}>
           {busy ? 'Saving…' : 'Start swiping'}
         </button>
+      </div>
       </div>
     </div>
   );

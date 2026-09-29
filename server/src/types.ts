@@ -40,6 +40,33 @@ export interface Tattoo { motif: string; position: string }
 export interface Piercing { type: string; position: string }
 export interface OnlineWindow { weekday: number; from: string; to: string }
 
+/** A category-qualified attribute id. Unlike bare ids, this cannot collide across tables. */
+export interface AttributeRef { category: string; id: string }
+
+export interface CharacterContrast {
+  axis: 'surface_private' | 'text_spoken' | 'life_desire';
+  left: AttributeRef;
+  right: AttributeRef;
+}
+
+/**
+ * The deterministic bridge between the complete roll and prose written about her. Nothing in
+ * here invents or replaces identity; it selects which rolled facts should drive play.
+ */
+export interface CharacterBlueprint {
+  version: 1;
+  anchors: AttributeRef[];
+  contrasts: CharacterContrast[];
+  chat_voice: AttributeRef[];
+  spoken_voice: AttributeRef[];
+  life_anchors: AttributeRef[];
+  erotic_anchors: AttributeRef[];
+  initiative: Array<{
+    kind: 'open' | 'flirt' | 'invite' | 'reconnect';
+    sources: AttributeRef[];
+  }>;
+}
+
 export interface CharacterSeed {
   // appearance
   age: number;
@@ -86,6 +113,19 @@ export interface CharacterSeed {
   hair_color: string;
   hair_style: string;
   eye_color: string;
+  /** Stable facial geometry. Optional only for characters created before visual identity v1. */
+  face_shape?: string;
+  facial_structure?: string;
+  eye_shape?: string;
+  eye_spacing?: string;
+  nose_shape?: string;
+  mouth_shape?: string;
+  brow_shape?: string;
+  facial_detail?: string;
+  /** A recurring colour/material language, not a mandatory outfit. */
+  visual_palette?: string;
+  /** Attribute-backed identity anchors shared by every image of her. */
+  visual_core?: { version: 1; anchors: AttributeRef[]; palette?: AttributeRef };
   clothing_style: string;
   grooming: string;
   makeup_style: string;
@@ -207,6 +247,8 @@ export interface CharacterSeed {
   core?: CoreEntry[];
   /** 2 once her core is on the 3-5 scheme; a missing marker means an old three-trait core to extend. */
   core_v?: number;
+  /** Structured, attribute-backed identity used by prompts; prose is only a rendering of it. */
+  blueprint?: CharacterBlueprint;
   fetishes: string[];
   hard_limits: string[];
 
@@ -281,6 +323,12 @@ export interface Ledger {
    * Optional: older saves have no such array.
    */
   pinned?: string[];
+  /** Recurring, character-specific ways the two of them initiate, tease, or come down together. */
+  rituals?: string[];
+  /** Small specific details worth bringing back once when the timing is good. */
+  callbacks?: string[];
+  /** Her current subjective read of the most recent intimate/date aftermath. */
+  aftermath?: string;
   open_threads: OpenThread[];
   director_notes: DirectorNotes;
 }
@@ -289,12 +337,12 @@ export interface Direction {
   valid_for: number;
   expires_on: string[];
   mood: string;
-  energy: string;
-  goal: string;
-  stance: string;
-  forbidden: string[];
-  bring_up: string | null;
-  length: string;
+  /**
+   * A loose private inclination, never dialogue or a move the user must answer correctly.
+   * Older saves used `goal` plus several screenplay-like fields; repo hydration is tolerant
+   * and directionBlock() reads that old goal until the direction expires.
+   */
+  impulse: string;
 }
 
 /** The other woman on a duo profile (duo.ts). Always an adult. */
@@ -320,14 +368,21 @@ export interface ActorMessage {
   from?: string;
 }
 
+/**
+ * Embodied continuity shared by text and dates. Empty fields mean unchanged, never "nothing".
+ * It is deliberately descriptive state, not a progression system or a script for the next beat.
+ */
+export interface RoleplayScene {
+  position: string;
+  proximity: string;
+  contact: string;
+  sensory: string;
+  interruption: string;
+  unfinished: string;
+}
+
 export interface ActorHidden {
   thoughts: string;
-  /**
-   * Something live in the conversation right now that has not finished - a question he
-   * asked, a game in play, a bit that is still running. Null when the floor is clear.
-   * Used to stop her opening a second topic on top of an unfinished one.
-   */
-  unresolved: string | null;
   mood: string;
   /**
    * Her physical situation right now: where she is, what she has on, what she is actually
@@ -343,10 +398,9 @@ export interface ActorHidden {
   /** What changed on her this turn (wardrobe.ts): a slot, a new state, or a piece put on. */
   outfit_changes?: { slot: string; state?: string | null; item?: string | null }[];
   activity: string;
-  goal_fulfilled: boolean;
-  new_fact: string | null;
-  open_thread: string | null;
-  director_needed: boolean;
+  scene: RoleplayScene;
+  /** Exact callback memory used this turn, so it can retire instead of becoming a catchphrase. */
+  callback_used: string | null;
   /**
    * Set when, in these very messages, she actually sends him a photo - not just talks about
    * maybe sending one later. The image is generated straight away; there is no consent step.
@@ -492,17 +546,32 @@ export interface Location {
   description: string;
   /** Relative to the images directory, like any other generated picture. */
   image_path: string | null;
+  /** Concrete handles the Actor may use selectively; never a checklist of required beats. */
+  affordances: {
+    sensory: string[];
+    private_spaces: string[];
+    /** Staff, regulars and crowd texture who exist here but are not automatically date cast. */
+    background_people: string[];
+    /** Optional ways to involve another person; invitations, never promised plot beats. */
+    social_openings: string[];
+    interruptions: string[];
+    transitions: string[];
+    /** Practical limits and social norms: noise, privacy, closing time, dress code, access. */
+    constraints: string[];
+  };
   created_at: string;
   updated_at: string;
 }
 
 /**
- * One date: an in-person scene with its own transcript, separate from the texting history.
+ * One live date or call with its own transcript, separate from the texting history.
  * Only the player starts one. While `status` is 'active' neither side can text.
  */
 export interface DateSession {
   id: string;
   character_id: string;
+  /** Dates and voice calls share the live-session/transcript machinery, but not their Actor register. */
+  kind: 'date' | 'call';
   status: 'active' | 'ended';
   /** When they are meeting, as he wrote it - "tonight, 8pm", not a parsed timestamp. */
   when_at: string;
@@ -511,6 +580,8 @@ export interface DateSession {
   location_id: string | null;
   /** Written when the date ends, and folded into what she remembers of him. */
   summary: string | null;
+  /** In-fiction elapsed time estimated from the completed transcript. */
+  duration_minutes: number | null;
   /** Decided once as the date opens; read fresh on every turn after that. Null until then. */
   outfit: string | null;
   /** What she arrived in, slot by slot (wardrobe.ts Outfit); null for dates from before outfits. */

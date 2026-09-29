@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { getSettings } from '../config.js';
 import { db, nowIso } from '../db/index.js';
 import { byCategory, find, RARITY_WEIGHT, type Attribute } from '../db/attributes.js';
-import { completeJson } from '../llm/client.js';
+import { completeJson, TimeoutError, TransportError } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
 import {
@@ -11,9 +11,9 @@ import {
 } from '../repo.js';
 import type { Character, CharacterSeed, KinkStance, OnlineWindow } from '../types.js';
 import { domSubLean, fitsSide, rollFantasySeeds, rollKinkMap, rollKinkSides, sideLabel } from './kinks.js';
-import { buildAppearancePrompt } from './appearance.js';
+import { buildAppearancePrompt, buildVisualCore } from './appearance.js';
 import { cosplayCount } from './cosplay.js';
-import { closetList, rollWardrobe } from './wardrobe.js';
+import { applyWardrobeLeans, closetList, rollWardrobe, WARDROBE_ACCESSORY_IDS } from './wardrobe.js';
 import { allowedDuos, duoDossierLines, duoPartner, duoRow, enforceDuoStatus, partnerRelation, rollPartnerBase } from './duo.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
@@ -21,26 +21,12 @@ import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
 import { pick, unwrap } from '../llm/shape.js';
 import { coreTraits, pickCore } from './profilecard.js';
+import { buildCharacterBlueprint } from './blueprint.js';
+import { evaluateCharacterDraft } from './character-evaluator.js';
+import { rollHeight } from './height.js';
 import { bodyFits, fitsHer, isAiCharacter, isPower, speciesFits, speciesHidden, speciesRow, speciesVisibility, transRow } from './species.js';
 import { LAYERS, hiddenLayerLabels, layerDossierLines, tellingWord } from './layers.js';
 import { BIO, CHARACTER, FANTASIES, REAL_NAME, USERNAME } from '../llm/schemas.js';
-
-/** Fields the Director may swap during the coherence pass. */
-const SWAPPABLE: Record<string, string> = {
-  clothing_style: 'clothing_style',
-  grooming: 'grooming',
-  makeup_style: 'makeup_style',
-  hair_style: 'hair_style',
-  hair_color: 'hair_color',
-  occupation: 'occupation',
-  living_situation: 'living_situation',
-  relationship_status: 'relationship_status',
-  humor_type: 'humor_type',
-  conflict_style: 'conflict_style',
-  insecurity: 'insecurity',
-  relationship_history: 'relationship_history',
-  dating_experience: 'dating_experience',
-};
 
 function hintOf(a: Attribute | null | undefined): string {
   if (!a) return '';
@@ -113,8 +99,6 @@ export interface RolledSeed {
   seed: CharacterSeed;
   ctx: DiceContext;
   archetype: Attribute;
-  /** id per swappable field, so the Director's swaps can be applied. */
-  fieldIds: Record<string, string>;
 }
 
 /**
@@ -202,12 +186,9 @@ function rollFreak(libido: number, confidence: number, sexting: number, archetyp
  */
 export function rollSeed(): RolledSeed {
   const ctx = newContext();
-  const fieldIds: Record<string, string> = {};
 
   const one = (category: string, opts: { ignoreArchetype?: boolean } = {}) => {
-    const a = roll(category, ctx, opts);
-    if (a) fieldIds[category] = a.id;
-    return a;
+    return roll(category, ctx, opts);
   };
 
   // ---- 1. the base: age and species, conditioned on nothing
@@ -243,6 +224,7 @@ export function rollSeed(): RolledSeed {
   // personality here, and its extra.weights lean how she texts, what she does for work and
   // what she is into (a goth towards deadpan texting, horror and tattoo studios, an e-girl
   // towards streaming), as well as the hair, makeup and jewellery rolled later.
+  applyWardrobeLeans(ctx, { species: species.id, hero_role: hero_role?.id, era: layers.era });
   const clothing_style = one('clothing_style');
   const humor_type = one('humor_type');
   const quirks = rollMany('quirk', ctx, drawCount(counts.quirks, 2)).map((a) => a.id);
@@ -279,13 +261,24 @@ export function rollSeed(): RolledSeed {
   // ---- 3. looks, drawn knowing who she is and how old she is
   const ethnicity = one('ethnicity');
   const skin_tone = one('skin_tone');
-  const height = one('height');
+  const height = rollHeight(species.id, ctx);
   const body_type = one('body_type');
   const breast_size = one('breast_size');
   const butt_size = one('butt_size');
   const hair_color = one('hair_color');
   const hair_style = one('hair_style');
   const eye_color = one('eye_color');
+  // Stable facial geometry gives the image model more than hair colour to recognize. These
+  // are ordinary attribute rolls, so they preserve the controlled variety of the generator.
+  const face_shape = one('face_shape');
+  const facial_structure = one('facial_structure');
+  const eye_shape = one('eye_shape');
+  const eye_spacing = one('eye_spacing');
+  const nose_shape = one('nose_shape');
+  const mouth_shape = one('mouth_shape');
+  const brow_shape = one('brow_shape');
+  const facial_detail = one('facial_detail');
+  const visual_palette = one('visual_palette');
   const grooming = one('grooming');
   const makeup_style = one('makeup_style');
   const distinctive_feature = one('distinctive_feature');
@@ -298,34 +291,32 @@ export function rollSeed(): RolledSeed {
   // skin tone excluded and generation crashed.
   const extraLanguages = rollMany('language', ctx, drawCount([0.55, 0.33, 0.12], 0)).map((a) => a.id);
 
-  // A look can carry more ink and metal than her archetype alone would give her - a goth or
-  // alt girl with bare skin reads as a costume. extra.adds on the clothing style: each whole
-  // unit is one more, the fraction a chance of one more.
+  // Clothing-style adds now only lean the rare tattoo gate. Ink remains possible for styles
+  // where it belongs without making body art a near-default image-generation complication.
   const adds = (clothing_style?.extra?.adds ?? {}) as Record<string, number>;
   const bonus = (p = 0) => Math.floor(p) + (Math.random() < p % 1 ? 1 : 0);
-  const tattooCount = drawCount(counts.tattoos, 0) + bonus(adds.tattoos);
+  const rolledTattooCount = drawCount(counts.tattoos, 0) + bonus(adds.tattoos);
+  // Seedream often turns several small ink details into broken lettering or muddy anatomy.
+  // Preserve tattoos as a real character possibility, but make them an exception rather
+  // than the near-majority outcome the archetype tables historically produced.
+  const tattooChance = Math.min(0.18, 0.06 + Math.max(0, Number(adds.tattoos ?? 0)) * 0.05);
+  const tattooCount = Math.random() < tattooChance ? Math.min(2, rolledTattooCount) : 0;
   const tattoos = Array.from({ length: tattooCount }, () => ({
     motif: roll('tattoo_motif', ctx, { transient: true })?.id ?? 'fineline_flower',
     position: roll('tattoo_position', ctx, { transient: true })?.id ?? 'forearm',
   }));
 
-  // Type first, then a position that type can actually go in: rolling both independently
-  // produced things like a stretched lobe in a navel.
-  const piercingCount = drawCount(counts.piercings, 1) + bonus(adds.piercings);
-  const piercings = Array.from({ length: piercingCount }, () => {
-    const type = roll('piercing_type', ctx, { transient: true });
-    const allowed: string[] = (type?.extra?.positions as string[]) ?? [];
-    const position = roll('piercing_position', ctx, {
-      transient: true,
-      only: allowed.length ? new Set(allowed) : undefined,
-    });
-    return { type: type?.id ?? 'stud', position: position?.id ?? 'earlobe' };
-  });
+  // Piercings now live in wardrobe.jewellery, where an outfit can choose one deliberately.
+  // Keep the legacy field empty so old saves remain readable without creating two sources.
+  const piercings: CharacterSeed['piercings'] = [];
 
   // What is always on her: glasses she needs, her nails, a ring she never takes off. Only the
   // body-bound things are left in this table - jewellery and hair pieces are in her wardrobe,
   // bags and keys are what she carries - so it is fewer than the old accessory count.
-  const accessories = rollMany('accessory', ctx, Math.floor(drawCount(counts.accessories, 1) / 2)).map((a) => a.id);
+  const accessoryPool = byCategory('accessory').filter((a) => !WARDROBE_ACCESSORY_IDS.has(a.id));
+  const accessories = rollMany('accessory', ctx, Math.floor(drawCount(counts.accessories, 1) / 2), {
+    only: new Set(accessoryPool.map((a) => a.id)),
+  }).map((a) => a.id);
   // What she has on her: flavour, not clothing (see carried_item in wardrobe.json).
   const carries = rollMany('carried_item', ctx, drawCount([0.35, 0.45, 0.2], 1), { transient: true }).map((a) => a.id);
 
@@ -352,7 +343,6 @@ export function rollSeed(): RolledSeed {
     }
   }
   const persona = roll('sexual_persona', ctx, { lean: personaLean })!;
-  fieldIds.sexual_persona = persona.id;
   const pr = (persona.extra?.ranges ?? {}) as Record<string, number[]>;
   const search_motive = roll('search_motive', ctx, { ignoreArchetype: true })!;
   const libido = rollRange(pr.libido ?? ranges.libido, 1, 5);
@@ -448,9 +438,12 @@ export function rollSeed(): RolledSeed {
   const dirty_talk = one('dirty_talk')!;
   const sexual_experience = one('sexual_experience')!;
   if (tattoos.length >= 2) ctx.weights.her_tattoos = (ctx.weights.her_tattoos ?? 1) * 3;
-  if (piercings.length >= 3) ctx.weights.her_piercings = (ctx.weights.her_piercings ?? 1) * 2;
-  if (/tall|statuesque/.test(height!.id)) ctx.weights.her_height = (ctx.weights.her_height ?? 1) * 3;
-  if (/petite|short|tiny/.test(height!.id)) ctx.weights.being_petite = (ctx.weights.being_petite ?? 1) * 3;
+  if (height!.extra?.stature === 'tall' || /tall|statuesque|giant|amazon/.test(height!.id)) {
+    ctx.weights.her_height = (ctx.weights.her_height ?? 1) * 3;
+  }
+  if (height!.extra?.stature === 'short' || /petite|short|tiny|fairy|halfling|dwarf|kobold/.test(height!.id)) {
+    ctx.weights.being_petite = (ctx.weights.being_petite ?? 1) * 3;
+  }
   const body_pride = one('body_pride')!;
   const signature = one('signature_move')!;
   // What she wears underneath, to bed, and how she keeps herself - leaned by her persona and
@@ -523,6 +516,15 @@ export function rollSeed(): RolledSeed {
     hair_color: hair_color!.id,
     hair_style: hair_style!.id,
     eye_color: eye_color!.id,
+    face_shape: face_shape!.id,
+    facial_structure: facial_structure!.id,
+    eye_shape: eye_shape!.id,
+    eye_spacing: eye_spacing!.id,
+    nose_shape: nose_shape!.id,
+    mouth_shape: mouth_shape!.id,
+    brow_shape: brow_shape!.id,
+    facial_detail: facial_detail!.id,
+    visual_palette: visual_palette!.id,
     clothing_style: clothing_style!.id,
     grooming: grooming!.id,
     makeup_style: makeup_style!.id,
@@ -605,12 +607,103 @@ export function rollSeed(): RolledSeed {
   // Her costumes, last, because what makes her a cosplayer (persona, job, style, hobbies,
   // fetishes) has to be rolled first. Through roll() so his taste applies to them too.
   seed.cosplays = rollMany('cosplay_character', ctx, cosplayCount(seed)).map((a) => a.id);
+  seed.visual_core = buildVisualCore(seed);
   seed.appearance_prompt = buildAppearancePrompt(seed);
   // The three things she is built around (profilecard.ts): picked once, here, so her card,
   // her dossier and every prompt after it agree on who she is.
   seed.core = pickCore(seed);
   seed.core_v = 2;
-  return { seed, ctx, archetype, fieldIds };
+  seed.blueprint = buildCharacterBlueprint(seed);
+  return { seed, ctx, archetype };
+}
+
+/** Fields that make two people feel alike in play; visual micro-details do not dominate it. */
+const CAST_SIGNATURE_FIELDS: Array<keyof CharacterSeed> = [
+  'archetype', 'humor_type', 'texting_persona', 'speech_style', 'occupation',
+  'clothing_style', 'social_energy', 'search_motive', 'sexual_persona', 'dirty_talk',
+  'signature_move', 'relationship_status', 'species', 'double_life', 'era', 'curse',
+];
+
+function castSignature(seed: CharacterSeed): Set<string> {
+  const tokens = new Set<string>();
+  for (const field of CAST_SIGNATURE_FIELDS) {
+    const value = seed[field];
+    if (typeof value === 'string' && value && value !== 'none') tokens.add(`${field}/${value}`);
+  }
+  for (const [category, values] of [
+    ['hobby', seed.hobbies], ['interest', seed.interests], ['fetish', seed.fetishes],
+  ] as const) {
+    for (const id of values.slice(0, 2)) tokens.add(`${category}/${id}`);
+  }
+  return tokens;
+}
+
+function signatureSimilarity(a: Set<string>, b: Set<string>): number {
+  let shared = 0;
+  for (const token of a) if (b.has(token)) shared++;
+  const union = a.size + b.size - shared;
+  return union ? shared / union : 0;
+}
+
+export function castNoveltyScore(seed: CharacterSeed, cast: CharacterSeed[]): number {
+  if (!cast.length) return 1;
+  const signature = castSignature(seed);
+  return 1 - Math.max(...cast.map((other) => signatureSimilarity(signature, castSignature(other))));
+}
+
+const VISUAL_SIGNATURE_FIELDS: Array<keyof CharacterSeed> = [
+  'ethnicity', 'skin_tone', 'body_type', 'hair_color', 'hair_style', 'eye_color',
+  'face_shape', 'facial_structure', 'eye_shape', 'nose_shape', 'mouth_shape', 'visual_palette',
+];
+
+function visualSignature(seed: CharacterSeed): Set<string> {
+  const tokens = new Set<string>();
+  for (const field of VISUAL_SIGNATURE_FIELDS) {
+    const value = seed[field];
+    if (typeof value === 'string' && value) tokens.add(`${field}/${value}`);
+  }
+  return tokens;
+}
+
+export function visualNoveltyScore(seed: CharacterSeed, cast: CharacterSeed[]): number {
+  if (!cast.length) return 1;
+  const signature = visualSignature(seed);
+  return 1 - Math.max(...cast.map((other) => signatureSimilarity(signature, visualSignature(other))));
+}
+
+function currentCastSeeds(): CharacterSeed[] {
+  const rows = db.prepare('SELECT seed FROM characters').all() as Array<{ seed: string }>;
+  return rows.flatMap((row) => {
+    try { return [JSON.parse(row.seed) as CharacterSeed]; } catch { return []; }
+  });
+}
+
+/**
+ * Roll several ordinary candidates and softly prefer the one least like the current cast.
+ * No model chooses attributes and no candidate is required to be exotic: with an empty cast
+ * this is an unbiased random pick, and later it rewards novel combinations rather than rarity.
+ */
+export function rollDiverseSeed(candidateCount = 12, cast = currentCastSeeds()): RolledSeed {
+  const candidates = Array.from({ length: Math.max(1, candidateCount) }, () => rollSeed());
+  if (!cast.length || candidates.length === 1) return pickOne(candidates);
+  const scored = candidates.map((candidate) => {
+    // Playable identity stays primary; visible cast variety gets a meaningful but smaller vote.
+    const novelty = castNoveltyScore(candidate.seed, cast) * 0.75 + visualNoveltyScore(candidate.seed, cast) * 0.25;
+    // A little jitter keeps selection from becoming a deterministic optimiser that always
+    // chases the edge of the distribution. The dice remain primary; novelty is a soft vote.
+    return { candidate, novelty, weight: Math.exp(novelty * 4 + Math.random() * 0.35) };
+  });
+  let draw = Math.random() * scored.reduce((sum, item) => sum + item.weight, 0);
+  for (const item of scored) {
+    draw -= item.weight;
+    if (draw <= 0) {
+      logger.debug('generator', 'selected cast-aware candidate', {
+        candidates: candidates.length, cast_size: cast.length, novelty: Math.round(item.novelty * 1000) / 1000,
+      });
+      return item.candidate;
+    }
+  }
+  return scored.at(-1)!.candidate;
 }
 
 /**
@@ -624,6 +717,11 @@ function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }
     ['species', seed.species], ['ethnicity', seed.ethnicity], ['skin_tone', seed.skin_tone], ['height', seed.height],
     ['body_type', seed.body_type], ['breast_size', seed.breast_size], ['butt_size', seed.butt_size], ['hair_color', seed.hair_color],
     ['hair_style', seed.hair_style], ['eye_color', seed.eye_color], ['clothing_style', seed.clothing_style],
+    ['face_shape', seed.face_shape ?? ''], ['facial_structure', seed.facial_structure ?? ''],
+    ['eye_shape', seed.eye_shape ?? ''], ['eye_spacing', seed.eye_spacing ?? ''],
+    ['nose_shape', seed.nose_shape ?? ''], ['mouth_shape', seed.mouth_shape ?? ''],
+    ['brow_shape', seed.brow_shape ?? ''], ['facial_detail', seed.facial_detail ?? ''],
+    ['visual_palette', seed.visual_palette ?? ''],
     ['grooming', seed.grooming], ['makeup_style', seed.makeup_style], ['distinctive_feature', seed.distinctive_feature],
     ['archetype', seed.archetype], ['humor_type', seed.humor_type],
     ['typing_style', seed.typing_style], ['emoji_usage', seed.emoji_usage], ['message_length', seed.message_length],
@@ -781,10 +879,10 @@ export function describeSeed(seed: CharacterSeed): string {
     `how it shows when she is turned on: ${label('arousal_tell', seed.arousal_tell)} - ${seed.hints.arousal_tell ?? ''}`,
     `where she stands on the usual kinks: ${
       Object.entries(seed.kink_map ?? {})
-        .filter(([, st]) => st === 'into' || st === 'hard_no')
         .map(([d, st]) => {
-          const side = st === 'into' ? sideLabel(find('kink_domain', d), seed.kink_sides?.[d]) : '';
-          return `${label('kink_domain', d)} = ${st === 'into' ? `into it${side ? ` (${side})` : ''}` : 'hard no'}`;
+          const side = st === 'into' || st === 'curious' ? sideLabel(find('kink_domain', d), seed.kink_sides?.[d]) : '';
+          const stance = st === 'into' ? 'into it' : st === 'curious' ? 'curious' : st === 'hard_no' ? 'hard no' : 'not for her';
+          return `${label('kink_domain', d)} = ${stance}${side ? ` (${side})` : ''}`;
         })
         .join('; ') || 'nothing strong either way'
     }`,
@@ -796,12 +894,6 @@ export function describeSeed(seed: CharacterSeed): string {
     `hard limits: ${labels('hard_limit', seed.hard_limits)}`,
   ];
   return lines.join('\n');
-}
-
-function allowedSwapList(): string {
-  return Object.keys(SWAPPABLE)
-    .map((field) => `${field}: ${byCategory(field).map((a) => a.id).join(', ')}`)
-    .join('\n');
 }
 
 const FALLBACK_NAMES = [
@@ -870,8 +962,9 @@ export function sanitizeEmoji(raw: unknown): string | null {
 }
 
 interface DirectorPass {
-  swaps?: { field: string; to: string; why?: string }[];
   real_name?: string;
+  username?: string;
+  bio?: string;
   avatar_emoji?: string;
   one_line?: string;
   /**
@@ -886,8 +979,6 @@ interface DirectorPass {
   duo_partner?: { name?: string; manner?: string; up_for?: string } | null;
   /** The one piece of clothing with a story (wardrobe.ts). */
   favourite_piece?: string | null;
-  /** 3-5 concrete sexual scenarios she wants to live out. Stored in seed.hints.fantasies. */
-  fantasies?: string[];
   director_intent?: string;
   opening_plan?: { text: string; expires_when: string };
 }
@@ -916,6 +1007,8 @@ async function rerollName(
       label: 'reroll_name',
       schema: REAL_NAME,
       config: { ...getSettings().models.actor, max_tokens: NAME_TOKENS },
+      reasoningEffort: 'none',
+      totalTimeoutMs: 60_000,
       require: ['real_name'],
       messages: [
         {
@@ -986,7 +1079,7 @@ function lifeWords(seed: CharacterSeed): string[] {
 
 /**
  * Her handle, written last and by the actor model, against the finished character rather
- * than a half-built one. It used to come out of the coherence pass alongside her name and
+ * than a half-built one. It used to come out of the character pass alongside her name and
  * her stats, which meant it was being invented before there was much of a person for it to
  * belong to - and a handle is one of the few things on a profile she actually chose.
  */
@@ -1085,6 +1178,8 @@ async function writeUsername(
         label: attempt ? 'write_username:retry' : 'write_username',
         schema: USERNAME,
         config: { ...getSettings().models.actor, max_tokens: NAME_TOKENS },
+        reasoningEffort: 'none',
+        totalTimeoutMs: 60_000,
         require: ['username'],
         messages: correction
           ? [{ role: 'user', content: prompt }, { role: 'user', content: correction }]
@@ -1161,16 +1256,17 @@ async function writeUsername(
 }
 
 export async function generateCharacter(): Promise<Character> {
-  const { seed, fieldIds } = rollSeed();
+  const { seed } = rollDiverseSeed();
   const settings = getSettings();
   const takenHandles = existingUsernames();
   const takenNames = existingNames();
+  const rolledBlock = describeSeed(seed);
   let pass: DirectorPass = {};
   const characterPassMessages = [
     {
       role: 'user' as const,
       content: render('director_generate_character', {
-        rolled_block: describeSeed(seed),
+        rolled_block: rolledBlock,
         is_fantasy: speciesRow(seed) && !isPower(seed) ? '1' : '',
         is_power: isPower(seed) ? '1' : '',
         power_secret: isPower(seed) && speciesHidden(seed) ? '1' : '',
@@ -1183,9 +1279,11 @@ export async function generateCharacter(): Promise<Character> {
         is_big_secret: seed.big_secret && seed.big_secret !== 'none' ? '1' : '',
         closet: closetList(seed).replace(/\n/g, ' '),
         age: seed.age,
-        fantasy_seeds: fantasySeedList(seed.fantasy_seeds),
-        allowed_swaps: allowedSwapList(),
         avoid_names: takenNames.length ? takenNames.map((n) => `- ${n}`).join('\n') : '(none yet)',
+        avoid_handles: takenHandles.length
+          ? takenHandles.slice(0, HANDLES_SHOWN).map((u) => `- @${u}`).join('\n')
+          : '(none yet)',
+        avoid_bios: recentBios().slice(0, BIOS_SHOWN).map((b) => `- ${b}`).join('\n') || '(none yet)',
       }),
     },
   ];
@@ -1196,7 +1294,7 @@ export async function generateCharacter(): Promise<Character> {
   // that used to send every character born during it straight to that fallback.
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      pass = await completeJson<DirectorPass>({
+      const candidate = await completeJson<DirectorPass>({
         scope: 'generator',
         label: attempt ? 'generate_character:retry' : 'generate_character',
         schema: CHARACTER,
@@ -1206,14 +1304,20 @@ export async function generateCharacter(): Promise<Character> {
         // that has to take a seed full of explicit traits seriously rather than sand them
         // down. The director still runs the game; it just does not invent the cast.
         config: { ...settings.models.actor, max_tokens: CHARACTER_TOKENS },
-        // The biggest call in the app (a whole dossier plus her fantasies), running in the
-        // background where nobody is waiting on it. A reasoning model can take well over the
-        // default five minutes to think through it, and cutting it off just throws the work away.
+        // This one creative planning pass benefits from a little thought, but the logs show
+        // GLM can spend 9k tokens even at low. Minimal preserves planning without that tail.
+        reasoningEffort: 'minimal',
+        // The biggest call in the app (the dossier and public profile), running in the
+        // background where nobody is waiting on it. Even at low reasoning it gets a larger
+        // per-attempt clock, while totalTimeoutMs below bounds all of its recovery work.
         timeoutMs: CHARACTER_TIMEOUT_MS,
+        // A dead or overloaded backend used to multiply this ten-minute call through the
+        // client's retries and this outer quality retry. Bound the entire request instead.
+        totalTimeoutMs: 420_000,
         require: ['real_name', 'dossier'],
         // Seen: the whole character wrapped in {"character": {...}}, and "name" for "real_name".
         normalize: (v: any) => {
-          const p = unwrap(v, ['real_name', 'dossier', 'swaps', 'name', 'character_name']);
+          const p = unwrap(v, ['real_name', 'dossier', 'name', 'character_name']);
           if (!p.real_name) p.real_name = pick(p, ['name', 'first_name', 'character_name']);
           if (!p.dossier) p.dossier = pick(p, ['character_dossier', 'dossier_text', 'writeup']);
           // The commonest miss of all: a full dossier and no name field. The dossier nearly
@@ -1223,33 +1327,38 @@ export async function generateCharacter(): Promise<Character> {
         },
         messages: characterPassMessages,
       });
+      // Keep the valid draft before optional evaluation. If its one focused rewrite hits a
+      // provider outage, generation falls back to this draft rather than to raw attributes.
+      pass = candidate;
+      if (settings.models.evaluator.enabled && candidate.dossier?.trim()) {
+        try {
+          const issues = await evaluateCharacterDraft(rolledBlock, candidate.dossier);
+          if (issues.length && attempt === 0) {
+            logger.warn('evaluator', 'character draft needs one focused rewrite', { issues });
+            characterPassMessages.push({
+              role: 'user',
+              content: `Rewrite the same character and return the same JSON shape. The attributes are immutable.\n- ${issues.join('\n- ')}`,
+            });
+            continue;
+          }
+          if (issues.length) logger.warn('evaluator', 'character draft still has quality warnings; keeping it', { issues });
+        } catch (err) {
+          // Evaluation is an optional quality layer. A new provider must never make the
+          // existing generation path unavailable when its endpoint or model is unsupported.
+          logger.warn('evaluator', 'character evaluation unavailable; keeping the draft', { error: String(err) });
+        }
+      }
       break;
     } catch (err) {
-      logger.warn('generator', `director coherence pass failed${attempt ? ', using raw roll' : ', retrying once'}`, {
+      logger.warn('generator', `character writing pass failed${attempt ? ', using raw roll' : ', retrying once'}`, {
         error: String(err),
       });
+      // complete() already retried a transient transport failure. Repeating the whole large
+      // character request here turns one outage into another several-minute wait; the outer
+      // retry is reserved for a focused evaluator rewrite.
+      if (err instanceof TimeoutError || err instanceof TransportError) break;
     }
   }
-
-  // 3. coherence correction: at most two swaps, only in swappable fields
-  for (const swap of (pass.swaps ?? []).slice(0, 2)) {
-    const category = SWAPPABLE[swap?.field];
-    if (!category) continue;
-    const replacement = find(category, swap.to);
-    if (!replacement) continue;
-    (seed as any)[swap.field] = replacement.id;
-    seed.hints[swap.field] = hintOf(replacement);
-    fieldIds[swap.field] = replacement.id;
-    logger.debug('generator', `swapped ${swap.field} -> ${swap.to}`, { why: swap.why });
-  }
-  // A swap may have touched her relationship status; a woman on a profile with her wife is
-  // still married to her.
-  enforceDuoStatus(seed);
-  // A new style or job means a different closet.
-  if ((pass.swaps ?? []).slice(0, 2).some((sw) => sw?.field === 'clothing_style' || sw?.field === 'occupation')) {
-    seed.wardrobe = rollWardrobe(seed);
-  }
-  seed.appearance_prompt = buildAppearancePrompt(seed);
 
   // The fallback pool is only reached when the API is down, but it can repeat just as
   // easily as the model can, so it gets the same avoid-list treatment.
@@ -1290,14 +1399,12 @@ export async function generateCharacter(): Promise<Character> {
   const favourite = String(pass.favourite_piece ?? '').trim();
   if (favourite) seed.wardrobe_favourite = favourite.slice(0, 200);
 
-  const fantasies = cleanFantasies(pass.fantasies);
-  if (fantasies.length) seed.hints.fantasies = fantasies.join('\n');
   if (pass.one_line) seed.hints.one_line = pass.one_line;
 
   // Everything written about her from here on is built from this, not from the raw tags -
   // that is the entire point of asking for it. describeSeed() is still the fallback that
   // keeps the rest of the app (the Actor's core "who is she" context, mainly) working when
-  // the coherence pass failed outright or came back without one despite `require` - but a
+  // the character pass failed outright or came back without one despite `require` - but a
   // dossier that degraded to it is exactly the flat "label - hint" dump that makes a bio or
   // handle read like a spec sheet, which is why writeUsername/writeBio below are told
   // whether this is the real thing rather than being handed it blind.
@@ -1308,7 +1415,10 @@ export async function generateCharacter(): Promise<Character> {
   // an inside joke, a mangled surname, or something completely opaque. The final collision
   // check still happens inside insertCharacter, which is the only place it can be done
   // atomically with the write.
-  const username = await writeUsername(seed, realName, takenHandles, dossierIsReal);
+  const draftedUsername = dossierIsReal
+    ? validateDraftedUsername(pass.username, seed, realName, takenHandles)
+    : null;
+  const username = draftedUsername ?? await writeUsername(seed, realName, takenHandles, dossierIsReal);
   // Only stored when the model actually chose one; otherwise avatarEmojiFor() derives it.
   const chosenEmoji = sanitizeEmoji(pass.avatar_emoji);
   if (chosenEmoji) seed.avatar_emoji = chosenEmoji;
@@ -1326,7 +1436,8 @@ export async function generateCharacter(): Promise<Character> {
     matched_at: null,
   };
 
-  character.bio = await writeBio(character, dossierIsReal);
+  const draftedBio = dossierIsReal ? validateDraftedBio(pass.bio, seed, recentBios()) : null;
+  character.bio = draftedBio ?? await writeBio(character, dossierIsReal);
 
   insertCharacter(character);
   const rel = createRelationship(character.id, {
@@ -1350,6 +1461,11 @@ export async function generateCharacter(): Promise<Character> {
       logger.debug('generator', `${username}'s bio already revealed: ${added.join(', ')}`);
     }
   }
+
+  // Fantasies are their own creative job and are not needed to put the card in Discover.
+  // Start them only after the character and relationship exist, then yield the completed
+  // character immediately. The Director already tolerates them arriving on a later pass.
+  void ensureFantasies(character);
 
   logger.info('generator', `generated ${username} (${realName})`, {
     id: character.id,
@@ -1519,6 +1635,64 @@ function nearestBio(bio: string, existing: string[]): string | null {
 }
 
 /**
+ * The main character pass writes these tiny profile fields alongside the dossier. Keep the
+ * same hard guards as the specialist prompts; only a rejected field pays for another call.
+ */
+function validateDraftedUsername(
+  raw: unknown,
+  seed: CharacterSeed,
+  realName: string,
+  existing: string[],
+): string | null {
+  const username = cleanHandle(raw);
+  let reason = '';
+  if (username.length < 4) reason = 'missing or malformed';
+  else if (username.includes(realName.toLowerCase())) reason = 'contains her real name';
+  else if (nearestHandle(username, existing)) reason = 'resembles an existing handle';
+  else if (lifeWords(seed).some((word) => username.includes(word))) reason = 'built from her job or home';
+  else {
+    const hiddenSpecies = speciesHidden(seed) ? cleanHandle(speciesRow(seed)?.label) : '';
+    const hiddenLayer = hiddenLayerLabels(seed).map(tellingWord).find((word) => word && username.includes(word));
+    const hiddenSecret = seed.big_secret && seed.big_secret !== 'none'
+      ? tellingWord(find('big_secret', seed.big_secret)?.label ?? seed.big_secret)
+      : '';
+    if (hiddenSpecies && username.includes(hiddenSpecies)) reason = 'leaks her hidden species';
+    else if (hiddenLayer) reason = 'leaks a hidden layer';
+    else if (hiddenSecret && username.includes(hiddenSecret)) reason = 'leaks her big secret';
+  }
+  if (!reason) return username;
+  logger.warn('generator', 'drafted handle rejected; using focused fallback', { username: username || null, reason });
+  return null;
+}
+
+function validateDraftedBio(raw: unknown, seed: CharacterSeed, existing: string[]): string | null {
+  const bio = String(raw ?? '').trim();
+  const words = bioWordCount(bio);
+  const clash = bio ? nearestBio(bio, existing) : null;
+  const lower = bio.toLowerCase();
+  const hiddenTerms = [
+    ...(speciesHidden(seed) ? [speciesRow(seed)?.label ?? ''] : []),
+    ...hiddenLayerLabels(seed),
+    ...(seed.big_secret && seed.big_secret !== 'none'
+      ? [find('big_secret', seed.big_secret)?.label ?? seed.big_secret]
+      : []),
+  ].flatMap((term) => [term.toLowerCase(), tellingWord(term)]).filter((term) => term.length >= 4);
+  const leak = hiddenTerms.find((term) => lower.includes(term));
+  if (bio && words >= BIO_MIN_WORDS && words <= BIO_MAX_WORDS && !clash && !leak) return bio.slice(0, 500);
+  logger.warn('generator', 'drafted bio rejected; using focused fallback', {
+    words,
+    reason: !bio
+      ? 'missing'
+      : clash
+        ? 'resembles an existing bio'
+        : leak
+          ? 'reveals hidden character material'
+          : 'outside the length range',
+  });
+  return null;
+}
+
+/**
  * Output budgets for the generation calls.
  *
  * These were sized for the answer alone - 120 tokens is generous for `{ "username": "..." }`.
@@ -1605,6 +1779,8 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
         // The bio is in-voice writing rather than analysis, so it goes to the actor model.
         // The director still designs the character; it just does not write her lines.
         config: { ...settings.models.actor, max_tokens: BIO_TOKENS },
+        reasoningEffort: 'none',
+        totalTimeoutMs: 120_000,
         require: ['bio'],
         messages: correction
           ? [{ role: 'user', content: prompt }, { role: 'user', content: correction }]
@@ -1696,7 +1872,12 @@ export function ensureFantasies(character: Character): Promise<void> {
         scope: 'director',
         label: `fantasies:${character.username}`,
         schema: FANTASIES,
-        config: getSettings().models.director,
+        // Explicit scenario writing belongs with the Actor; the decision-oriented Director
+        // is deliberately not asked to improvise erotic prose.
+        config: getSettings().models.actor,
+        reasoningEffort: 'minimal',
+        priority: 'background',
+        totalTimeoutMs: 180_000,
         require: ['fantasies'],
         messages: [{
           role: 'user',
@@ -1707,6 +1888,9 @@ export function ensureFantasies(character: Character): Promise<void> {
             '',
             `Who she is in bed: ${find('sexual_persona', character.seed.sexual_persona)?.label ?? 'not set'} - ${find('sexual_persona', character.seed.sexual_persona)?.prompt_hint ?? ''}`,
             `Her kinks: ${character.seed.fetishes.map((f) => find('fetish', f)?.label ?? f).join(', ') || 'none listed'}.`,
+            `Domains that are not fantasies for her: ${Object.entries(character.seed.kink_map ?? {})
+              .filter(([, stance]) => stance === 'soft_no' || stance === 'hard_no')
+              .map(([domain]) => find('kink_domain', domain)?.label ?? domain).join(', ') || 'none listed'}.`,
             `Her hard limits (never include these): ${character.seed.hard_limits.map((h) => find('hard_limit', h)?.label ?? h).join(', ') || 'none listed'}.`,
             '',
             'Scenario ideas that fit her:',
@@ -1716,7 +1900,8 @@ export function ensureFantasies(character: Character): Promise<void> {
             'concrete scenario in one or two sentences - a setting, a situation, what happens - explicit where it',
             'needs to be, nothing that touches her hard limits. Take two or three of the ideas above and make them',
             'hers (change the setting, roles and details until they could only be hers), then invent two or three',
-            'more of her own from who she is in bed, her kinks, her job and her life. Written in third person about her.',
+            'more of her own from who she is in bed, her kinks, her job and her life. Use only domains she is into or curious about; a merely playful framing does not make a neutral domain into her fantasy. Written in third person about her.',
+            'At least two happen while they are apart, through texts, photos, voice notes or a call.',
             '',
             'Reply with exactly one JSON object: { "fantasies": ["...", "..."] }',
           ].join('\n'),

@@ -1,9 +1,7 @@
-You are the Director. A character has just been rolled from the attribute tables. Raw dice
-produce combinations that do not hold together as a person and, read as a list, do not read
-as one either. Your job is to fix what is genuinely broken about the combination, then
-write her - a real dossier, not a rewording of the tag list - because everything written
-about her from here on, starting with her own handle and bio, is going to be built from
-what you write, not from the tags themselves.
+You are writing from a character already rolled and validated by the attribute system. Every
+rolled fact is immutable. Your job is to connect those facts into a real dossier rather than
+rewording the tag list. The structured roll remains the source of truth; your prose makes its
+particular combinations legible and playable.
 
 # THE ROLLED TAGS
 {{rolled_block}}
@@ -76,26 +74,11 @@ should be able to tell it exists.
 
 # WHAT TO DO
 
-1. COHERENCE PASS. You may swap AT MOST 2 tags, and most of the time you should swap none.
-   Swap ONLY when a combination is genuinely impossible or dead on arrival. Surprising is
-   good: a shy woman with a septum piercing is interesting, a shy woman whose every tag says
-   "extrovert" is broken.
-
-   Do NOT swap tags to make them agree with each other. Swapping "barista" to "piano tuner"
-   because something else about her is unusual is exactly the wrong move: it deletes the
-   tension between an ordinary day job and an odd life, and leaves a character where every
-   detail points the same way. A barista who moonlights doing something strange is a person.
-   A woman whose every tag agrees is a diagram.
-   Never touch: turn_ons, turn_offs, fetishes, hard limits. Those are meant to clash
-   with how she looks and how she comes across. Leave them alone.
-   Never lower age below 18.
-
-2. WRITE THE DOSSIER. This is the main job, and everything after it in this list is a
+1. WRITE THE DOSSIER. This is the main job, and everything after it in this list is a
    smaller output alongside it.
 
-   Nothing downstream of this reads the rolled tags directly any more. Her handle and her
-   bio are about to be written from what you produce here, not from the list above - so if
-   something matters and you leave it out of the dossier, it is gone. Write the actual
+   Her handle and bio will be written from this, while the roleplay still retains the full
+   structured roll. Write the actual
    character, in prose, the way a casting document or a character bible entry would: a
    handful of connected paragraphs, not a bullet list and not a restatement of the tags
    with commas turned into sentences. If a paragraph could be produced by taking two tags
@@ -117,9 +100,8 @@ should be able to tell it exists.
      how fast she replies, whether she sends voice notes, and her texting persona (the
      tone she reaches for over text - funny, cute, mean, shy, whatever it rolled). Be
      concrete enough that someone reading only this paragraph could write a message in her
-     exact voice - this is the one part that has to survive as usable fact, not just
-     flavour, because it is the only place that information will still exist once this
-     call returns.
+     exact voice. The structured roll remains available too, but this should still be usable
+     craft guidance rather than vague flavour.
    - How she actually talks, in person: her speech style is a separate roll from her
      texting persona and is allowed to land anywhere relative to it - bold over text and
      quiet in person, or the reverse, or the same energy either way. If the two genuinely
@@ -140,7 +122,7 @@ should be able to tell it exists.
    Length: as long as it needs to be to actually cover that, typically 300-500 words.
    Short changes nothing about the tags; it just fails to do the one job this step has.
 
-3. THE SMALLER OUTPUTS.
+2. THE SMALLER OUTPUTS.
    - real_name: a first name, first name only. Start from the two things that actually
      decide a name in real life:
        * The languages she speaks. Besides English these are a soft stand-in for where she
@@ -157,6 +139,15 @@ should be able to tell it exists.
      down, names from her parents' country rather than the one she lives in, shortenings and
      nicknames she actually goes by, the occasional plain one. Pick from that whole range,
      not from the handful that sound right for a dating app.
+   - username: the anonymous handle she chose for this app: lowercase, 4-18 characters,
+     letters with optional numbers, dots or underscores. It must not contain her real name,
+     describe her job or home, hint at anything marked hidden above, or resemble one of the
+     handles below. Build it from her look, attitude, aesthetic, sexual persona, a nickname
+     or a private joke—not from a shared house style.
+   - bio: what she actually typed on her profile, 14-75 words over one to four lines. It
+     should feel written by this woman in her own register, reveal enough to swipe on, and
+     add to the visible tags rather than summarize the dossier. Never reveal a hidden species,
+     identity, layer or big secret. Do not imitate one of the bios below.
    - avatar_emoji: ONE emoji she would put on her profile in place of a photo. This is the
      only thing distinguishing her at a glance in a list of matches, so make it hers: it
      should come from her look and style, her attitude or what she is into, in bed or out
@@ -167,14 +158,6 @@ should be able to tell it exists.
    - one_line: a single sentence describing who she is, for internal use. Draw on her
      profile as a whole and describe a person, not a walking quirk. No single tag is "her
      thing" - she is the combination.
-   - fantasies: 4 to 6 sexual fantasies she genuinely wants to play out with a man she is
-     into. Each one a concrete scenario in one or two sentences - a setting, a situation,
-     what happens - explicit where it needs to be, never touching her hard limits. Take two
-     or three of the SCENARIO IDEAS below and make them hers: change the setting, the roles
-     and the details until they could only be her fantasy. Then invent two or three more of
-     her own, from her persona, her fetishes, her job and her life, unlike the ideas. Make
-     them specific and hers, not generic. At least two of them happen over the phone while they are
-     apart - in texts, photos, voice notes or a call - and are written that way.
    - favourite_piece: the one piece of clothing she owns that has a story - worn to death,
      inherited, stolen, bought with her first paycheck - in a sentence. It fits her style
      and her life (her closet, for reference: {{closet}}). Not something sexy by default.
@@ -184,11 +167,6 @@ should be able to tell it exists.
      what defines her, not a stock opener - with an expiry condition. Something of hers, not a
      question about him.
 
-{{#fantasy_seeds}}
-# SCENARIO IDEAS FOR HER FANTASIES
-{{fantasy_seeds}}
-{{/fantasy_seeds}}
-
 All output in English. Her age is {{age}} and must stay at or above 18.
 
 # DO NOT REUSE THESE
@@ -196,16 +174,22 @@ Names already in this app. Yours must not be any of these, a spelling variant of
 obvious near-neighbour of one (Mila next to Mia, Sofia next to Sophia):
 {{avoid_names}}
 
+Handles already in this app:
+{{avoid_handles}}
+
+Recent bios in this app:
+{{avoid_bios}}
+
 # OUTPUT
 Reply with exactly one JSON object and nothing else:
 
 {
-  "swaps": [{ "field": "clothing_style", "to": "cosy", "why": "..." }],
   "dossier": "...",
   "real_name": "...",
+  "username": "quietly_specific",
+  "bio": "...",
   "avatar_emoji": "🦊",
   "one_line": "...",
-  "fantasies": ["...", "...", "..."],
   "director_intent": "...",
   "opening_plan": { "text": "...", "expires_when": "..." },
   "favourite_piece": "...",
@@ -213,7 +197,3 @@ Reply with exactly one JSON object and nothing else:
 }
 
 "duo_partner" stays null unless she shares her profile; then it is { "name": "...", "manner": "...", "up_for": "..." }.
-
-"swaps" may be an empty array. "to" must be an attribute id that exists in the table for
-that field, taken from this list of allowed ids:
-{{allowed_swaps}}

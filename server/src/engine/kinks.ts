@@ -223,6 +223,11 @@ export const TASTE_SECTIONS: { title: string; categories: { category: string; la
       { category: 'height', label: 'Height' },
       { category: 'hair_color', label: 'Hair colour' },
       { category: 'hair_style', label: 'Hairstyle' },
+      { category: 'face_shape', label: 'Face shape' },
+      { category: 'eye_shape', label: 'Eye shape' },
+      { category: 'nose_shape', label: 'Nose' },
+      { category: 'mouth_shape', label: 'Mouth' },
+      { category: 'visual_palette', label: 'Colour palette' },
       { category: 'makeup_style', label: 'Makeup' },
       { category: 'accessory', label: 'Always on her (glasses, nails, a ring)' },
       // Only matters for the women who cosplay at all; leans which characters they own.

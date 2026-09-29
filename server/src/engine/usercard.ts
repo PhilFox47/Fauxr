@@ -105,7 +105,7 @@ export function sanitizeCard(raw: unknown): UserCard {
   for (const f of FIELDS) {
     const value = input[f.key];
     if (value == null) continue;
-    const valid = new Set(byCategory(f.category).map((a) => a.id));
+    const valid = new Set(byCategory(f.category).filter((a) => !a.extra?.character_only).map((a) => a.id));
     if (f.multi) {
       if (!Array.isArray(value)) continue;
       const ids = value.map(String).filter((id) => valid.has(id)).slice(0, f.max ?? 6);

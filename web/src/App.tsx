@@ -45,10 +45,12 @@ export default function App() {
   const [openChat, setOpenChat] = useState<string | null>(null);
   const [matches, setMatches] = useState<MatchSummary[]>([]);
   const [typing, setTyping] = useState<Record<string, boolean>>({});
-  const [eventSeq, setEventSeq] = useState(0);
+  const [chatEventSeq, setChatEventSeq] = useState(0);
   /** Bumps only on new messages, so the read-marking below does not run on typing events. */
   const [messageSeq, setMessageSeq] = useState(0);
   const typingTimers = useRef<Record<string, number>>({});
+  const stateRequest = useRef(0);
+  const matchesRequest = useRef(0);
   const desktop = useDesktop();
   const openChatRef = useRef<string | null>(null);
   openChatRef.current = openChat;
@@ -76,10 +78,14 @@ export default function App() {
   }, []);
 
   const refreshState = useCallback(async () => {
+    const request = ++stateRequest.current;
     try {
-      setState(await api.state());
+      const next = await api.state();
+      if (request !== stateRequest.current) return;
+      setState(next);
       setNeedsLogin(false);
     } catch (err) {
+      if (request !== stateRequest.current) return;
       if (err instanceof ApiError && err.status === 401) {
         setNeedsLogin(true);
       } else {
@@ -89,8 +95,10 @@ export default function App() {
   }, []);
 
   const refreshMatches = useCallback(async () => {
+    const request = ++matchesRequest.current;
     try {
-      setMatches(await api.matches());
+      const next = await api.matches();
+      if (request === matchesRequest.current) setMatches(next);
     } catch {
       /* server asleep - keep the last view */
     }
@@ -125,11 +133,26 @@ export default function App() {
           setTypingFor(event.character_id, event.on);
           break;
         case 'message':
-          setMessageSeq((n) => n + 1);
+          if (event.character_id === openChatRef.current) {
+            setMessageSeq((n) => n + 1);
+            setChatEventSeq((n) => n + 1);
+          }
+          void refreshMatches();
+          break;
+        case 'message_updated':
+          if (event.character_id === openChatRef.current) setChatEventSeq((n) => n + 1);
+          break;
+        case 'messages_removed':
+          if (event.character_id === openChatRef.current) setChatEventSeq((n) => n + 1);
           void refreshMatches();
           break;
         case 'match':
         case 'character_state':
+          if (event.character_id === openChatRef.current) setChatEventSeq((n) => n + 1);
+          void refreshMatches();
+          break;
+        case 'date':
+          if (event.character_id === openChatRef.current) setChatEventSeq((n) => n + 1);
           void refreshMatches();
           break;
         case 'match_removed':
@@ -148,9 +171,10 @@ export default function App() {
         default:
           break;
       }
-      if (event.type === 'hello') clearAllTyping();
-      setEventSeq((n) => n + 1);
-      (window as any).__fauxrEvent?.(event);
+      if (event.type === 'hello') {
+        clearAllTyping();
+        setChatEventSeq((n) => n + 1);
+      }
     });
   }, [refreshMatches, setTypingFor, clearAllTyping]);
 
@@ -232,7 +256,7 @@ export default function App() {
 
   if (!state.onboarded) {
     return (
-      <div className="app">
+      <div className="app onboarding-app">
         <Onboarding
           onDone={async () => {
             await refreshState();
@@ -274,7 +298,7 @@ export default function App() {
         </nav>
         <main className="desk-main">
           {deskTab === 'swipe' && (
-            <div className="desk-column">
+            <div className="desk-column discover-column">
               <Swipe onMatched={refreshMatches} />
             </div>
           )}
@@ -289,7 +313,7 @@ export default function App() {
                     key={openChat}
                     characterId={openChat}
                     typing={!!typing[openChat]}
-                    eventSeq={eventSeq}
+                    eventSeq={chatEventSeq}
                     onBack={closeView}
                   />
                 ) : (
@@ -323,7 +347,7 @@ export default function App() {
         <Chat
           characterId={openChat}
           typing={!!typing[openChat]}
-          eventSeq={eventSeq}
+          eventSeq={chatEventSeq}
           onBack={closeView}
         />
       </div>

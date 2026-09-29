@@ -40,7 +40,10 @@ interface PromptMessage {
 }
 
 /** Keys the LLM logger writes, rendered as sections rather than dumped as JSON. */
-const KNOWN = new Set(['model', 'duration_ms', 'tokens_in', 'tokens_out', 'tokens_per_second', 'prompt', 'response']);
+const KNOWN = new Set([
+  'model', 'duration_ms', 'tokens_in', 'tokens_out', 'tokens_per_second', 'reasoning_tokens',
+  'reasoning_effort', 'reasoning_requested', 'priority', 'calls_in_flight', 'prompt', 'response',
+]);
 
 function trim(text: string, detail: PromptDetail): string {
   if (detail !== 'trim' || text.length <= TRIM_CHARS) return text;
@@ -75,6 +78,11 @@ function renderEntry(entry: any, detail: PromptDetail): string {
     typeof p.duration_ms === 'number' && `${(p.duration_ms / 1000).toFixed(1)}s`,
     (p.tokens_in != null || p.tokens_out != null) && `${p.tokens_in ?? '?'} in / ${p.tokens_out ?? '?'} out`,
     typeof p.tokens_per_second === 'number' && `${p.tokens_per_second} tok/s`,
+    p.reasoning_effort && `reasoning ${p.reasoning_effort}`,
+    p.reasoning_requested && `requested ${p.reasoning_requested}`,
+    typeof p.reasoning_tokens === 'number' && `${p.reasoning_tokens} reasoning`,
+    p.priority && `${p.priority} priority`,
+    typeof p.calls_in_flight === 'number' && `${p.calls_in_flight} in flight`,
   ].filter(Boolean);
   if (vitals.length) out.push('', vitals.join(' · '));
 
@@ -109,8 +117,9 @@ function header(opts: ExportOptions, count: number): string {
     `- Entries: ${count}, oldest first`,
     `- Filters: ${filters}`,
     `- Prompt detail: ${opts.prompts ?? 'full'}`,
-    `- Director: ${s.models.director.model} · temp ${s.models.director.temperature} · top_p ${s.models.director.top_p} · max ${s.models.director.max_tokens}`,
-    `- Actor: ${s.models.actor.model} · temp ${s.models.actor.temperature} · top_p ${s.models.actor.top_p} · max ${s.models.actor.max_tokens}`,
+    `- Director: ${s.models.director.model} · reasoning ${s.models.director.reasoning_effort} · temp ${s.models.director.temperature} · top_p ${s.models.director.top_p} · max ${s.models.director.max_tokens}`,
+    `- Actor: ${s.models.actor.model} · reasoning ${s.models.actor.reasoning_effort} · temp ${s.models.actor.temperature} · top_p ${s.models.actor.top_p} · max ${s.models.actor.max_tokens}`,
+    `- Evaluator: ${s.models.evaluator.enabled ? s.models.evaluator.model : 'off'} · confidence ${s.models.evaluator.confidence_threshold}`,
     `- Image: ${s.models.image.model} at ${s.models.image.size}, generation ${s.images_enabled ? 'on' : 'off'}`,
     `- Tuning: spice ${s.spice} · activity ${s.activity} · rarity bias ${s.rarity_bias} · ${s.chat.context_messages} messages of context · up to ${s.chat.max_messages_per_turn} per turn`,
     '',

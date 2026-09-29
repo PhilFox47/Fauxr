@@ -94,6 +94,15 @@ export default function Matches({
         key={m.id}
         className={`match-row${m.unread > 0 ? ' unreadrow' : ''}${m.id === selectedId ? ' selected' : ''}`}
         onClick={() => onOpen(m.id)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onOpen(m.id);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-current={m.id === selectedId ? 'true' : undefined}
         style={opts.archived ? { opacity: 0.5 } : undefined}
       >
         <Avatar match={m} onDate={!opts.archived && m.on_date} />
@@ -104,7 +113,7 @@ export default function Matches({
           </div>
           <div className={`preview${typing[m.id] ? ' typing-now' : ''}`}>
             {m.on_date && !opts.archived
-              ? 'On a date right now'
+              ? m.active_session_kind === 'call' ? 'On a call right now' : 'On a date right now'
               : typing[m.id]
                 ? 'typing…'
                 : opts.archived
@@ -137,7 +146,7 @@ export default function Matches({
       <div className="topbar">
         <h1>Chats</h1>
         <div className="spacer" />
-        <span className="usage-pill">{matches.length} match{matches.length === 1 ? '' : 'es'}</span>
+        <span className="usage-pill">{active.length} conversation{active.length === 1 ? '' : 's'}</span>
       </div>
 
       {matches.length > 0 && (

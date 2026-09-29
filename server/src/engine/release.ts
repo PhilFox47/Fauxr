@@ -48,7 +48,7 @@ function goesAgain(character: Character): boolean {
 }
 
 /** The stage, in words, for her prompt. Empty when nothing is going on. */
-export function releaseBlock(character: Character, rel: Relationship, medium: 'text' | 'in_person' = 'text'): string {
+export function releaseBlock(character: Character, rel: Relationship, medium: 'text' | 'in_person' | 'call' = 'text'): string {
   const r = releaseOf(rel);
   const persona = find('sexual_persona', character.seed.sexual_persona)?.label.toLowerCase() ?? 'yourself';
   if (r.afterglow > 0) {
@@ -62,8 +62,11 @@ export function releaseBlock(character: Character, rel: Relationship, medium: 't
     return medium === 'in_person'
       ? 'You are coming, right now, in this beat. Let it happen - your body, your breath, your voice, ' +
           'whatever you are like when it hits. Do not skip it or summarise it.'
-      : 'You are coming, right now, in this reply. Let it happen in your messages, your way - breathless, ' +
-          'loud, a string of typos, a single word, whatever you are like. Do not skip it or summarise it.';
+      : medium === 'call'
+        ? 'You are coming, right now, on the call. Let him hear it in your breath and whatever words ' +
+            'you manage. Do not skip it, narrate it from outside, or summarise it.'
+        : 'You are coming, right now, in this reply. Let it happen in your messages, your way - breathless, ' +
+            'loud, a string of typos, a single word, whatever you are like. Do not skip it or summarise it.';
   }
   if (r.level >= 85) {
     return 'You are right on the edge. One or two more good ones from him and you are gone - unless he ' +
@@ -72,7 +75,9 @@ export function releaseBlock(character: Character, rel: Relationship, medium: 't
   if (r.level >= 60) {
     return medium === 'in_person'
       ? 'You are getting close, and your body is showing it.'
-      : 'You are getting close. It shows in how you type - shorter, messier, more urgent.';
+      : medium === 'call'
+        ? 'You are getting close. It shows in your voice and breath - shorter, less composed, more urgent.'
+        : 'You are getting close. It shows in how you type - shorter, messier, more urgent.';
   }
   if (r.level >= 30) return 'It is building. You are properly into it, but you are not close yet - no rush.';
   if (r.level > 0) return 'You have only just started. Nowhere near finishing - enjoy it and take your time.';

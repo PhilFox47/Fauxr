@@ -28,6 +28,9 @@ export interface DirectorUpdate {
     what_landed?: string[];
     pinned_add?: string[];
     pinned_remove?: string[];
+    rituals_add?: string[];
+    callbacks_add?: string[];
+    aftermath?: string | null;
     open_threads_add?: { text: string; expires_when?: string }[];
     open_threads_close?: string[];
     director_notes?: { intent?: string; plans?: { text: string; expires_when?: string }[] };
@@ -46,6 +49,8 @@ const MAX_THREADS = 4;
  * nicknames, running deals, real milestones - is the rare exception, not the norm.
  */
 const MAX_PINNED = 15;
+const MAX_RITUALS = 8;
+const MAX_CALLBACKS = 12;
 /** A thread she has raised this many times is spent, whether or not he engaged. */
 const MAX_RAISES = 2;
 const THREAD_MAX_AGE_HOURS = 72;
@@ -98,6 +103,9 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger'], now: numbe
     events: [...(ledger.events ?? [])],
     what_landed: [...(ledger.what_landed ?? [])],
     pinned: [...(ledger.pinned ?? [])],
+    rituals: [...(ledger.rituals ?? [])],
+    callbacks: [...(ledger.callbacks ?? [])],
+    aftermath: ledger.aftermath ?? '',
     open_threads: [...(ledger.open_threads ?? [])],
     director_notes: {
       intent: ledger.director_notes?.intent ?? '',
@@ -105,10 +113,29 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger'], now: numbe
     },
   };
 
+  const memoryWords = (text: string) => new Set(
+    text.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/)
+      .filter((word) => word.length > 2 && !['the', 'and', 'that', 'this', 'with', 'from', 'was', 'has', 'have', 'his', 'her', 'him', 'she', 'said', 'explicitly'].includes(word))
+      .map((word) => /^(?:like[sd]?|love[sd]?|enjoy(?:s|ed)?)$/.test(word) ? 'like'
+        : /^(?:command(?:s|ed)?|order(?:s|ed)?)$/.test(word) ? 'command'
+        : word),
+  );
+  const sameMemory = (a: string, b: string) => {
+    const left = memoryWords(a);
+    const right = memoryWords(b);
+    if (!left.size || !right.size) return a.trim().toLowerCase() === b.trim().toLowerCase();
+    const shared = [...left].filter((word) => right.has(word)).length;
+    return shared / Math.min(left.size, right.size) >= 0.75;
+  };
+  const isGateMemory = (text: string) =>
+    /\b(?:owe[sd]?|debt|invoice|fee|payment|paid up|pay up|compliance|clause violation|must earn|has to earn)\b/i.test(text) ||
+    /\b(?:voice ?note|photo|pic)\b.{0,80}\b(?:still owed|due|deadline|within (?:the|an?) hour|will (?:record|send))\b/i.test(text);
   const pushUnique = (arr: string[], items: string[] | undefined) => {
     for (const item of items ?? []) {
       const t = String(item).trim();
-      if (t && !arr.includes(t)) arr.push(t);
+      // Transactional teasing can live in the recent transcript. Making it durable turns a
+      // one-off joke into a standing content gate, so it does not belong in long-term memory.
+      if (t && !isGateMemory(t) && !arr.some((existing) => sameMemory(existing, t))) arr.push(t);
     }
   };
   pushUnique(next.facts.about_user, patch.facts_about_user);
@@ -116,6 +143,11 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger'], now: numbe
   pushUnique(next.events, patch.events);
   pushUnique(next.what_landed as string[], patch.what_landed);
   pushUnique(next.pinned as string[], patch.pinned_add);
+  pushUnique(next.rituals as string[], patch.rituals_add);
+  pushUnique(next.callbacks as string[], patch.callbacks_add);
+  if (patch.aftermath !== undefined && patch.aftermath !== null) {
+    next.aftermath = String(patch.aftermath).trim().slice(0, 500);
+  }
 
   // Retiring a pinned fact (a nickname that changed, a deal that concluded) works the same
   // way closing an open thread does: match on the text itself, case-insensitive.
@@ -150,11 +182,30 @@ function mergeLedger(ledger: Ledger, patch: DirectorUpdate['ledger'], now: numbe
   }
 
   next.open_threads = pruneThreads(next.open_threads, now);
+  // Clean older saves as they next pass through the Director, not only newly added patches.
+  next.events = next.events.filter((item) => !isGateMemory(item));
+  next.what_landed = (next.what_landed ?? []).filter((item) => !isGateMemory(item));
+  next.pinned = (next.pinned ?? []).filter((item) => !isGateMemory(item));
+  next.rituals = (next.rituals ?? []).filter((item) => !isGateMemory(item));
+  next.callbacks = (next.callbacks ?? []).filter((item) => !isGateMemory(item));
+  const compact = (items: string[]) => items.reduce<string[]>((kept, item) => {
+    if (!kept.some((existing) => sameMemory(existing, item))) kept.push(item);
+    return kept;
+  }, []);
+  next.facts.about_user = compact(next.facts.about_user);
+  next.facts.about_her = compact(next.facts.about_her);
+  next.events = compact(next.events);
+  next.what_landed = compact(next.what_landed ?? []);
+  next.pinned = compact(next.pinned ?? []);
+  next.rituals = compact(next.rituals ?? []);
+  next.callbacks = compact(next.callbacks ?? []);
   next.facts.about_user = next.facts.about_user.slice(-MAX_FACTS);
   next.facts.about_her = next.facts.about_her.slice(-MAX_FACTS);
   next.events = next.events.slice(-MAX_EVENTS);
   next.what_landed = (next.what_landed ?? []).slice(-MAX_LANDED);
   next.pinned = (next.pinned ?? []).slice(-MAX_PINNED);
+  next.rituals = (next.rituals ?? []).slice(-MAX_RITUALS);
+  next.callbacks = (next.callbacks ?? []).slice(-MAX_CALLBACKS);
   next.open_threads = next.open_threads.slice(-MAX_THREADS);
   return next;
 }

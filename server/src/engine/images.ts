@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { writeFileSync, readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 import { getSettings } from '../config.js';
 import { db, nowIso, DATA_DIR } from '../db/index.js';
 import { bus } from '../events.js';
@@ -28,6 +28,7 @@ import { cosplayImageBlock } from './cosplay.js';
 import { duoImageBlock } from './duo.js';
 import { closetBlock, currentOutfit, outfitForImage } from './wardrobe.js';
 import { gameClockMs } from './clock.js';
+import { appearanceForShot, type AppearanceFraming } from './appearance.js';
 
 /** Whether image generation is switched on at all. */
 export function photosEnabled(): boolean {
@@ -118,13 +119,23 @@ function postFailedPlaceholder(job: ImageJob, characterId: string, caption: stri
 
 export async function ensureProfilePicture(characterId: string): Promise<void> {
   if (!photosEnabled()) return;
-  const existing = db
+  let existing = db
     .prepare("SELECT id, status FROM images WHERE character_id = ? AND kind = 'profile' AND status != 'failed' ORDER BY rowid ASC LIMIT 1")
     .get(characterId) as { id: string; status: string } | undefined;
   if (!existing) {
-    const job = insertImageJob({ characterId, kind: 'profile', situation: '' });
-    await runImageJob(job.id, '', false);
-    return;
+    // The paid click creates a neutral, private identity plate first. It is never exposed in
+    // the gallery; its only job is to keep her face stable while her public profile photo can
+    // still express her personality. If it fails, the visible photo remains usable on its own.
+    await ensureIdentityReference(characterId);
+    // Another caller may have crossed the same gap while the identity plate rendered.
+    existing = db
+      .prepare("SELECT id, status FROM images WHERE character_id = ? AND kind = 'profile' AND status != 'failed' ORDER BY rowid ASC LIMIT 1")
+      .get(characterId) as { id: string; status: string } | undefined;
+    if (!existing) {
+      const job = insertImageJob({ characterId, kind: 'profile', situation: '' });
+      await runImageJob(job.id, '', false);
+      return;
+    }
   }
   // Already queued or running from another caller: wait for it rather than starting a second.
   const deadline = Date.now() + 10 * 60_000;
@@ -262,6 +273,15 @@ export async function showPhoto(imageId: string): Promise<void> {
 
 type PromptStyle = 'seedream' | 'z_image_turbo';
 
+/** A rare species can change the medium itself; ordinary species remain photographic. */
+export function imageRenderMode(seed: CharacterSeed): 'photo' | 'anime_2d' {
+  return speciesRow(seed)?.extra?.image_style === 'anime_2d' ? 'anime_2d' : 'photo';
+}
+
+function usesAnimeRender(seed: CharacterSeed): boolean {
+  return imageRenderMode(seed) === 'anime_2d';
+}
+
 /**
  * The floor every generated photo lands on, whatever kind of shot it is - split per
  * prompt-model, because the two send this in completely different shapes.
@@ -293,6 +313,23 @@ const BASE_SUFFIX: Record<PromptStyle, string> = {
     'style - real, unretouched skin with natural texture and pores, and anatomically ' +
     'correct hands and limbs.',
 };
+
+const ANIME_BASE_SUFFIX =
+  'Rendered entirely as a polished hand-drawn 2D anime illustration with clean expressive ' +
+  'line art, controlled cel shading and a cohesive painted background. She is a literal ' +
+  'adult anime woman, not a human cosplayer, live-action photograph or 3D CGI character.';
+const ANIME_PROFILE_SUFFIX =
+  'Composed as a polished adult character portrait with her face clearly readable and her ' +
+  'individual design preserved.';
+const ANIME_MOMENT_SUFFIX =
+  'Framed like a casual smartphone snapshot from inside her animated world: immediate, ' +
+  'slightly imperfect and expressive rather than a formal character sheet.';
+const ANIME_DATE_SUFFIX =
+  'Composed as an in-scene anime frame seen by an observer standing there at natural social distance.';
+const ANIME_SCENE_SUFFIX =
+  'Composed as a first-person anime scene from his actual viewpoint inside the established place.';
+const ANIME_SPICY_SUFFIX =
+  'Composed as an intimate self-portrait by an adult woman, deliberately posed for one person while remaining consistent 2D anime artwork.';
 
 /**
  * The "flattering angle" clause, which used to live in BASE_SUFFIX and therefore rode along
@@ -389,6 +426,9 @@ const SPICY_SUFFIX: Record<PromptStyle, string> = {
 const BASE_NEGATIVE =
   'No airbrushing, beauty-filter skin or doll-like retouching. No cgi, illustration or ' +
   'anime look, and no deformed anatomy or extra limbs.';
+const ANIME_NEGATIVE =
+  'No photorealism, live-action skin, cosplay photography or 3D CGI. Keep clean 2D line art, ' +
+  'coherent cel shading, adult proportions and correct hands and limbs.';
 
 /**
  * Only for a chat/spicy moment: a profile picture is now allowed to genuinely be a studio
@@ -521,11 +561,37 @@ export interface ShootingConditions {
  * crooked horizon onto her own lead image would be the wrong correction entirely. What it
  * does get is the room - even her best photo was taken somewhere real.
  */
-function shootingConditions(kind: 'profile' | 'moment' | 'spicy' | 'date'): ShootingConditions {
+function shootingConditions(kind: 'profile' | 'moment' | 'spicy' | 'date' | 'scene', situation = ''): ShootingConditions {
   if (kind === 'profile') return { light: '', flaw: '', lived_in: pickOne(LIVED_IN_DETAILS) };
-  if (kind === 'spicy') return { light: pickOne(SPICY_LIGHT), flaw: pickOne(SPICY_FLAWS), lived_in: pickOne(LIVED_IN_DETAILS) };
-  if (kind === 'date') return { light: pickOne(LIGHT_CONDITIONS), flaw: '', lived_in: pickOne(VENUE_TRUTH) };
+  // An in-person scene already has real light and a real venue. A random photographic
+  // condition turned night cafés into grey daylight and restaurant walk-ins into warm
+  // pantries, so realism may add wear/background life but never replace those anchors.
+  if (kind === 'date' || kind === 'scene') return { light: '', flaw: '', lived_in: pickOne(VENUE_TRUTH) };
+  if (kind === 'spicy') {
+    const namedElsewhere = /\b(?:restaurant|commercial kitchen|walk-in|office|workplace|club|bar|café|cafe|street|car|hotel|locker room)\b/i.test(situation);
+    return {
+      light: namedElsewhere ? '' : pickOne(SPICY_LIGHT),
+      flaw: pickOne(SPICY_FLAWS),
+      lived_in: namedElsewhere ? '' : pickOne(LIVED_IN_DETAILS),
+    };
+  }
   return { light: pickOne(LIGHT_CONDITIONS), flaw: pickOne(CAPTURE_FLAWS), lived_in: pickOne(LIVED_IN_DETAILS) };
+}
+
+async function ensureIdentityReference(characterId: string): Promise<void> {
+  let existing = db
+    .prepare("SELECT id, status FROM images WHERE character_id = ? AND kind = 'identity' AND status != 'failed' ORDER BY rowid ASC LIMIT 1")
+    .get(characterId) as { id: string; status: string } | undefined;
+  if (!existing) {
+    const job = insertImageJob({ characterId, kind: 'identity', situation: 'Private identity reference' });
+    await runImageJob(job.id, job.situation ?? '', false);
+    return;
+  }
+  const deadline = Date.now() + 10 * 60_000;
+  while ((existing.status === 'queued' || existing.status === 'running') && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    existing = getImageJob(existing.id) ?? { id: existing.id, status: 'failed' };
+  }
 }
 
 /**
@@ -541,11 +607,14 @@ const REF_NOTE =
   'The attached reference photo fixes WHO she is - same face, same bone structure, same hair ' +
   'and colouring. It does not fix this photo: her expression, head angle, pose, framing and ' +
   'surroundings all come from the description above, not from the reference.';
+const ANIME_REF_NOTE =
+  'The attached reference illustration fixes WHO she is - the same facial design, line-art ' +
+  'identity, hair and colouring. It does not fix this frame: expression, pose, composition ' +
+  'and surroundings all come from the description above.';
 
 /**
- * Her profile picture is the identity anchor - same character, same seed, so the face every
- * later reference image locks onto is the one she was generated with. Every shot after it
- * gets a fresh seed instead.
+ * Her private identity plate and public profile picture are stable; every conversational
+ * shot after them gets a fresh seed instead.
  *
  * One fixed seed used to be reused for every single image of a character, which stacked with
  * the reference image and a demeanour line that never changes to leave the prompt doing
@@ -581,8 +650,8 @@ export const PHOTO_ASPECTS = new Set<PhotoAspect>(['square', 'portrait', 'landsc
 
 /**
  * Resolution per shot, fixed by kind where the kind decides it:
- * - a profile picture is always square: the main photo slot is square everywhere, and it is
- *   the identity reference every later photo is matched to;
+ * - an identity or profile picture is always square: the former is the private likeness
+ *   reference, while the latter fills the public square profile slot;
  * - a date's arrival photo is always 2:3 portrait: it shows her whole outfit, head to shoes;
  * - a photo she sends in the chat is her call (see photo_aspect on ActorHidden): square for a
  *   close selfie or a detail, 2:3 portrait for a mirror or outfit shot, 3:2 landscape for a
@@ -600,7 +669,7 @@ export const IMAGE_SIZE: Record<'profile' | PhotoAspect, string> = {
 };
 
 function sizeFor(job: Pick<ImageJob, 'kind' | 'aspect'>): string {
-  if (job.kind === 'profile') return IMAGE_SIZE.profile;
+  if (job.kind === 'profile' || job.kind === 'identity') return IMAGE_SIZE.profile;
   if (job.kind === 'date') return IMAGE_SIZE.portrait;
   return IMAGE_SIZE[job.aspect && PHOTO_ASPECTS.has(job.aspect) ? job.aspect : 'portrait'];
 }
@@ -692,8 +761,15 @@ function showsFace(job: Pick<ImageJob, 'shows_face'>): boolean {
   return job.shows_face !== 0;
 }
 
+function framingFor(job: Pick<ImageJob, 'kind' | 'aspect'>, facesCamera: boolean): AppearanceFraming {
+  if (!facesCamera) return 'body';
+  if (job.kind === 'identity' || job.kind === 'profile') return 'face';
+  if (job.kind === 'date' || job.kind === 'scene' || job.aspect === 'portrait') return 'full';
+  return 'upper';
+}
+
 export function listImageJobs(limit = 50): ImageJob[] {
-  return db.prepare('SELECT * FROM images ORDER BY rowid DESC LIMIT ?').all(limit) as ImageJob[];
+  return db.prepare("SELECT * FROM images WHERE kind != 'identity' ORDER BY rowid DESC LIMIT ?").all(limit) as ImageJob[];
 }
 
 /** Every finished picture of one character, newest first. */
@@ -701,7 +777,7 @@ export function characterGallery(characterId: string): ImageJob[] {
   const rows = db
     .prepare(
       `SELECT * FROM images
-       WHERE character_id = ? AND status = 'done' AND path IS NOT NULL
+       WHERE character_id = ? AND status = 'done' AND path IS NOT NULL AND kind != 'identity'
        ORDER BY rowid DESC`,
     )
     .all(characterId) as ImageJob[];
@@ -771,10 +847,10 @@ function visibleMarks(character: Character, kind: string, showsFaceInShot: boole
   return parts.join(', ');
 }
 
-/** The character's profile picture doubles as the reference image for everything after it. */
+/** Prefer the private neutral identity plate; old characters fall back to their public profile. */
 function referenceImage(characterId: string): string | null {
   const row = db
-    .prepare("SELECT path FROM images WHERE character_id = ? AND kind = 'profile' AND status = 'done' ORDER BY rowid ASC LIMIT 1")
+    .prepare("SELECT path FROM images WHERE character_id = ? AND kind IN ('identity', 'profile') AND status = 'done' ORDER BY CASE kind WHEN 'identity' THEN 0 ELSE 1 END, rowid ASC LIMIT 1")
     .get(characterId) as { path: string } | undefined;
   if (!row?.path) return null;
   const abs = join(DATA_DIR, row.path);
@@ -862,7 +938,7 @@ async function profilePicConcept(character: Character): Promise<string> {
 
 type ImageJobOptions = {
   characterId: string;
-  kind: 'profile' | 'chat' | 'spicy' | 'date' | 'scene';
+  kind: 'identity' | 'profile' | 'chat' | 'spicy' | 'date' | 'scene';
   /** Only for a 'date' or 'scene' job: which date's own transcript the result posts into. */
   dateId?: string | null;
   /** What she has on, as the image model gets it (wardrobe.ts), when the caller knows it. */
@@ -878,7 +954,7 @@ type ImageJobOptions = {
 function insertImageJob(opts: ImageJobOptions): ImageJob {
   const id = randomUUID();
   // Fixed by kind where the kind decides it - see IMAGE_SIZE.
-  const aspect = opts.kind === 'profile' ? 'square' : opts.kind === 'date' ? 'portrait' : opts.aspect ?? 'portrait';
+  const aspect = opts.kind === 'profile' || opts.kind === 'identity' ? 'square' : opts.kind === 'date' ? 'portrait' : opts.aspect ?? 'portrait';
   db.prepare(
     `INSERT INTO images (id, character_id, kind, prompt, seed, ref_image, status, path, error, aspect, shows_face, situation, date_id, outfit, created_at, updated_at)
      VALUES (?, ?, ?, '', NULL, NULL, 'queued', NULL, NULL, ?, ?, ?, ?, ?, ?, ?)`,
@@ -930,7 +1006,7 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
     setStatus(id, 'failed', { error: String(err) });
     // Her profile picture is never a chat bubble; its retry is the camera button (see
     // profilePictureState). Anything else that was meant to land in a chat gets a bubble.
-    if (postToChat && loaded.job.kind !== 'profile') {
+    if (postToChat && loaded.job.kind !== 'profile' && loaded.job.kind !== 'identity') {
       postFailedPlaceholder(
         loaded.job,
         loaded.character.id,
@@ -959,6 +1035,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // ever gave it a situation - it arrived here as ''. Asking her what it actually is
   // happens once, lazily, right where that gap used to go unfilled.
   const isProfile = job.kind === 'profile';
+  const isIdentity = job.kind === 'identity';
   const isDate = job.kind === 'date';
   const isSpicy = job.kind === 'spicy';
   // "Show current scene" on a date: what he sees this second, through his own eyes.
@@ -982,6 +1059,19 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
 
   const facesCamera = isProfile || showsFace(job);
   const promptStyle: PromptStyle = settings.models.image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream';
+  const animeRender = usesAnimeRender(character.seed);
+
+  // This is an image-model reference asset, not a character-authored photo. A deterministic
+  // neutral brief makes it a better likeness anchor and avoids spending a Director call on it.
+  if (isIdentity) {
+    const prompt = animeRender
+      ? `${appearanceForShot(character.seed, 'face')}; neutral head-and-shoulders character reference, nearly frontal, relaxed neutral expression, even soft light, plain unobtrusive background, face fully visible. ${ANIME_BASE_SUFFIX} ${ANIME_PROFILE_SUFFIX}`
+      : `${appearanceForShot(character.seed, 'face')}; neutral head-and-shoulders identity reference portrait, nearly frontal, relaxed neutral expression, even soft daylight, plain unobtrusive background, face fully visible. ${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`;
+    const negative = promptStyle === 'z_image_turbo' ? '' : animeRender ? ANIME_NEGATIVE : BASE_NEGATIVE;
+    db.prepare('UPDATE images SET prompt = ?, negative_prompt = ?, caption = ?, situation = ? WHERE id = ?')
+      .run(prompt, negative, '', situation, id);
+    return { prompt, negative, caption: '', situation };
+  }
 
   // Candid phone-photo texture only applies to a moment inside the conversation. A
   // profile picture's style - polished headshot or grainy selfie - was already decided
@@ -993,17 +1083,19 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // FLATTERING_SUFFIX rides with the profile picture only - see its own comment for why
   // asking every candid for a flattering angle was most of what made them read as shot
   // rather than taken.
-  const styleSuffix = isProfile
-    ? `${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`
-    : isDate
-      ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
-      : isScene
-      ? `${BASE_SUFFIX[promptStyle]} ${SCENE_SUFFIX[promptStyle]}`
-      : isSpicy
-        ? `${BASE_SUFFIX[promptStyle]} ${SPICY_SUFFIX[promptStyle]}`
-        : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
+  const styleSuffix = animeRender
+    ? `${ANIME_BASE_SUFFIX} ${isProfile ? ANIME_PROFILE_SUFFIX : isDate ? ANIME_DATE_SUFFIX : isScene ? ANIME_SCENE_SUFFIX : isSpicy ? ANIME_SPICY_SUFFIX : ANIME_MOMENT_SUFFIX}`
+    : isProfile
+      ? `${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`
+      : isDate
+        ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
+        : isScene
+          ? `${BASE_SUFFIX[promptStyle]} ${SCENE_SUFFIX[promptStyle]}`
+          : isSpicy
+            ? `${BASE_SUFFIX[promptStyle]} ${SPICY_SUFFIX[promptStyle]}`
+            : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
   // Drawn per shot rather than left to the assembler's taste - see LIGHT_CONDITIONS.
-  const conditions = shootingConditions(isProfile ? 'profile' : isDate || isScene ? 'date' : isSpicy ? 'spicy' : 'moment');
+  const conditions = shootingConditions(isProfile ? 'profile' : isScene ? 'scene' : isDate ? 'date' : isSpicy ? 'spicy' : 'moment', situation);
   // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
   // characters - not a soft quality preference, an actual request error. That leaves the
   // assembler only whatever headroom styleSuffix does not already spend, plus a safety
@@ -1022,7 +1114,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
       {
         role: 'user',
         content: render('image_prompt_assembler', {
-          appearance_prompt: character.seed.appearance_prompt,
+          appearance_prompt: appearanceForShot(character.seed, framingFor(job, facesCamera)),
           image_kind: job.kind,
           situation,
           visible_marks: visibleMarks(character, job.kind, facesCamera),
@@ -1061,6 +1153,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
           photo_scene: isDate || isScene ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
           mode_seedream: promptStyle === 'seedream' ? '1' : '',
           mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
+          render_anime: animeRender ? '1' : '',
           z_char_budget: zCharBudget,
         }),
       },
@@ -1098,7 +1191,11 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   const negative =
     promptStyle === 'z_image_turbo'
       ? ''
-      : [assembled.negative_prompt, BASE_NEGATIVE, isProfile ? null : isSpicy ? SPICY_NEGATIVE : isScene ? SCENE_NEGATIVE : CANDID_NEGATIVE]
+      : [
+          assembled.negative_prompt,
+          animeRender ? ANIME_NEGATIVE : BASE_NEGATIVE,
+          animeRender ? null : isProfile ? null : isSpicy ? SPICY_NEGATIVE : isScene ? SCENE_NEGATIVE : CANDID_NEGATIVE,
+        ]
           .filter(Boolean)
           .join(' ');
   const caption = cleanCaption(assembled.caption, situation);
@@ -1110,20 +1207,21 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
 async function renderImageJob(job: ImageJob, character: Character, shot: AssembledShot, postToChat: boolean): Promise<void> {
   const id = job.id;
   const isProfile = job.kind === 'profile';
+  const isIdentity = job.kind === 'identity';
   const isDate = job.kind === 'date' || job.kind === 'scene';
-  const facesCamera = isProfile || showsFace(job);
+  const facesCamera = isProfile || isIdentity || showsFace(job);
   const { prompt, negative, situation } = shot;
   // Forcing her face to match a reference photo is exactly wrong for a shot that is not
   // supposed to show her face at all - it just makes one appear anyway. Skip the
   // reference whenever this shot does not put her face in frame.
-  const ref = isProfile || !facesCamera ? null : referenceImage(character.id);
+  const ref = isIdentity || !facesCamera ? null : referenceImage(character.id);
   // Only when one is actually attached - see REF_NOTE for why the reference needs telling
   // what it is for. Appended after styleSuffix so it is the last thing read, and left off
   // the Z Image Turbo budget maths above on purpose: that mode never sends a reference at
   // all unless a profile picture exists, and the same trim still protects the ceiling.
-  const finalPrompt = ref ? `${prompt} ${REF_NOTE}` : prompt;
+  const finalPrompt = ref ? `${prompt} ${usesAnimeRender(character.seed) ? ANIME_REF_NOTE : REF_NOTE}` : prompt;
   const size = sizeFor(job);
-  const imageSeed = seedFor(character.seed, isProfile);
+  const imageSeed = seedFor(character.seed, isProfile || isIdentity);
   const b64 = await generateImage({
     prompt: finalPrompt,
     negativePrompt: negative,
@@ -1132,7 +1230,7 @@ async function renderImageJob(job: ImageJob, character: Character, shot: Assembl
     size,
   });
 
-  const relPath = join('images', `${id}.png`);
+  const relPath = posix.join('images', `${id}.png`);
   writeFileSync(join(DATA_DIR, relPath), Buffer.from(b64, 'base64'));
   // The log records what was actually sent, reference note and per-shot seed included -
   // otherwise two shots that came out identical would show identical log rows for no
@@ -1140,7 +1238,7 @@ async function renderImageJob(job: ImageJob, character: Character, shot: Assembl
   db.prepare('UPDATE images SET prompt = ?, seed = ?, ref_image = ? WHERE id = ?').run(
     finalPrompt,
     imageSeed,
-    ref ? 'profile' : null,
+    ref ? 'identity' : null,
     id,
   );
   setStatus(id, 'done', { path: relPath });
@@ -1193,7 +1291,7 @@ export async function retryImageJob(id: string): Promise<void> {
   // falls back to blank, which is what lets a profile job's lazy profilePicConcept() run.
   // Her profile picture was never a chat message; retrying it from the Settings list used to
   // post it into her chat as a photo she sent.
-  await runImageJob(id, job.situation ?? '', job.kind !== 'profile');
+  await runImageJob(id, job.situation ?? '', job.kind !== 'profile' && job.kind !== 'identity');
 }
 
 /** Sized like PROFILE_PIC_TOKENS - one real paragraph, from a reasoning model. */
@@ -1253,6 +1351,7 @@ async function freshPhotoIdea(
 export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'): Promise<void> {
   const job = getImageJob(id);
   if (!job) throw new Error('image job not found');
+  if (job.kind === 'identity') throw new Error('private identity references cannot be regenerated directly');
   const character = job.character_id ? getCharacter(job.character_id) : null;
   if (!character) throw new Error('character not found');
   const kind = job.kind as 'profile' | 'chat' | 'spicy' | 'date' | 'scene';

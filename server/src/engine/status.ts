@@ -133,6 +133,8 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
       label: `status:${character.username}`,
       schema: threadList ? STATUS_WITH_THREAD : STATUS,
       config: { ...getSettings().models.director, max_tokens: 1000 },
+      reasoningEffort: 'none',
+      priority: 'background',
       require: ['status'],
       messages: [{ role: 'user', content: prompt }],
     });

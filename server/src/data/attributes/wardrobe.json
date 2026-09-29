@@ -604,6 +604,15 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "borrowed",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "quiet_luxury",
+        "uniform_of_one_outfit",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -623,6 +632,13 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "cosy",
+        "normcore",
+        "denim_on_denim",
+        "gamer_girl"
       ]
     },
     "enabled": true
@@ -642,6 +658,15 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "minimalist_neutral",
+        "normcore",
+        "monochrome_head_to_toe",
+        "quiet_luxury",
+        "uniform_of_one_outfit",
+        "classic_denim"
       ]
     },
     "enabled": true
@@ -661,6 +686,15 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "borrowed",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "layered_neutrals",
+        "classic_denim",
+        "gamer_girl"
       ]
     },
     "enabled": true
@@ -680,6 +714,12 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "borrowed",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "gamer_girl"
       ]
     },
     "enabled": true
@@ -699,6 +739,10 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "denim_on_denim",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -718,6 +762,10 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "normcore",
+        "denim_on_denim"
       ]
     },
     "enabled": true
@@ -737,6 +785,14 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "minimalist_neutral",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "gamer_girl",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -756,6 +812,15 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "minimalist_neutral",
+        "normcore",
+        "quiet_luxury",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "classic_denim"
       ]
     },
     "enabled": true
@@ -775,6 +840,12 @@
       "slot": "top",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "cosy",
+        "layered_neutrals",
+        "gamer_girl"
       ]
     },
     "enabled": true
@@ -794,6 +865,18 @@
       "slot": "bottom",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "cosy",
+        "borrowed",
+        "normcore",
+        "denim_on_denim",
+        "quiet_luxury",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "classic_denim",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -813,6 +896,14 @@
       "slot": "bottom",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "borrowed",
+        "denim_on_denim",
+        "classic_denim",
+        "clean_girl",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -832,6 +923,13 @@
       "slot": "bottom",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "cosy",
+        "normcore",
+        "monochrome_head_to_toe",
+        "gamer_girl"
       ]
     },
     "enabled": true
@@ -851,6 +949,11 @@
       "slot": "bottom",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "normcore",
+        "denim_on_denim",
+        "classic_denim"
       ]
     },
     "enabled": true
@@ -870,6 +973,9 @@
       "slot": "bottom",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "layered_neutrals"
       ]
     },
     "enabled": true
@@ -889,6 +995,16 @@
       "slot": "bottom",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "minimalist_neutral",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "uniform_of_one_outfit",
+        "gamer_girl",
+        "clean_girl",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -908,6 +1024,16 @@
       "slot": "dress",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "borrowed",
+        "normcore",
+        "denim_on_denim",
+        "quiet_luxury",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -927,6 +1053,17 @@
       "slot": "dress",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "cosy",
+        "borrowed",
+        "minimalist_neutral",
+        "normcore",
+        "monochrome_head_to_toe",
+        "layered_neutrals",
+        "classic_denim",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -946,6 +1083,16 @@
       "slot": "dress",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "normcore",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "quiet_luxury",
+        "uniform_of_one_outfit",
+        "classic_denim",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -966,6 +1113,19 @@
       "families": [
         "basics",
         "retro"
+      ],
+      "styles": [
+        "casual_basics",
+        "cosy",
+        "borrowed",
+        "normcore",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "uniform_of_one_outfit",
+        "classic_denim",
+        "westerncore",
+        "pin_up",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -986,6 +1146,22 @@
       "families": [
         "basics",
         "tailored"
+      ],
+      "styles": [
+        "casual_basics",
+        "elegant",
+        "preppy",
+        "borrowed",
+        "dark_academia",
+        "normcore",
+        "monochrome_head_to_toe",
+        "quiet_luxury",
+        "androgynous_tailoring",
+        "uniform_of_one_outfit",
+        "soft_tailoring",
+        "layered_neutrals",
+        "classic_denim",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -1006,6 +1182,19 @@
       "families": [
         "basics",
         "street"
+      ],
+      "styles": [
+        "y2k",
+        "cosy",
+        "workwear_inspired",
+        "denim_on_denim",
+        "utilitarian",
+        "uniform_of_one_outfit",
+        "classic_denim",
+        "anime_girl_style",
+        "clean_girl",
+        "cyberpunk",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1026,6 +1215,19 @@
       "families": [
         "basics",
         "tailored"
+      ],
+      "styles": [
+        "casual_basics",
+        "elegant",
+        "business",
+        "borrowed",
+        "minimalist_neutral",
+        "power_dressing",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "gamer_girl",
+        "clean_girl",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -1046,6 +1248,14 @@
       "families": [
         "basics",
         "sporty"
+      ],
+      "styles": [
+        "casual_basics",
+        "borrowed",
+        "normcore",
+        "layered_neutrals",
+        "classic_denim",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -1065,6 +1275,13 @@
       "slot": "legwear",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "borrowed",
+        "monochrome_head_to_toe",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -1085,6 +1302,22 @@
       "families": [
         "basics",
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "cosy",
+        "borrowed",
+        "dark_academia",
+        "normcore",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "uniform_of_one_outfit",
+        "soft_tailoring",
+        "classic_denim",
+        "gamer_girl"
       ]
     },
     "enabled": true
@@ -1105,6 +1338,23 @@
       "families": [
         "basics",
         "boho"
+      ],
+      "styles": [
+        "casual_basics",
+        "cosy",
+        "bohemian",
+        "minimalist_neutral",
+        "cottagecore_full",
+        "normcore",
+        "denim_on_denim",
+        "quiet_luxury",
+        "festival_boho",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "fantasy_costume",
+        "westerncore",
+        "craftcore",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -1124,6 +1374,13 @@
       "slot": "shoes",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "normcore",
+        "denim_on_denim",
+        "layered_neutrals",
+        "gamer_girl",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -1143,6 +1400,14 @@
       "slot": "shoes",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "borrowed",
+        "monochrome_head_to_toe",
+        "denim_on_denim",
+        "layered_neutrals",
+        "classic_denim"
       ]
     },
     "enabled": true
@@ -1162,6 +1427,13 @@
       "slot": "shoes",
       "families": [
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "minimalist_neutral",
+        "normcore",
+        "gamer_girl",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -1182,6 +1454,19 @@
       "families": [
         "basics",
         "tailored"
+      ],
+      "styles": [
+        "casual_basics",
+        "elegant",
+        "librarian",
+        "borrowed",
+        "androgynous_tailoring",
+        "secondhand_luxury",
+        "uniform_of_one_outfit",
+        "soft_tailoring",
+        "layered_neutrals",
+        "clean_girl",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -1203,6 +1488,17 @@
         "basics",
         "sporty",
         "street"
+      ],
+      "styles": [
+        "casual_basics",
+        "sporty",
+        "skater",
+        "normcore",
+        "military_inspired",
+        "uniform_of_one_outfit",
+        "cosplayer_style",
+        "anime_girl_style",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -1223,6 +1519,19 @@
       "families": [
         "basics",
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "cosy",
+        "preppy",
+        "borrowed",
+        "minimalist_neutral",
+        "monochrome_head_to_toe",
+        "androgynous_tailoring",
+        "secondhand_luxury",
+        "clean_girl",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -1244,6 +1553,24 @@
         "basics",
         "alt",
         "boho"
+      ],
+      "styles": [
+        "cosy",
+        "minimalist_neutral",
+        "monochrome_head_to_toe",
+        "quiet_luxury",
+        "layered_neutrals",
+        "classic_denim",
+        "emo_style",
+        "fantasy_costume",
+        "westerncore",
+        "fairycore",
+        "fetishcore",
+        "goblincore",
+        "clean_girl",
+        "tomboy",
+        "biker_chick",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -1265,6 +1592,19 @@
         "basics",
         "street",
         "sporty"
+      ],
+      "styles": [
+        "skater",
+        "borrowed",
+        "workwear_inspired",
+        "monochrome_head_to_toe",
+        "athleisure",
+        "quiet_luxury",
+        "utilitarian",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "classic_denim",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -1286,6 +1626,23 @@
         "basics",
         "street",
         "alt"
+      ],
+      "styles": [
+        "casual_basics",
+        "cosy",
+        "borrowed",
+        "minimalist_neutral",
+        "workwear_inspired",
+        "military_inspired",
+        "denim_on_denim",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "e_girl",
+        "cosplayer_style",
+        "alt_girl",
+        "punk_style",
+        "grunge",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -1307,6 +1664,20 @@
         "basics",
         "tailored",
         "boho"
+      ],
+      "styles": [
+        "cosy",
+        "librarian",
+        "borrowed",
+        "dark_academia",
+        "denim_on_denim",
+        "equestrian_inspired",
+        "soft_tailoring",
+        "classic_denim",
+        "gamer_girl",
+        "fantasy_costume",
+        "fairycore",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -1326,6 +1697,14 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "gamer_girl",
+        "tomboy",
+        "kpop_idol",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1345,6 +1724,13 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "gorpcore",
+        "military_inspired",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -1364,6 +1750,15 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "y2k",
+        "skater",
+        "techwear",
+        "workwear_inspired",
+        "utilitarian",
+        "tomboy",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1383,6 +1778,13 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "skater",
+        "techwear",
+        "gamer_girl",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -1402,6 +1804,13 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "techwear",
+        "club_kid",
+        "e_girl",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -1421,6 +1830,12 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "club_kid",
+        "e_girl",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1440,6 +1855,12 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "techwear",
+        "workwear_inspired",
+        "utilitarian",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -1459,6 +1880,13 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "y2k",
+        "gorpcore",
+        "workwear_inspired",
+        "military_inspired",
+        "utilitarian"
       ]
     },
     "enabled": true
@@ -1478,6 +1906,13 @@
       "slot": "top",
       "families": [
         "street"
+      ],
+      "styles": [
+        "military_inspired",
+        "e_girl",
+        "gamer_girl",
+        "anime_girl_style",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -1500,6 +1935,20 @@
         "alt",
         "goth",
         "rave"
+      ],
+      "styles": [
+        "alt_goth",
+        "y2k",
+        "skater",
+        "festival_style",
+        "cosplayer_style",
+        "gamer_girl",
+        "emo_style",
+        "alt_girl",
+        "tomboy",
+        "grunge",
+        "biker_chick",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -1519,6 +1968,14 @@
       "slot": "bottom",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "skater",
+        "techwear",
+        "workwear_inspired",
+        "utilitarian"
       ]
     },
     "enabled": true
@@ -1538,6 +1995,14 @@
       "slot": "bottom",
       "families": [
         "street"
+      ],
+      "styles": [
+        "y2k",
+        "techwear",
+        "workwear_inspired",
+        "utilitarian",
+        "tomboy",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1557,6 +2022,12 @@
       "slot": "bottom",
       "families": [
         "street"
+      ],
+      "styles": [
+        "y2k",
+        "skater",
+        "club_kid",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -1576,6 +2047,13 @@
       "slot": "bottom",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "skater",
+        "techwear",
+        "club_kid",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1595,6 +2073,13 @@
       "slot": "bottom",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "gorpcore",
+        "workwear_inspired",
+        "club_kid",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -1614,6 +2099,12 @@
       "slot": "bottom",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "skater",
+        "military_inspired",
+        "utilitarian"
       ]
     },
     "enabled": true
@@ -1635,6 +2126,16 @@
         "street",
         "sporty",
         "soft"
+      ],
+      "styles": [
+        "y2k",
+        "military_inspired",
+        "romantic_florals",
+        "athleisure",
+        "balletcore",
+        "anime_girl_style",
+        "angelcore",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -1654,6 +2155,18 @@
       "slot": "dress",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "gorpcore",
+        "skater",
+        "workwear_inspired",
+        "utilitarian",
+        "gamer_girl",
+        "anime_girl_style",
+        "gyaru",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -1673,6 +2186,12 @@
       "slot": "dress",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "military_inspired",
+        "club_kid",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -1692,6 +2211,13 @@
       "slot": "dress",
       "families": [
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "workwear_inspired",
+        "military_inspired",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -1711,6 +2237,16 @@
       "slot": "dress",
       "families": [
         "street"
+      ],
+      "styles": [
+        "skater",
+        "techwear",
+        "utilitarian",
+        "cosplayer_style",
+        "gamer_girl",
+        "tomboy",
+        "kpop_idol",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1732,6 +2268,25 @@
         "street",
         "sporty",
         "tailored"
+      ],
+      "styles": [
+        "streetwear",
+        "sporty",
+        "gorpcore",
+        "skater",
+        "techwear",
+        "minimalist_neutral",
+        "athleisure",
+        "club_kid",
+        "androgynous_tailoring",
+        "utilitarian",
+        "soft_tailoring",
+        "e_girl",
+        "gym_girl",
+        "office_siren",
+        "kpop_idol",
+        "cyberpunk",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1751,6 +2306,10 @@
       "slot": "outer",
       "families": [
         "street"
+      ],
+      "styles": [
+        "military_inspired",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -1770,6 +2329,13 @@
       "slot": "outer",
       "families": [
         "street"
+      ],
+      "styles": [
+        "gorpcore",
+        "workwear_inspired",
+        "e_girl",
+        "cosplayer_style",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -1790,6 +2356,18 @@
       "families": [
         "street",
         "sporty"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "gorpcore",
+        "skater",
+        "military_inspired",
+        "athleisure",
+        "club_kid",
+        "tomboy",
+        "gyaru",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -1811,6 +2389,17 @@
         "street",
         "soft",
         "alt"
+      ],
+      "styles": [
+        "skater",
+        "cottagecore_full",
+        "military_inspired",
+        "utilitarian",
+        "gamer_girl",
+        "emo_style",
+        "alt_girl",
+        "gyaru",
+        "decora"
       ]
     },
     "enabled": true
@@ -1834,6 +2423,17 @@
         "goth",
         "rave",
         "glam"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "workwear_inspired",
+        "military_inspired",
+        "festival_style",
+        "barbiecore",
+        "grunge",
+        "bratz_doll",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -1856,6 +2456,18 @@
         "soft",
         "goth",
         "alt"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "workwear_inspired",
+        "scene_alt",
+        "romantic_florals",
+        "soft_grunge",
+        "utilitarian",
+        "cosplayer_style",
+        "anime_girl_style",
+        "sundress_style"
       ]
     },
     "enabled": true
@@ -1876,6 +2488,17 @@
       "families": [
         "street",
         "sporty"
+      ],
+      "styles": [
+        "streetwear",
+        "sporty",
+        "workwear_inspired",
+        "club_kid",
+        "utilitarian",
+        "cosplayer_style",
+        "anime_girl_style",
+        "gyaru",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -1896,6 +2519,19 @@
       "families": [
         "street",
         "alt"
+      ],
+      "styles": [
+        "y2k",
+        "techwear",
+        "workwear_inspired",
+        "military_inspired",
+        "club_kid",
+        "e_girl",
+        "cosplayer_style",
+        "alt_girl",
+        "punk_style",
+        "grunge",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -1915,6 +2551,12 @@
       "slot": "shoes",
       "families": [
         "street"
+      ],
+      "styles": [
+        "y2k",
+        "skater",
+        "techwear",
+        "utilitarian"
       ]
     },
     "enabled": true
@@ -1936,6 +2578,18 @@
         "street",
         "soft",
         "rave"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "cottagecore_full",
+        "e_girl",
+        "cosplayer_style",
+        "rave_wear",
+        "lolita_fashion",
+        "sundress_style",
+        "lovecore",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -1956,6 +2610,13 @@
       "families": [
         "street",
         "boho"
+      ],
+      "styles": [
+        "streetwear",
+        "cottagecore_full",
+        "workwear_inspired",
+        "utilitarian",
+        "fantasy_costume"
       ]
     },
     "enabled": true
@@ -1978,6 +2639,20 @@
         "boho",
         "retro",
         "alt"
+      ],
+      "styles": [
+        "y2k",
+        "workwear_inspired",
+        "scene_alt",
+        "military_inspired",
+        "soft_grunge",
+        "club_kid",
+        "anime_girl_style",
+        "emo_style",
+        "fantasy_costume",
+        "craftcore",
+        "grunge",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -1998,6 +2673,13 @@
       "families": [
         "street",
         "alt"
+      ],
+      "styles": [
+        "scene_alt",
+        "club_kid",
+        "utilitarian",
+        "gamer_girl",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -2017,6 +2699,10 @@
       "slot": "top",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -2036,6 +2722,10 @@
       "slot": "top",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "athleisure",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2055,6 +2745,9 @@
       "slot": "top",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "athleisure"
       ]
     },
     "enabled": true
@@ -2093,6 +2786,12 @@
       "slot": "top",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "athleisure",
+        "gym_girl",
+        "tomboy"
       ]
     },
     "enabled": true
@@ -2112,6 +2811,9 @@
       "slot": "top",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2131,6 +2833,10 @@
       "slot": "top",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2150,6 +2856,11 @@
       "slot": "top",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "gorpcore",
+        "athleisure",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2169,6 +2880,12 @@
       "slot": "bottom",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "gorpcore",
+        "athleisure",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2188,6 +2905,10 @@
       "slot": "bottom",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2207,6 +2928,9 @@
       "slot": "bottom",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "athleisure"
       ]
     },
     "enabled": true
@@ -2226,6 +2950,9 @@
       "slot": "bottom",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2244,6 +2971,9 @@
     "extra": {
       "slot": "bottom",
       "families": [
+        "sporty"
+      ],
+      "styles": [
         "sporty"
       ]
     },
@@ -2264,6 +2994,10 @@
       "slot": "bottom",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "gorpcore",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2283,6 +3017,9 @@
       "slot": "bottom",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -2302,6 +3039,12 @@
       "slot": "dress",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "gorpcore",
+        "athleisure",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2321,6 +3064,11 @@
       "slot": "dress",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "athleisure",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2340,6 +3088,11 @@
       "slot": "outer",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "gym_girl",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -2360,6 +3113,16 @@
       "families": [
         "sporty",
         "boho"
+      ],
+      "styles": [
+        "sporty",
+        "gorpcore",
+        "maximalist",
+        "thrift_eclectic",
+        "athleisure",
+        "fantasy_costume",
+        "fairycore",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -2379,6 +3142,10 @@
       "slot": "legwear",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -2398,6 +3165,12 @@
       "slot": "legwear",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "gorpcore",
+        "athleisure",
+        "gym_girl",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -2418,6 +3191,13 @@
       "families": [
         "sporty",
         "retro"
+      ],
+      "styles": [
+        "sporty",
+        "vintage",
+        "pin_up",
+        "gym_girl",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -2437,6 +3217,13 @@
       "slot": "shoes",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "gorpcore",
+        "athleisure",
+        "gym_girl",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -2456,6 +3243,11 @@
       "slot": "shoes",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "athleisure",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2474,6 +3266,9 @@
     "extra": {
       "slot": "shoes",
       "families": [
+        "sporty"
+      ],
+      "styles": [
         "sporty"
       ]
     },
@@ -2494,6 +3289,11 @@
       "slot": "extras",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "gorpcore",
+        "gym_girl",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -2513,6 +3313,9 @@
       "slot": "extras",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "athleisure"
       ]
     },
     "enabled": true
@@ -2532,6 +3335,9 @@
       "slot": "extras",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -2551,6 +3357,9 @@
       "slot": "top",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "goth_girl"
       ]
     },
     "enabled": true
@@ -2570,6 +3379,10 @@
       "slot": "top",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "goth_girl",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -2589,6 +3402,12 @@
       "slot": "top",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "goth_girl",
+        "devilcore",
+        "fetishcore",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -2608,6 +3427,11 @@
       "slot": "top",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2627,6 +3451,10 @@
       "slot": "top",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "alt_goth",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2646,6 +3474,9 @@
       "slot": "top",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "all_black"
       ]
     },
     "enabled": true
@@ -2665,6 +3496,10 @@
       "slot": "top",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "alt_goth",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2684,6 +3519,12 @@
       "slot": "top",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "all_black",
+        "goth_girl",
+        "devilcore",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2704,6 +3545,14 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "soft_grunge",
+        "goth_girl",
+        "emo_style",
+        "fetishcore",
+        "grunge",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -2723,6 +3572,13 @@
       "slot": "bottom",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "alt_goth",
+        "goth_girl",
+        "devilcore",
+        "pastel_goth",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2742,6 +3598,11 @@
       "slot": "bottom",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "goth_girl"
       ]
     },
     "enabled": true
@@ -2761,6 +3622,11 @@
       "slot": "bottom",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "goth_girl",
+        "devilcore",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2780,6 +3646,12 @@
       "slot": "bottom",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "goth_girl",
+        "devilcore",
+        "pastel_goth",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2800,6 +3672,13 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "soft_grunge",
+        "e_girl",
+        "emo_style",
+        "devilcore",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -2820,6 +3699,14 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "all_black",
+        "scene_alt",
+        "soft_grunge",
+        "emo_style",
+        "grunge",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -2839,6 +3726,13 @@
       "slot": "dress",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "all_black",
+        "goth_girl",
+        "devilcore",
+        "fetishcore",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2858,6 +3752,11 @@
       "slot": "dress",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "all_black",
+        "goth_girl",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -2877,6 +3776,9 @@
       "slot": "dress",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "alt_goth"
       ]
     },
     "enabled": true
@@ -2896,6 +3798,12 @@
       "slot": "dress",
       "families": [
         "goth"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "pastel_goth",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2916,6 +3824,12 @@
       "families": [
         "goth",
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "preppy",
+        "equestrian_inspired",
+        "quiet_luxury"
       ]
     },
     "enabled": true
@@ -2937,6 +3851,16 @@
         "goth",
         "boho",
         "costume"
+      ],
+      "styles": [
+        "alt_goth",
+        "bohemian",
+        "all_black",
+        "cottagecore_full",
+        "goth_girl",
+        "craftcore",
+        "fetishcore",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2957,6 +3881,19 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "scene_alt",
+        "goth_girl",
+        "punk_style",
+        "devilcore",
+        "fetishcore",
+        "biker_chick",
+        "rockstar_gf",
+        "pastel_goth",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -2978,6 +3915,18 @@
         "goth",
         "alt",
         "soft"
+      ],
+      "styles": [
+        "scene_alt",
+        "balletcore",
+        "goth_girl",
+        "emo_style",
+        "lolita_fashion",
+        "punk_style",
+        "sundress_style",
+        "angelcore",
+        "devilcore",
+        "decora"
       ]
     },
     "enabled": true
@@ -3004,6 +3953,21 @@
       "lingerie": [
         "corset_garters",
         "black_lace"
+      ],
+      "styles": [
+        "elegant",
+        "vintage",
+        "preppy",
+        "mob_wife",
+        "librarian",
+        "all_black",
+        "minimalist_neutral",
+        "power_dressing",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "bold_prints",
+        "goth_girl",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -3024,6 +3988,13 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "all_black",
+        "alt_girl",
+        "devilcore",
+        "biker_chick",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -3044,6 +4015,15 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "soft_grunge",
+        "e_girl",
+        "punk_style",
+        "devilcore",
+        "grunge"
       ]
     },
     "enabled": true
@@ -3065,6 +4045,17 @@
         "goth",
         "alt",
         "rave"
+      ],
+      "styles": [
+        "alt_goth",
+        "scene_alt",
+        "alt_girl",
+        "devilcore",
+        "fetishcore",
+        "grunge",
+        "cyberpunk",
+        "biker_chick",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -3085,6 +4076,14 @@
       "families": [
         "goth",
         "soft"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "balletcore",
+        "coquette",
+        "kpop_idol",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -3105,6 +4104,19 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "scene_alt",
+        "soft_grunge",
+        "goth_girl",
+        "alt_girl",
+        "punk_style",
+        "devilcore",
+        "biker_chick",
+        "pastel_goth",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -3126,6 +4138,14 @@
         "goth",
         "alt",
         "street"
+      ],
+      "styles": [
+        "gorpcore",
+        "all_black",
+        "soft_grunge",
+        "utilitarian",
+        "emo_style",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -3146,6 +4166,12 @@
       "families": [
         "goth",
         "glam"
+      ],
+      "styles": [
+        "alt_goth",
+        "goth_girl",
+        "gyaru",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -3166,6 +4192,14 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "goth_girl",
+        "alt_girl",
+        "devilcore",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -3186,6 +4220,11 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "soft_grunge",
+        "alt_girl",
+        "fetishcore"
       ]
     },
     "enabled": true
@@ -3207,6 +4246,21 @@
         "goth",
         "retro",
         "glam"
+      ],
+      "styles": [
+        "alt_goth",
+        "rockabilly",
+        "all_black",
+        "thrift_eclectic",
+        "bold_prints",
+        "goth_girl",
+        "clowncore",
+        "westerncore",
+        "baddie",
+        "pin_up",
+        "pastel_goth",
+        "old_hollywood",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -3228,6 +4282,10 @@
         "goth",
         "alt",
         "rave"
+      ],
+      "styles": [
+        "scene_alt",
+        "rave_wear"
       ]
     },
     "enabled": true
@@ -3249,6 +4307,11 @@
         "goth",
         "boho",
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "goth_girl",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -3268,6 +4331,11 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "scene_alt",
+        "e_girl",
+        "grunge"
       ]
     },
     "enabled": true
@@ -3287,6 +4355,15 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "scene_alt",
+        "emo_style",
+        "alt_girl",
+        "punk_style",
+        "grunge",
+        "biker_chick",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -3306,6 +4383,14 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "soft_grunge",
+        "e_girl",
+        "emo_style",
+        "grunge",
+        "biker_chick",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -3325,6 +4410,9 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "punk_style"
       ]
     },
     "enabled": true
@@ -3344,6 +4432,11 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "alt_goth",
+        "scene_alt",
+        "alt_girl"
       ]
     },
     "enabled": true
@@ -3363,6 +4456,10 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "scene_alt",
+        "grunge"
       ]
     },
     "enabled": true
@@ -3382,6 +4479,9 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -3401,6 +4501,10 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "soft_grunge",
+        "grunge"
       ]
     },
     "enabled": true
@@ -3420,6 +4524,12 @@
       "slot": "top",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "scene_alt",
+        "alt_girl",
+        "punk_style",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -3439,6 +4549,13 @@
       "slot": "bottom",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "e_girl",
+        "alt_girl",
+        "punk_style",
+        "grunge",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -3458,6 +4575,13 @@
       "slot": "bottom",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "alt_goth",
+        "soft_grunge",
+        "emo_style",
+        "punk_style",
+        "fetishcore"
       ]
     },
     "enabled": true
@@ -3477,6 +4601,11 @@
       "slot": "bottom",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "emo_style",
+        "alt_girl",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -3496,6 +4625,11 @@
       "slot": "bottom",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "alt_goth",
+        "scene_alt",
+        "soft_grunge"
       ]
     },
     "enabled": true
@@ -3515,6 +4649,14 @@
       "slot": "dress",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "scene_alt",
+        "soft_grunge",
+        "e_girl",
+        "alt_girl",
+        "punk_style",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -3534,6 +4676,16 @@
       "slot": "dress",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "soft_grunge",
+        "e_girl",
+        "emo_style",
+        "alt_girl",
+        "punk_style",
+        "grunge",
+        "biker_chick",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -3555,6 +4707,18 @@
         "alt",
         "goth",
         "glam"
+      ],
+      "styles": [
+        "all_black",
+        "scene_alt",
+        "goth_girl",
+        "emo_style",
+        "devilcore",
+        "baddie",
+        "bimbo_glam",
+        "grunge",
+        "pastel_goth",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -3574,6 +4738,13 @@
       "slot": "outer",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "alt_girl",
+        "punk_style",
+        "fetishcore",
+        "biker_chick",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -3594,6 +4765,23 @@
       "families": [
         "alt",
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "y2k",
+        "skater",
+        "techwear",
+        "military_inspired",
+        "soft_grunge",
+        "club_kid",
+        "gamer_girl",
+        "emo_style",
+        "alt_girl",
+        "punk_style",
+        "kpop_idol",
+        "grunge",
+        "cyberpunk",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -3615,6 +4803,18 @@
         "alt",
         "glam",
         "retro"
+      ],
+      "styles": [
+        "maximalist",
+        "scene_alt",
+        "soft_grunge",
+        "secondhand_luxury",
+        "bold_prints",
+        "emo_style",
+        "barbiecore",
+        "pin_up",
+        "grunge",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -3634,6 +4834,11 @@
       "slot": "legwear",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "scene_alt",
+        "grunge",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -3653,6 +4858,9 @@
       "slot": "shoes",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -3672,6 +4880,9 @@
       "slot": "extras",
       "families": [
         "alt"
+      ],
+      "styles": [
+        "fetishcore"
       ]
     },
     "enabled": true
@@ -3693,6 +4904,14 @@
         "alt",
         "boho",
         "glam"
+      ],
+      "styles": [
+        "vintage",
+        "colour_blocked",
+        "bold_prints",
+        "fairycore",
+        "bimbo_glam",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -3713,6 +4932,11 @@
       "families": [
         "alt",
         "goth"
+      ],
+      "styles": [
+        "e_girl",
+        "emo_style",
+        "alt_girl"
       ]
     },
     "enabled": true
@@ -3732,6 +4956,14 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "romantic_florals",
+        "lolita_fashion",
+        "lovecore",
+        "coquette",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -3751,6 +4983,12 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "romantic_florals",
+        "balletcore",
+        "sundress_style",
+        "decora"
       ]
     },
     "enabled": true
@@ -3770,6 +5008,12 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "cottagecore_full",
+        "balletcore",
+        "cosplayer_style",
+        "anime_girl_style"
       ]
     },
     "enabled": true
@@ -3789,6 +5033,15 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "cosplayer_style",
+        "lolita_fashion",
+        "angelcore",
+        "fairycore",
+        "lovecore",
+        "coquette",
+        "decora"
       ]
     },
     "enabled": true
@@ -3808,6 +5061,13 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "balletcore",
+        "lovecore",
+        "coquette",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -3827,6 +5087,12 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "sundress_style",
+        "coquette",
+        "kpop_idol",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -3846,6 +5112,16 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "romantic_florals",
+        "balletcore",
+        "cosplayer_style",
+        "anime_girl_style",
+        "angelcore",
+        "coquette",
+        "decora"
       ]
     },
     "enabled": true
@@ -3865,6 +5141,15 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "cottagecore_full",
+        "anime_girl_style",
+        "lolita_fashion",
+        "angelcore",
+        "fairycore",
+        "lovecore"
       ]
     },
     "enabled": true
@@ -3884,6 +5169,14 @@
       "slot": "top",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "romantic_florals",
+        "balletcore",
+        "anime_girl_style",
+        "sundress_style",
+        "angelcore"
       ]
     },
     "enabled": true
@@ -3903,6 +5196,14 @@
       "slot": "bottom",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "romantic_florals",
+        "balletcore",
+        "cosplayer_style",
+        "angelcore",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -3922,6 +5223,13 @@
       "slot": "bottom",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "anime_girl_style",
+        "lolita_fashion",
+        "kpop_idol",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -3941,6 +5249,14 @@
       "slot": "bottom",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "cottagecore_full",
+        "balletcore",
+        "fairycore",
+        "lovecore",
+        "coquette"
       ]
     },
     "enabled": true
@@ -3960,6 +5276,12 @@
       "slot": "bottom",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "romantic_florals",
+        "anime_girl_style",
+        "decora"
       ]
     },
     "enabled": true
@@ -3979,6 +5301,16 @@
       "slot": "bottom",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "balletcore",
+        "anime_girl_style",
+        "lolita_fashion",
+        "angelcore",
+        "lovecore",
+        "coquette",
+        "decora"
       ]
     },
     "enabled": true
@@ -3998,6 +5330,10 @@
       "slot": "bottom",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "anime_girl_style",
+        "fairycore"
       ]
     },
     "enabled": true
@@ -4017,6 +5353,14 @@
       "slot": "dress",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "romantic_florals",
+        "lolita_fashion",
+        "lovecore",
+        "coquette",
+        "kpop_idol",
+        "decora"
       ]
     },
     "enabled": true
@@ -4036,6 +5380,11 @@
       "slot": "dress",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "cottagecore_full",
+        "romantic_florals",
+        "angelcore"
       ]
     },
     "enabled": true
@@ -4055,6 +5404,14 @@
       "slot": "dress",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "cottagecore_full",
+        "lolita_fashion",
+        "fairycore",
+        "lovecore",
+        "coquette"
       ]
     },
     "enabled": true
@@ -4074,6 +5431,12 @@
       "slot": "dress",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "balletcore",
+        "cosplayer_style",
+        "angelcore",
+        "decora"
       ]
     },
     "enabled": true
@@ -4095,6 +5458,16 @@
         "soft",
         "beach",
         "boho"
+      ],
+      "styles": [
+        "soft_girl",
+        "bohemian",
+        "balletcore",
+        "festival_boho",
+        "relaxed_linen",
+        "anime_girl_style",
+        "sundress_style",
+        "craftcore"
       ]
     },
     "enabled": true
@@ -4114,6 +5487,13 @@
       "slot": "outer",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "cosplayer_style",
+        "lolita_fashion",
+        "angelcore",
+        "coquette"
       ]
     },
     "enabled": true
@@ -4134,6 +5514,22 @@
       "families": [
         "soft",
         "glam"
+      ],
+      "styles": [
+        "romantic_florals",
+        "balletcore",
+        "colour_blocked",
+        "anime_girl_style",
+        "lolita_fashion",
+        "sundress_style",
+        "barbiecore",
+        "clowncore",
+        "fairycore",
+        "lovecore",
+        "bimbo_glam",
+        "coquette",
+        "pastel_goth",
+        "decora"
       ]
     },
     "enabled": true
@@ -4154,6 +5550,19 @@
       "families": [
         "soft",
         "beach"
+      ],
+      "styles": [
+        "soft_girl",
+        "resort_wear",
+        "romantic_florals",
+        "coastal_grandmother",
+        "balletcore",
+        "relaxed_linen",
+        "sundress_style",
+        "angelcore",
+        "lovecore",
+        "mermaidcore",
+        "decora"
       ]
     },
     "enabled": true
@@ -4173,6 +5582,16 @@
       "slot": "legwear",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "romantic_florals",
+        "balletcore",
+        "lolita_fashion",
+        "angelcore",
+        "lovecore",
+        "coquette",
+        "decora"
       ]
     },
     "enabled": true
@@ -4192,6 +5611,13 @@
       "slot": "legwear",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "cosplayer_style",
+        "anime_girl_style",
+        "angelcore",
+        "fairycore",
+        "decora"
       ]
     },
     "enabled": true
@@ -4211,6 +5637,16 @@
       "slot": "legwear",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "cottagecore_full",
+        "romantic_florals",
+        "sundress_style",
+        "angelcore",
+        "lovecore",
+        "coquette",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -4231,6 +5667,13 @@
       "families": [
         "soft",
         "retro"
+      ],
+      "styles": [
+        "soft_girl",
+        "balletcore",
+        "angelcore",
+        "pin_up",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -4250,6 +5693,11 @@
       "slot": "legwear",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "balletcore",
+        "angelcore",
+        "lovecore"
       ]
     },
     "enabled": true
@@ -4269,6 +5717,9 @@
       "slot": "legwear",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "lovecore"
       ]
     },
     "enabled": true
@@ -4288,6 +5739,12 @@
       "slot": "shoes",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "romantic_florals",
+        "lolita_fashion",
+        "angelcore"
       ]
     },
     "enabled": true
@@ -4307,6 +5764,13 @@
       "slot": "shoes",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "romantic_florals",
+        "balletcore",
+        "lovecore",
+        "coquette",
+        "decora"
       ]
     },
     "enabled": true
@@ -4326,6 +5790,13 @@
       "slot": "shoes",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "cottagecore_full",
+        "lolita_fashion",
+        "angelcore",
+        "decora"
       ]
     },
     "enabled": true
@@ -4345,6 +5816,12 @@
       "slot": "extras",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "cottagecore_full",
+        "romantic_florals",
+        "coquette",
+        "kpop_idol"
       ]
     },
     "enabled": true
@@ -4364,6 +5841,13 @@
       "slot": "extras",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "romantic_florals",
+        "anime_girl_style",
+        "lolita_fashion",
+        "angelcore",
+        "decora"
       ]
     },
     "enabled": true
@@ -4383,6 +5867,12 @@
       "slot": "extras",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "lolita_fashion",
+        "angelcore",
+        "lovecore",
+        "coquette"
       ]
     },
     "enabled": true
@@ -4402,6 +5892,14 @@
       "slot": "extras",
       "families": [
         "soft"
+      ],
+      "styles": [
+        "lolita_fashion",
+        "sundress_style",
+        "coquette",
+        "kpop_idol",
+        "pastel_goth",
+        "decora"
       ]
     },
     "enabled": true
@@ -4421,6 +5919,9 @@
       "slot": "top",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "vintage"
       ]
     },
     "enabled": true
@@ -4440,6 +5941,12 @@
       "slot": "top",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "festival_boho",
+        "fairycore",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -4459,6 +5966,15 @@
       "slot": "top",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "vintage",
+        "bohemian",
+        "thrift_eclectic",
+        "westerncore",
+        "fairycore",
+        "goblincore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4478,6 +5994,12 @@
       "slot": "top",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "thrift_eclectic",
+        "festival_boho",
+        "fairycore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4497,6 +6019,10 @@
       "slot": "top",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "thrift_eclectic",
+        "fantasy_costume"
       ]
     },
     "enabled": true
@@ -4516,6 +6042,10 @@
       "slot": "top",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "maximalist",
+        "craftcore"
       ]
     },
     "enabled": true
@@ -4535,6 +6065,12 @@
       "slot": "top",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "festival_style",
+        "festival_boho",
+        "fantasy_costume",
+        "craftcore"
       ]
     },
     "enabled": true
@@ -4554,6 +6090,16 @@
       "slot": "top",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "cottagecore_full",
+        "thrift_eclectic",
+        "festival_style",
+        "westerncore",
+        "craftcore",
+        "goblincore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4573,6 +6119,11 @@
       "slot": "bottom",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "thrift_eclectic",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -4592,6 +6143,14 @@
       "slot": "bottom",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "thrift_eclectic",
+        "festival_style",
+        "fantasy_costume",
+        "westerncore",
+        "craftcore",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -4611,6 +6170,15 @@
       "slot": "bottom",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "vintage",
+        "bohemian",
+        "maximalist",
+        "thrift_eclectic",
+        "festival_boho",
+        "craftcore",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -4630,6 +6198,13 @@
       "slot": "bottom",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "cottagecore_full",
+        "thrift_eclectic",
+        "festival_boho",
+        "westerncore"
       ]
     },
     "enabled": true
@@ -4649,6 +6224,10 @@
       "slot": "bottom",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "vintage",
+        "maximalist"
       ]
     },
     "enabled": true
@@ -4668,6 +6247,16 @@
       "slot": "dress",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "thrift_eclectic",
+        "festival_style",
+        "festival_boho",
+        "fantasy_costume",
+        "fairycore",
+        "goblincore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4687,6 +6276,9 @@
       "slot": "dress",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "craftcore"
       ]
     },
     "enabled": true
@@ -4706,6 +6298,9 @@
       "slot": "dress",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "fantasy_costume"
       ]
     },
     "enabled": true
@@ -4725,6 +6320,9 @@
       "slot": "dress",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "goblincore"
       ]
     },
     "enabled": true
@@ -4744,6 +6342,11 @@
       "slot": "outer",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "thrift_eclectic",
+        "craftcore"
       ]
     },
     "enabled": true
@@ -4764,6 +6367,14 @@
       "families": [
         "boho",
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "cottagecore_full",
+        "festival_boho",
+        "westerncore",
+        "fairycore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4783,6 +6394,15 @@
       "slot": "outer",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "vintage",
+        "festival_style",
+        "festival_boho",
+        "fantasy_costume",
+        "craftcore",
+        "fairycore",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -4802,6 +6422,11 @@
       "slot": "legwear",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "cottagecore_full",
+        "thrift_eclectic",
+        "festival_style"
       ]
     },
     "enabled": true
@@ -4821,6 +6446,13 @@
       "slot": "legwear",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "maximalist",
+        "thrift_eclectic",
+        "fairycore",
+        "goblincore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4841,6 +6473,11 @@
       "families": [
         "boho",
         "rave"
+      ],
+      "styles": [
+        "bohemian",
+        "club_kid",
+        "craftcore"
       ]
     },
     "enabled": true
@@ -4860,6 +6497,15 @@
       "slot": "legwear",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "festival_style",
+        "festival_boho",
+        "fantasy_costume",
+        "westerncore",
+        "craftcore",
+        "goblincore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4880,6 +6526,13 @@
       "families": [
         "boho",
         "retro"
+      ],
+      "styles": [
+        "bohemian",
+        "festival_boho",
+        "fantasy_costume",
+        "westerncore",
+        "craftcore"
       ]
     },
     "enabled": true
@@ -4899,6 +6552,11 @@
       "slot": "shoes",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "festival_style",
+        "westerncore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4919,6 +6577,17 @@
       "families": [
         "boho",
         "beach"
+      ],
+      "styles": [
+        "maximalist",
+        "resort_wear",
+        "coastal_grandmother",
+        "festival_boho",
+        "relaxed_linen",
+        "craftcore",
+        "goblincore",
+        "surfer_girl",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4938,6 +6607,11 @@
       "slot": "shoes",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "vintage",
+        "bohemian",
+        "maximalist"
       ]
     },
     "enabled": true
@@ -4959,6 +6633,17 @@
         "boho",
         "retro",
         "tailored"
+      ],
+      "styles": [
+        "preppy",
+        "rockabilly",
+        "bohemian",
+        "thrift_eclectic",
+        "quiet_luxury",
+        "androgynous_tailoring",
+        "festival_boho",
+        "goblincore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -4979,6 +6664,13 @@
       "families": [
         "boho",
         "glam"
+      ],
+      "styles": [
+        "colour_blocked",
+        "festival_boho",
+        "bold_prints",
+        "barbiecore",
+        "westerncore"
       ]
     },
     "enabled": true
@@ -5017,6 +6709,10 @@
       "slot": "extras",
       "families": [
         "boho"
+      ],
+      "styles": [
+        "vintage",
+        "westerncore"
       ]
     },
     "enabled": true
@@ -5036,6 +6732,12 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "quiet_luxury",
+        "secondhand_luxury",
+        "soft_tailoring",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5055,6 +6757,14 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "preppy",
+        "librarian",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "secondhand_luxury",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5074,6 +6784,13 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "dark_academia",
+        "secondhand_luxury",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5093,6 +6810,11 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "preppy",
+        "librarian",
+        "androgynous_tailoring"
       ]
     },
     "enabled": true
@@ -5112,6 +6834,16 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "librarian",
+        "dark_academia",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "secondhand_luxury",
+        "soft_tailoring"
       ]
     },
     "enabled": true
@@ -5131,6 +6863,14 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "dark_academia",
+        "power_dressing",
+        "quiet_luxury",
+        "secondhand_luxury",
+        "soft_tailoring"
       ]
     },
     "enabled": true
@@ -5150,6 +6890,12 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "dark_academia",
+        "power_dressing",
+        "soft_tailoring",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5169,6 +6915,10 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business"
       ]
     },
     "enabled": true
@@ -5188,6 +6938,13 @@
       "slot": "top",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "preppy",
+        "dark_academia",
+        "power_dressing",
+        "equestrian_inspired",
+        "soft_tailoring"
       ]
     },
     "enabled": true
@@ -5207,6 +6964,15 @@
       "slot": "bottom",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "minimalist_neutral",
+        "dark_academia",
+        "power_dressing",
+        "equestrian_inspired",
+        "quiet_luxury",
+        "androgynous_tailoring",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5226,6 +6992,11 @@
       "slot": "bottom",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "librarian",
+        "dark_academia",
+        "soft_tailoring"
       ]
     },
     "enabled": true
@@ -5245,6 +7016,14 @@
       "slot": "bottom",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "business",
+        "librarian",
+        "power_dressing",
+        "equestrian_inspired",
+        "soft_tailoring",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5264,6 +7043,14 @@
       "slot": "bottom",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "preppy",
+        "librarian",
+        "dark_academia",
+        "power_dressing"
       ]
     },
     "enabled": true
@@ -5283,6 +7070,14 @@
       "slot": "bottom",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "preppy",
+        "librarian",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "secondhand_luxury"
       ]
     },
     "enabled": true
@@ -5302,6 +7097,15 @@
       "slot": "dress",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "librarian",
+        "dark_academia",
+        "power_dressing",
+        "secondhand_luxury",
+        "soft_tailoring",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5321,6 +7125,17 @@
       "slot": "dress",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "preppy",
+        "librarian",
+        "minimalist_neutral",
+        "power_dressing",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5340,6 +7155,14 @@
       "slot": "dress",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "business",
+        "preppy",
+        "dark_academia",
+        "equestrian_inspired",
+        "soft_tailoring",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5359,6 +7182,12 @@
       "slot": "dress",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "minimalist_neutral",
+        "androgynous_tailoring",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5378,6 +7207,12 @@
       "slot": "outer",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "preppy",
+        "librarian",
+        "power_dressing",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5397,6 +7232,12 @@
       "slot": "outer",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "preppy",
+        "librarian",
+        "dark_academia",
+        "equestrian_inspired"
       ]
     },
     "enabled": true
@@ -5416,6 +7257,14 @@
       "slot": "outer",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "dark_academia",
+        "equestrian_inspired",
+        "secondhand_luxury",
+        "soft_tailoring"
       ]
     },
     "enabled": true
@@ -5436,6 +7285,16 @@
       "families": [
         "tailored",
         "glam"
+      ],
+      "styles": [
+        "dark_academia",
+        "power_dressing",
+        "colour_blocked",
+        "soft_tailoring",
+        "bold_prints",
+        "clowncore",
+        "bimbo_glam",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5456,6 +7315,15 @@
       "families": [
         "tailored",
         "retro"
+      ],
+      "styles": [
+        "elegant",
+        "librarian",
+        "dark_academia",
+        "quiet_luxury",
+        "pin_up",
+        "office_siren",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -5475,6 +7343,11 @@
       "slot": "legwear",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "business",
+        "preppy",
+        "androgynous_tailoring"
       ]
     },
     "enabled": true
@@ -5495,6 +7368,17 @@
       "families": [
         "tailored",
         "glam"
+      ],
+      "styles": [
+        "business",
+        "mob_wife",
+        "librarian",
+        "dark_academia",
+        "power_dressing",
+        "equestrian_inspired",
+        "quiet_luxury",
+        "devilcore",
+        "baddie"
       ]
     },
     "enabled": true
@@ -5514,6 +7398,15 @@
       "slot": "shoes",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "preppy",
+        "librarian",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "soft_tailoring"
       ]
     },
     "enabled": true
@@ -5533,6 +7426,14 @@
       "slot": "shoes",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "business",
+        "librarian",
+        "dark_academia",
+        "power_dressing",
+        "quiet_luxury",
+        "secondhand_luxury"
       ]
     },
     "enabled": true
@@ -5552,6 +7453,13 @@
       "slot": "shoes",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "business",
+        "preppy",
+        "power_dressing",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5571,6 +7479,13 @@
       "slot": "extras",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "minimalist_neutral",
+        "power_dressing",
+        "androgynous_tailoring",
+        "secondhand_luxury",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -5590,6 +7505,13 @@
       "slot": "extras",
       "families": [
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "preppy",
+        "dark_academia",
+        "power_dressing",
+        "androgynous_tailoring"
       ]
     },
     "enabled": true
@@ -5609,6 +7531,13 @@
       "slot": "top",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "colour_blocked",
+        "secondhand_luxury",
+        "bold_prints",
+        "devilcore",
+        "bimbo_glam"
       ]
     },
     "enabled": true
@@ -5628,6 +7557,13 @@
       "slot": "top",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "maximalist",
+        "barbiecore",
+        "bimbo_glam",
+        "bratz_doll",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -5647,6 +7583,13 @@
       "slot": "top",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "maximalist",
+        "bold_prints",
+        "barbiecore",
+        "baddie"
       ]
     },
     "enabled": true
@@ -5666,6 +7609,13 @@
       "slot": "top",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "colour_blocked",
+        "barbiecore",
+        "clowncore",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -5685,6 +7635,10 @@
       "slot": "top",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "gyaru",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -5704,6 +7658,13 @@
       "slot": "top",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "bold_prints",
+        "clowncore",
+        "bimbo_glam",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -5723,6 +7684,12 @@
       "slot": "top",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "secondhand_luxury",
+        "clowncore",
+        "baddie",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -5742,6 +7709,13 @@
       "slot": "top",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "colour_blocked",
+        "barbiecore",
+        "baddie",
+        "bratz_doll",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -5761,6 +7735,13 @@
       "slot": "bottom",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "colour_blocked",
+        "barbiecore",
+        "baddie",
+        "bimbo_glam"
       ]
     },
     "enabled": true
@@ -5780,6 +7761,11 @@
       "slot": "bottom",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "bold_prints",
+        "bimbo_glam",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -5799,6 +7785,14 @@
       "slot": "bottom",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "secondhand_luxury",
+        "bold_prints",
+        "barbiecore",
+        "bimbo_glam",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -5818,6 +7812,11 @@
       "slot": "bottom",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "maximalist",
+        "clowncore",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -5837,6 +7836,13 @@
       "slot": "bottom",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "colour_blocked",
+        "devilcore",
+        "clowncore",
+        "baddie",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -5856,6 +7862,11 @@
       "slot": "dress",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "maximalist",
+        "colour_blocked",
+        "baddie"
       ]
     },
     "enabled": true
@@ -5875,6 +7886,14 @@
       "slot": "dress",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "maximalist",
+        "bold_prints",
+        "clowncore",
+        "gyaru",
+        "bratz_doll",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -5894,6 +7913,14 @@
       "slot": "dress",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "maximalist",
+        "colour_blocked",
+        "secondhand_luxury",
+        "barbiecore",
+        "baddie",
+        "bimbo_glam"
       ]
     },
     "enabled": true
@@ -5913,6 +7940,11 @@
       "slot": "dress",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "clowncore",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -5932,6 +7964,14 @@
       "slot": "dress",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "bold_prints",
+        "clowncore",
+        "bimbo_glam",
+        "gyaru",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -5952,6 +7992,13 @@
       "families": [
         "glam",
         "retro"
+      ],
+      "styles": [
+        "vintage",
+        "rockabilly",
+        "thrift_eclectic",
+        "barbiecore",
+        "westerncore"
       ]
     },
     "enabled": true
@@ -5971,6 +8018,15 @@
       "slot": "outer",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "colour_blocked",
+        "secondhand_luxury",
+        "clowncore",
+        "baddie",
+        "bimbo_glam",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -5990,6 +8046,12 @@
       "slot": "outer",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "bold_prints",
+        "devilcore",
+        "baddie",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -6010,6 +8072,12 @@
       "families": [
         "glam",
         "tailored"
+      ],
+      "styles": [
+        "business",
+        "mob_wife",
+        "power_dressing",
+        "androgynous_tailoring"
       ]
     },
     "enabled": true
@@ -6030,6 +8098,18 @@
       "families": [
         "glam",
         "goth"
+      ],
+      "styles": [
+        "mob_wife",
+        "all_black",
+        "secondhand_luxury",
+        "barbiecore",
+        "clowncore",
+        "fetishcore",
+        "bimbo_glam",
+        "bratz_doll",
+        "rockstar_gf",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -6049,6 +8129,12 @@
       "slot": "legwear",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "secondhand_luxury",
+        "baddie",
+        "bimbo_glam",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -6069,6 +8155,13 @@
       "families": [
         "glam",
         "rave"
+      ],
+      "styles": [
+        "rave_wear",
+        "barbiecore",
+        "fetishcore",
+        "baddie",
+        "bimbo_glam"
       ]
     },
     "enabled": true
@@ -6088,6 +8181,10 @@
       "slot": "shoes",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -6107,6 +8204,13 @@
       "slot": "shoes",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "colour_blocked",
+        "bold_prints",
+        "barbiecore",
+        "bimbo_glam",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -6126,6 +8230,14 @@
       "slot": "shoes",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "colour_blocked",
+        "barbiecore",
+        "baddie",
+        "rockstar_gf",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -6145,6 +8257,13 @@
       "slot": "shoes",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "colour_blocked",
+        "baddie",
+        "bimbo_glam",
+        "gyaru"
       ]
     },
     "enabled": true
@@ -6164,6 +8283,13 @@
       "slot": "shoes",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "colour_blocked",
+        "bold_prints",
+        "barbiecore",
+        "clowncore",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -6183,6 +8309,16 @@
       "slot": "shoes",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "colour_blocked",
+        "bold_prints",
+        "clowncore",
+        "baddie",
+        "bimbo_glam",
+        "gyaru",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -6202,6 +8338,11 @@
       "slot": "extras",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "clowncore",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -6222,6 +8363,13 @@
       "families": [
         "glam",
         "retro"
+      ],
+      "styles": [
+        "devilcore",
+        "clowncore",
+        "westerncore",
+        "baddie",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6241,6 +8389,11 @@
       "slot": "extras",
       "families": [
         "glam"
+      ],
+      "styles": [
+        "mob_wife",
+        "bold_prints",
+        "barbiecore"
       ]
     },
     "enabled": true
@@ -6260,6 +8413,9 @@
       "slot": "top",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "thrift_eclectic"
       ]
     },
     "enabled": true
@@ -6279,6 +8435,10 @@
       "slot": "top",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6298,6 +8458,9 @@
       "slot": "top",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly"
       ]
     },
     "enabled": true
@@ -6317,6 +8480,9 @@
       "slot": "top",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "westerncore"
       ]
     },
     "enabled": true
@@ -6336,6 +8502,10 @@
       "slot": "top",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "vintage",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6355,6 +8525,10 @@
       "slot": "top",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6374,6 +8548,9 @@
       "slot": "bottom",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6393,6 +8570,11 @@
       "slot": "bottom",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "pin_up",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -6412,6 +8594,10 @@
       "slot": "bottom",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6431,6 +8617,11 @@
       "slot": "bottom",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "pin_up",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -6450,6 +8641,10 @@
       "slot": "bottom",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "vintage",
+        "rockabilly"
       ]
     },
     "enabled": true
@@ -6469,6 +8664,11 @@
       "slot": "dress",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "pin_up",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -6488,6 +8688,11 @@
       "slot": "dress",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "vintage",
+        "rockabilly",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6526,6 +8731,10 @@
       "slot": "dress",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "westerncore"
       ]
     },
     "enabled": true
@@ -6545,6 +8754,10 @@
       "slot": "outer",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -6564,6 +8777,9 @@
       "slot": "outer",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "vintage"
       ]
     },
     "enabled": true
@@ -6584,6 +8800,12 @@
       "families": [
         "retro",
         "glam"
+      ],
+      "styles": [
+        "rockabilly",
+        "maximalist",
+        "colour_blocked",
+        "bold_prints"
       ]
     },
     "enabled": true
@@ -6603,6 +8825,11 @@
       "slot": "legwear",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "vintage",
+        "rockabilly",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6622,6 +8849,11 @@
       "slot": "shoes",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "pin_up",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -6641,6 +8873,9 @@
       "slot": "shoes",
       "families": [
         "retro"
+      ],
+      "styles": [
+        "thrift_eclectic"
       ]
     },
     "enabled": true
@@ -6661,6 +8896,14 @@
       "families": [
         "retro",
         "boho"
+      ],
+      "styles": [
+        "vintage",
+        "rockabilly",
+        "thrift_eclectic",
+        "festival_style",
+        "craftcore",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -6700,6 +8943,12 @@
       "families": [
         "retro",
         "glam"
+      ],
+      "styles": [
+        "maximalist",
+        "barbiecore",
+        "gyaru",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -6719,6 +8968,11 @@
       "slot": "top",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "coastal_grandmother",
+        "relaxed_linen",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -6738,6 +8992,13 @@
       "slot": "top",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "relaxed_linen",
+        "sundress_style",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -6757,6 +9018,10 @@
       "slot": "top",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "coastal_grandmother",
+        "relaxed_linen"
       ]
     },
     "enabled": true
@@ -6776,6 +9041,10 @@
       "slot": "top",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "relaxed_linen"
       ]
     },
     "enabled": true
@@ -6795,6 +9064,10 @@
       "slot": "top",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "relaxed_linen"
       ]
     },
     "enabled": true
@@ -6814,6 +9087,13 @@
       "slot": "bottom",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "relaxed_linen",
+        "sundress_style",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -6833,6 +9113,10 @@
       "slot": "bottom",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother"
       ]
     },
     "enabled": true
@@ -6852,6 +9136,13 @@
       "slot": "bottom",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "relaxed_linen",
+        "sundress_style",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -6871,6 +9162,10 @@
       "slot": "bottom",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "relaxed_linen",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -6890,6 +9185,13 @@
       "slot": "dress",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "relaxed_linen",
+        "sundress_style",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -6909,6 +9211,10 @@
       "slot": "dress",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "surfer_girl",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -6928,6 +9234,11 @@
       "slot": "dress",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "relaxed_linen"
       ]
     },
     "enabled": true
@@ -6947,6 +9258,10 @@
       "slot": "outer",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "sundress_style"
       ]
     },
     "enabled": true
@@ -6966,6 +9281,12 @@
       "slot": "outer",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "coastal_grandmother",
+        "relaxed_linen",
+        "sundress_style",
+        "surfer_girl"
       ]
     },
     "enabled": true
@@ -6985,6 +9306,12 @@
       "slot": "shoes",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "relaxed_linen",
+        "sundress_style"
       ]
     },
     "enabled": true
@@ -7005,6 +9332,9 @@
       "families": [
         "beach",
         "any"
+      ],
+      "styles": [
+        "relaxed_linen"
       ]
     },
     "enabled": true
@@ -7024,6 +9354,11 @@
       "slot": "extras",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "relaxed_linen"
       ]
     },
     "enabled": true
@@ -7043,6 +9378,11 @@
       "slot": "extras",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "coastal_grandmother",
+        "surfer_girl",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -7062,6 +9402,11 @@
       "slot": "top",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "festival_style",
+        "rave_wear",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7081,6 +9426,11 @@
       "slot": "top",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "rave_wear",
+        "fetishcore",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7100,6 +9450,11 @@
       "slot": "top",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "festival_style",
+        "rave_wear",
+        "fetishcore"
       ]
     },
     "enabled": true
@@ -7119,6 +9474,9 @@
       "slot": "top",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "rave_wear"
       ]
     },
     "enabled": true
@@ -7138,6 +9496,11 @@
       "slot": "top",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "festival_style",
+        "rave_wear",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7157,6 +9520,9 @@
       "slot": "top",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "club_kid"
       ]
     },
     "enabled": true
@@ -7176,6 +9542,11 @@
       "slot": "bottom",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "techwear",
+        "festival_style",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7195,6 +9566,11 @@
       "slot": "bottom",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "rave_wear",
+        "fetishcore",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7233,6 +9609,11 @@
       "slot": "bottom",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "techwear",
+        "club_kid",
+        "rave_wear"
       ]
     },
     "enabled": true
@@ -7252,6 +9633,9 @@
       "slot": "dress",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "club_kid"
       ]
     },
     "enabled": true
@@ -7271,6 +9655,13 @@
       "slot": "dress",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "techwear",
+        "festival_style",
+        "rave_wear",
+        "fetishcore",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7290,6 +9681,10 @@
       "slot": "dress",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "rave_wear",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7309,6 +9704,12 @@
       "slot": "outer",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "techwear",
+        "festival_style",
+        "rave_wear",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7328,6 +9729,12 @@
       "slot": "outer",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "techwear",
+        "e_girl",
+        "rave_wear",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7347,6 +9754,9 @@
       "slot": "outer",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7366,6 +9776,12 @@
       "slot": "legwear",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "techwear",
+        "club_kid",
+        "rave_wear",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7385,6 +9801,11 @@
       "slot": "legwear",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "techwear",
+        "e_girl",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7404,6 +9825,11 @@
       "slot": "shoes",
       "families": [
         "rave"
+      ],
+      "styles": [
+        "rave_wear",
+        "fetishcore",
+        "cyberpunk"
       ]
     },
     "enabled": true
@@ -7424,6 +9850,11 @@
       "families": [
         "rave",
         "alt"
+      ],
+      "styles": [
+        "festival_style",
+        "club_kid",
+        "biker_chick"
       ]
     },
     "enabled": true
@@ -7444,6 +9875,10 @@
       "families": [
         "rave",
         "goth"
+      ],
+      "styles": [
+        "techwear",
+        "festival_style"
       ]
     },
     "enabled": true
@@ -7482,6 +9917,9 @@
       "slot": "top",
       "families": [
         "costume"
+      ],
+      "styles": [
+        "cosplayer_style"
       ]
     },
     "enabled": true
@@ -7501,6 +9939,9 @@
       "slot": "top",
       "families": [
         "costume"
+      ],
+      "styles": [
+        "fantasy_costume"
       ]
     },
     "enabled": true
@@ -7520,6 +9961,9 @@
       "slot": "bottom",
       "families": [
         "costume"
+      ],
+      "styles": [
+        "fantasy_costume"
       ]
     },
     "enabled": true
@@ -7539,6 +9983,9 @@
       "slot": "bottom",
       "families": [
         "costume"
+      ],
+      "styles": [
+        "cosplayer_style"
       ]
     },
     "enabled": true
@@ -7558,6 +10005,9 @@
       "slot": "dress",
       "families": [
         "costume"
+      ],
+      "styles": [
+        "fantasy_costume"
       ]
     },
     "enabled": true
@@ -7577,6 +10027,10 @@
       "slot": "shoes",
       "families": [
         "costume"
+      ],
+      "styles": [
+        "fantasy_costume",
+        "fairycore"
       ]
     },
     "enabled": true
@@ -8727,7 +11181,16 @@
       "pieces": {
         "bra": "red string bikini top",
         "panties": "red string bikini bottoms"
-      }
+      },
+      "styles": [
+        "maximalist",
+        "colour_blocked",
+        "bold_prints",
+        "clowncore",
+        "baddie",
+        "gyaru",
+        "surfer_girl"
+      ]
     },
     "enabled": true
   },
@@ -8752,7 +11215,25 @@
       "pieces": {
         "bra": "black triangle bikini top",
         "panties": "black bikini bottoms"
-      }
+      },
+      "styles": [
+        "casual_basics",
+        "sporty",
+        "cosy",
+        "gorpcore",
+        "borrowed",
+        "minimalist_neutral",
+        "monochrome_head_to_toe",
+        "athleisure",
+        "denim_on_denim",
+        "quiet_luxury",
+        "layered_neutrals",
+        "classic_denim",
+        "gamer_girl",
+        "gym_girl",
+        "clean_girl",
+        "surfer_girl"
+      ]
     },
     "enabled": true
   },
@@ -8776,7 +11257,19 @@
       "pieces": {
         "bra": "white crochet bikini top",
         "panties": "white crochet bikini bottoms"
-      }
+      },
+      "styles": [
+        "cottagecore_full",
+        "resort_wear",
+        "coastal_grandmother",
+        "festival_boho",
+        "fantasy_costume",
+        "sundress_style",
+        "craftcore",
+        "goblincore",
+        "surfer_girl",
+        "mermaidcore"
+      ]
     },
     "enabled": true
   },
@@ -8800,7 +11293,25 @@
       ],
       "pieces": {
         "lingerie": "black low-back one-piece swimsuit"
-      }
+      },
+      "styles": [
+        "casual_basics",
+        "elegant",
+        "business",
+        "preppy",
+        "librarian",
+        "dark_academia",
+        "normcore",
+        "power_dressing",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "secondhand_luxury",
+        "uniform_of_one_outfit",
+        "soft_tailoring",
+        "goth_girl",
+        "clean_girl",
+        "office_siren"
+      ]
     },
     "enabled": true
   },
@@ -8824,7 +11335,15 @@
       "pieces": {
         "bra": "leopard-print bikini top",
         "panties": "leopard-print bikini bottoms"
-      }
+      },
+      "styles": [
+        "punk_style",
+        "barbiecore",
+        "baddie",
+        "grunge",
+        "bratz_doll",
+        "rockstar_gf"
+      ]
     },
     "enabled": true
   },
@@ -8848,7 +11367,19 @@
       "pieces": {
         "bra": "neon green bikini top",
         "panties": "neon green bikini bottoms"
-      }
+      },
+      "styles": [
+        "streetwear",
+        "y2k",
+        "skater",
+        "workwear_inspired",
+        "military_inspired",
+        "club_kid",
+        "utilitarian",
+        "e_girl",
+        "rave_wear",
+        "cyberpunk"
+      ]
     },
     "enabled": true
   },
@@ -8871,7 +11402,13 @@
       ],
       "pieces": {
         "lingerie": "high-cut red one-piece swimsuit"
-      }
+      },
+      "styles": [
+        "mob_wife",
+        "barbiecore",
+        "pin_up",
+        "old_hollywood"
+      ]
     },
     "enabled": true
   },
@@ -8894,7 +11431,12 @@
       "pieces": {
         "bra": "polka-dot halter bikini top",
         "panties": "high-waisted polka-dot bikini bottoms"
-      }
+      },
+      "styles": [
+        "rockabilly",
+        "westerncore",
+        "pin_up"
+      ]
     },
     "enabled": true
   },
@@ -8917,7 +11459,19 @@
       "pieces": {
         "bra": "pastel pink frilly bikini top",
         "panties": "pastel pink frilly bikini bottoms"
-      }
+      },
+      "styles": [
+        "soft_girl",
+        "romantic_florals",
+        "balletcore",
+        "anime_girl_style",
+        "lolita_fashion",
+        "angelcore",
+        "lovecore",
+        "coquette",
+        "kpop_idol",
+        "pastel_goth"
+      ]
     },
     "enabled": true
   },
@@ -8941,7 +11495,17 @@
       "pieces": {
         "bra": "tiny gold micro bikini top",
         "panties": "gold micro bikini bottoms"
-      }
+      },
+      "styles": [
+        "mob_wife",
+        "techwear",
+        "club_kid",
+        "colour_blocked",
+        "clowncore",
+        "fetishcore",
+        "bimbo_glam",
+        "old_hollywood"
+      ]
     },
     "enabled": true
   },
@@ -8966,7 +11530,17 @@
       "pieces": {
         "bra": "floral bandeau bikini top",
         "panties": "floral bikini bottoms"
-      }
+      },
+      "styles": [
+        "vintage",
+        "bohemian",
+        "cottagecore_full",
+        "thrift_eclectic",
+        "coastal_grandmother",
+        "fantasy_costume",
+        "surfer_girl",
+        "decora"
+      ]
     },
     "enabled": true
   },
@@ -8990,7 +11564,14 @@
       "pieces": {
         "bra": "black sporty bikini crop top",
         "panties": "black sporty bikini briefs"
-      }
+      },
+      "styles": [
+        "sporty",
+        "resort_wear",
+        "athleisure",
+        "coastal_grandmother",
+        "tomboy"
+      ]
     },
     "enabled": true
   },
@@ -9014,7 +11595,14 @@
       "pieces": {
         "bra": "holographic bikini top",
         "panties": "holographic bikini bottoms"
-      }
+      },
+      "styles": [
+        "festival_style",
+        "coastal_grandmother",
+        "relaxed_linen",
+        "rave_wear",
+        "cyberpunk"
+      ]
     },
     "enabled": true
   },
@@ -9038,7 +11626,15 @@
       "pieces": {
         "bra": "shell bikini top",
         "panties": "iridescent bikini bottoms"
-      }
+      },
+      "styles": [
+        "relaxed_linen",
+        "cosplayer_style",
+        "fantasy_costume",
+        "fairycore",
+        "surfer_girl",
+        "mermaidcore"
+      ]
     },
     "enabled": true
   },
@@ -9062,7 +11658,18 @@
       "pieces": {
         "bra": "black strappy cut-out bikini top",
         "panties": "black strappy bikini bottoms"
-      }
+      },
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "scene_alt",
+        "soft_grunge",
+        "emo_style",
+        "alt_girl",
+        "devilcore",
+        "biker_chick",
+        "witchcore"
+      ]
     },
     "enabled": true
   },
@@ -9662,6 +12269,18 @@
         "glam",
         "tailored",
         "beach"
+      ],
+      "styles": [
+        "business",
+        "mob_wife",
+        "monochrome_head_to_toe",
+        "coastal_grandmother",
+        "uniform_of_one_outfit",
+        "classic_denim",
+        "clean_girl",
+        "office_siren",
+        "surfer_girl",
+        "old_hollywood"
       ]
     },
     "enabled": true,
@@ -9683,6 +12302,17 @@
         "alt",
         "boho",
         "street"
+      ],
+      "styles": [
+        "streetwear",
+        "maximalist",
+        "workwear_inspired",
+        "scene_alt",
+        "military_inspired",
+        "festival_boho",
+        "emo_style",
+        "goblincore",
+        "witchcore"
       ]
     },
     "enabled": true,
@@ -9704,6 +12334,13 @@
         "boho",
         "beach",
         "soft"
+      ],
+      "styles": [
+        "soft_girl",
+        "festival_style",
+        "coastal_grandmother",
+        "festival_boho",
+        "craftcore"
       ]
     },
     "enabled": true,
@@ -9725,6 +12362,19 @@
         "basics",
         "tailored",
         "sporty"
+      ],
+      "styles": [
+        "casual_basics",
+        "business",
+        "gorpcore",
+        "librarian",
+        "borrowed",
+        "minimalist_neutral",
+        "athleisure",
+        "power_dressing",
+        "denim_on_denim",
+        "androgynous_tailoring",
+        "layered_neutrals"
       ]
     },
     "enabled": true,
@@ -9746,6 +12396,18 @@
         "boho",
         "glam",
         "street"
+      ],
+      "styles": [
+        "y2k",
+        "cottagecore_full",
+        "military_inspired",
+        "club_kid",
+        "colour_blocked",
+        "fantasy_costume",
+        "devilcore",
+        "westerncore",
+        "craftcore",
+        "witchcore"
       ]
     },
     "enabled": true,
@@ -9755,7 +12417,7 @@
     "id": "anklet",
     "category": "wardrobe_item",
     "label": "Anklet",
-    "weight": 1.0,
+    "weight": 1,
     "prompt_hint": "a thin anklet",
     "image_prompt": null,
     "affinities": [],
@@ -9767,6 +12429,12 @@
         "beach",
         "boho",
         "glam"
+      ],
+      "styles": [
+        "vintage",
+        "mob_wife",
+        "festival_boho",
+        "sundress_style"
       ]
     },
     "enabled": true,
@@ -9776,7 +12444,7 @@
     "id": "locket",
     "category": "wardrobe_item",
     "label": "Locket",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "a small locket she never opens",
     "image_prompt": null,
@@ -9788,6 +12456,11 @@
       "families": [
         "soft",
         "retro"
+      ],
+      "styles": [
+        "balletcore",
+        "sundress_style",
+        "angelcore"
       ]
     },
     "enabled": true
@@ -9796,7 +12469,7 @@
     "id": "hoops",
     "category": "wardrobe_item",
     "label": "Big hoop earrings",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "large gold hoop earrings",
     "image_prompt": null,
@@ -9809,6 +12482,16 @@
         "glam",
         "street",
         "retro"
+      ],
+      "styles": [
+        "rockabilly",
+        "mob_wife",
+        "skater",
+        "cosplayer_style",
+        "baddie",
+        "bimbo_glam",
+        "kpop_idol",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -9817,7 +12500,7 @@
     "id": "many_bracelets",
     "category": "wardrobe_item",
     "label": "Armful of bracelets",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "a stack of bracelets up one forearm",
     "image_prompt": null,
@@ -9830,6 +12513,13 @@
         "boho",
         "alt",
         "rave"
+      ],
+      "styles": [
+        "vintage",
+        "bohemian",
+        "emo_style",
+        "rave_wear",
+        "craftcore"
       ]
     },
     "enabled": true
@@ -9838,7 +12528,7 @@
     "id": "pendant",
     "category": "wardrobe_item",
     "label": "Single pendant",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "one pendant she always wears",
     "image_prompt": null,
@@ -9851,6 +12541,23 @@
         "basics",
         "soft",
         "tailored"
+      ],
+      "styles": [
+        "cosy",
+        "borrowed",
+        "minimalist_neutral",
+        "cottagecore_full",
+        "romantic_florals",
+        "equestrian_inspired",
+        "uniform_of_one_outfit",
+        "soft_tailoring",
+        "layered_neutrals",
+        "cosplayer_style",
+        "lolita_fashion",
+        "lovecore",
+        "clean_girl",
+        "tomboy",
+        "decora"
       ]
     },
     "enabled": true
@@ -9859,7 +12566,7 @@
     "id": "layered_rings",
     "category": "wardrobe_item",
     "label": "Layered rings on multiple fingers",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Layered rings on multiple fingers",
     "image_prompt": null,
@@ -9872,6 +12579,14 @@
         "alt",
         "goth",
         "boho"
+      ],
+      "styles": [
+        "maximalist",
+        "fantasy_costume",
+        "alt_girl",
+        "devilcore",
+        "fetishcore",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -9893,6 +12608,12 @@
         "glam",
         "boho",
         "retro"
+      ],
+      "styles": [
+        "bold_prints",
+        "clowncore",
+        "goblincore",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -9901,7 +12622,7 @@
     "id": "delicate_anklet",
     "category": "wardrobe_item",
     "label": "Delicate anklet",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Delicate anklet",
     "image_prompt": null,
@@ -9914,6 +12635,20 @@
         "beach",
         "soft",
         "glam"
+      ],
+      "styles": [
+        "soft_girl",
+        "maximalist",
+        "resort_wear",
+        "romantic_florals",
+        "coastal_grandmother",
+        "colour_blocked",
+        "relaxed_linen",
+        "lolita_fashion",
+        "angelcore",
+        "clowncore",
+        "baddie",
+        "bimbo_glam"
       ]
     },
     "enabled": true
@@ -9922,7 +12657,7 @@
     "id": "charm_bracelet",
     "category": "wardrobe_item",
     "label": "Charm bracelet",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Charm bracelet",
     "image_prompt": null,
@@ -9935,6 +12670,19 @@
         "soft",
         "retro",
         "basics"
+      ],
+      "styles": [
+        "cosy",
+        "rockabilly",
+        "cottagecore_full",
+        "normcore",
+        "romantic_florals",
+        "denim_on_denim",
+        "uniform_of_one_outfit",
+        "layered_neutrals",
+        "anime_girl_style",
+        "lovecore",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -9957,6 +12705,19 @@
         "alt",
         "street",
         "goth"
+      ],
+      "styles": [
+        "all_black",
+        "scene_alt",
+        "military_inspired",
+        "romantic_florals",
+        "balletcore",
+        "goth_girl",
+        "lolita_fashion",
+        "fairycore",
+        "lovecore",
+        "coquette",
+        "pastel_goth"
       ]
     },
     "enabled": true
@@ -9979,6 +12740,17 @@
         "goth",
         "street",
         "rave"
+      ],
+      "styles": [
+        "streetwear",
+        "scene_alt",
+        "soft_grunge",
+        "e_girl",
+        "gamer_girl",
+        "anime_girl_style",
+        "goth_girl",
+        "alt_girl",
+        "rave_wear"
       ]
     },
     "enabled": true
@@ -9999,6 +12771,16 @@
       "families": [
         "sporty",
         "basics"
+      ],
+      "styles": [
+        "gorpcore",
+        "borrowed",
+        "minimalist_neutral",
+        "normcore",
+        "monochrome_head_to_toe",
+        "athleisure",
+        "classic_denim",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -10007,7 +12789,7 @@
     "id": "vintage_watch",
     "category": "wardrobe_item",
     "label": "Vintage watch",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "Vintage watch",
     "image_prompt": null,
@@ -10019,6 +12801,13 @@
       "families": [
         "retro",
         "tailored"
+      ],
+      "styles": [
+        "vintage",
+        "librarian",
+        "quiet_luxury",
+        "secondhand_luxury",
+        "soft_tailoring"
       ]
     },
     "enabled": true
@@ -10027,7 +12816,7 @@
     "id": "layered_gold_rings",
     "category": "wardrobe_item",
     "label": "Layered gold rings",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Layered gold rings",
     "image_prompt": null,
@@ -10040,6 +12829,22 @@
         "glam",
         "tailored",
         "boho"
+      ],
+      "styles": [
+        "preppy",
+        "mob_wife",
+        "bohemian",
+        "dark_academia",
+        "thrift_eclectic",
+        "power_dressing",
+        "equestrian_inspired",
+        "quiet_luxury",
+        "colour_blocked",
+        "festival_boho",
+        "barbiecore",
+        "goblincore",
+        "old_hollywood",
+        "witchcore"
       ]
     },
     "enabled": true
@@ -10048,7 +12853,7 @@
     "id": "vintage_brooch",
     "category": "wardrobe_item",
     "label": "Vintage brooch",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "Vintage brooch",
     "image_prompt": null,
@@ -10060,6 +12865,14 @@
       "families": [
         "retro",
         "tailored"
+      ],
+      "styles": [
+        "vintage",
+        "business",
+        "preppy",
+        "power_dressing",
+        "equestrian_inspired",
+        "pin_up"
       ]
     },
     "enabled": true
@@ -10068,7 +12881,7 @@
     "id": "ankle_bracelet_beaded",
     "category": "wardrobe_item",
     "label": "Beaded ankle bracelet",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Beaded ankle bracelet",
     "image_prompt": null,
@@ -10080,6 +12893,13 @@
       "families": [
         "beach",
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "cottagecore_full",
+        "resort_wear",
+        "relaxed_linen",
+        "fairycore"
       ]
     },
     "enabled": true
@@ -10088,7 +12908,7 @@
     "id": "layered_bracelets_mixed",
     "category": "wardrobe_item",
     "label": "Mixed-metal layered bracelets",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Mixed-metal layered bracelets",
     "image_prompt": null,
@@ -10101,6 +12921,17 @@
         "street",
         "boho",
         "alt"
+      ],
+      "styles": [
+        "vintage",
+        "skater",
+        "maximalist",
+        "thrift_eclectic",
+        "festival_style",
+        "soft_grunge",
+        "emo_style",
+        "alt_girl",
+        "fetishcore"
       ]
     },
     "enabled": true
@@ -10109,7 +12940,7 @@
     "id": "delicate_body_chain",
     "category": "wardrobe_item",
     "label": "Delicate body chain",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "Delicate body chain",
     "image_prompt": null,
@@ -10122,6 +12953,16 @@
         "glam",
         "beach",
         "boho"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "festival_boho",
+        "relaxed_linen",
+        "bold_prints",
+        "fairycore",
+        "bratz_doll",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -10130,7 +12971,7 @@
     "id": "thin_stacked_bangles",
     "category": "wardrobe_item",
     "label": "Thin stacked bangles",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Thin stacked bangles",
     "image_prompt": null,
@@ -10143,6 +12984,16 @@
         "boho",
         "glam",
         "soft"
+      ],
+      "styles": [
+        "thrift_eclectic",
+        "colour_blocked",
+        "festival_boho",
+        "lolita_fashion",
+        "sundress_style",
+        "barbiecore",
+        "goblincore",
+        "decora"
       ]
     },
     "enabled": true
@@ -10151,7 +13002,7 @@
     "id": "delicate_toe_ring",
     "category": "wardrobe_item",
     "label": "Delicate toe ring",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "Delicate toe ring",
     "image_prompt": null,
@@ -10163,6 +13014,13 @@
       "families": [
         "beach",
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "thrift_eclectic",
+        "festival_boho",
+        "sundress_style",
+        "westerncore"
       ]
     },
     "enabled": true
@@ -10171,7 +13029,7 @@
     "id": "statement_watch_face",
     "category": "wardrobe_item",
     "label": "Oversized statement watch",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "Oversized statement watch",
     "image_prompt": null,
@@ -10184,6 +13042,25 @@
         "glam",
         "tailored",
         "street"
+      ],
+      "styles": [
+        "gorpcore",
+        "preppy",
+        "skater",
+        "power_dressing",
+        "quiet_luxury",
+        "androgynous_tailoring",
+        "soft_tailoring",
+        "bold_prints",
+        "e_girl",
+        "gamer_girl",
+        "clowncore",
+        "baddie",
+        "bimbo_glam",
+        "office_siren",
+        "gyaru",
+        "kpop_idol",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -10192,7 +13069,7 @@
     "id": "single_drop_earring",
     "category": "wardrobe_item",
     "label": "Single long drop earring",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "Single long drop earring",
     "image_prompt": null,
@@ -10205,6 +13082,12 @@
         "glam",
         "alt",
         "tailored"
+      ],
+      "styles": [
+        "elegant",
+        "preppy",
+        "equestrian_inspired",
+        "baddie"
       ]
     },
     "enabled": true
@@ -10226,6 +13109,17 @@
         "goth",
         "alt",
         "rave"
+      ],
+      "styles": [
+        "alt_goth",
+        "all_black",
+        "club_kid",
+        "rave_wear",
+        "punk_style",
+        "devilcore",
+        "cyberpunk",
+        "biker_chick",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -10246,6 +13140,20 @@
         "street",
         "basics",
         "sporty"
+      ],
+      "styles": [
+        "casual_basics",
+        "sporty",
+        "workwear_inspired",
+        "normcore",
+        "military_inspired",
+        "monochrome_head_to_toe",
+        "athleisure",
+        "uniform_of_one_outfit",
+        "classic_denim",
+        "cosplayer_style",
+        "gym_girl",
+        "tomboy"
       ]
     },
     "enabled": true,
@@ -10255,7 +13163,7 @@
     "id": "sunglasses_on_head",
     "category": "wardrobe_item",
     "label": "Sunglasses pushed up on her head",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Sunglasses pushed up on her head",
     "image_prompt": null,
@@ -10268,6 +13176,25 @@
         "beach",
         "glam",
         "basics"
+      ],
+      "styles": [
+        "casual_basics",
+        "minimalist_neutral",
+        "resort_wear",
+        "normcore",
+        "monochrome_head_to_toe",
+        "quiet_luxury",
+        "uniform_of_one_outfit",
+        "relaxed_linen",
+        "layered_neutrals",
+        "classic_denim",
+        "barbiecore",
+        "clowncore",
+        "bimbo_glam",
+        "tomboy",
+        "surfer_girl",
+        "mermaidcore",
+        "old_hollywood"
       ]
     },
     "enabled": true
@@ -10276,7 +13203,7 @@
     "id": "hair_clips_colourful",
     "category": "wardrobe_item",
     "label": "Colourful hair clips",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Colourful hair clips",
     "image_prompt": null,
@@ -10288,6 +13215,20 @@
       "families": [
         "soft",
         "street"
+      ],
+      "styles": [
+        "soft_girl",
+        "y2k",
+        "workwear_inspired",
+        "romantic_florals",
+        "utilitarian",
+        "coquette",
+        "gyaru",
+        "kpop_idol",
+        "cyberpunk",
+        "bratz_doll",
+        "pastel_goth",
+        "decora"
       ]
     },
     "enabled": true
@@ -10296,7 +13237,7 @@
     "id": "claw_clip",
     "category": "wardrobe_item",
     "label": "Claw clip",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Claw clip",
     "image_prompt": null,
@@ -10309,6 +13250,20 @@
         "basics",
         "tailored",
         "beach"
+      ],
+      "styles": [
+        "casual_basics",
+        "business",
+        "preppy",
+        "librarian",
+        "minimalist_neutral",
+        "resort_wear",
+        "normcore",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "secondhand_luxury",
+        "soft_tailoring",
+        "classic_denim"
       ]
     },
     "enabled": true
@@ -10317,7 +13272,7 @@
     "id": "statement_sunglasses",
     "category": "wardrobe_item",
     "label": "Statement sunglasses",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Statement sunglasses",
     "image_prompt": null,
@@ -10330,6 +13285,13 @@
         "glam",
         "retro",
         "street"
+      ],
+      "styles": [
+        "maximalist",
+        "workwear_inspired",
+        "bold_prints",
+        "e_girl",
+        "cosplayer_style"
       ]
     },
     "enabled": true
@@ -10338,7 +13300,7 @@
     "id": "chunky_headphones",
     "category": "wardrobe_item",
     "label": "Chunky over-ear headphones",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Chunky over-ear headphones",
     "image_prompt": null,
@@ -10351,6 +13313,14 @@
         "street",
         "alt",
         "rave"
+      ],
+      "styles": [
+        "techwear",
+        "scene_alt",
+        "utilitarian",
+        "rave_wear",
+        "punk_style",
+        "grunge"
       ]
     },
     "enabled": true
@@ -10359,7 +13329,7 @@
     "id": "wide_headband",
     "category": "wardrobe_item",
     "label": "Wide fabric headband",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "Wide fabric headband",
     "image_prompt": null,
@@ -10372,6 +13342,15 @@
         "soft",
         "retro",
         "sporty"
+      ],
+      "styles": [
+        "rockabilly",
+        "athleisure",
+        "balletcore",
+        "cosplayer_style",
+        "lolita_fashion",
+        "lovecore",
+        "decora"
       ]
     },
     "enabled": true
@@ -10380,7 +13359,7 @@
     "id": "beaded_hair_string",
     "category": "wardrobe_item",
     "label": "Beaded string woven into hair",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "Beaded string woven into hair",
     "image_prompt": null,
@@ -10392,6 +13371,16 @@
       "families": [
         "boho",
         "beach"
+      ],
+      "styles": [
+        "bohemian",
+        "resort_wear",
+        "coastal_grandmother",
+        "westerncore",
+        "craftcore",
+        "goblincore",
+        "surfer_girl",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -10400,7 +13389,7 @@
     "id": "cat_ear_headphones",
     "category": "wardrobe_item",
     "label": "Cat-ear headphones",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "pastel cat-ear headphones",
     "image_prompt": null,
@@ -10413,6 +13402,21 @@
         "street",
         "soft",
         "rave"
+      ],
+      "styles": [
+        "streetwear",
+        "soft_girl",
+        "gorpcore",
+        "skater",
+        "military_inspired",
+        "balletcore",
+        "utilitarian",
+        "anime_girl_style",
+        "rave_wear",
+        "coquette",
+        "cyberpunk",
+        "pastel_goth",
+        "decora"
       ]
     },
     "enabled": true
@@ -10421,7 +13425,7 @@
     "id": "scrunchie_wrist",
     "category": "wardrobe_item",
     "label": "Scrunchie on wrist",
-    "weight": 1.0,
+    "weight": 1,
     "prompt_hint": "a scrunchie around her wrist",
     "image_prompt": null,
     "affinities": [],
@@ -10433,6 +13437,18 @@
         "basics",
         "sporty",
         "soft"
+      ],
+      "styles": [
+        "casual_basics",
+        "sporty",
+        "gorpcore",
+        "monochrome_head_to_toe",
+        "classic_denim",
+        "sundress_style",
+        "lovecore",
+        "gym_girl",
+        "coquette",
+        "clean_girl"
       ]
     },
     "enabled": true,
@@ -10474,6 +13490,20 @@
         "basics",
         "tailored",
         "sporty"
+      ],
+      "styles": [
+        "casual_basics",
+        "sporty",
+        "elegant",
+        "business",
+        "librarian",
+        "borrowed",
+        "dark_academia",
+        "monochrome_head_to_toe",
+        "equestrian_inspired",
+        "androgynous_tailoring",
+        "layered_neutrals",
+        "clean_girl"
       ]
     },
     "enabled": true
@@ -10495,6 +13525,19 @@
         "soft",
         "retro",
         "tailored"
+      ],
+      "styles": [
+        "rockabilly",
+        "power_dressing",
+        "equestrian_inspired",
+        "soft_tailoring",
+        "lolita_fashion",
+        "westerncore",
+        "fairycore",
+        "lovecore",
+        "coquette",
+        "pastel_goth",
+        "decora"
       ]
     },
     "enabled": true
@@ -10515,6 +13558,13 @@
       "families": [
         "goth",
         "alt"
+      ],
+      "styles": [
+        "e_girl",
+        "punk_style",
+        "fetishcore",
+        "biker_chick",
+        "rockstar_gf"
       ]
     },
     "enabled": true
@@ -10535,6 +13585,11 @@
       "families": [
         "goth",
         "boho"
+      ],
+      "styles": [
+        "bohemian",
+        "craftcore",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -10555,6 +13610,16 @@
       "families": [
         "rave",
         "street"
+      ],
+      "styles": [
+        "y2k",
+        "gorpcore",
+        "festival_style",
+        "utilitarian",
+        "rave_wear",
+        "tomboy",
+        "cyberpunk",
+        "bratz_doll"
       ]
     },
     "enabled": true
@@ -10574,6 +13639,11 @@
       "slot": "jewellery",
       "families": [
         "sporty"
+      ],
+      "styles": [
+        "sporty",
+        "athleisure",
+        "gym_girl"
       ]
     },
     "enabled": true
@@ -10594,6 +13664,14 @@
       "families": [
         "boho",
         "retro"
+      ],
+      "styles": [
+        "vintage",
+        "bohemian",
+        "maximalist",
+        "cottagecore_full",
+        "festival_style",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -10614,6 +13692,18 @@
       "families": [
         "glam",
         "tailored"
+      ],
+      "styles": [
+        "business",
+        "librarian",
+        "minimalist_neutral",
+        "maximalist",
+        "dark_academia",
+        "quiet_luxury",
+        "secondhand_luxury",
+        "soft_tailoring",
+        "clowncore",
+        "office_siren"
       ]
     },
     "enabled": true
@@ -10633,6 +13723,12 @@
       "slot": "jewellery",
       "families": [
         "beach"
+      ],
+      "styles": [
+        "resort_wear",
+        "coastal_grandmother",
+        "surfer_girl",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -10653,6 +13749,11 @@
       "families": [
         "boho",
         "costume"
+      ],
+      "styles": [
+        "bohemian",
+        "westerncore",
+        "goblincore"
       ]
     },
     "enabled": true
@@ -10673,6 +13774,12 @@
       "families": [
         "costume",
         "boho"
+      ],
+      "styles": [
+        "festival_boho",
+        "fantasy_costume",
+        "craftcore",
+        "mermaidcore"
       ]
     },
     "enabled": true
@@ -10779,7 +13886,7 @@
     "id": "phone_charm",
     "category": "carried_item",
     "label": "Phone charm",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "",
     "image_prompt": null,
@@ -10863,7 +13970,7 @@
     "id": "mini_purse_crossbody",
     "category": "carried_item",
     "label": "Tiny structured crossbody purse",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "",
     "image_prompt": null,
@@ -10899,6 +14006,283 @@
     "conflicts": [],
     "modifies": {},
     "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "small_gold_hoops",
+    "category": "wardrobe_item",
+    "label": "Small gold hoop earrings",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "small gold hoop earrings",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "any"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "nose_ring_delicate",
+    "category": "wardrobe_item",
+    "label": "Delicate nostril ring",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "one delicate nostril ring",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "any"
+      ],
+      "body_jewellery": true
+    },
+    "enabled": true
+  },
+  {
+    "id": "septum_ring_jewelry",
+    "category": "wardrobe_item",
+    "label": "Fine septum ring",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "one fine septum ring",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt",
+        "street"
+      ],
+      "body_jewellery": true,
+      "styles": [
+        "gorpcore",
+        "techwear",
+        "military_inspired",
+        "punk_style",
+        "gyaru",
+        "bratz_doll"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "septum_hidden",
+    "category": "wardrobe_item",
+    "label": "Small septum ring she can flip up",
+    "weight": 0.5,
+    "rarity": "very_rare",
+    "prompt_hint": "a small septum ring",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt",
+        "street"
+      ],
+      "body_jewellery": true,
+      "styles": [
+        "skater",
+        "workwear_inspired",
+        "soft_grunge",
+        "emo_style",
+        "fetishcore",
+        "tomboy",
+        "grunge",
+        "biker_chick"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cartilage_hoop_jewellery",
+    "category": "wardrobe_item",
+    "label": "Single cartilage hoop",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "one small cartilage hoop in her ear",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "any"
+      ],
+      "body_jewellery": true
+    },
+    "enabled": true
+  },
+  {
+    "id": "eyebrow_bar_jewellery",
+    "category": "wardrobe_item",
+    "label": "Slim eyebrow bar",
+    "weight": 0.6,
+    "rarity": "very_rare",
+    "prompt_hint": "one slim eyebrow bar piercing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt",
+        "street"
+      ],
+      "body_jewellery": true,
+      "styles": [
+        "streetwear",
+        "y2k",
+        "skater",
+        "techwear",
+        "military_inspired",
+        "emo_style",
+        "punk_style"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "lip_ring_jewellery",
+    "category": "wardrobe_item",
+    "label": "Fine lip ring",
+    "weight": 0.5,
+    "rarity": "very_rare",
+    "prompt_hint": "one fine lip ring piercing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt",
+        "street"
+      ],
+      "body_jewellery": true,
+      "styles": [
+        "skater",
+        "club_kid",
+        "utilitarian",
+        "punk_style",
+        "fetishcore"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "tongue_bar_jewellery",
+    "category": "wardrobe_item",
+    "label": "Tongue bar",
+    "weight": 0.3,
+    "rarity": "very_rare",
+    "prompt_hint": "a tongue bar piercing, visible only when her mouth is open",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt"
+      ],
+      "body_jewellery": true,
+      "styles": [
+        "alt_goth",
+        "soft_grunge",
+        "grunge"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "navel_bar_jewellery",
+    "category": "wardrobe_item",
+    "label": "Tiny navel bar",
+    "weight": 0.4,
+    "rarity": "very_rare",
+    "prompt_hint": "one tiny navel bar piercing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt",
+        "beach"
+      ],
+      "body_jewellery": true,
+      "styles": [
+        "resort_wear",
+        "relaxed_linen",
+        "punk_style"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "nipple_bar_jewellery",
+    "category": "wardrobe_item",
+    "label": "Pair of nipple bars",
+    "weight": 0.25,
+    "rarity": "very_rare",
+    "prompt_hint": "a discreet pair of nipple bar piercings",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt"
+      ],
+      "body_jewellery": true,
+      "styles": [
+        "soft_grunge",
+        "alt_girl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "clavicle_dermal_jewellery",
+    "category": "wardrobe_item",
+    "label": "Single clavicle dermal",
+    "weight": 0.2,
+    "rarity": "very_rare",
+    "prompt_hint": "one tiny dermal stud near her clavicle",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "slot": "jewellery",
+      "families": [
+        "alt"
+      ],
+      "body_jewellery": true,
+      "styles": [
+        "soft_grunge",
+        "e_girl",
+        "punk_style"
+      ]
+    },
     "enabled": true
   }
 ]

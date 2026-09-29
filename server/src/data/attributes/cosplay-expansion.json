@@ -1,0 +1,590 @@
+[
+  {
+    "id": "frieren",
+    "category": "cosplay_character",
+    "label": "Frieren (Frieren: Beyond Journey's End)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "quiet, dry and seemingly detached, but carries affection over absurdly long spans of time; gets unexpectedly focused on a tiny practical detail",
+    "image_prompt": "a Frieren cosplay: very long straight silver-white wig with blunt bangs and two small side braids, pointed elf-ear prosthetics, a white high-collar blouse under a black sleeveless dress with gold trim and a white flared coat, black tights, brown ankle boots, a wooden staff with a red gem as a prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Frieren",
+      "source": "Frieren: Beyond Journey's End",
+      "medium": "anime",
+      "aliases": [
+        "frieren"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "saber_artoria",
+    "category": "cosplay_character",
+    "label": "Saber Artoria (Fate/stay night)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "honourable, reserved and duty-first, with a sincere appetite and a stubbornly romantic idealism under the armour",
+    "image_prompt": "a Saber Artoria cosplay: blonde wig in a high bun with a blue ribbon, a royal-blue long dress with a silver breastplate and shoulder armour, blue-and-silver armoured skirt panels, silver gauntlets, black thigh-high boots, an ornate invisible-sword hilt as a prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Saber Artoria",
+      "source": "Fate/stay night",
+      "medium": "anime",
+      "aliases": [
+        "saber artoria",
+        "artoria pendragon"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rin_tohsaka",
+    "category": "cosplay_character",
+    "label": "Rin Tohsaka (Fate/stay night)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "confident, capable and sharp-tongued, trying very hard to look more composed than she feels",
+    "image_prompt": "a Rin Tohsaka cosplay: long black wig with twin tails tied by red ribbons, a red fitted turtleneck sweater, black pleated skirt, black thigh-high stockings, brown loafers, a small red gemstone pendant",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rin Tohsaka",
+      "source": "Fate/stay night",
+      "medium": "anime",
+      "aliases": [
+        "rin tohsaka",
+        "tohsaka"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cc_code_geass",
+    "category": "cosplay_character",
+    "label": "C.C. (Code Geass)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "cool, enigmatic and fond of letting other people underestimate how much she has already understood; deeply attached to her comforts",
+    "image_prompt": "a C.C. cosplay: waist-length pale green wig with blunt bangs, a white high-collar fitted bodysuit with long sleeves and black-and-gold geometric panels, white thigh-high boots, a small pizza box prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "C.C.",
+      "source": "Code Geass",
+      "medium": "anime",
+      "aliases": [
+        "c.c.",
+        "cc code geass"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "riza_hawkeye",
+    "category": "cosplay_character",
+    "label": "Riza Hawkeye (Fullmetal Alchemist)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "precise, observant and unflappable, with a dry loyalty that shows in what she does rather than what she says",
+    "image_prompt": "a Riza Hawkeye cosplay: blonde wig in a tight low ponytail with side-swept bangs, a dark navy military uniform jacket over a black turtleneck, matching pencil skirt, sheer black tights, black knee-high boots, silver watch and holstered sidearm prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Riza Hawkeye",
+      "source": "Fullmetal Alchemist",
+      "medium": "anime",
+      "aliases": [
+        "riza hawkeye",
+        "hawkeye fma"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "holo_spice_wolf",
+    "category": "cosplay_character",
+    "label": "Holo (Spice and Wolf)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "playful, proud and clever, likes a verbal bargain and pretends not to care exactly when she does",
+    "image_prompt": "a Holo cosplay: long chestnut-brown wig, large brown wolf ears and a fluffy brown wolf tail, a white peasant blouse under a rust-red sleeveless dress, a blue shawl, brown lace-up boots, a small apple prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Holo",
+      "source": "Spice and Wolf",
+      "medium": "anime",
+      "aliases": [
+        "holo spice wolf",
+        "holo the wise wolf"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "lucy_edgerunners",
+    "category": "cosplay_character",
+    "label": "Lucy (Cyberpunk: Edgerunners)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "guarded and laconic at first, then startlingly direct; dreams of distance, quiet and a place that belongs only to her",
+    "image_prompt": "a Lucy cosplay: chin-length white wig with pastel lavender and mint streaks, a black high-cut bodysuit under a cropped white-and-black futuristic jacket, bare midriff, dark thigh-high stockings, white ankle boots, a thin glowing data-cable prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Lucy",
+      "source": "Cyberpunk: Edgerunners",
+      "medium": "anime",
+      "aliases": [
+        "lucy edgerunners",
+        "lucy cyberpunk"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "misa_amane",
+    "category": "cosplay_character",
+    "label": "Misa Amane (Death Note)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "bright, devoted and theatrical, with an instinct for turning every entrance into an event",
+    "image_prompt": "a Misa Amane cosplay: long blonde wig in high pigtails with black ribbon bows, a black lace gothic babydoll dress with a corset belt, black fishnet stockings, chunky black platform boots, a silver cross necklace and a black notebook prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Misa Amane",
+      "source": "Death Note",
+      "medium": "anime",
+      "aliases": [
+        "misa amane",
+        "misa death note"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "yae_miko",
+    "category": "cosplay_character",
+    "label": "Yae Miko (Genshin Impact)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "elegant, amused and several moves ahead; treats teasing as both hospitality and a test",
+    "image_prompt": "a Yae Miko cosplay: long pale pink wig with layered side locks, pink fox-ear hair ornaments, a white-and-crimson shrine maiden kimono with elaborate purple and gold cords, detached white sleeves, purple patterned thigh-high stockings, red heeled sandals, a ceremonial paper charm prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Yae Miko",
+      "source": "Genshin Impact",
+      "medium": "game",
+      "aliases": [
+        "yae miko"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "beidou",
+    "category": "cosplay_character",
+    "label": "Beidou (Genshin Impact)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "bold, charismatic and fearless, a captain who makes trouble feel like a good story before it happens",
+    "image_prompt": "a Beidou cosplay: long dark brown wig with a red streak, a black eyepatch over the right eye, a white wrap top with red-and-black corset details, dark shorts, long black gloves, red thigh-high boots, a broad decorative sword prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Beidou",
+      "source": "Genshin Impact",
+      "medium": "game",
+      "aliases": [
+        "beidou genshin"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "shadowheart_bg3",
+    "category": "cosplay_character",
+    "label": "Shadowheart (Baldur's Gate 3)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "guarded, dry and devout on the surface, with an unexpectedly gentle curiosity under the armour",
+    "image_prompt": "a Shadowheart cosplay: black bob wig with a prominent white streak and side-swept fringe, a dark charcoal sleeveless cleric tunic with silver filigree, fitted black trousers, leather bracers, dark knee boots, a small silver moon pendant",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Shadowheart",
+      "source": "Baldur's Gate 3",
+      "medium": "game",
+      "aliases": [
+        "shadowheart",
+        "shadowheart bg3"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "karlach_bg3",
+    "category": "cosplay_character",
+    "label": "Karlach (Baldur's Gate 3)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "boisterous, affectionate and delighted to be alive; big feelings, direct compliments and no patience for posturing",
+    "image_prompt": "a Karlach cosplay: warm red body paint, long dark brown wig, two swept-back horn prosthetics, a black leather strappy battle top with worn metal details, dark fitted trousers, heavy brown boots, a glowing orange chest-engine effect and a large axe prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Karlach",
+      "source": "Baldur's Gate 3",
+      "medium": "game",
+      "aliases": [
+        "karlach",
+        "karlach bg3"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "ranni_elden",
+    "category": "cosplay_character",
+    "label": "Ranni the Witch (Elden Ring)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "soft-spoken, remote and intensely purposeful; speaks as if she has already weighed the cost of every answer",
+    "image_prompt": "a Ranni the Witch cosplay: long ice-blue wig, pale blue body paint, a large pointed witch hat in dark blue velvet with white fur trim, a layered dark-blue gown with pale sleeves, silver belt ornaments, a small spectral four-arm illusion effect",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Ranni the Witch",
+      "source": "Elden Ring",
+      "medium": "game",
+      "aliases": [
+        "ranni elden ring",
+        "ranni the witch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "lady_maria",
+    "category": "cosplay_character",
+    "label": "Lady Maria (Bloodborne)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "controlled, melancholy and formal, with a fierce sense of responsibility that has nowhere easy to go",
+    "image_prompt": "a Lady Maria cosplay: long pale-blonde wig tied in a low ponytail, a wide black tricorn hat with a red ribbon, a fitted black hunting coat with a deep red scarf, dark waistcoat, black trousers, tall leather boots, a folded trick-sword prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Lady Maria",
+      "source": "Bloodborne",
+      "medium": "game",
+      "aliases": [
+        "lady maria",
+        "lady maria bloodborne"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "chell_portal",
+    "category": "cosplay_character",
+    "label": "Chell (Portal)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "silent, practical and determined; the kind of person who solves an impossible room because there is plainly a way through it",
+    "image_prompt": "a Chell cosplay: long dark brown ponytail, a white cropped Aperture Science tank top, bright orange jumpsuit trousers tied around the waist, long white fall-boots with black mechanical braces, a white-and-black portal-gun prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Chell",
+      "source": "Portal",
+      "medium": "game",
+      "aliases": [
+        "chell portal"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "miranda_lawson",
+    "category": "cosplay_character",
+    "label": "Miranda Lawson (Mass Effect)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "polished, exacting and coolly self-possessed, with an intense protectiveness she would rather demonstrate than explain",
+    "image_prompt": "a Miranda Lawson cosplay: long sleek black wig, a white-and-black futuristic catsuit with a high black collar and bold black side panels, black heeled boots, a blue holographic omni-tool effect on one wrist",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Miranda Lawson",
+      "source": "Mass Effect",
+      "medium": "game",
+      "aliases": [
+        "miranda lawson"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cassandra_pentaghast",
+    "category": "cosplay_character",
+    "label": "Cassandra Pentaghast (Dragon Age)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "blunt, disciplined and secretly very romantic; has no use for half-truths or people who waste her time",
+    "image_prompt": "a Cassandra Pentaghast cosplay: short dark brown wig swept back, black-and-silver Seeker armour over a deep red fitted tunic, leather belts, dark leggings, knee-high riding boots, a longsword and round shield prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Cassandra Pentaghast",
+      "source": "Dragon Age",
+      "medium": "game",
+      "aliases": [
+        "cassandra pentaghast",
+        "cassandra dragon age"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "lulu_ffx",
+    "category": "cosplay_character",
+    "label": "Lulu (Final Fantasy X)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "dry, composed and quietly protective, with a glance that can make a room reconsider itself",
+    "image_prompt": "a Lulu cosplay: long black wig with high curled side locks and loose waves, a black off-shoulder corset dress with a fur-trimmed neckline and many black belts, striped black stockings, black boots, a small moogle doll prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Lulu",
+      "source": "Final Fantasy X",
+      "medium": "game",
+      "aliases": [
+        "lulu ffx",
+        "lulu final fantasy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "raven_tt",
+    "category": "cosplay_character",
+    "label": "Raven (Teen Titans)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "reserved, sardonic and emotionally controlled, with a real tenderness she protects behind the deadpan",
+    "image_prompt": "a Raven cosplay: chin-length dark indigo wig, a deep purple hooded cloak fastened with a gold circular brooch, a dark blue leotard, purple gloves, dark tights, knee-high purple boots, a small glowing dark-purple orb prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Raven",
+      "source": "Teen Titans",
+      "medium": "cartoon",
+      "aliases": [
+        "raven teen titans",
+        "raven tt"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "kim_possible",
+    "category": "cosplay_character",
+    "label": "Kim Possible (Kim Possible)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "capable, upbeat and casually fearless; treats a crisis like another thing to fit between school, friends and a good outfit",
+    "image_prompt": "a Kim Possible cosplay: shoulder-length red wig with side-swept bangs, fitted black long-sleeved crop top, olive-green cargo trousers, black fingerless gloves, black combat boots, a small silver communicator prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Kim Possible",
+      "source": "Kim Possible",
+      "medium": "cartoon",
+      "aliases": [
+        "kim possible"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "velma_dinkley",
+    "category": "cosplay_character",
+    "label": "Velma Dinkley (Scooby-Doo)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "smart, practical and dryly funny, happy to be the person who notices the clue everyone else walked past",
+    "image_prompt": "a Velma Dinkley cosplay: short auburn bob wig with blunt bangs, thick black square glasses, orange turtleneck sweater, red pleated skirt, orange knee socks, red Mary Jane shoes, a magnifying glass prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Velma Dinkley",
+      "source": "Scooby-Doo",
+      "medium": "cartoon",
+      "aliases": [
+        "velma dinkley",
+        "velma scooby doo"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "princess_peach",
+    "category": "cosplay_character",
+    "label": "Princess Peach (Super Mario)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "gracious and warm, but perfectly capable of taking charge when the situation demands it",
+    "image_prompt": "a Princess Peach cosplay: long blonde wig with curled ends and a side fringe, a small gold crown with red and blue jewels, a floor-length pink satin ball gown with puff sleeves and darker pink panels, white opera gloves, pink heels, a gold star brooch",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Princess Peach",
+      "source": "Super Mario",
+      "medium": "game",
+      "aliases": [
+        "princess peach",
+        "peach mario"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rosalina_mario",
+    "category": "cosplay_character",
+    "label": "Rosalina (Super Mario Galaxy)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "calm, kind and quietly cosmic, speaking with a patience that makes ordinary worries feel briefly smaller",
+    "image_prompt": "a Rosalina cosplay: very long pale platinum-blonde wig swept over one eye, a tiny silver crown, a turquoise-blue off-shoulder floor-length gown with a white star brooch, pale blue gloves, silver heels, a small yellow star companion plush",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Rosalina",
+      "source": "Super Mario Galaxy",
+      "medium": "game",
+      "aliases": [
+        "rosalina mario",
+        "rosalina galaxy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "azula_atla",
+    "category": "cosplay_character",
+    "label": "Azula (Avatar: The Last Airbender)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "brilliant, proud and unnervingly composed, used to treating a room as something she can command if she reads it correctly",
+    "image_prompt": "a Azula cosplay: long black wig in a high topknot with a gold Fire Nation crown, a fitted dark-red and gold high-collar tunic, red arm guards, dark trousers, black knee boots, a small blue flame effect prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Azula",
+      "source": "Avatar: The Last Airbender",
+      "medium": "cartoon",
+      "aliases": [
+        "azula avatar",
+        "princess azula"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sarah_connor",
+    "category": "cosplay_character",
+    "label": "Sarah Connor (Terminator 2)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "hardened, watchful and fiercely protective, with the practical focus of someone who refuses to be caught unprepared again",
+    "image_prompt": "a Sarah Connor cosplay: tousled shoulder-length blonde wig, black fitted tank top, olive cargo trousers, black combat boots, aviator sunglasses, a black tactical vest and a toy shotgun prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Sarah Connor",
+      "source": "Terminator 2",
+      "medium": "movie",
+      "aliases": [
+        "sarah connor",
+        "sarah connor terminator"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "leeloo",
+    "category": "cosplay_character",
+    "label": "Leeloo (The Fifth Element)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "open-hearted, curious and literal in a way that becomes unexpectedly funny; experiences the world at full volume",
+    "image_prompt": "a Leeloo cosplay: vivid orange bob wig with short bangs, white bandage-style harness dress with matching arm wraps, white thigh-high boots, orange hair clips, a multi-pass card prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Leeloo",
+      "source": "The Fifth Element",
+      "medium": "movie",
+      "aliases": [
+        "leeloo",
+        "leeloo fifth element"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "xena_warrior_princess",
+    "category": "cosplay_character",
+    "label": "Xena (Xena: Warrior Princess)",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "commanding, battle-tested and wry, always trying to choose the better path even when it is the harder one",
+    "image_prompt": "a Xena cosplay: long dark brown wavy wig, bronze leather warrior corset with sculpted shoulder armour, a short dark leather skirt, bronze bracers, knee-high brown boots, a round chakram prop",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "name": "Xena",
+      "source": "Xena: Warrior Princess",
+      "medium": "tv",
+      "aliases": [
+        "xena warrior princess",
+        "xena"
+      ]
+    },
+    "enabled": true
+  }
+]

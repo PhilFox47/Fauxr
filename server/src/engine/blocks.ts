@@ -2,7 +2,6 @@ import { find } from '../db/attributes.js';
 import { herPhotosSince, type StoredMessage } from '../repo.js';
 import type { Character, CharacterSeed, DateSession, Direction, Flags, Ledger, UserProfile } from '../types.js';
 import { describeSeed } from './generator.js';
-import { freshThreads, pruneThreads } from './state.js';
 import { chatPhotoLine } from './photolevel.js';
 import { detectAuditionFrame } from './voice.js';
 import { heroRoleRow, isPower, speciesRow, speciesVisibility, transRow } from './species.js';
@@ -12,6 +11,7 @@ import { closetBlock, outfitLines, type Outfit } from './wardrobe.js';
 import { layerLines, layerVoiceLines } from './layers.js';
 import { sideDetail } from './kinks.js';
 import { coreTraits, isCore } from './profilecard.js';
+import { blueprintBlock } from './blueprint.js';
 
 const label = (cat: string, id: string) => find(cat, id)?.label ?? id;
 const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || label(cat, id);
@@ -156,7 +156,7 @@ export function quirksBlock(seed: CharacterSeed): string {
 }
 
 /** How she looks. Nothing is hidden from her own prompt; what she shows him is her call. */
-export function appearanceBlock(seed: CharacterSeed): string {
+export function appearanceBlock(seed: CharacterSeed, includeCloset = true): string {
   const tattoos = seed.tattoos.map((t) => `${label('tattoo_motif', t.motif)} ${label('tattoo_position', t.position)}`);
   const piercings = seed.piercings.map((p) => `${label('piercing_type', p.type)} ${label('piercing_position', p.position)}`);
   return [
@@ -168,7 +168,7 @@ export function appearanceBlock(seed: CharacterSeed): string {
     piercings.length ? `Piercings: ${piercings.join('; ')}` : '',
     seed.accessories.length ? `Always on you: ${seed.accessories.map((a) => label('accessory', a)).join(', ')}` : '',
     seed.carries?.length ? `What you have on you, usually: ${seed.carries.map((c) => label('carried_item', c).toLowerCase()).join(', ')}` : '',
-    closetBlock(seed),
+    includeCloset ? closetBlock(seed) : '',
   ].filter(Boolean).join('\n');
 }
 
@@ -178,19 +178,23 @@ export function appearanceBlock(seed: CharacterSeed): string {
  * evenly and they all sounded like the same well-rounded person, above all about work.
  */
 export function coreBlock(character: Character): string {
-  const traits = coreTraits(character.seed, character.id);
+  // The full communication block already carries her texting persona and its usage budget.
+  // Repeating it as a core trait made rare surface voices (especially uwu speech) dominate
+  // the whole prompt and drown out the person underneath.
+  const traits = coreTraits(character.seed, character.id).filter((trait) => trait.category !== 'texting_persona');
   if (!traits.length) return '';
   const jobIsCore = traits.some((t) => t.category === 'occupation');
   const [lead, ...rest] = [traits.slice(0, 2), traits.slice(2)];
   return [
-    'These are the heart of you. They are what you bring up, what colours how you flirt and what he ' +
-      'will remember you by. Above all:',
+    'These are the heart of you. They colour your choices, attention and voice; they are not facts ' +
+      'you need to announce or repeatedly prove. Above all:',
     ...lead.map((t) => `- ${t.caption}: ${t.label} - ${t.hint}`),
     ...(rest[0].length ? ['And just as much you:', ...rest[0].map((t) => `- ${t.caption}: ${t.label} - ${t.hint}`)] : []),
-    'Rotate between them - one or two in a message, not all at once, and never the same one message ' +
-      'after message. Everything else about you below is true and there when it fits, but it is ' +
+    'Usually leave them implicit. When the immediate moment genuinely activates one, embody its ' +
+      'consequence rather than restating its label or biography. Everything else below is true and there when it fits, but it is ' +
       'flavour: it comes up when he asks or the moment calls for it, never as what you steer towards.' +
       (jobIsCore ? '' : ' Your job especially is a passing detail - a word here and there, not a topic.'),
+    blueprintBlock(character.seed),
   ].filter(Boolean).join('\n');
 }
 
@@ -305,8 +309,10 @@ export function languageBlock(seed: CharacterSeed): string {
 }
 
 /** The Actor gets a filtered ledger. Relevance beats completeness. */
-export function ledgerBlock(ledger: Ledger, now: number, opts: { full?: boolean } = {}): string {
-  const lines: string[] = [];
+export function ledgerBlock(ledger: Ledger, _now: number, opts: { full?: boolean } = {}): string {
+  const lines: string[] = [
+    'This is reference, not material to recite. Remember it silently. Mention an old detail only when the newest turn makes it newly useful; never repeat it merely to demonstrate continuity.',
+  ];
   // A memory phrased as a condition on him ("two orders and he earns the nickname") is left
   // out of every prompt: stored once, it was fed back on every turn and carried a whole chat's
   // audition into the date. The entry stays in the ledger; it just stops being read.
@@ -340,38 +346,36 @@ export function ledgerBlock(ledger: Ledger, now: number, opts: { full?: boolean 
     );
   }
 
-  // The Actor only sees threads she has not just been on about. Showing her the same one
-  // every turn is how a passing remark turns into a fixation.
-  const threads = (opts.full ? pruneThreads(ledger.open_threads ?? [], now) : freshThreads(ledger.open_threads ?? [], now))
-    .filter((t) => clean(t.text));
-  if (threads.length) {
+  const rituals = take(ledger.rituals ?? [], 6);
+  if (rituals.length) {
+    lines.push('Ways the two of you have naturally made your own:\n' + rituals.map((r) => `- ${r}`).join('\n'));
+  }
+
+  const callbacks = take(ledger.callbacks ?? [], 8);
+  if (callbacks.length) {
     lines.push(
-      'Still hanging in the air (mention at most one of these, and only if it fits):\n' +
-        threads
-          .map((t) => `- ${t.text}${opts.full ? ` (raised ${t.raised ?? 0}x, closes when: ${t.expires_when})` : ''}`)
-          .join('\n'),
+      'Small details that could become an inside callback:\n' + callbacks.map((c) => `- ${c}`).join('\n') +
+        '\nUse at most one only when it lands naturally. Most turns use none; never recite memory to prove you have it.',
     );
   }
 
-  if (opts.full) {
-    const notes = ledger.director_notes;
-    if (notes?.intent && clean(notes.intent)) lines.push(`Director intent (long game): ${notes.intent}`);
-    const plans = (notes?.plans ?? []).filter((p) => clean(p.text));
-    if (plans.length) {
-      lines.push('Director plans:\n' + plans.map((p) => `- ${p.text} (expires when: ${p.expires_when})`).join('\n'));
-    }
+  if (ledger.aftermath?.trim()) {
+    lines.push(`How the last intimate/date aftermath sits with you now:\n${ledger.aftermath.trim()}`);
   }
+
   return lines.join('\n\n');
 }
 
 /** What the arousal number feels like from the inside. The Actor never sees the number. */
-export function moodBlock(arousal: number, tell?: string, medium: 'text' | 'in_person' = 'text'): string {
+export function moodBlock(arousal: number, tell?: string, medium: 'text' | 'in_person' | 'call' = 'text'): string {
   const lines: string[] = [];
   if (arousal >= 70) {
     lines.push(
       medium === 'in_person'
         ? 'You want him, right now, and it shows - in how close you are, in how you look at him. You are not trying to hide it.'
-        : 'You are properly worked up right now and it is all over how you type. You are not trying to hide it.',
+        : medium === 'call'
+          ? 'You want him, right now, and it is audible in your voice, breath and choice of words. You are not trying to hide it.'
+          : 'You are properly worked up right now and it is all over how you type. You are not trying to hide it.',
     );
   } else if (arousal >= 45) {
     lines.push('You are turned on and thinking about it. It leaks into everything you say.');
@@ -434,7 +438,7 @@ export function continuityBlock(mood: Record<string, unknown>, outfit?: Outfit):
  * texting forbids narration and asterisks, a date is built out of narration and speech (see
  * actor_date.md), so each gets its own version of the craft notes.
  */
-export function spiceBlock(seed: CharacterSeed, arousal: number, medium: 'text' | 'in_person' = 'text'): string {
+export function spiceBlock(seed: CharacterSeed, arousal: number, medium: 'text' | 'in_person' | 'call' = 'text'): string {
   const forward = seed.sexual_confidence >= 4;
   const lines = [
     'This is an adult app and sex is what it is about. You are allowed - expected - to want him, to',
@@ -447,13 +451,19 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, medium: 'text' 
   if (medium === 'in_person') {
     lines.push(
       'In the room it stays in the same format as everything else here: narration of what she does,',
-      '"what she says" out loud, and a *private thought* if it wants one. Say the specific thing. Let',
-      'her body carry half of it. One beat at a time.',
+      'and "what she says" out loud. Put private thought in hidden.thoughts, not into the visible',
+      'prose. Say the specific thing. Let her body carry half of it. One beat at a time.',
+    );
+  } else if (medium === 'call') {
+    lines.push(
+      'On the call, keep everything audible: what you say, the change in your breath, a laugh or',
+      'a broken-off word. Say plainly what you are doing and what you want him to do. Do not turn',
+      'it into visual narration, write silent stage directions, or pretend you can see his response.',
     );
   } else {
     lines.push(
       'Sext the way people actually do on a phone: first person, short bursts, the specific thing',
-      'rather than a vague one, in your own typing style. Tease, stop short, make him ask. No',
+      'rather than a vague one, in your own typing style. Tease when it suits you or say it plainly. No',
       'asterisk actions, no narration, no third person - only what you would type.',
       'It is happening now, between two phones: what you are doing this minute, where your hands',
       'are, what you have on, what you want him to do right now. Not a list of what you will do to',
@@ -480,7 +490,7 @@ export function spiceBlock(seed: CharacterSeed, arousal: number, medium: 'text' 
 export function fantasiesBlock(
   seed: CharacterSeed,
   log: Record<string, { status: string; played?: number }> = {},
-  medium: 'text' | 'in_person' = 'text',
+  medium: 'text' | 'in_person' | 'call' = 'text',
 ): string {
   const items = fantasyList(seed);
   if (!items.length) return '';
@@ -493,12 +503,17 @@ export function fantasiesBlock(
   const how = medium === 'in_person'
     ? ['Fantasies you have. Tonight you are in the same place: one that needs a room and two bodies',
       'can happen now. Adapt them to what you learn about him; invent new ones too.']
-    : ['Fantasies you have. Pitch one - describe it, ask if he is in - and start it right here: in the',
-      'chat it is played out in texts, photos and voice notes, as it happens, not planned for later.',
-      'One that needs you both in the same room can wait for a date he sets up. Adapt them to what',
-      'you learn about him; invent new ones too.'];
+    : medium === 'call'
+      ? ['Fantasies you have. A fantasy that works through voices, instructions or mutual phone sex',
+        'can happen on this call. Adapt a physical fantasy into something they can actually do apart,',
+        'or leave it for a date; never pretend they share a room. Invent new ones too.']
+      : ['Fantasies you have. Pitch one - describe it, ask if he is in - and start it right here: in the',
+        'chat it is played out in texts, photos and voice notes, as it happens, not planned for later.',
+        'One that needs you both in the same room can wait for a date he sets up. Adapt them to what',
+        'you learn about him; invent new ones too.'];
   return [
     ...how,
+    'Your current kink map and hard limits are authoritative. If an old scenario contradicts them, leave that scenario unused rather than bending your preferences to fit it.',
     ...items.map((f, i) => `${i + 1}. ${f}${note(f)}`),
   ].join('\n');
 }
@@ -508,26 +523,21 @@ export function fantasyList(seed: CharacterSeed): string[] {
   return raw.split('\n').map((l) => l.replace(/^[-*\d.)\s]+/, '').trim()).filter(Boolean);
 }
 
-export function directionBlock(d: Direction | null, somethingLive = false): string {
+export function directionBlock(d: Direction | null, _somethingLive = false): string {
   if (!d) {
     return [
       'Mood: good - into this new match.',
-      'What you privately want (never say it out loud): nothing planned - be yourself and see where it goes.',
-      'Stance: warm, flirty, herself.',
-      'Length: short.',
+      'Private impulse: nothing planned - answer as yourself and see where it goes.',
     ].join('\n');
   }
+
+  // `goal` is the old saved shape. It remains readable for the one turn until it expires,
+  // but the screenplay fields that used to accompany it are deliberately ignored.
+  const impulse = d.impulse || String((d as unknown as { goal?: string }).goal ?? 'respond as yourself');
   return [
     `Mood: ${d.mood}`,
-    `Energy: ${d.energy}`,
-    // Spelled out as private, because a model handed a goal will otherwise announce it.
-    `What you privately want out of the next few messages (never say this out loud - it only shows in what you do): ${d.goal}`,
-    `Stance towards him: ${d.stance}`,
-    d.forbidden?.length ? `Not right now:\n${d.forbidden.map((f) => `- ${f}`).join('\n')}` : '',
-    // A direction lasts several turns, so its bring_up outlives the moment it was written for.
-    d.bring_up && !somethingLive ? `If it fits, and nothing else is hanging, bring up: ${d.bring_up}` : '',
-    somethingLive ? 'Something is still unfinished between you. Stay on it. Do not start a new subject this turn.' : '',
-    `Length: ${d.length}`,
+    `Private impulse: ${impulse}`,
+    'This is an inclination, not an assignment. Answer his newest message naturally; he does not owe you a particular response.',
   ].filter(Boolean).join('\n');
 }
 
@@ -568,7 +578,9 @@ export function recentPhotosFact(characterId: string, who: 'you' | 'she' = 'you'
  * them. Nothing is gated on this.
  */
 export function dateHistoryFact(dates: DateSession[]): string {
-  const ended = dates.filter((d) => d.status === 'ended').sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+  const ended = dates
+    .filter((d) => d.kind === 'date' && d.status === 'ended')
+    .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
   // Worded so it is not a gap to close: "never met up" read as the thing to fix next.
   if (ended.length === 0) return 'No dates so far; everything between you has happened in the chat.';
   const last = ended[0];
@@ -592,7 +604,7 @@ export function historyBlock(
     // Leftover cards from the short-lived "Play it out" button carry nothing she said, and the
     // "profile picture generated" line is his bookkeeping, not an event in their chat - with it
     // in her history she kept commenting on "the swap".
-    .filter((m) => m.meta?.type !== 'fantasy_pitch' && m.meta?.type !== 'photos_swapped')
+    .filter((m) => !m.meta?.failed && m.meta?.type !== 'fantasy_pitch' && m.meta?.type !== 'photos_swapped')
     .map((m) => {
       // On a duo profile a message can be her partner's (meta.from), and she has to see whose.
       const who = m.sender === 'user' ? him : m.sender === 'character' ? (m.meta?.from ? String(m.meta.from) : her) : 'system';

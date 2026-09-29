@@ -5,12 +5,24 @@ export interface ModelConfig {
   temperature: number;
   top_p: number;
   max_tokens: number;
+  /** NanoGPT reasoning depth. `none` prevents small creative tasks spending minutes thinking. */
+  reasoning_effort: ReasoningEffort;
   /**
    * Optional upstream routing hint (Nano-GPT's `provider` field on chat completions) -
    * pins an open-source model to one specific backend instead of letting it pick. Left
    * unset, the request omits the field entirely and the provider decides as usual.
    */
   provider?: string;
+}
+
+export type ReasoningEffort = 'none' | 'minimal' | 'low' | 'medium' | 'high' | 'xhigh' | 'max';
+
+export interface EvaluatorConfig {
+  enabled: boolean;
+  /** A System One decision model, not a chat-completion model. */
+  model: string;
+  /** Low-confidence judgments stay diagnostic and never block character creation. */
+  confidence_threshold: number;
 }
 
 export interface Settings {
@@ -28,6 +40,7 @@ export interface Settings {
   models: {
     actor: ModelConfig;
     director: ModelConfig;
+    evaluator: EvaluatorConfig;
     image: {
       model: string;
       size: string;
@@ -100,8 +113,9 @@ export const DEFAULT_SETTINGS: Settings = {
     // off by its own ceiling, at the cost of a slower/pricier worst case on a call that
     // genuinely fills the budget thinking. See complete()'s truncation handling below for
     // why the ceiling matters more than it looks like it should for a reasoning model.
-    actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 7200 },
-    director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 10400 },
+    actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 7200, reasoning_effort: 'none' },
+    director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 10400, reasoning_effort: 'low' },
+    evaluator: { enabled: true, model: 'typesafe/jev-latest', confidence_threshold: 0.65 },
     image: { model: 'seedream-v4', size: '1024x1024', prompt_style: 'seedream' },
   },
   activity: 0.6,
@@ -134,6 +148,115 @@ function deepMerge<T>(base: T, override: unknown): T {
   return out as T;
 }
 
+function stringValue(value: unknown, fallback: string, max = 500): string {
+  return typeof value === 'string' ? value.trim().slice(0, max) : fallback;
+}
+
+function numberValue(value: unknown, fallback: number, min: number, max: number): number {
+  const n = Number(value);
+  return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : fallback;
+}
+
+function integerValue(value: unknown, fallback: number, min: number, max: number): number {
+  return Math.round(numberValue(value, fallback, min, max));
+}
+
+function modelConfig(value: unknown, fallback: ModelConfig): ModelConfig {
+  const v = isPlainObject(value) ? value : {};
+  const provider = stringValue(v.provider, '', 120);
+  return {
+    model: stringValue(v.model, fallback.model, 200) || fallback.model,
+    temperature: numberValue(v.temperature, fallback.temperature, 0, 2),
+    top_p: numberValue(v.top_p, fallback.top_p, 0.1, 1),
+    max_tokens: integerValue(v.max_tokens, fallback.max_tokens, 128, 100_000),
+    reasoning_effort: ['none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max'].includes(String(v.reasoning_effort))
+      ? v.reasoning_effort as ReasoningEffort
+      : fallback.reasoning_effort,
+    ...(provider ? { provider } : {}),
+  };
+}
+
+/**
+ * Settings are persistent input, not trusted program state. Keep the stored document to the
+ * public shape and clamp every numeric field before any prompt, timer or provider request can
+ * consume it. This also repairs settings written by older clients on their next save.
+ */
+export function normalizeSettings(value: unknown): Settings {
+  const v = isPlainObject(value) ? value : {};
+  const api = isPlainObject(v.api) ? v.api : {};
+  const models = isPlainObject(v.models) ? v.models : {};
+  const image = isPlainObject(models.image) ? models.image : {};
+  const budget = isPlainObject(v.budget) ? v.budget : {};
+  const chat = isPlainObject(v.chat) ? v.chat : {};
+  const rawTaste = isPlainObject(v.taste) ? v.taste : {};
+  const taste: Record<string, number> = {};
+  for (const [key, raw] of Object.entries(rawTaste)) {
+    if (key.length > 160) continue;
+    const n = Number(raw);
+    if (!Number.isFinite(n)) continue;
+    taste[key] = key === 'lean/dom_sub'
+      ? Math.max(-1, Math.min(1, n))
+      : Math.max(0, Math.min(3, n));
+  }
+
+  const imageProvider = stringValue(image.provider, '', 120);
+  return {
+    api: {
+      base_url: stringValue(api.base_url, DEFAULT_SETTINGS.api.base_url, 500),
+      api_key: stringValue(api.api_key, DEFAULT_SETTINGS.api.api_key, 1000),
+      image_base_url: stringValue(api.image_base_url, DEFAULT_SETTINGS.api.image_base_url, 500),
+      image_api_key: stringValue(api.image_api_key, DEFAULT_SETTINGS.api.image_api_key, 1000),
+      structured_outputs: typeof api.structured_outputs === 'boolean'
+        ? api.structured_outputs
+        : DEFAULT_SETTINGS.api.structured_outputs,
+    },
+    models: {
+      actor: modelConfig(models.actor, DEFAULT_SETTINGS.models.actor),
+      director: modelConfig(models.director, DEFAULT_SETTINGS.models.director),
+      evaluator: {
+        enabled: isPlainObject(models.evaluator) && typeof models.evaluator.enabled === 'boolean'
+          ? models.evaluator.enabled
+          : DEFAULT_SETTINGS.models.evaluator.enabled,
+        model: stringValue(
+          isPlainObject(models.evaluator) ? models.evaluator.model : undefined,
+          DEFAULT_SETTINGS.models.evaluator.model,
+          200,
+        ) || DEFAULT_SETTINGS.models.evaluator.model,
+        confidence_threshold: numberValue(
+          isPlainObject(models.evaluator) ? models.evaluator.confidence_threshold : undefined,
+          DEFAULT_SETTINGS.models.evaluator.confidence_threshold,
+          0,
+          1,
+        ),
+      },
+      image: {
+        model: stringValue(image.model, DEFAULT_SETTINGS.models.image.model, 200) || DEFAULT_SETTINGS.models.image.model,
+        size: stringValue(image.size, DEFAULT_SETTINGS.models.image.size, 80) || DEFAULT_SETTINGS.models.image.size,
+        prompt_style: image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream',
+        ...(imageProvider ? { provider: imageProvider } : {}),
+      },
+    },
+    activity: numberValue(v.activity, DEFAULT_SETTINGS.activity, 0.1, 3),
+    budget: {
+      max_calls_per_day: integerValue(budget.max_calls_per_day, DEFAULT_SETTINGS.budget.max_calls_per_day, 0, 100_000),
+      max_cost_per_day: numberValue(budget.max_cost_per_day, DEFAULT_SETTINGS.budget.max_cost_per_day, 0, 1_000_000),
+    },
+    chat: {
+      context_messages: integerValue(chat.context_messages, DEFAULT_SETTINGS.chat.context_messages, 1, 500),
+      max_messages_per_turn: integerValue(chat.max_messages_per_turn, DEFAULT_SETTINGS.chat.max_messages_per_turn, 1, 10),
+      max_delay_seconds: numberValue(chat.max_delay_seconds, DEFAULT_SETTINGS.chat.max_delay_seconds, 0, 120),
+    },
+    images_enabled: typeof v.images_enabled === 'boolean' ? v.images_enabled : DEFAULT_SETTINGS.images_enabled,
+    voice_enabled: typeof v.voice_enabled === 'boolean' ? v.voice_enabled : DEFAULT_SETTINGS.voice_enabled,
+    spice: numberValue(v.spice, DEFAULT_SETTINGS.spice, 0.3, 2),
+    rarity_bias: numberValue(v.rarity_bias, DEFAULT_SETTINGS.rarity_bias, 0.3, 2.5),
+    unprompted_messages: typeof v.unprompted_messages === 'boolean'
+      ? v.unprompted_messages
+      : DEFAULT_SETTINGS.unprompted_messages,
+    taste,
+  };
+}
+
 let cached: Settings | null = null;
 
 /**
@@ -163,14 +286,23 @@ export function getSettings(): Settings {
   const row = db.prepare("SELECT value FROM settings WHERE key = 'settings'").get() as
     | { value: string }
     | undefined;
-  cached = row
-    ? applyEnvFallbacks(deepMerge(DEFAULT_SETTINGS, JSON.parse(row.value)))
-    : DEFAULT_SETTINGS;
+  if (!row) {
+    cached = DEFAULT_SETTINGS;
+    return cached;
+  }
+  try {
+    cached = applyEnvFallbacks(normalizeSettings(deepMerge(DEFAULT_SETTINGS, JSON.parse(row.value))));
+  } catch {
+    // A manually edited or interrupted row must not make every request fail. Keep it in place
+    // for diagnosis; the next successful save replaces it with a normalized document.
+    console.warn('[config] saved settings were not valid JSON; using defaults');
+    cached = DEFAULT_SETTINGS;
+  }
   return cached;
 }
 
 export function saveSettings(patch: unknown): Settings {
-  const next = deepMerge(getSettings(), patch);
+  const next = normalizeSettings(deepMerge(getSettings(), patch));
   db.prepare(
     "INSERT INTO settings (key, value) VALUES ('settings', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
   ).run(JSON.stringify(next));

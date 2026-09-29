@@ -18,8 +18,8 @@ export default function Avatar({
   match: AvatarSubject | null;
   small?: boolean;
   /**
-   * She is out with him right now. A separate prop rather than a field read off `match`
-   * because not every screen that renders an Avatar has fetched date state for it.
+   * She is in a live roleplay with him right now. A separate prop rather than a field read
+   * off `match` because not every screen that renders an Avatar has fetched session state.
    */
   onDate?: boolean;
 }) {
@@ -33,7 +33,7 @@ export default function Avatar({
         (match?.display_name ?? '?').slice(0, 1).toUpperCase()
       )}
       {onDate && (
-        <span className="dot-date" title="On a date right now">
+        <span className="dot-date" title="In a live session">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 19.5S4.5 15 4.5 9.8A3.8 3.8 0 0 1 12 8.2a3.8 3.8 0 0 1 7.5 1.6C19.5 15 12 19.5 12 19.5Z" />
           </svg>

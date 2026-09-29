@@ -1,18 +1,21 @@
 import { randomUUID } from 'node:crypto';
 import { unlinkSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 import type { FastifyInstance } from 'fastify';
-import { DATA_DIR, db, nowIso } from '../db/index.js';
-import { allCategories, byCategory, find, invalidateAttributeCache } from '../db/attributes.js';
-import { authEnabled, checkPassword, logIn, logOut } from '../auth.js';
+import { DATA_DIR, nowIso } from '../db/index.js';
+import {
+  allCategories, byCategory, deleteEditableAttribute, editableAttributes, editableCategories, find,
+  invalidateAttributeCache, replaceEditableCategory, saveEditableAttribute,
+} from '../db/attributes.js';
+import { authEnabled, checkPassword, isSecureRequest, logIn, logOut } from '../auth.js';
 import { getSettings, saveSettings } from '../config.js';
 import { usageToday } from '../llm/client.js';
 import { logger } from '../log.js';
 import { exportLogs } from '../logexport.js';
 import {
-  activeDate, addMessage, characterIdsOnDate, dateMessages, deleteCharacter, deleteLocation, getCharacter, getCircle, getDate,
+  activeDate, activeSessionKinds, addMessage, characterIdsOnDate, dateMessages, deleteCharacter, deleteLocation, getCharacter, getCircle, getDate,
   getLocation, getRelationship, getUserProfile, getWakeup, lastMessage, listLocations,
-  markCharacterMessagesRead, queryLogs, recentMessages, saveLocation, saveRelationship,
+  markCharacterMessagesRead, profilePicturePath, queryLogs, recentMessages, saveLocation, saveRelationship,
   saveUserProfile, unreadCount,
 } from '../repo.js';
 import { bus } from '../events.js';
@@ -30,6 +33,7 @@ import { profileView } from '../engine/discovery.js';
 import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
 import {
   dateHistory, deleteDateMessage, dismissNpc, endDate, handleUserDateMessage, regenerateLastDateBeat, showCurrentScene, startDate,
+  startCall,
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
 import { domainSides, TASTE_SECTIONS } from '../engine/kinks.js';
@@ -37,6 +41,7 @@ import { coreTraits } from '../engine/profilecard.js';
 import { statusOf } from '../engine/status.js';
 import { gameClockMs } from '../engine/clock.js';
 import type { Character, KinkSide, KinkStance, Location } from '../types.js';
+import { setSteering } from '../engine/roleplay.js';
 
 /**
  * The backdrop is cache-busted on updated_at: regenerating writes a new file, but an edit
@@ -50,11 +55,41 @@ function publicLocation(l: Location) {
   };
 }
 
+const IMAGE_EXTENSIONS: Record<string, string> = {
+  'image/jpeg': '.jpg',
+  'image/png': '.png',
+  'image/webp': '.webp',
+  'image/gif': '.gif',
+};
+
+function matchesImageSignature(buffer: Buffer, mimeType: string): boolean {
+  if (mimeType === 'image/jpeg') return buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+  if (mimeType === 'image/png') return buffer.length >= 8 && buffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+  if (mimeType === 'image/gif') return buffer.length >= 6 && ['GIF87a', 'GIF89a'].includes(buffer.subarray(0, 6).toString('ascii'));
+  if (mimeType === 'image/webp') {
+    return buffer.length >= 12 && buffer.subarray(0, 4).toString('ascii') === 'RIFF' && buffer.subarray(8, 12).toString('ascii') === 'WEBP';
+  }
+  return false;
+}
+
+async function readUploadedImage(
+  file: any,
+  owner: 'profile' | 'chat',
+): Promise<{ buffer: Buffer; relPath: string; mimeType: string }> {
+  const mimeType = String(file?.mimetype ?? '').toLowerCase();
+  const extension = IMAGE_EXTENSIONS[mimeType];
+  if (!extension) throw new Error('upload must be a JPEG, PNG, WebP or GIF image');
+  const buffer = await file.toBuffer();
+  if (!buffer.length) throw new Error('uploaded image is empty');
+  if (!matchesImageSignature(buffer, mimeType)) throw new Error(`uploaded bytes do not match ${mimeType}`);
+  // Never preserve a user-supplied extension. Static media is same-origin; allowing `.html`
+  // or `.svg` here would turn an upload endpoint into a script-hosting endpoint.
+  return { buffer, relPath: posix.join('uploads', owner, `${randomUUID()}${extension}`), mimeType };
+}
+
 function publicCharacter(c: Character) {
   const rel = getRelationship(c.id);
-  const picture = db
-    .prepare("SELECT path FROM images WHERE character_id = ? AND kind = 'profile' AND status = 'done' ORDER BY rowid ASC LIMIT 1")
-    .get(c.id) as { path: string } | undefined;
+  const picture = profilePicturePath(c.id);
   return {
     id: c.id,
     username: c.username,
@@ -64,7 +99,7 @@ function publicCharacter(c: Character) {
     matched_at: c.matched_at,
     // Stands in for her photo until it has been generated.
     avatar_emoji: avatarEmojiFor(c),
-    profile_picture: picture ? `/media/${picture.path}` : null,
+    profile_picture: picture ? `/media/${picture}` : null,
     photos_exchanged: hasSwapped(rel),
     // 'failed' brings the camera button back as a retry (see profilePictureState).
     profile_picture_state: profilePictureState(c.id),
@@ -79,17 +114,37 @@ function publicCharacter(c: Character) {
 
 export async function registerApi(app: FastifyInstance): Promise<void> {
   // ------------------------------------------------------------- auth
+  const loginFailures = new Map<string, { count: number; resetAt: number }>();
   app.post<{ Body: { password?: string; remember?: boolean } }>('/api/login', async (req, reply) => {
     if (!authEnabled()) return { ok: true };
+    const key = req.ip;
+    const now = Date.now();
+    if (loginFailures.size > 1000) {
+      for (const [ip, entry] of loginFailures) {
+        if (entry.resetAt <= now) loginFailures.delete(ip);
+      }
+      while (loginFailures.size > 1000) loginFailures.delete(loginFailures.keys().next().value!);
+    }
+    const attempts = loginFailures.get(key);
+    if (attempts && attempts.resetAt > now && attempts.count >= 10) {
+      return reply
+        .code(429)
+        .header('retry-after', String(Math.ceil((attempts.resetAt - now) / 1000)))
+        .send({ error: 'too many login attempts - try again shortly' });
+    }
     if (!checkPassword(String(req.body?.password ?? ''))) {
+      const current = attempts && attempts.resetAt > now ? attempts : { count: 0, resetAt: now + 5 * 60_000 };
+      current.count++;
+      loginFailures.set(key, current);
       return reply.code(401).send({ error: 'incorrect password' });
     }
-    logIn(reply, !!req.body?.remember);
+    loginFailures.delete(key);
+    logIn(reply, !!req.body?.remember, isSecureRequest(req));
     return { ok: true };
   });
 
-  app.post('/api/logout', async (_req, reply) => {
-    logOut(reply);
+  app.post('/api/logout', async (req, reply) => {
+    logOut(reply, isSecureRequest(req));
     return { ok: true };
   });
 
@@ -198,6 +253,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     // One query for the whole list rather than an activeDate() lookup per row - the same
     // set the scheduler already uses to skip texting characters who are mid-date.
     const onDate = characterIdsOnDate();
+    const liveKinds = activeSessionKinds();
     // visibleMatches() itself is ordered by matched_at - the right order for a fresh cast,
     // wrong for a chat list. Re-sorted here by last_activity (a real message if there is
     // one, else when they matched) so whoever most recently said something floats to the
@@ -213,6 +269,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
             : null,
           last_activity: last?.sent_at ?? c.matched_at,
           on_date: onDate.has(c.id),
+          active_session_kind: liveKinds.get(c.id) ?? null,
         };
       })
       .sort((a, b) => Date.parse(b.last_activity ?? '') - Date.parse(a.last_activity ?? ''));
@@ -379,9 +436,13 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   app.post<{ Params: { id: string } }>('/api/chats/:id/image', async (req, reply) => {
     const file = await (req as any).file?.();
     if (!file) return reply.code(400).send({ error: 'no file uploaded' });
-    const buffer = await file.toBuffer();
-    const name = `${randomUUID()}-${file.filename.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-    const relPath = join('uploads', name);
+    let upload;
+    try {
+      upload = await readUploadedImage(file, 'chat');
+    } catch (err) {
+      return reply.code(415).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+    const { buffer, relPath, mimeType } = upload;
     writeFileSync(join(DATA_DIR, relPath), buffer);
 
     let stored;
@@ -394,12 +455,13 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         deferTurn: true,
       });
     } catch (err) {
+      try { unlinkSync(join(DATA_DIR, relPath)); } catch { /* already gone */ }
       return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
     }
 
     // She looks at it first, then replies - so her answer is about what is actually in it.
     const characterId = req.params.id;
-    void evaluateUserImage(characterId, stored.id, buffer.toString('base64'), file.mimetype)
+    void evaluateUserImage(characterId, stored.id, buffer.toString('base64'), mimeType)
       .catch((err) => logger.error('director', 'image evaluation failed', { error: String(err) }))
       .finally(() => {
         void takeTurn(characterId, { trigger: 'user_message' }).catch((err) =>
@@ -425,6 +487,15 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     }));
   });
 
+  /** Private tone guidance for the next Actor reply. It is never inserted into the transcript. */
+  app.post<{ Params: { id: string }; Body: { direction?: string } }>('/api/chats/:id/steer', async (req, reply) => {
+    try {
+      return setSteering(req.params.id, 'chat', String(req.body?.direction ?? ''));
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
+
   // ------------------------------------------------------------- locations
   /**
    * The places he can take someone. Written by hand in Settings; the backdrop is the only
@@ -432,7 +503,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
    */
   app.get('/api/locations', async () => listLocations().map(publicLocation));
 
-  app.post<{ Body: { id?: string; name?: string; description?: string } }>(
+  app.post<{ Body: { id?: string; name?: string; description?: string; affordances?: Location['affordances'] } }>(
     '/api/locations',
     async (req, reply) => {
       const name = String(req.body?.name ?? '').trim();
@@ -441,6 +512,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         id: String(req.body?.id ?? '').trim() || randomUUID(),
         name: name.slice(0, 80),
         description: String(req.body?.description ?? '').trim().slice(0, 2000),
+        affordances: req.body?.affordances,
       });
       return publicLocation(saved);
     },
@@ -552,6 +624,24 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     },
   );
 
+  app.post<{ Params: { id: string } }>('/api/chats/:id/calls', async (req, reply) => {
+    try {
+      return await startCall(req.params.id);
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
+
+  app.post<{ Params: { dateId: string }; Body: { direction?: string } }>('/api/dates/:dateId/steer', async (req, reply) => {
+    const date = getDate(req.params.dateId);
+    if (!date || date.status !== 'active') return reply.code(404).send({ error: 'active date not found' });
+    try {
+      return setSteering(date.character_id, 'date', String(req.body?.direction ?? ''));
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
+
   /** Reroll her most recent beat - the date-room equivalent of /api/chats/:id/regenerate. */
   app.post<{ Params: { dateId: string }; Body: { message_id?: number } }>(
     '/api/dates/:dateId/regenerate',
@@ -615,7 +705,8 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   app.post<{ Params: { id: string } }>('/api/chats/:id/your-move', async (req, reply) => {
     const character = getCharacter(req.params.id);
     if (!character || character.state !== 'matched') return reply.code(404).send({ error: 'not found' });
-    if (activeDate(character.id)) return reply.code(409).send({ error: 'she is out with you right now' });
+    const live = activeDate(character.id);
+    if (live) return reply.code(409).send({ error: `she is on a ${live.kind} with you right now` });
     if (isRunning(character.id)) return reply.code(409).send({ error: 'she is already typing' });
     void takeTurn(character.id, {
       trigger: 'initiative',
@@ -730,7 +821,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     options: Object.fromEntries(
       [...new Set(CARD_SECTIONS.flatMap((s) => s.fields.map((f) => f.category)))].map((cat) => [
         cat,
-        byCategory(cat).map((a) => ({ id: a.id, label: a.label })),
+        byCategory(cat)
+          .filter((a) => !a.extra?.character_only)
+          .map((a) => ({ id: a.id, label: a.label })),
       ]),
     ),
   }));
@@ -763,6 +856,70 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     invalidateAttributeCache();
     return { ok: true };
   });
+
+  app.get('/api/attribute-library', async () => editableCategories());
+
+  app.get<{ Params: { category: string } }>('/api/attribute-library/:category', async (req) => ({
+    category: req.params.category,
+    entries: editableAttributes(req.params.category),
+  }));
+
+  app.put<{ Params: { category: string; id: string }; Body: unknown }>(
+    '/api/attribute-library/:category/:id',
+    async (req, reply) => {
+      try {
+        const value = { ...(req.body as Record<string, unknown>), category: req.params.category };
+        return saveEditableAttribute(value, req.params.id);
+      } catch (err) {
+        return reply.code(400).send({ error: err instanceof Error ? err.message : String(err) });
+      }
+    },
+  );
+
+  app.post<{ Params: { category: string }; Body: unknown }>('/api/attribute-library/:category', async (req, reply) => {
+    try {
+      const value = { ...(req.body as Record<string, unknown>), category: req.params.category };
+      const id = String((value as Record<string, unknown>).id ?? '').trim();
+      if (editableAttributes(req.params.category).some((row) => row.id === id)) {
+        return reply.code(409).send({ error: 'an attribute with this id already exists' });
+      }
+      return reply.code(201).send(saveEditableAttribute(value));
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : String(err) });
+    }
+  });
+
+  app.delete<{ Params: { category: string; id: string } }>(
+    '/api/attribute-library/:category/:id',
+    async (req, reply) => deleteEditableAttribute(req.params.category, req.params.id)
+      ? { ok: true }
+      : reply.code(404).send({ error: 'attribute not found' }),
+  );
+
+  app.get<{ Params: { category: string } }>('/api/attribute-library/:category/export', async (req, reply) => {
+    const category = req.params.category;
+    const payload = {
+      format: 'fauxr-attributes', version: 1, category,
+      attributes: editableAttributes(category).map(({ origin: _origin, user_modified: _modified, ...attribute }) => attribute),
+    };
+    reply.header('content-disposition', `attachment; filename="fauxr-${category}.json"`);
+    return payload;
+  });
+
+  app.post<{ Params: { category: string }; Body: { format?: string; category?: string; attributes?: unknown[] } }>(
+    '/api/attribute-library/:category/import',
+    async (req, reply) => {
+      try {
+        if (req.body?.format !== 'fauxr-attributes' || req.body?.category !== req.params.category) {
+          throw new Error('this file is not a Fauxr export for the selected category');
+        }
+        const count = replaceEditableCategory(req.params.category, req.body.attributes ?? []);
+        return { ok: true, count };
+      } catch (err) {
+        return reply.code(400).send({ error: err instanceof Error ? err.message : String(err) });
+      }
+    },
+  );
 
   /** Test roll: ten raw seeds, no LLM calls, so weights can be eyeballed. */
   app.get('/api/attributes/testroll', async () => {
@@ -815,9 +972,13 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   app.post('/api/uploads', async (req, reply) => {
     const file = await (req as any).file?.();
     if (!file) return reply.code(400).send({ error: 'no file uploaded' });
-    const buffer = await file.toBuffer();
-    const name = `${randomUUID()}-${file.filename.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-    const relPath = join('uploads', name);
+    let upload;
+    try {
+      upload = await readUploadedImage(file, 'profile');
+    } catch (err) {
+      return reply.code(415).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+    const { buffer, relPath } = upload;
     writeFileSync(join(DATA_DIR, relPath), buffer);
     return { path: relPath, url: `/media/${relPath}` };
   });

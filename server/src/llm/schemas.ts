@@ -42,20 +42,25 @@ const outfitPicks = obj({
 });
 /** What changed on her this turn; never the whole outfit. */
 const outfitChanges = arr(obj({ slot: str, state: nstr, item: nstr }));
+const roleplayScene = obj({
+  position: str,
+  proximity: str,
+  contact: str,
+  sensory: str,
+  interruption: str,
+  unfinished: str,
+});
 
 export const ACTOR_CHAT = spec('her_reply', obj({
   messages: arr(obj({ text: str, from: nstr })),
   hidden: obj({
     thoughts: str,
-    unresolved: nstr,
     mood: str,
     location: str,
     outfit_changes: outfitChanges,
     activity: str,
-    goal_fulfilled: bool,
-    new_fact: nstr,
-    open_thread: nstr,
-    director_needed: bool,
+    scene: roleplayScene,
+    callback_used: nstr,
     photo_offer: nstr,
     photo_situation: nstr,
     photo_aspect: nstr,
@@ -70,12 +75,17 @@ export const ACTOR_CHAT = spec('her_reply', obj({
 
 export const VOICE_NOTE = spec('voice_note', obj({
   message: obj({ text: str, duration_seconds: int }),
-  hidden: obj({ thoughts: str, mood: str, goal_fulfilled: bool, new_fact: nstr, open_thread: nstr, director_needed: bool }),
+  hidden: obj({ thoughts: str, mood: str }),
 }));
 
 export const DATE_BEAT = spec('date_beat', obj({
   text: str,
-  hidden: obj({ thoughts: str, mood: str, wants: str, in_the_act: bool, joined: arr(npc), left: arr(str), outfit_changes: outfitChanges }),
+  hidden: obj({ thoughts: str, mood: str, wants: str, scene: roleplayScene, callback_used: nstr, in_the_act: bool, joined: arr(npc), left: arr(str), outfit_changes: outfitChanges }),
+}));
+
+export const CALL_BEAT = spec('call_beat', obj({
+  text: str,
+  hidden: obj({ thoughts: str, mood: str, wants: str, callback_used: nstr, in_the_act: bool }),
 }));
 
 const ledger = obj({
@@ -85,9 +95,9 @@ const ledger = obj({
   what_landed: arr(str),
   pinned_add: arr(str),
   pinned_remove: arr(str),
-  open_threads_add: arr(thread),
-  open_threads_close: arr(str),
-  director_notes: nullable(obj({ intent: str, plans: arr(thread) })),
+  rituals_add: arr(str),
+  callbacks_add: arr(str),
+  aftermath: nstr,
 });
 
 export const DIRECTOR = spec('direction', obj({
@@ -99,39 +109,35 @@ export const DIRECTOR = spec('direction', obj({
     fantasies_played: arr(int),
     ledger,
   }),
-  direction: obj({
-    valid_for: int,
-    expires_on: arr(str),
-    mood: str,
-    energy: str,
-    goal: str,
-    stance: str,
-    forbidden: arr(str),
-    bring_up: nstr,
-    length: str,
-  }),
+    direction: obj({
+      valid_for: int,
+      expires_on: arr(str),
+      mood: str,
+      impulse: str,
+    }),
   wakeup: nullable(obj({ in_minutes: int, reason: str, cancel_if_user_writes: bool })),
 }));
 
 export const DATE_SUMMARY = spec('date_summary', obj({
   summary: str,
+  duration_minutes: int,
   highlights: arr(str),
   update: obj({
     arousal_delta: num,
     reason: str,
     discovered: arr(str),
     fantasies_played: arr(int),
-    ledger: obj({ facts_about_user: arr(str), pinned_add: arr(str), open_threads_add: arr(thread) }),
+    ledger: obj({ facts_about_user: arr(str), pinned_add: arr(str), rituals_add: arr(str), callbacks_add: arr(str), aftermath: nstr }),
   }),
 }));
 
 export const CHARACTER = spec('character', obj({
-  swaps: arr(obj({ field: str, to: str, why: str })),
   dossier: str,
   real_name: str,
+  username: str,
+  bio: str,
   avatar_emoji: str,
   one_line: str,
-  fantasies: arr(str),
   director_intent: str,
   opening_plan: nullable(thread),
   duo_partner: nullable(obj({ name: str, manner: str, up_for: str })),
@@ -155,4 +161,24 @@ export const STATUS_WITH_THREAD = spec('status', obj({
 export const PHOTO_IDEA = spec('photo_idea', obj({ situation: str, aspect: { type: 'string', enum: ['square', 'portrait', 'landscape'] } }));
 export const IMAGE_REVIEW = spec('image_review', obj({ description: str, arousal_delta: num, ledger_fact: nstr, reaction_hint: str }));
 export const BACKDROP_PROMPT = spec('backdrop_prompt', obj({ prompt: str }));
-export const LOCATION = spec('location', obj({ name: str, description: str }));
+export const LOCATION = spec('location', obj({
+  name: str,
+  description: str,
+  affordances: obj({
+    sensory: arr(str), private_spaces: arr(str), background_people: arr(str), social_openings: arr(str),
+    interruptions: arr(str), transitions: arr(str), constraints: arr(str),
+  }),
+}));
+
+export const CALL_SUMMARY = spec('call_summary', obj({
+  summary: str,
+  duration_minutes: int,
+  highlights: arr(str),
+  update: obj({
+    arousal_delta: num,
+    reason: str,
+    discovered: arr(str),
+    fantasies_played: arr(int),
+    ledger: obj({ facts_about_user: arr(str), pinned_add: arr(str), rituals_add: arr(str), callbacks_add: arr(str), aftermath: nstr }),
+  }),
+}));

@@ -63,6 +63,8 @@ photos of the same woman should not either.
 # WHAT THE IMAGE SHOULD BE
 Kind: {{image_kind}}
 Situation: {{situation}}
+
+The situation's place, time of day, established light, physical positions and current clothing are continuity anchors. Preserve their ordinary meaning exactly. A walk-in cold room remains a commercial cold room, a café remains that café, and night never becomes daylight. Add texture only in gaps the situation leaves open; never substitute a prettier or more familiar location.
 {{#photo_scene}}
 Where her photos usually happen: {{photo_scene}}. Draw on it when the situation puts her
 somewhere of her own and leaves the place open; the situation always wins.
@@ -237,7 +239,7 @@ polish or beauty-filter smoothing, and none of the handheld phone-grain look eit
 This is **what he is looking at right now**, in the middle of their date - through his own
 eyes, from exactly where he is in the scene. First person: the camera is his head. His own
 hands, arms, knees or chest can sit at the near edge of the frame when the moment puts them
-there (reaching for her, her on his lap); his face never appears. It is not a photo either of
+there (reaching for her, her on his lap); his face, mouth, eyes and head never appear or get described. It is not a photo either of
 them took and not a posed portrait.
 
 The point of this picture is the situation, not her outfit: where they are in the place, what
@@ -272,6 +274,21 @@ the framing as part of the picture. Do not write the word for what is being kept
 anywhere in this prompt, positive or negative - naming it, even to say "no", tends to make the
 model refuse the request outright. The fix is what the shot is of and how it is framed.
 {{/is_spicy}}
+{{#render_anime}}
+
+# LITERAL 2D ANIME RENDER MODE
+
+This character is literally a two-dimensional adult anime woman, not a human wearing an
+anime costume. This instruction overrides every generic reference above to a photograph,
+live-action skin, pores, camera sensor texture or photographic depth of field. Translate the
+same situation and framing into a polished hand-drawn anime frame: clean expressive line art,
+controlled cel shading, an illustrated background and deliberately animated facial and body
+language. Keep her exact adult age, body, clothes, continuity and individual facial design;
+anime does not mean childlike proportions or a generic schoolgirl. A phone selfie still has
+the composition and intimacy of a phone selfie inside her world, but the resulting image is
+2D anime artwork. State the 2D anime medium explicitly in the prompt and never introduce
+photorealism, live action, cosplay photography or 3D CGI.
+{{/render_anime}}
 
 # NEGATIVE PROMPT
 {{#mode_seedream}}

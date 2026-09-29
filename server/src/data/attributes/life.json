@@ -9668,7 +9668,7 @@
     "category": "texting_persona",
     "label": "uwu speech",
     "weight": 0.35,
-    "prompt_hint": "leans into uwu/kawaii internet speak when comfortable: swaps r and l for w ('wight', 'suwe'), tacks on uwu/owo, reaches for kaomoji (>w<, (´｡• ᴗ •｡`), baby-talk endearments. A real, specific register, not a vague 'cutesy' - commit to the actual spelling.",
+    "prompt_hint": "uses uwu/kawaii internet speak as a readable accent when comfortable: an occasional r/l-to-w spelling, uwu/owo, kaomoji (>w<, (´｡• ᴗ •｡`), or baby-talk endearment. Keep most words ordinary and use only one or two of these touches per message, so her meaning and personality stay clear.",
     "image_prompt": null,
     "affinities": [
       "anime",

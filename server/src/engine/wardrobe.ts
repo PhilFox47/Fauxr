@@ -17,9 +17,9 @@ import { newContext, pickOne, randInt, rollMany, type DiceContext } from './dice
  * nobody bothered to repeat - socks, above all - quietly stopped existing, and a bra could come
  * back after it had come off. Every slot of the outfit is now always stated, even as "none".
  *
- * Items hang off style families (wardrobe_family), not individual styles, so a new piece needs
- * a slot and a family and a new clothing style needs only its families (see wardrobe.json and
- * the checks in validate-attributes.mjs).
+ * Items hang off broad style families and may also name the exact styles they originated for.
+ * Families let related looks share useful pieces; exact style tags keep ninety different
+ * aesthetics from collapsing into thirteen identical closets.
  */
 
 export const OWNED_SLOTS = ['top', 'bottom', 'dress', 'outer', 'legwear', 'shoes', 'extras', 'jewellery', 'bra', 'panties', 'lingerie', 'swim', 'work'] as const;
@@ -41,6 +41,34 @@ export interface Outfit {
   pieces: WornPiece[];
 }
 export type Wardrobe = Partial<Record<OwnedSlot, string[]>>;
+
+/** Legacy "Always on her" rows that are really things she can choose from her jewellery box. */
+export const WARDROBE_ACCESSORY_IDS = new Set([
+  'septum_ring_jewelry', 'septum_hidden', 'nose_ring_delicate', 'small_gold_hoops',
+]);
+
+/** Special body jewellery is injected rarely, never mixed into every ordinary jewellery roll. */
+export const BODY_JEWELLERY_IDS = new Set([
+  'septum_ring_jewelry', 'septum_hidden', 'nose_ring_delicate', 'cartilage_hoop_jewellery',
+  'eyebrow_bar_jewellery', 'lip_ring_jewellery', 'tongue_bar_jewellery',
+  'navel_bar_jewellery', 'nipple_bar_jewellery', 'clavicle_dermal_jewellery',
+]);
+
+/** Apply data-defined species/era/hero wardrobe leans before clothing style is rolled. */
+export function applyWardrobeLeans(ctx: DiceContext, sources: Record<string, string | undefined>): void {
+  for (const lean of byCategory('wardrobe_lean')) {
+    if (sources[String(lean.extra?.source_category)] !== lean.extra?.source_id) continue;
+    for (const [id, value] of Object.entries((lean.extra?.weights ?? {}) as Record<string, number>)) {
+      const n = Number(value);
+      if (Number.isFinite(n) && n > 0) ctx.weights[id] = (ctx.weights[id] ?? 1) * n;
+    }
+  }
+}
+
+function speciesAdaptations(species: string): Set<string> {
+  const lean = byCategory('wardrobe_lean').find((r) => r.extra?.source_category === 'species' && r.extra?.source_id === species);
+  return new Set((lean?.extra?.adaptations as string[] | undefined) ?? []);
+}
 
 /** A one-piece covers other slots: a dress is top and bottom, a teddy is bra and panties. */
 const COVERS: Partial<Record<WornSlot, WornSlot[]>> = { dress: ['top', 'bottom'], lingerie: ['bra', 'panties'] };
@@ -118,8 +146,11 @@ export function rollWardrobe(seed: CharacterSeed, onlySlots?: OwnedSlot[]): Ward
   const fams = new Set([...styleFamilies(seed), 'any']);
   const counts = wardrobeCounts(seed);
   const noSlots = new Set((find('species', seed.species)?.extra?.no_slots as string[] | undefined) ?? []);
+  const adaptations = speciesAdaptations(seed.species);
   const lingerie = seed.lingerie_style;
   const inFamily = (i: Attribute) => ((i.extra?.families as string[] | undefined) ?? []).some((f) => fams.has(f));
+  const inStyle = (i: Attribute) => ((i.extra?.styles as string[] | undefined) ?? []).includes(seed.clothing_style);
+  const fitsAnatomy = (i: Attribute) => ((i.extra?.adaptations as string[] | undefined) ?? []).some((a) => adaptations.has(a));
   const forLingerie = (i: Attribute) => !!lingerie && ((i.extra?.lingerie as string[] | undefined) ?? []).includes(lingerie);
   const out: Wardrobe = {};
 
@@ -129,13 +160,18 @@ export function rollWardrobe(seed: CharacterSeed, onlySlots?: OwnedSlot[]): Ward
     // Her kinks can bring in pieces from outside her style: a sporty woman who is into
     // thigh-highs still owns a pair (anything her leans push up is eligible).
     const leaned = (i: Attribute) => (ctx.weights[i.id] ?? 1) > 1.5;
-    const pool = items.filter((i) => i.extra?.slot === slot && (inFamily(i) || forLingerie(i) || leaned(i)));
+    const pool = items.filter((i) =>
+      i.extra?.slot === slot && !i.extra?.body_jewellery &&
+      (inFamily(i) || inStyle(i) || fitsAnatomy(i) || forLingerie(i) || leaned(i)),
+    );
     if (!pool.length) continue;
     const n = range(counts[slot], [0, 1]);
     if (!n) continue;
     // Her own lingerie style's pieces come first; the plain basics are there to fill up.
     const lean: Record<string, number> = {};
     for (const i of pool) if (forLingerie(i)) lean[i.id] = underwear ? 6 : 2;
+    for (const i of pool) if (inStyle(i)) lean[i.id] = Math.max(lean[i.id] ?? 1, 7);
+    for (const i of pool) if (fitsAnatomy(i)) lean[i.id] = Math.max(lean[i.id] ?? 1, 9);
     out[slot] = rollMany('wardrobe_item', ctx, n, { only: new Set(pool.map((i) => i.id)), lean, transient: true }).map((a) => a.id);
   }
 
@@ -146,6 +182,23 @@ export function rollWardrobe(seed: CharacterSeed, onlySlots?: OwnedSlot[]): Ward
       const stray = items.filter((i) => i.extra?.slot === slot && !inFamily(i) && (i.extra?.families as string[] | undefined)?.length);
       const got = rollMany('wardrobe_item', ctx, 1, { only: new Set(stray.map((i) => i.id)), transient: true })[0];
       if (got) out[slot] = [...(out[slot] ?? []), got.id];
+    }
+  }
+
+  // Piercings are wardrobe jewellery now, not a second permanent appearance system. Keep
+  // them uncommon even for alt styles: image models lose facial coherence when every look
+  // carries several tiny pieces of metal. A style's old `adds.piercings` is only a lean.
+  if (!noSlots.has('jewellery') && (!onlySlots || onlySlots.includes('jewellery'))) {
+    const adds = (find('clothing_style', seed.clothing_style)?.extra?.adds ?? {}) as Record<string, number>;
+    const chance = Math.min(0.18, 0.06 + Math.max(0, Number(adds.piercings ?? 0)) * 0.06);
+    if (Math.random() < chance) {
+      const pool = items.filter((i) =>
+        i.extra?.slot === 'jewellery' && i.extra?.body_jewellery && (inFamily(i) || inStyle(i)),
+      );
+      const piece = rollMany('wardrobe_item', ctx, 1, {
+        only: new Set(pool.map((i) => i.id)), transient: true,
+      })[0];
+      if (piece && !(out.jewellery ?? []).includes(piece.id)) out.jewellery = [...(out.jewellery ?? []), piece.id];
     }
   }
 

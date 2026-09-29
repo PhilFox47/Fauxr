@@ -11,6 +11,7 @@ export type TemplateName =
   | 'actor_chat'
   | 'actor_voice'
   | 'actor_date'
+  | 'actor_call'
   | 'actor_date_outfit'
   | 'actor_date_scene'
   | 'director_date_cast'
@@ -22,6 +23,7 @@ export type TemplateName =
   | 'director_write_bio'
   | 'director_evaluate_image'
   | 'director_date_summary'
+  | 'director_call_summary'
   | 'image_prompt_assembler'
   | 'system_actor'
   | 'system_director';

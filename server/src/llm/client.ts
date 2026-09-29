@@ -1,6 +1,6 @@
 import { Agent, fetch } from 'undici';
 import { db, nowIso } from '../db/index.js';
-import { getSettings, type ModelConfig } from '../config.js';
+import { getSettings, type ModelConfig, type ReasoningEffort } from '../config.js';
 import { logger } from '../log.js';
 import { loadTemplate } from '../prompts/render.js';
 import type { JsonSchemaSpec } from './schemas.js';
@@ -12,6 +12,13 @@ export interface ChatMessage {
 
 export class BudgetExceededError extends Error {}
 export class LlmError extends Error {}
+
+/** A valid provider response rejecting the request itself; changing the JSON prompt cannot fix it. */
+export class RequestError extends LlmError {
+  constructor(message: string, public readonly status: number) {
+    super(message);
+  }
+}
 
 /**
  * The model used up its whole output budget and never finished. Worth its own type because
@@ -90,11 +97,50 @@ function recordUsage(tokensIn: number, tokensOut: number, cost: number): void {
   ).run(today(), tokensIn, tokensOut, cost);
 }
 
+// The persisted counter moves only when a response lands. Reserve a slot while a request is
+// in flight so several background jobs cannot all pass the same last available daily slot.
+let callsInFlight = 0;
+let interactiveInFlight = 0;
+let interactiveWaiting = 0;
+let priorityWaiters: Array<() => void> = [];
+
+function wakePriorityWaiters(): void {
+  const waiters = priorityWaiters;
+  priorityWaiters = [];
+  // A chat turn often goes Director -> Actor. Give the continuation that starts the Actor
+  // one event-loop turn before releasing queued background work, or the background waiter
+  // wins the tiny gap between those two interactive calls.
+  setTimeout(() => {
+    for (const wake of waiters) wake();
+  }, 0);
+}
+
+async function acquirePriority(priority: 'interactive' | 'background'): Promise<() => void> {
+  if (priority === 'interactive') {
+    interactiveWaiting++;
+    // Yield once so a background stage about to start sees the pending interactive request.
+    await Promise.resolve();
+    interactiveWaiting--;
+    interactiveInFlight++;
+    let released = false;
+    return () => {
+      if (released) return;
+      released = true;
+      interactiveInFlight = Math.max(0, interactiveInFlight - 1);
+      wakePriorityWaiters();
+    };
+  }
+  while (interactiveWaiting > 0 || interactiveInFlight > 0) {
+    await new Promise<void>((resolve) => priorityWaiters.push(resolve));
+  }
+  return () => {};
+}
+
 function assertBudget(): void {
   const { budget } = getSettings();
   const used = usageToday();
-  if (budget.max_calls_per_day > 0 && used.calls >= budget.max_calls_per_day) {
-    throw new BudgetExceededError(`daily call budget reached (${used.calls})`);
+  if (budget.max_calls_per_day > 0 && used.calls + callsInFlight >= budget.max_calls_per_day) {
+    throw new BudgetExceededError(`daily call budget reached (${used.calls} complete, ${callsInFlight} running)`);
   }
   if (budget.max_cost_per_day > 0 && used.cost >= budget.max_cost_per_day) {
     throw new BudgetExceededError(`daily cost budget reached (${used.cost.toFixed(2)})`);
@@ -115,12 +161,33 @@ export interface CompletionOptions {
   schema?: JsonSchemaSpec;
   label?: string;
   timeoutMs?: number;
+  /** Total wall-clock budget shared by transport and truncation retries. */
+  totalTimeoutMs?: number;
+  /** New background stages wait while an interactive reply is in flight. */
+  priority?: 'interactive' | 'background';
+  /** Per-task override; otherwise the configured role default is sent. */
+  reasoningEffort?: ReasoningEffort;
   /**
    * On a truncated answer, re-ask once with a bigger ceiling instead of failing. On by
    * default: a truncation is a budget that was too small, and repeating the request
    * unchanged - which is what every caller used to do, three times over - cannot fix that.
    */
   expandOnTruncation?: boolean;
+}
+
+export type DecisionQuestion =
+  | { type: 'noul'; instructions: unknown; criteria?: { true: unknown; false: unknown } }
+  | { type: 'choice'; instructions: unknown; criteria: Record<string, unknown> }
+  | { type: 'score'; instructions: unknown; criteria: unknown[] };
+
+export type DecisionAnswer =
+  | { type: 'noul'; noul: number }
+  | { type: 'choice'; choice: string; probabilities: Record<string, number>; confidence: number }
+  | { type: 'score'; score: number; legend: Record<string, string>; probabilities: Record<string, number>; confidence: number };
+
+export interface DecisionResult {
+  model: string;
+  answers: Record<string, DecisionAnswer>;
 }
 
 /**
@@ -139,7 +206,7 @@ const EXPAND_CEILING = 24000;
 
 /** Provider-side failures worth waiting out rather than giving up on. */
 const RETRYABLE = (status: number) => status === 429 || status === 408 || status >= 500;
-const TRANSPORT_ATTEMPTS = 3;
+const TRANSPORT_ATTEMPTS = 2;
 
 /** How long one call may take before it is cancelled. Callers doing big background work raise it. */
 const DEFAULT_TIMEOUT_MS = 300_000;
@@ -161,6 +228,8 @@ const dispatcher = new Agent({ headersTimeout: 0, bodyTimeout: 0 });
  * plain JSON mode for the rest of the process and every other model keeps its schema.
  */
 const schemaRefused = new Set<string>();
+/** Models that told us they cannot run with reasoning disabled. */
+const reasoningRequired = new Set<string>();
 
 function schemaKey(base: string, config: ModelConfig): string {
   return `${base}|${config.model}|${config.provider ?? ''}`;
@@ -168,6 +237,19 @@ function schemaKey(base: string, config: ModelConfig): string {
 
 /** An error body that is about the response format rather than the request as a whole. */
 const SCHEMA_COMPLAINT = /response_format|json_schema|structured[ _-]?output|\bschema\b/i;
+const REASONING_REQUIRED = /"code"\s*:\s*"reasoning_required"|always thinks|does not support disabling reasoning/i;
+
+/**
+ * GLM 5.3 is forced-thinking and its native API accepts only low/high/max. NanoGPT may
+ * tolerate OpenAI's other labels, but sending one made the requested control ambiguous and
+ * logs showed "minimal" calls still spending thousands of reasoning tokens.
+ */
+function providerReasoning(model: string, requested: ReasoningEffort): ReasoningEffort {
+  if (!/(?:^|\/)glm-5\.3(?:-|$)/i.test(model)) return requested;
+  if (requested === 'xhigh' || requested === 'max') return 'max';
+  if (requested === 'medium' || requested === 'high') return 'high';
+  return 'low';
+}
 
 /**
  * OpenAI-compatible chat completion. Nano-GPT is the default provider, but nothing here
@@ -178,9 +260,17 @@ export async function complete(opts: CompletionOptions): Promise<string> {
   // answered is waited out and asked again unchanged; an answer that ran out of room is
   // asked again with more room. Neither used to happen: both arrived at the caller as a
   // generic failure and were retried identically until the attempts ran out.
+  const started = Date.now();
+  const totalTimeoutMs = opts.totalTimeoutMs ??
+    (opts.priority === 'background' || opts.scope === 'generator' ? 600_000 : 360_000);
+  const once = (next: CompletionOptions) => {
+    const remaining = totalTimeoutMs - (Date.now() - started);
+    if (remaining <= 0) throw new TimeoutError(totalTimeoutMs);
+    return callOnce({ ...next, timeoutMs: Math.min(next.timeoutMs ?? DEFAULT_TIMEOUT_MS, remaining) });
+  };
   for (let attempt = 0; ; attempt++) {
     try {
-      return await callOnce(opts);
+      return await once(opts);
     } catch (err) {
       if (err instanceof TransportError && attempt < TRANSPORT_ATTEMPTS - 1) {
         logger.warn(opts.scope === 'generator' ? 'generator' : opts.scope, `provider said ${err.status}, waiting`, {
@@ -200,7 +290,7 @@ export async function complete(opts: CompletionOptions): Promise<string> {
             was: err.cap,
             now: roomier,
           });
-          return callOnce({
+          return once({
             ...opts,
             config: { ...opts.config, max_tokens: roomier },
             label: `${opts.label ?? 'call'}:roomier`,
@@ -234,8 +324,24 @@ function systemMessage(scope: CompletionOptions['scope']): ChatMessage {
 }
 
 async function callOnce(opts: CompletionOptions): Promise<string> {
-  assertBudget();
+  const priority = opts.priority ?? (opts.scope === 'actor' || opts.scope === 'director' ? 'interactive' : 'background');
+  // Image briefs are formatting/description work, not deliberation. Their configured model
+  // may also serve the Director, but they should not inherit its slower reasoning depth.
+  const requestedReasoning = opts.reasoningEffort ?? (opts.scope === 'image' ? 'none' : opts.config.reasoning_effort);
+  const releasePriority = await acquirePriority(priority);
+  let releaseBudget: () => void;
+  try {
+    releaseBudget = reserveBudget();
+  } catch (err) {
+    releasePriority();
+    throw err;
+  }
   const settings = getSettings();
+  const key = schemaKey(settings.api.base_url, opts.config);
+  const nativeReasoning = providerReasoning(opts.config.model, requestedReasoning);
+  const reasoningEffort = nativeReasoning === 'none' && reasoningRequired.has(key)
+    ? 'minimal'
+    : nativeReasoning;
   const url = `${settings.api.base_url.replace(/\/$/, '')}/chat/completions`;
   // Prepended here rather than at each call site so retries, JSON re-asks and the
   // expand-on-truncation path all carry it too - a frame that only survives the first
@@ -249,8 +355,8 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
     temperature: opts.config.temperature,
     top_p: opts.config.top_p,
     max_tokens: opts.config.max_tokens,
+    reasoning_effort: reasoningEffort,
   };
-  const key = schemaKey(settings.api.base_url, opts.config);
   const useSchema = !!(opts.json && opts.schema && settings.api.structured_outputs !== false && !schemaRefused.has(key));
   if (useSchema) {
     body.response_format = {
@@ -301,6 +407,20 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
     }
     const duration = Date.now() - started;
     const raw = await res.text();
+    // Some always-thinking models reject `none` rather than treating it as their lowest
+    // supported level. Learn that capability from the provider and retry once at minimal;
+    // later calls avoid the rejected request entirely. GLM 5.3 is handled proactively above.
+    if (!res.ok && reasoningEffort === 'none' && REASONING_REQUIRED.test(raw)) {
+      reasoningRequired.add(key);
+      logger.warn('api', `${opts.config.model} requires reasoning; using minimal`, {
+        label: opts.label,
+        status: res.status,
+      });
+      clearTimeout(timer);
+      releaseBudget();
+      releasePriority();
+      return callOnce({ ...opts, reasoningEffort: 'minimal' });
+    }
     // A model that cannot do Structured Output says so in a 4xx (sometimes a 5xx) naming the
     // response format. That is not a failed call, just a feature this model lacks: remember it
     // and ask again at once in plain JSON mode rather than failing or waiting out a "retry".
@@ -312,6 +432,10 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
         response: raw.slice(0, 600),
       });
       clearTimeout(timer);
+      // Do not make the fallback compete with the request it is replacing for the last
+      // budget slot. The outer finally is idempotent through reserveBudget's release closure.
+      releaseBudget();
+      releasePriority();
       return callOnce(opts);
     }
     if (!res.ok) {
@@ -324,7 +448,7 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
       if (RETRYABLE(res.status)) {
         throw new TransportError(`${res.status} ${raw.slice(0, 300)}`, res.status, retryDelay(res, raw, 0));
       }
-      throw new LlmError(`${res.status} ${raw.slice(0, 300)}`);
+      throw new RequestError(`${res.status} ${raw.slice(0, 300)}`, res.status);
     }
     let parsed: any;
     try {
@@ -347,6 +471,7 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
     // faster than writing the answer out, so completion tokens over wall time is what actually
     // says whether a model or provider is slow to write, as opposed to slow to start.
     const tokensPerSecond = out > 0 && duration > 0 ? Math.round((out / (duration / 1000)) * 10) / 10 : null;
+    const reasoningTokens = Number(usage.completion_tokens_details?.reasoning_tokens ?? usage.reasoning_tokens ?? 0) || 0;
 
     logger.info(opts.scope === 'generator' ? 'generator' : opts.scope, opts.label ?? 'llm call', {
       model: opts.config.model,
@@ -354,6 +479,11 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
       tokens_in: usage.prompt_tokens ?? null,
       tokens_out: usage.completion_tokens ?? null,
       tokens_per_second: tokensPerSecond,
+      reasoning_tokens: reasoningTokens || null,
+      reasoning_effort: reasoningEffort,
+      reasoning_requested: requestedReasoning === reasoningEffort ? null : requestedReasoning,
+      priority,
+      calls_in_flight: callsInFlight,
       // Recorded on every call so a cap that is quietly too tight is visible in the export
       // before it becomes a wave of empty answers.
       max_tokens: cap,
@@ -380,7 +510,97 @@ async function callOnce(opts: CompletionOptions): Promise<string> {
     return text;
   } finally {
     clearTimeout(timer);
+    releaseBudget();
+    releasePriority();
   }
+}
+
+/**
+ * A System One evaluation call. Nano-GPT exposes the TypeSafe-compatible endpoint beside
+ * chat completions, but its answer is a map of calibrated decisions rather than prose.
+ */
+export async function evaluateDecisions(
+  state: unknown,
+  questions: Record<string, DecisionQuestion>,
+  label = 'decision',
+): Promise<DecisionResult> {
+  const settings = getSettings();
+  const config = settings.models.evaluator;
+  if (!config.enabled) throw new LlmError('evaluator is disabled');
+
+  for (let attempt = 0; ; attempt++) {
+    const releaseBudget = reserveBudget();
+    const controller = new AbortController();
+    const timeoutMs = 30_000;
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const started = Date.now();
+    try {
+      const url = `${settings.api.base_url.replace(/\/$/, '')}/systemone`;
+      let res: Awaited<ReturnType<typeof fetch>>;
+      try {
+        res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            authorization: `Bearer ${settings.api.api_key}`,
+          },
+          body: JSON.stringify({ model: config.model, state, questions }),
+          signal: controller.signal,
+          dispatcher,
+        });
+      } catch (err) {
+        if (controller.signal.aborted) throw new TimeoutError(timeoutMs);
+        throw new TransportError(`network error: ${String(err)}`, 0, 2_000);
+      }
+      const raw = await res.text();
+      if (!res.ok) {
+        if (RETRYABLE(res.status) || res.status === 529) {
+          throw new TransportError(`${res.status} ${raw.slice(0, 300)}`, res.status, retryDelay(res, raw, attempt));
+        }
+        throw new LlmError(`${res.status} ${raw.slice(0, 300)}`);
+      }
+      const parsed = JSON.parse(raw) as DecisionResult & {
+        usage?: { input_tokens?: number; output_tokens?: number; cost?: number };
+        cost?: number;
+      };
+      if (!parsed.answers || typeof parsed.answers !== 'object') throw new LlmError('decision response had no answers');
+      const usage = parsed.usage ?? {};
+      recordUsage(usage.input_tokens ?? 0, usage.output_tokens ?? 0, usage.cost ?? parsed.cost ?? 0);
+      logger.info('evaluator', label, {
+        model: parsed.model || config.model,
+        duration_ms: Date.now() - started,
+        tokens_in: usage.input_tokens ?? null,
+        tokens_out: usage.output_tokens ?? null,
+        questions: Object.keys(questions),
+        answers: parsed.answers,
+      });
+      return parsed;
+    } catch (err) {
+      if (err instanceof TransportError && attempt < TRANSPORT_ATTEMPTS - 1) {
+        logger.warn('evaluator', 'decision provider unavailable, waiting', {
+          label, status: err.status, waiting_ms: err.retryAfterMs, attempt: attempt + 1,
+        });
+        releaseBudget();
+        await sleep(err.retryAfterMs);
+        continue;
+      }
+      throw err;
+    } finally {
+      clearTimeout(timer);
+      releaseBudget();
+    }
+  }
+}
+
+function reserveBudget(): () => void {
+  assertBudget();
+  callsInFlight++;
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    callsInFlight = Math.max(0, callsInFlight - 1);
+  };
 }
 
 /** Strip code fences and pull the outermost JSON object out of a model response. */
@@ -424,6 +644,7 @@ function missingKeys(value: unknown, required: string[] | undefined): string[] {
 }
 
 export async function completeJson<T = any>(opts: JsonCallOptions): Promise<T> {
+  const started = Date.now();
   let parsed: T;
   try {
     parsed = extractJson<T>(await complete({ ...opts, json: true }));
@@ -434,7 +655,7 @@ export async function completeJson<T = any>(opts: JsonCallOptions): Promise<T> {
     // fits it, and re-asking here would just spend the provider's patience telling an
     // overloaded server that its JSON was malformed.
     if (
-      err instanceof BudgetExceededError || err instanceof TransportError ||
+      err instanceof BudgetExceededError || err instanceof RequestError || err instanceof TransportError ||
       err instanceof TruncatedError || err instanceof TimeoutError
     ) throw err;
     logger.warn(opts.scope === 'generator' ? 'generator' : opts.scope, 'JSON parse failed, retrying', {
@@ -442,7 +663,7 @@ export async function completeJson<T = any>(opts: JsonCallOptions): Promise<T> {
       error: String(err),
     });
     return retryJson<T>(opts, opts.retryHint ??
-      'Your previous answer was not valid JSON. Reply with a single JSON object and nothing else. No prose, no code fences, no trailing commas.');
+      'Your previous answer was not valid JSON. Reply with a single JSON object and nothing else. No prose, no code fences, no trailing commas.', started);
   }
 
   const missing = missingKeys(parsed, opts.require);
@@ -456,12 +677,17 @@ export async function completeJson<T = any>(opts: JsonCallOptions): Promise<T> {
     opts,
     `Your previous answer was missing ${missing.join(' and ')}. Reply with a single JSON object ` +
       `that actually contains ${missing.map((k) => `"${k}"`).join(' and ')}, and nothing else.`,
+    started,
   );
 }
 
-async function retryJson<T>(opts: JsonCallOptions, hint: string): Promise<T> {
+async function retryJson<T>(opts: JsonCallOptions, hint: string, started = Date.now()): Promise<T> {
+  const elapsed = Date.now() - started;
+  const remaining = opts.totalTimeoutMs === undefined ? undefined : opts.totalTimeoutMs - elapsed;
+  if (remaining !== undefined && remaining <= 0) throw new TimeoutError(opts.totalTimeoutMs!);
   const retried = await complete({
     ...opts,
+    ...(remaining === undefined ? {} : { totalTimeoutMs: remaining }),
     json: true,
     messages: [...opts.messages, { role: 'user', content: hint }],
     label: `${opts.label ?? 'call'}:retry`,
@@ -478,50 +704,75 @@ export interface ImageRequest {
   refImage?: string;
   /** Overrides settings.models.image.size for this one call - see images.ts's IMAGE_SIZE. */
   size?: string;
+  /** Primarily useful for provider-specific tuning and deterministic failure tests. */
+  timeoutMs?: number;
 }
+
+/** Image providers can be slower than chat models, but a job must never stay running forever. */
+const IMAGE_TIMEOUT_MS = 10 * 60_000;
 
 /** Image generation. Returns base64 image data. */
 export async function generateImage(req: ImageRequest): Promise<string> {
-  assertBudget();
-  const settings = getSettings();
-  const base = settings.api.image_base_url || settings.api.base_url;
-  const key = settings.api.image_api_key || settings.api.api_key;
-  const body: Record<string, unknown> = {
-    model: settings.models.image.model,
-    prompt: req.prompt,
-    size: req.size || settings.models.image.size,
-    response_format: 'b64_json',
-    n: 1,
-  };
-  if (req.negativePrompt) body.negative_prompt = req.negativePrompt;
-  if (req.seed !== undefined) body.seed = req.seed;
-  if (req.refImage) body.image = req.refImage;
-  if (settings.models.image.provider) body.provider = settings.models.image.provider;
-
-  const started = Date.now();
-  const res = await fetch(`${base.replace(/\/$/, '')}/images/generations`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
-    body: JSON.stringify(body),
-    dispatcher,
-  });
-  const raw = await res.text();
-  if (!res.ok) {
-    logger.error('image', `image generation failed (${res.status})`, {
-      status: res.status,
-      response: raw.slice(0, 1000),
+  const releaseBudget = reserveBudget();
+  try {
+    const settings = getSettings();
+    const base = settings.api.image_base_url || settings.api.base_url;
+    const key = settings.api.image_api_key || settings.api.api_key;
+    const body: Record<string, unknown> = {
+      model: settings.models.image.model,
       prompt: req.prompt,
+      size: req.size || settings.models.image.size,
+      response_format: 'b64_json',
+      n: 1,
+    };
+    if (req.negativePrompt) body.negative_prompt = req.negativePrompt;
+    if (req.seed !== undefined) body.seed = req.seed;
+    if (req.refImage) body.image = req.refImage;
+    if (settings.models.image.provider) body.provider = settings.models.image.provider;
+
+    const started = Date.now();
+    const timeoutMs = req.timeoutMs ?? IMAGE_TIMEOUT_MS;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let res: Awaited<ReturnType<typeof fetch>>;
+    let raw: string;
+    try {
+      res = await fetch(`${base.replace(/\/$/, '')}/images/generations`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+        dispatcher,
+      });
+      raw = await res.text();
+    } catch (err) {
+      if (controller.signal.aborted) {
+        logger.error('image', 'image generation timed out', { timeout_ms: timeoutMs });
+        throw new TimeoutError(timeoutMs);
+      }
+      throw new TransportError(`image network error: ${String(err)}`, 0, 5_000);
+    } finally {
+      clearTimeout(timer);
+    }
+    if (!res.ok) {
+      logger.error('image', `image generation failed (${res.status})`, {
+        status: res.status,
+        response: raw.slice(0, 1000),
+        prompt: req.prompt,
+      });
+      throw new LlmError(`image ${res.status}: ${raw.slice(0, 300)}`);
+    }
+    const parsed = JSON.parse(raw);
+    recordUsage(0, 0, parsed?.cost ?? 0);
+    logger.info('image', 'image generated', {
+      duration_ms: Date.now() - started,
+      prompt: req.prompt,
+      seed: req.seed ?? null,
     });
-    throw new LlmError(`image ${res.status}: ${raw.slice(0, 300)}`);
+    const b64 = parsed?.data?.[0]?.b64_json;
+    if (!b64) throw new LlmError('image response contained no b64_json');
+    return b64;
+  } finally {
+    releaseBudget();
   }
-  const parsed = JSON.parse(raw);
-  recordUsage(0, 0, parsed?.cost ?? 0);
-  logger.info('image', 'image generated', {
-    duration_ms: Date.now() - started,
-    prompt: req.prompt,
-    seed: req.seed ?? null,
-  });
-  const b64 = parsed?.data?.[0]?.b64_json;
-  if (!b64) throw new LlmError('image response contained no b64_json');
-  return b64;
 }

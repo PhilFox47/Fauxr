@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS locations (
   -- Relative to the images directory, same as any generated picture. Optional: a location
   -- works fine without one, it just has no backdrop behind the date.
   image_path   TEXT,
+  affordances  TEXT NOT NULL DEFAULT '{"sensory":[],"private_spaces":[],"background_people":[],"social_openings":[],"interruptions":[],"transitions":[],"constraints":[]}',
   created_at   TEXT NOT NULL,
   updated_at   TEXT NOT NULL
 );
@@ -99,6 +100,7 @@ CREATE TABLE IF NOT EXISTS locations (
 CREATE TABLE IF NOT EXISTS dates (
   id            TEXT PRIMARY KEY,
   character_id  TEXT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
+  kind          TEXT NOT NULL DEFAULT 'date', -- date | call
   status        TEXT NOT NULL DEFAULT 'proposed',  -- active | ended
   when_at       TEXT,
   -- The location's name copied in at the time, so an old date still reads correctly after
@@ -108,6 +110,7 @@ CREATE TABLE IF NOT EXISTS dates (
   proposed_by   TEXT,
   confirmed_by  TEXT,
   summary       TEXT,
+  duration_minutes INTEGER,
   -- Decided once, right as the date opens, and read fresh on every turn after that - so the
   -- opening beat, every later beat and the arrival photo all agree on what she is wearing.
   outfit        TEXT,
@@ -149,6 +152,10 @@ CREATE TABLE IF NOT EXISTS attribute_db (
   modifies     TEXT NOT NULL DEFAULT '{}',
   extra        TEXT NOT NULL DEFAULT '{}',
   enabled      INTEGER NOT NULL DEFAULT 1,
+  -- Shipped rows can be refreshed on upgrade until the user edits or deletes them.
+  origin       TEXT NOT NULL DEFAULT 'shipped',
+  user_modified INTEGER NOT NULL DEFAULT 0,
+  user_deleted INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (category, id)
 );
 

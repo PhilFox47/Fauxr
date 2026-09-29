@@ -4,7 +4,7 @@ import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { getUserProfile, listDates, recentMessages, saveRelationship, setWakeup, clearWakeup, type StoredMessage } from '../repo.js';
 import { render } from '../prompts/render.js';
-import type { ActorHidden, Character, Direction, Relationship } from '../types.js';
+import type { Character, Direction, Relationship } from '../types.js';
 import {
   coreBlock,
   dateHistoryFact, directionBlock, fantasiesBlock, historyBlock, ledgerBlock, seedBlock,
@@ -15,8 +15,11 @@ import { lifeBlockForDirector } from './life.js';
 import { isObj, pick, unwrap } from '../llm/shape.js';
 
 const UPDATE_KEYS = ['arousal_delta', 'reason', 'discovered', 'big_secret_revealed', 'fantasies_played'];
-const LEDGER_KEYS = ['facts_about_user', 'facts_about_her', 'events', 'what_landed', 'open_threads_add', 'open_threads_close', 'director_notes'];
-const DIRECTION_KEYS = ['valid_for', 'expires_on', 'mood', 'energy', 'goal', 'stance', 'forbidden', 'bring_up', 'length'];
+const LEDGER_KEYS = [
+  'facts_about_user', 'facts_about_her', 'events', 'what_landed', 'pinned_add', 'pinned_remove',
+  'rituals_add', 'callbacks_add', 'aftermath',
+];
+const DIRECTION_KEYS = ['valid_for', 'expires_on', 'mood', 'impulse'];
 
 /**
  * The Director's reply in {update, direction, wakeup} shape, from however it actually came
@@ -64,36 +67,27 @@ export interface DirectorResult {
 
 /** Used when a Director call fails or comes back hollow, and per-field for a missing field. */
 const DEFAULT_DIRECTION: Direction = {
-  valid_for: 2,
+  valid_for: 3,
   expires_on: [],
   mood: 'into him, playful',
-  energy: 'normal',
-  goal: 'get him going with something of hers - a thought, a confession, a fantasy',
-  stance: 'warm, flirty, herself',
-  forbidden: [],
-  bring_up: null,
-  length: 'short, 1-2 messages',
+  impulse: 'respond as herself; if the floor is open, she may share something of her own',
 };
 
 function sanitizeDirection(raw: any): Direction {
   const arr = (v: unknown): string[] =>
     Array.isArray(v) ? v.map((x) => String(x)).filter(Boolean).slice(0, 8) : [];
   return {
-    valid_for: Math.max(1, Math.min(6, Number(raw?.valid_for) || 2)),
+    // A loose impulse usually survives a few ordinary exchanges. Events and a late reply
+    // still expire it, while the clamp prevents a model from turning it into a scene script.
+    valid_for: Math.max(1, Math.min(4, Math.round(Number(raw?.valid_for) || DEFAULT_DIRECTION.valid_for))),
     expires_on: arr(raw?.expires_on),
     mood: String(raw?.mood ?? DEFAULT_DIRECTION.mood),
-    energy: String(raw?.energy ?? DEFAULT_DIRECTION.energy),
-    goal: String(raw?.goal ?? DEFAULT_DIRECTION.goal),
-    stance: String(raw?.stance ?? DEFAULT_DIRECTION.stance),
-    forbidden: arr(raw?.forbidden),
-    bring_up: raw?.bring_up ? String(raw.bring_up) : null,
-    length: String(raw?.length ?? DEFAULT_DIRECTION.length),
+    impulse: String(raw?.impulse ?? raw?.goal ?? DEFAULT_DIRECTION.impulse),
   };
 }
 
 export interface RunDirectorOptions {
   reason: string;
-  actorReport?: ActorHidden | null;
   /** Extra context for the Director that is not in the message history. */
   event?: string;
   /**
@@ -118,9 +112,14 @@ export async function runDirector(
   // Older characters have no fantasies written yet; this writes them once, in the background.
   // Not awaited: it is a slow call, and a chat turn must never sit waiting on it - she simply
   // has them from the next pass on.
-  void ensureFantasies(character);
+  // Defer starting the backfill until this Director request has registered as interactive;
+  // otherwise a legacy fantasy call launched one line earlier can slip ahead of the reply it
+  // is explicitly meant not to delay. The LLM priority queue then holds it through the Actor.
+  setTimeout(() => void ensureFantasies(character), 0);
   const sinceId = Number((rel.mood as any)?.last_director_msg_id ?? 0);
-  const all = recentMessages(character.id, settings.chat.context_messages);
+  // A failed placeholder is UI recovery, not something she said and not an event the
+  // Director may turn into memory or a new plan.
+  const all = recentMessages(character.id, settings.chat.context_messages).filter((m) => !m.meta?.failed);
   const since = sinceId ? all.filter((m) => m.id > sinceId) : all;
   const history = since.length ? since : all.slice(-8);
   const open = undiscoveredKeys(character, rel);
@@ -160,9 +159,7 @@ export async function runDirector(
     replies_only: settings.unprompted_messages ? '' : '1',
     ledger_block: ledgerBlock(rel.ledger, gameClockMs(rel), { full: true }) || '(empty)',
     previous_direction: rel.active_direction ? directionBlock(rel.active_direction) : '(none yet)',
-    actor_report: opts.actorReport
-      ? JSON.stringify(opts.actorReport)
-      : opts.event ?? `(no actor report - triggered by: ${opts.reason})`,
+    actor_report: opts.event ?? `(triggered by: ${opts.reason})`,
     history_block: historyBlock(history, character, user),
     date_history: dateHistoryFact(listDates(character.id)),
     recent_photos: recentPhotosFact(character.id, 'she') || 'none in the last day',
@@ -182,8 +179,8 @@ export async function runDirector(
   } catch (err) {
     // Keep playing with the last valid direction rather than stalling the chat.
     logger.error('director', `director call failed for ${character.username}`, { error: String(err) });
-    const fallback = rel.active_direction ?? DEFAULT_DIRECTION;
-    fallback.valid_for = Math.min(6, fallback.valid_for + 1);
+    const previous = rel.active_direction ?? DEFAULT_DIRECTION;
+    const fallback: Direction = { ...previous, expires_on: [...(previous.expires_on ?? [])], valid_for: 1 };
     rel.active_direction = fallback;
     rel.direction_set_at = nowIso();
     saveRelationship(rel);
@@ -195,12 +192,12 @@ export async function runDirector(
   /**
    * "direction" being present is not the same as it being usable. `require` above catches
    * the key missing outright; it does not catch `direction: {}`, which parses as present.
-   * A well-formed direction always has a "goal", so its absence means the call handed back
+   * A well-formed direction always has an "impulse", so its absence means the call handed back
    * nothing to act on. sanitizeDirection() would silently fill every field with defaults and
    * that would become her real direction with no error anywhere. Falling back to the previous
    * direction, same as a hard exception above, keeps her in character instead.
    */
-  if (!parsed.direction?.goal) {
+  if (!parsed.direction?.impulse) {
     logger.error('director', `direction came back empty for ${character.username}`, {
       reason: opts.reason,
       raw: JSON.stringify(parsed.direction ?? null).slice(0, 300),
@@ -211,8 +208,8 @@ export async function runDirector(
     // bad turn, but stretching a stale direction out for several more (what actually
     // happened in the log this was found from) is the visible symptom that gets reported
     // as "worse than before".
-    const fallback = rel.active_direction ?? DEFAULT_DIRECTION;
-    fallback.valid_for = Math.min(fallback.valid_for, 1);
+    const previous = rel.active_direction ?? DEFAULT_DIRECTION;
+    const fallback: Direction = { ...previous, expires_on: [...(previous.expires_on ?? [])], valid_for: 1 };
     rel.active_direction = fallback;
     rel.direction_set_at = nowIso();
     saveRelationship(rel);
@@ -285,12 +282,10 @@ export function directionOutdatedBy(rel: Relationship, userMessageAt: number): b
 /** Does this direction still cover the next turn? */
 export function directionExpired(
   rel: Relationship,
-  hidden: ActorHidden | null,
   events: string[] = [],
 ): { expired: boolean; reason: string } {
   const d = rel.active_direction;
   if (!d) return { expired: true, reason: 'no direction' };
-  if (hidden?.director_needed) return { expired: true, reason: 'actor requested director' };
   if (d.valid_for <= 0) return { expired: true, reason: 'valid_for exhausted' };
   for (const e of events) {
     if (d.expires_on?.some((x) => x.toLowerCase() === e.toLowerCase())) {

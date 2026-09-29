@@ -9,14 +9,13 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 );
 
-if ('serviceWorker' in navigator && location.protocol !== 'http:') {
+const canUseServiceWorker =
+  location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+
+if ('serviceWorker' in navigator && canUseServiceWorker) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(() => {
       /* installability is a nice-to-have, never a blocker */
     });
-  });
-} else if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
 }

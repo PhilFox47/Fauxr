@@ -6,7 +6,9 @@ import {
 import Avatar from '../components/Avatar';
 import Icon from '../components/Icon';
 import Lightbox from '../components/Lightbox';
+import RoleplaySteering from '../components/RoleplaySteering';
 import { closeView, openView, replaceTopView } from '../nav';
+import { useCoalescedRefresh } from '../hooks/useCoalescedRefresh';
 
 /**
  * When a message reads as having happened, for every display purpose (the stamp under a
@@ -64,24 +66,56 @@ function dayLabel(ms: number, nowMs: number): string {
  * needs to see what is currently in force - just set apart, so a glance down the transcript
  * never mistakes it for something that was said in the room.
  */
-function renderBeat(text: string) {
-  // Thoughts are stripped as a string operation first, with the whitespace they leave
-  // behind collapsed - splitting into elements and just omitting the *thought* fragment
-  // would leave the space on either side of it behind as a visible double space.
-  // The final collapse of 3+ newlines to 2 matters: a thought written as its own paragraph
-  // leaves the blank lines that surrounded it behind, which rendered as a conspicuous empty
-  // gap in the middle of her beat - the one place the invisible markup was still visible.
-  const visible = text
+function renderBeat(text: string, mode: 'date' | 'call' = 'date') {
+  if (mode === 'call') {
+    return text.split(/(\*[^*]*\*|\([^()]*\))/g).filter(Boolean).map((part, i) => {
+      if (part.startsWith('*') && part.endsWith('*')) {
+        return <span key={i} className="call-cue">{part.slice(1, -1)}</span>;
+      }
+      if (part.startsWith('(') && part.endsWith(')')) return <span key={i} className="direction">{part}</span>;
+      return <span key={i}>{part}</span>;
+    });
+  }
+
+  // Protect direct speech while stripping private *thoughts* from narration. Asterisks inside
+  // quotes are emphasis, not thoughts, so "now *that* was funny" must keep the word visible.
+  const quotes: string[] = [];
+  const protectedText = text.replace(/"[^"]*"/g, (quote) => {
+    const index = quotes.push(quote) - 1;
+    return `\uE000${index}\uE001`;
+  });
+  const visible = protectedText
     .replace(/\*[^*]*\*/g, ' ')
     .replace(/[ \t]+/g, ' ')
     .replace(/ *\n */g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
-  return visible.split(/("[^"]*"|\([^()]*\))/g).filter(Boolean).map((part, i) => {
-    if (part.startsWith('"') && part.endsWith('"')) return <span key={i} className="speech">{part}</span>;
+
+  return visible.split(/(\uE000\d+\uE001|\([^()]*\))/g).filter(Boolean).map((part, i) => {
+    const quoteToken = part.match(/^\uE000(\d+)\uE001$/);
+    if (quoteToken) {
+      const quote = quotes[Number(quoteToken[1])] ?? '""';
+      const inner = quote.slice(1, -1).split(/(\*[^*]*\*)/g).filter(Boolean);
+      return (
+        <span key={i} className="speech">
+          &quot;{inner.map((piece, j) => piece.startsWith('*') && piece.endsWith('*')
+            ? <em key={j}>{piece.slice(1, -1)}</em>
+            : <span key={j}>{piece}</span>)}&quot;
+        </span>
+      );
+    }
     if (part.startsWith('(') && part.endsWith(')')) return <span key={i} className="direction">{part}</span>;
     return <span key={i}>{part}</span>;
   });
+}
+
+function sessionLength(minutes: unknown): string {
+  const n = Math.round(Number(minutes));
+  if (!Number.isFinite(n) || n < 1) return '';
+  if (n < 60) return `${n}m`;
+  const hours = Math.floor(n / 60);
+  const rest = n % 60;
+  return rest ? `${hours}h ${rest}m` : `${hours}h`;
 }
 
 function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
@@ -197,7 +231,7 @@ export default function Chat({
     window.setTimeout(() => setToast((t) => (t === message ? null : t)), 4000);
   }, []);
 
-  const load = useCallback(async () => {
+  const load = useCoalescedRefresh(async () => {
     try {
       const res = await api.chat(characterId);
       setCharacter(res.character);
@@ -207,7 +241,7 @@ export default function Chat({
     } catch {
       /* keep the current view if the server is unreachable */
     }
-  }, [characterId]);
+  });
 
   useEffect(() => {
     void load();
@@ -472,7 +506,17 @@ export default function Chat({
         <button className="iconbtn chat-back" onClick={onBack} aria-label="Back">
           <Icon name="back" size={22} />
         </button>
-        <Avatar match={character} small />
+        <button
+          className="chat-identity"
+          onClick={() => {
+            if (!profile) return;
+            openView(() => setProfileOpen(false));
+            setProfileOpen(true);
+          }}
+          disabled={!profile}
+          aria-label={`Open ${character?.display_name ?? 'her'} profile`}
+        >
+          <Avatar match={character} small />
         <div style={{ minWidth: 0 }}>
           <h1 className="chat-name-row">
             <span className="chat-name-text">{character?.display_name ?? '…'}</span>
@@ -486,39 +530,8 @@ export default function Chat({
             {blocked ? 'You blocked her' : isTyping ? 'typing…' : character?.status || 'online'}
           </span>
         </div>
+        </button>
         <div className="spacer" />
-        {character && !blocked && (!character.photos_exchanged || character.profile_picture_state === 'failed') && (
-          <button
-            className={confirmPicture ? 'btn picture-confirm' : 'iconbtn'}
-            onClick={() => void generateProfilePicture()}
-            disabled={generatingPicture}
-            aria-label={retryPicture ? 'Retry profile pic' : 'Generate profile pic'}
-            title={retryPicture
-              ? 'Her profile picture did not come through - try again'
-              : 'Generate profile pic - her picture, and from then on she can send photos'}
-          >
-            {confirmPicture
-              ? (generatingPicture ? 'Generating…' : retryPicture ? 'Retry profile pic?' : 'Generate profile pic?')
-              : <Icon name={retryPicture ? 'refresh' : 'camera'} size={20} />}
-          </button>
-        )}
-        {profile && (
-          <button
-            className="iconbtn known-count"
-            onClick={() => {
-              openView(() => setProfileOpen(false));
-              setProfileOpen(true);
-            }}
-            aria-label="Her profile"
-            title="Her profile"
-          >
-            <span className="glyph"><Icon name="eye" size={15} /></span>
-            {(() => {
-              const intimate = profile.categories.find((c) => c.category === 'intimate');
-              return intimate ? <span>{intimate.known}/{intimate.total}</span> : null;
-            })()}
-          </button>
-        )}
         {character && !blocked && !activeDate && (
           <button
             className="iconbtn"
@@ -575,11 +588,19 @@ export default function Chat({
       )}
 
       {menuOpen && (
-        <div className="card">
-          <div className="section-title" style={{ padding: '0 0 6px' }}>Her bio</div>
-          <p className="small muted bio-quote" style={{ margin: '0 0 14px' }}>
-            {character?.bio}
-          </p>
+        <div className="chat-menu" role="menu">
+          {profile && (
+            <button
+              className="chat-menu-item"
+              onClick={() => {
+                setMenuOpen(false);
+                openView(() => setProfileOpen(false));
+                setProfileOpen(true);
+              }}
+            >
+              <Icon name="eye" size={17} /> View profile
+            </button>
+          )}
           {/* An in-app confirm rather than window.confirm(), which looks like a browser
               error and is the one dialog a phone renders least gracefully. */}
           {confirmBlock ? (
@@ -609,8 +630,8 @@ export default function Chat({
               </div>
             </>
           ) : (
-            <button className="btn danger block" onClick={() => setConfirmBlock(true)}>
-              Block
+            <button className="chat-menu-item danger" onClick={() => setConfirmBlock(true)}>
+              <Icon name="close" size={17} /> Block conversation
             </button>
           )}
         </div>
@@ -618,6 +639,28 @@ export default function Chat({
 
       <div className="chat-log" ref={logRef} onScroll={onLogScroll}>
         <div className={`chat-log-inner${messages.length === 0 ? ' is-empty' : ''}`}>
+        {character && !blocked && (!character.photos_exchanged || character.profile_picture_state === 'failed') && (
+          <div className="photo-unlock-card">
+            <span className="photo-unlock-icon"><Icon name={retryPicture ? 'refresh' : 'camera'} size={20} /></span>
+            <div className="grow">
+              <strong>{retryPicture ? 'Her profile photo did not come through' : 'Bring photos into this chat'}</strong>
+              <span>
+                {retryPicture
+                  ? 'Try the image generation again.'
+                  : 'Create her profile photo first. After that, she can choose to send photos here.'}
+              </span>
+            </div>
+            <button
+              className={confirmPicture ? 'btn picture-confirm' : 'btn ghost'}
+              onClick={() => void generateProfilePicture()}
+              disabled={generatingPicture}
+            >
+              {confirmPicture
+                ? (generatingPicture ? 'Creating…' : retryPicture ? 'Try again?' : 'Create photo?')
+                : retryPicture ? 'Retry' : 'Create'}
+            </button>
+          </div>
+        )}
         {messages.length === 0 && (
           <div className="empty">
             <strong>Nothing here yet</strong>
@@ -656,14 +699,19 @@ export default function Chat({
             );
           }
 
-          if (m.sender === 'system' && (m.meta?.type === 'date_started' || m.meta?.type === 'date_ended')) {
+          if (m.sender === 'system' && ['date_started', 'date_ended', 'call_started', 'call_ended'].includes(m.meta?.type)) {
+            const isCall = String(m.meta.type).startsWith('call_');
+            const ended = String(m.meta.type).endsWith('_ended');
+            const duration = ended ? sessionLength(m.meta?.duration_minutes) : '';
             return (
               <div key={m.id} style={{ display: 'contents' }}>
                 {showDay && <div className="day-sep">{dayLabel(messageMs(m), nowMs)}</div>}
                 <button className="date-marker" onClick={() => setOpenDateId(m.meta.date_id)}>
                   <span className="date-marker-head">
                     <Icon name="spark" size={14} />
-                    {m.meta.type === 'date_started' ? 'Date' : 'Date — how she remembers it'}
+                    {isCall ? (ended ? 'Call' : 'Phone call') : 'Date'}
+                    {duration ? ` · ${duration}` : ''}
+                    {ended ? ' — how she remembers it' : ''}
                   </span>
                   <span className="date-marker-body">{m.text}</span>
                 </button>
@@ -851,12 +899,22 @@ export default function Chat({
       {!blocked && activeDate && (
         <div className="composer date-frozen">
           <span className="grow small muted">
-            You are out with {character?.display_name} right now.
+            {activeDate.kind === 'call'
+              ? `You are on a call with ${character?.display_name} right now.`
+              : `You are out with ${character?.display_name} right now.`}
           </span>
           <button className="btn" onClick={() => setOpenDateId(activeDate.id)}>
-            Back to the date
+            {activeDate.kind === 'call' ? 'Back to the call' : 'Back to the date'}
           </button>
         </div>
+      )}
+
+      {!blocked && !activeDate && (
+        <RoleplaySteering
+          scope="chat"
+          id={characterId}
+          resetKey={messages.filter((message) => message.sender === 'character').length}
+        />
       )}
 
       {!blocked && !activeDate && (
@@ -927,6 +985,8 @@ function PassTimePanel({
   const [customAmount, setCustomAmount] = useState('1');
   const [customUnit, setCustomUnit] = useState<'hours' | 'days'>('hours');
   const [busy, setBusy] = useState(false);
+  const [callBusy, setCallBusy] = useState(false);
+  const [callError, setCallError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
 
@@ -995,8 +1055,7 @@ function PassTimePanel({
 }
 
 /**
- * Her profile. The everyday facts are all there from the start; the intimate ones start as
- * ??? and fill in as she lets them out - a record of the conversation, not a stat readout.
+ * Her profile is a record of what is known, not a checklist of what remains hidden.
  */
 function ProfileSheet({
   characterId,
@@ -1013,17 +1072,13 @@ function ProfileSheet({
   onOpenDate: (dateId: string) => void;
   onClose: () => void;
 }) {
-  const intimate = profile.categories.find((c) => c.category === 'intimate');
-
   return (
-    <div className="sheet-backdrop" onClick={onClose}>
-      <div className="sheet" onClick={(e) => e.stopPropagation()}>
+    <div className="sheet-backdrop profile-backdrop" onClick={onClose}>
+      <div className="sheet profile-sheet" onClick={(e) => e.stopPropagation()}>
         <div className="sheet-head">
           <div>
             <h2>{profile.display_name}</h2>
-            <span className="tiny muted">
-              {intimate ? `${intimate.known} of ${intimate.total} intimate things discovered` : `@${profile.username}`}
-            </span>
+            <span className="tiny muted">@{profile.username} · What she has shared with you</span>
           </div>
           <button className="iconbtn" onClick={onClose} aria-label="Close">
             <Icon name="close" size={20} />
@@ -1032,20 +1087,14 @@ function ProfileSheet({
 
         {/*
           Everything below the header lives in one scrolling region - the profile used to
-          split "categories" into their own scrollable sheet-body while the progress bar,
-          bio, gallery and (once dates existed) the whole Dates section sat outside it,
+          split "categories" into their own scrollable sheet-body while the bio, gallery and
+          (once dates existed) the whole Dates section sat outside it,
           unscrollable. That was fine while it all happened to fit inside the sheet's own
           max-height; the Dates section's invite form was what finally didn't, and on a
           phone with the keyboard open there was no way to scroll the "when" field into
           view at all - it was rendered past the edge of a box nothing could scroll.
         */}
         <div className="sheet-body">
-          {intimate && intimate.total > 0 && (
-            <div className="progress">
-              <span style={{ width: `${Math.round((intimate.known / intimate.total) * 100)}%` }} />
-            </div>
-          )}
-
           <p className="small muted bio-quote">{profile.bio}</p>
 
           {profile.core?.length > 0 && (
@@ -1089,23 +1138,21 @@ function ProfileSheet({
             </div>
           )}
 
-          {profile.categories.map((cat) => (
-            <section key={cat.category}>
-              <div className="section-title">
-                {cat.label} <span className="muted">{cat.known}/{cat.total}</span>
-              </div>
-              {cat.rows.map((row) => (
-                <div key={row.key} className={`fact${row.known ? ' known' : ''}`}>
-                  <span className="fact-label">{row.label}</span>
-                  {row.known ? (
+          {profile.categories.map((cat) => {
+            const knownRows = cat.rows.filter((row) => row.known);
+            if (knownRows.length === 0) return null;
+            return (
+              <section key={cat.category}>
+                <div className="section-title">{cat.category === 'intimate' ? 'What she has shared' : cat.label}</div>
+                {knownRows.map((row) => (
+                  <div key={row.key} className="fact known">
+                    <span className="fact-label">{row.label}</span>
                     <span className="fact-value">{row.value}</span>
-                  ) : (
-                    <span className="fact-value locked" title={row.hint}>???</span>
-                  )}
-                </div>
-              ))}
-            </section>
-          ))}
+                  </div>
+                ))}
+              </section>
+            );
+          })}
 
           <FantasiesSection characterId={characterId} />
 
@@ -1117,8 +1164,8 @@ function ProfileSheet({
 }
 
 /**
- * Her fantasies, as far as he knows them: the ones she has pitched, and how many she has not
- * shared yet. Read-only - playing one out happens in the chat or on a date, naturally.
+ * Her fantasies, as far as he knows them. Read-only - playing one out happens naturally in
+ * the chat or on a date.
  */
 function FantasiesSection({ characterId }: { characterId: string }) {
   const [list, setList] = useState<FantasyList | null>(null);
@@ -1127,11 +1174,10 @@ function FantasiesSection({ characterId }: { characterId: string }) {
     api.fantasies(characterId).then(setList).catch(() => setList(null));
   }, [characterId]);
 
-  if (!list || (list.known.length === 0 && list.hidden === 0)) return null;
+  if (!list || list.known.length === 0) return null;
   return (
     <div className="dates-section">
       <div className="section-title">Her fantasies</div>
-      {list.known.length === 0 && <p className="tiny muted">She has not told you any yet.</p>}
       {list.known.map((f) => (
         <div key={f.text} className="fantasy-row">
           <span className="grow small">
@@ -1140,7 +1186,6 @@ function FantasiesSection({ characterId }: { characterId: string }) {
           </span>
         </div>
       ))}
-      {list.hidden > 0 && <p className="tiny muted">{list.hidden} more she has not told you about yet.</p>}
     </div>
   );
 }
@@ -1168,6 +1213,8 @@ function DatesSection({
   const [circle, setCircle] = useState<{ id: string; name: string; who: string }[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [callBusy, setCallBusy] = useState(false);
+  const [callError, setCallError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -1200,14 +1247,61 @@ function DatesSection({
     }
   };
 
+  const startCall = async () => {
+    if (callBusy) return;
+    setCallBusy(true);
+    setCallError(null);
+    try {
+      const call = await api.startCall(characterId);
+      onOpenDate(call.id);
+    } catch (err) {
+      setCallError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setCallBusy(false);
+    }
+  };
+
+  const pastDates = past.filter((session) => session.kind !== 'call');
+  const pastCalls = past.filter((session) => session.kind === 'call');
+
   return (
-    <div className="dates-section">
+    <>
+      <div className="dates-section">
+        <div className="section-title">Calls</div>
+        {active?.kind === 'call' ? (
+          <button className="btn block" onClick={() => onOpenDate(active.id)}>Return to the call</button>
+        ) : active ? (
+          <p className="tiny muted">Finish the current date before starting a call.</p>
+        ) : (
+          <button className="btn block" onClick={() => void startCall()} disabled={callBusy}>
+            {callBusy ? 'Calling…' : 'Call her'}
+          </button>
+        )}
+        <p className="tiny muted">Live voice roleplay: spoken, remote, and lighter than a date.</p>
+        {pastCalls.length > 0 && (
+          <div className="past-dates">
+            {pastCalls.map((call) => (
+              <button key={call.id} className="past-date" onClick={() => onOpenDate(call.id)}>
+                <span className="row">
+                  <strong className="grow">Phone call{call.duration_minutes ? ` · ${sessionLength(call.duration_minutes)}` : ''}</strong>
+                  <span className="tiny muted">{new Date(call.ended_at ?? call.created_at).toLocaleDateString([], { day: 'numeric', month: 'short' })}</span>
+                </span>
+                {call.summary && <span className="tiny muted past-date-summary">{call.summary}</span>}
+              </button>
+            ))}
+          </div>
+        )}
+        {callError && <p className="tiny level-error">{callError}</p>}
+      </div>
+      <div className="dates-section">
       <div className="section-title">Dates</div>
 
-      {active ? (
+      {active?.kind !== 'call' && active ? (
         <button className="btn block" onClick={() => onOpenDate(active.id)}>
           You are out with her — open the date
         </button>
+      ) : active ? (
+        <p className="tiny muted">Finish the current call before starting a date.</p>
       ) : locations.length === 0 ? (
         <p className="tiny muted">
           Nowhere to go yet. Write a place under Settings → Locations first.
@@ -1284,12 +1378,12 @@ function DatesSection({
       )}
       {error && <p className="tiny level-error">{error}</p>}
 
-      {past.length > 0 && (
+      {pastDates.length > 0 && (
         <div className="past-dates">
-          {past.map((d) => (
+          {pastDates.map((d) => (
             <button key={d.id} className="past-date" onClick={() => onOpenDate(d.id)}>
               <span className="row">
-                <strong className="grow">{d.where_at || 'Somewhere'}</strong>
+                <strong className="grow">{d.where_at || 'Somewhere'}{d.duration_minutes ? ` · ${sessionLength(d.duration_minutes)}` : ''}</strong>
                 <span className="tiny muted">
                   {new Date(d.ended_at ?? d.created_at).toLocaleDateString([], { day: 'numeric', month: 'short' })}
                 </span>
@@ -1299,7 +1393,8 @@ function DatesSection({
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -1334,13 +1429,14 @@ function DateRoom({
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const load = useCallback(async () => {
+  const load = useCoalescedRefresh(async () => {
     try {
-      setView(await api.date(dateId));
+      const next = await api.date(dateId);
+      setView(next);
     } catch {
       /* keep what is on screen if the server blinks */
     }
-  }, [dateId]);
+  });
 
   useEffect(() => {
     void load();
@@ -1372,6 +1468,7 @@ function DateRoom({
   }, []);
 
   const live = view?.date.status === 'active';
+  const isCall = view?.date.kind === 'call';
   const here = (view?.date.npcs ?? []).filter((n) => !n.left_at);
 
   // The scene is done once its image message shows up; four minutes is the give-up point.
@@ -1411,7 +1508,7 @@ function DateRoom({
 
   const send = async () => {
     const text = draft.trim();
-    if (!text || sending || !live) return;
+    if (!text || sending || !live || view?.typing || ending) return;
     setSending(true);
     setDraft('');
     try {
@@ -1484,10 +1581,10 @@ function DateRoom({
     }
   };
 
-  const backdrop = view?.location?.image_url ?? null;
+  const backdrop = isCall ? null : view?.location?.image_url ?? null;
 
   return (
-    <div className="chat date-room">
+    <div className={`chat date-room${isCall ? ' call-room' : ''}`}>
       {backdrop && <div className="date-backdrop" style={{ backgroundImage: `url(${backdrop})` }} />}
 
       <div className="topbar">
@@ -1498,13 +1595,13 @@ function DateRoom({
         <div style={{ minWidth: 0 }}>
           <h1>{view?.character.display_name ?? '…'}</h1>
           <span className={`sub${view?.typing ? ' live' : ''}`}>
-            {view?.location?.name ?? view?.date.where_at ?? 'somewhere'}
-            {view?.date.when_at ? ` · ${view.date.when_at}` : ''}
+            {isCall ? 'On a private call' : (view?.location?.name ?? view?.date.where_at ?? 'somewhere')}
+            {!isCall && view?.date.when_at ? ` · ${view.date.when_at}` : ''}
             {!live ? ' · ended' : ''}
           </span>
         </div>
         <div className="spacer" />
-        {live && hasBeat && (
+        {live && hasBeat && !isCall && (
           <button
             className="iconbtn"
             onClick={() => void showScene()}
@@ -1517,13 +1614,13 @@ function DateRoom({
           </button>
         )}
         {live && (
-          <button className="btn ghost" onClick={() => void end()} disabled={ending}>
-            {ending ? 'Ending…' : 'End date'}
+          <button className="btn ghost" onClick={() => void end()} disabled={ending || !!view?.typing}>
+            {ending ? 'Ending…' : isCall ? 'Hang up' : 'End date'}
           </button>
         )}
       </div>
 
-      {here.length > 0 && (
+      {!isCall && here.length > 0 && (
         <div className="date-cast" aria-label="Also here">
           <span className="tiny muted">Also here</span>
           {here.map((n) => (
@@ -1549,7 +1646,7 @@ function DateRoom({
       <div className="chat-log date-log" ref={logRef}>
         <div className="chat-log-inner">
           {view?.messages.length === 0 && (
-            <div className="empty"><strong>You have just arrived</strong>Give her a moment.</div>
+            <div className="empty"><strong>{isCall ? 'Connecting…' : 'You have just arrived'}</strong>Give her a moment.</div>
           )}
           {(() => {
             const messages = view?.messages ?? [];
@@ -1598,7 +1695,7 @@ function DateRoom({
               return (
                 <div key={m.id} className="date-beat-wrap">
                   <div className={`date-beat ${m.sender === 'user' ? 'me' : 'them'}`}>
-                    {renderBeat(m.text)}
+                    {renderBeat(m.text, isCall ? 'call' : 'date')}
                     {m.meta?.failed && (
                       <span className="fail-mark" title="Generation failed - this is a placeholder">
                         <Icon name="alert" size={14} />
@@ -1636,7 +1733,7 @@ function DateRoom({
           {view?.typing && <div className="typing"><i /><i /><i /></div>}
           {!live && view?.date.summary && (
             <div className="date-summary">
-              <div className="section-title" style={{ padding: '0 0 6px' }}>How she remembers it</div>
+              <div className="section-title" style={{ padding: '0 0 6px' }}>How she remembers {isCall ? 'the call' : 'it'}</div>
               {view.date.summary}
             </div>
           )}
@@ -1657,24 +1754,36 @@ function DateRoom({
       )}
 
       {live ? (
-        <div className="composer">
-          {/* Four hints where there used to be three, so the wording tightens to keep the
-              placeholder on one line - a clipped second row is worse than a shorter word. */}
-          <textarea
-            ref={inputRef}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => enterSends(e, () => void send())}
-            placeholder='Narrate · "speak" · *thought* · (direction)'
-            rows={1}
+        <div className="date-composer-wrap">
+          <RoleplaySteering
+            scope="date"
+            id={dateId}
+            resetKey={view?.messages.filter((message) => message.sender === 'character').length ?? 0}
           />
-          <button className="send" onClick={() => void send()} disabled={!draft.trim() || sending} aria-label="Send">
-            <Icon name="send" size={19} />
-          </button>
+          <details className="date-writing-help">
+            <summary>Writing guide</summary>
+            <span>{isCall
+              ? 'Plain text is speech. Use *asterisks* for audible extra information—laughter, breath, or background sounds. Parentheses remain optional private direction.'
+              : 'Write naturally. Use quotation marks for speech, asterisks for thoughts, and parentheses only for private scene direction.'}</span>
+          </details>
+          <div className="composer">
+            <textarea
+              ref={inputRef}
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => enterSends(e, () => void send())}
+              placeholder={isCall ? 'Say something…' : 'Write what you say or do…'}
+              rows={1}
+              disabled={ending}
+            />
+            <button className="send" onClick={() => void send()} disabled={!draft.trim() || sending || !!view?.typing || ending} aria-label="Send">
+              <Icon name="send" size={19} />
+            </button>
+          </div>
         </div>
       ) : (
         <div className="composer date-frozen">
-          <span className="grow small muted">This date is over.</span>
+          <span className="grow small muted">This {isCall ? 'call' : 'date'} is over.</span>
           <button className="btn" onClick={onOpenTextChat}>Back to the chat</button>
         </div>
       )}

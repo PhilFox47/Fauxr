@@ -5,10 +5,12 @@
   "description": "Fauxr - gamified dating simulator, self-hosted",
   "workspaces": ["server", "web"],
   "scripts": {
-    "dev": "npm run dev --workspace=server & npm run dev --workspace=web",
+    "dev": "node scripts/dev.mjs",
     "build": "npm run build --workspace=web && npm run build --workspace=server",
     "start": "npm run start --workspace=server",
-    "typecheck": "npm run typecheck --workspace=server && npm run typecheck --workspace=web"
+    "typecheck": "npm run typecheck --workspace=server && npm run typecheck --workspace=web",
+    "check": "npm run build && node server/scripts/check-regressions.mjs && node server/scripts/validate-attributes.mjs",
+    "eval:roleplay": "npm run build --workspace=server && node server/scripts/evaluate-roleplay.mjs"
   },
   "engines": { "node": ">=22" }
 }

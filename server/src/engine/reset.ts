@@ -103,12 +103,13 @@ export async function resetParts(opts: ResetOptions = {}): Promise<ResetResult> 
   let filesRemoved = 0;
   if (world) {
     filesRemoved += emptyMediaDir('images');
+    filesRemoved += emptyMediaDir(join('uploads', 'chat'));
     // The locations themselves survive - they are places he wrote, not part of the cast -
     // but their backdrops were in the directory that just went, so the rows have to let go
     // of them or the Locations tab comes back full of broken images.
     clearLocationImages();
   }
-  if (profile) filesRemoved += emptyMediaDir('uploads');
+  if (profile) filesRemoved += emptyMediaDir(join('uploads', 'profile'));
 
   if (world) invalidateAttributeCache();
   if (settings) clearSettingsCache();

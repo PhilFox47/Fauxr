@@ -43,6 +43,17 @@ npm start            # serves the API and the built frontend on :8080
 ```
 
 For development, `npm run dev` starts the API on :8080 and Vite on :5173 with a proxy.
+The root launcher starts both workspace processes directly, so the same command works under
+PowerShell/cmd as well as a Unix shell. `npm run check` builds both workspaces, runs the
+isolated core regression checks, and validates all attribute tables.
+
+Settings loaded from SQLite and patches sent by the browser are normalized to the documented
+shape before the engine sees them: unknown keys are dropped, numeric values are clamped, and
+invalid values fall back to defaults. Uploaded profile/chat files are accepted only as JPEG,
+PNG, WebP or GIF and are stored under generated names rather than a caller-supplied extension.
+Profile and chat uploads have separate directories, so resetting one part cannot break or
+leak files owned by the other; deleting a chat removes the images the user sent in it too.
+Startup migrates older shared-directory uploads and Windows-style stored path separators.
 
 ### Data
 
@@ -58,7 +69,9 @@ Nothing else on disk is state. See **Starting over** below.
 
 Characters answer whenever you write, at any hour. There are no online windows, no "I'm
 heading off" absences and no server uptime window any more. On every start a catch-up job
-spreads out any overdue wakeups and decays arousal for the time the server was off.
+spreads out overdue wakeups and refills the swipe stack. Story time and arousal do not move
+merely because the server was off; only conversation and the explicit **Pass time** control
+move a chat's own clock.
 
 ### A password, optionally
 
@@ -81,6 +94,10 @@ is deliberately left reachable with no session, since otherwise there would be n
 render the login screen with — it carries no data of its own until the API actually answers
 something. An **Account** card at the top of **Settings → Reset** logs out, and only appears
 at all when a password is actually set.
+
+Ten failed logins from one address within five minutes are throttled. Session cookies gain the
+`Secure` flag automatically on HTTPS (including a proxy that sends `X-Forwarded-Proto: https`);
+set `FAUXR_SECURE_COOKIE=1` when TLS terminates somewhere that cannot send that header.
 
 ### Starting over
 
@@ -125,19 +142,28 @@ Build artefacts are not state and are rebuilt by `npm run build`; delete `node_m
 
 ## Models
 
-All LLM and image calls go through one OpenAI-compatible endpoint (Nano-GPT by default).
-Three roles, configured separately in Settings:
+Model and image calls share one configured API base (Nano-GPT by default). Chat/image roles
+use its OpenAI-compatible endpoints; the optional evaluator uses the adjacent System One
+decision endpoint. Four roles are configured separately in Settings:
+
+Every provider request has an application-owned deadline. Text calls default to five minutes
+unless a large background call asks for more; image calls get ten minutes. The undici transport
+timeouts stay disabled because non-streaming reasoning models may legitimately take minutes to
+produce response headers, but a stalled provider can no longer leave an image job permanently
+"running". Daily call budgets include requests currently in flight, so concurrent background
+work cannot all consume the last available slot.
 
 | Role | Default | Job |
 |---|---|---|
 | Actor | `z-ai/glm-5.3-flash-uncensored` | writes every chat and date message, and the bios |
 | Director | `google/gemma-4-31b-it` | direction, stats, ledger, generation, vision |
+| Evaluator | `typesafe/jev-latest` | cheap typed quality judgments over new character dossiers |
 | Image | `seedream-v4` | profile and in-chat images |
 
 Nothing is hardcoded: base URL, key, model name and sampling parameters are all editable,
 and `server/src/llm/client.ts` is the only place that knows about the provider.
 
-Each of the three roles also has an optional `provider` field, matching Nano-GPT's
+Actor, Director and Image also have an optional `provider` field, matching Nano-GPT's
 `provider` field on `/chat/completions` and `/images/generations` — a plain string like
 `"chutes"` or `"targon"` that pins an open-source model to one specific backend instead of
 letting Nano-GPT route it. Left blank (the default), the field is omitted from the request
@@ -320,7 +346,8 @@ What was added:
   an emoji to you and she cannot send photos. (This was a "swap" at first: your pictures were
   hidden from her until then and she reacted to it. See "Generate profile pic, not a swap"
   below.) From then on, when she decides to send a photo it is generated straight away with no
-  consent card, using her profile picture as the reference for her face. Characters whose
+  consent card, using her private identity portrait (or an older character's profile picture)
+  as the reference for her face. Characters whose
   picture was already generated count as swapped.
 - **She sees what you send.** A photo you upload is described by the vision model before she
   replies, and the description goes into the conversation history, so her answer is about
@@ -412,12 +439,26 @@ scene". When he replied two hours later that direction was still valid, so she f
 
 Now:
 
+- A direction is only a one-turn mood and loose private impulse. It no longer scripts exact
+  dialogue, message counts, required beats, forbidden topics or an outcome he must provide.
 - A direction written for a moment she acted on her own (her opener, a check-in) expires as
   soon as he writes.
 - Any direction expires if he replies more than 30 minutes after it was written.
 - Regenerating a reply refreshes an outdated direction before rewriting, instead of rerolling
   the same wrong plan.
 - Both prompts say it outright: the direction never means ignoring his newest message.
+
+The Actor no longer reports an `unresolved` topic or asks for an extra Director pass after
+writing. Those fields made a passing question or joke into a mandatory loop and let the
+reply retroactively script the next one. Durable facts are recorded by the Director from the
+real transcript. Failed fallback bubbles are excluded from prompts and do not update mood,
+memory, clothing, release state or direction lifetime.
+
+Dates use the same principle. The Actor sees the opening handoff from the recent text chat,
+then a bounded scene window (the opening, current state and latest beats), with the newest beat
+immediately before it writes. Private thoughts live in structured hidden state rather than a
+required narration/thought/dialogue formula. A beat may use whatever mix of action and speech
+the moment needs.
 
 ## Keeping characters distinct
 
@@ -429,9 +470,8 @@ do to me first?"). Fixes:
 - Her curiosity about you was per character: one question tied to her own kinks plus one
   generic topic. It has since been removed with the other topic lists (see "She decides where
   it goes").
-- The Director is told to build every goal from what is specific to her, never to open by
-  quoting a label from your bio, and to vary the kind of move (tell, confess, describe, order,
-  tease) instead of quizzing you.
+- The Director's loose impulse is built from what is specific to her; it cannot prescribe her
+  wording or turn a label from your bio into a shared stock opener.
 - The Actor no longer has a generic "lowercase, u, tbh" texting default that overrode each
   character's own typing style. She types exactly as her own style block says.
 - The flirt and escalate nudges used her persona, dirty-talk style, signature move and body
@@ -479,6 +519,10 @@ there, it just no longer fills the middle. Only new characters are affected.
 
 Measured over 4000 rolled characters, before and after:
 
+The tattoo and piercing rows below are historical measurements from this rebalance. The later
+wardrobe consolidation deliberately supersedes them because that much ink and metal degraded
+image consistency.
+
 | | before | after |
 |---|---|---|
 | alt / OnlyFans styles (goth, e-girl, emo, alt, punk, gamer, cosplay, ...) | 24% | 52% |
@@ -510,8 +554,9 @@ What changed:
   outright: it has no place next to sexual content.
 - **Looks pull their own look along.** Alt styles carry `extra.weights` towards black or
   vivid dyed hair, liner, chokers, fishnets and platform boots, and a new `extra.adds`
-  (`{ tattoos, piercings }`, read in `rollSeed`) gives them more ink and metal: each whole
-  unit is one more, the fraction a chance of one more. Sexual personas list matching styles as
+  (`{ tattoos, piercings }`) originally gave them more ink and metal. Those values now only
+  lean the much rarer tattoo/body-jewellery selection rather than adding pieces outright.
+  Sexual personas list matching styles as
   affinities, so a goth leans towards the domme, the latex fetishist and the alt girl.
 - **Personas lean dominant and distinctive.** The dom personas lead, the kink-specific ones
   (foot-focused, exhibitionist, rope bunny, latex) are common, and the soft middle
@@ -878,13 +923,19 @@ background only - he sees her style, never the list.
   stockings, garters), shoes, extras (belt, hat, gloves, harness, headphones), jewellery, bra, panties,
   lingerie (a teddy or bodysuit, covers bra and panties), swim and work. Swimwear and uniforms
   are sets: `extra.pieces` says which worn slots they fill.
-- The data is in `data/attributes/wardrobe.json` (474 pieces). Items hang off **style
-  families** (`wardrobe_family`: basics, street, sporty, goth, alt, soft, boho, tailored,
-  glam, retro, beach, rave, costume, plus `any` for the universal basics), and every
-  clothing style lists its families in `extra.wardrobe_families`. A new piece needs a slot
-  and a family, and a new style needs only its families. `validate-attributes.mjs` checks
-  slots, families, lingerie styles, occupations and set pieces, and that every style's pool
-  can fill its own counts.
+- The data is in `data/attributes/wardrobe.json` and `wardrobe-expansion.json` (1,061
+  pieces across 122 styles). Items still hang off broad **style families** for useful
+  sharing, but may also carry `extra.styles`: the exact aesthetics they were designed for.
+  Every style has a validated 20-40-piece capsule covering the core outfit slots, and its
+  own pieces receive a strong preference when the closet is rolled. Thus office siren and
+  dark academia can share tailored basics without receiving the same effective wardrobe.
+  `build-wardrobe-expansion.mjs` regenerates the checked-in capsules deterministically;
+  `validate-attributes.mjs` checks their references, size and slot coverage.
+- Historical, fantasy, superhero and science-fiction characters now have dedicated families
+  and styles: period clothing from Greco-Roman through disco, courtly/adventuring/armoured/
+  magical fantasy looks, hero and villain suits, and futurist, spacefaring, alien and
+  post-apocalyptic wardrobes. Era, species and hero-role wardrobe leans live in data as
+  `wardrobe_lean` rows rather than hard-coded character checks.
 - How many per slot: `extra.counts` on the families (defaults on `any`, overrides on her
   main family), her lingerie style's `extra.wardrobe_counts` ("usually nothing underneath"
   owns at most one bra) and the style's own `extra.wardrobe_counts`. A closet comes out at
@@ -894,6 +945,10 @@ background only - he sees her style, never the list.
   chef's whites, a stage outfit...) comes with it. A mermaid or lamia owns no bottoms,
   legwear or shoes (`extra.no_slots` on the species). About one closet in three gets one
   piece from outside her style.
+- Anatomy is independent of aesthetic. Species wardrobe leans can request wing openings,
+  tail openings, horn-friendly headwear or hoof-safe footwear; those compatible pieces are
+  eligible and strongly preferred without forcing an angel, catgirl or satyr into one
+  particular fashion style.
 - Rolled through `roll()`, so Settings -> Taste has a **Clothes** section split by slot
   ("Socks, tights and stockings", "Shoes", ...). Her style's and her kinks' `extra.weights`
   lean it too, and a leaned piece is eligible even outside her families: "wearing
@@ -913,13 +968,24 @@ background only - he sees her style, never the list.
     clothing;
   - only what is always on her stayed an accessory, and now reads that way ("Always on her"
     on the profile sheet and in Taste): glasses she needs, her nails, the ring she never
-    takes off, the pale band where one was. That is all the fixed look still carries.
+    takes off, the pale band where one was. Piercings and ordinary earrings no longer appear
+    here; they are jewellery in her wardrobe. That is all the fixed look still carries.
   - His own profile card keeps its "Usually wearing" list (`his_accessory`, the old table
     under the same ids), so nothing on it changed.
 - The fixed look (`engine/appearance.ts`) no longer carries the style's outfit line.
 - Existing characters get a closet on first load, their moved accessories go into it (or
   into what they carry), a closet from before jewellery gets its jewellery, and their fixed
-  look is rebuilt without the outfit line and the moved pieces.
+  look is rebuilt without the outfit line and the moved pieces. Legacy permanent piercing
+  records are converted to the closest wardrobe body-jewellery piece and then cleared, so an
+  image never receives both a piercing attribute and an "Always on her" copy.
+
+**Body art is intentionally sparse for image reliability.** New characters no longer roll a
+separate permanent piercing attribute. A closet has a 6% base chance of one special body-
+jewellery piece, rising only as far as 18% for styles that strongly lean that way; ordinary
+earrings remain ordinary jewellery. Tattoos remain appearance facts because they cannot be
+taken off, but their old archetype/style count passes through a 6–18% rarity gate and is capped
+at two. This keeps both available as distinctive exceptions without asking the image model to
+reconstruct several tiny metal or ink details in every shot.
 
 **Her outfit** is what is on her body right now, slot by slot, each piece with a state: on,
 open, pushed up, pulled down, pulled aside, half off, off.
@@ -1150,20 +1216,20 @@ guessed:
 - The em-dash, already rejected in dates, only appears in logs from before that check.
 
 What changed:
-- **The prompts name them**, briefly, in the static half: the chat prompt's "Do not sound like
-  an assistant" gets the reframe with its own examples and the fix ("thats panic phil"); the
-  date prompt's "The thing that gives you away" gets the reframe and stage business on repeat.
-- **`detectReframe()`** (`voice.ts`) sends the first draft back with a fix, in the chat and on
-  dates. Over the 784 replies it matches 9 distinct lines, all real reframes; it leaves "im not
-  mad im just tired", "its not that deep", "ur not nearly as patient as ur profile says" and
-  similar ordinary speech alone. "I'm not X, I'm Y" is deliberately not matched.
+- **The prompts name them** as writing guidance, while keeping the character and immediate
+  scene more important than a house-style checklist.
+- **`detectReframe()`** and the other style detectors remain as diagnostics. They no longer
+  discard a coherent draft. The real-session failure mode was worse than the tic: a good
+  first answer was rejected, its correction conflicted with the character's voice, and the
+  second call either flattened the line or fell back entirely.
 - **Dates name her recent crutches.** Each beat's prompt lists the stage business she used in
-  her last three beats ("Fresh this time"), so she can leave it out instead of being caught
-  afterwards. If she still reaches for one she used in two of those three, the first draft is
-  sent back (`detectRepeatedCrutch()`); on the logged dates that would have been 9 of 24 later
-  beats, before she was ever told.
-- Both checks only ever cost one retry on the first draft, never the fallback line, like the
-  existing quiz check.
+  her last three beats, so she can vary it without a forced rewrite. Length and punctuation
+  are advisory for the same reason.
+
+Retries are reserved for failures that break the product or the fiction: invalid JSON, no
+usable content, refusal/fade-out, system or media markup leaking into dialogue, writing his
+half of a date, hard-limit-adjacent euphemism, scorekeeping/audition framing, or an impossible
+photo promise. This keeps guardrails from becoming a second, contradictory author.
 
 ## He is not auditioning
 
@@ -1191,9 +1257,9 @@ Now:
   with a fix, in the chat (through `findVoiceProblem`) and on dates. Checked against every such
   line in the log, and against nearby phrases it must leave alone ("i earn good tips", "you
   passed the salt", "a ranked list").
-- **Her memory stops feeding it back.** `ledgerBlock()` leaves out any fact, thread, intent or
-  plan phrased that way, so Kaoru's stored "earn the nickname" threads no longer reach her
-  prompts. They stay in the ledger; they are just not read.
+- **Her memory stops feeding it back.** The Director no longer creates open threads or
+  long-game plans, and neither reaches prompts from an older save. Durable facts that contain
+  audition framing are filtered too, so Kaoru's stored "earn the nickname" loop is inert.
 
 Teasing, dares and games she genuinely likes are untouched. What goes is the verdict on him.
 
@@ -1220,26 +1286,99 @@ Per AGENTS.md this is her judgment, not a limit, so she gets the guidance and th
   has sent one in the last day, and as "photos:" in the Director's RIGHT NOW. Two photos
   offered as a choice count as one send, and the one he did not pick is left out.
 
-## A desktop layout
+## A character-first interface
 
-The app was built for a phone. On a desktop it showed as a 620px phone column in the middle of
-the monitor, with bottom tabs, a chat list and a chat as two separate screens, and sheets
-sliding up from the bottom edge.
+The interface is designed as a private messenger and dating app, not a progression game or an
+operator dashboard. Discover presents one person at a time without rarity tiers or collectible
+grading. A character profile shows only what is already known; it does not render hidden facts
+as `???`, totals, or progress bars. Her identity in the chat header opens that profile.
 
-From 1024px wide (`DESKTOP_QUERY` in `App.tsx`, the same width as the CSS) it lays out for the
-screen instead:
-- **A sidebar** with the brand and Discover / Chats / Settings replaces the bottom tabs; the
-  unread count sits on Chats.
-- **Chats is a split view:** the list on the left (360px), the open chat on the right, and "Pick
+Image generation remains an explicit cost decision. Instead of a small camera control in the
+chat header, a contextual card explains that creating her profile photo enables photos in that
+conversation and asks for confirmation. Regenerate and delete controls remain available but
+recede until hover/focus on pointer devices. Dates use an ordinary writing prompt with an
+optional syntax guide rather than putting roleplay notation in the placeholder.
+
+Settings separates **Your experience** (behaviour, taste, profile, date locations) from
+**System** (models, images, diagnostics, account/data). The experience section opens first.
+
+## A living roleplay layer
+
+Chat and dates share embodied continuity without adding relationship scores or content gates.
+The Actor reports a small private scene state—position, proximity, physical contact, one live
+sensory detail, interruptions and any literal action left in motion—and the next turn receives
+it as physical truth. Empty fields mean unchanged. Date beats store their scene snapshot on the
+beat itself, so deleting or regenerating a beat also rolls its physical consequences back.
+
+The Director can retain three kinds of relationship texture separately from ordinary facts:
+
+- **Rituals** are recurring, character-specific habits that have genuinely repeated, such as
+  how she initiates or how the two of them come down after something intense.
+- **Callbacks** are small concrete details worth bringing back once. When the Actor uses one,
+  she reports it privately and it is retired rather than becoming a catchphrase.
+- **Aftermath** is her subjective emotional residue after intimacy or a date. It can colour the
+  next conversation without rating the user or gating anything.
+
+Scene state deliberately rejects conversational IOUs: `unfinished` can carry a hand still
+moving or a kiss interrupted halfway, never a question, promised photo, debt or reply she is
+waiting for. Mock contracts, fees and deadlines stay disposable banter and are removed from
+durable memory. Near-duplicate memories are compacted so one preference cannot become louder
+merely because the Director described it three ways.
+
+Voice notes use their structured `{ message: { text, duration_seconds } }` result directly.
+They are the payoff when the conversation has been waiting for one, and pass the same
+anti-gating checks as text and date prose instead of silently falling back to more promises.
+Ordinary photo exchange is likewise distinct from a sexual interest in filming or recording.
+
+Date turns receive a non-persistent rhythm nudge—clarify, answer, linger, reveal, transition or
+pay off—chosen from the newest player move and recent prose. This varies composition without
+creating progression state. A first draft over 160 visible words is rewritten as one focused
+beat, and an opening may be physical or declarative rather than another question.
+
+The composer has optional **Guide the next reply** controls: Slow down, Let her lead, More
+playful, Change the scene, Toward intimacy and Surprise me. A selection is private guidance
+for one Actor reply only. It is not dialogue, consent, or a command, and her identity, hard
+limits, physical continuity and the user's newest message remain authoritative.
+
+Date locations have layered scene affordances: sensory handles, private corners, ambient
+people, optional social openings, believable interruptions, natural transitions and practical
+constraints. Expanding a location drafts them automatically and the editor keeps everything
+editable. Ambient staff and regulars are explicitly background—not cast or foreshadowing—and
+every affordance is a possibility rather than a checklist of events.
+
+The chat Actor also sees a compact list of the saved date map. She can propose one by its exact
+name when it genuinely fits her and the conversation, but the list is not the boundary of the
+fictional city: she remains free to pitch a new venue or kind of outing as a new idea.
+
+For writing-quality work, `npm run eval:roleplay -- transcripts.json` runs a deterministic,
+offline transcript lint. It accepts an array (or `{ "conversations": [...] }`) of conversations
+with `mode` and `{ sender, text }` messages and reports likely stalls, question-heavy replies,
+repetition, system/score language, transactional content gates, repeatedly delayed payoffs,
+message floods, overlong date beats and excessive surface-voice gimmicks. Image messages may
+also include `kind`, `situation` and `prompt` to check whether an established place or night
+scene survived prompt assembly. It never
+calls a model and never rewrites runtime output; the flags are for human review.
+
+Image assembly treats the scene's location, time, light, positions and clothes as anchors.
+Random photographic imperfections fill only unspecified gaps; in-person scenes no longer
+draw a replacement light, and a spicy photo in a named workplace keeps that workplace rather
+than drifting into a generic bedroom or pantry.
+
+From 1024px wide (`DESKTOP_QUERY` in `App.tsx`, the same width as the CSS) the layout expands for
+the screen:
+- **A compact sidebar** with Discover / Chats / Settings replaces the bottom tabs; the unread
+  count sits on Chats.
+- **Chats is a split view:** the list on the left (340px), the open chat on the right, and "Pick
   a chat" until one is open. The open row is highlighted, the chat has no back button, and
   clicking another chat switches the pane in place (`replaceTopView`), so the browser's back
   button still leaves the chat in one step. Leaving the Chats tab closes the chat. Dates open
   in the same pane.
-- **Discover and Settings** stay one readable column (560px and 860px) in the middle.
+- **Discover gets an editorial profile stage** while Settings gets a persistent section rail;
+  both keep readable content widths inside the larger workspace.
 - **Long lines are capped:** the conversation is at most 860px wide and a bubble at most 560px,
   so text does not run across a whole monitor.
-- **Sheets become dialogs:** her profile and a past date open as a centred dialog, not a
-  bottom sheet.
+- **Her profile becomes a side drawer** on desktop, keeping the conversation visible as
+  context. Other sheets remain dialogs.
 - **Keyboard:** Enter sends and Shift+Enter starts a new line, in the chat and on a date.
   Escape closes an open dialog but never the chat itself. Enter only sends on a wide screen
   with a mouse or trackpad, so a phone keyboard keeps Enter as a new line.
@@ -1328,8 +1467,8 @@ Now:
   lines in existing chats. Until then her prompt says only that she cannot send photos in this
   chat for now, with no reason given, so there is nothing for her to talk about. The same note
   shows when image generation is off.
-- The armed label "Generate profile pic?" wraps inside the header on a phone instead of
-  pushing the page sideways.
+- The action appears in a contextual conversation card, explains what it enables, and uses a
+  second press as confirmation.
 
 The internal flag keeps its old name, `photos_exchanged`.
 
@@ -2713,8 +2852,8 @@ caught and, per the fix above, is accepted on the retry rather than falling back
 
 ## Character generation
 
-Every seed is rolled once and never changes. Generation runs as a **cascade** rather than
-one flat roll, because the order is what makes a character hold together:
+Every candidate seed is rolled as a **cascade** rather than one flat roll, because the order
+is what makes a character hold together:
 
 1. **Age and the languages she speaks**, conditioned on nothing. These are the base.
    Languages are a soft stand-in for where she or her family are from, which is what later
@@ -2749,9 +2888,24 @@ from the archetype too, which coupled how many languages she speaks to how she b
 is an odd pairing once a language is standing in for background rather than personality, so
 it now uses one distribution for everyone.
 
-After the rolls, three LLM passes finish her: a **Director coherence pass** that may swap at
-most two tags and writes her **dossier** along with the rest of her seed's free text, then
-the Actor writes her **handle** from the dossier, then her **bio** from the dossier.
+For a new character the app rolls twelve ordinary candidates, compares their playable
+signatures with the existing cast, and makes a soft weighted choice for the least duplicated
+combination. This does not chase rarity: with an empty cast it is an unbiased choice, and
+later it rewards novel combinations of personality, voice, life, style and sexuality rather
+than individually exotic tags. The chosen seed is then immutable. The writing model cannot
+swap attributes.
+
+The seed is compiled into a structured **character blueprint**: attribute-qualified anchors,
+chat and spoken voice inputs, life and erotic anchors, meaningful contrasts, and a small
+initiative repertoire. It contains references to rolled attributes rather than invented
+facts, and remains the prompt-facing source of truth. Existing characters receive the same
+blueprint from their established seed when first loaded.
+
+The Actor then renders a private dossier from the frozen roll, followed by separate handle,
+bio and fantasy passes. Keeping fantasies separate prevents one vivid sexual scenario from
+pulling the rest of her identity into its orbit. The dossier helps prose writers understand the combination; omitting a fact
+from it no longer erases that fact from roleplay, because the seed and blueprint remain in
+the Actor and Director context.
 
 `search_motive`, `touchstone`, `turn_ons` and `turn_offs` are rolled *without* the archetype
 filter, on purpose. A character who ticks differently than she looks is the interesting case.
@@ -2763,12 +2917,11 @@ attribute dump, straight into both prompts: forty-odd lines of `label - hint` pa
 women who happened to roll three of the same tags produced suspiciously similar bios,
 because "suspiciously similar" is exactly what a spec sheet read out loud sounds like.
 
-The coherence pass now writes a **dossier** — several paragraphs of prose, the way a casting
+The character pass writes a **dossier** — several paragraphs of prose, the way a casting
 document or a character bible entry would, not a restatement of the tags with commas turned
-into sentences — and it is what everything downstream actually reads. Nothing else changed
-about the pass itself: it still does the coherence swaps, still writes her name, her avatar
-emoji, her online windows. Writing her out in full is just the main thing it does now, and
-everything else is the smaller output alongside it.
+into sentences. It cannot replace the roll. The dossier feeds the profile-writing passes,
+while live roleplay retains the complete structured identity and uses the blueprint to keep
+her contrasts and characteristic ways of initiating visible.
 
 The instruction leans hard on one point: a real woman with this exact profile has specifics
 the dice never rolled — what she actually calls her cat, why this job and not some other
@@ -2776,23 +2929,29 @@ one, what she is like at 2am versus a work lunch — and inventing two or three 
 consistent with everything else, is what a spec sheet cannot do and prose can. That is the
 actual point of the exercise, not the prose itself.
 
-One section of the dossier is deliberately load-bearing rather than merely descriptive: how
-she actually texts. Typing habits, typo rate, emoji use, message length, reply speed, voice
-notes. The bio prompt has always leaned on this ("a lowercase no-punctuation woman writes
-the bio that way"), and once the raw attributes are gone from that prompt, this paragraph is
-the only place that information still exists — so it is asked for as usable fact, concrete
-enough to write a message in her exact voice, not just flavour.
+The dossier still describes how she texts in usable terms, but it is no longer the only copy:
+the blueprint separately records the exact chat and spoken voice attributes. A vague sentence
+in the prose therefore cannot flatten the underlying voice configuration.
 
-The raw attribute dump did not go anywhere — `describeSeed()` is still what the coherence
-pass itself reads to write the dossier in the first place, and it still backs the debug
-endpoints and the vision self-check. It just stopped being what the handle and the bio see.
-If the coherence pass fails outright, `seed.hints.dossier` falls back to it, so a character
+The raw attribute dump did not go anywhere — `describeSeed()` is still what the character
+pass reads to write the dossier in the first place, and it still backs the debug endpoints
+and the vision self-check. If the character pass fails outright, `seed.hints.dossier` falls back to it, so a character
 still gets a handle and a bio rather than nothing — verified against a mock that fails the
 coherence call specifically: generation still completes, and only in that failure case does
 the handle prompt see the raw tags again.
 
 The pass writes more now, so its budget was raised accordingly — see *"Headroom over
 truncation, everywhere"* below for the current numbers, which have moved again since.
+
+### Optional Jev character evaluation
+
+Settings contains a third text role, **Evaluator**, enabled by default with Nano-GPT's
+`typesafe/jev-latest`. It is not a prose model and never chooses attributes. After a dossier
+is written it evaluates four atomic yes/no questions in one request: contradiction of the
+roll, interchangeability, flattened contrasts, and an unusably vague voice description.
+Confident problems produce one focused rewrite request; an uncertain answer, disabled model,
+unsupported endpoint, timeout or provider failure is advisory and never blocks generation.
+Its confidence threshold and model id are editable independently of Actor and Director.
 
 ### There is no "her whole thing" any more
 
@@ -3428,8 +3587,8 @@ still laughs; she just laughs like someone guarded."
 **One seed was reused for every image she ever generated.** `character.seed.image_seed` went
 into every call — profile, chat, spicy, date, and every regenerate of any of them. Same
 seed, same reference image, same demeanour string left the prompt doing all the differing on
-its own. Her profile picture keeps the fixed seed, because it is the identity anchor every
-later reference image locks onto; everything after it gets a fresh one. Nothing reads the
+its own. Her private identity portrait and profile picture keep the fixed seed; later shots
+get a fresh one. Nothing reads the
 value back (it is persisted for the image log and nothing else), so this also gives
 "regenerate" something real to change.
 
@@ -4503,9 +4662,16 @@ single ethnicity id alone is too sparse a sample to trust a bare count from).
 ## Dates
 
 Everything else in Fauxr simulates a phone. A date is the other register: the two of you in
-the same room, written as roleplay — speech in plain text, actions in `*asterisks*` — with
-physical contact that actually happens instead of being described over a text message. It is
-the one part of the app that is not a chat.
+the same room, with narration in plain text, speech in quotes, private thoughts in structured
+hidden state, and out-of-scene direction in `(round brackets)`. The player can still use
+`*asterisks*` for his own private intent; she never treats that as something heard. Physical
+contact actually happens instead of being described over a text message. It is the one part
+of the app that is not a chat.
+
+A date room is serialized one beat at a time. While she is writing, the server rejects another
+line or an end-date request rather than accepting work against two different transcript
+snapshots. Ending takes that same lock through the summary call, so the remembered evening and
+the relationship state always include the final completed beat.
 
 **You start them, she doesn't.** She can ask for a date in the texting, and often will, but
 the button is yours. An invitation you could be talked into by the other side is not an
@@ -4514,19 +4680,18 @@ makes the mechanic worth having.
 
 ### Places you write yourself
 
-Settings → **Locations** is a list of places, each one a name and a description you typed.
-The description is what she actually experiences being there — the noise, the light, who else
-is around — so it is worth writing the place rather than labelling it. Nothing about a
-location is rolled or generated; it is your prose, and the date prompt uses it verbatim.
+Settings → **Locations** is a list of places, each one with a name, an editable description
+and structured scene texture. The prose establishes the physical place—shape, light, sound,
+rhythm and contrasts—while separate fields distinguish ambient people from optional social
+openings. This prevents a named owner or bartender from becoming important merely because the
+venue description mentioned them.
 
-**Expand description** turns a placeholder into the real thing. Type "Wine Bar" and "a wine
-bar near me", hit the button, and it comes back as something like "Wine Bar: Le Chez" with a
-description that actually pictures the place — the vibe, a specialty drink the owner ages
-himself, an ex-sommelier bartender who won't stop talking about it, why the tables being so
-close somehow works in the room's favour. It never contradicts what you already wrote, only
-adds concrete, specific color to it, and it runs on the draft sitting in the editor — nothing
-has to be saved first, and it costs no image generation. The result lands back in the same
-two fields, still fully yours to edit or rewrite before you save.
+**Develop this place** turns a placeholder into the real thing. It preserves supplied facts,
+adds physical layout, atmosphere, use, signatures and contradictions, then extracts the scene
+handles separately. People who merely belong to the venue go into `background_people`; an
+actual opportunity to involve somebody belongs in `social_openings`. Neither is a promised
+event. The call runs against the unsaved draft and costs no image generation, and every result
+lands back in the editor for revision before saving.
 
 The one generated part is the **backdrop**: an optional AI image, made from the name and the
 description, that becomes the blurred background of the date screen. It is a separate,
@@ -4644,27 +4809,21 @@ instructions every other in-app photo gets.
 character blocks (identity, appearance, life, interests, sexual, spice, ledger, mood) and
 replaces everything about texting:
 
-- **Four-part syntax, not asterisk-actions.** Plain text is narration — third person, present
+- **Visible prose plus structured thought.** Plain text is narration — third person, present
   tense, a camera's view of what happens. `"Quoted text"` is spoken aloud, and only ever
-  hers; she never voices his lines. `*Asterisked text*` is a private thought, and it is
-  genuinely invisible — stripped before the beat ever renders, for both sides. He can write
-  his own `*thoughts*` too when composing his half; they tell the model what he privately
-  means, never something she perceives — she reacts to what is actually said or done, exactly
-  as he never hears hers. The stored message keeps the full markup either way, so a beat that
-  is nothing but a hidden thought would render as a blank bubble — checked for and rejected
-  before that happens — and so the model can see its own past private thoughts on the next
-  turn for continuity, even though nobody watching ever will.
+  hers; she never voices his lines. Her private thought is returned in `hidden.thoughts`, not
+  forced into every visible beat. This removes the repetitive narration/thought/speech formula
+  while keeping continuity. He can write his own `*thoughts*`; they tell the model what he
+  privately means, never something she perceives. Legacy inline thoughts remain readable and
+  invisible, but new Actor output does not rely on them.
 - **Write her, never him.** She never narrates his reactions, his lines or his feelings.
   Enforced in code as well as prose — narration is plain text now, so a sentence that opens
   on "he" or "you" as its subject is rejected and rewritten, while "she takes your hand"
   passes, which is the whole distinction.
-- **Two or three paragraphs, still one beat.** What she notices, what the room is doing, a
-  thought riding along, what she does, what she says — that is room to actually write the
-  moment rather than a line or two of shorthand for it, checked in code (220 words, not
-  counting any hidden thought) and re-requested once if it runs past even that. The point of
-  the cap was never brevity for its own sake, only ruling out a reply that skips ahead an hour
-  or plays out a whole exchange in one go, which steals the date from you as much as writing
-  your half would and leaves no room to answer before the next one arrives.
+- **One playable beat.** Any mix of action and speech is valid; there is no fixed three-part
+  composition. One to three short paragraphs is guidance, and the 220-word detector is a
+  diagnostic rather than a rewrite trigger. The hard boundary is temporal: she must not skip
+  ahead or play his side of an exchange.
 - **Physical contact is real and she initiates it.** Her limits and her appetite are exactly
   what they always were; what changed is that she has her whole body available instead of a
   phone. Nothing on her hard-limits list moves for being in the room.
@@ -4682,15 +4841,15 @@ the better answer: a per-beat goal and stance would rail-road exactly the thing 
 chat and dates, and until now the date prompt got the texting version verbatim - "Write it the
 way people actually sext on a phone", "STILL FORBIDDEN: asterisk actions, narration... it is a
 script", "it is affecting how you type". That flatly contradicts `actor_date.md`'s own rules
-a few sections earlier in the same prompt, which *require* narration and asterisked thoughts
+a few sections earlier in the same prompt, which require narration
 and explicitly say typing habits do not apply once she is worked up in person. A model handed
 both halves in one request was being told, simultaneously, that narration is forbidden and
 that narration is the format - and a turn like reaching for his glass and calling it "guessed
 something" reads exactly like a model splitting the difference between two contradictory
 instructions rather than following either one. Both functions now take a `medium` argument
 (`'text'` or `'in_person'`, defaulting to `'text'` so the chat call site in `actor.ts` is
-untouched); dates.ts passes `'in_person'`, which swaps in phrasing that asks for the same
-three-part format as the rest of the date prompt instead of fighting it. Verified two ways:
+untouched); dates.ts passes `'in_person'`, which asks for narration and spoken dialogue while
+keeping her private thought in structured hidden state. Verified two ways:
 unit checks on both functions confirm the `'in_person'` variants drop every texting-only
 line and the default (texting) output is byte-for-byte unchanged, and an end-to-end date
 started with arousal forced to 80 had its actual captured prompt checked directly - no
@@ -4698,16 +4857,17 @@ started with arousal forced to 80 had its actual captured prompt checked directl
 the format section and its typing-habits-don't-apply line were still there as normal.
 
 On screen, a spoken line renders in the app's own accent pink, narration stays the ordinary
-text colour, and a `*thought*` — from either of you — simply never appears; the backdrop
-behind it all is a lighter blur than it started at, enough to stay a place without turning
-into an abstract wash.
+text colour, and a `*thought*` outside speech — from either of you — simply never appears.
+Asterisks inside quoted direct speech are emphasis, so `"now *that* was funny"` keeps and
+italicises "that" instead of accidentally deleting it. The backdrop behind it all is a
+lighter blur than it started at, enough to stay a place without turning into an abstract wash.
 
 ### Ending it, and remembering it
 
 **End date** is yours too. Ending runs one Director pass (`director_date_summary.md`) over
 the whole transcript, which writes the paragraph she will remember the evening by, up to
-three highlights of what actually landed, anything new she learned about you, threads left
-hanging, and the stat movement — an evening in person moves more than an evening of texting,
+three highlights of what actually landed, anything new she learned about you, and the state
+movement — an evening in person moves more than an evening of texting,
 in whichever direction it went.
 
 The summary is then posted as a system line into the **text chat**, which is the point of the
@@ -4719,6 +4879,28 @@ and `has_had_first_date` gets set.
 
 If the summary call fails, the date still ends with a plain factual line. Losing the stat
 deltas is survivable; leaving her stuck on a date because one call timed out is not.
+
+### Calls: live audio between chat and a date
+
+Calls reuse the date session lock and separate transcript, but have their own Actor prompt and
+screen. They are remote, audio-only and intentionally shorter: plain text is spoken aloud;
+`*asterisks*` are visible audible context such as laughter, a caught breath or someone speaking
+in the background. She cannot see, touch or position him, there is no outfit/cast/location or
+scene-image machinery, and phone sex stays in what the microphone can carry. Parentheses remain
+the player's private direction syntax.
+
+The user can call anyone at any time when no other live session is active. Only a stable, small
+minority of characters suggest calls themselves, weighted by their voice-message tendency, so it
+feels like a character preference rather than the cast's next universal script. Starting and
+ending a call creates the same tappable system cards as a date, never ordinary chat bubbles.
+
+Ending either kind of session asks its summary Director for `duration_minutes`, estimated from
+what the transcript says actually happened (bounded to 1–180 minutes for calls; dates may span
+overnight stays or multiple days, with only a 30-day corruption guard). The date Director is told
+to follow explicit times, travel, meals, sleep, mornings and changes of day rather than assuming a
+conventional evening. That duration is stored on the session and advances this relationship's game
+clock before the summary card is posted. A turn-count fallback still moves time if summary
+generation fails.
 
 ### A date can genuinely go badly
 
@@ -5919,3 +6101,159 @@ directly (bypassing the LLM entirely, since a date with no messages skips that c
 the first date auto-pins a milestone and a second date to the same place does not re-pin it.
 The full existing regression suite still passes. `npx tsc --noEmit` and a full build both
 clean.
+
+### A visual identity is now a schema, not just a profile-picture accident
+
+New characters roll stable facial geometry alongside the older hair, eyes and body fields:
+face shape and structure, eye shape and spacing, nose, mouth and brows, with an uncommon small
+facial detail. They also roll a recurring colour/material palette. These are ordinary attribute
+tables, so taste and affinity weighting still control the cast rather than an LLM converging on
+the same attractive face. Cast-aware candidate selection gives visual novelty a 25% vote while
+keeping personality and roleplay identity primary.
+
+The image brief is now camera-aware. A close portrait gets the compact face identity and
+styling; an upper-body image adds only the visible build; a full portrait adds the whole figure;
+a deliberate faceless shot omits eye, nose and mouth details that would otherwise encourage the
+model to put a face back into frame. The complete appearance description remains available to
+dossiers and roleplay prompts.
+
+Pressing **Generate profile pic** now makes a neutral head-and-shoulders identity portrait first,
+then uses it as the face reference for the expressive public profile picture and every later
+face-visible image. The neutral portrait is hidden from the gallery and chat. This does mean one
+additional image generation at the moment the user explicitly opts in, but nothing image-related
+is generated before that action; if the private reference fails, the public profile picture still
+generates and becomes the fallback anchor. Existing characters keep their established faces: the
+backfill records only attributes they already had and never rolls new facial geometry for them.
+
+### Reasoning is now a task control, not an accidental latency tax
+
+Actor and Director model settings now expose NanoGPT's `reasoning_effort` directly. The defaults
+keep ordinary Actor replies at `none` and the Director at `low`; image briefs, statuses, handles
+and bios explicitly avoid reasoning, while the single character-design pass and fantasy writer
+use `minimal`. Forced-thinking models are the exception: GLM 5.3 accepts only its native
+`low`/`high`/`max` levels, so the client translates Off, Minimal and Low to `low`, Medium and High
+to `high`, and Extra high or Maximum to `max`, while preserving the selected values for other
+models. This is a compute control: hiding reasoning output with an exclude flag would not make the
+request faster. Custom values are normalized before they reach the provider.
+
+Directions now normally cover two to four ordinary Actor replies instead of being forcibly
+discarded after one. A new message that makes the situation stale, an explicit expiry event, or
+an unprompted direction followed by a user reply still triggers a fresh Director pass. This keeps
+memory and dramatic judgment in the Director without paying for it before every line of chat.
+
+Character generation's visible critical path is one creative pass in the common case: that pass
+writes the dossier, name, handle and bio together. The existing focused handle and bio writers
+remain as fallbacks when validation catches a malformed, revealing or repetitive field. Fantasy
+scenarios begin after the character and relationship have been stored, so the new card can appear
+while that optional material finishes in the background. Transport retries share a total deadline,
+and the large character call is not restarted by an outer retry after a timeout or upstream error.
+
+Interactive Actor and Director requests also take priority over *new* background stages. Work
+already in flight is never cancelled, but another status, image brief or fantasy pass will wait
+until the live reply clears. LLM logs and exports now include requested reasoning effort, reported
+reasoning-token usage, priority and concurrent-call count, so a future slow turn can be separated
+into provider throughput, deliberate thinking and local queueing rather than guessed at from wall
+time alone.
+
+### Height now means scale, including fantasy scale
+
+The old height table stopped being useful at `Statuesque (1.80m+)`. Worse, species and height
+were independent rolls: a fairy could be both hand-sized and 1.65m tall in the same seed, while
+a giantess's species prompt said nine feet and her profile said ordinary height. Height selection
+is now species-aware through `height.extra.species`; the generator uses a dedicated pool when a
+species defines one and the ordinary pool otherwise. This remains attribute data rather than a
+switch on species ids, so new fantasy scales can be added without another generation branch.
+
+The ordinary range is now explicit from 1.42m through 2.25m. Halflings, dwarves and kobolds have
+their own sub-human-scale ranges, fairies span 8-25cm, Amazons span 1.85-2.20m, and giantesses span
+2.40-12m across small, full and colossal variants. Each row supplies an exact image prompt and a
+short/tall stature hint for related attribute affinities. Species-only heights remain available in
+Taste for controlling generated characters but are hidden from the user's own non-species profile
+editor.
+
+Existing characters are repaired lazily on first load only when their current height is invalid
+for a species with a dedicated scale. The corrected seed, appearance prompt and visual blueprint
+are persisted together; ordinary characters and already-valid fantasy characters are untouched.
+
+### The attribute library now has broader, connected variety
+
+The supplemental variety library adds twelve adult, humanoid-compatible fantasy species;
+sixteen new archetypes; additional humor, quirks, occupations, homes, interests, hobbies,
+languages and texting habits; and visual micro-features that are useful to portrait generation
+without adding permanent accessory clutter. Species have prompt-safe visual tells and wardrobe
+leans, while the new facial geometry and palettes feed the existing visual-core and cast-novelty
+systems.
+
+Intimacy variety is expanded as three complete kink domains (voice and sound, service/care, and
+ritual/anticipation), each with its own named preferences and a compatible hard limit. This is
+important: they are not loose fetishes that can contradict a character's stance; the domain is
+rolled first and the detailed preference follows only when she is into or curious about it.
+There are also new sexual personas and date/call-friendly fantasy premises built on those domains.
+
+Wardrobe now includes four additional full twenty-piece capsules: Space cowgirl, Regency noir,
+Dark fairy and Mecha pilot. The checked-in data is generated from
+`build-variety-expansion.mjs` and `build-wardrobe-expansion.mjs`; those compact source scripts
+should be rerun before validating whenever this expansion is edited.
+
+### Cosplay references are curated visual briefs
+
+The cosplay catalogue now contains 116 characters. New entries are limited to designs with a
+clear, reproducible costume silhouette: each gives the image system concrete hair/wig, layers,
+palette, footwear and a safe identifying prop, plus a short playable characterization. They are
+generated from `build-cosplay-expansion.mjs` into `cosplay-expansion.json`. This keeps a request
+such as “come as Shadowheart” from degrading into generic fantasy clothing even when an image
+model does not recognise the name itself.
+
+### A living anime character changes the medium, not only her outfit
+
+`Living anime character` is an extremely rare species: a literal adult 2D anime woman in the
+fiction, rather than a human cosplayer. Its attribute weights lean toward anime-associated
+archetypes, expressive texting and speech, theatrical quirks, and anime-inspired clothing,
+without guaranteeing any single trope or replacing the rest of her rolled adult life.
+
+The species carries `extra.image_style: anime_2d`. The image pipeline reads that as a render
+mode for every image kind—including the private identity reference, profile picture, chat
+photos, date arrivals and first-person scenes—and swaps the normal photorealistic suffix and
+negative prompt for consistent line art, cel shading and illustrated backgrounds. The prompt
+assembler is told to translate photographic framing into an anime frame while preserving her
+exact adult age, individual face, body, clothing and continuity. Other species remain on the
+unchanged photographic path.
+
+### Continuity stays implicit instead of becoming a recital
+
+Actor prompts now distinguish background knowledge from material that belongs in the next line.
+Core traits, durable memories, jobs, body details and kinks still shape a character, but the Actor
+normally leaves them implicit and uses an old detail only when the newest turn gives it a fresh
+consequence. Chat, calls, dates and voice notes all ask the scene to advance rather than paraphrase
+an established fact; calls additionally treat recently used audible cues as spent. The Director is
+likewise told not to turn an already-salient identity fact into its next impulse. This is a
+single-pass writing change—there is no repetition grader or extra regeneration call.
+
+GLM 5.3 reasoning settings are translated to the model's native `low`, `high` and `max` values.
+Because GLM 5.3 is a forced-thinking model, Off and Minimal cannot disable its reasoning and map to
+Low instead; Medium maps to High and Extra high maps to Max. Other models continue receiving the
+selected value unchanged. The Actor's system frame also asks for a direct decision rather than an
+inventory of the dossier, which can encourage concise reasoning but is not treated as a hard token
+limit.
+
+### The attribute library is editable in the WebUI
+
+**Settings → Attribute library** exposes every attribute category in the live SQLite database.
+Each category can be searched across ids, labels, prompts and structured metadata; rows can be
+created, edited, enabled/disabled or deleted. The editor keeps common fields approachable while
+leaving `modifies` and `extra` as JSON objects, since those category-specific extension fields are
+how generation behavior stays data-driven. Changes affect future rolls. Existing characters keep
+the attribute ids already stored in their seeds, so deleting an attribute may make its descriptive
+label unavailable to those characters and the UI warns before doing it.
+
+WebUI customizations survive restarts and upgrades. A shipped row continues receiving source-data
+updates until it is edited; after that it is marked user-owned. Deleting a shipped row stores a
+tombstone, preventing the seed loader from resurrecting it during the next upgrade, while custom
+rows and categories are excluded from shipped-data pruning.
+
+Import and export operate on one selected category at a time—for example `archetype`,
+`kink_domain`, `fetish` or `wardrobe_item`—using a versioned `fauxr-attributes` JSON document.
+Import is intentionally an exact replacement of that category rather than an ambiguous merge. It
+validates every row and duplicate id before committing the transaction, and the UI requires a
+confirmation because omitted rows are deleted. Export the current category first when using the
+files as editable backups.

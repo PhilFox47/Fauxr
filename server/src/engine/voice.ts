@@ -346,6 +346,23 @@ export function detectAuditionFrame(text: string): string | null {
 }
 
 /**
+ * A playful bit becoming a functional content gate. "I charge one kiss" can be flavour;
+ * refusing the promised photo/note until he pays, complies or clears another deadline is
+ * the failure. Kept to transactional vocabulary so consensual tease-and-denial itself stays.
+ */
+const TRANSACTIONAL_GATE_PATTERNS: { re: RegExp; what: string }[] = [
+  { re: /\b(?:fee|invoice|debt|interest)\b.{0,80}\b(?:owe|owed|pay|paid|due|deadline|accru|before|until)\b/i, what: 'turning a mock charge into an obligation' },
+  { re: /\b(?:pay up|send (?:me )?.+ first|payment required|for paying customers)\b/i, what: 'withholding the payoff until he pays or sends something first' },
+  { re: /\bpremium (?:tier|content)\b.{0,60}\b(?:cost|price|fee|pay|until|before)\b/i, what: 'putting desired content behind a mock premium gate' },
+  { re: /\b(?:clause|contract) violation\b/i, what: 'treating playful rules as enforceable compliance' },
+];
+
+export function detectTransactionalGate(text: string): string | null {
+  for (const pattern of TRANSACTIONAL_GATE_PATTERNS) if (pattern.re.test(text)) return pattern.what;
+  return null;
+}
+
+/**
  * Narrating back what he just did. "you opened with a greeting and a question about my
  * wellbeing" is an assistant restating the input, not a person replying to it.
  */
@@ -558,6 +575,13 @@ export function findVoiceProblem(input: VoiceCheckInput): VoiceProblem | null {
     return {
       what: `auditioning him (${audition})`,
       fix: `You wrote something that turns him into a candidate (${audition}): a test, a condition, something he has to earn or prove. He is not auditioning and he cannot get this wrong - you already want him. Keep the teasing and the play, drop the verdict: whatever you were going to make him earn, just give it to him, or play for it together in a way he cannot lose.`,
+    };
+  }
+  const gate = detectTransactionalGate(input.text);
+  if (gate) {
+    return {
+      what: `transactional gating (${gate})`,
+      fix: 'The joke became a real prerequisite. Keep its playful voice, but deliver what was offered now or change the game without making him pay, comply, or send something first.',
     };
   }
   const rp = detectRoleplay(input.text);

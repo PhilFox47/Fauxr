@@ -42,6 +42,8 @@ export async function ensureLife(character: Character): Promise<LifeThread[]> {
       label: `life:${character.username}`,
       schema: LIFE_THREADS,
       config: { ...getSettings().models.director, max_tokens: 1200 },
+      reasoningEffort: 'minimal',
+      priority: 'background',
       require: ['threads'],
       messages: [
         {

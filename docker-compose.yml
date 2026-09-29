@@ -2,7 +2,7 @@ services:
   fauxr:
     build: .
     container_name: fauxr
-    restart: unless-stopped
+    restart: always
     ports:
       - "${FAUXR_PORT:-8080}:8080"
     volumes:
@@ -19,6 +19,7 @@ services:
       FAUXR_STRUCTURED_OUTPUTS: ${FAUXR_STRUCTURED_OUTPUTS:-1}
       # Leave unset for no login. Set it to require a password before the app opens.
       FAUXR_PASSWORD: ${FAUXR_PASSWORD:-}
+      FAUXR_SECURE_COOKIE: ${FAUXR_SECURE_COOKIE:-0}
 
 volumes:
   fauxr-data:

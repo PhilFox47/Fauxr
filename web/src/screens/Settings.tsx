@@ -1,20 +1,41 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type CardSpec, type ImageJob, type KinkDomain, type KinkSide, type KinkStance, type Location, type LogEntry, type ResetParts, type TasteSection, type UserProfile } from '../api';
+import { api, type AttributeExport, type CardSpec, type EditableAttribute, type ImageJob, type KinkDomain, type KinkSide, type KinkStance, type Location, type LogEntry, type ResetParts, type SettingsData, type TasteSection, type UsageSummary, type UserProfile } from '../api';
+import SettingsNav, { type SettingsNavGroup } from '../components/SettingsNav';
 
-type Pane = 'models' | 'behaviour' | 'taste' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
+type Pane = 'models' | 'behaviour' | 'taste' | 'attributes' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
 
-const PANES: { id: Pane; label: string }[] = [
-  { id: 'models', label: 'Models' },
-  { id: 'behaviour', label: 'Behaviour' },
-  { id: 'taste', label: 'Taste' },
-  { id: 'profile', label: 'Your profile' },
-  { id: 'locations', label: 'Locations' },
-  { id: 'logs', label: 'Logs' },
-  { id: 'images', label: 'Images' },
-  { id: 'reset', label: 'Reset' },
+const PANE_GROUPS: SettingsNavGroup<Pane>[] = [
+  {
+    label: 'Your experience',
+    panes: [
+      { id: 'behaviour', label: 'Experience', detail: 'Pacing and activity' },
+      { id: 'taste', label: 'Taste', detail: 'Who appears in Discover' },
+      { id: 'attributes', label: 'Attribute library', detail: 'Edit generation building blocks' },
+      { id: 'profile', label: 'Your profile', detail: 'What characters know about you' },
+      { id: 'locations', label: 'Date locations', detail: 'Places you can invite her' },
+    ],
+  },
+  {
+    label: 'System',
+    panes: [
+      { id: 'models', label: 'Models & API', detail: 'Providers and generation' },
+      { id: 'images', label: 'Image jobs', detail: 'Generated media' },
+      { id: 'logs', label: 'Diagnostics', detail: 'Prompts and responses' },
+      { id: 'reset', label: 'Account & data', detail: 'Session and reset controls' },
+    ],
+  },
 ];
 
-const SCOPES = ['', 'director', 'actor', 'image', 'scheduler', 'api', 'generator', 'app'];
+const SCOPES = ['', 'director', 'actor', 'evaluator', 'image', 'scheduler', 'api', 'generator', 'app'];
+
+type SettingsPatch = (path: string[], value: unknown) => void;
+type SettingsPaneProps = {
+  settings: SettingsData;
+  patch: SettingsPatch;
+  save: () => void;
+  saved: boolean;
+  saving: boolean;
+};
 
 /** The independently resettable parts, in the order they are worth thinking about. */
 const PARTS: { id: keyof ResetParts; label: string; short: string; detail: string }[] = [
@@ -57,10 +78,12 @@ export default function Settings({
   authEnabled: boolean;
   onLoggedOut: () => void;
 }) {
-  const [pane, setPane] = useState<Pane>('models');
-  const [settings, setSettings] = useState<any>(null);
-  const [usage, setUsage] = useState<any>(null);
+  const [pane, setPane] = useState<Pane>('behaviour');
+  const [settings, setSettings] = useState<SettingsData | null>(null);
+  const [usage, setUsage] = useState<UsageSummary | null>(null);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     const res = await api.settings();
@@ -73,20 +96,30 @@ export default function Settings({
   }, [load]);
 
   const patch = (path: string[], value: unknown) => {
-    setSettings((s: any) => {
+    setSettings((s) => {
+      if (!s) return s;
       const next = structuredClone(s);
-      let node = next;
-      for (const key of path.slice(0, -1)) node = node[key];
+      let node = next as unknown as Record<string, unknown>;
+      for (const key of path.slice(0, -1)) node = node[key] as Record<string, unknown>;
       node[path[path.length - 1]] = value;
       return next;
     });
   };
 
   const save = async () => {
-    await api.saveSettings(settings);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-    await load();
+    if (saving) return;
+    setSaving(true);
+    setSaveError(null);
+    try {
+      await api.saveSettings(settings);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+      await load();
+    } catch (err) {
+      setSaveError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (!settings) return <div className="empty">Loading settings…</div>;
@@ -103,28 +136,18 @@ export default function Settings({
         )}
       </div>
 
-      <div className="chips">
-        {PANES.map((p) => (
-          <button
-            key={p.id}
-            className="chip"
-            data-active={pane === p.id}
-            aria-pressed={pane === p.id}
-            onClick={() => setPane(p.id)}
-          >
-            {p.label}
-          </button>
-        ))}
-      </div>
+      <div className="settings-layout">
+        <SettingsNav groups={PANE_GROUPS} active={pane} onSelect={setPane} />
 
-      <div className="screen">
+        <div className="screen settings-content">
         {pane === 'models' && (
-          <ModelsPane settings={settings} patch={patch} save={save} saved={saved} />
+          <ModelsPane settings={settings} patch={patch} save={save} saved={saved} saving={saving} />
         )}
         {pane === 'behaviour' && (
-          <BehaviourPane settings={settings} patch={patch} save={save} saved={saved} usage={usage} />
+          <BehaviourPane settings={settings} patch={patch} save={save} saved={saved} saving={saving} usage={usage} />
         )}
-        {pane === 'taste' && <TastePane settings={settings} patch={patch} save={save} saved={saved} />}
+        {pane === 'taste' && <TastePane settings={settings} patch={patch} save={save} saved={saved} saving={saving} />}
+        {pane === 'attributes' && <AttributesPane />}
         {pane === 'profile' && <ProfilePane profile={profile} onSaved={onProfileSaved} />}
         {pane === 'locations' && <LocationsPane />}
         {pane === 'logs' && <LogsPane />}
@@ -135,22 +158,24 @@ export default function Settings({
             <ResetPane />
           </>
         )}
+        {saveError && <div className="banner warn">Could not save settings: {saveError}</div>}
+        </div>
       </div>
     </>
   );
 }
 
-function SaveBar({ save, saved }: { save: () => void; saved: boolean }) {
+function SaveBar({ save, saved, saving }: { save: () => void; saved: boolean; saving: boolean }) {
   return (
     <div className="card">
-      <button className="btn block" onClick={save}>
-        {saved ? 'Saved' : 'Save settings'}
+      <button className="btn block" onClick={save} disabled={saving}>
+        {saving ? 'Saving…' : saved ? 'Saved' : 'Save settings'}
       </button>
     </div>
   );
 }
 
-function ModelsPane({ settings, patch, save, saved }: any) {
+function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps) {
   const roles: ('actor' | 'director')[] = ['actor', 'director'];
   return (
     <>
@@ -208,7 +233,7 @@ function ModelsPane({ settings, patch, save, saved }: any) {
       {roles.map((role) => (
         <div className="card" key={role}>
           <div className="section-title" style={{ padding: '0 0 10px' }}>
-            {role === 'actor' ? 'Actor — writes her messages' : 'Director — scores and steers'}
+            {role === 'actor' ? 'Actor — writes her messages' : 'Director — keeps memory and context'}
           </div>
           <label className="field">
             <span>Model</span>
@@ -263,8 +288,65 @@ function ModelsPane({ settings, patch, save, saved }: any) {
               onChange={(e) => patch(['models', role, 'max_tokens'], Number(e.target.value))}
             />
           </label>
+          <label className="field">
+            <span>Reasoning effort</span>
+            <select
+              value={settings.models[role].reasoning_effort}
+              onChange={(e) => patch(['models', role, 'reasoning_effort'], e.target.value)}
+            >
+              <option value="none">Off when supported</option>
+              <option value="minimal">Minimal</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="xhigh">Extra high</option>
+              <option value="max">Maximum</option>
+            </select>
+            <span className="tiny muted">Actor defaults to off. GLM 5.3 cannot turn thinking off, so Off, Minimal, and Low all use its native Low setting.</span>
+          </label>
         </div>
       ))}
+
+      <div className="card">
+        <div className="section-title" style={{ padding: '0 0 10px' }}>Evaluator — checks generated characters</div>
+        <label className="switch-row">
+          <span className="switch">
+            <input
+              type="checkbox"
+              checked={settings.models.evaluator.enabled}
+              onChange={(e) => patch(['models', 'evaluator', 'enabled'], e.target.checked)}
+            />
+            <span className="track" />
+          </span>
+          <span className="small">
+            Evaluate new character dossiers
+            <br />
+            <span className="tiny muted">
+              Uses a fast decision model for narrow quality checks. Generation continues normally if it is unavailable.
+            </span>
+          </span>
+        </label>
+        <label className="field">
+          <span>Decision model</span>
+          <input
+            type="text"
+            value={settings.models.evaluator.model}
+            onChange={(e) => patch(['models', 'evaluator', 'model'], e.target.value)}
+          />
+          <span className="tiny muted">Nano-GPT exposes Jev as typesafe/jev-latest. It does not use temperature or an output-token budget.</span>
+        </label>
+        <label className="field">
+          <div className="slider-head">
+            <span className="label">Confidence threshold</span>
+            <span className="value">{settings.models.evaluator.confidence_threshold.toFixed(2)}</span>
+          </div>
+          <input
+            type="range" min={0} max={1} step={0.05}
+            value={settings.models.evaluator.confidence_threshold}
+            onChange={(e) => patch(['models', 'evaluator', 'confidence_threshold'], Number(e.target.value))}
+          />
+        </label>
+      </div>
 
       <div className="card">
         <div className="section-title" style={{ padding: '0 0 10px' }}>Images</div>
@@ -311,12 +393,14 @@ function ModelsPane({ settings, patch, save, saved }: any) {
         </label>
       </div>
 
-      <SaveBar save={save} saved={saved} />
+      <SaveBar save={save} saved={saved} saving={saving} />
     </>
   );
 }
 
-function BehaviourPane({ settings, patch, save, saved, usage }: any) {
+function BehaviourPane({
+  settings, patch, save, saved, saving, usage,
+}: SettingsPaneProps & { usage: UsageSummary | null }) {
   return (
     <>
       <div className="card">
@@ -484,7 +568,7 @@ function BehaviourPane({ settings, patch, save, saved, usage }: any) {
         </label>
       </div>
 
-      <SaveBar save={save} saved={saved} />
+      <SaveBar save={save} saved={saved} saving={saving} />
     </>
   );
 }
@@ -611,7 +695,7 @@ const DOM_SUB_LEAN: { label: string; value: number }[] = [
  * often that attribute is rolled for a new character, on top of the tuned tables; nothing here
  * touches characters that already exist.
  */
-function TastePane({ settings, patch, save, saved }: any) {
+function TastePane({ settings, patch, save, saved, saving }: SettingsPaneProps) {
   const [spec, setSpec] = useState<TasteSection[] | null>(null);
   const [filter, setFilter] = useState('');
   useEffect(() => {
@@ -708,7 +792,7 @@ function TastePane({ settings, patch, save, saved }: any) {
         </div>
         );
       })}
-      <SaveBar save={save} saved={saved} />
+      <SaveBar save={save} saved={saved} saving={saving} />
     </>
   );
 }
@@ -1106,9 +1190,208 @@ function LogsPane() {
  * The places you can take someone. Written by hand - a name and a description, both yours -
  * with an optional AI backdrop that becomes the blurred background of the date itself.
  */
+type AttributeDraft = EditableAttribute & {
+  affinities_text: string;
+  conflicts_text: string;
+  modifies_text: string;
+  extra_text: string;
+};
+
+function attributeDraft(attribute?: EditableAttribute, category = ''): AttributeDraft {
+  const base: EditableAttribute = attribute ?? {
+    id: '', category, label: '', weight: 1, rarity: 'common', prompt_hint: '', image_prompt: null,
+    affinities: [], conflicts: [], modifies: {}, extra: {}, enabled: true, origin: 'user', user_modified: true,
+  };
+  return {
+    ...base,
+    affinities_text: base.affinities.join('\n'),
+    conflicts_text: base.conflicts.join('\n'),
+    modifies_text: JSON.stringify(base.modifies, null, 2),
+    extra_text: JSON.stringify(base.extra, null, 2),
+  };
+}
+
+function AttributesPane() {
+  const [categories, setCategories] = useState<{ category: string; count: number }[]>([]);
+  const [category, setCategory] = useState('');
+  const [entries, setEntries] = useState<EditableAttribute[]>([]);
+  const [query, setQuery] = useState('');
+  const [draft, setDraft] = useState<AttributeDraft | null>(null);
+  const [originalId, setOriginalId] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadCategories = useCallback(async (preferred?: string) => {
+    const rows = await api.attributeCategories();
+    setCategories(rows);
+    setCategory((current) => preferred ?? (current || rows[0]?.category || ''));
+  }, []);
+
+  const loadEntries = useCallback(async (selected: string) => {
+    if (!selected) return setEntries([]);
+    const result = await api.attributes(selected);
+    setEntries(result.entries);
+  }, []);
+
+  useEffect(() => { void loadCategories().catch((err) => setError(String(err))); }, [loadCategories]);
+  useEffect(() => { void loadEntries(category).catch((err) => setError(String(err))); }, [category, loadEntries]);
+
+  const filtered = entries.filter((entry) => {
+    const needle = query.trim().toLowerCase();
+    return !needle || JSON.stringify(entry).toLowerCase().includes(needle);
+  });
+
+  const saveDraft = async () => {
+    if (!draft) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const value = {
+        ...draft,
+        affinities: draft.affinities_text.split('\n').map((v) => v.trim()).filter(Boolean),
+        conflicts: draft.conflicts_text.split('\n').map((v) => v.trim()).filter(Boolean),
+        modifies: JSON.parse(draft.modifies_text || '{}'),
+        extra: JSON.parse(draft.extra_text || '{}'),
+      };
+      if (originalId) await api.updateAttribute(category, originalId, value);
+      else await api.createAttribute(category, value);
+      setDraft(null);
+      setOriginalId(null);
+      await Promise.all([loadEntries(category), loadCategories(category)]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const remove = async (entry: EditableAttribute) => {
+    if (!window.confirm(`Delete “${entry.label}” (${entry.id})? Existing characters keep the id in their saved seed, but its descriptive text will no longer resolve.`)) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await api.deleteAttribute(category, entry.id);
+      await Promise.all([loadEntries(category), loadCategories(category)]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const exportList = async () => {
+    try {
+      const payload = await api.exportAttributes(category);
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `fauxr-${category}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    }
+  };
+
+  const importList = async (file: File) => {
+    if (!window.confirm(`Replace the complete “${category}” list with ${file.name}? This cannot be undone unless you export the current list first.`)) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const payload = JSON.parse(await file.text()) as AttributeExport;
+      await api.importAttributes(category, payload);
+      await Promise.all([loadEntries(category), loadCategories(category)]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="card">
+        <div className="section-title" style={{ padding: '0 0 8px' }}>Attribute library</div>
+        <p className="small muted">
+          These are the building blocks used when characters are rolled. Changes apply to future
+          rolls; existing characters keep the ids already stored in their seeds. Each category is
+          imported and exported separately.
+        </p>
+        <div className="row wrap">
+          <label className="field grow">
+            <span>Attribute type</span>
+            <select value={category} onChange={(event) => { setCategory(event.target.value); setDraft(null); }}>
+              {categories.map((item) => <option key={item.category} value={item.category}>{item.category.replaceAll('_', ' ')} ({item.count})</option>)}
+            </select>
+          </label>
+          <label className="field grow">
+            <span>Search this type</span>
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Label, id, prompt, affinity…" />
+          </label>
+        </div>
+        <div className="row wrap">
+          <button className="btn" disabled={!category || busy} onClick={() => { setOriginalId(null); setDraft(attributeDraft(undefined, category)); }}>Add attribute</button>
+          <button className="btn ghost" disabled={!category || busy} onClick={() => void exportList()}>Export this type</button>
+          <label className={`btn ghost ${busy || !category ? 'disabled' : ''}`}>
+            Import and replace
+            <input
+              type="file" accept="application/json,.json" hidden disabled={busy || !category}
+              onChange={(event) => { const file = event.target.files?.[0]; event.target.value = ''; if (file) void importList(file); }}
+            />
+          </label>
+        </div>
+        {error && <div className="banner warn">{error}</div>}
+      </div>
+
+      {draft && (
+        <div className="card attribute-editor">
+          <div className="section-title" style={{ padding: '0 0 8px' }}>{originalId ? 'Edit attribute' : 'New attribute'}</div>
+          <div className="row wrap">
+            <label className="field grow"><span>ID</span><input value={draft.id} onChange={(e) => setDraft({ ...draft, id: e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '_') })} /></label>
+            <label className="field grow"><span>Label</span><input value={draft.label} onChange={(e) => setDraft({ ...draft, label: e.target.value })} /></label>
+          </div>
+          <div className="row wrap">
+            <label className="field grow"><span>Weight</span><input type="number" min={0} max={1000} step={0.1} value={draft.weight} onChange={(e) => setDraft({ ...draft, weight: Number(e.target.value) })} /></label>
+            <label className="field grow"><span>Rarity</span><select value={draft.rarity} onChange={(e) => setDraft({ ...draft, rarity: e.target.value as EditableAttribute['rarity'] })}><option value="common">Common</option><option value="uncommon">Uncommon</option><option value="rare">Rare</option><option value="very_rare">Very rare</option><option value="extremely_rare">Extremely rare</option></select></label>
+          </div>
+          <label className="switch-row"><span className="switch"><input type="checkbox" checked={draft.enabled} onChange={(e) => setDraft({ ...draft, enabled: e.target.checked })} /><span className="track" /></span><span className="small">Enabled for future rolls</span></label>
+          <label className="field"><span>Prompt hint</span><textarea rows={4} value={draft.prompt_hint} onChange={(e) => setDraft({ ...draft, prompt_hint: e.target.value })} /></label>
+          <label className="field"><span>Image prompt</span><textarea rows={3} value={draft.image_prompt ?? ''} onChange={(e) => setDraft({ ...draft, image_prompt: e.target.value || null })} /></label>
+          <div className="row wrap">
+            <label className="field grow"><span>Affinities — one id per line</span><textarea rows={5} value={draft.affinities_text} onChange={(e) => setDraft({ ...draft, affinities_text: e.target.value })} /></label>
+            <label className="field grow"><span>Conflicts — one id per line</span><textarea rows={5} value={draft.conflicts_text} onChange={(e) => setDraft({ ...draft, conflicts_text: e.target.value })} /></label>
+          </div>
+          <label className="field"><span>Modifies — JSON object</span><textarea className="code-input" rows={5} value={draft.modifies_text} onChange={(e) => setDraft({ ...draft, modifies_text: e.target.value })} /></label>
+          <label className="field"><span>Extra — JSON object</span><textarea className="code-input" rows={9} value={draft.extra_text} onChange={(e) => setDraft({ ...draft, extra_text: e.target.value })} /></label>
+          <div className="row"><button className="btn ghost grow" disabled={busy} onClick={() => { setDraft(null); setOriginalId(null); }}>Cancel</button><button className="btn grow" disabled={busy || !draft.id || !draft.label} onClick={() => void saveDraft()}>{busy ? 'Saving…' : 'Save attribute'}</button></div>
+        </div>
+      )}
+
+      <div className="attribute-list">
+        {filtered.map((entry) => (
+          <div className="card attribute-row" key={entry.id}>
+            <div className="row">
+              <div className="grow"><strong>{entry.label}</strong><div className="tiny muted">{entry.id} · {entry.rarity} · weight {entry.weight}{!entry.enabled ? ' · disabled' : ''}{entry.user_modified ? ' · customized' : ''}</div></div>
+              <button className="btn ghost" disabled={busy} onClick={() => { setOriginalId(entry.id); setDraft(attributeDraft(entry)); }}>Edit</button>
+              <button className="btn ghost danger" disabled={busy} onClick={() => void remove(entry)}>Delete</button>
+            </div>
+            {entry.prompt_hint && <p className="small muted attribute-hint">{entry.prompt_hint}</p>}
+          </div>
+        ))}
+        {!filtered.length && <div className="empty">No attributes match this search.</div>}
+      </div>
+    </>
+  );
+}
+
 function LocationsPane() {
   const [locations, setLocations] = useState<Location[]>([]);
-  const [editing, setEditing] = useState<{ id?: string; name: string; description: string } | null>(null);
+  const emptyAffordances: Location['affordances'] = {
+    sensory: [], private_spaces: [], background_people: [], social_openings: [],
+    interruptions: [], transitions: [], constraints: [],
+  };
+  const [editing, setEditing] = useState<{ id?: string; name: string; description: string; affordances: Location['affordances'] } | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -1122,7 +1405,7 @@ function LocationsPane() {
   const saveDraft = async () => {
     if (!editing?.name.trim()) return;
     try {
-      await api.saveLocation({ id: editing.id, name: editing.name, description: editing.description });
+      await api.saveLocation({ id: editing.id, name: editing.name, description: editing.description, affordances: editing.affordances });
       setEditing(null);
       await load();
     } catch (err) {
@@ -1163,9 +1446,9 @@ function LocationsPane() {
     <>
       <div className="card">
         <p className="small muted" style={{ marginTop: 0 }}>
-          Somewhere to take a match. The description is what she actually experiences being
-          there, so write the place rather than a label — the noise, the light, who else is
-          around. The backdrop is optional and only ever shows up blurred behind the date.
+          Somewhere to take a match. Describe the place itself—its shape, light, sound, rhythm
+          and contrasts. Staff and regulars can exist without becoming characters in every date.
+          The backdrop is optional and only ever appears blurred behind the scene.
         </p>
         {editing ? (
           <>
@@ -1178,6 +1461,37 @@ function LocationsPane() {
                 onChange={(e) => setEditing({ ...editing, name: e.target.value })}
               />
             </label>
+            <details className="card-section location-affordances">
+              <summary>Scene possibilities</summary>
+              <span className="tiny muted card-section-note">
+                Optional handles the date can use naturally—not events it must play through. One per line.
+              </span>
+              {([
+                ['sensory', 'Sensory texture', 'Ice knocking against a thin glass\nBass felt through the booth'],
+                ['private_spaces', 'Private or quieter spaces', 'The narrow balcony behind the toilets'],
+                ['background_people', 'Ambient people', 'Mara, the owner, usually doing paperwork at the far end\nA changing after-work crowd'],
+                ['social_openings', 'Optional social openings', 'Trivia teams sometimes ask a pair to join\nThe bartender offers a tasting flight'],
+                ['interruptions', 'Possible interruptions', 'Last orders over the speakers'],
+                ['transitions', 'Natural transitions', 'Walk along the river\nShare a cab home'],
+                ['constraints', 'Limits and social norms', 'Too public for anything explicit before closing\nThe kitchen closes at ten'],
+              ] as const).map(([key, label, placeholder]) => (
+                <label className="field" key={key}>
+                  <span>{label}</span>
+                  <textarea
+                    rows={3}
+                    value={editing.affordances[key].join('\n')}
+                    placeholder={placeholder}
+                    onChange={(e) => setEditing({
+                      ...editing,
+                      affordances: {
+                        ...editing.affordances,
+                        [key]: e.target.value.split('\n').map((line) => line.trim()).filter(Boolean).slice(0, 8),
+                      },
+                    })}
+                  />
+                </label>
+              ))}
+            </details>
             <label className="field">
               <span>Description</span>
               <textarea
@@ -1191,11 +1505,11 @@ function LocationsPane() {
               onClick={() => void expand()}
               disabled={expanding || !editing.name.trim()}
             >
-              {expanding ? 'Expanding…' : 'Expand description'}
+              {expanding ? 'Developing…' : 'Develop this place'}
             </button>
             <p className="tiny muted" style={{ marginTop: 6 }}>
-              Fills in a proper name and a vivid write-up from whatever you've got so far - a
-              vibe, a specialty, a notable regular. Still yours to edit before saving.
+              Adds physical detail, contrasts and scene possibilities. Ambient people remain
+              background unless a date deliberately engages them. Everything stays editable.
             </p>
             <div className="row">
               <button className="btn ghost grow" onClick={() => setEditing(null)}>Cancel</button>
@@ -1205,7 +1519,7 @@ function LocationsPane() {
             </div>
           </>
         ) : (
-          <button className="btn block" onClick={() => setEditing({ name: '', description: '' })}>
+          <button className="btn block" onClick={() => setEditing({ name: '', description: '', affordances: emptyAffordances })}>
             Add a place
           </button>
         )}
@@ -1224,11 +1538,16 @@ function LocationsPane() {
           {l.image_url && <img className="location-thumb" src={l.image_url} alt="" />}
           <div className="row">
             <strong className="grow">{l.name}</strong>
-            <button className="btn ghost" onClick={() => setEditing({ id: l.id, name: l.name, description: l.description })}>
+            <button className="btn ghost" onClick={() => setEditing({ id: l.id, name: l.name, description: l.description, affordances: l.affordances })}>
               Edit
             </button>
           </div>
           {l.description && <p className="small muted">{l.description}</p>}
+          {Object.values(l.affordances).some((items) => items.length > 0) && (
+            <p className="tiny muted location-affordance-summary">
+              {Object.values(l.affordances).flat().length} scene possibilities
+            </p>
+          )}
           <div className="row">
             <button className="btn ghost grow" onClick={() => void generate(l.id)} disabled={busyId === l.id}>
               {busyId === l.id ? 'Generating…' : l.image_url ? 'New backdrop' : 'Generate backdrop'}

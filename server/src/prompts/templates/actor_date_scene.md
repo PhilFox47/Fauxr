@@ -24,6 +24,8 @@ own eyes, from where he is. Say, plainly and concretely:
 - how close he is, and anything of his that is in the foreground (his hand on the table, her
   hand on his knee, her on his lap).
 
+This is his visual point of view. Never describe his own face, eyes, mouth, lips or head; he cannot see those without a mirror. Only hands, arms, knees, torso or clothing may enter the near edge when the scene establishes them.
+
 Use only what the scene has established. Where it is silent about the room, add one or two
 small concrete details of the place. Nothing that has not happened yet, nothing from earlier
 that is over. The clothes appear only as far as the moment involves them - a strap slipping, a

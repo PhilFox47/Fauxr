@@ -5,26 +5,6 @@ import Icon from '../components/Icon';
 /** How far the card has to travel before letting go counts as a decision. */
 const COMMIT_PX = 90;
 
-/** How many sparks a tier gets - a small visual escalation on top of the label itself. */
-const RARITY_SPARKS: Record<SwipeProfile['rarity']['tier'], number> = {
-  common: 0,
-  uncommon: 1,
-  rare: 2,
-  very_rare: 3,
-  extremely_rare: 4,
-};
-
-/** Spoiler-free: a grade on the dice roll, not a hint about anything she'll actually say. */
-function RarityBadge({ rarity }: { rarity: SwipeProfile['rarity'] }) {
-  const sparks = RARITY_SPARKS[rarity.tier];
-  return (
-    <div className="rarity-badge" data-tier={rarity.tier}>
-      {Array.from({ length: sparks }, (_, i) => <Icon key={i} name="spark" size={11} />)}
-      <span>{rarity.label}</span>
-    </div>
-  );
-}
-
 export default function Swipe({ onMatched }: { onMatched: () => void }) {
   const [profiles, setProfiles] = useState<SwipeProfile[]>([]);
   const [generating, setGenerating] = useState(0);
@@ -109,7 +89,8 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
         <h1>Discover</h1>
         <div className="spacer" />
         <span className="usage-pill">
-          {profiles.length} in stack{generating > 0 ? ` · ${generating} loading` : ''}
+          {profiles.length} profile{profiles.length === 1 ? '' : 's'} ready
+          {generating > 0 ? ' · finding more' : ''}
         </span>
       </div>
 
@@ -161,27 +142,29 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
                   Nope
                 </div>
 
-                <RarityBadge rarity={current.rarity} />
-
-                <div className="swipe-emoji" aria-hidden="true">{current.avatar_emoji}</div>
-                <div className="swipe-names">
-                  <div className="real-name">{current.real_name}</div>
-                  <div className="handle">{current.username}</div>
+                <div className="swipe-intro">
+                  <div className="swipe-emoji" aria-hidden="true">{current.avatar_emoji}</div>
+                  <div className="swipe-names">
+                    <div className="real-name">{current.real_name}<span className="swipe-age">, {current.age}</span></div>
+                    <div className="handle">{current.username}</div>
+                  </div>
                 </div>
                 <div className="swipe-meta">
-                  <span>{current.age}</span>
                   {current.ethnicity && <span>{current.ethnicity}</span>}
                 </div>
                 <div className="bio">{current.bio}</div>
                 {current.traits?.length > 0 && (
-                  <ul className="swipe-traits" aria-label="What defines her">
+                  <div className="swipe-signals">
+                    <span className="swipe-signals-title">A few things about her</span>
+                    <ul className="swipe-traits" aria-label="What defines her">
                     {current.traits.map((t) => (
                       <li key={t.caption + t.label}>
                         <span className="caption">{t.caption}</span>
                         <span className="value">{t.label}</span>
                       </li>
                     ))}
-                  </ul>
+                    </ul>
+                  </div>
                 )}
               </div>
             </div>
@@ -196,7 +179,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
             </div>
           </>
         )}
-        <div className="stack-count">Swipe right to like, left to pass. Arrow keys work too.</div>
+        <div className="stack-count">Swipe or use the arrow keys</div>
       </div>
     </>
   );

@@ -286,7 +286,9 @@ const DOMAIN_TERMS: Record<string, string[]> = {
   anal: ['anal', 'from behind properly', 'back door', 'pegging'],
   toys: ['toy', 'vibrator', 'dildo', 'plug'],
   roleplay: ['roleplay', 'role play', 'pretend to be', 'costume', 'uniform', 'nurse outfit', 'petplay', 'pet play', 'cosplay', 'hentai', 'affair', 'cheat on'],
-  recording: ['film', 'record', 'video', 'send a pic', 'photos of you', 'camera'],
+  // An ordinary request to exchange a photo is part of the app, not evidence that cameras
+  // themselves are the kink. Keep this to explicitly erotic recording/filming language.
+  recording: ['film me', 'film you', 'film us', 'record me', 'record you', 'record us', 'sex tape', 'on camera', 'video us', 'camera watching'],
   fetishwear: ['latex', 'leather', 'lingerie', 'corset', 'stockings', 'fishnet', 'heels', 'pantyhose', 'knee highs', 'knee-high'],
   cum_play: ['cum', 'swallow', 'facial', 'cum play', 'cum in', 'cum on', 'creampie', 'breed', 'finish inside'],
   messy: ['spit', 'squirt', 'soaked', 'drool', 'messy'],

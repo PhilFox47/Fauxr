@@ -1,6 +1,17 @@
-export type KinkStance = 'into' | 'curious' | 'soft_no' | 'hard_no';
+import type { AppEvent } from '../../server/src/events';
+import type { Settings as ServerSettings } from '../../server/src/config';
+import type {
+  DateNpc as ServerDateNpc,
+  DateSession as ServerDateSession,
+  KinkSide as ServerKinkSide,
+  KinkStance as ServerKinkStance,
+  Location as ServerLocation,
+  UserProfile as ServerUserProfile,
+} from '../../server/src/types';
+
+export type KinkStance = ServerKinkStance;
 /** Which end of a two-ended kink: 'her' = done to her, 'his' = done to him. */
-export type KinkSide = 'her' | 'his' | 'both';
+export type KinkSide = ServerKinkSide;
 
 export interface CardField {
   key: string;
@@ -35,27 +46,40 @@ export interface KinkDomain {
   sides: { her: string; his: string } | null;
 }
 
-export interface UserProfile {
-  display_name: string;
-  age: number;
-  bio: string;
-  photos: string[];
-  gender: string;
-  seeking: string;
-  /** The age band to generate and show, applied to new characters as they are made. */
-  age_min: number;
-  age_max: number;
-  /** Your own stances. Characters are told none of this; they find it out by talking to you. */
-  kink_map: Record<string, KinkStance>;
-  /** Which end you want, for the two-ended ones you are into or curious about. Unset = either. */
-  kink_sides?: Record<string, KinkSide>;
-  /** Who may join in when someone else does on a date. Unset follows who you are looking for. */
-  joiners?: 'women' | 'men' | 'anyone' | '';
-  /** Stands in for your photo when you have not uploaded one. */
-  avatar_emoji: string;
-  /** Everything else about you, same vocabulary the characters are built from. */
-  card: Record<string, unknown>;
+export interface EditableAttribute {
+  id: string;
+  category: string;
+  label: string;
+  weight: number;
+  rarity: RarityTier;
+  prompt_hint: string;
+  image_prompt: string | null;
+  affinities: string[];
+  conflicts: string[];
+  modifies: Record<string, unknown>;
+  extra: Record<string, unknown>;
+  enabled: boolean;
+  origin: 'shipped' | 'user';
+  user_modified: boolean;
 }
+
+export interface AttributeExport {
+  format: 'fauxr-attributes';
+  version: 1;
+  category: string;
+  attributes: Omit<EditableAttribute, 'origin' | 'user_modified'>[];
+}
+
+export type SettingsData = ServerSettings;
+
+export interface UsageSummary {
+  calls: number;
+  tokens_in: number;
+  tokens_out: number;
+  cost: number;
+}
+
+export type UserProfile = ServerUserProfile;
 
 export interface AppState {
   onboarded: boolean;
@@ -111,6 +135,8 @@ export interface MatchSummary {
   last_activity: string | null;
   /** She is out with him right now - the chat is frozen and there is somewhere better to look. */
   on_date: boolean;
+  /** The live register behind on_date; null when ordinary texting is available. */
+  active_session_kind?: 'date' | 'call' | null;
   /** Her WhatsApp-style status line, refreshed every 4-12 hours; null until she has one. */
   status?: string | null;
   /** This chat's own clock (epoch ms) - see engine/clock.ts. Ticks with messages and Pass Time. */
@@ -162,50 +188,13 @@ export interface CharacterProfile {
 }
 
 /** A place you wrote in Settings, and can take someone to. */
-export interface Location {
-  id: string;
-  name: string;
-  description: string;
-  image_path: string | null;
+export interface Location extends ServerLocation {
   /** Cache-busted; null until a backdrop has actually been generated. */
   image_url: string | null;
-  created_at: string;
-  updated_at: string;
 }
 
-export interface DateSession {
-  id: string;
-  character_id: string;
-  status: 'active' | 'ended';
-  when_at: string;
-  where_at: string;
-  location_id: string | null;
-  /** Written when the date ends - what she remembers of the evening. */
-  summary: string | null;
-  /** What she decided to wear tonight - set once as the date opens. */
-  outfit: string | null;
-  /** Everyone else who has been part of the evening; left_at is set once they are gone. */
-  npcs: DateNpc[];
-  /** Who else he asked for on the invite, as he wrote it. */
-  company: string;
-  created_at: string;
-  ended_at: string | null;
-}
-
-export interface DateNpc {
-  id: string;
-  name: string;
-  gender: 'woman' | 'man' | 'nonbinary' | 'mixed';
-  /** More than 1 for a group played as one card. */
-  count?: number;
-  age: number;
-  who: string;
-  look: string;
-  manner: string;
-  up_for: string;
-  source: 'invite' | 'scene';
-  left_at: string | null;
-}
+export type DateSession = ServerDateSession;
+export type DateNpc = ServerDateNpc;
 
 export interface DateView {
   date: DateSession;
@@ -316,17 +305,21 @@ export const api = {
   },
   // ---- locations and dates
   locations: () => request<Location[]>('/api/locations'),
-  saveLocation: (l: { id?: string; name: string; description: string }) =>
+  saveLocation: (l: { id?: string; name: string; description: string; affordances?: Location['affordances'] }) =>
     request<Location>('/api/locations', { method: 'POST', body: JSON.stringify(l) }),
   deleteLocation: (id: string) => request<{ ok: true }>(`/api/locations/${id}`, { method: 'DELETE' }),
   generateLocationImage: (id: string) =>
     request<Location>(`/api/locations/${id}/image`, { method: 'POST' }),
   /** Fleshes out a bare name/description into something specific - a draft-only text call. */
   expandLocation: (name: string, description: string) =>
-    request<{ name: string; description: string }>('/api/locations/expand', {
+    request<{ name: string; description: string; affordances: Location['affordances'] }>('/api/locations/expand', {
       method: 'POST',
       body: JSON.stringify({ name, description }),
     }),
+  steerChat: (id: string, direction: string) =>
+    request<{ id: string }>(`/api/chats/${id}/steer`, { method: 'POST', body: JSON.stringify({ direction }) }),
+  steerDate: (dateId: string, direction: string) =>
+    request<{ id: string }>(`/api/dates/${dateId}/steer`, { method: 'POST', body: JSON.stringify({ direction }) }),
   dates: (characterId: string) =>
     request<{ active: DateSession | null; past: DateSession[]; locations: Location[]; circle: { id: string; name: string; who: string }[] }>(
       `/api/chats/${characterId}/dates`,
@@ -336,6 +329,8 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ location_id: locationId, when, company }),
     }),
+  startCall: (characterId: string) =>
+    request<DateSession>(`/api/chats/${characterId}/calls`, { method: 'POST' }),
   dismissNpc: (dateId: string, npcId: string) =>
     request<DateSession>(`/api/dates/${dateId}/npcs/${npcId}/dismiss`, { method: 'POST' }),
   date: (dateId: string) => request<DateView>(`/api/dates/${dateId}`),
@@ -359,8 +354,15 @@ export const api = {
   deleteDateMessage: (dateId: string, messageId: number) =>
     request<{ ok: true }>(`/api/dates/${dateId}/messages/${messageId}`, { method: 'DELETE' }),
 
-  settings: () => request<{ settings: any; usage: any }>('/api/settings'),
-  saveSettings: (patch: unknown) => request<any>('/api/settings', { method: 'PUT', body: JSON.stringify(patch) }),
+  settings: () => request<{ settings: SettingsData; usage: UsageSummary }>('/api/settings'),
+  saveSettings: (patch: unknown) => request<SettingsData>('/api/settings', { method: 'PUT', body: JSON.stringify(patch) }),
+  attributeCategories: () => request<{ category: string; count: number }[]>('/api/attribute-library'),
+  attributes: (category: string) => request<{ category: string; entries: EditableAttribute[] }>(`/api/attribute-library/${encodeURIComponent(category)}`),
+  createAttribute: (category: string, value: unknown) => request<EditableAttribute>(`/api/attribute-library/${encodeURIComponent(category)}`, { method: 'POST', body: JSON.stringify(value) }),
+  updateAttribute: (category: string, id: string, value: unknown) => request<EditableAttribute>(`/api/attribute-library/${encodeURIComponent(category)}/${encodeURIComponent(id)}`, { method: 'PUT', body: JSON.stringify(value) }),
+  deleteAttribute: (category: string, id: string) => request<{ ok: true }>(`/api/attribute-library/${encodeURIComponent(category)}/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+  exportAttributes: (category: string) => request<AttributeExport>(`/api/attribute-library/${encodeURIComponent(category)}/export`),
+  importAttributes: (category: string, value: AttributeExport) => request<{ ok: true; count: number }>(`/api/attribute-library/${encodeURIComponent(category)}/import`, { method: 'POST', body: JSON.stringify(value) }),
   logs: (params: Record<string, string>) =>
     request<LogEntry[]>(`/api/logs?${new URLSearchParams(params).toString()}`),
   /** Markdown, not JSON - the server does the formatting so both surfaces agree. */
@@ -388,20 +390,7 @@ export const api = {
   },
 };
 
-export type ServerEvent =
-  | { type: 'message'; character_id: string; message: Message }
-  | { type: 'message_updated'; character_id: string; message: Message }
-  | { type: 'typing'; character_id: string; on: boolean }
-  | { type: 'read'; character_id: string; at: string }
-  | { type: 'match'; character_id: string }
-  | { type: 'character_state'; character_id: string; state: string }
-  | { type: 'match_removed'; character_id: string }
-  | { type: 'stack'; count: number }
-  | { type: 'generating'; count: number }
-  | { type: 'reset' }
-  | { type: 'messages_removed'; character_id: string; message_ids: number[] }
-  | { type: 'date'; character_id: string; date: DateSession }
-  | { type: 'hello'; at: string };
+export type ServerEvent = AppEvent<Message, DateSession>;
 
 /** Reconnecting WebSocket. The server is off between 02:00 and 06:00, so drops are normal. */
 export function connectEvents(onEvent: (e: ServerEvent) => void): () => void {

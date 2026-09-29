@@ -3,7 +3,7 @@ import { find } from '../db/attributes.js';
 import { complete, extractJson } from '../llm/client.js';
 import { isObj, pick } from '../llm/shape.js';
 import { logger } from '../log.js';
-import { getUserProfile, recentMessages, saveRelationship } from '../repo.js';
+import { getUserProfile, listLocations, recentMessages, saveRelationship } from '../repo.js';
 import { render } from '../prompts/render.js';
 import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Relationship } from '../types.js';
 import {
@@ -17,7 +17,11 @@ import { describePace } from './stage.js';
 import { describeHerMoment } from './moment.js';
 import { initiativeNudge, openerNudge } from './nudge.js';
 import { releaseBlock } from './release.js';
-import { detectMeetupDeferral, detectQuizzingHim, detectReframe, detectRoleplay, findVoiceProblem, isRelentlesslyWitty, verbatimRepeats } from './voice.js';
+import {
+  detectAuditionFrame, detectCaseFileVoice, detectMeetupDeferral, detectQuizzingHim,
+  detectReframe, detectRoleplay, detectScorekeepingTell, detectTransactionalGate, findVoiceProblem,
+  isRelentlesslyWitty, verbatimRepeats,
+} from './voice.js';
 import { canSendPhotos } from './images.js';
 import { fantasyLog } from './fantasies.js';
 import { ACTOR_CHAT, VOICE_NOTE } from '../llm/schemas.js';
@@ -26,6 +30,8 @@ import { costumeMentionBlock } from './cosplay.js';
 import { gameClockMs } from './clock.js';
 import { duoPartner } from './duo.js';
 import { currentOutfit, defaultOutfit, isOutfit, outfitMood } from './wardrobe.js';
+import { EMPTY_SCENE, normalizeScene, sceneBlock, steeringBlock } from './roleplay.js';
+import { locationMapBlock } from './locations.js';
 
 export { detectRoleplay };
 
@@ -63,15 +69,12 @@ function fallbackOutput(): ActorOutput {
     }],
     hidden: {
       thoughts: 'fallback message, the model failed',
-      unresolved: null,
       mood: 'neutral',
       location: '',
       outfit_changes: [],
       activity: '',
-      goal_fulfilled: false,
-      new_fact: null,
-      open_thread: null,
-      director_needed: true,
+      scene: { ...EMPTY_SCENE },
+      callback_used: null,
       photo_offer: null,
       photo_situation: null,
       photo_aspect: null,
@@ -96,14 +99,10 @@ const PHOTO_ASPECTS = new Set(['square', 'portrait', 'landscape']);
  */
 const HIDDEN_ALIASES: Record<string, string[]> = {
   thoughts: ['thoughts', 'hidden_thoughts', 'reflection', 'inner_thoughts', 'thought', 'inner_monologue'],
-  unresolved: ['unresolved', 'waiting_on', 'open_loop'],
   mood: ['mood', 'current_mood', 'feeling'],
   location: ['location', 'current_location', 'where'],
   outfit_changes: ['outfit_changes', 'clothes', 'clothing_changes', 'outfit_change'],
   activity: ['activity', 'current_activity', 'doing'],
-  new_fact: ['new_fact', 'new_information', 'last_fact_learned', 'fact_learned'],
-  open_thread: ['open_thread', 'open_loops'],
-  director_needed: ['director_needed', 'needs_director'],
   photo_shows_face: ['photo_shows_face', 'show_face', 'shows_face'],
   react: ['react', 'reaction'],
 };
@@ -133,15 +132,12 @@ export function collectHidden(parsed: any): any {
 function normalizeHidden(raw: any): ActorHidden {
   return {
     thoughts: String(raw?.thoughts ?? ''),
-    unresolved: raw?.unresolved ? String(raw.unresolved) : null,
     mood: String(raw?.mood ?? ''),
     location: String(raw?.location ?? '').trim().slice(0, 200),
     outfit_changes: normalizeOutfitChanges(raw?.outfit_changes),
     activity: String(raw?.activity ?? '').trim().slice(0, 200),
-    goal_fulfilled: !!raw?.goal_fulfilled,
-    new_fact: raw?.new_fact ? String(raw.new_fact) : null,
-    open_thread: raw?.open_thread ? String(raw.open_thread) : null,
-    director_needed: !!raw?.director_needed,
+    scene: normalizeScene(raw?.scene),
+    callback_used: raw?.callback_used ? String(raw.callback_used).trim().slice(0, 300) : null,
     // An old-style "profile" offer is read as an ordinary photo: her profile picture already
     // exists (or is made first), so what she means is "here's a pic of me".
     photo_offer: raw?.photo_offer === 'profile' ? 'chat' : PHOTO_OFFER_KINDS.has(raw?.photo_offer) ? raw.photo_offer : null,
@@ -206,6 +202,10 @@ export function typingDelay(text: string, maxSeconds: number): number {
 export function collectMessages(parsed: any): unknown[] {
   const raw = pick(parsed, ['messages', 'message', 'reply', 'replies', 'text']);
   if (typeof raw === 'string') return [raw];
+  // Voice notes use the documented { message: { text, duration_seconds } } shape. Treating
+  // that object as "no messages" silently discarded a successfully generated recording and
+  // made the text fallback promise the same voice note again.
+  if (raw && typeof raw === 'object' && !Array.isArray(raw)) return [raw];
   return Array.isArray(raw) ? raw : [];
 }
 
@@ -252,7 +252,7 @@ function buildPrompt(
   const seed = character.seed;
   const flags = relationship.flags;
 
-  const messages = recentMessages(character.id, settings.chat.context_messages);
+  const messages = recentMessages(character.id, settings.chat.context_messages).filter((message) => !message.meta?.failed);
   // Her first outfit, for anyone without one yet, is stored right away: the turn that reads it
   // back to apply her changes has to see the same pieces this prompt showed her.
   if (!isOutfit(relationship.mood?.outfit_state)) {
@@ -279,7 +279,9 @@ function buildPrompt(
     communication_block: communicationBlock(seed),
     quirks_block: quirksBlock(seed),
     // She always knows all of herself. Nothing here is gated on how far things have got.
-    appearance_block: appearanceBlock(seed),
+    // The assembler owns her full closet. Repeating every garment in every text turn adds
+    // hundreds of irrelevant tokens and competes with the newest message.
+    appearance_block: appearanceBlock(seed, false),
     life_block: lifeBlock(seed),
     interests_block: interestsBlock(seed),
     sexual_block: sexualBlock(seed),
@@ -293,6 +295,10 @@ function buildPrompt(
     release_block: releaseBlock(character, relationship),
     moment_block: describeHerMoment(character, relationship),
     continuity_block: continuityBlock(relationship.mood, currentOutfit(relationship, seed)),
+    scene_block: sceneBlock((relationship.mood as any)?.scene),
+    date_map_block: locationMapBlock(listLocations()),
+    call_block: callBlock(character),
+    steering_block: steeringBlock(relationship, 'chat'),
     costume_block: costumeMentionBlock(messages.slice(-8).map((m) => m.text), seed),
     turn_nudge: nudge,
     history_block: historyBlock(messages, character, user),
@@ -341,26 +347,50 @@ function writesFormally(character: { seed: { typing_style: string; slang_registe
   );
 }
 
+/** A stable minority may initiate calls; everyone can still respond if he asks directly. */
+export function maySuggestCall(seed: Character['seed']): boolean {
+  const threshold: Record<string, number> = {
+    often: 14, only_when_emotional: 9, prefers_it_late_at_night: 10, rare: 4, never: 0,
+  };
+  const chance = threshold[seed.voice_msg_tendency] ?? 5;
+  const bucket = Math.abs((seed.image_seed * 1103515245 + 12345) | 0) % 100;
+  return bucket < chance;
+}
+
+function callBlock(character: Character): string {
+  return maySuggestCall(character.seed)
+    ? 'Live phone calls are possible. You are among the small minority who might occasionally suggest one when hearing each other would genuinely suit the moment. Never make it a recurring pitch or a condition; if you want one, plainly ask him to call or say you want to hear his voice.'
+    : 'Live phone calls are possible, but suggesting them is not normally your impulse. Do not tell him to call you on your own initiative. If he directly asks to call, answer naturally in character; this is a preference, not a locked feature.';
+}
+
+/** Only frame breaks and product-language leaks justify discarding a usable draft. */
+function isHardVoiceFailure(what: string): boolean {
+  return [
+    'broke character',
+    'euphemism',
+    'case-file voice',
+    'scorekeeping',
+    'auditioning him',
+    'roleplay prose',
+    "writing the app's own system message",
+    'writing a "[photo:',
+    'announcing that she is testing him',
+  ].some((prefix) => what.startsWith(prefix));
+}
+
 export async function runActor(ctx: ActorContext): Promise<ActorRun> {
   const settings = getSettings();
-  const recent = recentMessages(ctx.character.id, 12);
+  const recent = recentMessages(ctx.character.id, 12).filter((message) => !message.meta?.failed);
   const lastUserMessage = [...recent].reverse().find((m) => m.sender === 'user')?.text ?? '';
   const recentOwnMessages = recent.filter((m) => m.sender === 'character').map((m) => m.text);
   // A wider window for exact repeats only: a catchphrase can come back every few turns.
-  const longOwnHistory = recentMessages(ctx.character.id, 60).filter((m) => m.sender === 'character').map((m) => m.text);
-
-  /**
-   * Two signals that the floor is not clear. The Actor's own report from last turn is the
-   * better one - it knows whether a bit is running - and an unanswered question from him
-   * is the obvious code-side case.
-   */
-  const somethingLive =
-    !!(ctx.relationship.mood as any)?.unresolved ||
-    (recent[recent.length - 1]?.sender === 'user' && lastUserMessage.includes('?'));
+  const longOwnHistory = recentMessages(ctx.character.id, 60)
+    .filter((m) => m.sender === 'character' && !m.meta?.failed)
+    .map((m) => m.text);
 
   // Only a turn she starts herself gets framing; what she says on any turn is hers.
   const nudge = ctx.initiative ? initiativeNudge() : ctx.opener ? openerNudge(ctx.character.seed) : null;
-  const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '', somethingLive);
+  const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '');
   const base = [{ role: 'user' as const, content: prompt }];
 
   let correction: string | null = null;
@@ -435,17 +465,12 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       if (kept.length) out.messages = kept.map((m, i) => (i === 0 ? { ...m, delay: 0 } : m));
     }
 
-    // The "that's not X, that's Y" reframe - see detectReframe. First draft only, like the quiz
-    // check below: a false positive costs one retry, never the fallback line.
-    const reframe = attempt === 0 ? out.messages.map((m) => detectReframe(m.text)).find(Boolean) : null;
+    // Machine-writing tells are useful diagnostics, but not worth throwing away an otherwise
+    // coherent, in-character reply. The old retry policy routinely replaced the better draft
+    // with a fallback or a more confused second attempt.
+    const reframe = out.messages.map((m) => detectReframe(m.text)).find(Boolean);
     if (reframe) {
-      logger.warn('actor', 'rejected: "not X, that\'s Y" reframe', { character: ctx.character.username, matched: reframe });
-      correction = retryHint(
-        `you wrote a "that's not X, that's Y" line ("${reframe}")`,
-        'That construction is the most recognisable tell that a machine wrote this. Say the thing ' +
-          'directly, the way you would actually text it: just the Y, or a plain reaction to what he said.',
-      );
-      continue;
+      logger.debug('actor', 'style diagnostic: "not X, that\'s Y" reframe', { character: ctx.character.username, matched: reframe });
     }
 
     // Handing him the work instead of bringing her own - see detectQuizzingHim.
@@ -498,7 +523,7 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       )
       .find(Boolean);
 
-    if (problem) {
+    if (problem && isHardVoiceFailure(problem.what)) {
       logger.warn('actor', `rejected: ${problem.what}`, {
         character: ctx.character.username,
         attempt,
@@ -508,6 +533,32 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       if (problem.what.startsWith('broke character')) budget = Math.min(3, budget + 1);
       correction = retryHint(problem.what, problem.fix);
       continue;
+    }
+
+    if (attempt === 0 && out.messages.length > 3) {
+      correction = retryHint(
+        `you split one reply into ${out.messages.length} messages`,
+        'Keep the same substance in one or two messages, three only if the timing genuinely matters. Let one good line land instead of flooding the chat.',
+      );
+      continue;
+    }
+
+    if (attempt === 0 && ctx.character.seed.texting_persona === 'uwu_texting') {
+      const body = out.messages.map((message) => message.text).join(' ');
+      const touches = body.match(/\b(?:uwu|owo|hewwo|hai|phiw|wittle|weal(?:ly)?|wight|wook(?:s|ing)?|fiwst|wawk\w*|wepway\w*|pwemium|contwact\w*|cwause\w*|cowou?r\w*|wuwes?)\b|[>(][^\s]{0,8}w[^\s]{0,8}[<)]/gi) ?? [];
+      if (touches.length > out.messages.length * 2) {
+        correction = retryHint(
+          `the uwu accent took over (${touches.length} altered words/markers)`,
+          'Her accent is a light touch: at most one or two altered words, uwu/owo, or kaomoji per message. Keep every other word ordinary and readable so her actual feeling leads.',
+        );
+        continue;
+      }
+    }
+    if (problem) {
+      logger.debug('actor', `style diagnostic: ${problem.what}`, {
+        character: ctx.character.username,
+        messages: out.messages.map((m) => m.text),
+      });
     }
 
     // Sending IS the move - her messages this turn already say a photo is coming. Before the
@@ -529,17 +580,11 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       continue;
     }
 
-    if (attempt === 0 && isRelentlesslyWitty(out.messages.map((m) => m.text))) {
-      logger.warn('actor', 'rejected: every message is a one-line quip', {
+    if (isRelentlesslyWitty(out.messages.map((m) => m.text))) {
+      logger.debug('actor', 'style diagnostic: every message is a one-line quip', {
         character: ctx.character.username,
         messages: out.messages.map((m) => m.text),
       });
-      correction = retryHint(
-        'every message was the same polished one-liner',
-        'Three quips in a row is a performance, not a conversation. Keep at most one good line. ' +
-          'Let the others be ordinary, or say something real, or ask something you actually want to know.',
-      );
-      continue;
     }
 
     return out;
@@ -575,6 +620,14 @@ export async function runActorVoice(ctx: ActorContext): Promise<VoiceOutput | nu
     // Voice messages may be prose, but still never narration.
     if (detectRoleplay(body)) {
       logger.warn('actor', 'voice message contained narration, dropped');
+      return null;
+    }
+    const gating = detectAuditionFrame(body) ?? detectScorekeepingTell(body) ?? detectCaseFileVoice(body) ?? detectTransactionalGate(body);
+    if (gating) {
+      // Voice notes used to bypass the chat/date quality checks entirely, which let a playful
+      // premise harden into invoices, compliance and things he had to earn. Fall back to text
+      // for this turn rather than deliver a recording built around that frame.
+      logger.warn('actor', `voice message used a gating frame (${gating}), dropped`);
       return null;
     }
     const words = body.split(/\s+/).length;
