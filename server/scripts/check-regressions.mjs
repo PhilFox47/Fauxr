@@ -28,7 +28,7 @@ const { default: Fastify } = await import('fastify');
 const { default: fastifyMultipart } = await import('@fastify/multipart');
 const { registerApi } = await import('../dist/routes/api.js');
 const { directionBlock, historyBlock } = await import('../dist/engine/blocks.js');
-const { render } = await import('../dist/prompts/render.js');
+const { loadTemplate, render, resetPromptOverride, savePromptOverride } = await import('../dist/prompts/render.js');
 const { consumeCallback, normalizeScene, physicalUnfinished, sceneBlock, setSteering, steeringBlock } = await import('../dist/engine/roleplay.js');
 const { collectMessages, maySuggestCall } = await import('../dist/engine/actor.js');
 const { detectKinkHits } = await import('../dist/engine/discovery.js');
@@ -45,6 +45,13 @@ const { imageRenderMode } = await import('../dist/engine/images.js');
 try {
   migrate();
   seedAttributes();
+
+  const shippedActorPrompt = loadTemplate('system_actor');
+  savePromptOverride('system_actor', `${shippedActorPrompt}\n\nPROMPT OVERRIDE REGRESSION`);
+  assert.match(loadTemplate('system_actor'), /PROMPT OVERRIDE REGRESSION/);
+  assert.throws(() => savePromptOverride('system_actor', '{{#broken}}never closes'), /not closed/);
+  resetPromptOverride('system_actor');
+  assert.equal(loadTemplate('system_actor'), shippedActorPrompt);
 
   const starter = editableAttributes('conversation_starter')[0];
   const removedStarter = editableAttributes('conversation_starter')[1];
@@ -131,6 +138,9 @@ try {
   assert.equal(normalized.models.actor.top_p, 1);
   assert.equal(normalized.models.actor.max_tokens, 128);
   assert.equal(normalized.models.actor.reasoning_effort, 'none');
+  assert.equal(normalized.token_limits.status, 600);
+  assert.equal(normalizeSettings({ token_limits: { status: 32, character: 250000 } }).token_limits.status, 128);
+  assert.equal(normalizeSettings({ token_limits: { status: 32, character: 250000 } }).token_limits.character, 100000);
   assert.equal(normalizeSettings({ models: { actor: { reasoning_effort: 'xhigh' } } }).models.actor.reasoning_effort, 'xhigh');
   assert.equal(normalizeSettings({ models: { actor: { reasoning_effort: 'max' } } }).models.actor.reasoning_effort, 'max');
   assert.equal(normalizeSettings({ models: { actor: { reasoning_effort: 'invalid' } } }).models.actor.reasoning_effort, 'none');
@@ -295,6 +305,9 @@ try {
   for (const template of ['actor_chat', 'actor_voice', 'actor_date', 'actor_call', 'director_direction', 'director_generate_character', 'director_date_summary', 'director_call_summary']) {
     assert.doesNotMatch(render(template, {}), /{{/);
   }
+  const actorSystem = render('system_actor', {});
+  assert.match(actorSystem, /enter mid-conversation, one beat after acknowledgement/i);
+  assert.match(actorSystem, /remove any opening sentence or clause/i);
   const location = saveLocation({
     id: randomUUID(), name: 'Test place', description: 'Temporary.',
     affordances: {
@@ -409,6 +422,20 @@ try {
   });
   assert.equal(imported.statusCode, 200);
   assert.deepEqual(byCategory('regression_attribute').map((row) => row.id), ['two']);
+  const promptList = await app.inject({ method: 'GET', url: '/api/prompt-library' });
+  assert.equal(promptList.statusCode, 200);
+  const actorChatPrompt = promptList.json().find((prompt) => prompt.name === 'actor_chat');
+  assert(actorChatPrompt?.content.includes('{{char_display_name}}'));
+  const promptSaved = await app.inject({
+    method: 'PUT', url: '/api/prompt-library/actor_chat',
+    payload: { content: `${actorChatPrompt.content}\n\nAPI PROMPT OVERRIDE` },
+  });
+  assert.equal(promptSaved.statusCode, 200);
+  assert.equal(promptSaved.json().customized, true);
+  assert.match(loadTemplate('actor_chat'), /API PROMPT OVERRIDE/);
+  const promptReset = await app.inject({ method: 'DELETE', url: '/api/prompt-library/actor_chat' });
+  assert.equal(promptReset.statusCode, 200);
+  assert.equal(promptReset.json().customized, false);
   await app.close();
 
   let decisionRequest;

@@ -259,12 +259,13 @@ export function castLine(date: DateSession): string {
  */
 export async function castFromInvite(character: Character, date: DateSession, locationText: string, request: string, profile: UserProfile | null): Promise<DateNpc[]> {
   if (!request.trim()) return [];
+  const settings = getSettings();
   try {
     const out = await completeJson<{ people?: unknown[] }>({
       scope: 'director',
       label: `date_cast:${character.username}`,
       schema: DATE_CAST,
-      config: { ...getSettings().models.director, max_tokens: 900 },
+      config: { ...settings.models.director, max_tokens: settings.token_limits.date_cast },
       require: ['people'],
       messages: [
         {

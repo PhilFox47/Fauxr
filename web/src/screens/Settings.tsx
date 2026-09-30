@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type AttributeExport, type CardSpec, type EditableAttribute, type ImageJob, type KinkDomain, type KinkSide, type KinkStance, type Location, type LogEntry, type ResetParts, type SettingsData, type TasteSection, type UsageSummary, type UserProfile } from '../api';
+import { api, type AttributeExport, type CardSpec, type EditableAttribute, type EditablePrompt, type ImageJob, type ImageModelCapability, type KinkDomain, type KinkSide, type KinkStance, type Location, type LogEntry, type PromptExport, type ResetParts, type SettingsData, type TasteSection, type UsageSummary, type UserProfile } from '../api';
 import SettingsNav, { type SettingsNavGroup } from '../components/SettingsNav';
 
-type Pane = 'models' | 'behaviour' | 'taste' | 'attributes' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
+type Pane = 'models' | 'prompts' | 'behaviour' | 'taste' | 'attributes' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
 
 const PANE_GROUPS: SettingsNavGroup<Pane>[] = [
   {
@@ -19,6 +19,7 @@ const PANE_GROUPS: SettingsNavGroup<Pane>[] = [
     label: 'System',
     panes: [
       { id: 'models', label: 'Models & API', detail: 'Providers and generation' },
+      { id: 'prompts', label: 'Prompt library', detail: 'Edit model instructions' },
       { id: 'images', label: 'Image jobs', detail: 'Generated media' },
       { id: 'logs', label: 'Diagnostics', detail: 'Prompts and responses' },
       { id: 'reset', label: 'Account & data', detail: 'Session and reset controls' },
@@ -57,7 +58,7 @@ const PARTS: { id: keyof ResetParts; label: string; short: string; detail: strin
     id: 'settings',
     label: 'API keys and settings',
     short: 'your API keys and settings',
-    detail: 'Keys, base URLs, model choices and every tuning slider go back to defaults.',
+    detail: 'Keys, base URLs, model choices, prompt overrides and every tuning slider go back to defaults.',
   },
   {
     id: 'logs',
@@ -158,6 +159,7 @@ export default function Settings({
             <ResetPane />
           </>
         )}
+        {pane === 'prompts' && <PromptsPane />}
         {saveError && <div className="banner warn">Could not save settings: {saveError}</div>}
         </div>
       </div>
@@ -176,7 +178,56 @@ function SaveBar({ save, saved, saving }: { save: () => void; saved: boolean; sa
 }
 
 function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps) {
+  const [imageModels, setImageModels] = useState<ImageModelCapability[]>([]);
+  const [catalogSource, setCatalogSource] = useState<'nanogpt' | 'fallback' | null>(null);
+  const [customSize, setCustomSize] = useState('');
+  useEffect(() => {
+    void api.imageModels().then((result) => {
+      setImageModels(result.models);
+      setCatalogSource(result.source);
+    }).catch(() => setCatalogSource('fallback'));
+  }, []);
+
+  const selectImageModel = (modelId: string) => {
+    patch(['models', 'image', 'model'], modelId);
+    const model = imageModels.find((candidate) => candidate.id === modelId);
+    if (!model) return;
+    if (model.sizes.length) {
+      patch(['models', 'image', 'sizes'], model.sizes.map((size) => {
+        const [width, height] = size.split('x').map(Number);
+        return { size, profile: width === height, chat: true, date: height > width };
+      }));
+      patch(['models', 'image', 'size'], model.sizes[0]);
+    }
+    patch(['models', 'image', 'send_reference_image'], model.supports_reference === true);
+    if (model.suggested_prompt_chars) patch(['models', 'image', 'max_prompt_chars'], model.suggested_prompt_chars);
+    patch(['models', 'image', 'prompt_style'], modelId.startsWith('z-image') ? 'z_image_turbo' : 'seedream');
+  };
+
+  const patchImageSize = (index: number, key: 'profile' | 'chat' | 'date', value: boolean) => {
+    const next = settings.models.image.sizes.map((row, rowIndex) => rowIndex === index ? { ...row, [key]: value } : row);
+    patch(['models', 'image', 'sizes'], next);
+  };
+
+  const addCustomSize = () => {
+    const size = customSize.trim().toLowerCase().replace('*', 'x');
+    if (!/^\d{2,5}x\d{2,5}$/.test(size) || settings.models.image.sizes.some((row) => row.size === size)) return;
+    patch(['models', 'image', 'sizes'], [...settings.models.image.sizes, { size, profile: false, chat: true, date: false }]);
+    setCustomSize('');
+  };
   const roles: ('actor' | 'director')[] = ['actor', 'director'];
+  const tokenLimits: { key: keyof SettingsData['token_limits']; label: string; detail: string }[] = [
+    { key: 'status', label: 'Status message', detail: 'Status, location, activity, outfit and optional life update' },
+    { key: 'life_threads', label: 'New life threads', detail: 'Background storylines created when a character runs low' },
+    { key: 'date_cast', label: 'Date guest cards', detail: 'NPCs requested when a date starts' },
+    { key: 'date_scene', label: 'Date scene image brief', detail: 'Description used by Show current scene' },
+    { key: 'date_outfit', label: 'Date outfit', detail: 'Slot-by-slot outfit selected when a date begins' },
+    { key: 'character', label: 'Character generation', detail: 'Full dossier and public profile fields' },
+    { key: 'name_and_handle', label: 'Name and handle repairs', detail: 'Fallback calls for clashes or invalid handles' },
+    { key: 'bio', label: 'Profile bio', detail: 'Focused bio writer and repair attempts' },
+    { key: 'profile_picture_brief', label: 'Profile-picture concept', detail: 'Her description of the profile picture she wants' },
+    { key: 'chat_photo_idea', label: 'New chat-photo idea', detail: 'Fresh concept when regenerating with a new idea' },
+  ];
   return (
     <>
       <div className="card">
@@ -281,12 +332,15 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
             </label>
           </div>
           <label className="field">
-            <span>Max tokens</span>
+            <span>Default max tokens</span>
             <input
               type="number"
               value={settings.models[role].max_tokens}
               onChange={(e) => patch(['models', role, 'max_tokens'], Number(e.target.value))}
             />
+            <span className="tiny muted">
+              Used by this role unless the task has a specific limit below. Reasoning tokens count toward the same ceiling.
+            </span>
           </label>
           <label className="field">
             <span>Reasoning effort</span>
@@ -306,6 +360,28 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
           </label>
         </div>
       ))}
+
+      <div className="card">
+        <div className="section-title" style={{ padding: '0 0 6px' }}>Task token limits</div>
+        <p className="small muted" style={{ marginTop: 0 }}>
+          Every task-specific ceiling in the app is editable here. Lower values can reduce
+          worst-case time and cost, but reasoning models spend part of the allowance before
+          writing their JSON. Values are clamped to 128–100,000 tokens.
+        </p>
+        <div className="token-limit-grid">
+          {tokenLimits.map((item) => (
+            <label className="field" key={item.key}>
+              <span>{item.label}</span>
+              <input
+                type="number" min={128} max={100000} step={100}
+                value={settings.token_limits[item.key]}
+                onChange={(event) => patch(['token_limits', item.key], Number(event.target.value))}
+              />
+              <span className="tiny muted">{item.detail}</span>
+            </label>
+          ))}
+        </div>
+      </div>
 
       <div className="card">
         <div className="section-title" style={{ padding: '0 0 10px' }}>Evaluator — checks generated characters</div>
@@ -370,18 +446,52 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
           <span>Model</span>
           <input
             type="text"
+            list="image-model-options"
             value={settings.models.image.model}
-            onChange={(e) => patch(['models', 'image', 'model'], e.target.value)}
+            onChange={(e) => selectImageModel(e.target.value)}
           />
+          <datalist id="image-model-options">
+            {imageModels.map((model) => <option key={model.id} value={model.id}>{model.name}</option>)}
+          </datalist>
+          <span className="tiny muted">
+            {catalogSource === 'nanogpt' ? 'Models and capabilities loaded from NanoGPT.' : 'Showing built-in suggestions; custom model IDs still work.'}
+          </span>
         </label>
         <label className="field">
-          <span>Size</span>
-          <input
-            type="text"
-            value={settings.models.image.size}
-            onChange={(e) => patch(['models', 'image', 'size'], e.target.value)}
-          />
+          <span>Maximum prompt length</span>
+          <input type="number" min={0} max={100000} value={settings.models.image.max_prompt_chars}
+            onChange={(e) => patch(['models', 'image', 'max_prompt_chars'], Number(e.target.value))} />
+          <span className="tiny muted">Characters, including reference instructions, in the final prompt. 0 means unlimited. Z-Image Turbo is preset to 1,200.</span>
         </label>
+        <label className="switch-row">
+          <span className="switch">
+            <input type="checkbox" checked={settings.models.image.send_reference_image}
+              onChange={(e) => patch(['models', 'image', 'send_reference_image'], e.target.checked)} />
+            <span className="track" />
+          </span>
+          <span className="small">Send identity reference image<br /><span className="tiny muted">Disable this for text-to-image-only models. Fauxr also skips creating the private identity plate.</span></span>
+        </label>
+        <div className="section-title" style={{ padding: '12px 0 6px' }}>Resolutions by image type</div>
+        <p className="tiny muted">When several enabled resolutions match a shot's orientation, Fauxr varies between them. Date includes arrival and current-scene images.</p>
+        <div className="image-size-grid">
+          <div className="image-size-row image-size-head">
+            <span className="tiny muted">Resolution</span><span className="tiny muted">Profile</span><span className="tiny muted">Chat</span><span className="tiny muted">Date</span><span />
+          </div>
+          {settings.models.image.sizes.map((row, index) => (
+            <div className="image-size-row" key={row.size}>
+              <code>{row.size}</code>
+              {(['profile', 'chat', 'date'] as const).map((key) => (
+                <input key={key} aria-label={`${row.size} for ${key}`} type="checkbox" checked={row[key]}
+                  onChange={(e) => patchImageSize(index, key, e.target.checked)} />
+              ))}
+              <button className="btn subtle" type="button" onClick={() => patch(['models', 'image', 'sizes'], settings.models.image.sizes.filter((_, rowIndex) => rowIndex !== index))}>Remove</button>
+            </div>
+          ))}
+        </div>
+        <div className="row">
+          <label className="field grow"><span>Custom resolution</span><input placeholder="1024x1536" value={customSize} onChange={(e) => setCustomSize(e.target.value)} /></label>
+          <button className="btn subtle" type="button" onClick={addCustomSize}>Add</button>
+        </div>
         <label className="field">
           <span>Provider (optional)</span>
           <input
@@ -1190,6 +1300,135 @@ function LogsPane() {
  * The places you can take someone. Written by hand - a name and a description, both yours -
  * with an optional AI backdrop that becomes the blurred background of the date itself.
  */
+const PROMPT_LABELS: Record<string, string> = {
+  actor_chat: 'Chat reply', actor_voice: 'Voice message', actor_date: 'Date beat', actor_call: 'Phone call',
+  actor_date_outfit: 'Date outfit', actor_date_scene: 'Date scene image brief', actor_profile_pic: 'Profile-picture concept',
+  actor_photo_idea: 'Chat-photo concept', director_direction: 'Director turn', director_generate_character: 'Character generation',
+  director_write_bio: 'Profile bio', director_evaluate_image: 'Image evaluation', director_date_summary: 'Date summary',
+  director_call_summary: 'Call summary', director_date_cast: 'Date guests', director_life_threads: 'Life threads',
+  image_prompt_assembler: 'Image prompt assembler', system_actor: 'Actor system prompt', system_director: 'Director system prompt',
+};
+
+function PromptsPane() {
+  const [prompts, setPrompts] = useState<EditablePrompt[]>([]);
+  const [selected, setSelected] = useState('');
+  const [draft, setDraft] = useState('');
+  const [query, setQuery] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async (preferred?: string) => {
+    const rows = await api.prompts();
+    setPrompts(rows);
+    const name = preferred ?? (selected || rows[0]?.name || '');
+    setSelected(name);
+    setDraft(rows.find((prompt) => prompt.name === name)?.content ?? '');
+  }, [selected]);
+
+  useEffect(() => { void load().catch((err) => setError(String(err))); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const current = prompts.find((prompt) => prompt.name === selected) ?? null;
+  const filtered = prompts.filter((prompt) => {
+    const needle = query.trim().toLowerCase();
+    return !needle || prompt.name.includes(needle) || (PROMPT_LABELS[prompt.name] ?? '').toLowerCase().includes(needle) || prompt.content.toLowerCase().includes(needle);
+  });
+  const choose = (name: string) => {
+    if (current && draft !== current.content && !window.confirm('Discard your unsaved prompt changes?')) return;
+    const next = prompts.find((prompt) => prompt.name === name);
+    setSelected(name);
+    setDraft(next?.content ?? '');
+    setError(null);
+    setSaved(false);
+  };
+  const save = async () => {
+    if (!current || busy) return;
+    setBusy(true); setError(null);
+    try {
+      const updated = await api.savePrompt(current.name, draft);
+      setPrompts((rows) => rows.map((row) => row.name === updated.name ? updated : row));
+      setDraft(updated.content);
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally { setBusy(false); }
+  };
+  const reset = async () => {
+    if (!current || busy || !window.confirm(`Restore ${PROMPT_LABELS[current.name] ?? current.name} to the shipped prompt?`)) return;
+    setBusy(true); setError(null);
+    try {
+      const updated = await api.resetPrompt(current.name);
+      setPrompts((rows) => rows.map((row) => row.name === updated.name ? updated : row));
+      setDraft(updated.content);
+    } catch (err) { setError(err instanceof Error ? err.message : String(err)); }
+    finally { setBusy(false); }
+  };
+  const exportPrompt = async () => {
+    if (!current) return;
+    try {
+      const payload = await api.exportPrompt(current.name);
+      const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }));
+      const link = document.createElement('a'); link.href = url; link.download = `fauxr-prompt-${current.name}.json`; link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) { setError(err instanceof Error ? err.message : String(err)); }
+  };
+  const importPrompt = async (file: File) => {
+    if (!current || !window.confirm(`Replace ${PROMPT_LABELS[current.name] ?? current.name} with ${file.name}?`)) return;
+    setBusy(true); setError(null);
+    try {
+      const payload = JSON.parse(await file.text()) as PromptExport;
+      const updated = await api.importPrompt(current.name, payload);
+      setPrompts((rows) => rows.map((row) => row.name === updated.name ? updated : row));
+      setDraft(updated.content);
+    } catch (err) { setError(err instanceof Error ? err.message : String(err)); }
+    finally { setBusy(false); }
+  };
+
+  return (
+    <div className="prompt-library">
+      <div className="card">
+        <div className="section-title" style={{ padding: '0 0 8px' }}>Prompt library</div>
+        <p className="small muted">
+          Overrides apply to the next model call and survive upgrades. Template variables use
+          <code>{'{{name}}'}</code> and optional sections use <code>{'{{#name}}…{{/name}}'}</code>.
+          Reset always restores the prompt shipped with this version of Fauxr.
+        </p>
+        <label className="field"><span>Search prompts and their text</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="chat, summary, image, wording…" /></label>
+        <div className="prompt-picker">
+          {filtered.map((prompt) => (
+            <button key={prompt.name} className={prompt.name === selected ? 'active' : ''} onClick={() => choose(prompt.name)}>
+              <span>{PROMPT_LABELS[prompt.name] ?? prompt.name.replaceAll('_', ' ')}</span>
+              <span className="tiny muted">{prompt.name}{prompt.customized ? ' · customized' : ''}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {current && (
+        <div className="card prompt-editor-card">
+          <div className="row wrap">
+            <div className="grow"><div className="section-title" style={{ padding: 0 }}>{PROMPT_LABELS[current.name] ?? current.name}</div><span className="tiny muted">{current.name} · {draft.length.toLocaleString()} characters</span></div>
+            {current.customized && <span className="pill">Customized</span>}
+          </div>
+          <label className="field prompt-text"><span>Prompt Markdown</span><textarea value={draft} onChange={(e) => { setDraft(e.target.value); setSaved(false); }} spellCheck={false} /></label>
+          <details className="prompt-reference">
+            <summary>Available variables ({current.variables.length})</summary>
+            <div className="prompt-vars">{current.variables.map((variable) => <code key={variable}>{`{{${variable}}}`}</code>)}</div>
+          </details>
+          <div className="row wrap">
+            <button className="btn grow" disabled={busy || draft === current.content} onClick={() => void save()}>{busy ? 'Saving…' : saved ? 'Saved' : 'Save override'}</button>
+            <button className="btn ghost" disabled={busy || !current.customized} onClick={() => void reset()}>Reset to shipped</button>
+            <button className="btn ghost" disabled={busy} onClick={() => void exportPrompt()}>Export</button>
+            <label className="btn ghost">Import<input type="file" hidden accept="application/json,.json" disabled={busy} onChange={(e) => { const file = e.target.files?.[0]; e.target.value = ''; if (file) void importPrompt(file); }} /></label>
+          </div>
+          {error && <div className="banner warn">{error}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
 type AttributeDraft = EditableAttribute & {
   affinities_text: string;
   conflicts_text: string;

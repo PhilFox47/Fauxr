@@ -688,11 +688,6 @@ export interface StartDateInput {
   company?: string;
 }
 
-/** Ten short slot answers and a note - a little more than the old one-paragraph outfit. */
-const OUTFIT_TOKENS = 1000;
-
-const SCENE_TOKENS = 1500;
-
 /**
  * "Show current scene": a picture of this moment of the date, as he sees it. A small call reads
  * the last few beats and writes the shot (where everyone is, what she is doing, her face); the
@@ -701,6 +696,7 @@ const SCENE_TOKENS = 1500;
  * on her. Pressing the button is his action, so it costs nothing he did not ask for.
  */
 export async function showCurrentScene(dateId: string): Promise<{ image_id: string }> {
+  const settings = getSettings();
   const date = getDate(dateId);
   if (!date) throw new Error('date not found');
   if (date.kind === 'call') throw new Error('a phone call has no shared scene to photograph');
@@ -724,7 +720,7 @@ export async function showCurrentScene(dateId: string): Promise<{ image_id: stri
       label: `date_scene:${character.username}`,
       schema: DATE_SCENE,
       // The actor model: the scene can be explicit, and this has to describe it as it is.
-      config: { ...getSettings().models.actor, max_tokens: SCENE_TOKENS },
+      config: { ...settings.models.actor, max_tokens: settings.token_limits.date_scene },
       require: ['situation'],
       messages: [
         {
@@ -780,12 +776,13 @@ export function dateOutfit(date: DateSession, seed: CharacterSeed): Outfit | nul
  * red lipstick). If the call fails she comes in an outfit rolled from her closet.
  */
 async function decideDateOutfit(character: Character, date: DateSession, location: Location): Promise<{ outfit: Outfit; note: string }> {
+  const settings = getSettings();
   try {
     const out = await completeJson<{ outfit?: Record<string, unknown>; note?: string }>({
       scope: 'image',
       label: `date_outfit:${character.username}`,
       schema: OUTFIT,
-      config: { ...getSettings().models.actor, max_tokens: OUTFIT_TOKENS },
+      config: { ...settings.models.actor, max_tokens: settings.token_limits.date_outfit },
       require: ['outfit'],
       messages: [
         {

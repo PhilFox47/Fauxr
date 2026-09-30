@@ -727,7 +727,7 @@ export async function generateImage(req: ImageRequest): Promise<string> {
     };
     if (req.negativePrompt) body.negative_prompt = req.negativePrompt;
     if (req.seed !== undefined) body.seed = req.seed;
-    if (req.refImage) body.image = req.refImage;
+    if (settings.models.image.send_reference_image && req.refImage) body.image = req.refImage;
     if (settings.models.image.provider) body.provider = settings.models.image.provider;
 
     const started = Date.now();

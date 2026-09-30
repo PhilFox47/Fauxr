@@ -159,6 +159,13 @@ CREATE TABLE IF NOT EXISTS attribute_db (
   PRIMARY KEY (category, id)
 );
 
+-- User-edited prompt text. The checked-in Markdown remains the recoverable default.
+CREATE TABLE IF NOT EXISTS prompt_overrides (
+  name       TEXT PRIMARY KEY,
+  content    TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS logs (
   id         INTEGER PRIMARY KEY AUTOINCREMENT,
   ts         TEXT NOT NULL,

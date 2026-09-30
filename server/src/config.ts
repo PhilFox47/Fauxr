@@ -25,6 +25,27 @@ export interface EvaluatorConfig {
   confidence_threshold: number;
 }
 
+export interface ImageSizeSetting {
+  size: string;
+  profile: boolean;
+  chat: boolean;
+  date: boolean;
+}
+
+/** Per-job output ceilings that intentionally differ from the Actor/Director defaults. */
+export interface TokenLimits {
+  status: number;
+  life_threads: number;
+  date_cast: number;
+  date_scene: number;
+  date_outfit: number;
+  character: number;
+  name_and_handle: number;
+  bio: number;
+  profile_picture_brief: number;
+  chat_photo_idea: number;
+}
+
 export interface Settings {
   api: {
     base_url: string;
@@ -43,7 +64,13 @@ export interface Settings {
     evaluator: EvaluatorConfig;
     image: {
       model: string;
+      /** Legacy fallback retained for old settings and providers with no model metadata. */
       size: string;
+      sizes: ImageSizeSetting[];
+      /** 0 means unlimited; otherwise the complete prompt sent upstream is capped. */
+      max_prompt_chars: number;
+      /** Attach Fauxr's private identity plate when the selected model accepts image input. */
+      send_reference_image: boolean;
       provider?: string;
       /**
        * These two models want fundamentally different prompts - Seedream 5.0 Lite reads a
@@ -56,6 +83,7 @@ export interface Settings {
       prompt_style: 'seedream' | 'z_image_turbo';
     };
   };
+  token_limits: TokenLimits;
   /** Global multiplier for proactivity and wakeup frequency. Conservative by default. */
   activity: number;
   budget: { max_calls_per_day: number; max_cost_per_day: number };
@@ -116,7 +144,30 @@ export const DEFAULT_SETTINGS: Settings = {
     actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 7200, reasoning_effort: 'none' },
     director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 10400, reasoning_effort: 'low' },
     evaluator: { enabled: true, model: 'typesafe/jev-latest', confidence_threshold: 0.65 },
-    image: { model: 'seedream-v4', size: '1024x1024', prompt_style: 'seedream' },
+    image: {
+      model: 'seedream-v4',
+      size: '2048x2048',
+      sizes: [
+        { size: '2048x2048', profile: true, chat: true, date: false },
+        { size: '2048x3072', profile: false, chat: true, date: true },
+        { size: '3072x2048', profile: false, chat: true, date: true },
+      ],
+      max_prompt_chars: 0,
+      send_reference_image: true,
+      prompt_style: 'seedream',
+    },
+  },
+  token_limits: {
+    status: 600,
+    life_threads: 1200,
+    date_cast: 900,
+    date_scene: 1500,
+    date_outfit: 1000,
+    character: 14_400,
+    name_and_handle: 2400,
+    bio: 4800,
+    profile_picture_brief: 4800,
+    chat_photo_idea: 2400,
   },
   activity: 0.6,
   budget: { max_calls_per_day: 1500, max_cost_per_day: 0 },
@@ -188,6 +239,7 @@ export function normalizeSettings(value: unknown): Settings {
   const image = isPlainObject(models.image) ? models.image : {};
   const budget = isPlainObject(v.budget) ? v.budget : {};
   const chat = isPlainObject(v.chat) ? v.chat : {};
+  const tokenLimits = isPlainObject(v.token_limits) ? v.token_limits : {};
   const rawTaste = isPlainObject(v.taste) ? v.taste : {};
   const taste: Record<string, number> = {};
   for (const [key, raw] of Object.entries(rawTaste)) {
@@ -200,6 +252,17 @@ export function normalizeSettings(value: unknown): Settings {
   }
 
   const imageProvider = stringValue(image.provider, '', 120);
+  const rawImageSizes = Array.isArray(image.sizes) ? image.sizes : DEFAULT_SETTINGS.models.image.sizes;
+  const imageSizes = rawImageSizes
+    .filter(isPlainObject)
+    .map((row) => ({
+      size: stringValue(row.size, '', 40).toLowerCase().replace('*', 'x'),
+      profile: row.profile === true,
+      chat: row.chat === true,
+      date: row.date === true,
+    }))
+    .filter((row, index, all) => /^\d{2,5}x\d{2,5}$/.test(row.size) && all.findIndex((other) => other.size === row.size) === index)
+    .slice(0, 40);
   return {
     api: {
       base_url: stringValue(api.base_url, DEFAULT_SETTINGS.api.base_url, 500),
@@ -232,10 +295,21 @@ export function normalizeSettings(value: unknown): Settings {
       image: {
         model: stringValue(image.model, DEFAULT_SETTINGS.models.image.model, 200) || DEFAULT_SETTINGS.models.image.model,
         size: stringValue(image.size, DEFAULT_SETTINGS.models.image.size, 80) || DEFAULT_SETTINGS.models.image.size,
+        sizes: imageSizes.length ? imageSizes : DEFAULT_SETTINGS.models.image.sizes.map((row) => ({ ...row })),
+        max_prompt_chars: integerValue(image.max_prompt_chars, DEFAULT_SETTINGS.models.image.max_prompt_chars, 0, 100_000),
+        send_reference_image: typeof image.send_reference_image === 'boolean'
+          ? image.send_reference_image
+          : DEFAULT_SETTINGS.models.image.send_reference_image,
         prompt_style: image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream',
         ...(imageProvider ? { provider: imageProvider } : {}),
       },
     },
+    token_limits: Object.fromEntries(
+      Object.entries(DEFAULT_SETTINGS.token_limits).map(([key, fallback]) => [
+        key,
+        integerValue(tokenLimits[key], fallback, 128, 100_000),
+      ]),
+    ) as unknown as TokenLimits,
     activity: numberValue(v.activity, DEFAULT_SETTINGS.activity, 0.1, 3),
     budget: {
       max_calls_per_day: integerValue(budget.max_calls_per_day, DEFAULT_SETTINGS.budget.max_calls_per_day, 0, 100_000),

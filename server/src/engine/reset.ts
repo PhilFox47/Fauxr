@@ -6,6 +6,7 @@ import { invalidateAttributeCache, seedAttributes } from '../db/attributes.js';
 import { bus } from '../events.js';
 import { logger } from '../log.js';
 import { clearLocationImages } from '../repo.js';
+import { invalidatePromptCache } from '../prompts/render.js';
 import { abandonRunningTurns } from './chat.js';
 import { ensureStack, resetGenerationQueue } from './matching.js';
 import { startScheduler, stopScheduler } from './scheduler.js';
@@ -66,7 +67,7 @@ export async function resetParts(opts: ResetOptions = {}): Promise<ResetResult> 
   const tables = [
     ...(world ? WORLD_TABLES : []),
     ...(profile ? ['user_profile'] : []),
-    ...(settings ? ['settings'] : []),
+    ...(settings ? ['settings', 'prompt_overrides'] : []),
     ...(logs ? ['logs'] : []),
   ];
   if (tables.length === 0) {
@@ -112,7 +113,10 @@ export async function resetParts(opts: ResetOptions = {}): Promise<ResetResult> 
   if (profile) filesRemoved += emptyMediaDir(join('uploads', 'profile'));
 
   if (world) invalidateAttributeCache();
-  if (settings) clearSettingsCache();
+  if (settings) {
+    clearSettingsCache();
+    invalidatePromptCache();
+  }
 
   const attributeRows = world ? seedAttributes() : 0;
 

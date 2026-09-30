@@ -74,6 +74,7 @@ function partOfDay(d: Date): string {
 }
 
 export async function refreshStatus(character: Character): Promise<CharacterStatus | null> {
+  const settings = getSettings();
   const rel = getRelationship(character.id);
   if (!rel) return null;
   const seed = character.seed;
@@ -132,9 +133,12 @@ export async function refreshStatus(character: Character): Promise<CharacterStat
       scope: 'director',
       label: `status:${character.username}`,
       schema: threadList ? STATUS_WITH_THREAD : STATUS,
-      config: { ...getSettings().models.director, max_tokens: 1000 },
+      config: { ...settings.models.director, max_tokens: settings.token_limits.status },
       reasoningEffort: 'none',
       priority: 'background',
+      // Status is disposable background flavour. Respect its small user-controlled ceiling
+      // instead of turning a truncation into a much larger automatic second call.
+      expandOnTruncation: false,
       require: ['status'],
       messages: [{ role: 'user', content: prompt }],
     });

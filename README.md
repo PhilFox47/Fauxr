@@ -731,7 +731,7 @@ one is limited - but none of them costs an image generation until you choose to 
 `runImageJob` is now the two halves in a row - `assembleImageJob` then `renderImageJob` - for
 the paths that render at once.
 
-**Frames are fixed by kind** (`IMAGE_SIZE`, `sizeFor()` in `images.ts`): a profile picture is
+**Frames are configured by kind** (`models.image.sizes`, selected by `sizeFor()` in `images.ts`): each resolution can be enabled separately for profile, chat and date/scene images. Fauxr prefers the requested orientation and varies among matching enabled resolutions. The Models & API page loads NanoGPT's image-model catalog when available, with built-in Chroma, HiDream and Z-Image suggestions plus custom model IDs and resolutions. It also controls whether the private identity reference is generated/sent and can enforce a model-specific final prompt character limit (0 leaves it unlimited). A profile picture is
 always square (2048x2048) - the main photo slot and the identity reference; a date's arrival
 photo is always 2:3 portrait (2048x3072), since it shows her whole outfit; a photo she sends in
 the chat is her call between square (a close selfie or a detail), 2:3 portrait (a mirror or
@@ -3883,8 +3883,9 @@ matters is the specific deployment this app talks to, which hard-rejects a "prom
 roughly 1200 characters regardless of what the model itself would rather have. Two things
 now enforce that instead of one hopeful paragraph:
 
-- `zCharBudget` in `runImageJob` computes the room actually left for the assembler's own
-  text - `Z_IMAGE_MAX_CHARS` minus however long `BASE_SUFFIX`/`CANDID_SUFFIX` already are for
+- The editable `max_prompt_chars` setting (preset to 1200 when Z-Image is selected from the
+  model catalog) computes the room actually left for the assembler's own text - the chosen
+  limit minus however long `BASE_SUFFIX`/`CANDID_SUFFIX` already are for
   this shot - and hands it to the assembler as a concrete number (`{{z_char_budget}}`), not a
   vague "keep it short". The template's Z Image Turbo section now leads with that as a HARD
   LIMIT and explicitly disclaims the model's own "long prompts are fine" reputation as not
@@ -6257,3 +6258,56 @@ Import is intentionally an exact replacement of that category rather than an amb
 validates every row and duplicate id before committing the transaction, and the UI requires a
 confirmation because omitted rows are deleted. Export the current category first when using the
 files as editable backups.
+
+### Desktop composers understand emoji shortcodes
+
+The text-chat, date and call composers provide Slack/Discord-style emoji completion. Typing a
+colon followed by part of a name—such as `:swea`—opens a filtered list above the composer. Arrow
+keys move through it, Enter or Tab inserts the highlighted emoji, Escape closes it, and clicking a
+row works as expected. Completion replaces only the shortcode at the caret, so it also works in
+the middle of a draft without disturbing surrounding text. The built-in conversational catalogue
+includes common reactions, gestures, hearts, symbols and flirt-oriented emoji and requires no
+third-party service or desktop emoji keyboard.
+
+### Visible roleplay skips the assistant's analysis preamble
+
+Actor prompts now draw a hard boundary between useful private reasoning and character writing the
+player sees. Hidden thoughts, mood, continuity and Director impulses may identify patterns plainly;
+her message or spoken line must not leak that process as commentary on his answer.
+
+This covers chat, voice notes, calls and dates. The first attempt described a long catalogue of
+AI-like failures; a live GLM test immediately made that catalogue more salient and produced an even
+more elaborate clause-by-clause audit. The replacement is deliberately short and constructive:
+enter one beat after acknowledgement, silently receive what he wrote, and add something new. A
+final single-pass edit removes an opening sentence or clause when the remainder works without its
+receipt, approval, grading or interpretation. Pointed quotation and deliberate callbacks remain
+when they are the actual joke or answer. This remains guidance inside the existing Actor call; it
+adds no style grader or regeneration cost.
+
+### Every text-generation ceiling is editable
+
+**Settings → Models & API** distinguishes the Actor and Director default `max_tokens` values from
+task-specific overrides. The page exposes every specialized ceiling: status messages, life-thread
+creation, date guest cards, date scene briefs, date outfits, full character generation, name and
+handle repairs, bios, profile-picture concepts and new chat-photo ideas. Saved values are normalized
+to 128–100,000 tokens and older settings automatically inherit the documented defaults.
+
+Status generation now defaults to 600 rather than 1,000 tokens. Its ceiling is deliberately strict:
+a disposable background status that runs out of room fails and waits for its normal retry window
+instead of automatically launching a much larger truncation retry. This makes lowering the Status
+field an actual latency/cost control. Reasoning tokens share the same allowance, so very small
+values can leave no room for the structured status and outfit response.
+
+### Prompts can be edited without modifying the installation
+
+**Settings → Prompt library** exposes every Actor, Director, system and image-assembly Markdown
+template. Search covers prompt names, friendly labels and full text. The editor shows the template
+variables available to that prompt, validates balanced optional sections before saving, and applies
+the override to the next model call without restarting the server.
+
+Edits live in SQLite's `prompt_overrides` table rather than overwriting `src/prompts/templates`.
+They therefore survive builds, container restarts and upgrades, while **Reset to shipped** always
+reveals the current version's checked-in prompt again. Each prompt has its own versioned JSON
+import/export file for experiments and backups. Import requires the file's prompt name to match the
+selected prompt, preventing an Actor template from accidentally replacing a Director or system
+template. Resetting **API keys and settings** also clears all prompt overrides.

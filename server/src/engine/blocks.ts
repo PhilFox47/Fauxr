@@ -537,7 +537,7 @@ export function directionBlock(d: Direction | null, _somethingLive = false): str
   return [
     `Mood: ${d.mood}`,
     `Private impulse: ${impulse}`,
-    'This is an inclination, not an assignment. Answer his newest message naturally; he does not owe you a particular response.',
+    'This is silent dramatic pressure, not wording to reuse or an assignment. Answer his newest message naturally; he does not owe you a particular response.',
   ].filter(Boolean).join('\n');
 }
 

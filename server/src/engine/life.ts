@@ -32,6 +32,7 @@ export function liveThreads(characterId: string): LifeThread[] {
 
 /** Tops her storylines up to TARGET, with one small call. A failure just leaves what she has. */
 export async function ensureLife(character: Character): Promise<LifeThread[]> {
+  const settings = getSettings();
   const all = getLife(character.id);
   const live = all.filter((t) => !t.resolved);
   if (live.length >= TARGET - 1) return live;
@@ -41,7 +42,7 @@ export async function ensureLife(character: Character): Promise<LifeThread[]> {
       scope: 'director',
       label: `life:${character.username}`,
       schema: LIFE_THREADS,
-      config: { ...getSettings().models.director, max_tokens: 1200 },
+      config: { ...settings.models.director, max_tokens: settings.token_limits.life_threads },
       reasoningEffort: 'minimal',
       priority: 'background',
       require: ['threads'],

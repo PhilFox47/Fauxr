@@ -1006,7 +1006,7 @@ async function rerollName(
       scope: 'generator',
       label: 'reroll_name',
       schema: REAL_NAME,
-      config: { ...getSettings().models.actor, max_tokens: NAME_TOKENS },
+      config: { ...getSettings().models.actor, max_tokens: getSettings().token_limits.name_and_handle },
       reasoningEffort: 'none',
       totalTimeoutMs: 60_000,
       require: ['real_name'],
@@ -1177,7 +1177,7 @@ async function writeUsername(
         scope: 'generator',
         label: attempt ? 'write_username:retry' : 'write_username',
         schema: USERNAME,
-        config: { ...getSettings().models.actor, max_tokens: NAME_TOKENS },
+        config: { ...getSettings().models.actor, max_tokens: getSettings().token_limits.name_and_handle },
         reasoningEffort: 'none',
         totalTimeoutMs: 60_000,
         require: ['username'],
@@ -1303,7 +1303,7 @@ export async function generateCharacter(): Promise<Character> {
         // is typically also the censored one, which makes it a poor choice for something
         // that has to take a seed full of explicit traits seriously rather than sand them
         // down. The director still runs the game; it just does not invent the cast.
-        config: { ...settings.models.actor, max_tokens: CHARACTER_TOKENS },
+        config: { ...settings.models.actor, max_tokens: settings.token_limits.character },
         // This one creative planning pass benefits from a little thought, but the logs show
         // GLM can spend 9k tokens even at low. Minimal preserves planning without that tail.
         reasoningEffort: 'minimal',
@@ -1708,9 +1708,6 @@ const BIOS_SHOWN = 10;
 // 4x'd across the board (600/1200/3600 -> 2400/4800/14400): headroom traded for cost and
 // worst-case latency, on purpose, so a genuinely long answer - or a reasoning model that
 // wants to think at length before it writes one - never gets cut off by its own ceiling.
-const NAME_TOKENS = 2400;
-const BIO_TOKENS = 4800;
-const CHARACTER_TOKENS = 14400;
 const CHARACTER_TIMEOUT_MS = 600_000;
 
 const BIO_MIN_WORDS = 14;
@@ -1778,7 +1775,7 @@ async function writeBio(character: Character, dossierIsReal: boolean): Promise<s
         schema: BIO,
         // The bio is in-voice writing rather than analysis, so it goes to the actor model.
         // The director still designs the character; it just does not write her lines.
-        config: { ...settings.models.actor, max_tokens: BIO_TOKENS },
+        config: { ...settings.models.actor, max_tokens: settings.token_limits.bio },
         reasoningEffort: 'none',
         totalTimeoutMs: 120_000,
         require: ['bio'],

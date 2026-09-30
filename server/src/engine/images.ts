@@ -126,7 +126,7 @@ export async function ensureProfilePicture(characterId: string): Promise<void> {
     // The paid click creates a neutral, private identity plate first. It is never exposed in
     // the gallery; its only job is to keep her face stable while her public profile photo can
     // still express her personality. If it fails, the visible photo remains usable on its own.
-    await ensureIdentityReference(characterId);
+    if (getSettings().models.image.send_reference_image) await ensureIdentityReference(characterId);
     // Another caller may have crossed the same gap while the identity plate rendered.
     existing = db
       .prepare("SELECT id, status FROM images WHERE character_id = ? AND kind = 'profile' AND status != 'failed' ORDER BY rowid ASC LIMIT 1")
@@ -634,8 +634,6 @@ function seedFor(characterSeed: CharacterSeed, isProfile: boolean): number {
  * would rather have, this specific deployment enforces the cap, so the prompt this app
  * builds has to stay under it. Seedream has no equivalent limit here.
  */
-const Z_IMAGE_MAX_CHARS = 1200;
-
 /** Cuts at the last whole word at or before `max`, so a trim never lands mid-word. */
 function truncateAtWord(text: string, max: number): string {
   if (text.length <= max) return text;
@@ -668,10 +666,44 @@ export const IMAGE_SIZE: Record<'profile' | PhotoAspect, string> = {
   landscape: '3072x2048',
 };
 
+function imageUse(job: Pick<ImageJob, 'kind'>): 'profile' | 'chat' | 'date' {
+  if (job.kind === 'profile' || job.kind === 'identity') return 'profile';
+  if (job.kind === 'date' || job.kind === 'scene') return 'date';
+  return 'chat';
+}
+
+function orientation(size: string): PhotoAspect | null {
+  const match = /^(\d+)x(\d+)$/.exec(size);
+  if (!match) return null;
+  const width = Number(match[1]);
+  const height = Number(match[2]);
+  return width === height ? 'square' : width < height ? 'portrait' : 'landscape';
+}
+
 function sizeFor(job: Pick<ImageJob, 'kind' | 'aspect'>): string {
-  if (job.kind === 'profile' || job.kind === 'identity') return IMAGE_SIZE.profile;
-  if (job.kind === 'date') return IMAGE_SIZE.portrait;
-  return IMAGE_SIZE[job.aspect && PHOTO_ASPECTS.has(job.aspect) ? job.aspect : 'portrait'];
+  const settings = getSettings().models.image;
+  const use = imageUse(job);
+  const enabled = settings.sizes.filter((row) => row[use]);
+  if (!enabled.length) throw new Error(`No image resolution is enabled for ${use} images`);
+  const wanted: PhotoAspect = use === 'profile'
+    ? 'square'
+    : job.kind === 'date'
+      ? 'portrait'
+      : job.aspect && PHOTO_ASPECTS.has(job.aspect) ? job.aspect : 'portrait';
+  const matching = enabled.filter((row) => orientation(row.size) === wanted);
+  return pickOne(matching.length ? matching : enabled).size;
+}
+
+function promptLimit(): number {
+  return getSettings().models.image.max_prompt_chars;
+}
+
+function promptWithTail(body: string, tail: string, max: number): string {
+  const cleanTail = tail.trim();
+  if (!max) return [body.trim(), cleanTail].filter(Boolean).join(' ');
+  if (!cleanTail) return truncateAtWord(body.trim(), max);
+  if (cleanTail.length >= max) return truncateAtWord(cleanTail, max);
+  return `${truncateAtWord(body.trim(), max - cleanTail.length - 1)} ${cleanTail}`.trim();
 }
 
 /**
@@ -890,9 +922,6 @@ export function photoSelfBlock(seed: CharacterSeed, opts: { profile?: boolean; c
   ].filter(Boolean).join('\n');
 }
 
-/** Sized like BIO_TOKENS in generator.ts - one real paragraph, from a reasoning model. */
-const PROFILE_PIC_TOKENS = 4800;
-
 /**
  * What her profile picture actually is, in her own words - asked once, lazily, the first
  * time she needs one rather than for every character rolled (most never reach this point).
@@ -906,12 +935,13 @@ const PROFILE_PIC_TOKENS = 4800;
  * flip in code.
  */
 async function profilePicConcept(character: Character): Promise<string> {
+  const settings = getSettings();
   try {
     const out = await completeJson<{ profile_pic?: string }>({
       scope: 'image',
       label: `profile_pic_concept:${character.username}`,
       schema: PROFILE_PIC,
-      config: { ...getSettings().models.actor, max_tokens: PROFILE_PIC_TOKENS },
+      config: { ...settings.models.actor, max_tokens: settings.token_limits.profile_picture_brief },
       require: ['profile_pic'],
       messages: [
         {
@@ -1064,9 +1094,10 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // This is an image-model reference asset, not a character-authored photo. A deterministic
   // neutral brief makes it a better likeness anchor and avoids spending a Director call on it.
   if (isIdentity) {
-    const prompt = animeRender
+    const rawPrompt = animeRender
       ? `${appearanceForShot(character.seed, 'face')}; neutral head-and-shoulders character reference, nearly frontal, relaxed neutral expression, even soft light, plain unobtrusive background, face fully visible. ${ANIME_BASE_SUFFIX} ${ANIME_PROFILE_SUFFIX}`
       : `${appearanceForShot(character.seed, 'face')}; neutral head-and-shoulders identity reference portrait, nearly frontal, relaxed neutral expression, even soft daylight, plain unobtrusive background, face fully visible. ${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`;
+    const prompt = truncateAtWord(rawPrompt, promptLimit() || rawPrompt.length);
     const negative = promptStyle === 'z_image_turbo' ? '' : animeRender ? ANIME_NEGATIVE : BASE_NEGATIVE;
     db.prepare('UPDATE images SET prompt = ?, negative_prompt = ?, caption = ?, situation = ? WHERE id = ?')
       .run(prompt, negative, '', situation, id);
@@ -1102,7 +1133,8 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // margin for the joining space. Handed to it as a concrete number rather than a vague
   // "keep it short", because "this model likes long prompts" is the model's general
   // reputation and directly wrong for this specific limit.
-  const zCharBudget = Z_IMAGE_MAX_CHARS - styleSuffix.length - 1;
+  const maxPromptChars = promptLimit();
+  const assemblerCharBudget = maxPromptChars ? Math.max(80, maxPromptChars - styleSuffix.length - 1) : 4000;
 
   const assembled = await completeJson<{ prompt: string; negative_prompt?: string; caption?: string }>({
     scope: 'image',
@@ -1154,7 +1186,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
           mode_seedream: promptStyle === 'seedream' ? '1' : '',
           mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
           render_anime: animeRender ? '1' : '',
-          z_char_budget: zCharBudget,
+          z_char_budget: assemblerCharBudget,
         }),
       },
     ],
@@ -1170,15 +1202,15 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // quality/style instructions that matter on every single shot, where the assembler's
   // prose is the one part that is safe to lose the tail end of.
   let assembledPrompt = assembled.prompt;
-  if (promptStyle === 'z_image_turbo' && assembledPrompt.length > zCharBudget) {
-    logger.warn('image', 'z_image_turbo prompt over the character budget, trimming', {
+  if (maxPromptChars && assembledPrompt.length > assemblerCharBudget) {
+    logger.warn('image', 'image prompt over the configured character budget, trimming', {
       character: character.username,
       length: assembledPrompt.length,
-      budget: zCharBudget,
+      budget: assemblerCharBudget,
     });
-    assembledPrompt = truncateAtWord(assembledPrompt, zCharBudget);
+    assembledPrompt = truncateAtWord(assembledPrompt, assemblerCharBudget);
   }
-  const prompt = `${assembledPrompt} ${styleSuffix}`;
+  const prompt = promptWithTail(assembledPrompt, styleSuffix, maxPromptChars);
   // Z Image Turbo runs with no classifier-free guidance at all, so it never reads a
   // negative prompt - sending one is not wrong exactly, just pure dead weight, and the
   // constraints it would have carried are already folded into the prompt itself above
@@ -1205,6 +1237,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
 
 /** The paid part: the image model call, the file, and the chat bubble. */
 async function renderImageJob(job: ImageJob, character: Character, shot: AssembledShot, postToChat: boolean): Promise<void> {
+  const settings = getSettings();
   const id = job.id;
   const isProfile = job.kind === 'profile';
   const isIdentity = job.kind === 'identity';
@@ -1214,12 +1247,15 @@ async function renderImageJob(job: ImageJob, character: Character, shot: Assembl
   // Forcing her face to match a reference photo is exactly wrong for a shot that is not
   // supposed to show her face at all - it just makes one appear anyway. Skip the
   // reference whenever this shot does not put her face in frame.
-  const ref = isIdentity || !facesCamera ? null : referenceImage(character.id);
+  const ref = !settings.models.image.send_reference_image || isIdentity || !facesCamera
+    ? null
+    : referenceImage(character.id);
   // Only when one is actually attached - see REF_NOTE for why the reference needs telling
   // what it is for. Appended after styleSuffix so it is the last thing read, and left off
   // the Z Image Turbo budget maths above on purpose: that mode never sends a reference at
   // all unless a profile picture exists, and the same trim still protects the ceiling.
-  const finalPrompt = ref ? `${prompt} ${usesAnimeRender(character.seed) ? ANIME_REF_NOTE : REF_NOTE}` : prompt;
+  const referenceNote = ref ? (usesAnimeRender(character.seed) ? ANIME_REF_NOTE : REF_NOTE) : '';
+  const finalPrompt = promptWithTail(prompt, referenceNote, promptLimit());
   const size = sizeFor(job);
   const imageSeed = seedFor(character.seed, isProfile || isIdentity);
   const b64 = await generateImage({
@@ -1294,9 +1330,6 @@ export async function retryImageJob(id: string): Promise<void> {
   await runImageJob(id, job.situation ?? '', job.kind !== 'profile' && job.kind !== 'identity');
 }
 
-/** Sized like PROFILE_PIC_TOKENS - one real paragraph, from a reasoning model. */
-const PHOTO_IDEA_TOKENS = 2400;
-
 /**
  * A fresh idea for a chat/spicy photo, in her own words - used only by regenerateImage()'s
  * "new idea" mode. Mirrors profilePicConcept() but for the two tiers that come after the
@@ -1307,12 +1340,13 @@ async function freshPhotoIdea(
   character: Character,
   kind: 'chat' | 'spicy',
 ): Promise<{ situation: string; aspect: PhotoAspect }> {
+  const settings = getSettings();
   try {
     const out = await completeJson<{ situation?: string; aspect?: string }>({
       scope: 'image',
       label: `photo_idea:${character.username}`,
       schema: PHOTO_IDEA,
-      config: { ...getSettings().models.actor, max_tokens: PHOTO_IDEA_TOKENS },
+      config: { ...settings.models.actor, max_tokens: settings.token_limits.chat_photo_idea },
       require: ['situation'],
       messages: [
         {

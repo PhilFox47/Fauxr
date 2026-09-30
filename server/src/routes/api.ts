@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { unlinkSync, writeFileSync } from 'node:fs';
 import { join, posix } from 'node:path';
 import type { FastifyInstance } from 'fastify';
+import { fetch as undiciFetch } from 'undici';
 import { DATA_DIR, nowIso } from '../db/index.js';
 import {
   allCategories, byCategory, deleteEditableAttribute, editableAttributes, editableCategories, find,
@@ -36,6 +37,7 @@ import {
   startCall,
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
+import { promptLibrary, resetPromptOverride, savePromptOverride } from '../prompts/render.js';
 import { domainSides, TASTE_SECTIONS } from '../engine/kinks.js';
 import { coreTraits } from '../engine/profilecard.js';
 import { statusOf } from '../engine/status.js';
@@ -61,6 +63,44 @@ const IMAGE_EXTENSIONS: Record<string, string> = {
   'image/webp': '.webp',
   'image/gif': '.gif',
 };
+
+export interface ImageModelCapability {
+  id: string;
+  name: string;
+  sizes: string[];
+  supports_reference: boolean | null;
+  suggested_prompt_chars: number;
+}
+
+const FALLBACK_IMAGE_MODELS: ImageModelCapability[] = [
+  { id: 'chroma', name: 'Chroma', sizes: ['1024x1024', '1024x1536', '1536x1024', '1536x1536'], supports_reference: false, suggested_prompt_chars: 0 },
+  { id: 'hidream-i1-fast', name: 'HiDream-I1 Fast', sizes: ['1024x1024', '768x1024', '1024x768', '1920x1080', '1080x1920'], supports_reference: false, suggested_prompt_chars: 0 },
+  { id: 'hidream-o1-image', name: 'HiDream O1', sizes: ['2048x2048', '1728x2304', '2304x1728', '1440x2560', '2560x1440'], supports_reference: true, suggested_prompt_chars: 0 },
+  { id: 'z-image-turbo', name: 'Z-Image Turbo', sizes: ['1024x1024', '1024x1536', '1536x1024', '1536x1536'], supports_reference: false, suggested_prompt_chars: 1200 },
+  { id: 'z-image-turbo-image-to-image', name: 'Z-Image Turbo (image-to-image)', sizes: ['1024x1024', '1024x1536', '1536x1024', '1536x1536'], supports_reference: true, suggested_prompt_chars: 1200 },
+];
+
+function capabilitySizes(value: unknown): string[] {
+  const raw = Array.isArray(value) ? value : [];
+  return [...new Set(raw.map((entry) => {
+    if (typeof entry === 'string') return entry;
+    if (entry && typeof entry === 'object') {
+      const row = entry as Record<string, unknown>;
+      return String(row.size ?? row.resolution ?? row.value ?? '');
+    }
+    return '';
+  }).map((size) => size.toLowerCase().replace('*', 'x')).filter((size) => /^\d{2,5}x\d{2,5}$/.test(size)))];
+}
+
+function capabilityBoolean(row: Record<string, unknown>): boolean | null {
+  const capabilities = row.capabilities && typeof row.capabilities === 'object'
+    ? row.capabilities as Record<string, unknown>
+    : {};
+  for (const value of [row.supports_image_input, row.supports_image_editing, row.image_input, capabilities.image_input, capabilities.image_editing]) {
+    if (typeof value === 'boolean') return value;
+  }
+  return null;
+}
 
 function matchesImageSignature(buffer: Buffer, mimeType: string): boolean {
   if (mimeType === 'image/jpeg') return buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
@@ -768,6 +808,43 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   // ------------------------------------------------------------- settings & tuning
   app.get('/api/settings', async () => ({ settings: getSettings(), usage: usageToday() }));
 
+  app.get('/api/image-models', async () => {
+    const settings = getSettings();
+    const base = settings.api.image_base_url || settings.api.base_url;
+    const key = settings.api.image_api_key || settings.api.api_key;
+    try {
+      const response = await undiciFetch(`${base.replace(/\/$/, '')}/images/models`, {
+        headers: key ? { authorization: `Bearer ${key}` } : {},
+        signal: AbortSignal.timeout(12_000),
+      });
+      if (!response.ok) throw new Error(`catalog returned HTTP ${response.status}`);
+      const payload = await response.json() as unknown;
+      const root = payload && typeof payload === 'object' ? payload as Record<string, unknown> : {};
+      const rows = Array.isArray(payload) ? payload : Array.isArray(root.data) ? root.data : Array.isArray(root.models) ? root.models : [];
+      const discovered = rows.flatMap((value): ImageModelCapability[] => {
+        if (!value || typeof value !== 'object') return [];
+        const row = value as Record<string, unknown>;
+        const id = String(row.id ?? row.model_id ?? row.model ?? '').trim();
+        if (!id) return [];
+        const fallback = FALLBACK_IMAGE_MODELS.find((model) => model.id === id);
+        const sizes = capabilitySizes(row.supported_resolutions ?? row.resolutions ?? row.sizes ?? row.output_sizes);
+        return [{
+          id,
+          name: String(row.display_name ?? row.name ?? fallback?.name ?? id),
+          sizes: sizes.length ? sizes : fallback?.sizes ?? [],
+          supports_reference: capabilityBoolean(row) ?? fallback?.supports_reference ?? null,
+          suggested_prompt_chars: fallback?.suggested_prompt_chars ?? 0,
+        }];
+      });
+      if (!discovered.length) throw new Error('catalog contained no image models');
+      const ids = new Set(discovered.map((model) => model.id));
+      return { models: [...discovered, ...FALLBACK_IMAGE_MODELS.filter((model) => !ids.has(model.id))], source: 'nanogpt' };
+    } catch (err) {
+      logger.warn('api', 'image model catalog unavailable; using built-in suggestions', { error: String(err) });
+      return { models: FALLBACK_IMAGE_MODELS, source: 'fallback' };
+    }
+  });
+
   app.put<{ Body: unknown }>('/api/settings', async (req) => {
     const next = saveSettings(req.body);
     logger.info('app', 'settings updated');
@@ -856,6 +933,45 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     invalidateAttributeCache();
     return { ok: true };
   });
+
+  app.get('/api/prompt-library', async () => promptLibrary());
+
+  app.put<{ Params: { name: string }; Body: { content?: unknown } }>('/api/prompt-library/:name', async (req, reply) => {
+    try {
+      return savePromptOverride(req.params.name, req.body?.content);
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : String(err) });
+    }
+  });
+
+  app.delete<{ Params: { name: string } }>('/api/prompt-library/:name', async (req, reply) => {
+    try {
+      return resetPromptOverride(req.params.name);
+    } catch (err) {
+      return reply.code(404).send({ error: err instanceof Error ? err.message : String(err) });
+    }
+  });
+
+  app.get<{ Params: { name: string } }>('/api/prompt-library/:name/export', async (req, reply) => {
+    const prompt = promptLibrary().find((item) => item.name === req.params.name);
+    if (!prompt) return reply.code(404).send({ error: 'prompt not found' });
+    reply.header('content-disposition', `attachment; filename="fauxr-prompt-${prompt.name}.json"`);
+    return { format: 'fauxr-prompt', version: 1, name: prompt.name, content: prompt.content };
+  });
+
+  app.post<{ Params: { name: string }; Body: { format?: string; name?: string; content?: unknown } }>(
+    '/api/prompt-library/:name/import',
+    async (req, reply) => {
+      try {
+        if (req.body?.format !== 'fauxr-prompt' || req.body?.name !== req.params.name) {
+          throw new Error('this file is not a Fauxr export for the selected prompt');
+        }
+        return savePromptOverride(req.params.name, req.body.content);
+      } catch (err) {
+        return reply.code(400).send({ error: err instanceof Error ? err.message : String(err) });
+      }
+    },
+  );
 
   app.get('/api/attribute-library', async () => editableCategories());
 

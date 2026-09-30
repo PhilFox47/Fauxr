@@ -70,7 +70,30 @@ export interface AttributeExport {
   attributes: Omit<EditableAttribute, 'origin' | 'user_modified'>[];
 }
 
+export interface EditablePrompt {
+  name: string;
+  content: string;
+  shipped_content: string;
+  customized: boolean;
+  variables: string[];
+}
+
+export interface PromptExport {
+  format: 'fauxr-prompt';
+  version: 1;
+  name: string;
+  content: string;
+}
+
 export type SettingsData = ServerSettings;
+
+export interface ImageModelCapability {
+  id: string;
+  name: string;
+  sizes: string[];
+  supports_reference: boolean | null;
+  suggested_prompt_chars: number;
+}
 
 export interface UsageSummary {
   calls: number;
@@ -355,6 +378,7 @@ export const api = {
     request<{ ok: true }>(`/api/dates/${dateId}/messages/${messageId}`, { method: 'DELETE' }),
 
   settings: () => request<{ settings: SettingsData; usage: UsageSummary }>('/api/settings'),
+  imageModels: () => request<{ models: ImageModelCapability[]; source: 'nanogpt' | 'fallback' }>('/api/image-models'),
   saveSettings: (patch: unknown) => request<SettingsData>('/api/settings', { method: 'PUT', body: JSON.stringify(patch) }),
   attributeCategories: () => request<{ category: string; count: number }[]>('/api/attribute-library'),
   attributes: (category: string) => request<{ category: string; entries: EditableAttribute[] }>(`/api/attribute-library/${encodeURIComponent(category)}`),
@@ -363,6 +387,11 @@ export const api = {
   deleteAttribute: (category: string, id: string) => request<{ ok: true }>(`/api/attribute-library/${encodeURIComponent(category)}/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   exportAttributes: (category: string) => request<AttributeExport>(`/api/attribute-library/${encodeURIComponent(category)}/export`),
   importAttributes: (category: string, value: AttributeExport) => request<{ ok: true; count: number }>(`/api/attribute-library/${encodeURIComponent(category)}/import`, { method: 'POST', body: JSON.stringify(value) }),
+  prompts: () => request<EditablePrompt[]>('/api/prompt-library'),
+  savePrompt: (name: string, content: string) => request<EditablePrompt>(`/api/prompt-library/${encodeURIComponent(name)}`, { method: 'PUT', body: JSON.stringify({ content }) }),
+  resetPrompt: (name: string) => request<EditablePrompt>(`/api/prompt-library/${encodeURIComponent(name)}`, { method: 'DELETE' }),
+  exportPrompt: (name: string) => request<PromptExport>(`/api/prompt-library/${encodeURIComponent(name)}/export`),
+  importPrompt: (name: string, value: PromptExport) => request<EditablePrompt>(`/api/prompt-library/${encodeURIComponent(name)}/import`, { method: 'POST', body: JSON.stringify(value) }),
   logs: (params: Record<string, string>) =>
     request<LogEntry[]>(`/api/logs?${new URLSearchParams(params).toString()}`),
   /** Markdown, not JSON - the server does the formatting so both surfaces agree. */

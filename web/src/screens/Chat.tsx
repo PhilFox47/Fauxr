@@ -7,6 +7,7 @@ import Avatar from '../components/Avatar';
 import Icon from '../components/Icon';
 import Lightbox from '../components/Lightbox';
 import RoleplaySteering from '../components/RoleplaySteering';
+import EmojiTextarea from '../components/EmojiTextarea';
 import { closeView, openView, replaceTopView } from '../nav';
 import { useCoalescedRefresh } from '../hooks/useCoalescedRefresh';
 
@@ -942,10 +943,10 @@ export default function Chat({
               <Icon name="spark" size={19} />
             </button>
           )}
-          <textarea
+          <EmojiTextarea
             ref={inputRef}
             value={draft}
-            onChange={(e) => setDraft(e.target.value)}
+            onValueChange={setDraft}
             onKeyDown={(e) => enterSends(e, () => void send())}
             placeholder="Message"
             rows={1}
@@ -1767,10 +1768,10 @@ function DateRoom({
               : 'Write naturally. Use quotation marks for speech, asterisks for thoughts, and parentheses only for private scene direction.'}</span>
           </details>
           <div className="composer">
-            <textarea
+            <EmojiTextarea
               ref={inputRef}
               value={draft}
-              onChange={(e) => setDraft(e.target.value)}
+              onValueChange={setDraft}
               onKeyDown={(e) => enterSends(e, () => void send())}
               placeholder={isCall ? 'Say something…' : 'Write what you say or do…'}
               rows={1}
