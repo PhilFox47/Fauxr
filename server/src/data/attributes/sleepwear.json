@@ -1,0 +1,1582 @@
+[
+  {
+    "id": "backless_nightdress",
+    "category": "sleepwear",
+    "label": "A backless nightdress",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "soft sleep dress from the front, mostly bare back from behind",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "romantic_florals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a soft backless nightdress"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "band_tee",
+    "category": "sleepwear",
+    "label": "A band tee and underwear",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a faded tour shirt, nothing on her legs",
+    "image_prompt": null,
+    "affinities": [
+      "goth_girl",
+      "emo_style",
+      "punk_style",
+      "alt_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a faded band tee",
+        "panties": "cotton underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "goth_nightdress",
+    "category": "sleepwear",
+    "label": "A black lace nightdress",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "black, soft, slightly dramatic and exactly as gothic as her daytime wardrobe",
+    "image_prompt": null,
+    "affinities": [
+      "goth_girl",
+      "witchcore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a black nightdress with lace trim"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "bralette_sleep_shorts",
+    "category": "sleepwear",
+    "label": "A bralette and sleep shorts",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "minimal, cool and comfortable without being completely naked",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "bra": "a soft bralette",
+        "bottom": "light sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "bralette_panties",
+    "category": "sleepwear",
+    "label": "A bralette and underwear",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "soft matching basics, enough support to feel dressed without really wearing clothes",
+    "image_prompt": null,
+    "affinities": [
+      "clean_girl",
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "bra": "a soft bralette",
+        "panties": "matching underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "onesie",
+    "category": "sleepwear",
+    "label": "A cosy onesie",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "one-piece pyjamas, warm, deeply unserious and much more comfortable than she will admit publicly",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "big_kid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a soft full-length sleep onesie"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "cotton_cami_panties",
+    "category": "sleepwear",
+    "label": "A cotton cami and panties",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "thin cotton, light and uncomplicated for warm nights",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics",
+      "clean_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a fitted cotton camisole",
+        "panties": "cotton underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "borrowed_sweatpants",
+    "category": "sleepwear",
+    "label": "A crop top and his sweatpants",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "his oversized sweatpants low on her hips with a small fitted top",
+    "image_prompt": null,
+    "affinities": [
+      "borrowed",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a fitted crop top",
+        "bottom": "oversized borrowed sweatpants"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "tee_panties",
+    "category": "sleepwear",
+    "label": "A fitted tee and underwear",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "a small soft t-shirt and ordinary underwear, comfortable enough to forget about",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a fitted cotton t-shirt",
+        "panties": "cotton underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "frilly_cami_shorts",
+    "category": "sleepwear",
+    "label": "A frilly cami and shorts",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "soft cotton with little bows or lace edging, cute without being full lingerie",
+    "image_prompt": null,
+    "affinities": [
+      "coquette",
+      "soft_girl",
+      "lovecore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a frilled cotton camisole",
+        "bottom": "matching short sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "hooded_onesie",
+    "category": "sleepwear",
+    "label": "A hooded character onesie",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "ridiculous, warm and themed like an animal or fictional character because adulthood has clearly gone very well",
+    "image_prompt": null,
+    "affinities": [
+      "anime_girl_style",
+      "gamer_girl",
+      "big_kid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a soft hooded character onesie"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "hoodie_pj_pants",
+    "category": "sleepwear",
+    "label": "A hoodie and pyjama pants",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "maximum comfort, especially when the heating is losing the argument",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "gamer_girl",
+      "soft_grunge"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a soft oversized hoodie",
+        "bottom": "loose pyjama pants"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "graphic_tee_fishnets",
+    "category": "sleepwear",
+    "label": "A huge graphic tee and nothing practical",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "an oversized graphic shirt and whatever alt-girl logic led to falling asleep dressed like this",
+    "image_prompt": null,
+    "affinities": [
+      "alt_girl",
+      "punk_style",
+      "emo_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized graphic t-shirt",
+        "panties": "black underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "huge_hoodie",
+    "category": "sleepwear",
+    "label": "A huge hoodie, legs out",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the hoodie comes to mid-thigh",
+    "image_prompt": null,
+    "affinities": [
+      "e_girl",
+      "gamer_girl",
+      "soft_grunge"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a huge hoodie",
+        "panties": "underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "lace_trim_slip",
+    "category": "sleepwear",
+    "label": "A lace-trim slip",
+    "weight": 0.75,
+    "rarity": "uncommon",
+    "prompt_hint": "satin with a little lace at the neckline and hem, halfway between sleepwear and showing off",
+    "image_prompt": null,
+    "affinities": [
+      "coquette",
+      "elegant",
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a satin slip nightdress with lace trim"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "long_cotton_nightgown",
+    "category": "sleepwear",
+    "label": "A long cotton nightgown",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "light cotton, ankle-skimming and unapologetically old-fashioned",
+    "image_prompt": null,
+    "affinities": [
+      "cottagecore_full",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a long lightweight cotton nightgown"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "long_sleeve_pj_pants",
+    "category": "sleepwear",
+    "label": "A long-sleeve top and pyjama pants",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "the sensible cold-night uniform, usually soft cotton or jersey",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a soft long-sleeve sleep top",
+        "bottom": "matching pyjama pants"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "babydoll_nightdress",
+    "category": "sleepwear",
+    "label": "A loose babydoll nightdress",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "short, floaty and feminine without quite crossing into lingerie",
+    "image_prompt": null,
+    "affinities": [
+      "coquette",
+      "romantic_florals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a loose short babydoll nightdress"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "satin_robe_set",
+    "category": "sleepwear",
+    "label": "A matching satin robe set",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "cami, shorts and robe all matching because apparently bedtime can have art direction",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "baddie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a satin camisole",
+        "bottom": "matching satin shorts",
+        "outer": "a matching satin robe"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "side_slit_nightgown",
+    "category": "sleepwear",
+    "label": "A nightgown with a high side slit",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "long and fluid until she moves and the slit makes the whole thing much less innocent",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a long satin nightgown with a high side slit"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "pastel_pj_set",
+    "category": "sleepwear",
+    "label": "A pastel pyjama set",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "soft pastel colours, neat matching pieces and an embarrassing amount of commitment to looking cute in bed",
+    "image_prompt": null,
+    "affinities": [
+      "soft_girl",
+      "coquette"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a pastel button-up pyjama top",
+        "bottom": "matching pastel pyjama shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "pointelle_set",
+    "category": "sleepwear",
+    "label": "A pointelle sleep set",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "light ribbed pointelle cotton, delicate trim and a very soft old-fashioned feel",
+    "image_prompt": null,
+    "affinities": [
+      "coquette",
+      "cottagecore_full"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a pointelle cotton camisole",
+        "bottom": "matching pointelle shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "grandma_nightdress",
+    "category": "sleepwear",
+    "label": "A ridiculously cosy nightdress",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "loose, soft, practical and several decades less glamorous than the rest of her wardrobe",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "cottagecore_full"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a loose cosy cotton nightdress"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "robe_nothing_under",
+    "category": "sleepwear",
+    "label": "A robe with nothing underneath",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "soft robe tied at the waist and no other sleepwear underneath it",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "baddie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "outer": "a soft robe"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "satin_cami_panties",
+    "category": "sleepwear",
+    "label": "A satin cami and matching panties",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "simple, glossy and deliberately prettier than necessary without becoming a full lingerie set",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "baddie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a satin camisole",
+        "panties": "matching satin panties"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "satin_slip",
+    "category": "sleepwear",
+    "label": "A satin slip nightdress",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "soft shine, thin straps and just enough structure to look intentional",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a satin slip nightdress"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "sheer_nightdress",
+    "category": "sleepwear",
+    "label": "A sheer sleep dress",
+    "weight": 0.55,
+    "rarity": "rare",
+    "prompt_hint": "light enough to be technically sleepwear and transparent enough that the technicality is doing heavy work",
+    "image_prompt": null,
+    "affinities": [
+      "baddie",
+      "coquette"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a lightweight sheer nightdress"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "short_nightie",
+    "category": "sleepwear",
+    "label": "A short nightie",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "barely-there, a little old-fashioned",
+    "image_prompt": null,
+    "affinities": [
+      "pin_up",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a short nightie"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "silk_cami_set",
+    "category": "sleepwear",
+    "label": "A silk cami set",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "shorts and a cami, matching",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "silk cami",
+        "bottom": "matching silk shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "silk_robe_underwear",
+    "category": "sleepwear",
+    "label": "A silk robe over underwear",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "the robe is technically the outfit and she sees no reason to add anything complicated underneath",
+    "image_prompt": null,
+    "affinities": [
+      "quiet_luxury",
+      "elegant"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "outer": "a loose silk robe",
+        "panties": "simple underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "silk_slip",
+    "category": "sleepwear",
+    "label": "A silk slip",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "simple, fluid and cut like something she could almost wear outside if she were brave enough",
+    "image_prompt": null,
+    "affinities": [
+      "quiet_luxury",
+      "elegant"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a simple silk slip nightdress"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "romper_sleep",
+    "category": "sleepwear",
+    "label": "A soft sleep romper",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "one-piece, short-legged and chosen because nothing rides up or separates while she sleeps",
+    "image_prompt": null,
+    "affinities": [
+      "soft_girl",
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "a soft cotton sleep romper"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "sports_bra_joggers",
+    "category": "sleepwear",
+    "label": "A sports bra and joggers",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "comfortable, athletic and exactly what she was already wearing before deciding to go to bed",
+    "image_prompt": null,
+    "affinities": [
+      "gym_girl",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "bra": "a sports bra",
+        "bottom": "soft joggers"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "sports_bra_shorts",
+    "category": "sleepwear",
+    "label": "A sports bra and shorts",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "light athletic pieces because she runs warm and owns too much activewear anyway",
+    "image_prompt": null,
+    "affinities": [
+      "gym_girl",
+      "athleisure",
+      "sporty"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "bra": "a simple sports bra",
+        "bottom": "soft athletic shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "sweatshirt_shorts",
+    "category": "sleepwear",
+    "label": "A sweatshirt and sleep shorts",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the top says cold, the bare legs say she refused to commit to that decision",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized sweatshirt",
+        "bottom": "soft sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "tee_pj_pants",
+    "category": "sleepwear",
+    "label": "A t-shirt and pyjama pants",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "mismatched more often than not, chosen entirely for comfort",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics",
+      "cosy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a loose cotton t-shirt",
+        "bottom": "soft pyjama pants"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "plain_tee_shorts",
+    "category": "sleepwear",
+    "label": "A t-shirt and sleep shorts",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "soft cotton, practical, the default when she is not trying to look like anything in particular",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a soft cotton t-shirt",
+        "bottom": "comfortable sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "tank_sleep_shorts",
+    "category": "sleepwear",
+    "label": "A tank top and sleep shorts",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "light, simple and what she reaches for when the room is warm",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a fitted cotton tank top",
+        "bottom": "soft sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "tank_panties",
+    "category": "sleepwear",
+    "label": "A tank top and underwear",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "just enough to count as dressed, not enough to overheat",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a soft tank top",
+        "panties": "comfortable underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "printed_pj_pants",
+    "category": "sleepwear",
+    "label": "A tee and printed pyjama pants",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "plain shirt, ridiculous printed trousers, completely sincere about loving them",
+    "image_prompt": null,
+    "affinities": [
+      "soft_girl",
+      "gamer_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a plain soft t-shirt",
+        "bottom": "printed pyjama pants"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "thermal_set",
+    "category": "sleepwear",
+    "label": "A thermal sleep set",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "ribbed long sleeves and leggings for nights when warmth outranks glamour",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "gorpcore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a fitted ribbed thermal top",
+        "bottom": "matching thermal leggings"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "thong_only",
+    "category": "sleepwear",
+    "label": "A thong and nothing else",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "gets too hot otherwise, she says",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "panties": "a thong"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "velvet_robe",
+    "category": "sleepwear",
+    "label": "A velvet robe and little else",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "heavy, dramatic and absurdly luxurious for walking from the bathroom to the bed",
+    "image_prompt": null,
+    "affinities": [
+      "old_hollywood",
+      "mob_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "outer": "a soft velvet robe",
+        "panties": "underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "sleep_shirt",
+    "category": "sleepwear",
+    "label": "An oversized sleep shirt",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a purpose-made sleep shirt, loose and long enough that she does not bother with bottoms",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics",
+      "clean_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "dress": "an oversized cotton sleep shirt"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "sweatshirt_panties",
+    "category": "sleepwear",
+    "label": "An oversized sweatshirt and underwear",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "huge sleeves, bare legs and the comfortable laziness of not adding another layer",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized sweatshirt",
+        "panties": "comfortable underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "his_tshirt",
+    "category": "sleepwear",
+    "label": "An oversized t-shirt and nothing else",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "a shirt that used to be someone else's",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized t-shirt"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "basketball_shorts_tank",
+    "category": "sleepwear",
+    "label": "Basketball shorts and a tank",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "oversized athletic shorts, fitted tank, extremely committed to comfort",
+    "image_prompt": null,
+    "affinities": [
+      "sporty",
+      "tomboy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a fitted tank top",
+        "bottom": "loose basketball shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "black_cami_shorts",
+    "category": "sleepwear",
+    "label": "Black cami and shorts",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "simple black sleepwear with just enough lace or ribbing to look intentional",
+    "image_prompt": null,
+    "affinities": [
+      "goth_girl",
+      "alt_girl",
+      "all_black"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a black camisole",
+        "bottom": "matching black sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "black_hoodie_boyshorts",
+    "category": "sleepwear",
+    "label": "Black hoodie and boyshorts",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "oversized black hoodie with fitted boyshorts, warm on top and absolutely not on the legs",
+    "image_prompt": null,
+    "affinities": [
+      "e_girl",
+      "goth_girl",
+      "soft_grunge"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized black hoodie",
+        "panties": "black boyshorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "boxer_shorts_tee",
+    "category": "sleepwear",
+    "label": "Boxer shorts and a tee",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "loose boxer-style sleep shorts and an old t-shirt, zero interest in bedtime glamour",
+    "image_prompt": null,
+    "affinities": [
+      "tomboy",
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a loose cotton t-shirt",
+        "bottom": "boxer-style sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "boyshorts_crop",
+    "category": "sleepwear",
+    "label": "Boyshorts and a crop top",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "comfortable and not at all accidental",
+    "image_prompt": null,
+    "affinities": [
+      "sporty",
+      "gym_girl",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a cropped cotton top",
+        "panties": "cotton boyshorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "cartoon_pjs",
+    "category": "sleepwear",
+    "label": "Cartoon pyjamas",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "matching sleepwear covered in a character or cartoon she likes enough to wear unironically",
+    "image_prompt": null,
+    "affinities": [
+      "anime_girl_style",
+      "gamer_girl",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a printed pyjama top",
+        "bottom": "matching printed pyjama bottoms"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "cotton_button_pjs",
+    "category": "sleepwear",
+    "label": "Classic cotton pyjamas",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "button-up top, matching trousers, clean piping and absolutely no need for an occasion",
+    "image_prompt": null,
+    "affinities": [
+      "preppy",
+      "clean_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a button-up cotton pyjama shirt",
+        "bottom": "matching cotton pyjama pants"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "flannel_pjs",
+    "category": "sleepwear",
+    "label": "Flannel pyjamas",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "soft checked flannel, slightly oversized and genuinely warm",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "preppy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a button-up flannel pyjama shirt",
+        "bottom": "matching flannel pyjama pants"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "fleece_pjs",
+    "category": "sleepwear",
+    "label": "Fleece pyjamas",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "soft, thick and chosen because winter has defeated every remaining concern about elegance",
+    "image_prompt": null,
+    "affinities": [
+      "cosy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a soft fleece pyjama top",
+        "bottom": "matching fleece pyjama pants"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "his_boxers_tank",
+    "category": "sleepwear",
+    "label": "His boxers and a tank top",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "borrowed boxers, her own tank, domestic enough to feel more intimate than dressing up",
+    "image_prompt": null,
+    "affinities": [
+      "borrowed",
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a fitted tank top",
+        "bottom": "borrowed boxer shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "his_button_down",
+    "category": "sleepwear",
+    "label": "His button-down shirt",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "oversized on her, sleeves rolled, buttons only partially doing their job",
+    "image_prompt": null,
+    "affinities": [
+      "borrowed",
+      "office_siren"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized borrowed button-down shirt"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "his_hoodie",
+    "category": "sleepwear",
+    "label": "His hoodie and underwear",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "stolen permanently enough that calling it his is now mostly historical",
+    "image_prompt": null,
+    "affinities": [
+      "borrowed",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized borrowed hoodie",
+        "panties": "underwear"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "his_tee_shorts",
+    "category": "sleepwear",
+    "label": "His t-shirt and tiny sleep shorts",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "an oversized borrowed shirt over shorts that almost disappear underneath it",
+    "image_prompt": null,
+    "affinities": [
+      "borrowed",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized borrowed t-shirt",
+        "bottom": "tiny sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "joggers_crop",
+    "category": "sleepwear",
+    "label": "Joggers and a crop top",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "soft joggers and a small fitted top, casual enough to sleep in and answer the door in",
+    "image_prompt": null,
+    "affinities": [
+      "athleisure",
+      "streetwear"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a fitted crop top",
+        "bottom": "soft joggers"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "just_boyshorts",
+    "category": "sleepwear",
+    "label": "Just boyshorts",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "sleeps in fitted boyshort underwear and nothing on top because anything more feels unnecessary",
+    "image_prompt": null,
+    "affinities": [
+      "sporty",
+      "tomboy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "panties": "cotton boyshorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "briefs_only",
+    "category": "sleepwear",
+    "label": "Just briefs",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "ordinary comfortable briefs and no shirt, chosen for sleep rather than presentation",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "panties": "comfortable briefs"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "sleep_shorts_only",
+    "category": "sleepwear",
+    "label": "Just sleep shorts",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "loose sleep shorts and nothing on top, particularly when it is too hot for sensible decisions",
+    "image_prompt": null,
+    "affinities": [
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "bottom": "loose sleep shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "lace_cami_boyshorts",
+    "category": "sleepwear",
+    "label": "Lace cami and boyshorts",
+    "weight": 0.75,
+    "rarity": "uncommon",
+    "prompt_hint": "soft lace on top, fitted shorts below, an easy compromise between comfort and showing off",
+    "image_prompt": null,
+    "affinities": [
+      "coquette",
+      "baddie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a lace camisole",
+        "panties": "matching lace boyshorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "lingerie_to_bed",
+    "category": "sleepwear",
+    "label": "Lingerie, even to sleep",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "why own it if you do not wear it",
+    "image_prompt": null,
+    "affinities": [
+      "baddie",
+      "bimbo_glam"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "lingerie": "her lingerie"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "silk_long_pjs",
+    "category": "sleepwear",
+    "label": "Long silk pyjamas",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "matching silk shirt and trousers, properly luxurious and suspiciously photogenic",
+    "image_prompt": null,
+    "affinities": [
+      "quiet_luxury",
+      "elegant"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a silk button-up pyjama shirt",
+        "bottom": "matching silk pyjama trousers"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "cute_pyjamas",
+    "category": "sleepwear",
+    "label": "Matching pyjamas, cute ones",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "printed ones, and she will send a picture",
+    "image_prompt": null,
+    "affinities": [
+      "soft_girl",
+      "e_girl",
+      "anime_girl_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a button-up pyjama top",
+        "bottom": "matching pyjama shorts"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "mesh_tee_bralette",
+    "category": "sleepwear",
+    "label": "Mesh tee over a bralette",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "an oversized sheer mesh tee over a simple bralette, more alt-club leftover than conventional pyjamas",
+    "image_prompt": null,
+    "affinities": [
+      "alt_girl",
+      "e_girl",
+      "goth_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "an oversized sheer mesh t-shirt",
+        "bra": "a simple black bralette"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "naked",
+    "category": "sleepwear",
+    "label": "Nothing",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "sleeps naked, all year",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {}
+    },
+    "enabled": true
+  },
+  {
+    "id": "fuzzy_socks_pjs",
+    "category": "sleepwear",
+    "label": "Pyjamas and fuzzy socks",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "a matching set completed by absurdly soft socks she refuses to sleep without in winter",
+    "image_prompt": null,
+    "affinities": [
+      "cosy",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a soft pyjama top",
+        "bottom": "matching pyjama bottoms",
+        "legwear": "thick fuzzy socks"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "robe_over_pjs",
+    "category": "sleepwear",
+    "label": "Pyjamas under a huge robe",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "layers sleepwear like she is preparing for an expedition across a cold bedroom",
+    "image_prompt": null,
+    "affinities": [
+      "cosy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a soft pyjama top",
+        "bottom": "matching pyjama bottoms",
+        "outer": "an oversized fluffy robe"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "satin_long_pjs",
+    "category": "sleepwear",
+    "label": "Satin pyjamas",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "smooth button-up satin set with contrast piping and more polish than bedtime requires",
+    "image_prompt": null,
+    "affinities": [
+      "elegant",
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a satin pyjama shirt",
+        "bottom": "matching satin pyjama trousers"
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "jersey_pj_set",
+    "category": "sleepwear",
+    "label": "Soft jersey pyjama set",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "stretchy matching jersey pieces that look put together while feeling like almost nothing",
+    "image_prompt": null,
+    "affinities": [
+      "clean_girl",
+      "casual_basics"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "pieces": {
+        "top": "a soft jersey sleep top",
+        "bottom": "matching jersey sleep shorts"
+      }
+    },
+    "enabled": true
+  }
+]

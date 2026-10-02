@@ -112,6 +112,27 @@ export interface AppState {
   auth_enabled: boolean;
 }
 
+export interface WorldClock {
+  base_ms: number;
+  anchored_real_ms: number;
+  sampled_real_ms: number;
+  paused: boolean;
+  time_ms: number;
+}
+
+export interface StatusPost {
+  id: string;
+  character_id: string;
+  image_id: string;
+  caption: string;
+  created_at_ms: number;
+  expires_at_ms: number;
+  liked: boolean;
+  viewed: boolean;
+  aspect: 'square' | 'portrait' | 'landscape' | null;
+  image_url: string;
+}
+
 export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare' | 'extremely_rare';
 
 export interface SwipeProfile {
@@ -125,6 +146,7 @@ export interface SwipeProfile {
   bio: string;
   /** Not a photo - just the emoji she picked for herself, so cards are tellable apart. */
   avatar_emoji: string;
+  profile_picture: string | null;
   age: number;
   /** Display labels, already resolved server-side. */
   languages: string[];
@@ -160,9 +182,22 @@ export interface MatchSummary {
   on_date: boolean;
   /** The live register behind on_date; null when ordinary texting is available. */
   active_session_kind?: 'date' | 'call' | null;
-  /** Her WhatsApp-style status line, refreshed every 4-12 hours; null until she has one. */
+  /** Public label of her current private schedule entry. */
   status?: string | null;
-  /** This chat's own clock (epoch ms) - see engine/clock.ts. Ticks with messages and Pass Time. */
+  availability?: 'green' | 'yellow' | 'red' | null;
+  /** Whether her avatar opens one or more active 24-world-hour Status stories. */
+  has_status?: boolean;
+  /** Whether at least one active Status story has not been displayed to the user yet. */
+  has_unseen_status?: boolean;
+  /** An agreed future date; `due` opens ten minutes before its start and pauses the world clock. */
+  scheduled_date?: {
+    id: string;
+    scheduled_at_ms: number;
+    where_at: string;
+    company: string;
+    due: boolean;
+  } | null;
+  /** The shared world clock (epoch ms). */
   game_clock_ms: number | null;
 }
 
@@ -175,7 +210,7 @@ export interface Message {
   meta: Record<string, any>;
   sent_at: string;
   read_at: string | null;
-  /** This chat's own clock (engine/clock.ts) when sent - null for a date beat, or a message from before this field existed. */
+  /** Shared world clock (engine/clock.ts) when sent; null only on legacy messages. */
   game_clock_ms: number | null;
   image_url?: string | null;
 }
@@ -291,12 +326,13 @@ export const api = {
   logout: () => request<{ ok: true }>('/api/logout', { method: 'POST' }),
   state: () => request<AppState>('/api/state'),
   saveProfile: (p: UserProfile) => request<UserProfile>('/api/profile', { method: 'PUT', body: JSON.stringify(p) }),
-  stack: () => request<{ generating: number; profiles: SwipeProfile[] }>('/api/stack'),
+  stack: () => request<{ generating: number; preparing_images: number; show_images: boolean; profiles: SwipeProfile[] }>('/api/stack'),
   kinkDomains: () => request<KinkDomain[]>('/api/kink-domains'),
   tasteSpec: () => request<TasteSection[]>('/api/taste-spec'),
   cardSpec: () => request<CardSpec>('/api/card-spec'),
   swipe: (id: string, direction: 'left' | 'right') =>
     request<any>(`/api/swipe/${id}`, { method: 'POST', body: JSON.stringify({ direction }) }),
+  skipProfile: (id: string) => request<{ ok: true }>(`/api/swipe/${id}/skip`, { method: 'POST' }),
   matches: () => request<MatchSummary[]>('/api/matches'),
   chat: (id: string) =>
     request<{
@@ -344,7 +380,7 @@ export const api = {
   steerDate: (dateId: string, direction: string) =>
     request<{ id: string }>(`/api/dates/${dateId}/steer`, { method: 'POST', body: JSON.stringify({ direction }) }),
   dates: (characterId: string) =>
-    request<{ active: DateSession | null; past: DateSession[]; locations: Location[]; circle: { id: string; name: string; who: string }[] }>(
+    request<{ active: DateSession | null; scheduled: DateSession | null; past: DateSession[]; world_time_ms: number; locations: Location[]; circle: { id: string; name: string; who: string }[] }>(
       `/api/chats/${characterId}/dates`,
     ),
   startDate: (characterId: string, locationId: string, when: string, company = '') =>
@@ -352,6 +388,15 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ location_id: locationId, when, company }),
     }),
+  scheduleDate: (characterId: string, locationId: string, scheduledAtMs: number, company = '') =>
+    request<DateSession>(`/api/chats/${characterId}/dates/schedule`, {
+      method: 'POST',
+      body: JSON.stringify({ location_id: locationId, scheduled_at_ms: scheduledAtMs, company }),
+    }),
+  enterScheduledDate: (dateId: string) =>
+    request<DateSession>(`/api/dates/${dateId}/enter`, { method: 'POST' }),
+  cancelScheduledDate: (dateId: string) =>
+    request<{ ok: true }>(`/api/dates/${dateId}/schedule`, { method: 'DELETE' }),
   startCall: (characterId: string) =>
     request<DateSession>(`/api/chats/${characterId}/calls`, { method: 'POST' }),
   dismissNpc: (dateId: string, npcId: string) =>
@@ -363,12 +408,13 @@ export const api = {
   endDate: (dateId: string) => request<DateSession>(`/api/dates/${dateId}/end`, { method: 'POST' }),
   /** A picture of this moment of the date, from his point of view; arrives as an image in the date. */
   showScene: (dateId: string) => request<{ image_id: string }>(`/api/dates/${dateId}/scene`, { method: 'POST' }),
-  /** This one chat lives through this many hours - see engine/timepass.ts. Chats never share a clock. */
-  passTime: (characterId: string, hours: number) =>
-    request<{ hours: number; label: string; reaching_out: boolean }>(`/api/chats/${characterId}/pass-time`, {
-      method: 'POST',
-      body: JSON.stringify({ hours }),
-    }),
+  worldClock: () => request<WorldClock>('/api/world-clock'),
+  pauseWorldClock: (paused: boolean) => request<WorldClock>('/api/world-clock/pause', { method: 'POST', body: JSON.stringify({ paused }) }),
+  advanceWorldClock: (value: { hours?: number; time_ms?: number }) => request<WorldClock>('/api/world-clock/advance', { method: 'POST', body: JSON.stringify(value) }),
+  statusPosts: (characterId: string) => request<StatusPost[]>(`/api/status-posts/${characterId}`),
+  createStatusPost: () => request<{ character_id: string; status_id: string }>('/api/status-posts/create', { method: 'POST' }),
+  likeStatusPost: (id: string) => request<{ ok: true; liked: true }>(`/api/status-posts/${id}/like`, { method: 'POST' }),
+  viewStatusPost: (id: string) => request<{ ok: true; viewed: true }>(`/api/status-posts/${id}/view`, { method: 'POST' }),
   regenerateDateBeat: (dateId: string, messageId: number) =>
     request<{ removed_ids: number[] }>(`/api/dates/${dateId}/regenerate`, {
       method: 'POST',

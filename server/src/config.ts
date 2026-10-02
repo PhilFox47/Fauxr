@@ -35,11 +35,14 @@ export interface ImageSizeSetting {
 /** Per-job output ceilings that intentionally differ from the Actor/Director defaults. */
 export interface TokenLimits {
   status: number;
+  schedule: number;
+  status_post: number;
   life_threads: number;
   date_cast: number;
   date_scene: number;
   date_outfit: number;
   character: number;
+  character_coherence: number;
   name_and_handle: number;
   bio: number;
   profile_picture_brief: number;
@@ -73,14 +76,14 @@ export interface Settings {
       send_reference_image: boolean;
       provider?: string;
       /**
-       * These two models want fundamentally different prompts - Seedream 5.0 Lite reads a
+       * These models want fundamentally different prompts - Seedream 5.0 Lite reads a
        * concise photographer's-brief paragraph and a short natural-language negative;
        * Z Image Turbo runs with no classifier-free guidance at all, so it ignores negative
        * prompts entirely and wants every constraint folded into a longer, more detailed
        * positive prompt instead. See image_prompt_assembler.md and images.ts's per-mode
        * suffix/negative constants for what actually changes.
        */
-      prompt_style: 'seedream' | 'z_image_turbo';
+      prompt_style: 'seedream' | 'z_image_turbo' | 'chroma';
     };
   };
   token_limits: TokenLimits;
@@ -94,6 +97,8 @@ export interface Settings {
     max_delay_seconds: number;
   };
   images_enabled: boolean;
+  /** Opt-in paid/free image work before a swipe; off preserves the manual chat action. */
+  show_images_during_matching: boolean;
   voice_enabled: boolean;
   /**
    * How forward the cast runs, on top of each character's own appetite. 1 is the designed
@@ -109,12 +114,14 @@ export interface Settings {
    */
   rarity_bias: number;
   /**
-   * Whether characters may message him unprompted: follow-ups after a silence, check-ins,
-   * anniversaries, and the wakeups the Director schedules. Off by default - they cost tokens
-   * and can feel like pressure. With it off, a character only ever writes when he has (plus
-   * her one opening message after a match).
+   * Whether her own explicit soft close may arm one later conversation reopen. Generic
+   * silence, anniversaries and Director-authored wakeups never initiate messages.
    */
   unprompted_messages: boolean;
+  /** World-hours after her own soft close before she may start the next conversation. */
+  conversation_reopen_hours: number;
+  /** Average image Status stories generated per fictional world-hour across the whole cast. */
+  status_posts_per_hour: number;
   /**
    * His taste, from Settings -> Taste: "category/id" -> multiplier on how often that attribute
    * is rolled for a new character (0 never, 1 or absent normal). Two keys are not attribute
@@ -159,11 +166,14 @@ export const DEFAULT_SETTINGS: Settings = {
   },
   token_limits: {
     status: 600,
+    schedule: 9000,
+    status_post: 1800,
     life_threads: 1200,
     date_cast: 900,
     date_scene: 1500,
     date_outfit: 1000,
     character: 14_400,
+    character_coherence: 2400,
     name_and_handle: 2400,
     bio: 4800,
     profile_picture_brief: 4800,
@@ -173,10 +183,13 @@ export const DEFAULT_SETTINGS: Settings = {
   budget: { max_calls_per_day: 1500, max_cost_per_day: 0 },
   chat: { context_messages: 40, max_messages_per_turn: 5, max_delay_seconds: 10 },
   images_enabled: false,
+  show_images_during_matching: false,
   voice_enabled: false,
   spice: 1.15,
   rarity_bias: 1,
   unprompted_messages: false,
+  conversation_reopen_hours: 8,
+  status_posts_per_hour: 1,
   taste: {},
 };
 
@@ -300,7 +313,9 @@ export function normalizeSettings(value: unknown): Settings {
         send_reference_image: typeof image.send_reference_image === 'boolean'
           ? image.send_reference_image
           : DEFAULT_SETTINGS.models.image.send_reference_image,
-        prompt_style: image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream',
+        prompt_style: ['seedream', 'z_image_turbo', 'chroma'].includes(String(image.prompt_style))
+          ? image.prompt_style as Settings['models']['image']['prompt_style']
+          : 'seedream',
         ...(imageProvider ? { provider: imageProvider } : {}),
       },
     },
@@ -321,12 +336,17 @@ export function normalizeSettings(value: unknown): Settings {
       max_delay_seconds: numberValue(chat.max_delay_seconds, DEFAULT_SETTINGS.chat.max_delay_seconds, 0, 120),
     },
     images_enabled: typeof v.images_enabled === 'boolean' ? v.images_enabled : DEFAULT_SETTINGS.images_enabled,
+    show_images_during_matching: typeof v.show_images_during_matching === 'boolean'
+      ? v.show_images_during_matching
+      : DEFAULT_SETTINGS.show_images_during_matching,
     voice_enabled: typeof v.voice_enabled === 'boolean' ? v.voice_enabled : DEFAULT_SETTINGS.voice_enabled,
     spice: numberValue(v.spice, DEFAULT_SETTINGS.spice, 0.3, 2),
     rarity_bias: numberValue(v.rarity_bias, DEFAULT_SETTINGS.rarity_bias, 0.3, 2.5),
     unprompted_messages: typeof v.unprompted_messages === 'boolean'
       ? v.unprompted_messages
       : DEFAULT_SETTINGS.unprompted_messages,
+    conversation_reopen_hours: numberValue(v.conversation_reopen_hours, DEFAULT_SETTINGS.conversation_reopen_hours, 1, 168),
+    status_posts_per_hour: numberValue(v.status_posts_per_hour, DEFAULT_SETTINGS.status_posts_per_hour, 0, 12),
     taste,
   };
 }

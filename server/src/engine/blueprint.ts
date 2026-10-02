@@ -39,7 +39,7 @@ export function buildCharacterBlueprint(seed: CharacterSeed): CharacterBlueprint
   }
 
   return {
-    version: 1,
+    version: 2,
     anchors,
     contrasts: contrasts.slice(0, 3),
     chat_voice: refs(
@@ -69,7 +69,7 @@ export function buildCharacterBlueprint(seed: CharacterSeed): CharacterBlueprint
       ref('fetish', seed.fetishes[1]),
     ),
     initiative: [
-      { kind: 'open', sources: refs(ref('conversation_starter', seed.conversation_starter), ref('texting_persona', seed.texting_persona)) },
+      { kind: 'open', sources: refs(ref('texting_persona', seed.texting_persona), ref('archetype', seed.archetype)) },
       { kind: 'flirt', sources: refs(ref('humor_type', seed.humor_type), ref('sexual_persona', seed.sexual_persona)) },
       { kind: 'invite', sources: refs(ref('fantasy_scenario', seed.fantasy_seeds?.[0]), ref('signature_move', seed.signature_move)) },
       { kind: 'reconnect', sources: refs(ref('hobby', seed.hobbies[0]), ref('interest', seed.interests[0])) },
@@ -84,7 +84,7 @@ function describe(refValue: AttributeRef): string {
 
 /** Compact prompt rendering: the blueprint selects; the attribute rows still supply meaning. */
 export function blueprintBlock(seed: CharacterSeed): string {
-  const blueprint = seed.blueprint ?? buildCharacterBlueprint(seed);
+  const blueprint = seed.blueprint?.version === 2 ? seed.blueprint : buildCharacterBlueprint(seed);
   const axis: Record<CharacterContrast['axis'], string> = {
     surface_private: 'Everyday / intimate',
     text_spoken: 'Text / spoken',

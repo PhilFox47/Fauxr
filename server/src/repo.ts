@@ -292,7 +292,9 @@ function backfillIntimateDetails(characterId: string, seed: CharacterSeed): Char
  * one from the three-trait days is extended to her 3-5 rather than re-picked.
  */
 function backfillCore(characterId: string, seed: CharacterSeed): CharacterSeed {
-  if (seed.core?.length && seed.core_v === 2) return seed;
+  // v3 is Core-first at creation; never replace that causal Core with the legacy
+  // retrospective picker when the freshly generated character is first hydrated.
+  if (seed.core?.length && Number(seed.core_v ?? 0) >= 2) return seed;
   if (!byCategory('archetype').length) return seed; // attribute table not seeded yet
   // A core from the three-trait days keeps its three and grows to her count (3-5).
   seed.core = pickCore(seed, characterId, seed.core ?? []);
@@ -376,7 +378,7 @@ function backfillSpeciesHeight(characterId: string, seed: CharacterSeed): Charac
 
 /** Existing characters gain a blueprint made only from their established attributes. */
 function backfillBlueprint(characterId: string, seed: CharacterSeed): CharacterSeed {
-  if (seed.blueprint?.version === 1) return seed;
+  if (seed.blueprint?.version === 2) return seed;
   seed.blueprint = buildCharacterBlueprint(seed);
   db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
   return seed;
@@ -489,6 +491,18 @@ function backfillConversationStarter(characterId: string, seed: CharacterSeed): 
   return seed;
 }
 
+/** Existing characters gain a photo format without changing their established identity. */
+function backfillProfilePhotoFormat(characterId: string, seed: CharacterSeed): CharacterSeed {
+  if (seed.profile_photo_format && find('profile_photo_format', seed.profile_photo_format)) return seed;
+  if (!byCategory('profile_photo_format').length) return seed;
+  const chosen = roll('profile_photo_format', newContext(), { ignoreArchetype: true });
+  if (chosen) {
+    seed.profile_photo_format = chosen.id;
+    db.prepare('UPDATE characters SET seed = ? WHERE id = ?').run(JSON.stringify(seed), characterId);
+  }
+  return seed;
+}
+
 function hydrateCharacter(row: any): Character {
   let seed = backfillSpecies(row.id, JSON.parse(row.seed) as CharacterSeed);
   seed = backfillSpeciesHeight(row.id, seed);
@@ -503,6 +517,7 @@ function hydrateCharacter(row: any): Character {
   seed = backfillAccessorySplit(row.id, seed);
   seed = backfillCosplays(row.id, seed);
   seed = backfillConversationStarter(row.id, seed);
+  seed = backfillProfilePhotoFormat(row.id, seed);
   seed = backfillBlueprint(row.id, seed);
   seed = backfillVisualCore(row.id, seed);
   return {
@@ -584,7 +599,7 @@ export function swipeStack(limit = 10): Character[] {
          AND json_extract(seed, '$.age') BETWEEN ? AND ?
          AND (json_extract(seed, '$.orientation') IS NULL
               OR json_extract(seed, '$.orientation') IN (SELECT value FROM json_each(?)))
-       ORDER BY created_at ASC LIMIT ?`,
+       ORDER BY discover_order ASC, created_at ASC LIMIT ?`,
     )
     .all(nowIso(), band.min, band.max, JSON.stringify(ok), limit) as any[];
   return rows.map(hydrateCharacter);
@@ -629,6 +644,16 @@ export function listVisibleMatches(at = nowIso()): Character[] {
     )
     .all(at) as any[];
   return rows.map(hydrateCharacter);
+}
+
+/** Move a profile behind every other Discover candidate without rejecting or changing her. */
+export function moveToEndOfSwipeStack(characterId: string): boolean {
+  const result = db.prepare(
+    `UPDATE characters
+     SET discover_order = (SELECT COALESCE(MAX(discover_order), 0) + 1 FROM characters)
+     WHERE id = ? AND state IN ('pool', 'swiped_left')`,
+  ).run(characterId);
+  return result.changes > 0;
 }
 
 /** The first successfully rendered profile picture is her stable visual reference. */
@@ -704,23 +729,11 @@ export function createRelationship(characterId: string, seedLedger?: Partial<Led
   return getRelationship(characterId)!;
 }
 
-/**
- * Her own clock (engine/clock.ts) is seeded the first time a chat's relationship row is ever
- * read - a brand new match right after createRelationship(), or an existing one loading it for
- * the first time after this feature shipped - and never touched again after that. Persisted
- * directly rather than through saveRelationship() so a plain read never has other, unrelated
- * mood changes riding along with it.
- */
-function backfillGameClock(characterId: string, rel: Relationship): Relationship {
-  if ((rel.mood as any)?.game_clock_ms !== undefined) return rel;
-  rel.mood = { ...rel.mood, game_clock_ms: Date.now() };
-  db.prepare('UPDATE relationships SET mood = ? WHERE character_id = ?').run(JSON.stringify(rel.mood), characterId);
-  return rel;
-}
-
 export function getRelationship(characterId: string): Relationship | null {
   const row = db.prepare('SELECT * FROM relationships WHERE character_id = ?').get(characterId) as any;
-  return row ? backfillGameClock(characterId, hydrateRelationship(row)) : null;
+  // Old mood.game_clock_ms values are intentionally left intact: clock.ts reads the newest one
+  // once when migrating to the shared world clock. New relationships need no per-chat clock.
+  return row ? hydrateRelationship(row) : null;
 }
 
 export function saveRelationship(r: Relationship): void {
@@ -754,7 +767,7 @@ export interface StoredMessage {
   /** null for the text chat; a dates.id for a line spoken in person during that date. */
   date_id: string | null;
   /**
-   * This chat's own clock (engine/clock.ts) at the moment this message was sent - null for a
+   * Shared world-clock time (engine/clock.ts) at the moment this message was sent - null for a
    * date beat (dates run on real time, not the text chat's clock) and for anything predating
    * this field. The chat screen displays this instead of `sent_at` when it has one.
    */
@@ -776,7 +789,7 @@ export function addMessage(m: {
   read_at?: string | null;
   /** Omit for the text chat. Set to put this line in a date's own transcript instead. */
   date_id?: string | null;
-  /** This chat's own clock (engine/clock.ts) at the moment of sending - omit for a date beat. */
+  /** Shared world-clock time (engine/clock.ts) at the moment of sending. */
   game_clock_ms?: number | null;
 }): StoredMessage {
   const info = db
@@ -878,6 +891,18 @@ export function herPhotosSince(characterId: string, sinceIso: string): StoredMes
   });
 }
 
+/** Failed recovery bubbles and system bookkeeping are not a first conversation. */
+export function hasRealChatMessages(characterId: string): boolean {
+  return !!db.prepare(`SELECT 1 FROM messages WHERE character_id = ? AND date_id IS NULL
+    AND sender IN ('user', 'character') AND COALESCE(json_extract(meta, '$.failed'), 0) = 0 LIMIT 1`).get(characterId);
+}
+
+export function hasUserMessageAfter(characterId: string, historyThroughId: number): boolean {
+  return !!db.prepare(`SELECT 1 FROM messages WHERE character_id = ? AND date_id IS NULL
+    AND sender = 'user' AND id > ? AND COALESCE(json_extract(meta, '$.failed'), 0) = 0 LIMIT 1`)
+    .get(characterId, historyThroughId);
+}
+
 export function messagesSince(characterId: string, sinceId: number): StoredMessage[] {
   const rows = db
     .prepare('SELECT * FROM messages WHERE character_id = ? AND date_id IS NULL AND id > ? ORDER BY id ASC')
@@ -914,13 +939,13 @@ export function pendingUserMessageCount(characterId: string): number {
 }
 
 /** Mark the user's messages as seen by her. Only ever called while she is online. */
-export function markUserMessagesRead(characterId: string): number {
+export function markUserMessagesRead(characterId: string, throughId = Number.MAX_SAFE_INTEGER): number {
   return db
     .prepare(
       `UPDATE messages SET read_at = ?
-       WHERE character_id = ? AND date_id IS NULL AND sender = 'user' AND read_at IS NULL`,
+       WHERE character_id = ? AND date_id IS NULL AND sender = 'user' AND read_at IS NULL AND id <= ?`,
     )
-    .run(nowIso(), characterId).changes;
+    .run(nowIso(), characterId, throughId).changes;
 }
 
 /** Returns how many messages this actually marked, so callers can tell a no-op apart. */
@@ -1023,8 +1048,12 @@ function hydrateDate(row: any): DateSession {
     id: row.id,
     character_id: row.character_id,
     kind: row.kind === 'call' ? 'call' : 'date',
-    status: row.status === 'active' ? 'active' : 'ended',
+    status: row.status === 'scheduled' ? 'scheduled' : row.status === 'active' ? 'active' : 'ended',
     when_at: row.when_at ?? '',
+    scheduled_at_ms: row.scheduled_at_ms == null || !Number.isFinite(Number(row.scheduled_at_ms))
+      ? null
+      : Number(row.scheduled_at_ms),
+    reminder_sent: !!row.reminder_sent,
     where_at: row.where_at ?? '',
     location_id: row.location_id ?? null,
     summary: row.summary ?? null,
@@ -1036,6 +1065,7 @@ function hydrateDate(row: any): DateSession {
     npcs: JSON.parse(row.npcs ?? '[]'),
     company: row.company ?? '',
     created_at: row.created_at,
+    started_at: row.started_at ?? null,
     ended_at: row.ended_at ?? null,
   };
 }
@@ -1048,11 +1078,21 @@ export function createDate(d: {
   where_at: string;
   location_id: string | null;
   company?: string;
+  status?: 'scheduled' | 'active';
+  scheduled_at_ms?: number | null;
 }): DateSession {
   db.prepare(
-    `INSERT INTO dates (id, character_id, kind, status, when_at, where_at, location_id, company, created_at)
-     VALUES (@id, @character_id, @kind, 'active', @when_at, @where_at, @location_id, @company, @created_at)`,
-  ).run({ ...d, kind: d.kind ?? 'date', company: d.company ?? '', created_at: nowIso() });
+    `INSERT INTO dates (id, character_id, kind, status, when_at, scheduled_at_ms, where_at, location_id, company, created_at, started_at)
+     VALUES (@id, @character_id, @kind, @status, @when_at, @scheduled_at_ms, @where_at, @location_id, @company, @created_at, @started_at)`,
+  ).run({
+    ...d,
+    kind: d.kind ?? 'date',
+    status: d.status ?? 'active',
+    scheduled_at_ms: d.scheduled_at_ms ?? null,
+    company: d.company ?? '',
+    created_at: nowIso(),
+    started_at: (d.status ?? 'active') === 'active' ? nowIso() : null,
+  });
   return getDate(d.id)!;
 }
 
@@ -1120,6 +1160,35 @@ export function characterIdsOnDate(): Set<string> {
   return new Set(rows.map((r) => r.character_id as string));
 }
 
+/** The next agreed future date. It does not lock chat until explicitly entered. */
+export function scheduledDate(characterId: string): DateSession | null {
+  const row = db.prepare(
+    "SELECT * FROM dates WHERE character_id = ? AND kind = 'date' AND status = 'scheduled' ORDER BY scheduled_at_ms ASC LIMIT 1",
+  ).get(characterId) as any;
+  return row ? hydrateDate(row) : null;
+}
+
+export function dueScheduledDates(nowMs: number): DateSession[] {
+  return (db.prepare(
+    "SELECT * FROM dates WHERE kind = 'date' AND status = 'scheduled' AND reminder_sent = 0 AND scheduled_at_ms <= ? ORDER BY scheduled_at_ms",
+  ).all(nowMs + 10 * 60_000) as any[]).map(hydrateDate);
+}
+
+export function markDateReminderSent(id: string): DateSession | null {
+  db.prepare("UPDATE dates SET reminder_sent = 1 WHERE id = ? AND status = 'scheduled'").run(id);
+  return getDate(id);
+}
+
+export function activateScheduledDate(id: string): DateSession | null {
+  db.prepare("UPDATE dates SET status = 'active', reminder_sent = 1, started_at = ? WHERE id = ? AND status = 'scheduled'")
+    .run(nowIso(), id);
+  return getDate(id);
+}
+
+export function cancelScheduledDate(id: string): boolean {
+  return db.prepare("DELETE FROM dates WHERE id = ? AND status = 'scheduled'").run(id).changes > 0;
+}
+
 /** Which live register each busy character is in, for accurate chat-list labels. */
 export function activeSessionKinds(): Map<string, 'date' | 'call'> {
   const rows = db.prepare("SELECT character_id, kind FROM dates WHERE status = 'active'").all() as any[];
@@ -1136,9 +1205,9 @@ export function listDates(characterId: string): DateSession[] {
 /** When the very first date with her began, if there has been one - for the anniversary check. */
 export function firstDateStartedAt(characterId: string): string | null {
   const row = db
-    .prepare("SELECT created_at FROM dates WHERE character_id = ? AND kind = 'date' ORDER BY created_at ASC LIMIT 1")
-    .get(characterId) as { created_at: string } | undefined;
-  return row?.created_at ?? null;
+    .prepare("SELECT COALESCE(started_at, created_at) AS at FROM dates WHERE character_id = ? AND kind = 'date' AND status != 'scheduled' ORDER BY COALESCE(started_at, created_at) ASC LIMIT 1")
+    .get(characterId) as { at: string } | undefined;
+  return row?.at ?? null;
 }
 
 export function finishDate(id: string, summary: string, durationMinutes: number): DateSession | null {

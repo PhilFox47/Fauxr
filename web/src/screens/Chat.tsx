@@ -8,12 +8,13 @@ import Icon from '../components/Icon';
 import Lightbox from '../components/Lightbox';
 import RoleplaySteering from '../components/RoleplaySteering';
 import EmojiTextarea from '../components/EmojiTextarea';
+import StatusViewer from '../components/StatusViewer';
 import { closeView, openView, replaceTopView } from '../nav';
 import { useCoalescedRefresh } from '../hooks/useCoalescedRefresh';
 
 /**
  * When a message reads as having happened, for every display purpose (the stamp under a
- * bubble, day separators): this chat's own clock (`game_clock_ms`, see engine/clock.ts) when
+ * bubble, day separators): the shared world clock (`game_clock_ms`, see engine/clock.ts) when
  * the message has one, real time for anything older than that field. Never a mix of the two
  * within one message - a message either lived entirely in-game or, for a handful of messages
  * from before this existed, entirely in real time.
@@ -28,7 +29,7 @@ function clock(ms: number): string {
 
 const WEEKDAYS_SHORT = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
-/** Her own chat clock, next to her name: weekday and time only, no date - see engine/clock.ts. */
+/** The world clock, next to her name: weekday and time only, no date. */
 function chatClockLabel(ms: number): string {
   const d = new Date(ms);
   const hh = String(d.getHours()).padStart(2, '0');
@@ -119,6 +120,12 @@ function sessionLength(minutes: unknown): string {
   return rest ? `${hours}h ${rest}m` : `${hours}h`;
 }
 
+function datetimeLocalValue(ms: number): string {
+  const d = new Date(ms);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 function VoiceBubble({ message, mine }: { message: Message; mine: boolean }) {
   const [open, setOpen] = useState(false);
   const duration = Number(message.meta?.duration_seconds ?? 0);
@@ -186,9 +193,9 @@ export default function Chat({
   const [draft, setDraft] = useState('');
   const [sending, setSending] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [timeOpen, setTimeOpen] = useState(false);
   const [profile, setProfile] = useState<CharacterProfile | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [statusOpen, setStatusOpen] = useState(false);
   const [gallery, setGallery] = useState<GalleryImage[]>([]);
   const [lightboxAt, setLightboxAt] = useState<number | null>(null);
   const [regeneratingId, setRegeneratingId] = useState<number | null>(null);
@@ -201,6 +208,7 @@ export default function Chat({
   const confirmDeleteTimer = useRef<number | null>(null);
   /** Non-null while she is out with him. The text chat stays readable, but frozen. */
   const [activeDate, setActiveDate] = useState<DateSession | null>(null);
+  const [enteringScheduledDate, setEnteringScheduledDate] = useState(false);
   /**
    * Which date is on screen. Set to the live one the moment it starts, cleared to step back
    * into the text chat without ending anything, and also used to re-read a finished one.
@@ -487,6 +495,24 @@ export default function Chat({
   // same restriction the text regen button already applies to her last reply.
   const lastHerImageId = [...messages].reverse().find((m) => m.kind === 'image' && m.sender === 'character')?.id ?? null;
 
+  const enterPlannedDate = async () => {
+    const planned = character?.scheduled_date;
+    if (!planned?.due || enteringScheduledDate) return;
+    setEnteringScheduledDate(true);
+    try {
+      const date = await api.enterScheduledDate(planned.id);
+      autoOpenedDate.current = date.id;
+      setActiveDate(date);
+      openView(() => setOpenDateId(null));
+      setOpenDateId(date.id);
+    } catch (err) {
+      flashToast(String(err instanceof Error ? err.message : err));
+      await load();
+    } finally {
+      setEnteringScheduledDate(false);
+    }
+  };
+
   if (openDateId) {
     return (
       <DateRoom
@@ -510,9 +536,12 @@ export default function Chat({
         <button
           className="chat-identity"
           onClick={() => {
-            if (!profile) return;
-            openView(() => setProfileOpen(false));
-            setProfileOpen(true);
+            if (character?.has_status) {
+              setStatusOpen(true);
+            } else if (profile) {
+              openView(() => setProfileOpen(false));
+              setProfileOpen(true);
+            }
           }}
           disabled={!profile}
           aria-label={`Open ${character?.display_name ?? 'her'} profile`}
@@ -533,30 +562,28 @@ export default function Chat({
         </div>
         </button>
         <div className="spacer" />
-        {character && !blocked && !activeDate && (
-          <button
-            className="iconbtn"
-            onClick={() => setTimeOpen((o) => !o)}
-            aria-label="Pass time"
-            title="Pass time"
-          >
-            <Icon name="clock" size={19} />
-          </button>
-        )}
         <button className="iconbtn" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
           <Icon name="more" size={20} />
         </button>
       </div>
 
-      {timeOpen && (
-        <PassTimePanel
-          characterId={characterId}
-          onDone={() => {
-            setTimeOpen(false);
-            void load();
-          }}
-          onClose={() => setTimeOpen(false)}
-        />
+      {character?.scheduled_date && (
+        <div className={`scheduled-date-banner${character.scheduled_date.due ? ' due' : ''}`}>
+          <span className="scheduled-date-icon"><Icon name={character.scheduled_date.due ? 'spark' : 'clock'} size={20} /></span>
+          <div className="grow">
+            <strong>{character.scheduled_date.due ? 'Your date is ready' : 'Date scheduled'}</strong>
+            <span>
+              {character.scheduled_date.where_at} · {new Date(character.scheduled_date.scheduled_at_ms).toLocaleString([], {
+                weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+              })}
+            </span>
+          </div>
+          {character.scheduled_date.due && (
+            <button className="btn" disabled={enteringScheduledDate} onClick={() => void enterPlannedDate()}>
+              {enteringScheduledDate ? 'Entering…' : 'Enter date'}
+            </button>
+          )}
+        </div>
       )}
 
       {profileOpen && profile && (
@@ -716,6 +743,18 @@ export default function Chat({
                   </span>
                   <span className="date-marker-body">{m.text}</span>
                 </button>
+              </div>
+            );
+          }
+
+          if (m.sender === 'system' && ['date_scheduled', 'date_cancelled'].includes(m.meta?.type)) {
+            return (
+              <div key={m.id} style={{ display: 'contents' }}>
+                {showDay && <div className="day-sep">{dayLabel(messageMs(m), nowMs)}</div>}
+                <div className="date-marker scheduled-marker">
+                  <span className="date-marker-head"><Icon name="clock" size={14} /> Date plan</span>
+                  <span className="date-marker-body">{m.text}</span>
+                </div>
               </div>
             );
           }
@@ -917,6 +956,22 @@ export default function Chat({
           resetKey={messages.filter((message) => message.sender === 'character').length}
         />
       )}
+      {statusOpen && character && (
+        <StatusViewer
+          character={character}
+          onClose={() => setStatusOpen(false)}
+          onLiked={() => { void api.gallery(characterId).then(setGallery); }}
+          onViewed={(hasUnseenRemaining) => {
+            if (!hasUnseenRemaining) setCharacter((current) => current ? { ...current, has_unseen_status: false } : current);
+          }}
+          onProfile={() => {
+            setStatusOpen(false);
+            if (!profile) return;
+            openView(() => setProfileOpen(false));
+            setProfileOpen(true);
+          }}
+        />
+      )}
 
       {!blocked && !activeDate && (
         <div className="composer">
@@ -956,101 +1011,6 @@ export default function Chat({
           </button>
         </div>
       )}
-    </div>
-  );
-}
-
-const PASS_TIME_PRESETS: { label: string; hours: number }[] = [
-  { label: '1 hour', hours: 1 },
-  { label: '4 hours', hours: 4 },
-  { label: 'Tonight', hours: 8 },
-  { label: '1 day', hours: 24 },
-  { label: '3 days', hours: 72 },
-  { label: '1 week', hours: 24 * 7 },
-];
-
-/**
- * "Pass time": the only way this chat's clock moves (server/src/engine/clock.ts). Chats have
- * no bearing on each other, so this always acts on just her - he decides how much of a gap
- * just happened between the two of them, and she lives through it on her own.
- */
-function PassTimePanel({
-  characterId,
-  onDone,
-  onClose,
-}: {
-  characterId: string;
-  onDone: () => void;
-  onClose: () => void;
-}) {
-  const [customAmount, setCustomAmount] = useState('1');
-  const [customUnit, setCustomUnit] = useState<'hours' | 'days'>('hours');
-  const [busy, setBusy] = useState(false);
-  const [callBusy, setCallBusy] = useState(false);
-  const [callError, setCallError] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<string | null>(null);
-
-  const go = async (hours: number) => {
-    if (busy || !(hours > 0)) return;
-    setBusy(true);
-    setError(null);
-    try {
-      const res = await api.passTime(characterId, hours);
-      setResult(`${res.label} passed.${res.reaching_out ? ' She might text you about it.' : ''}`);
-      onDone();
-    } catch (err) {
-      setError(String(err instanceof Error ? err.message : err));
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  return (
-    <div className="card">
-      <div className="section-title" style={{ padding: '0 0 6px' }}>Pass time</div>
-      <p className="tiny muted" style={{ margin: '0 0 14px' }}>
-        Nothing ages on its own here - this chat just picks up where you left it. Skip time on
-        purpose and she lives through it: her mood settles, her day moves on, and she may get
-        in touch about whatever happened while you were away. Only this chat - it has no
-        bearing on anyone else.
-      </p>
-      {result ? (
-        <p className="small" style={{ margin: '0 0 12px' }}>{result}</p>
-      ) : (
-        <>
-          <div className="row" style={{ flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-            {PASS_TIME_PRESETS.map((p) => (
-              <button key={p.label} className="chip" disabled={busy} onClick={() => void go(p.hours)}>
-                {p.label}
-              </button>
-            ))}
-          </div>
-          <div className="row" style={{ gap: 8, marginBottom: 12 }}>
-            <input
-              type="number"
-              min="1"
-              inputMode="numeric"
-              value={customAmount}
-              onChange={(e) => setCustomAmount(e.target.value)}
-              style={{ width: 72 }}
-            />
-            <select value={customUnit} onChange={(e) => setCustomUnit(e.target.value as 'hours' | 'days')}>
-              <option value="hours">hours</option>
-              <option value="days">days</option>
-            </select>
-            <button
-              className="btn grow"
-              disabled={busy || !(Number(customAmount) > 0)}
-              onClick={() => void go(Number(customAmount) * (customUnit === 'days' ? 24 : 1))}
-            >
-              {busy ? 'Passing time…' : 'Pass time'}
-            </button>
-          </div>
-        </>
-      )}
-      {error && <p className="small" style={{ color: 'var(--err)' }}>{error}</p>}
-      <button className="btn ghost block" onClick={onClose}>Close</button>
     </div>
   );
 }
@@ -1207,9 +1167,11 @@ function DatesSection({
   const [locations, setLocations] = useState<Location[]>([]);
   const [past, setPast] = useState<DateSession[]>([]);
   const [active, setActive] = useState<DateSession | null>(null);
-  const [inviting, setInviting] = useState(false);
+  const [dateForm, setDateForm] = useState<'invite' | 'schedule' | null>(null);
   const [locationId, setLocationId] = useState('');
   const [when, setWhen] = useState('tonight, 8pm');
+  const [scheduledAt, setScheduledAt] = useState('');
+  const [scheduled, setScheduled] = useState<DateSession | null>(null);
   const [company, setCompany] = useState('');
   const [circle, setCircle] = useState<{ id: string; name: string; who: string }[]>([]);
   const [busy, setBusy] = useState(false);
@@ -1223,8 +1185,15 @@ function DatesSection({
       setLocations(res.locations);
       setPast(res.past);
       setActive(res.active);
+      setScheduled(res.scheduled);
       setCircle(res.circle ?? []);
       setLocationId((id) => id || res.locations[0]?.id || '');
+      setScheduledAt((value) => {
+        if (value) return value;
+        const next = new Date(res.world_time_ms + 24 * 3_600_000);
+        next.setMinutes(next.getMinutes() < 30 ? 30 : 60, 0, 0);
+        return datetimeLocalValue(next.getTime());
+      });
     } catch {
       /* the sheet is still useful without this */
     }
@@ -1232,6 +1201,12 @@ function DatesSection({
 
   useEffect(() => {
     void load();
+  }, [load]);
+
+  // The ten-minute reminder can arrive while the profile sheet is already open.
+  useEffect(() => {
+    const id = window.setInterval(() => void load(), 30_000);
+    return () => window.clearInterval(id);
   }, [load]);
 
   const start = async () => {
@@ -1259,6 +1234,52 @@ function DatesSection({
       setCallError(String(err instanceof Error ? err.message : err));
     } finally {
       setCallBusy(false);
+    }
+  };
+
+  const schedule = async () => {
+    const at = Date.parse(scheduledAt);
+    if (!locationId || busy || !Number.isFinite(at)) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const date = await api.scheduleDate(characterId, locationId, at, company.trim());
+      setScheduled(date);
+      setDateForm(null);
+      await load();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const enterScheduled = async () => {
+    if (!scheduled || busy) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const date = await api.enterScheduledDate(scheduled.id);
+      onOpenDate(date.id);
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const cancelScheduled = async () => {
+    if (!scheduled || busy) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await api.cancelScheduledDate(scheduled.id);
+      setScheduled(null);
+      await load();
+    } catch (err) {
+      setError(String(err instanceof Error ? err.message : err));
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -1303,11 +1324,25 @@ function DatesSection({
         </button>
       ) : active ? (
         <p className="tiny muted">Finish the current call before starting a date.</p>
+      ) : scheduled ? (
+        <div className={`planned-date-card${scheduled.reminder_sent ? ' due' : ''}`}>
+          <div>
+            <strong>{scheduled.reminder_sent ? 'Date ready' : 'Coming up'}</strong>
+            <span>{scheduled.where_at} · {scheduled.scheduled_at_ms ? new Date(scheduled.scheduled_at_ms).toLocaleString([], {
+              weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+            }) : scheduled.when_at}</span>
+            {scheduled.company && <span className="tiny muted">With {scheduled.company}</span>}
+          </div>
+          <div className="row">
+            <button className="btn ghost grow" disabled={busy} onClick={() => void cancelScheduled()}>Cancel plan</button>
+            {scheduled.reminder_sent && <button className="btn grow" disabled={busy} onClick={() => void enterScheduled()}>{busy ? 'Entering…' : 'Enter date'}</button>}
+          </div>
+        </div>
       ) : locations.length === 0 ? (
         <p className="tiny muted">
           Nowhere to go yet. Write a place under Settings → Locations first.
         </p>
-      ) : inviting ? (
+      ) : dateForm ? (
         <>
           <label className="field">
             <span>Where</span>
@@ -1318,12 +1353,12 @@ function DatesSection({
             </select>
           </label>
           <label className="field">
-            <span>When</span>
+            <span>{dateForm === 'schedule' ? 'Start time' : 'When'}</span>
             <input
-              type="text"
-              value={when}
-              placeholder="tonight, 8pm"
-              onChange={(e) => setWhen(e.target.value)}
+              type={dateForm === 'schedule' ? 'datetime-local' : 'text'}
+              value={dateForm === 'schedule' ? scheduledAt : when}
+              placeholder={dateForm === 'schedule' ? undefined : 'tonight, 8pm'}
+              onChange={(e) => dateForm === 'schedule' ? setScheduledAt(e.target.value) : setWhen(e.target.value)}
               // Belt and braces on top of .sheet-body actually being scrollable: a phone
               // keyboard opening and the sheet reflowing happen at the same time, and a
               // browser's own "scroll the focused field into view" heuristic doesn't
@@ -1366,16 +1401,17 @@ function DatesSection({
             )}
           </label>
           <div className="row">
-            <button className="btn ghost grow" onClick={() => setInviting(false)}>Cancel</button>
-            <button className="btn grow" onClick={() => void start()} disabled={busy || !locationId}>
-              {busy ? 'Going…' : 'Take her out'}
+            <button className="btn ghost grow" onClick={() => setDateForm(null)}>Cancel</button>
+            <button className="btn grow" onClick={() => void (dateForm === 'schedule' ? schedule() : start())} disabled={busy || !locationId || (dateForm === 'schedule' && !scheduledAt)}>
+              {busy ? (dateForm === 'schedule' ? 'Scheduling…' : 'Going…') : dateForm === 'schedule' ? 'Schedule date' : 'Take her out'}
             </button>
           </div>
         </>
       ) : (
-        <button className="btn block" onClick={() => setInviting(true)}>
-          Invite to a date
-        </button>
+        <div className="date-action-stack">
+          <button className="btn block" onClick={() => setDateForm('invite')}>Invite to a date</button>
+          <button className="btn subtle block" onClick={() => setDateForm('schedule')}>Schedule a date</button>
+        </div>
       )}
       {error && <p className="tiny level-error">{error}</p>}
 

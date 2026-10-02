@@ -1,65 +1,722 @@
 [
-  { "id": "face_oval", "category": "face_shape", "label": "Oval face", "weight": 1.4, "rarity": "common", "prompt_hint": "A balanced oval face.", "image_prompt": "a balanced oval face", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "face_round", "category": "face_shape", "label": "Round face", "weight": 1, "rarity": "common", "prompt_hint": "A softly rounded face with full cheeks.", "image_prompt": "a softly rounded face with full cheeks", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "face_heart", "category": "face_shape", "label": "Heart-shaped face", "weight": 1, "rarity": "common", "prompt_hint": "A heart-shaped face tapering to a narrow chin.", "image_prompt": "a heart-shaped face tapering to a narrow chin", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "face_square", "category": "face_shape", "label": "Square face", "weight": 0.9, "rarity": "common", "prompt_hint": "A broad square face with a defined jaw.", "image_prompt": "a broad square face with a defined jaw", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "face_long", "category": "face_shape", "label": "Long face", "weight": 0.8, "rarity": "common", "prompt_hint": "A long, elegant face.", "image_prompt": "a long elegant face", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "face_diamond", "category": "face_shape", "label": "Diamond face", "weight": 0.7, "rarity": "uncommon", "prompt_hint": "A diamond-shaped face, widest at the cheekbones.", "image_prompt": "a diamond-shaped face widest at the cheekbones", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-
-  { "id": "structure_soft", "category": "facial_structure", "label": "Soft features", "weight": 1.4, "rarity": "common", "prompt_hint": "Soft facial planes and a gently rounded jaw.", "image_prompt": "soft facial planes and a gently rounded jaw", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "structure_angular", "category": "facial_structure", "label": "Angular features", "weight": 1, "rarity": "common", "prompt_hint": "Angular facial planes and a crisp jawline.", "image_prompt": "angular facial planes and a crisp jawline", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "structure_high_cheekbones", "category": "facial_structure", "label": "High cheekbones", "weight": 1, "rarity": "common", "prompt_hint": "High, clearly defined cheekbones.", "image_prompt": "high clearly defined cheekbones", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "structure_broad_cheekbones", "category": "facial_structure", "label": "Broad cheekbones", "weight": 0.8, "rarity": "common", "prompt_hint": "Broad cheekbones and a strong mid-face.", "image_prompt": "broad cheekbones and a strong mid-face", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "structure_delicate", "category": "facial_structure", "label": "Delicate features", "weight": 0.8, "rarity": "common", "prompt_hint": "Fine-boned, delicate facial features.", "image_prompt": "fine-boned delicate facial features", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "structure_strong_jaw", "category": "facial_structure", "label": "Strong jaw", "weight": 0.7, "rarity": "uncommon", "prompt_hint": "A strong jaw and substantial facial structure.", "image_prompt": "a strong jaw and substantial facial structure", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-
-  { "id": "eyes_almond", "category": "eye_shape", "label": "Almond eyes", "weight": 1.4, "rarity": "common", "prompt_hint": "Almond-shaped eyes.", "image_prompt": "almond-shaped eyes", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "eyes_round", "category": "eye_shape", "label": "Round eyes", "weight": 1, "rarity": "common", "prompt_hint": "Large, distinctly round eyes.", "image_prompt": "large distinctly round eyes", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "eyes_hooded", "category": "eye_shape", "label": "Hooded eyes", "weight": 1, "rarity": "common", "prompt_hint": "Heavy-lidded hooded eyes.", "image_prompt": "heavy-lidded hooded eyes", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "eyes_deep_set", "category": "eye_shape", "label": "Deep-set eyes", "weight": 0.9, "rarity": "common", "prompt_hint": "Deep-set eyes beneath the brow.", "image_prompt": "deep-set eyes beneath the brow", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "eyes_upturned", "category": "eye_shape", "label": "Upturned eyes", "weight": 0.8, "rarity": "common", "prompt_hint": "Eyes with subtly lifted outer corners.", "image_prompt": "eyes with subtly lifted outer corners", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "eyes_downturned", "category": "eye_shape", "label": "Downturned eyes", "weight": 0.7, "rarity": "uncommon", "prompt_hint": "Eyes with gently lowered outer corners.", "image_prompt": "eyes with gently lowered outer corners", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "eyes_monolid", "category": "eye_shape", "label": "Monolid eyes", "weight": 0.7, "rarity": "common", "prompt_hint": "Smooth monolid eyes.", "image_prompt": "smooth monolid eyes", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-
-  { "id": "spacing_average", "category": "eye_spacing", "label": "Balanced eye spacing", "weight": 2.2, "rarity": "common", "prompt_hint": "Balanced eye spacing.", "image_prompt": "balanced eye spacing", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 1 }, "enabled": true },
-  { "id": "spacing_wide", "category": "eye_spacing", "label": "Wide-set eyes", "weight": 0.8, "rarity": "uncommon", "prompt_hint": "Noticeably wide-set eyes.", "image_prompt": "noticeably wide-set eyes", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "spacing_close", "category": "eye_spacing", "label": "Close-set eyes", "weight": 0.6, "rarity": "uncommon", "prompt_hint": "Slightly close-set eyes.", "image_prompt": "slightly close-set eyes", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-
-  { "id": "nose_straight", "category": "nose_shape", "label": "Straight nose", "weight": 1.5, "rarity": "common", "prompt_hint": "A straight nose with a clean bridge.", "image_prompt": "a straight nose with a clean bridge", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "nose_button", "category": "nose_shape", "label": "Button nose", "weight": 0.9, "rarity": "common", "prompt_hint": "A short button nose with a rounded tip.", "image_prompt": "a short button nose with a rounded tip", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "nose_aquiline", "category": "nose_shape", "label": "Aquiline nose", "weight": 0.8, "rarity": "uncommon", "prompt_hint": "A prominent aquiline nose.", "image_prompt": "a prominent aquiline nose", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "nose_broad", "category": "nose_shape", "label": "Broad nose", "weight": 1, "rarity": "common", "prompt_hint": "A broad nose with softly flared nostrils.", "image_prompt": "a broad nose with softly flared nostrils", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "nose_upturned", "category": "nose_shape", "label": "Upturned nose", "weight": 0.8, "rarity": "common", "prompt_hint": "A gently upturned nose.", "image_prompt": "a gently upturned nose", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "nose_narrow", "category": "nose_shape", "label": "Narrow nose", "weight": 0.8, "rarity": "common", "prompt_hint": "A narrow nose with a fine bridge.", "image_prompt": "a narrow nose with a fine bridge", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-
-  { "id": "mouth_balanced", "category": "mouth_shape", "label": "Balanced lips", "weight": 1.6, "rarity": "common", "prompt_hint": "Balanced, naturally shaped lips.", "image_prompt": "balanced naturally shaped lips", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "mouth_wide", "category": "mouth_shape", "label": "Wide mouth", "weight": 0.9, "rarity": "common", "prompt_hint": "A wide, expressive mouth.", "image_prompt": "a wide expressive mouth", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "mouth_cupids_bow", "category": "mouth_shape", "label": "Defined cupid's bow", "weight": 0.9, "rarity": "common", "prompt_hint": "A sharply defined cupid's bow.", "image_prompt": "a sharply defined cupid's bow", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "mouth_full_lower", "category": "mouth_shape", "label": "Full lower lip", "weight": 0.9, "rarity": "common", "prompt_hint": "A distinctly fuller lower lip.", "image_prompt": "a distinctly fuller lower lip", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "mouth_full", "category": "mouth_shape", "label": "Full lips", "weight": 1, "rarity": "common", "prompt_hint": "Naturally full lips.", "image_prompt": "naturally full lips", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "mouth_thin", "category": "mouth_shape", "label": "Fine lips", "weight": 0.7, "rarity": "uncommon", "prompt_hint": "Fine, narrow lips.", "image_prompt": "fine narrow lips", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-
-  { "id": "brows_soft_arch", "category": "brow_shape", "label": "Softly arched brows", "weight": 1.4, "rarity": "common", "prompt_hint": "Softly arched natural brows.", "image_prompt": "softly arched natural brows", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 1 }, "enabled": true },
-  { "id": "brows_straight", "category": "brow_shape", "label": "Straight brows", "weight": 1, "rarity": "common", "prompt_hint": "Straight brows with little arch.", "image_prompt": "straight brows with little arch", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "brows_bold", "category": "brow_shape", "label": "Bold brows", "weight": 0.9, "rarity": "common", "prompt_hint": "Thick, strongly defined brows.", "image_prompt": "thick strongly defined brows", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "brows_high_arch", "category": "brow_shape", "label": "High-arched brows", "weight": 0.7, "rarity": "uncommon", "prompt_hint": "High, pronounced brow arches.", "image_prompt": "high pronounced brow arches", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "brows_fine", "category": "brow_shape", "label": "Fine brows", "weight": 0.7, "rarity": "uncommon", "prompt_hint": "Fine, lightly defined brows.", "image_prompt": "fine lightly defined brows", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 1 }, "enabled": true },
-
-  { "id": "facial_detail_none", "category": "facial_detail", "label": "No defining facial mark", "weight": 5, "rarity": "common", "prompt_hint": "No single small mark defines her face.", "image_prompt": "", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 0 }, "enabled": true },
-  { "id": "detail_light_freckles", "category": "facial_detail", "label": "Light freckles", "weight": 0.7, "rarity": "uncommon", "prompt_hint": "A light dusting of freckles across her nose and cheeks.", "image_prompt": "a light dusting of freckles across her nose and cheeks", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "detail_left_dimple", "category": "facial_detail", "label": "Left cheek dimple", "weight": 0.45, "rarity": "rare", "prompt_hint": "One pronounced dimple in her left cheek when she smiles.", "image_prompt": "one pronounced dimple in her left cheek when she smiles", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "detail_right_beauty_mark", "category": "facial_detail", "label": "Beauty mark", "weight": 0.35, "rarity": "rare", "prompt_hint": "One small beauty mark high on her right cheek.", "image_prompt": "one small beauty mark high on her right cheek", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-  { "id": "detail_tooth_gap", "category": "facial_detail", "label": "Small tooth gap", "weight": 0.3, "rarity": "rare", "prompt_hint": "A small natural gap between her front teeth.", "image_prompt": "a small natural gap between her front teeth", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 2 }, "enabled": true },
-  { "id": "detail_brow_scar", "category": "facial_detail", "label": "Brow scar", "weight": 0.25, "rarity": "rare", "prompt_hint": "A short healed scar crossing her left eyebrow.", "image_prompt": "a short healed scar crossing her left eyebrow", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "visual_priority": 3 }, "enabled": true },
-
-  { "id": "palette_ink_wine", "category": "visual_palette", "label": "Ink and wine", "weight": 1, "rarity": "common", "prompt_hint": "She returns to black, oxblood and dark silver, with leather or velvet accents.", "image_prompt": "her styling tends toward black and oxblood with dark silver, leather or velvet accents", "affinities": ["goth", "dark_academia"], "conflicts": [], "modifies": {}, "extra": { "metal": "dark silver", "materials": ["leather", "velvet"] }, "enabled": true },
-  { "id": "palette_cream_gold", "category": "visual_palette", "label": "Cream and gold", "weight": 1, "rarity": "common", "prompt_hint": "She favors cream, warm beige and muted gold, with soft knits and satin.", "image_prompt": "her styling tends toward cream and warm beige with muted gold, knit or satin accents", "affinities": ["romantic"], "conflicts": [], "modifies": {}, "extra": { "metal": "gold", "materials": ["knit", "satin"] }, "enabled": true },
-  { "id": "palette_denim_rust", "category": "visual_palette", "label": "Denim and rust", "weight": 1, "rarity": "common", "prompt_hint": "She comes back to washed denim, rust and tobacco brown.", "image_prompt": "her styling tends toward washed denim, rust and tobacco brown", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "metal": "aged brass", "materials": ["denim", "suede"] }, "enabled": true },
-  { "id": "palette_navy_white", "category": "visual_palette", "label": "Navy and white", "weight": 1, "rarity": "common", "prompt_hint": "She favors navy, crisp white and restrained silver.", "image_prompt": "her styling tends toward navy and crisp white with restrained silver", "affinities": ["preppy"], "conflicts": [], "modifies": {}, "extra": { "metal": "silver", "materials": ["cotton", "wool"] }, "enabled": true },
-  { "id": "palette_sage_copper", "category": "visual_palette", "label": "Sage and copper", "weight": 0.9, "rarity": "common", "prompt_hint": "She gravitates toward sage, moss and warm copper with natural textures.", "image_prompt": "her styling tends toward sage and moss with warm copper and natural textures", "affinities": ["bohemian"], "conflicts": [], "modifies": {}, "extra": { "metal": "copper", "materials": ["linen", "woven cotton"] }, "enabled": true },
-  { "id": "palette_cherry_charcoal", "category": "visual_palette", "label": "Cherry and charcoal", "weight": 0.9, "rarity": "common", "prompt_hint": "She repeats cherry red against charcoal and polished steel.", "image_prompt": "her styling tends toward cherry red against charcoal with polished steel accents", "affinities": [], "conflicts": [], "modifies": {}, "extra": { "metal": "steel", "materials": ["leather", "jersey"] }, "enabled": true },
-  { "id": "palette_lilac_graphite", "category": "visual_palette", "label": "Lilac and graphite", "weight": 0.8, "rarity": "common", "prompt_hint": "She combines dusty lilac, graphite and cool iridescent accents.", "image_prompt": "her styling tends toward dusty lilac and graphite with subtle iridescent accents", "affinities": ["e_girl", "cyberpunk"], "conflicts": [], "modifies": {}, "extra": { "metal": "chrome", "materials": ["mesh", "technical fabric"] }, "enabled": true },
-  { "id": "palette_cobalt_black", "category": "visual_palette", "label": "Cobalt and black", "weight": 0.8, "rarity": "common", "prompt_hint": "She uses saturated cobalt against black and clean chrome.", "image_prompt": "her styling tends toward saturated cobalt against black with clean chrome", "affinities": ["streetwear", "techwear"], "conflicts": [], "modifies": {}, "extra": { "metal": "chrome", "materials": ["nylon", "technical fabric"] }, "enabled": true },
-  { "id": "palette_rose_chocolate", "category": "visual_palette", "label": "Rose and chocolate", "weight": 0.8, "rarity": "common", "prompt_hint": "She returns to dusty rose, chocolate brown and soft gold.", "image_prompt": "her styling tends toward dusty rose and chocolate brown with soft gold", "affinities": ["coquette", "vintage"], "conflicts": [], "modifies": {}, "extra": { "metal": "soft gold", "materials": ["lace", "satin"] }, "enabled": true },
-  { "id": "palette_citrus_teal", "category": "visual_palette", "label": "Citrus and teal", "weight": 0.6, "rarity": "uncommon", "prompt_hint": "She likes teal, tangerine and bright playful contrasts.", "image_prompt": "her styling tends toward teal and tangerine with bright playful contrasts", "affinities": ["maximalist"], "conflicts": [], "modifies": {}, "extra": { "metal": "mixed", "materials": ["printed cotton", "glossy accents"] }, "enabled": true }
+  {
+    "id": "face_oval",
+    "category": "face_shape",
+    "label": "Oval face",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "A balanced oval face.",
+    "image_prompt": "a balanced oval face",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_round",
+    "category": "face_shape",
+    "label": "Round face",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "A softly rounded face with full cheeks.",
+    "image_prompt": "a softly rounded face with full cheeks",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_heart",
+    "category": "face_shape",
+    "label": "Heart-shaped face",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "A heart-shaped face tapering to a narrow chin.",
+    "image_prompt": "a heart-shaped face tapering to a narrow chin",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_square",
+    "category": "face_shape",
+    "label": "Square face",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "A broad square face with a defined jaw.",
+    "image_prompt": "a broad square face with a defined jaw",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_long",
+    "category": "face_shape",
+    "label": "Long face",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "A long, elegant face.",
+    "image_prompt": "a long elegant face",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_diamond",
+    "category": "face_shape",
+    "label": "Diamond face",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "A diamond-shaped face, widest at the cheekbones.",
+    "image_prompt": "a diamond-shaped face widest at the cheekbones",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "structure_soft",
+    "category": "facial_structure",
+    "label": "Soft features",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "Soft facial planes and a gently rounded jaw.",
+    "image_prompt": "soft facial planes and a gently rounded jaw",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "structure_angular",
+    "category": "facial_structure",
+    "label": "Angular features",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Angular facial planes and a crisp jawline.",
+    "image_prompt": "angular facial planes and a crisp jawline",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "structure_high_cheekbones",
+    "category": "facial_structure",
+    "label": "High cheekbones",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "High, clearly defined cheekbones.",
+    "image_prompt": "high clearly defined cheekbones",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "structure_broad_cheekbones",
+    "category": "facial_structure",
+    "label": "Broad cheekbones",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "Broad cheekbones and a strong mid-face.",
+    "image_prompt": "broad cheekbones and a strong mid-face",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "structure_delicate",
+    "category": "facial_structure",
+    "label": "Delicate features",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "Fine-boned, delicate facial features.",
+    "image_prompt": "fine-boned delicate facial features",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "structure_strong_jaw",
+    "category": "facial_structure",
+    "label": "Strong jaw",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "A strong jaw and substantial facial structure.",
+    "image_prompt": "a strong jaw and substantial facial structure",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "eyes_almond",
+    "category": "eye_shape",
+    "label": "Almond eyes",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "Almond-shaped eyes.",
+    "image_prompt": "almond-shaped eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "eyes_round",
+    "category": "eye_shape",
+    "label": "Round eyes",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Large, distinctly round eyes.",
+    "image_prompt": "large distinctly round eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "eyes_hooded",
+    "category": "eye_shape",
+    "label": "Hooded eyes",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Heavy-lidded hooded eyes.",
+    "image_prompt": "heavy-lidded hooded eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "eyes_deep_set",
+    "category": "eye_shape",
+    "label": "Deep-set eyes",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "Deep-set eyes beneath the brow.",
+    "image_prompt": "deep-set eyes beneath the brow",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "eyes_upturned",
+    "category": "eye_shape",
+    "label": "Upturned eyes",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "Eyes with subtly lifted outer corners.",
+    "image_prompt": "eyes with subtly lifted outer corners",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "eyes_downturned",
+    "category": "eye_shape",
+    "label": "Downturned eyes",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "Eyes with gently lowered outer corners.",
+    "image_prompt": "eyes with gently lowered outer corners",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "eyes_monolid",
+    "category": "eye_shape",
+    "label": "Monolid eyes",
+    "weight": 0.7,
+    "rarity": "common",
+    "prompt_hint": "Smooth monolid eyes.",
+    "image_prompt": "smooth monolid eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "spacing_average",
+    "category": "eye_spacing",
+    "label": "Balanced eye spacing",
+    "weight": 2.2,
+    "rarity": "common",
+    "prompt_hint": "Balanced eye spacing.",
+    "image_prompt": "balanced eye spacing",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "spacing_wide",
+    "category": "eye_spacing",
+    "label": "Wide-set eyes",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "Noticeably wide-set eyes.",
+    "image_prompt": "noticeably wide-set eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "spacing_close",
+    "category": "eye_spacing",
+    "label": "Close-set eyes",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "Slightly close-set eyes.",
+    "image_prompt": "slightly close-set eyes",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "nose_straight",
+    "category": "nose_shape",
+    "label": "Straight nose",
+    "weight": 1.5,
+    "rarity": "common",
+    "prompt_hint": "A straight nose with a clean bridge.",
+    "image_prompt": "a straight nose with a clean bridge",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "nose_button",
+    "category": "nose_shape",
+    "label": "Button nose",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "A short button nose with a rounded tip.",
+    "image_prompt": "a short button nose with a rounded tip",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "nose_aquiline",
+    "category": "nose_shape",
+    "label": "Aquiline nose",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "A prominent aquiline nose.",
+    "image_prompt": "a prominent aquiline nose",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "nose_broad",
+    "category": "nose_shape",
+    "label": "Broad nose",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "A broad nose with softly flared nostrils.",
+    "image_prompt": "a broad nose with softly flared nostrils",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "nose_upturned",
+    "category": "nose_shape",
+    "label": "Upturned nose",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "A gently upturned nose.",
+    "image_prompt": "a gently upturned nose",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "nose_narrow",
+    "category": "nose_shape",
+    "label": "Narrow nose",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "A narrow nose with a fine bridge.",
+    "image_prompt": "a narrow nose with a fine bridge",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "mouth_balanced",
+    "category": "mouth_shape",
+    "label": "Balanced lips",
+    "weight": 1.6,
+    "rarity": "common",
+    "prompt_hint": "Balanced, naturally shaped lips.",
+    "image_prompt": "balanced naturally shaped lips",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "mouth_wide",
+    "category": "mouth_shape",
+    "label": "Wide mouth",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "A wide, expressive mouth.",
+    "image_prompt": "a wide expressive mouth",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "mouth_cupids_bow",
+    "category": "mouth_shape",
+    "label": "Defined cupid's bow",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "A sharply defined cupid's bow.",
+    "image_prompt": "a sharply defined cupid's bow",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "mouth_full_lower",
+    "category": "mouth_shape",
+    "label": "Full lower lip",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "A distinctly fuller lower lip.",
+    "image_prompt": "a distinctly fuller lower lip",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "mouth_full",
+    "category": "mouth_shape",
+    "label": "Full lips",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Naturally full lips.",
+    "image_prompt": "naturally full lips",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "mouth_thin",
+    "category": "mouth_shape",
+    "label": "Fine lips",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "Fine, narrow lips.",
+    "image_prompt": "fine narrow lips",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "brows_soft_arch",
+    "category": "brow_shape",
+    "label": "Softly arched brows",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "Softly arched natural brows.",
+    "image_prompt": "softly arched natural brows",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "brows_straight",
+    "category": "brow_shape",
+    "label": "Straight brows",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "Straight brows with little arch.",
+    "image_prompt": "straight brows with little arch",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "brows_bold",
+    "category": "brow_shape",
+    "label": "Bold brows",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "Thick, strongly defined brows.",
+    "image_prompt": "thick strongly defined brows",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "brows_high_arch",
+    "category": "brow_shape",
+    "label": "High-arched brows",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "High, pronounced brow arches.",
+    "image_prompt": "high pronounced brow arches",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "brows_fine",
+    "category": "brow_shape",
+    "label": "Fine brows",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "Fine, lightly defined brows.",
+    "image_prompt": "fine lightly defined brows",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "facial_detail_none",
+    "category": "facial_detail",
+    "label": "No defining facial mark",
+    "weight": 5,
+    "rarity": "common",
+    "prompt_hint": "No single small mark defines her face.",
+    "image_prompt": "",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 0
+    },
+    "enabled": true
+  },
+  {
+    "id": "detail_light_freckles",
+    "category": "facial_detail",
+    "label": "Light freckles",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "A light dusting of freckles across her nose and cheeks.",
+    "image_prompt": "a light dusting of freckles across her nose and cheeks",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "detail_left_dimple",
+    "category": "facial_detail",
+    "label": "Left cheek dimple",
+    "weight": 0.45,
+    "rarity": "rare",
+    "prompt_hint": "One pronounced dimple in her left cheek when she smiles.",
+    "image_prompt": "one pronounced dimple in her left cheek when she smiles",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "detail_right_beauty_mark",
+    "category": "facial_detail",
+    "label": "Beauty mark",
+    "weight": 0.35,
+    "rarity": "rare",
+    "prompt_hint": "One small beauty mark high on her right cheek.",
+    "image_prompt": "one small beauty mark high on her right cheek",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  },
+  {
+    "id": "detail_tooth_gap",
+    "category": "facial_detail",
+    "label": "Small tooth gap",
+    "weight": 0.3,
+    "rarity": "rare",
+    "prompt_hint": "A small natural gap between her front teeth.",
+    "image_prompt": "a small natural gap between her front teeth",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "detail_brow_scar",
+    "category": "facial_detail",
+    "label": "Brow scar",
+    "weight": 0.25,
+    "rarity": "rare",
+    "prompt_hint": "A short healed scar crossing her left eyebrow.",
+    "image_prompt": "a short healed scar crossing her left eyebrow",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 3
+    },
+    "enabled": true
+  }
 ]

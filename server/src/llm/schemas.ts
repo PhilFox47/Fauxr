@@ -70,6 +70,7 @@ export const ACTOR_CHAT = spec('her_reply', obj({
     react: nstr,
     photo_options: nullable(arr(str)),
     in_the_act: bool,
+    ending: nstr,
   }),
 }));
 
@@ -80,12 +81,12 @@ export const VOICE_NOTE = spec('voice_note', obj({
 
 export const DATE_BEAT = spec('date_beat', obj({
   text: str,
-  hidden: obj({ thoughts: str, mood: str, wants: str, scene: roleplayScene, callback_used: nstr, in_the_act: bool, joined: arr(npc), left: arr(str), outfit_changes: outfitChanges }),
+  hidden: obj({ thoughts: str, mood: str, wants: str, scene: roleplayScene, callback_used: nstr, in_the_act: bool, joined: arr(npc), left: arr(str), outfit_changes: outfitChanges, ending: nstr }),
 }));
 
 export const CALL_BEAT = spec('call_beat', obj({
   text: str,
-  hidden: obj({ thoughts: str, mood: str, wants: str, callback_used: nstr, in_the_act: bool }),
+  hidden: obj({ thoughts: str, mood: str, wants: str, callback_used: nstr, in_the_act: bool, ending: nstr }),
 }));
 
 const ledger = obj({
@@ -148,6 +149,15 @@ export const REAL_NAME = spec('real_name', obj({ real_name: str }));
 export const USERNAME = spec('username', obj({ username: str }));
 export const BIO = spec('bio', obj({ bio: str }));
 export const FANTASIES = spec('fantasies', obj({ fantasies: arr(str) }));
+export const SCHEDULE = spec('schedule', obj({
+  days: arr(obj({
+    date: str,
+    entries: arr(obj({ start: str, end: str, activity_id: str, detail: str })),
+  })),
+}));
+export const CHARACTER_COHERENCE = spec('character_coherence', obj({
+  changes: arr(obj({ field: str, choice: str, reason: str })),
+}));
 export const OUTFIT = spec('outfit', obj({ outfit: outfitPicks, note: str }));
 export const DATE_SCENE = spec('date_scene', obj({ situation: str, shows_face: bool, aspect: { type: 'string', enum: ['square', 'portrait', 'landscape'] } }));
 export const PROFILE_PIC = spec('profile_pic', obj({ profile_pic: str }));
@@ -159,6 +169,12 @@ export const STATUS_WITH_THREAD = spec('status', obj({
   status: str, location: str, activity: str, outfit: nullable(outfitPicks), thread: nint, happened: nstr, resolved: nbool,
 }));
 export const PHOTO_IDEA = spec('photo_idea', obj({ situation: str, aspect: { type: 'string', enum: ['square', 'portrait', 'landscape'] } }));
+export const STATUS_POST = spec('status_post', obj({
+  situation: str,
+  caption: str,
+  aspect: { type: 'string', enum: ['square', 'portrait', 'landscape'] },
+  shows_face: bool,
+}));
 export const IMAGE_REVIEW = spec('image_review', obj({ description: str, arousal_delta: num, ledger_fact: nstr, reaction_hint: str }));
 export const BACKDROP_PROMPT = spec('backdrop_prompt', obj({ prompt: str }));
 export const LOCATION = spec('location', obj({

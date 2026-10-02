@@ -17,7 +17,8 @@ import { herLayers, layerVisible } from './layers.js';
  * For that to make the cast varied, the cores themselves have to vary, so the candidates are
  * broad: a visible species, personality, humour, how she texts, how she talks dirty, style,
  * what she is proudest of, who she is in bed, her signature move, one or two of her kinks, her
- * job, her relationship status and her main hobby. One woman is two kinks and her personality;
+ * job, her relationship status and her hobbies/interests (one shared pastime slot).
+ * One woman is two kinks and her personality;
  * the next is her style, her job and how she flirts.
  * - Each candidate scores by how rare the rolled value is (softened, so one extremely rare
  *   kink does not win every time), a per-category lean, and a random jitter large enough that
@@ -29,8 +30,9 @@ import { herLayers, layerVisible } from './layers.js';
  *   part sex, two parts person.
  * - A species that shows in any photo always makes it. One she can hide (a witch, a succubus,
  *   an angel) is hers to reveal and never does; neither does her big secret.
- * Picked once at generation and stored (seed.core); existing characters get theirs on first
- * load (repo.ts), with a jitter keyed on their id so it is the same every time.
+ * New characters receive a causal Core before supporting rolls (core-generation.ts). This
+ * retrospective picker remains only for old saves that have no Core; its deterministic jitter
+ * preserves what their card shows across hydration.
  */
 
 export interface CoreTrait extends CoreEntry {
@@ -97,7 +99,12 @@ function options(seed: CharacterSeed): Option[] {
     ...(seed.relationship_status && !PLAIN_STATUS.has(seed.relationship_status)
       ? [{ category: 'relationship_status', id: seed.relationship_status, key: 'relationship_status', caption: 'Relationship', group: 'life', lean: 0.3 }]
       : []),
-    ...(seed.hobbies?.[0] ? [{ category: 'hobby', id: seed.hobbies[0], key: `hobby:${seed.hobbies[0]}`, caption: 'Lives for', group: 'life', lean: 0.2 }] : []),
+    ...(seed.hobbies ?? []).slice(0, 2).map((id, index) => ({
+      category: 'hobby', id, key: index === 0 ? 'hobby' : `hobby:${id}`, caption: 'Lives for', group: 'pastime', lean: 0.2,
+    })),
+    ...(seed.interests ?? []).slice(0, 2).map((id) => ({
+      category: 'interest', id, key: `interest:${id}`, caption: 'Into', group: 'pastime', lean: 0.15,
+    })),
   ];
 }
 

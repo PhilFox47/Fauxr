@@ -18,6 +18,7 @@ export const TEMPLATE_NAMES = [
   'actor_photo_idea', 'director_direction', 'director_generate_character',
   'director_write_bio', 'director_evaluate_image', 'director_date_summary',
   'director_call_summary', 'image_prompt_assembler', 'system_actor', 'system_director',
+  'director_schedule', 'actor_status_post', 'director_curate_character',
 ] as const;
 
 export type TemplateName =
@@ -33,13 +34,16 @@ export type TemplateName =
   | 'actor_photo_idea'
   | 'director_direction'
   | 'director_generate_character'
+  | 'director_curate_character'
   | 'director_write_bio'
   | 'director_evaluate_image'
   | 'director_date_summary'
   | 'director_call_summary'
   | 'image_prompt_assembler'
   | 'system_actor'
-  | 'system_director';
+  | 'system_director'
+  | 'director_schedule'
+  | 'actor_status_post';
 
 function isTemplateName(value: string): value is TemplateName {
   return (TEMPLATE_NAMES as readonly string[]).includes(value);
@@ -123,6 +127,21 @@ export function resetPromptOverride(name: string): EditablePrompt {
  */
 export function render(name: TemplateName, vars: Record<string, string | number | null | undefined>): string {
   let out = loadTemplate(name);
+
+  // Prompt overrides intentionally replace shipped templates wholesale. Keep older custom
+  // Actor prompts compatible with the ending field added later: without this small appended
+  // contract a saved override would still receive the stricter JSON schema but have no idea
+  // when the new value should be used. New/re-exported prompts already contain hidden.ending,
+  // so they are left exactly as edited.
+  if (!out.includes('hidden.ending')) {
+    if (name === 'actor_chat') {
+      out += '\n\n# NATURAL ENDINGS\nA conversation may rest. If this visible reply genuinely completes it for now, end without a maintenance question or new hook and return hidden.ending as "soft_close". Otherwise return null. This is a pause, never rejection or ghosting.\n';
+    } else if (name === 'actor_date') {
+      out += '\n\n# NATURAL ENDINGS\nIf this visible beat completes a real goodbye or departure and needs no answer inside the date, return hidden.ending as "end_session". The app will end the date after showing the beat. Otherwise return null.\n';
+    } else if (name === 'actor_call') {
+      out += '\n\n# NATURAL ENDINGS\nIf she audibly says goodbye or hangs up in this turn and needs no answer on the call, return hidden.ending as "end_session". The app will end the call after showing her words. Otherwise return null.\n';
+    }
+  }
 
   out = out.replace(/\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_m, key: string, body: string) => {
     const v = vars[key];

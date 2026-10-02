@@ -28,7 +28,8 @@ import { cosplayImageBlock } from './cosplay.js';
 import { duoImageBlock } from './duo.js';
 import { closetBlock, currentOutfit, outfitForImage } from './wardrobe.js';
 import { gameClockMs } from './clock.js';
-import { appearanceForShot, type AppearanceFraming } from './appearance.js';
+import { appearanceForShot, buildFacePassport, speciesMaterialPrompt, type AppearanceFraming } from './appearance.js';
+import { speciesPhysicalContract, speciesProfileComposition } from './species.js';
 
 /** Whether image generation is switched on at all. */
 export function photosEnabled(): boolean {
@@ -85,8 +86,7 @@ export function profilePictureState(characterId: string): 'none' | 'working' | '
 }
 
 /**
- * This chat's own clock (engine/clock.ts), but only for a message posted into the text chat -
- * a date beat runs on real time instead (see the type's own doc comment).
+ * The shared world clock for a message posted into text chat.
  */
 function textChatClockMs(characterId: string, dateId: string | null | undefined): number | null {
   if (dateId) return null;
@@ -271,7 +271,11 @@ export async function showPhoto(imageId: string): Promise<void> {
   })();
 }
 
-type PromptStyle = 'seedream' | 'z_image_turbo';
+type PromptStyle = 'seedream' | 'z_image_turbo' | 'chroma';
+
+function promptStyleFor(value: unknown): PromptStyle {
+  return value === 'z_image_turbo' || value === 'chroma' ? value : 'seedream';
+}
 
 /** A rare species can change the medium itself; ordinary species remain photographic. */
 export function imageRenderMode(seed: CharacterSeed): 'photo' | 'anime_2d' {
@@ -284,7 +288,7 @@ function usesAnimeRender(seed: CharacterSeed): boolean {
 
 /**
  * The floor every generated photo lands on, whatever kind of shot it is - split per
- * prompt-model, because the two send this in completely different shapes.
+ * prompt-model, because they send this in fundamentally different shapes.
  *
  * Seedream 5.0 Lite: a short natural-language suffix, and constraints as a genuinely
  * separate negative_prompt (see SEEDREAM_NEGATIVE below).
@@ -304,15 +308,17 @@ function usesAnimeRender(seed: CharacterSeed): boolean {
  * CANDID_SUFFIX below plus whatever the assembler itself wrote from her own account of the
  * shot.
  */
-const BASE_SUFFIX: Record<PromptStyle, string> = {
-  seedream:
-    'Rendered as a photorealistic photograph, not an illustration or a render, with real ' +
-    'unretouched skin texture.',
-  z_image_turbo:
-    'Rendered as a photorealistic photograph, not an illustration, cgi render or anime ' +
-    'style - real, unretouched skin with natural texture and pores, and anatomically ' +
-    'correct hands and limbs.',
-};
+function baseSuffix(seed: CharacterSeed, style: PromptStyle): string {
+  const speciesMaterial = speciesMaterialPrompt(seed);
+  const surface = speciesMaterial
+    ? `Her nonhuman body is physically real: ${speciesMaterial}`
+    : 'Her real, unretouched human skin has natural texture and pores.';
+  return style === 'seedream'
+    ? `Rendered as a photorealistic photograph, not an illustration or a render. ${surface}`
+    : style === 'z_image_turbo'
+      ? `Rendered as a photorealistic photograph, not an illustration, CGI render or anime style. ${surface} Hands and limbs are anatomically coherent.`
+      : `A natural photorealistic photograph with believable anatomy and ${speciesMaterial ? 'the described physical nonhuman material' : 'real skin texture'}.`;
+}
 
 const ANIME_BASE_SUFFIX =
   'Rendered entirely as a polished hand-drawn 2D anime illustration with clean expressive ' +
@@ -343,7 +349,9 @@ const ANIME_SPICY_SUFFIX =
  * fake. The candid and date paths carry their own, milder "she is an attractive woman,
  * photographed honestly" language in the assembler template instead.
  */
-const FLATTERING_SUFFIX = 'Framed from the waist up or closer, her face sharp, clearly lit and fully visible, from a flattering angle.';
+const FLATTERING_SUFFIX = 'Her face is sharp, clearly lit and fully visible from a flattering angle.';
+const FACE_FREE_PROFILE_SUFFIX =
+  'Composed as an intentional, attractive dating-profile image; preserve the requested crop, pose and concealment instead of forcing her face into view.';
 
 /**
  * The "taken on her phone, right now" look - added on top of BASE_SUFFIX for a chat or
@@ -353,13 +361,16 @@ const FLATTERING_SUFFIX = 'Framed from the waist up or closer, her face sharp, c
  */
 const CANDID_SUFFIX: Record<PromptStyle, string> = {
   seedream:
-    'Shot as a candid amateur phone photo, taken in this exact moment: natural available ' +
-    'light, softly imperfect handheld framing, a little sensor grain, shallow phone-lens ' +
+    'Shot on her own phone by her in this exact moment. If she is visible, this is a physically ' +
+    'possible front-camera, mirror, or propped-phone self-portrait; otherwise it is her rear-camera view. ' +
+    'Natural available ' +
+    'light, softly imperfect phone-camera framing, a little sensor grain, shallow phone-lens ' +
     'depth of field.',
   z_image_turbo:
-    'Shot as a candid amateur phone photo taken in this exact moment, with natural ' +
-    'available light, softly imperfect handheld framing, a little sensor grain and shallow ' +
-    'phone-lens depth of field - not a studio-lit or posed professional-model photo.',
+    'A physically possible self-taken phone photo: front camera, mirror, propped timer, or her ' +
+    'rear-camera view as appropriate. Natural available light and mild phone-camera imperfection, not a studio shoot.',
+  chroma:
+    'A physically plausible self-taken phone image using a front camera, mirror, propped timer, or her rear-camera view as appropriate, with natural available light and ordinary phone-camera texture.',
 };
 
 /**
@@ -379,6 +390,8 @@ const DATE_SUFFIX: Record<PromptStyle, string> = {
     'Framed as if by an unseen observer standing right there with them, natural eye-level ' +
     'distance, real depth into the room behind her - not a phone selfie, not a posed studio ' +
     'portrait.',
+  chroma:
+    'Seen at natural eye-level social distance in the real venue, with spatial depth around her rather than a studio portrait setup.',
 };
 
 /**
@@ -394,6 +407,8 @@ const SCENE_SUFFIX: Record<PromptStyle, string> = {
   z_image_turbo:
     'Seen through his own eyes, first person, in the actual place and its actual light - not a ' +
     'phone photo, not a posed portrait, not a staged set.',
+  chroma:
+    'A first-person view from his position inside the established place and its actual light.',
 };
 
 const SCENE_NEGATIVE = 'No studio lighting, no posed model styling, no staged set, no camera or phone in her hand unless the scene has one.';
@@ -406,13 +421,33 @@ const SCENE_NEGATIVE = 'No studio lighting, no posed model styling, no staged se
  */
 const SPICY_SUFFIX: Record<PromptStyle, string> = {
   seedream:
-    'Shot as an intimate amateur phone photo she took of herself for one man, posed on purpose ' +
-    'the way she knows looks good: real skin, a natural body, a little sensor grain.',
+    'Shot as an intimate amateur phone photo she physically took herself for one man, using a ' +
+    'front camera, mirror, or visibly plausible propped-phone viewpoint, posed on purpose ' +
+    'the way she knows looks good: physically believable body texture and a little sensor grain.',
   z_image_turbo:
-    'Shot as an intimate amateur phone photo she took of herself for one man, posed on purpose ' +
-    'the way she knows looks good, with real skin, a natural body and a little sensor grain - ' +
+    'Shot as an intimate amateur phone photo she physically took herself for one man, using a ' +
+    'front camera, mirror, or visibly plausible propped-phone viewpoint, posed on purpose ' +
+    'the way she knows looks good, with physically believable body texture and a little sensor grain - ' +
     'not a studio shoot.',
+  chroma:
+    'An intimate self-portrait she physically took with a front camera, mirror, or plausibly propped phone, deliberately posed in her real surroundings.',
 };
+
+/**
+ * Chat images are messages she photographed herself, not an invisible photographer's view.
+ * This is appended to the situation in code (rather than existing only as a template section)
+ * so an older runtime DB override of image_prompt_assembler still receives the constraint.
+ * It is assembler-only: the clean authored situation remains what history and captions see.
+ */
+function selfTakenCaptureContract(): string {
+  return [
+    'CAPTURE OWNERSHIP (higher priority than any conflicting camera wording above): she took this image herself, with her own phone.',
+    'If she is visible, choose exactly one physically possible setup: (1) front camera held at arm length, with the phone outside the image; (2) mirror selfie, with the phone visible only in the mirror; or (3) phone deliberately propped on a real surface with a timer, described as a stationary timer shot rather than handheld or candid.',
+    'The same phone taking the picture cannot appear directly between her face and the viewer; that composition is possible only as a reflection in a mirror.',
+    'If she is not visible, this is her rear-camera point of view.',
+    'Never use an unseen photographer, overhead observer, floating camera, drone view, or external third-person angle. Repair an impossible viewpoint while preserving the intended pose, clothes, action and mood.',
+  ].join(' ');
+}
 
 /**
  * Sent with every Seedream image regardless of kind - the airbrushed-render look, the
@@ -561,7 +596,7 @@ export interface ShootingConditions {
  * crooked horizon onto her own lead image would be the wrong correction entirely. What it
  * does get is the room - even her best photo was taken somewhere real.
  */
-function shootingConditions(kind: 'profile' | 'moment' | 'spicy' | 'date' | 'scene', situation = ''): ShootingConditions {
+function shootingConditions(kind: 'profile' | 'moment' | 'status' | 'spicy' | 'date' | 'scene', situation = ''): ShootingConditions {
   if (kind === 'profile') return { light: '', flaw: '', lived_in: pickOne(LIVED_IN_DETAILS) };
   // An in-person scene already has real light and a real venue. A random photographic
   // condition turned night cafés into grey daylight and restaurant walk-ins into warm
@@ -575,6 +610,12 @@ function shootingConditions(kind: 'profile' | 'moment' | 'spicy' | 'date' | 'sce
       lived_in: namedElsewhere ? '' : pickOne(LIVED_IN_DETAILS),
     };
   }
+  // A Status is selected media, even when it is casual. The ordinary-moment pool contains
+  // deliberately hostile frames (green strip light, missed focus, a face a stop under) that
+  // make sense as accidental chat snapshots but made stories look like discarded takes. Its
+  // authored concept owns composition and light; the standing phone suffix supplies enough
+  // imperfection without randomly sabotaging a picture she chose to publish.
+  if (kind === 'status') return { light: '', flaw: '', lived_in: '' };
   return { light: pickOne(LIGHT_CONDITIONS), flaw: pickOne(CAPTURE_FLAWS), lived_in: pickOne(LIVED_IN_DETAILS) };
 }
 
@@ -612,19 +653,18 @@ const ANIME_REF_NOTE =
   'identity, hair and colouring. It does not fix this frame: expression, pose, composition ' +
   'and surroundings all come from the description above.';
 
-/**
- * Her private identity plate and public profile picture are stable; every conversational
- * shot after them gets a fresh seed instead.
- *
- * One fixed seed used to be reused for every single image of a character, which stacked with
- * the reference image and a demeanour line that never changes to leave the prompt doing
- * almost all of the differing on its own - so her photos came back with the same expression
- * and the same head angle over and over. Nothing reads this value back (it is persisted for
- * the image log and nothing else), so a fresh seed per run also gives "regenerate" something
- * real to change: re-running the same job used to hand back a near-identical picture.
- */
-function seedFor(characterSeed: CharacterSeed, isProfile: boolean): number {
-  return isProfile ? characterSeed.image_seed : randInt(1, 2_000_000_000);
+/** Seed policy follows the available identity mechanism; see the branches below. */
+function seedFor(characterSeed: CharacterSeed, isProfile: boolean, style: PromptStyle, previousSeed: number | null): number {
+  // A reference-capable model already has a likeness anchor and benefits from fresh noise.
+  // Z-Image has no reference input: changing both its prose and initial noise every time was
+  // effectively asking it to invent a new woman. Its scene prompt still changes composition.
+  if (isProfile) return characterSeed.image_seed;
+  if (style !== 'z_image_turbo') return randInt(1, 2_000_000_000);
+  // A redraw of the same stored job must not be byte-identical. Nearby deterministic seeds
+  // provide an escape hatch while ordinary new shots return to the character's identity root.
+  return previousSeed == null
+    ? characterSeed.image_seed
+    : (previousSeed % 2_000_000_000) + 1;
 }
 
 /**
@@ -696,6 +736,14 @@ function sizeFor(job: Pick<ImageJob, 'kind' | 'aspect'>): string {
 
 function promptLimit(): number {
   return getSettings().models.image.max_prompt_chars;
+}
+
+function heightPhysicalContract(seed: CharacterSeed): string {
+  return String(find('height', seed.height)?.extra?.image_physical_contract ?? '').trim();
+}
+
+function heightProfileComposition(seed: CharacterSeed): string {
+  return String(find('height', seed.height)?.extra?.profile_composition ?? '').trim();
 }
 
 function promptWithTail(body: string, tail: string, max: number): string {
@@ -793,6 +841,11 @@ function showsFace(job: Pick<ImageJob, 'shows_face'>): boolean {
   return job.shows_face !== 0;
 }
 
+function profileFormatShowsFace(seed: CharacterSeed): boolean {
+  const format = seed.profile_photo_format ? find('profile_photo_format', seed.profile_photo_format) : null;
+  return format?.extra?.shows_face !== false;
+}
+
 function framingFor(job: Pick<ImageJob, 'kind' | 'aspect'>, facesCamera: boolean): AppearanceFraming {
   if (!facesCamera) return 'body';
   if (job.kind === 'identity' || job.kind === 'profile') return 'face';
@@ -810,6 +863,9 @@ export function characterGallery(characterId: string): ImageJob[] {
     .prepare(
       `SELECT * FROM images
        WHERE character_id = ? AND status = 'done' AND path IS NOT NULL AND kind != 'identity'
+         AND (kind != 'status' OR EXISTS (
+           SELECT 1 FROM status_posts sp WHERE sp.image_id = images.id AND sp.liked = 1
+         ))
        ORDER BY rowid DESC`,
     )
     .all(characterId) as ImageJob[];
@@ -901,6 +957,9 @@ export function photoSelfBlock(seed: CharacterSeed, opts: { profile?: boolean; c
   const label = (cat: string, id: string | undefined) => (id ? find(cat, id)?.label ?? id : '');
   const hintOf = (cat: string, id: string | undefined) => (id ? find(cat, id)?.prompt_hint ?? '' : '');
   const style = find('clothing_style', seed.clothing_style);
+  const profileFormat = opts.profile && seed.profile_photo_format
+    ? find('profile_photo_format', seed.profile_photo_format)
+    : null;
   const pride = find('body_pride', seed.body_pride);
   const ink = seed.tattoos.map((t) => `${label('tattoo_motif', t.motif)} (${label('tattoo_position', t.position)})`);
   const metal = seed.piercings.map((p) => `${label('piercing_type', p.type)} (${label('piercing_position', p.position)})`);
@@ -908,6 +967,7 @@ export function photoSelfBlock(seed: CharacterSeed, opts: { profile?: boolean; c
     `How you look: ${seed.appearance_prompt}`,
     `Your figure: ${[label('body_type', seed.body_type), label('breast_size', seed.breast_size) && `${label('breast_size', seed.breast_size).toLowerCase()} breasts`, label('butt_size', seed.butt_size) && `${label('butt_size', seed.butt_size).toLowerCase()} butt`].filter(Boolean).join(', ')}`,
     style ? `Your style: ${style.label} - ${style.prompt_hint}` : '',
+    profileFormat ? `Required lead-photo format: ${profileFormat.label} - ${profileFormat.prompt_hint} This is mandatory; do not substitute a different format.` : '',
     style?.extra?.photo_scene ? `Where your photos tend to happen: ${String(style.extra.photo_scene)}` : '',
     pride ? `What you are proudest of: ${pride.label} - ${pride.prompt_hint || 'and your photos tend to show it off'}` : '',
     seed.lingerie_style ? `What you wear underneath: ${label('lingerie_style', seed.lingerie_style)} - ${hintOf('lingerie_style', seed.lingerie_style)}` : '',
@@ -951,6 +1011,7 @@ async function profilePicConcept(character: Character): Promise<string> {
             dossier: character.seed.hints.dossier || describeSeed(character.seed),
             photo_self: photoSelfBlock(character.seed, { profile: true, closet: true }),
             profile_heat: profileHeat(character.seed),
+            species_composition: speciesProfileComposition(character.seed),
           }),
         },
       ],
@@ -968,7 +1029,7 @@ async function profilePicConcept(character: Character): Promise<string> {
 
 type ImageJobOptions = {
   characterId: string;
-  kind: 'identity' | 'profile' | 'chat' | 'spicy' | 'date' | 'scene';
+  kind: 'identity' | 'profile' | 'chat' | 'spicy' | 'date' | 'scene' | 'status';
   /** Only for a 'date' or 'scene' job: which date's own transcript the result posts into. */
   dateId?: string | null;
   /** What she has on, as the image model gets it (wardrobe.ts), when the caller knows it. */
@@ -999,6 +1060,13 @@ export function enqueueImage(opts: ImageJobOptions): ImageJob {
   const job = insertImageJob(opts);
   void runImageJob(job.id, opts.situation, opts.postToChat !== false);
   return job;
+}
+
+/** A Status image is generated synchronously enough to publish only after the file exists. */
+export async function renderStandaloneImage(opts: ImageJobOptions): Promise<ImageJob> {
+  const job = insertImageJob(opts);
+  await runImageJob(job.id, opts.situation, false);
+  return getImageJob(job.id)!;
 }
 
 interface AssembledShot {
@@ -1080,25 +1148,37 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // What she has on, for a photo from inside the chat: her tracked outfit, fixed the first time
   // the photo is prepared so a "same idea" redraw keeps the same clothes. A profile picture is
   // her own account of a photo she chose; a date photo carries its outfit in its situation.
+  const facesCamera = isProfile ? profileFormatShowsFace(character.seed) : showsFace(job);
   let wearing = job.outfit ?? '';
-  if (!wearing && (job.kind === 'chat' || job.kind === 'spicy')) {
+  if (!wearing && (job.kind === 'chat' || job.kind === 'spicy' || job.kind === 'status')) {
     const rel = getRelationship(character.id);
-    if (rel) wearing = outfitForImage(currentOutfit(rel, character.seed));
+    if (rel) wearing = outfitForImage(currentOutfit(rel, character.seed), framingFor(job, facesCamera));
     db.prepare('UPDATE images SET outfit = ? WHERE id = ?').run(wearing, id);
   }
 
-  const facesCamera = isProfile || showsFace(job);
-  const promptStyle: PromptStyle = settings.models.image.prompt_style === 'z_image_turbo' ? 'z_image_turbo' : 'seedream';
+  const promptStyle = promptStyleFor(settings.models.image.prompt_style);
   const animeRender = usesAnimeRender(character.seed);
+  const selfTaken = job.kind === 'chat' || job.kind === 'spicy' || job.kind === 'status';
+  const physicalContract = [speciesPhysicalContract(character.seed), heightPhysicalContract(character.seed)].filter(Boolean).join(' ');
+  const speciesComposition = [speciesProfileComposition(character.seed), heightProfileComposition(character.seed)].filter(Boolean).join(' ');
+  // Runtime prompt overrides may predate the optional species variables. Put the profile
+  // geometry into the universally existing situation field too, so an old custom assembler
+  // cannot let an impossible mirror selfie overrule a fairy's scale contract.
+  const compositionAwareSituation = isProfile && speciesComposition
+    ? `${speciesComposition}\n\nChosen profile-photo idea: ${situation}`
+    : situation;
+  const assemblerSituation = selfTaken
+    ? `${compositionAwareSituation}\n\n${selfTakenCaptureContract()}`
+    : compositionAwareSituation;
 
   // This is an image-model reference asset, not a character-authored photo. A deterministic
   // neutral brief makes it a better likeness anchor and avoids spending a Director call on it.
   if (isIdentity) {
     const rawPrompt = animeRender
       ? `${appearanceForShot(character.seed, 'face')}; neutral head-and-shoulders character reference, nearly frontal, relaxed neutral expression, even soft light, plain unobtrusive background, face fully visible. ${ANIME_BASE_SUFFIX} ${ANIME_PROFILE_SUFFIX}`
-      : `${appearanceForShot(character.seed, 'face')}; neutral head-and-shoulders identity reference portrait, nearly frontal, relaxed neutral expression, even soft daylight, plain unobtrusive background, face fully visible. ${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`;
+      : `${appearanceForShot(character.seed, 'face')}; neutral head-and-shoulders identity reference portrait, nearly frontal, relaxed neutral expression, even soft daylight, plain unobtrusive background, face fully visible. ${baseSuffix(character.seed, promptStyle)} ${FLATTERING_SUFFIX}`;
     const prompt = truncateAtWord(rawPrompt, promptLimit() || rawPrompt.length);
-    const negative = promptStyle === 'z_image_turbo' ? '' : animeRender ? ANIME_NEGATIVE : BASE_NEGATIVE;
+    const negative = promptStyle === 'seedream' ? (animeRender ? ANIME_NEGATIVE : BASE_NEGATIVE) : '';
     db.prepare('UPDATE images SET prompt = ?, negative_prompt = ?, caption = ?, situation = ? WHERE id = ?')
       .run(prompt, negative, '', situation, id);
     return { prompt, negative, caption: '', situation };
@@ -1114,19 +1194,20 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // FLATTERING_SUFFIX rides with the profile picture only - see its own comment for why
   // asking every candid for a flattering angle was most of what made them read as shot
   // rather than taken.
+  const realismSuffix = baseSuffix(character.seed, promptStyle);
   const styleSuffix = animeRender
     ? `${ANIME_BASE_SUFFIX} ${isProfile ? ANIME_PROFILE_SUFFIX : isDate ? ANIME_DATE_SUFFIX : isScene ? ANIME_SCENE_SUFFIX : isSpicy ? ANIME_SPICY_SUFFIX : ANIME_MOMENT_SUFFIX}`
     : isProfile
-      ? `${BASE_SUFFIX[promptStyle]} ${FLATTERING_SUFFIX}`
+      ? `${realismSuffix} ${facesCamera ? FLATTERING_SUFFIX : FACE_FREE_PROFILE_SUFFIX}`
       : isDate
-        ? `${BASE_SUFFIX[promptStyle]} ${DATE_SUFFIX[promptStyle]}`
+        ? `${realismSuffix} ${DATE_SUFFIX[promptStyle]}`
         : isScene
-          ? `${BASE_SUFFIX[promptStyle]} ${SCENE_SUFFIX[promptStyle]}`
+          ? `${realismSuffix} ${SCENE_SUFFIX[promptStyle]}`
           : isSpicy
-            ? `${BASE_SUFFIX[promptStyle]} ${SPICY_SUFFIX[promptStyle]}`
-            : `${BASE_SUFFIX[promptStyle]} ${CANDID_SUFFIX[promptStyle]}`;
+            ? `${realismSuffix} ${SPICY_SUFFIX[promptStyle]}`
+            : `${realismSuffix} ${CANDID_SUFFIX[promptStyle]}`;
   // Drawn per shot rather than left to the assembler's taste - see LIGHT_CONDITIONS.
-  const conditions = shootingConditions(isProfile ? 'profile' : isScene ? 'scene' : isDate ? 'date' : isSpicy ? 'spicy' : 'moment', situation);
+  const conditions = shootingConditions(isProfile ? 'profile' : isScene ? 'scene' : isDate ? 'date' : isSpicy ? 'spicy' : job.kind === 'status' ? 'status' : 'moment', situation);
   // The provider this goes through hard-rejects a Z Image Turbo prompt over roughly 1200
   // characters - not a soft quality preference, an actual request error. That leaves the
   // assembler only whatever headroom styleSuffix does not already spend, plus a safety
@@ -1134,7 +1215,13 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // "keep it short", because "this model likes long prompts" is the model's general
   // reputation and directly wrong for this specific limit.
   const maxPromptChars = promptLimit();
-  const assemblerCharBudget = maxPromptChars ? Math.max(80, maxPromptChars - styleSuffix.length - 1) : 4000;
+  // Runtime prompt overrides may paraphrase or omit appearance. Reserve and inject this exact
+  // passport in code, because it is the only likeness anchor for text-only image models.
+  const facePassport = facesCamera ? truncateAtWord(buildFacePassport(character.seed), 340) : '';
+  const protectedPhysical = physicalContract ? `Physical species contract: ${physicalContract}` : '';
+  const assemblerCharBudget = maxPromptChars
+    ? Math.max(80, maxPromptChars - styleSuffix.length - facePassport.length - protectedPhysical.length - 3)
+    : 4000;
 
   const assembled = await completeJson<{ prompt: string; negative_prompt?: string; caption?: string }>({
     scope: 'image',
@@ -1147,8 +1234,11 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
         role: 'user',
         content: render('image_prompt_assembler', {
           appearance_prompt: appearanceForShot(character.seed, framingFor(job, facesCamera)),
+          nonhuman_material: speciesMaterialPrompt(character.seed) ?? '',
+          physical_contract: physicalContract,
+          species_composition: isProfile ? speciesComposition : '',
           image_kind: job.kind,
-          situation,
+          situation: assemblerSituation,
           visible_marks: visibleMarks(character, job.kind, facesCamera),
           demeanour: demeanourFor(character.seed, isProfile),
           light_condition: conditions.light,
@@ -1162,7 +1252,8 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
           is_profile: isProfile ? '1' : '',
           // A spicy photo is posed on purpose and gets its own section (is_spicy); the
           // "unposed, caught in the moment" rules are for an ordinary chat photo only.
-          is_moment: !isProfile && !isDate && !isSpicy && !isScene ? '1' : '',
+          is_moment: job.kind === 'chat' ? '1' : '',
+          is_status: job.kind === 'status' ? '1' : '',
           is_scene: isScene ? '1' : '',
           // Not a photo either of them took: how he actually sees her, right now, in the
           // room - see image_prompt_assembler.md's is_date section for the framing this
@@ -1185,6 +1276,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
           photo_scene: isDate || isScene ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
           mode_seedream: promptStyle === 'seedream' ? '1' : '',
           mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
+          mode_chroma: promptStyle === 'chroma' ? '1' : '',
           render_anime: animeRender ? '1' : '',
           z_char_budget: assemblerCharBudget,
         }),
@@ -1210,7 +1302,15 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
     });
     assembledPrompt = truncateAtWord(assembledPrompt, assemblerCharBudget);
   }
-  const prompt = promptWithTail(assembledPrompt, styleSuffix, maxPromptChars);
+  // These are separate semantic units. A bare space used to produce fragments such as
+  // "a very short bob timer shot" after the passport, making the camera setup look like part
+  // of her hairstyle. Complete sentence boundaries give a text-only renderer one clear
+  // subject followed by one clear photograph.
+  const promptBody = [facePassport, protectedPhysical, assembledPrompt]
+    .filter(Boolean)
+    .map((part) => /[.!?]$/.test(part.trim()) ? part.trim() : `${part.trim()}.`)
+    .join(' ');
+  const prompt = promptWithTail(promptBody, styleSuffix, maxPromptChars);
   // Z Image Turbo runs with no classifier-free guidance at all, so it never reads a
   // negative prompt - sending one is not wrong exactly, just pure dead weight, and the
   // constraints it would have carried are already folded into the prompt itself above
@@ -1221,7 +1321,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // (no studio lighting, no professional-model posing) only applies to a moment shot, for
   // the same reason. Kept short throughout: see BASE_NEGATIVE for why.
   const negative =
-    promptStyle === 'z_image_turbo'
+    promptStyle !== 'seedream'
       ? ''
       : [
           assembled.negative_prompt,
@@ -1242,7 +1342,7 @@ async function renderImageJob(job: ImageJob, character: Character, shot: Assembl
   const isProfile = job.kind === 'profile';
   const isIdentity = job.kind === 'identity';
   const isDate = job.kind === 'date' || job.kind === 'scene';
-  const facesCamera = isProfile || isIdentity || showsFace(job);
+  const facesCamera = isIdentity || (isProfile ? profileFormatShowsFace(character.seed) : showsFace(job));
   const { prompt, negative, situation } = shot;
   // Forcing her face to match a reference photo is exactly wrong for a shot that is not
   // supposed to show her face at all - it just makes one appear anyway. Skip the
@@ -1257,7 +1357,8 @@ async function renderImageJob(job: ImageJob, character: Character, shot: Assembl
   const referenceNote = ref ? (usesAnimeRender(character.seed) ? ANIME_REF_NOTE : REF_NOTE) : '';
   const finalPrompt = promptWithTail(prompt, referenceNote, promptLimit());
   const size = sizeFor(job);
-  const imageSeed = seedFor(character.seed, isProfile || isIdentity);
+  const promptStyle = promptStyleFor(settings.models.image.prompt_style);
+  const imageSeed = seedFor(character.seed, isProfile || isIdentity, promptStyle, job.seed);
   const b64 = await generateImage({
     prompt: finalPrompt,
     negativePrompt: negative,
@@ -1327,7 +1428,7 @@ export async function retryImageJob(id: string): Promise<void> {
   // falls back to blank, which is what lets a profile job's lazy profilePicConcept() run.
   // Her profile picture was never a chat message; retrying it from the Settings list used to
   // post it into her chat as a photo she sent.
-  await runImageJob(id, job.situation ?? '', job.kind !== 'profile' && job.kind !== 'identity');
+  await runImageJob(id, job.situation ?? '', !['profile', 'identity', 'status'].includes(job.kind));
 }
 
 /**
@@ -1388,7 +1489,7 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
   if (job.kind === 'identity') throw new Error('private identity references cannot be regenerated directly');
   const character = job.character_id ? getCharacter(job.character_id) : null;
   if (!character) throw new Error('character not found');
-  const kind = job.kind as 'profile' | 'chat' | 'spicy' | 'date' | 'scene';
+  const kind = job.kind as 'profile' | 'chat' | 'spicy' | 'date' | 'scene' | 'status';
 
   let situation: string;
   let aspect = job.aspect;
@@ -1405,7 +1506,7 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
       // A date's arrival photo has no separate "fresh idea" - what she is wearing is
       // decided once for the whole evening (dates.ts's decideDateOutfit), not per photo, so
       // "new idea" here just reassembles the same one rather than inventing an unrelated shot.
-      situation = job.situation || DEFAULT_SITUATION.date;
+      situation = job.situation || (kind === 'status' ? DEFAULT_SITUATION.status : DEFAULT_SITUATION.date);
     }
   } else {
     situation = job.situation || DEFAULT_SITUATION[kind];
@@ -1433,12 +1534,13 @@ export async function regenerateImage(id: string, mode: 'same_idea' | 'new_idea'
 }
 
 /** Used only when the Actor left no concrete detail to work from. */
-const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date' | 'scene', string> = {
+const DEFAULT_SITUATION: Record<'profile' | 'chat' | 'spicy' | 'date' | 'scene' | 'status', string> = {
   profile: 'a flirty close selfie held high in something low-cut, looking up into the lens',
   chat: 'a casual photo of whatever she is doing right now',
   spicy: 'a selfie from above, lying on her bed in just her underwear, one arm across her chest, taken for him',
   date: 'how she looks as he arrives, whatever she decided to wear tonight',
   scene: 'what he sees right now across the table from her',
+  status: 'a physically possible self-taken phone photo of what she is doing right now',
 };
 
 /**

@@ -35,10 +35,14 @@ export interface DiceContext {
   weights: Record<string, number>;
   /** Ids already drawn; used for affinity boosts and conflict filtering. */
   drawn: Set<string>;
+  /** Ids ruled out by attributes already drawn. Keeps conflicts effective in either direction. */
+  forbidden: Set<string>;
+  /** Rarity is charged while choosing the load-bearing Core, not again for its support. */
+  useRarity: boolean;
 }
 
 export function newContext(): DiceContext {
-  return { weights: {}, drawn: new Set() };
+  return { weights: {}, drawn: new Set(), forbidden: new Set(), useRarity: true };
 }
 
 const AFFINITY_BOOST = 2.5;
@@ -65,7 +69,7 @@ export function tasteWeight(category: string, id: string): number {
 }
 
 function effectiveWeight(a: Attribute, ctx: DiceContext): number {
-  let w = a.weight * rarityWeight(a) * (ctx.weights[a.id] ?? 1);
+  let w = a.weight * (ctx.useRarity ? rarityWeight(a) : 1) * (ctx.weights[a.id] ?? 1);
   // Affinity works both ways: an already-drawn tag that lists this one, or vice versa.
   for (const id of ctx.drawn) {
     if (a.affinities.includes(id)) w *= AFFINITY_BOOST;
@@ -90,14 +94,19 @@ export function roll(category: string, ctx: DiceContext, opts: RollOptions = {})
   const pool = byCategory(category).filter((a) => {
     if (opts.only && !opts.only.has(a.id)) return false;
     if (opts.exclude?.has(a.id)) return false;
-    if (a.conflicts.some((c) => ctx.drawn.has(c))) return false;
+    // Attribute tables are maintained by humans and older rows are not reliably symmetric.
+    // Honour both directions: the candidate may reject an earlier draw, or an earlier draw
+    // may already have forbidden this candidate.
+    if (ctx.forbidden.has(a.id) || a.conflicts.some((c) => ctx.drawn.has(c))) return false;
     return true;
   });
   if (pool.length === 0) return null;
 
   const raw = pool.map((a) => {
     // Rarity always applies; only the archetype's own re-weighting is skipped.
-    const base = opts.ignoreArchetype ? a.weight * rarityWeight(a) : effectiveWeight(a, ctx);
+    const base = opts.ignoreArchetype
+      ? a.weight * (ctx.useRarity ? rarityWeight(a) : 1)
+      : effectiveWeight(a, ctx);
     return Math.max(base * (opts.lean?.[a.id] ?? 1) * tasteWeight(a.category, a.id), 0);
   });
   // A 0 (his taste set to Never) is a real never. This used to be a 0.0001 floor per row,
@@ -119,6 +128,7 @@ export function roll(category: string, ctx: DiceContext, opts: RollOptions = {})
   }
   if (!opts.transient) {
     ctx.drawn.add(chosen.id);
+    for (const conflict of chosen.conflicts) ctx.forbidden.add(conflict);
     for (const aff of chosen.affinities) {
       ctx.weights[aff] = (ctx.weights[aff] ?? 1) * 1.8;
     }

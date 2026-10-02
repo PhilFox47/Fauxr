@@ -16,11 +16,11 @@ const {
 } = await import('../dist/db/attributes.js');
 const { clearSettingsCache, getSettings, normalizeSettings, saveSettings } = await import('../dist/config.js');
 const {
-  addMessage, createDate, createRelationship, deleteCharacter, getCharacter, getMessage, getRelationship, insertCharacter,
-  recentMessages, saveLocation,
+  addMessage, clearWakeup, createDate, createRelationship, deleteCharacter, getCharacter, getMessage, getRelationship,
+  getWakeup, insertCharacter, recentMessages, saveLocation, saveRelationship,
 } = await import('../dist/repo.js');
 const { castNoveltyScore, rollDiverseSeed, rollSeed, visualNoveltyScore } = await import('../dist/engine/generator.js');
-const { appearanceForShot, buildVisualIdentityPrompt } = await import('../dist/engine/appearance.js');
+const { appearanceForShot, buildFacePassport, buildVisualIdentityPrompt } = await import('../dist/engine/appearance.js');
 const { claimTurn, releaseTurn } = await import('../dist/engine/chat.js');
 const { dateBeatGuidance, endDate, handleUserDateMessage, locationBlock, sessionDurationMinutes } = await import('../dist/engine/dates.js');
 const { BudgetExceededError, complete, evaluateDecisions, generateImage, TimeoutError } = await import('../dist/llm/client.js');
@@ -36,11 +36,13 @@ const { detectTransactionalGate } = await import('../dist/engine/voice.js');
 const { applyUpdate } = await import('../dist/engine/state.js');
 const { evaluateConversation } = await import('./evaluate-roleplay.mjs');
 const { newContext } = await import('../dist/engine/dice.js');
-const { applyWardrobeLeans, BODY_JEWELLERY_IDS, styleFamilies, WARDROBE_ACCESSORY_IDS } = await import('../dist/engine/wardrobe.js');
+const { applyWardrobeLeans, BODY_JEWELLERY_IDS, outfitForImage, styleFamilies, WARDROBE_ACCESSORY_IDS } = await import('../dist/engine/wardrobe.js');
 const { locationMapBlock } = await import('../dist/engine/locations.js');
 const { heightRowsForSpecies, rollHeight } = await import('../dist/engine/height.js');
 const { cosplayMentions } = await import('../dist/engine/cosplay.js');
 const { imageRenderMode } = await import('../dist/engine/images.js');
+const { armConversationReopen, cancelConversationReopen, conversationReopenAt, CLOSED_REOPEN_REASON } = await import('../dist/engine/conversation-close.js');
+const { queueClosedConversationReopens } = await import('../dist/engine/scheduler.js');
 
 try {
   migrate();
@@ -66,7 +68,7 @@ try {
 
   const wardrobeItems = byCategory('wardrobe_item');
   const clothingStyles = byCategory('clothing_style');
-  assert.equal(byCategory('cosplay_character').length, 116);
+  assert.equal(byCategory('cosplay_character').length, 507);
   const cosplayBriefs = cosplayMentions('Could you come as Shadowheart or a Space cowgirl?');
   assert.deepEqual(cosplayBriefs.map((row) => row.id), ['shadowheart_bg3']);
   assert.match(cosplayBriefs[0].image_prompt ?? '', /white streak|silver filigree/i);
@@ -116,8 +118,37 @@ try {
   changedFace.face_shape = byCategory('face_shape').find((row) => row.id !== changedFace.face_shape).id;
   assert(visualNoveltyScore(appearanceSample[0], [changedFace]) > 0);
   assert(buildVisualIdentityPrompt(appearanceSample[0]).includes('Identity:'));
+  const textOnlyIdentity = buildFacePassport(appearanceSample[0]);
+  assert.match(textOnlyIdentity, /^The woman in this image is an? /);
+  assert(!/same recurring|preserve this identity/i.test(textOnlyIdentity));
+  assert(textOnlyIdentity.endsWith('.'));
   assert(!/\bbutt\b/i.test(appearanceForShot(appearanceSample[0], 'face')));
   assert(appearanceForShot(appearanceSample[0], 'full').includes('Build:'));
+  const layeredOutfit = { pieces: [
+    { slot: 'top', text: 'opaque black T-shirt', state: 'on' },
+    { slot: 'bottom', text: 'blue jeans', state: 'on' },
+    { slot: 'bra', text: 'red lace bra', state: 'on' },
+    { slot: 'panties', text: 'red lace panties', state: 'on' },
+    { slot: 'shoes', text: 'white trainers', state: 'on' },
+  ] };
+  assert.equal(outfitForImage(layeredOutfit).includes('red lace'), false, 'covered underwear must not reach image prompts');
+  assert.equal(outfitForImage(layeredOutfit, 'upper').includes('blue jeans'), false, 'off-frame lower clothing must not reach an upper-body prompt');
+  assert.equal(outfitForImage(layeredOutfit, 'upper').includes('white trainers'), false, 'off-frame shoes must not reach an upper-body prompt');
+  const exposedOutfit = { pieces: layeredOutfit.pieces.map((piece) =>
+    piece.slot === 'top' ? { ...piece, state: 'pushed up' } : piece.slot === 'bottom' ? { ...piece, state: 'pulled down' } : piece),
+  };
+  assert.match(outfitForImage(exposedOutfit), /red lace bra/);
+  assert.match(outfitForImage(exposedOutfit), /red lace panties/);
+  const sheerOutfit = { pieces: layeredOutfit.pieces.map((piece) =>
+    piece.slot === 'top' ? { ...piece, text: 'sheer black blouse' } : piece),
+  };
+  assert.match(outfitForImage(sheerOutfit, 'upper'), /red lace bra/);
+  const coveredOnePiece = { pieces: [
+    { slot: 'top', text: 'opaque white blouse', state: 'on' },
+    { slot: 'bottom', text: 'black pencil skirt', state: 'on' },
+    { slot: 'lingerie', text: 'purple lace bodysuit', state: 'on' },
+  ] };
+  assert.equal(outfitForImage(coveredOnePiece).includes('bodysuit'), false, 'covered one-piece lingerie must not reach image prompts');
   const wardrobeCtx = newContext();
   applyWardrobeLeans(wardrobeCtx, { species: 'angel', era: 'ancient_rome', hero_role: undefined });
   assert.equal(wardrobeCtx.weights.classical_roman, 5);
@@ -146,6 +177,7 @@ try {
   assert.equal(normalizeSettings({ models: { actor: { reasoning_effort: 'invalid' } } }).models.actor.reasoning_effort, 'none');
   assert.equal(normalized.models.evaluator.model, 'typesafe/jev-latest');
   assert.equal(normalized.models.evaluator.enabled, true);
+  assert.equal(normalizeSettings({ conversation_reopen_hours: 999 }).conversation_reopen_hours, 168);
   assert.equal(normalized.taste['lean/dom_sub'], 1);
   assert.equal(normalized.taste['appearance/test'], 0);
   assert.equal('unknown' in normalized, false);
@@ -185,6 +217,19 @@ try {
   createRelationship(characterId);
   const fixtureCharacter = getCharacter(characterId);
   assert(fixtureCharacter);
+  const closeRel = getRelationship(characterId);
+  saveSettings({ unprompted_messages: true, conversation_reopen_hours: 8 });
+  armConversationReopen(closeRel, 8);
+  assert(conversationReopenAt(closeRel) > Date.now());
+  cancelConversationReopen(closeRel);
+  assert.equal(conversationReopenAt(closeRel), null);
+  armConversationReopen(closeRel, 1);
+  closeRel.mood.conversation_reopen_at_ms = 1;
+  saveRelationship(closeRel);
+  queueClosedConversationReopens();
+  assert.equal(getWakeup(characterId)?.reason, CLOSED_REOPEN_REASON);
+  clearWakeup(characterId);
+  saveSettings({ unprompted_messages: false });
   assert.deepEqual(fixtureCharacter.seed.piercings, []);
   assert(fixtureCharacter.seed.wardrobe?.jewellery?.includes('septum_ring_jewelry'));
   assert(!fixtureCharacter.seed.accessories.includes('septum_ring_jewelry'));

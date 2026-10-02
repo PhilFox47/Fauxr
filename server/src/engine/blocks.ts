@@ -177,12 +177,20 @@ export function appearanceBlock(seed: CharacterSeed, includeCloset = true): stri
  * still there, but as flavour - before this, every character tended her whole attribute list
  * evenly and they all sounded like the same well-rounded person, above all about work.
  */
+export function dossierBlock(seed: CharacterSeed): string {
+  if (seed.hints.dossier_source !== 'generated' || !seed.hints.dossier?.trim()) return '';
+  return 'Backstage character dossier. This is interpretive texture derived from the structured character. ' +
+    'Use it for her small habits, contradictions and personal details. Structured seed facts remain authoritative ' +
+    'if anything conflicts. Do not recite, summarize or prove the dossier in dialogue. Most turns should use none of it explicitly.\n' +
+    seed.hints.dossier.trim();
+}
+
 export function coreBlock(character: Character): string {
   // The full communication block already carries her texting persona and its usage budget.
   // Repeating it as a core trait made rare surface voices (especially uwu speech) dominate
   // the whole prompt and drown out the person underneath.
   const traits = coreTraits(character.seed, character.id).filter((trait) => trait.category !== 'texting_persona');
-  if (!traits.length) return '';
+  if (!traits.length) return dossierBlock(character.seed);
   const jobIsCore = traits.some((t) => t.category === 'occupation');
   const [lead, ...rest] = [traits.slice(0, 2), traits.slice(2)];
   return [
@@ -195,6 +203,7 @@ export function coreBlock(character: Character): string {
       'flavour: it comes up when he asks or the moment calls for it, never as what you steer towards.' +
       (jobIsCore ? '' : ' Your job especially is a passing detail - a word here and there, not a topic.'),
     blueprintBlock(character.seed),
+    dossierBlock(character.seed),
   ].filter(Boolean).join('\n');
 }
 
@@ -210,10 +219,11 @@ export function lifeBlock(seed: CharacterSeed): string {
 }
 
 export function interestsBlock(seed: CharacterSeed): string {
-  // A hobby that is part of her core gets its full description; the rest are flavour.
+  // A pastime that is part of her core gets its full description; the rest are flavour.
   const coreHobby = (seed.core ?? []).find((e) => e.category === 'hobby')?.id;
+  const coreInterest = (seed.core ?? []).find((e) => e.category === 'interest')?.id;
   return [
-    `Into (flavour): ${seed.interests.map((i) => label('interest', i)).join(', ')}`,
+    `Into${coreInterest ? '' : ' (flavour)'}: ${seed.interests.map((i) => i === coreInterest ? `${label('interest', i)} (${hint('interest', i)}) - this one is a big part of you` : label('interest', i)).join(', ')}`,
     `Does: ${seed.hobbies.map((h) => (h === coreHobby ? `${label('hobby', h)} (${hint('hobby', h)}) - this one is a big part of you` : label('hobby', h))).join('; ')}`,
     cosplayBlock(seed),
   ].filter(Boolean).join('\n');
@@ -313,6 +323,10 @@ export function ledgerBlock(ledger: Ledger, _now: number, opts: { full?: boolean
   const lines: string[] = [
     'This is reference, not material to recite. Remember it silently. Mention an old detail only when the newest turn makes it newly useful; never repeat it merely to demonstrate continuity.',
   ];
+  if (opts.full && ledger.director_notes?.intent?.trim()) {
+    lines.push('Initial long-game inclination from character generation:\n' + ledger.director_notes.intent.trim() +
+      '\nThis is a starting hypothesis, not a goal, promise or required arc. The actual relationship and newest real message override it.');
+  }
   // A memory phrased as a condition on him ("two orders and he earns the nickname") is left
   // out of every prompt: stored once, it was fed back on every turn and carried a whole chat's
   // audition into the date. The entry stays in the ledger; it just stops being read.
@@ -578,18 +592,24 @@ export function recentPhotosFact(characterId: string, who: 'you' | 'she' = 'you'
  * them. Nothing is gated on this.
  */
 export function dateHistoryFact(dates: DateSession[]): string {
+  const planned = dates
+    .filter((d) => d.kind === 'date' && d.status === 'scheduled' && d.scheduled_at_ms != null)
+    .sort((a, b) => Number(a.scheduled_at_ms) - Number(b.scheduled_at_ms))[0];
+  const plannedLine = planned
+    ? ` They already have a date firmly scheduled at ${planned.where_at || 'the agreed place'} for ${new Date(planned.scheduled_at_ms!).toLocaleString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}; do not direct her to arrange or confirm another one while it is pending.`
+    : '';
   const ended = dates
     .filter((d) => d.kind === 'date' && d.status === 'ended')
     .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
   // Worded so it is not a gap to close: "never met up" read as the thing to fix next.
-  if (ended.length === 0) return 'No dates so far; everything between you has happened in the chat.';
+  if (ended.length === 0) return `No completed dates so far; everything between them has happened in the chat.${plannedLine}`;
   const last = ended[0];
   const hours = (Date.now() - Date.parse(last.ended_at ?? last.created_at)) / 3_600_000;
   const ago =
     hours < 1 ? 'less than an hour ago'
       : hours < 36 ? `${Math.round(hours)} hour${Math.round(hours) === 1 ? '' : 's'} ago`
         : `${Math.round(hours / 24)} day${Math.round(hours / 24) === 1 ? '' : 's'} ago`;
-  return `You have been on ${ended.length} date${ended.length === 1 ? '' : 's'} with him so far. The most recent one ended ${ago}.`;
+  return `You have been on ${ended.length} date${ended.length === 1 ? '' : 's'} with him so far. The most recent one ended ${ago}.${plannedLine}`;
 }
 
 export function historyBlock(
@@ -608,7 +628,7 @@ export function historyBlock(
     .map((m) => {
       // On a duo profile a message can be her partner's (meta.from), and she has to see whose.
       const who = m.sender === 'user' ? him : m.sender === 'character' ? (m.meta?.from ? String(m.meta.from) : her) : 'system';
-      // This chat's own clock (engine/clock.ts), not the real one - otherwise this timestamp
+      // Shared world-clock time (engine/clock.ts), not real bookkeeping time - otherwise this timestamp
       // and the "right now it is" line a few paragraphs down (moment.ts, also the game clock)
       // disagree inside the very same prompt, which is exactly what let a real conversation's
       // last message read as sent at 00:44 while "now" was already mid-morning. Falls back to

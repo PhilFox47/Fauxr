@@ -17,10 +17,9 @@ import { LIFE_THREADS } from '../llm/schemas.js';
  * her job, her flat and her hobbies, and every woman in the list had used up hers the same way.
  * Now each matched character has three or four storylines of her own - a feud with a colleague,
  * a tattoo she has booked, her sister's wedding - written by the model from her seed and mostly
- * out of her core, so a goth girl's storylines are not a nurse's. Her status refresh (status.ts,
- * already a call every 4-12 hours) moves one of them on by a sentence, so there is always
- * something new that happened to her since yesterday. The Director sees all of them; she sees
- * the latest few in her moment block. Nothing here is a topic list someone wrote by hand.
+ * out of her core, so a goth girl's storylines are not a nurse's. The Director sees all of
+ * them; she sees the latest few in her moment block. Nothing here is a topic list someone
+ * wrote by hand.
  */
 
 /** How many live storylines she keeps. */

@@ -2,7 +2,7 @@ import type { MatchSummary } from '../api';
 
 type AvatarSubject = Pick<
   MatchSummary,
-  'display_name' | 'avatar_emoji' | 'profile_picture'
+  'display_name' | 'avatar_emoji' | 'profile_picture' | 'availability' | 'has_status' | 'has_unseen_status'
 >;
 
 /**
@@ -24,7 +24,7 @@ export default function Avatar({
   onDate?: boolean;
 }) {
   return (
-    <div className={`avatar${small ? ' sm' : ''}`} aria-hidden="true">
+    <div className={`avatar${small ? ' sm' : ''}${match?.has_status ? ' has-story' : ''}${match?.has_unseen_status ? ' has-unseen-story' : ''}`} aria-hidden="true">
       {match?.profile_picture ? (
         <img src={match.profile_picture} alt="" />
       ) : match?.avatar_emoji ? (
@@ -38,6 +38,9 @@ export default function Avatar({
             <path d="M12 19.5S4.5 15 4.5 9.8A3.8 3.8 0 0 1 12 8.2a3.8 3.8 0 0 1 7.5 1.6C19.5 15 12 19.5 12 19.5Z" />
           </svg>
         </span>
+      )}
+      {!onDate && match?.availability && (
+        <span className={`dot-presence ${match.availability}`} title={match.availability === 'green' ? 'Available' : match.availability === 'yellow' ? 'Busy' : 'Unavailable'} />
       )}
     </div>
   );

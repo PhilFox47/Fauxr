@@ -3,6 +3,9 @@ import type { Character, Relationship } from '../types.js';
 import { coreTraits, isCore } from './profilecard.js';
 import { lifeLinesForHer } from './life.js';
 import { gameNow } from './clock.js';
+import { scheduleContext } from './schedule.js';
+import { recentStatusContext } from './status-posts.js';
+import { scheduledDateContext } from './scheduled-dates.js';
 
 /**
  * What is going on in her life at this exact moment, assembled in code from the clock and
@@ -37,7 +40,7 @@ function dayShape(now: Date): string {
   return 'It is the middle of the working week.';
 }
 
-export function describeHerMoment(character: Character, rel: Pick<Relationship, 'mood'>, now = gameNow(rel)): string {
+export function describeHerMoment(character: Character, rel: Pick<Relationship, 'mood'>, now = gameNow(rel), liveSession?: 'date' | 'call'): string {
   const seed = character.seed;
   const hour = now.getHours();
   const hint = (cat: string, id: string) => find(cat, id)?.prompt_hint || find(cat, id)?.label || id;
@@ -52,6 +55,15 @@ export function describeHerMoment(character: Character, rel: Pick<Relationship, 
       : `Your work, in the background: ${find('occupation', seed.occupation)?.label ?? seed.occupation}`,
     `Where you are living: ${find('living_situation', seed.living_situation)?.label ?? seed.living_situation}`,
   ];
+  if (liveSession) lines.push(liveSession === 'call'
+    ? 'Right now you are on this live phone call with him; that overrides what the calendar expected for this block.'
+    : 'Right now you are on this date with him; that overrides what the calendar expected for this block.');
+  const schedule = scheduleContext(character.id, false, !!liveSession);
+  if (schedule) lines.push(schedule);
+  const statuses = recentStatusContext(character.id);
+  if (statuses) lines.push(statuses);
+  const plannedDate = scheduledDateContext(character.id);
+  if (plannedDate && !liveSession) lines.push(plannedDate);
   if (hour >= 23 || hour < 5) {
     lines.push('It is very late. Either you cannot sleep, or you are out, or you are about to go to bed. Whichever it is, it is true and it shows.');
   }

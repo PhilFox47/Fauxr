@@ -1,0 +1,4100 @@
+[
+  {
+    "id": "three_d_printing",
+    "category": "hobby",
+    "label": "3D printing",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "prints useful brackets, tiny nonsense and replacement parts, then spends longer tuning the printer than printing",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "ballet_classes_adult",
+    "category": "hobby",
+    "label": "Adult ballet classes",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "takes ballet recreationally, knows exactly how much effort is hiding behind looking simple",
+    "image_prompt": null,
+    "affinities": [
+      "dancing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_gymnastics_adult",
+    "category": "hobby",
+    "label": "Adult gymnastics classes",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "trains as an adult beginner, surprisingly serious about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "aerial",
+    "category": "hobby",
+    "label": "Aerial silks",
+    "weight": 1.2,
+    "rarity": "uncommon",
+    "prompt_hint": "strong in an unexpected way, permanently bruised",
+    "image_prompt": null,
+    "affinities": [
+      "dancing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "allotment_gardening",
+    "category": "hobby",
+    "label": "Allotment gardening",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "maintains a small plot and develops strong feelings about slugs, weather and courgette surplus",
+    "image_prompt": null,
+    "affinities": [
+      "plants"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "beekeeping_hobby",
+    "category": "hobby",
+    "label": "Amateur beekeeping",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "keeps a hive in the garden, gives honey away in jam jars",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "amateur_radio",
+    "category": "hobby",
+    "label": "Amateur radio",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Enjoys catching strange voices and weather reports out of the air.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "taxidermy_hobby",
+    "category": "hobby",
+    "label": "Amateur taxidermy",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "learned from videos, keeps the results on a shelf that visitors always comment on",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dowsing_hobbyist",
+    "category": "hobby",
+    "label": "Amateur water dowsing",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "practices an old, mostly discredited skill and finds it genuinely calming",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "volunteer_animal",
+    "category": "hobby",
+    "label": "Animal shelter volunteer",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "walks the difficult dogs nobody else will",
+    "image_prompt": null,
+    "affinities": [
+      "animals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "archery",
+    "category": "hobby",
+    "label": "Archery",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "target archery at a club, very still and precise",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "arduino_projects",
+    "category": "hobby",
+    "label": "Arduino projects",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "builds small sensor and microcontroller projects, half practical and half because blinking LEDs remain satisfying",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "axe_throwing",
+    "category": "hobby",
+    "label": "Axe throwing",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "genuinely good at it, will not shut up about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "backpacking",
+    "category": "hobby",
+    "label": "Backpacking",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "carries everything she needs for several days and becomes weirdly opinionated about grams",
+    "image_prompt": null,
+    "affinities": [
+      "hiking",
+      "travel"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_badminton",
+    "category": "hobby",
+    "label": "Badminton",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "plays competitively at a club, faster and fiercer than it looks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "baking",
+    "category": "hobby",
+    "label": "Baking",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "bakes when stressed, results vary",
+    "image_prompt": null,
+    "affinities": [
+      "cooking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "baking_bread",
+    "category": "hobby",
+    "label": "Baking bread properly",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "kneads by hand, has strong opinions about crust",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "baking_pastry",
+    "category": "hobby",
+    "label": "Baking pastry specifically",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "croissants take three days and she does it anyway",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "gardening",
+    "category": "hobby",
+    "label": "Balcony gardening",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "grows things in too little space",
+    "image_prompt": null,
+    "affinities": [
+      "plants"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_ballroom",
+    "category": "hobby",
+    "label": "Ballroom dancing, competitively",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "competes properly, sequins and all, unexpectedly serious about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "beatmaking",
+    "category": "hobby",
+    "label": "Beatmaking",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "makes beats for fun, samples strange sounds and can lose an evening nudging one snare",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "blacksmithing",
+    "category": "hobby",
+    "label": "Beginner blacksmithing",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Loves the focus of heat, metal and making one clean deliberate shape.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bell_ringing_hobby",
+    "category": "hobby",
+    "label": "Bell ringing",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "rings at the local church on a rota, oddly meditative",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "belly_dancing",
+    "category": "hobby",
+    "label": "Belly dancing",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "takes regular classes, enjoys the control and musicality more than the costume fantasy",
+    "image_prompt": null,
+    "affinities": [
+      "dancing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "birdwatching_hobby",
+    "category": "hobby",
+    "label": "Birdwatching",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "goes out with binoculars intentionally and keeps some kind of list even if she denies being a list person",
+    "image_prompt": null,
+    "affinities": [
+      "birdwatching"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "scent_blending",
+    "category": "hobby",
+    "label": "Blending her own perfume",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "mixes scents at home, has a signature blend nobody else can name",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "blogging",
+    "category": "hobby",
+    "label": "Blogging",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "still writes longer posts on the internet because not every thought belongs in a disappearing feed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "board_game_nights",
+    "category": "hobby",
+    "label": "Board-game nights",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "has a regular group and willingly gives up entire evenings to cardboard and rules explanations",
+    "image_prompt": null,
+    "affinities": [
+      "boardgames"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bonsai",
+    "category": "hobby",
+    "label": "Bonsai cultivation",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "tends miniature trees with absurd patience, decades-long project mindset",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "book_club",
+    "category": "hobby",
+    "label": "Book club",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "meets regularly to discuss the book and, inevitably, everything around the book",
+    "image_prompt": null,
+    "affinities": [
+      "reading"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bookbinding",
+    "category": "hobby",
+    "label": "Bookbinding",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "makes notebooks nobody needs, beautifully",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bouldering",
+    "category": "hobby",
+    "label": "Bouldering",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "climbs without ropes, bruised shins she does not mind",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "climbing",
+    "category": "hobby",
+    "label": "Bouldering",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "climbs at a gym, has the calluses",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "boxing",
+    "category": "hobby",
+    "label": "Boxing",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "trains properly, hits things, sleeps better for it",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "brazilian_jiu_jitsu",
+    "category": "hobby",
+    "label": "Brazilian jiu-jitsu",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "spends evenings trying to choke friends in a completely consensual sporting context",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mechanical_keyboard_building",
+    "category": "hobby",
+    "label": "Building mechanical keyboards",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "lubricates switches and tunes stabilisers with a seriousness normally reserved for instruments",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pc_building",
+    "category": "hobby",
+    "label": "Building PCs",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "assembles and upgrades computers for herself and increasingly for friends who asked one innocent question",
+    "image_prompt": null,
+    "affinities": [
+      "tech",
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "terrarium_building",
+    "category": "hobby",
+    "label": "Building terrariums",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "tiny enclosed worlds on every shelf, very particular about moisture",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "burlesque",
+    "category": "hobby",
+    "label": "Burlesque",
+    "weight": 1.2,
+    "rarity": "uncommon",
+    "prompt_hint": "a burlesque troupe; feathers, gloves and perfect timing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cake_decorating",
+    "category": "hobby",
+    "label": "Cake decorating",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "spends far longer decorating cakes than eating them, owns suspiciously many piping tips",
+    "image_prompt": null,
+    "affinities": [
+      "baking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "calisthenics",
+    "category": "hobby",
+    "label": "Calisthenics",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "works on strength skills with bars and bodyweight, progress measured in annoyingly small improvements",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "calligraphy",
+    "category": "hobby",
+    "label": "Calligraphy",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "practices lettering slowly, finds it calming rather than productive",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "camping",
+    "category": "hobby",
+    "label": "Camping",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "regularly chooses to sleep outside and has equipment for making that choice less stupid",
+    "image_prompt": null,
+    "affinities": [
+      "hiking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "candle_making_hobby",
+    "category": "hobby",
+    "label": "Candle making",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "experiments with wax, wicks and scents, occasionally produces something genuinely excellent",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "canoeing",
+    "category": "hobby",
+    "label": "Canoeing",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "likes long slow days on water and owns equipment that takes up an unreasonable amount of storage",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "card_games",
+    "category": "hobby",
+    "label": "Card games",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "plays seriously, keeps score, does not go easy on anyone",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cheese_making",
+    "category": "hobby",
+    "label": "Cheesemaking",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "makes small batches at home and has learned milk becomes expensive disappointment very efficiently",
+    "image_prompt": null,
+    "affinities": [
+      "cooking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "chess",
+    "category": "hobby",
+    "label": "Chess",
+    "weight": 0.5,
+    "rarity": "common",
+    "prompt_hint": "plays online at night",
+    "image_prompt": null,
+    "affinities": [
+      "philosophy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "chocolate_making",
+    "category": "hobby",
+    "label": "Chocolate making",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "tempers chocolate at home and now notices every time somebody else did not",
+    "image_prompt": null,
+    "affinities": [
+      "cooking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_shooting_clay",
+    "category": "hobby",
+    "label": "Clay pigeon shooting",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "shoots at a range, better shot than most people guess",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "programming_side_projects",
+    "category": "hobby",
+    "label": "Coding side projects",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "builds little tools nobody commissioned, some useful and some existing purely because she wanted them to",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "coin_collecting",
+    "category": "hobby",
+    "label": "Coin collecting",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "keeps coins for history, design and tiny differences most people would spend without noticing",
+    "image_prompt": null,
+    "affinities": [
+      "history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cold_plunge",
+    "category": "hobby",
+    "label": "Cold plunging",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "does it most mornings, insufferable about the benefits",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "open_water",
+    "category": "hobby",
+    "label": "Cold water swimming",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "all year, evangelical about it",
+    "image_prompt": null,
+    "affinities": [
+      "swimming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sea_swimming",
+    "category": "hobby",
+    "label": "Cold water swimming",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "all year, will describe the exact temperature unprompted",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "collage_art",
+    "category": "hobby",
+    "label": "Collage art",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "cuts up old magazines and makes something new with them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "book_collecting",
+    "category": "hobby",
+    "label": "Collecting books",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "owns more books than storage permits and distinguishes 'to read' from 'to own' without shame",
+    "image_prompt": null,
+    "affinities": [
+      "reading"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "camera_collecting",
+    "category": "hobby",
+    "label": "Collecting old cameras",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "buys cameras that still work, mostly, and enjoys the machinery as much as the photographs",
+    "image_prompt": null,
+    "affinities": [
+      "photography"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "perfume_collecting",
+    "category": "hobby",
+    "label": "Collecting perfume",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "keeps samples and bottles, chooses scent by mood and remembers where she first smelled particular ones",
+    "image_prompt": null,
+    "affinities": [
+      "perfume"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "postcard_collecting",
+    "category": "hobby",
+    "label": "Collecting postcards",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "keeps cards from places, flea markets and strangers' old holidays",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "rock_collecting",
+    "category": "hobby",
+    "label": "Collecting rocks and minerals",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "brings home interesting stones intentionally and has labels for at least some of them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sneaker_collecting",
+    "category": "hobby",
+    "label": "Collecting sneakers",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "tracks releases and keeps at least some shoes too clean for their stated purpose",
+    "image_prompt": null,
+    "affinities": [
+      "sneaker_culture"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "trading_card_collecting",
+    "category": "hobby",
+    "label": "Collecting trading cards",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "sorts cards into sleeves, cares about condition and occasionally spends too much on shiny cardboard",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "vintage_clothing_collecting",
+    "category": "hobby",
+    "label": "Collecting vintage clothing",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "hunts for older pieces and cares about labels, construction and provenance",
+    "image_prompt": null,
+    "affinities": [
+      "fashion",
+      "thrifting"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "vinyl_collecting",
+    "category": "hobby",
+    "label": "Collecting vinyl",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "has strict rules about what earns a shelf spot",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "watch_collecting",
+    "category": "hobby",
+    "label": "Collecting watches",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "owns several mechanical watches and can explain why they are not remotely the same thing",
+    "image_prompt": null,
+    "affinities": [
+      "watches_mechanical"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "community_gardening",
+    "category": "hobby",
+    "label": "Community gardening",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "works on a shared garden with neighbours, meaning both plants and mild committee politics",
+    "image_prompt": null,
+    "affinities": [
+      "plants",
+      "volunteering"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "community_theatre",
+    "category": "hobby",
+    "label": "Community theatre",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "acts in local productions, giving up several evenings a week for people she now knows far too well",
+    "image_prompt": null,
+    "affinities": [
+      "theatre"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_climbing",
+    "category": "hobby",
+    "label": "Competition climbing",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "climbs to compete, not just to relax, takes it seriously",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "scrabble_competitive",
+    "category": "hobby",
+    "label": "Competitive Scrabble",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "knows words that do not exist anywhere else in her vocabulary",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cooking_hobby",
+    "category": "hobby",
+    "label": "Cooking",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "cooks for pleasure when she has time, tries new dishes instead of only feeding herself",
+    "image_prompt": null,
+    "affinities": [
+      "cooking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cosplay",
+    "category": "hobby",
+    "label": "Cosplay",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "makes costumes, it eats her weekends",
+    "image_prompt": null,
+    "affinities": [
+      "anime"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "cosplays": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "makeup_creative",
+    "category": "hobby",
+    "label": "Creative makeup looks",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "tries makeup looks for fun even when she has nowhere particular to wear them",
+    "image_prompt": null,
+    "affinities": [
+      "fashion"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "crochet",
+    "category": "hobby",
+    "label": "Crochet",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "makes blankets, clothes and small objects one loop at a time, usually while watching something",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_curling",
+    "category": "hobby",
+    "label": "Curling",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "plays in a genuinely tiny local league, delighted whenever anyone asks about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dancing",
+    "category": "hobby",
+    "label": "Dancing",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "dance class or just clubs, either way it is her outlet",
+    "image_prompt": null,
+    "affinities": [
+      "nightlife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "darts",
+    "category": "hobby",
+    "label": "Darts",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "plays in a pub league, better than she lets on at first",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_darts_playing",
+    "category": "hobby",
+    "label": "Darts, competitively",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "plays in a real league, far better than the pub suggests",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_debate_club",
+    "category": "hobby",
+    "label": "Debate club, as an adult",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "argues for sport in an actual organised club",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bread_sculpture",
+    "category": "hobby",
+    "label": "Decorative bread baking",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Turns bread into improbable shapes and insists it is a completely normal hobby.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "digital_art",
+    "category": "hobby",
+    "label": "Digital illustration",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "draws on a tablet, has layers named things like 'final_final2' and understands exactly why",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "djing",
+    "category": "hobby",
+    "label": "DJing",
+    "weight": 1.2,
+    "rarity": "uncommon",
+    "prompt_hint": "small rooms, bad money, loves it",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dog_training",
+    "category": "hobby",
+    "label": "Dog training",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "does structured training beyond basic ownership, carries treats in pockets by reflex",
+    "image_prompt": null,
+    "affinities": [
+      "animals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "nail_art_hobby",
+    "category": "hobby",
+    "label": "Doing nail art",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "paints tiny designs on her own nails and loses unreasonable time to one thumbnail",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stand_up_comedy_open_mic",
+    "category": "hobby",
+    "label": "Doing open mic stand-up",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "gets up and tries new material most weeks, thick skin about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "drag_performance",
+    "category": "hobby",
+    "label": "Drag performance",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "builds looks and performs a drag persona at small shows or events",
+    "image_prompt": null,
+    "affinities": [
+      "nightlife",
+      "fashion"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "drawing",
+    "category": "hobby",
+    "label": "Drawing",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "sketchbook always in the bag",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "electronics_tinkering",
+    "category": "hobby",
+    "label": "Electronics tinkering",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "solders small projects at a desk and keeps drawers full of parts that will definitely be useful later",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "embroidery",
+    "category": "hobby",
+    "label": "Embroidery",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "stitches small detailed designs slowly enough to count as meditation",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_baking_shows",
+    "category": "hobby",
+    "label": "Enters local baking competitions",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "takes the village fete far more seriously than it warrants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "puzzle_solving",
+    "category": "hobby",
+    "label": "Escape rooms and puzzles",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "does escape rooms obsessively, keeps a tally of times",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "genealogy_hobby",
+    "category": "hobby",
+    "label": "Family-history research",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "spends evenings in records and archives reconstructing branches of a family tree",
+    "image_prompt": null,
+    "affinities": [
+      "history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_fencing",
+    "category": "hobby",
+    "label": "Fencing",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "fences at a club, surprisingly aggressive about a genteel sport",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fermenting_hobby",
+    "category": "hobby",
+    "label": "Fermentation projects",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "has something bubbling, souring or ageing on the counter more often than not",
+    "image_prompt": null,
+    "affinities": [
+      "fermentation"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "film_photography",
+    "category": "hobby",
+    "label": "Film photography",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Shoots on film, enjoys the wait, and keeps the imperfect frames.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fishing",
+    "category": "hobby",
+    "label": "Fishing",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "alone, early, mostly for the quiet",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "flower_arranging",
+    "category": "hobby",
+    "label": "Flower arranging",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "buys stems and builds arrangements at home, treats colour balance as a small puzzle",
+    "image_prompt": null,
+    "affinities": [
+      "plants"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "drone_flying",
+    "category": "hobby",
+    "label": "Flying camera drones",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "flies drones recreationally, interested in both the view and not crashing an expensive object into a tree",
+    "image_prompt": null,
+    "affinities": [
+      "photography",
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "foraging",
+    "category": "hobby",
+    "label": "Foraging",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "comes back with things and cooks them",
+    "image_prompt": null,
+    "affinities": [
+      "mycology"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fossil_collecting",
+    "category": "hobby",
+    "label": "Fossil collecting",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "looks for and keeps legal fossil finds, genuinely excited by fragments other people mistake for rocks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "geocaching",
+    "category": "hobby",
+    "label": "Geocaching",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Likes finding the overlooked corner of a place with a small clue and a reason to wander.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "concert_going",
+    "category": "hobby",
+    "label": "Going to gigs",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "spends real evenings in small venues and comes home with ringing ears",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cinema_going",
+    "category": "hobby",
+    "label": "Going to the cinema",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "actually goes to screenings instead of waiting for everything to appear at home",
+    "image_prompt": null,
+    "affinities": [
+      "film"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mushroom_growing",
+    "category": "hobby",
+    "label": "Growing mushrooms",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "cultivates edible mushrooms at home and is delighted every time the strange little crop works",
+    "image_prompt": null,
+    "affinities": [
+      "mycology"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hand_lettering",
+    "category": "hobby",
+    "label": "Hand lettering",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "practices letterforms for hours, gives the results away as gifts",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "horse_care_volunteer",
+    "category": "hobby",
+    "label": "Helping at a horse rescue",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "volunteers around rescued horses, mostly cleaning and carrying things rather than cinematic bonding",
+    "image_prompt": null,
+    "affinities": [
+      "animals",
+      "volunteering"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hiking",
+    "category": "hobby",
+    "label": "Hiking",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "out of the city whenever she can be",
+    "image_prompt": null,
+    "affinities": [
+      "travel"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "historical_reenactment",
+    "category": "hobby",
+    "label": "Historical reenactment",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Likes the research, the costumes and the feeling of learning through doing.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "home_automation",
+    "category": "hobby",
+    "label": "Home automation",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "automates lights, sensors and routines until occasionally turning on a lamp requires debugging",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "home_brewing",
+    "category": "hobby",
+    "label": "Home brewing",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "makes beer in the kitchen, results improving slowly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "home_mixology",
+    "category": "hobby",
+    "label": "Home mixology",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Experiments with drinks, syrups and garnish with just enough theatre.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "horse_riding",
+    "category": "hobby",
+    "label": "Horse riding",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "rides regularly, knows most of the hobby is actually work done before and after the pretty part",
+    "image_prompt": null,
+    "affinities": [
+      "animals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "ice_skating",
+    "category": "hobby",
+    "label": "Ice skating",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Skates for the rhythm and the private feeling of getting a difficult thing right.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "improv_theatre",
+    "category": "hobby",
+    "label": "Improv theatre",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "goes to classes or jams and has deliberately trained herself to commit to bad ideas quickly",
+    "image_prompt": null,
+    "affinities": [
+      "theatre"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "indoor_gardening",
+    "category": "hobby",
+    "label": "Indoor gardening",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "keeps enough houseplants that watering becomes a recurring logistical event",
+    "image_prompt": null,
+    "affinities": [
+      "plants"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "jam_making",
+    "category": "hobby",
+    "label": "Jam and preserve making",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "turns seasonal fruit into enough jars to accidentally become a gift supplier",
+    "image_prompt": null,
+    "affinities": [
+      "cooking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "jewellery_making",
+    "category": "hobby",
+    "label": "Jewellery making",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "makes earrings, chains or rings at home and gives away more pieces than she sells",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "journaling",
+    "category": "hobby",
+    "label": "Journaling",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "writes most nights, will not show anyone the notebook",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "judo",
+    "category": "hobby",
+    "label": "Judo",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "trains throws and groundwork at a club, extremely familiar with being dropped correctly",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "juggling",
+    "category": "hobby",
+    "label": "Juggling",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "learned properly, can do it with almost anything handed to her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "karaoke",
+    "category": "hobby",
+    "label": "Karaoke",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sings in public recreationally and has at least one song she always reaches for",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_karate",
+    "category": "hobby",
+    "label": "Karate",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "trains and grades properly, has a belt she is quietly proud of",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "kayaking",
+    "category": "hobby",
+    "label": "Kayaking",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "gets onto rivers or calm coastal water whenever weather and free weekends cooperate",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "aquarium_keeping",
+    "category": "hobby",
+    "label": "Keeping an aquarium",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "maintains a small aquatic ecosystem and spends more time testing water than visitors realise",
+    "image_prompt": null,
+    "affinities": [
+      "animals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "reptile_keeping",
+    "category": "hobby",
+    "label": "Keeping reptiles",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "keeps a snake or lizard and is used to explaining that no, it is not trying to murder her",
+    "image_prompt": null,
+    "affinities": [
+      "animals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "kickboxing",
+    "category": "hobby",
+    "label": "Kickboxing",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "trains pads and sparring, likes the combination of technique and hitting something hard",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "knitting",
+    "category": "hobby",
+    "label": "Knitting",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "knits during films, gives the results away",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "language_exchange",
+    "category": "hobby",
+    "label": "Language exchange",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "meets or calls other learners regularly to practise speaking badly until it improves",
+    "image_prompt": null,
+    "affinities": [
+      "language_learning"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_lawn_bowls",
+    "category": "hobby",
+    "label": "Lawn bowls",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "plays at a club that skews much older than her, loves it anyway",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "leathercraft",
+    "category": "hobby",
+    "label": "Leathercraft",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "cuts, punches and hand-stitches small leather goods at a workbench",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "letterpress_printing",
+    "category": "hobby",
+    "label": "Letterpress printing",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "prints on an actual antique press, extremely patient work",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "life_drawing",
+    "category": "hobby",
+    "label": "Life drawing",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "goes to figure-drawing sessions and likes the discipline of seeing a body quickly and accurately",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "linocut",
+    "category": "hobby",
+    "label": "Linocut printmaking",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "carves blocks and prints them by hand, likes how physical the image-making feels",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "linux_tinkering",
+    "category": "hobby",
+    "label": "Linux tinkering",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "breaks and repairs her own computer in ways normal operating systems politely prevent",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "local_history_research",
+    "category": "hobby",
+    "label": "Local-history research",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "reads old maps, newspapers and records about places she walks through every week",
+    "image_prompt": null,
+    "affinities": [
+      "history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "lock_picking",
+    "category": "hobby",
+    "label": "Lock picking",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "a hobby that alarms people, practised on her own locks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "longboarding",
+    "category": "hobby",
+    "label": "Longboarding",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "cruises rather than tricks, headphones in, evening thing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "macrame",
+    "category": "hobby",
+    "label": "Macramé",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "ties decorative knots into plant hangers and wall pieces, mostly because the repetitive work settles her",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "magnet_fishing",
+    "category": "hobby",
+    "label": "Magnet fishing",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "throws a strong magnet into canals and rivers to see what somebody lost there decades ago",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "podcasting_hobby",
+    "category": "hobby",
+    "label": "Making a podcast",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "records a small podcast with friends or alone, learns audio editing through necessity",
+    "image_prompt": null,
+    "affinities": [
+      "podcasts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "candle_dipping",
+    "category": "hobby",
+    "label": "Making candles from scratch",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "the flat smells like whatever she is testing this week",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pasta_making",
+    "category": "hobby",
+    "label": "Making fresh pasta",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "rolls and shapes pasta at home because buying it would apparently be too easy",
+    "image_prompt": null,
+    "affinities": [
+      "cooking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "upcycled_jewellery",
+    "category": "hobby",
+    "label": "Making jewellery from found materials",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "turns odd found objects into wearable pieces",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pizza_making",
+    "category": "hobby",
+    "label": "Making pizza obsessively",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "has opinions about dough hydration, oven temperature and whether tonight's crust counts as progress",
+    "image_prompt": null,
+    "affinities": [
+      "cooking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "short_filmmaking",
+    "category": "hobby",
+    "label": "Making short films",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "makes tiny productions with friends and solves most problems with improvisation and borrowed gear",
+    "image_prompt": null,
+    "affinities": [
+      "film"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "video_essays",
+    "category": "hobby",
+    "label": "Making video essays",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "turns an interest into twenty minutes of script, footage and a deadline she invented herself",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "youtube_videos",
+    "category": "hobby",
+    "label": "Making YouTube videos",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "plans, shoots and edits videos recreationally, which takes far longer than watching them suggests",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "zine_making",
+    "category": "hobby",
+    "label": "Making zines",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "writes, cuts, photocopies or prints tiny publications for an audience measured in dozens",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "marquetry",
+    "category": "hobby",
+    "label": "Marquetry woodwork",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "inlays wood patterns by hand, extremely slow and precise",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_swimming_masters",
+    "category": "hobby",
+    "label": "Masters swimming, competitively",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "races in her age group, genuinely fast",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "metal_detecting",
+    "category": "hobby",
+    "label": "Metal detecting",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "walks fields and beaches listening for buried rubbish with occasional flashes of actual history",
+    "image_prompt": null,
+    "affinities": [
+      "history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "game_modding_hobby",
+    "category": "hobby",
+    "label": "Modding games",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "installs, configures or makes mods until the game becomes partly her own maintenance project",
+    "image_prompt": null,
+    "affinities": [
+      "gaming",
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "model_making",
+    "category": "hobby",
+    "label": "Model making",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "builds tiny, precise things, loses hours to it without noticing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "model_railways",
+    "category": "hobby",
+    "label": "Model railways",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "builds miniature rail layouts with enough scenic detail to consume whole weekends",
+    "image_prompt": null,
+    "affinities": [
+      "railways",
+      "miniatures"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "motorcycles",
+    "category": "hobby",
+    "label": "Motorbikes",
+    "weight": 1.2,
+    "rarity": "uncommon",
+    "prompt_hint": "rides, maintains it herself, knows the risk",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mountain_biking",
+    "category": "hobby",
+    "label": "Mountain biking",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "comes back covered in mud most weekends and loves it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "muay_thai",
+    "category": "hobby",
+    "label": "Muay Thai",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "trains seriously enough to own too many pairs of wraps and regard bruised shins as routine",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mudlarking",
+    "category": "hobby",
+    "label": "Mudlarking",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "searches riverbanks at low tide for old objects, has a small collection of finds",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "volunteer_museum",
+    "category": "hobby",
+    "label": "Museum volunteering",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "gives regular time to a local museum, somewhere between public-facing help and boxes nobody has catalogued yet",
+    "image_prompt": null,
+    "affinities": [
+      "museums",
+      "volunteering"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "museums",
+    "category": "hobby",
+    "label": "Museums",
+    "weight": 0.7,
+    "rarity": "common",
+    "prompt_hint": "goes alone and takes her time",
+    "image_prompt": null,
+    "affinities": [
+      "art",
+      "history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_netball",
+    "category": "hobby",
+    "label": "Netball",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "plays in a league, genuinely fierce about a sport people underrate",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "orienteering",
+    "category": "hobby",
+    "label": "Orienteering",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "navigates with map and compass for fun, competitive about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "origami",
+    "category": "hobby",
+    "label": "Origami",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "folds paper into increasingly unnecessary levels of precision",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "outdoor_climbing_hobby",
+    "category": "hobby",
+    "label": "Outdoor rock climbing",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "climbs actual rock on weekends, checks knots obsessively and brings home scratched knees",
+    "image_prompt": null,
+    "affinities": [
+      "climbing_outdoor"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stand_up_paddleboarding",
+    "category": "hobby",
+    "label": "Paddleboarding",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "goes at dawn before the water gets busy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "painting",
+    "category": "hobby",
+    "label": "Painting",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "keeps paints and half-finished canvases around, does it for the process more than the wall space",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "miniature_painting",
+    "category": "hobby",
+    "label": "Painting miniatures",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "paints tiny figures under bright lamps, owns brushes too small to explain to normal people",
+    "image_prompt": null,
+    "affinities": [
+      "miniatures"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "paper_marbling",
+    "category": "hobby",
+    "label": "Paper marbling",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "makes swirling patterned paper in a tray, impossible to repeat exactly and that is part of the appeal",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bird_photography",
+    "category": "hobby",
+    "label": "Photographing birds specifically",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "waits hours for one good shot, entirely worth it to her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "photography",
+    "category": "hobby",
+    "label": "Photography",
+    "weight": 1.2,
+    "rarity": "uncommon",
+    "prompt_hint": "shoots on an actual camera, not just a phone",
+    "image_prompt": null,
+    "affinities": [
+      "art",
+      "film"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pickling",
+    "category": "hobby",
+    "label": "Pickling",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "keeps jars of vegetables becoming more interesting on a shelf",
+    "image_prompt": null,
+    "affinities": [
+      "fermentation"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pilates",
+    "category": "hobby",
+    "label": "Pilates",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "goes regularly, discovered the quiet-looking exercises are often the cruelest ones",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "plane_spotting",
+    "category": "hobby",
+    "label": "Plane spotting",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "visits airports or viewpoints to identify aircraft, knows registrations she has no practical reason to remember",
+    "image_prompt": null,
+    "affinities": [
+      "aviation"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "music_practice",
+    "category": "hobby",
+    "label": "Playing an instrument",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "plays, badly or well, mostly for herself",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "basketball_playing",
+    "category": "hobby",
+    "label": "Playing basketball",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "plays pickup or league games regularly, likes the pace and constant small decisions",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bass_guitar",
+    "category": "hobby",
+    "label": "Playing bass",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "plays bass for fun or with friends, notices rhythm sections more than she used to",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "drums",
+    "category": "hobby",
+    "label": "Playing drums",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "practises rhythm loudly and has negotiated with neighbours at least once",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "football_playing",
+    "category": "hobby",
+    "label": "Playing football",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "plays in an amateur team or regular five-a-side game and gets genuinely competitive",
+    "image_prompt": null,
+    "affinities": [
+      "football"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "guitar",
+    "category": "hobby",
+    "label": "Playing guitar",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "plays regularly at home, good enough to have preferences about strings and bad habits about leaving it out",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "piano",
+    "category": "hobby",
+    "label": "Playing piano",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "sits down to play often enough that pieces live in her hands instead of only on sheet music",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "saxophone",
+    "category": "hobby",
+    "label": "Playing saxophone",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "plays often enough to care about reeds and where she is allowed to practise",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tennis_recreational",
+    "category": "hobby",
+    "label": "Playing tennis",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "plays regularly without needing tournament brackets to justify it",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "violin",
+    "category": "hobby",
+    "label": "Playing violin",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "practises regularly, has accepted that beautiful sound begins with years of sounding terrible",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pole_dancing",
+    "category": "hobby",
+    "label": "Pole dancing",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "pole classes twice a week; bruised thighs and very strong grip",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_pool",
+    "category": "hobby",
+    "label": "Pool, competitively",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "hustles slightly, will not admit how good she actually is at first",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "pottery",
+    "category": "hobby",
+    "label": "Pottery",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "throws badly and persistently, gives away lopsided mugs",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_powerlifting",
+    "category": "hobby",
+    "label": "Powerlifting",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "trains for numbers specifically, quietly very strong",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "home_music_production",
+    "category": "hobby",
+    "label": "Producing music at home",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "builds tracks on a laptop, owns more plugins than finished songs",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene",
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "houseplant_propagation",
+    "category": "hobby",
+    "label": "Propagating houseplants",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "every surface has a jar rooting something, gives cuttings away constantly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_trivia",
+    "category": "hobby",
+    "label": "Pub quiz, competitively",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "takes it more seriously than a pub quiz probably deserves",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "quilting",
+    "category": "hobby",
+    "label": "Quilting",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "builds large textile projects from tiny repeated decisions, patient about it in a way she is not elsewhere",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "rc_cars",
+    "category": "hobby",
+    "label": "RC cars",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "builds or drives radio-controlled cars, much more mechanically involved than the toy-store version suggests",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "reading_hobby",
+    "category": "hobby",
+    "label": "Reading",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "reads regularly for pleasure, usually has one book open and another she meant to start",
+    "image_prompt": null,
+    "affinities": [
+      "reading"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "book_restoration",
+    "category": "hobby",
+    "label": "Restoring old books",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "rebinds damaged books by hand, patient meticulous work",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "restoring",
+    "category": "hobby",
+    "label": "Restoring old things",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "furniture, radios, bikes. Patient work in a cold garage",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mudlarking_river",
+    "category": "hobby",
+    "label": "River mudlarking",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "searches the foreshore at low tide, has a small case of finds",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_cycling",
+    "category": "hobby",
+    "label": "Road cycling, competitively",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "trains seriously on weekends, opinionated about gear",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "roller_skating",
+    "category": "hobby",
+    "label": "Roller skating",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "skates recreationally, somewhere between smooth rhythm and preventable bruises",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_rowing",
+    "category": "hobby",
+    "label": "Rowing",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "up before dawn on the water, quietly very fit because of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "running",
+    "category": "hobby",
+    "label": "Running",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "runs several times a week, it is her head-clearing thing",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "homelab",
+    "category": "hobby",
+    "label": "Running a home server",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "maintains a small home server for media, backups or services and calls outages 'learning experiences'",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "running_clubs",
+    "category": "hobby",
+    "label": "Running club",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "runs with a group Tuesday nights, more social than sporty about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "recreational_sailing",
+    "category": "hobby",
+    "label": "Sailing",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "gets out on small boats for pleasure, enjoys having weather make the final decision",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_sailing",
+    "category": "hobby",
+    "label": "Sailing, competitively",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "races small boats on weekends, very at home on the water",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "salsa_dancing",
+    "category": "hobby",
+    "label": "Salsa dancing",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "goes to classes and social nights, comfortable learning through another person's timing",
+    "image_prompt": null,
+    "affinities": [
+      "dancing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "scrapbooking",
+    "category": "hobby",
+    "label": "Scrapbooking",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "turns photos and tiny scraps of ordinary life into overly elaborate physical pages",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "screen_printing",
+    "category": "hobby",
+    "label": "Screen printing",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "prints small runs of posters or shirts, permanently has ink somewhere inconvenient",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "scrimshaw",
+    "category": "hobby",
+    "label": "Scrimshaw carving",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "carves detailed designs into bone or antler, a strange inherited hobby",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "scuba_diving",
+    "category": "hobby",
+    "label": "Scuba diving",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "certified, saves for trips specifically to dive somewhere new",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sculpting",
+    "category": "hobby",
+    "label": "Sculpting",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "works in clay or another material, enjoys making something physical from a vague shape",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "self_portrait_photography",
+    "category": "hobby",
+    "label": "Self-portrait photography",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "sets up her own shots for fun, comfortable being both subject and photographer",
+    "image_prompt": null,
+    "affinities": [
+      "photography"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sewing_hobby",
+    "category": "hobby",
+    "label": "Sewing",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "makes and alters clothes at home, owns more fabric than current projects justify",
+    "image_prompt": null,
+    "affinities": [
+      "sewing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "silversmithing_hobby",
+    "category": "hobby",
+    "label": "Silversmithing",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "takes workshop classes and makes small pieces of jewellery with fire, files and disproportionate patience",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sim_racing",
+    "category": "hobby",
+    "label": "Sim racing",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "a wheel and pedals set up at home, takes it more seriously than it looks",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "choir",
+    "category": "hobby",
+    "label": "Sings in a choir",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "weekly, sincerely, would rather he did not come and watch",
+    "image_prompt": null,
+    "affinities": [
+      "music_practice"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "skating",
+    "category": "hobby",
+    "label": "Skating",
+    "weight": 1.2,
+    "rarity": "uncommon",
+    "prompt_hint": "skateboard or roller skates, scraped knees",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "skiing",
+    "category": "hobby",
+    "label": "Skiing",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "plans at least part of winter around getting onto a mountain",
+    "image_prompt": null,
+    "affinities": [
+      "travel"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "snowboarding",
+    "category": "hobby",
+    "label": "Snowboarding",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "spends winter weekends chasing decent snow and pretending chairlift queues are fine",
+    "image_prompt": null,
+    "affinities": [
+      "travel"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "soap_making",
+    "category": "hobby",
+    "label": "Soap making",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "makes small batches at home and has learned chemistry matters more than rustic aesthetics",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "social_dancing",
+    "category": "hobby",
+    "label": "Social dancing",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Goes dancing for the music, the physical conversation and the easy excuse to dress up.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "songwriting",
+    "category": "hobby",
+    "label": "Songwriting",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "writes songs privately or with friends, keeps fragments of lyrics in her phone",
+    "image_prompt": null,
+    "affinities": [
+      "music_scene"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "baking_sourdough",
+    "category": "hobby",
+    "label": "Sourdough",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "has named the starter and is normal about nothing else",
+    "image_prompt": null,
+    "affinities": [
+      "baking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "coffee_brewing",
+    "category": "hobby",
+    "label": "Specialty coffee brewing",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "owns a grinder and at least two ways to make coffee that involve a timer",
+    "image_prompt": null,
+    "affinities": [
+      "coffee_culture"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "speed_puzzling",
+    "category": "hobby",
+    "label": "Speed puzzling",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Can turn a table, a timer and a thousand cardboard pieces into a very satisfying evening.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "speedrunning_hobby",
+    "category": "hobby",
+    "label": "Speedrunning games",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "practises one game repeatedly to shave seconds off a route normal players never notice",
+    "image_prompt": null,
+    "affinities": [
+      "game_speedrunning",
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_squash",
+    "category": "hobby",
+    "label": "Squash",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "plays aggressively, will not go easy on anyone",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stained_glass",
+    "category": "hobby",
+    "label": "Stained glass",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "cuts and solders coloured glass into panels that take far longer than anybody expects",
+    "image_prompt": null,
+    "affinities": [
+      "crafts"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stamp_collecting",
+    "category": "hobby",
+    "label": "Stamp collecting",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "collects tiny pieces of postal history with surprising patience",
+    "image_prompt": null,
+    "affinities": [
+      "history"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stone_carving",
+    "category": "hobby",
+    "label": "Stone carving",
+    "weight": 0.4,
+    "rarity": "rare",
+    "prompt_hint": "carves small pieces from stone, slow deliberate work",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "stone_skipping",
+    "category": "hobby",
+    "label": "Stone skipping",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "takes it far more seriously than a beach activity usually warrants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "storm_chasing",
+    "category": "hobby",
+    "label": "Storm chasing",
+    "weight": 0.4,
+    "rarity": "very_rare",
+    "prompt_hint": "travels to photograph or observe severe weather while taking the risk far more seriously than the phrase suggests",
+    "image_prompt": null,
+    "affinities": [
+      "weather_systems"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "streaming",
+    "category": "hobby",
+    "label": "Streaming",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "streams to a small audience sometimes",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "streaming_hobby",
+    "category": "hobby",
+    "label": "Streams casually",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "streams for a handful of regulars, not trying to make it a job",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "street_photography_hobby",
+    "category": "hobby",
+    "label": "Street photography",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "walks with a camera looking for small unscripted moments rather than landmarks",
+    "image_prompt": null,
+    "affinities": [
+      "street_photography"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "surfing",
+    "category": "hobby",
+    "label": "Surfing",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "chases it whenever the coast is near, permanently slightly salty",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "swimming",
+    "category": "hobby",
+    "label": "Swimming",
+    "weight": 0.7,
+    "rarity": "common",
+    "prompt_hint": "laps at the pool, early",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "swing_dancing",
+    "category": "hobby",
+    "label": "Swing dancing",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "goes to social dances, likes fast music and the mildly obsessive little community around it",
+    "image_prompt": null,
+    "affinities": [
+      "dancing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "table_tennis",
+    "category": "hobby",
+    "label": "Table tennis",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "plays often enough that casual opponents stop finding it casual",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tabletop_rpg_playing",
+    "category": "hobby",
+    "label": "Tabletop roleplaying",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "plays in a regular campaign, owns dice for reasons beyond numerical necessity",
+    "image_prompt": null,
+    "affinities": [
+      "tabletop"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tabletop_wargaming",
+    "category": "hobby",
+    "label": "Tabletop wargaming",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "plays miniature war games, equal parts tactics, measuring tape and arguing about line of sight",
+    "image_prompt": null,
+    "affinities": [
+      "miniatures"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "taekwondo",
+    "category": "hobby",
+    "label": "Taekwondo",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "trains kicks and patterns regularly, flexibility earned rather than decorative",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tea_brewing",
+    "category": "hobby",
+    "label": "Tea brewing",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "keeps several teas and actually changes water temperature instead of throwing boiling water at everything",
+    "image_prompt": null,
+    "affinities": [
+      "tea"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "amateur_astronomy_hobby",
+    "category": "hobby",
+    "label": "Telescope observing",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "takes a telescope outside on clear nights and has learned astronomy includes a lot of waiting in the cold",
+    "image_prompt": null,
+    "affinities": [
+      "astronomy_amateur"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_tennis",
+    "category": "hobby",
+    "label": "Tennis, competitively",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "plays in a league, genuinely good, modest about it until pushed",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "thrifting",
+    "category": "hobby",
+    "label": "Thrifting",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "weekends in second-hand shops",
+    "image_prompt": null,
+    "affinities": [
+      "fashion"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "trail_running",
+    "category": "hobby",
+    "label": "Trail running",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "runs off-road because ordinary running apparently did not involve enough mud and hills",
+    "image_prompt": null,
+    "affinities": [
+      "running"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "trainspotting",
+    "category": "hobby",
+    "label": "Trainspotting",
+    "weight": 0.5,
+    "rarity": "rare",
+    "prompt_hint": "goes out specifically to see and record particular trains, entirely sincere about it",
+    "image_prompt": null,
+    "affinities": [
+      "railways"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "competitive_frisbee",
+    "category": "hobby",
+    "label": "Ultimate frisbee",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "plays in a league, very into the community around it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "upcycling_furniture",
+    "category": "hobby",
+    "label": "Upcycling furniture",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "rescues things from the street and gives them a second life",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "upholstery",
+    "category": "hobby",
+    "label": "Upholstery",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "reupholsters old chairs, hands permanently a bit stiff from it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "urban_foraging",
+    "category": "hobby",
+    "label": "Urban foraging",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Knows what grows in overlooked city corners and what should absolutely be left alone.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "urban_sketching",
+    "category": "hobby",
+    "label": "Urban sketching",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "draws buildings and strangers in cafes, fast and rough on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "running_ultra",
+    "category": "hobby",
+    "label": "Very long distances",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "runs distances that alarm people, quiet about why",
+    "image_prompt": null,
+    "affinities": [
+      "running"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "vibe_coding",
+    "category": "hobby",
+    "label": "Vibe coding",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "builds little projects with an AI doing most of the typing, for fun",
+    "image_prompt": null,
+    "affinities": [
+      "tech"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "video_gaming_hobby",
+    "category": "hobby",
+    "label": "Video gaming",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "plays games several evenings a week rather than only following them",
+    "image_prompt": null,
+    "affinities": [
+      "gaming"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "volleyball",
+    "category": "hobby",
+    "label": "Volleyball",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "plays recreationally or in a local club, has learned how quickly a friendly game becomes serious",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "volunteering",
+    "category": "hobby",
+    "label": "Volunteering",
+    "weight": 0.7,
+    "rarity": "common",
+    "prompt_hint": "gives time to something, does not advertise it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "watercolour",
+    "category": "hobby",
+    "label": "Watercolour painting",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "likes the part where the water ignores exact instructions and makes something better or worse",
+    "image_prompt": null,
+    "affinities": [
+      "art"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "weaving",
+    "category": "hobby",
+    "label": "Weaving",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "works a small loom, gives away scarves nobody asked for and everyone loves",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "weight_training",
+    "category": "hobby",
+    "label": "Weight training",
+    "weight": 1.1,
+    "rarity": "common",
+    "prompt_hint": "lifts several times a week without needing it to become her entire personality",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wig_styling",
+    "category": "hobby",
+    "label": "Wig styling",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "cuts, shapes and sets wigs at home, useful for cosplay and inexplicably satisfying on its own",
+    "image_prompt": null,
+    "affinities": [
+      "cosplay"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wild_camping",
+    "category": "hobby",
+    "label": "Wild camping",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "likes getting away from formal campsites and is careful about leaving almost no trace",
+    "image_prompt": null,
+    "affinities": [
+      "hiking"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wild_swimming_group",
+    "category": "hobby",
+    "label": "Wild swimming group",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "swims lakes and rivers with a small regular group, year round",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wildlife_watching",
+    "category": "hobby",
+    "label": "Wildlife watching",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "gets up early and sits still for animals that may never appear",
+    "image_prompt": null,
+    "affinities": [
+      "animals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "woodworking",
+    "category": "hobby",
+    "label": "Woodworking",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Makes small furniture or useful objects and has a dangerously optimistic relationship with new tools.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "fanfiction_writing",
+    "category": "hobby",
+    "label": "Writing fanfiction",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "writes fic in bursts, has drafts nobody knows about and tags she takes very seriously",
+    "image_prompt": null,
+    "affinities": [
+      "fanfiction_reading"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "poetry",
+    "category": "hobby",
+    "label": "Writing poetry",
+    "weight": 0.5,
+    "rarity": "common",
+    "prompt_hint": "writes and shows almost nobody",
+    "image_prompt": null,
+    "affinities": [
+      "reading"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "writing_stories",
+    "category": "hobby",
+    "label": "Writing stories",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "writes fiction on the side, always has a draft going",
+    "image_prompt": null,
+    "affinities": [
+      "reading"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "yoga",
+    "category": "hobby",
+    "label": "Yoga",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "goes to a class, is annoying about how much it helps",
+    "image_prompt": null,
+    "affinities": [
+      "fitness"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  }
+]

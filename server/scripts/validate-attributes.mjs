@@ -34,6 +34,7 @@ for (const e of all) {
 const allIds = new Set(all.map((e) => e.id));
 
 const errors = [];
+const kinkDomainIds = new Set((byCategory.get('kink_domain') ?? []).map((row) => row.id));
 
 // Unique id within its own category - a duplicate silently overwrites at seed time.
 for (const [cat, entries] of byCategory) {
@@ -89,6 +90,17 @@ for (const e of all) {
   if (e.category === 'fetish' && e.extra?.side !== undefined && !['her', 'his'].includes(e.extra.side)) {
     errors.push(`${e.id} (${e._file}): fetish.extra.side must be 'her' or 'his', not '${e.extra.side}'`);
   }
+  for (const key of ['domains', 'requires_domains', 'requires_any_domains']) {
+    const refs = e.extra?.[key];
+    if (refs === undefined) continue;
+    if (!Array.isArray(refs) || (key !== 'domains' && !refs.length)) {
+      errors.push(`${e.id} (${e._file}): extra.${key} must be ${key === 'domains' ? 'an array' : 'a non-empty array'}`);
+      continue;
+    }
+    for (const ref of refs) if (!kinkDomainIds.has(ref)) {
+      errors.push(`${e.id} (${e._file}): extra.${key} references unknown kink domain '${ref}'`);
+    }
+  }
   if (e.category === 'sexual_persona' && e.extra?.side_bias) {
     for (const [dom, side] of Object.entries(e.extra.side_bias)) {
       const d = (byCategory.get('kink_domain') ?? []).find((k) => k.id === dom);
@@ -111,6 +123,22 @@ for (const e of all) {
   }
   if (e.category === 'species' && e.extra?.image_style !== undefined && e.extra.image_style !== 'anime_2d') {
     errors.push(`${e.id} (${e._file}): unsupported species image_style '${e.extra.image_style}'`);
+  }
+}
+
+// Rows whose meaning unambiguously invokes a governed boundary must not fall through as an
+// "unmapped" general fetish. This caught imported suspension and pet-play rows which could
+// otherwise coexist with explicit no-restraint/no-roleplay stances.
+{
+  const claimed = new Set((byCategory.get('kink_domain') ?? []).flatMap((row) => row.extra?.fetishes ?? []));
+  for (const row of byCategory.get('fetish') ?? []) for (const id of row.extra?.domains ?? []) {
+    if (kinkDomainIds.has(id)) claimed.add(row.id);
+  }
+  const boundaryId = /(?:^|_)(?:suspension_bondage|mummification_bondage|predicament_bondage|remote_toy|electrostimulation|knife_play|blood_fetish|blood_exchange|chastity_receiving|pet_play|forced_breeding)(?:_|$)/;
+  for (const row of byCategory.get('fetish') ?? []) {
+    if (boundaryId.test(row.id) && !claimed.has(row.id)) {
+      errors.push(`${row.id} (${row._file}): boundary-sensitive fetish needs kink-domain ownership`);
+    }
   }
 }
 
@@ -175,7 +203,10 @@ for (const eth of byCategory.get('ethnicity') ?? []) {
       if (pool.length < max) errors.push(`clothing_style '${st.id}': only ${pool.length} ${slot} pieces for up to ${max}`);
     }
     const capsule = items.filter((i) => (i.extra?.styles ?? []).includes(st.id));
-    if (capsule.length < 20 || capsule.length > 40) errors.push(`clothing_style '${st.id}': style capsule has ${capsule.length} pieces, expected 20-40`);
+    // Twenty remains the coverage floor. There is deliberately no ceiling: user-maintained
+    // and expanded shipped wardrobes may keep growing, and rejecting useful variety after
+    // forty pieces turns the original bootstrap target into an arbitrary database limit.
+    if (capsule.length < 20) errors.push(`clothing_style '${st.id}': style capsule has ${capsule.length} pieces, expected at least 20`);
     for (const slot of ['top', 'bottom', 'dress', 'outer', 'shoes', 'extras', 'jewellery']) {
       if (!capsule.some((i) => i.extra?.slot === slot)) errors.push(`clothing_style '${st.id}': style capsule has no ${slot}`);
     }

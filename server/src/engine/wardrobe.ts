@@ -460,20 +460,51 @@ export function outfitLines(outfit: Outfit): string[] {
   return lines;
 }
 
+export type OutfitImageFraming = 'face' | 'upper' | 'full' | 'body';
+
+const TRANSPARENT_GARMENT = /\b(sheer|transparent|see[ -]?through|translucent)\b/i;
+
+/** Whether an ordinary outer garment prevents the image model from seeing an underlayer. */
+function hidesUnderlayer(piece: WornPiece, half: 'upper' | 'lower'): boolean {
+  if (TRANSPARENT_GARMENT.test(piece.text)) return false;
+  // An opened shirt or lifted dress can expose a bra. An open fly still normally covers
+  // panties, so lower layers need a more definite pulled-aside/down state before appearing.
+  return half === 'upper' ? piece.state === 'on' : piece.state === 'on' || piece.state === 'open';
+}
+
 /**
- * For an image: what is actually on her, positively. Pieces that are off are left out, an
- * empty bra or panties slot is said outright ("no bra"), and states are part of the piece.
+ * For an image: only clothing the camera can actually see. The full Outfit deliberately keeps
+ * underwear for continuity, but naming it beneath an opaque shirt, dress or bottom makes image
+ * models paint it through or on top of the outer garment. Covered underlayers are therefore
+ * removed here in code rather than entrusted to a negative prompt.
  */
-export function outfitForImage(outfit: Outfit): string {
-  const on = outfit.pieces.filter((p) => p.state !== 'off');
-  if (!on.length) return 'She is naked.';
-  const covered = new Set(on.flatMap((p) => COVERS[p.slot] ?? []));
-  const parts = on.map((p) => (p.state === 'on' ? p.text : `${p.text}, ${p.state}`));
+export function outfitForImage(outfit: Outfit, framing: OutfitImageFraming = 'full'): string {
+  const worn = outfit.pieces.filter((p) => p.state !== 'off');
+  if (!worn.length) return 'She is naked.';
+
+  const upperCovered = worn.some((p) => (p.slot === 'top' || p.slot === 'dress') && hidesUnderlayer(p, 'upper'));
+  const lowerCovered = worn.some((p) => (p.slot === 'bottom' || p.slot === 'dress') && hidesUnderlayer(p, 'lower'));
+  const upperOnly = framing === 'face' || framing === 'upper';
+  const visible = worn.filter((p) => {
+    if (p.slot === 'bra' && upperCovered) return false;
+    if (p.slot === 'panties' && lowerCovered) return false;
+    if (p.slot === 'lingerie' && (upperOnly ? upperCovered : upperCovered && lowerCovered)) return false;
+    if (upperOnly && (p.slot === 'bottom' || p.slot === 'panties' || p.slot === 'legwear' || p.slot === 'shoes')) return false;
+    return true;
+  });
+
+  const covered = new Set(worn.flatMap((p) => COVERS[p.slot] ?? []));
+  const parts = visible.map((p) => {
+    let text = p.text;
+    if (p.slot === 'lingerie' && upperCovered && !lowerCovered) text = `only the lower portion of ${text}, exposed below her top`;
+    if (p.slot === 'lingerie' && !upperCovered && lowerCovered) text = `only the upper portion of ${text}, exposed above her bottoms`;
+    return p.state === 'on' ? text : `${text}, ${p.state}`;
+  });
   const missing: string[] = [];
-  if (!on.some((p) => p.slot === 'top' || p.slot === 'dress')) missing.push('no top');
-  if (!on.some((p) => p.slot === 'bra') && !covered.has('bra')) missing.push('no bra');
-  if (!on.some((p) => p.slot === 'bottom' || p.slot === 'dress')) missing.push('no skirt or trousers');
-  if (!on.some((p) => p.slot === 'shoes')) missing.push('no shoes');
+  if (!worn.some((p) => p.slot === 'top' || p.slot === 'dress')) missing.push('no top');
+  if (!upperCovered && !worn.some((p) => p.slot === 'bra') && !covered.has('bra')) missing.push('no bra');
+  if (!upperOnly && !worn.some((p) => p.slot === 'bottom' || p.slot === 'dress')) missing.push('no skirt or trousers');
+  if (!upperOnly && !worn.some((p) => p.slot === 'shoes')) missing.push('no shoes');
   return `${parts.join('; ')}.${missing.length ? ` ${missing.join(', ').replace(/^./, (c) => c.toUpperCase())}.` : ''}`;
 }
 

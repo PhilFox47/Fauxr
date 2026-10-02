@@ -98,7 +98,11 @@ export function rollKinkSides(seed: {
       continue;
     }
     const own = new Set<string>();
-    for (const f of (d.extra?.fetishes as string[]) ?? []) {
+    const owned = new Set<string>((d.extra?.fetishes as string[]) ?? []);
+    for (const row of fetishes.values()) {
+      if (((row.extra?.domains as string[] | undefined) ?? []).includes(d.id)) owned.add(row.id);
+    }
+    for (const f of owned) {
       const side = fetishes.get(f)?.extra?.side;
       if ((seed.fetishes ?? []).includes(f) && (side === 'her' || side === 'his')) own.add(side);
     }

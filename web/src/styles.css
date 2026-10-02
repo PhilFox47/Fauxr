@@ -180,6 +180,32 @@ button { cursor: pointer; }
 .chat .topbar .sub { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .match-row .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .match-status { font-weight: 400; font-size: 13px; color: var(--muted); }
+.world-clock { display:flex; align-items:center; gap:7px; border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:999px; padding:6px 10px; font-size:12px; font-weight:650; }
+.world-clock.paused { color:var(--plum); border-color:color-mix(in srgb, var(--plum) 45%, var(--line)); }
+.world-clock-paused { font-size:9px; text-transform:uppercase; letter-spacing:.6px; opacity:.8; }
+.world-clock-panel { margin:12px 16px 0; display:flex; flex-direction:column; gap:14px; position:relative; z-index:4; }
+.world-clock-panel > .row:first-child { justify-content:space-between; align-items:center; }
+.world-clock-advance input { width:76px; }
+.world-clock-panel .field .row input { flex:1; min-width:0; }
+
+.date-reminder-list { display:grid; gap:8px; padding:12px 16px 0; }
+.date-reminder-card { width:100%; display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid color-mix(in srgb, var(--plum) 65%, var(--line)); border-radius:14px; background:linear-gradient(135deg, color-mix(in srgb, var(--plum) 18%, var(--surface)), var(--surface)); color:var(--text); text-align:left; box-shadow:0 8px 24px rgba(0,0,0,.13); }
+.date-reminder-card small { display:block; margin-top:2px; color:var(--muted); }
+.date-ready-chip { display:inline-flex; margin-left:7px; padding:2px 6px; border-radius:999px; background:var(--plum); color:white; font-size:9px; font-weight:800; letter-spacing:.35px; text-transform:uppercase; vertical-align:middle; }
+.scheduled-date-banner { display:flex; align-items:center; gap:11px; margin:10px 14px 0; padding:10px 12px; border:1px solid var(--line); border-radius:14px; background:var(--surface); position:relative; z-index:3; }
+.scheduled-date-banner.due { border-color:color-mix(in srgb, var(--plum) 70%, var(--line)); background:linear-gradient(135deg, color-mix(in srgb, var(--plum) 18%, var(--surface)), var(--surface)); box-shadow:0 8px 25px rgba(0,0,0,.16); }
+.scheduled-date-banner strong,.scheduled-date-banner span,.planned-date-card strong,.planned-date-card span { display:block; }
+.scheduled-date-banner .grow > span,.planned-date-card > div > span { margin-top:2px; color:var(--muted); font-size:12px; }
+.scheduled-date-icon { width:36px; height:36px; border-radius:50%; display:grid; place-items:center; flex:0 0 auto; background:color-mix(in srgb, var(--plum) 18%, var(--surface)); color:var(--plum); }
+.date-action-stack { display:grid; gap:8px; }
+.planned-date-card { display:grid; gap:12px; padding:13px; border:1px solid var(--line); border-radius:14px; background:var(--surface-2); }
+.planned-date-card.due { border-color:color-mix(in srgb, var(--plum) 65%, var(--line)); }
+.scheduled-marker { cursor:default; }
+.avatar { position:relative; }
+.dot-presence { position:absolute; right:-1px; bottom:-1px; width:12px; height:12px; border:2px solid var(--bg); border-radius:50%; box-shadow:0 0 0 1px rgba(0,0,0,.25); }
+.dot-presence.green { background:#35c46a; }
+.dot-presence.yellow { background:#e6b84a; }
+.dot-presence.red { background:#e65b64; }
 
 .brand-mark {
   width: 38px; height: 38px;
@@ -527,6 +553,29 @@ input[type='range'] {
   overflow-y: auto;
 }
 .swipe-card.dragging { transition: none; }
+.swipe-card.has-photo { padding: 0; gap: 0; }
+.swipe-photo {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface-3);
+}
+.swipe-photo::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 72px;
+  background: linear-gradient(transparent, color-mix(in srgb, var(--surface) 78%, transparent));
+  pointer-events: none;
+}
+.swipe-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 28%; display: block; }
+.swipe-copy { display: flex; flex-direction: column; gap: var(--s4); padding: var(--s5) var(--s6) var(--s6); }
+.swipe-card.has-photo .swipe-intro { margin-top: 0; }
+.swipe-card.has-photo .swipe-meta { margin: -8px 0 0; }
+.swipe-card.has-photo .verdict { z-index: 2; background: color-mix(in srgb, var(--bg) 62%, transparent); }
 /* Not a photo - the emoji she picked for herself, so the stack is not a run of identical
    cards. Sits at the top of the centred block; the auto margin used to live on .handle. */
 .swipe-emoji {
@@ -640,6 +689,8 @@ input[type='range'] {
 .swipe-actions .like { border-color: var(--accent-line); color: var(--accent); }
 .swipe-actions .like:hover { background: var(--accent-soft); }
 .swipe-actions .nope:hover { color: var(--text-dim); border-color: var(--line-strong); }
+.swipe-actions .skip { color: var(--plum); }
+.swipe-actions .skip:hover { background: var(--surface-2); border-color: var(--plum); }
 .stack-count { text-align: center; font-size: 11.5px; color: var(--faint); }
 
 /* ---------------------------------------------------------------- matches */
@@ -706,6 +757,27 @@ input[type='range'] {
 .avatar .emoji { font-size: 25px; line-height: 1; transform: translateY(1px); }
 .avatar.sm { width: 36px; height: 36px; font-size: 14px; }
 .avatar.sm .emoji { font-size: 18px; }
+.avatar.has-story::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.avatar.has-story.has-unseen-story::before { border-color: var(--accent); }
+.story-avatar-button {
+  appearance: none;
+  border: 0;
+  padding: 4px;
+  margin: -4px;
+  background: transparent;
+  color: inherit;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.story-avatar-button:disabled { cursor: default; opacity: 1; }
+.story-avatar-button:not(:disabled):focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 /* See Avatar.tsx's onDate
    prop. A small filled heart rather than a coloured dot, since "she's on a date" is a
    specific, nameable thing rather than a generic status light, and a slow pulse (not a
@@ -1417,6 +1489,90 @@ input[type='range'] {
 .date-room .composer {
   background: color-mix(in srgb, var(--bg) 72%, transparent);
 }
+
+/* ---------------------------------------------------------------- Status stories */
+.status-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.94);
+  display: grid;
+  place-items: center;
+  padding: max(var(--s3), env(safe-area-inset-top)) var(--s3) max(var(--s3), env(safe-area-inset-bottom));
+  animation: fade var(--fast) var(--ease-out);
+}
+.status-story {
+  width: min(100%, 500px);
+  height: min(92dvh, 860px);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  background: #09090c;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--sh-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.status-story-image { width: 100%; height: 100%; object-fit: contain; }
+.status-progress {
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  gap: 4px;
+}
+.status-progress span { height: 3px; flex: 1; border-radius: 9px; background: rgba(255,255,255,.32); overflow: hidden; }
+.status-progress span.done { background: rgba(255,255,255,.95); }
+.status-progress span.active::after { content: ''; display: block; height: 100%; background: #fff; animation: status-progress 7s linear forwards; }
+@keyframes status-progress { from { width: 0; } to { width: 100%; } }
+.status-story-head {
+  position: absolute;
+  z-index: 4;
+  top: 22px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0,0,0,.8);
+}
+.status-story-person { display: flex; align-items: center; gap: 9px; color: #fff; background: transparent; border: 0; padding: 4px; text-align: left; }
+.status-story-person > span:last-child { display: flex; flex-direction: column; }
+.status-story-person small { color: rgba(255,255,255,.72); margin-top: 2px; }
+.status-story-thumb { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; overflow: hidden; background: var(--surface-3); border: 1px solid rgba(255,255,255,.5); }
+.status-story-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.status-story-head .iconbtn { color: #fff; background: rgba(0,0,0,.25); }
+.status-story-side { position: absolute; z-index: 2; top: 70px; bottom: 78px; width: 38%; border: 0; background: transparent; }
+.status-story-side.prev { left: 0; }
+.status-story-side.next { right: 0; }
+.status-story-side:disabled { pointer-events: none; }
+.status-story-foot {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 72px;
+  padding: 24px 18px 16px;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s3);
+  color: #fff;
+  background: linear-gradient(transparent, rgba(0,0,0,.82));
+}
+.status-story-foot > span { flex: 1; line-height: 1.4; text-shadow: 0 1px 5px #000; }
+.status-like { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.5); background: rgba(0,0,0,.3); color: #fff; display: grid; place-items: center; }
+.status-like.liked { color: var(--accent); background: rgba(0,0,0,.58); }
+.status-like.liked svg { fill: currentColor; }
+.status-story-empty { color: rgba(255,255,255,.72); }
+@media (max-width: 560px) {
+  .status-viewer { padding: 0; }
+  .status-story { width: 100%; height: 100dvh; border: 0; border-radius: 0; }
+}
 .emoji-input-wrap {
   position: relative;
   flex: 1;
@@ -1960,6 +2116,89 @@ body {
 .swipe-actions button { width: 58px; height: 58px; box-shadow: none; background: var(--surface); }
 .stack-count { letter-spacing: 0.15px; }
 
+/* Discover owns the available viewport; only unusually long profile details scroll.
+   A square portrait must not become a full-width, desktop-height wall above the bio. */
+.discover-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  container-type: inline-size;
+}
+.discover-screen > .topbar { flex: 0 0 auto; }
+.discover-screen .usage-pill { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.discover-screen .swipe-area { min-height: 0; padding: 16px; gap: 12px; }
+.discover-screen .swipe-deck { min-height: 0; max-height: 680px; margin-top: 8px; }
+.discover-screen .swipe-card { padding: 0; gap: 0; overflow: hidden; min-width: 0; }
+.discover-screen .swipe-photo {
+  width: min(100%, 27svh, 260px);
+  flex: 0 0 auto;
+  align-self: center;
+}
+.discover-screen .swipe-photo img { object-fit: contain; object-position: center; }
+.discover-screen .swipe-photo::after { display: none; }
+.discover-screen .swipe-copy {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 20px;
+  gap: 8px;
+  scrollbar-width: thin;
+  overflow-wrap: anywhere;
+}
+.discover-screen .swipe-intro { margin-top: 0; }
+.discover-screen .swipe-card .real-name { font-size: clamp(22px, 5cqi, 30px); line-height: 1.2; }
+.discover-screen .swipe-card .bio { font-size: 15px; line-height: 1.45; margin: 0; }
+.discover-screen .swipe-card .swipe-meta { margin: 0; }
+.discover-screen .swipe-meta:empty { display: none; }
+.discover-screen .swipe-signals { margin: 0; }
+.discover-screen .swipe-traits li { padding: 5px 0; }
+.discover-screen .swipe-traits .caption { flex: 0 0 88px; }
+.discover-screen .swipe-traits .value { min-width: 0; }
+.discover-screen .swipe-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: min(100%, 420px);
+  align-self: center;
+  flex: 0 0 auto;
+}
+.discover-screen .swipe-actions button {
+  width: 100%; height: 54px; padding: 0 8px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 13px; font-weight: 650;
+}
+.discover-screen .swipe-actions button:focus-visible,
+.discover-screen .swipe-copy:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+.discover-screen .stack-count { flex: 0 0 auto; font-size: 11px; line-height: 1.4; }
+.discover-toast { position: absolute; inset: 64px 16px auto; z-index: 10; margin: 0; box-shadow: var(--sh-2); }
+@container (min-width: 640px) {
+  .discover-screen .swipe-area { padding: 24px 28px; gap: 20px; }
+  .discover-screen .swipe-deck { max-height: 560px; }
+  .discover-screen .swipe-card.has-photo { flex-direction: row; align-items: center; }
+  .discover-screen .swipe-photo { width: min(46%, calc(100svh - 250px)); }
+  .discover-screen .swipe-copy { padding: 28px; gap: 16px; max-height: 100%; }
+  .discover-screen .swipe-card:not(.has-photo) .swipe-copy { justify-content: safe center; }
+  .discover-screen .swipe-card .bio { font-size: 16px; }
+  .discover-screen .swipe-traits li { padding: 8px 0; }
+}
+@media (max-height: 550px) {
+  .discover-screen .swipe-area { padding-block: 8px; gap: 8px; }
+  .discover-screen .swipe-card.has-photo { flex-direction: row; align-items: center; }
+  .discover-screen .swipe-photo { width: min(35%, 42svh); }
+  .discover-screen .swipe-copy { max-height: 100%; }
+  .discover-screen .stack-count { display: none; }
+  .discover-screen .swipe-actions button { height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .discover-screen .swipe-card, .discover-screen .swipe-actions button { transition: none; }
+}
+
 /* Conversation list actions stay out of the scan path until the row is engaged. */
 .match-trash { opacity: 0; transition: opacity var(--fast) var(--ease), color var(--fast) var(--ease); }
 .match-row:hover .match-trash,
@@ -2179,8 +2418,7 @@ body {
   .rail .rail-label { flex: none; }
   .rail .badge { position: absolute; margin: -26px 0 0 26px; padding: 1px 5px; border: 2px solid #0b0b10; }
   .desk-column.discover-column { max-width: 980px; border-inline: 0; background: transparent; }
-  .discover-column .swipe-area { width: min(100%, 760px); margin: 0 auto; padding-inline: var(--s8); }
-  .discover-column .swipe-deck { max-height: 640px; }
+  .discover-column .swipe-area { width: 100%; margin: 0 auto; }
   .desk-column.wide { max-width: 1180px; border-right: 0; }
   .desk-list { width: 340px; background: #0b0b10; }
   .profile-backdrop { justify-content: flex-end; align-items: stretch; padding: 0; background: rgba(0, 0, 0, 0.35); }

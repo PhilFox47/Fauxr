@@ -14,19 +14,20 @@ import { domSubLean, fitsSide, rollFantasySeeds, rollKinkMap, rollKinkSides, sid
 import { buildAppearancePrompt, buildVisualCore } from './appearance.js';
 import { cosplayCount } from './cosplay.js';
 import { applyWardrobeLeans, closetList, rollWardrobe, WARDROBE_ACCESSORY_IDS } from './wardrobe.js';
-import { allowedDuos, duoDossierLines, duoPartner, duoRow, enforceDuoStatus, partnerRelation, rollPartnerBase } from './duo.js';
+import { duoDossierLines, duoPartner, duoRow, partnerRelation, rollPartnerBase } from './duo.js';
 import { drawCount, newContext, pickOne, randInt, roll, rollMany, rollRange, type DiceContext } from './dice.js';
 import { buildCatalogue, detectMentions, recordDiscoveries } from './discovery.js';
 import { textOverlap } from './voice.js';
 import { joinerFits, joinersFor } from './npcs.js';
 import { pick, unwrap } from '../llm/shape.js';
-import { coreTraits, pickCore } from './profilecard.js';
+import { coreTraits } from './profilecard.js';
 import { buildCharacterBlueprint } from './blueprint.js';
-import { evaluateCharacterDraft } from './character-evaluator.js';
+import { characterNeedsCuration, evaluateCharacterDraft } from './character-evaluator.js';
 import { rollHeight } from './height.js';
-import { bodyFits, fitsHer, isAiCharacter, isPower, speciesFits, speciesHidden, speciesRow, speciesVisibility, transRow } from './species.js';
+import { bodyFits, fitsHer, isPower, speciesFits, speciesHidden, speciesRow, speciesVisibility, transRow } from './species.js';
 import { LAYERS, hiddenLayerLabels, layerDossierLines, tellingWord } from './layers.js';
-import { BIO, CHARACTER, FANTASIES, REAL_NAME, USERNAME } from '../llm/schemas.js';
+import { BIO, CHARACTER, CHARACTER_COHERENCE, FANTASIES, REAL_NAME, USERNAME } from '../llm/schemas.js';
+import { rollCorePlan } from './core-generation.js';
 
 function hintOf(a: Attribute | null | undefined): string {
   if (!a) return '';
@@ -43,6 +44,20 @@ function hintOf(a: Attribute | null | undefined): string {
  */
 function speciesCanHave(fetish: Attribute, speciesId: string): boolean {
   return speciesFits(fetish, speciesId);
+}
+
+function kinkDomains(row: Attribute | null | undefined, key: 'domains' | 'requires_domains' | 'requires_any_domains'): string[] {
+  const value = row?.extra?.[key];
+  return Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string') : [];
+}
+
+/** A defining sexual persona establishes the domains its own wording explicitly promises. */
+function applyRequiredKinkDomains(persona: Attribute, kinkMap: Record<string, KinkStance>): void {
+  for (const id of kinkDomains(persona, 'requires_domains')) kinkMap[id] = 'into';
+  const any = kinkDomains(persona, 'requires_any_domains');
+  if (any.length && !any.some((id) => kinkMap[id] === 'into' || kinkMap[id] === 'curious')) {
+    kinkMap[pickOne(any)] = 'into';
+  }
 }
 
 /**
@@ -220,14 +235,34 @@ export function rollSeed(): RolledSeed {
   const counts = extra.counts ?? {};
   const ranges = extra.ranges ?? {};
 
+  // Core is now causal rather than a label attached after the roll. Its 3-5 attributes pay
+  // rarity once, enter the shared influence context now, and are reused in their old stages.
+  // Everything supporting them keeps base weight/taste but no longer pays another rarity tax.
+  applyWardrobeLeans(ctx, { species: species.id, hero_role: hero_role?.id, era: layers.era });
+  const corePlan = rollCorePlan(ctx, {
+    species: species.id,
+    archetype,
+    transgender: transgender?.id,
+    layers: Object.fromEntries(Object.entries(layers).map(([key, value]) => [key, value ?? 'none'])),
+    joiners: joinersFor(getUserProfile()),
+  });
+  const coreChoice = (category: string) => corePlan.chosen[category];
+  ctx.useRarity = false;
+
   // Her look is rolled with who she is, not with the rest of her looks: a style is half a
   // personality here, and its extra.weights lean how she texts, what she does for work and
   // what she is into (a goth towards deadpan texting, horror and tattoo studios, an e-girl
   // towards streaming), as well as the hair, makeup and jewellery rolled later.
-  applyWardrobeLeans(ctx, { species: species.id, hero_role: hero_role?.id, era: layers.era });
-  const clothing_style = one('clothing_style');
-  const humor_type = one('humor_type');
-  const quirks = rollMany('quirk', ctx, drawCount(counts.quirks, 2)).map((a) => a.id);
+  const clothing_style = coreChoice('clothing_style') ?? one('clothing_style');
+  const humor_type = coreChoice('humor_type') ?? one('humor_type');
+  const coreQuirk = coreChoice('quirk');
+  const quirkCount = Math.max(coreQuirk ? 1 : 0, drawCount(counts.quirks, 2));
+  const quirks = [
+    ...(coreQuirk ? [coreQuirk.id] : []),
+    ...rollMany('quirk', ctx, quirkCount - (coreQuirk ? 1 : 0), {
+      exclude: coreQuirk ? new Set([coreQuirk.id]) : undefined,
+    }).map((a) => a.id),
+  ];
 
   // how she writes
   const typing_style = one('typing_style');
@@ -245,13 +280,13 @@ export function rollSeed(): RolledSeed {
   // Rolled independently of each other on purpose - see CharacterSeed's own comment on why
   // her texting tone and her in-person one are allowed to land anywhere relative to each
   // other, archetype-confident-conflicts-shy aside.
-  const texting_persona = one('texting_persona');
-  const speech_style = one('speech_style');
+  const texting_persona = coreChoice('texting_persona') ?? one('texting_persona');
+  const speech_style = coreChoice('speech_style') ?? one('speech_style');
 
   // her life
-  const occupation = one('occupation');
-  const living_situation = one('living_situation');
-  const relationship_status = one('relationship_status');
+  const occupation = coreChoice('occupation') ?? one('occupation');
+  const living_situation = coreChoice('living_situation') ?? one('living_situation');
+  const relationship_status = coreChoice('relationship_status') ?? one('relationship_status');
   const social_energy = one('social_energy');
   // Almost always 'none'. Rolled ignoreArchetype on purpose - the whole point of a big secret
   // is that it does not fit the surface she otherwise presents, so it should never be leaned
@@ -322,8 +357,16 @@ export function rollSeed(): RolledSeed {
 
   // ---- 4. what she is into, the non-sexual half. Turn-offs deliberately skip the archetype
   // filter so she can still surprise; turn-ons wait for her persona, below.
-  const interests = rollMany('interest', ctx, drawCount(counts.interests, 3)).map((a) => a.id);
-  const hobbies = rollMany('hobby', ctx, drawCount(counts.hobbies, 2)).map((a) => a.id);
+  const coreInterest = coreChoice('interest');
+  const coreHobby = coreChoice('hobby');
+  const interests = [
+    ...(coreInterest ? [coreInterest.id] : []),
+    ...rollMany('interest', ctx, Math.max(0, drawCount(counts.interests, 3) - (coreInterest ? 1 : 0)), { exclude: new Set(coreInterest ? [coreInterest.id] : []) }).map((a) => a.id),
+  ];
+  const hobbies = [
+    ...(coreHobby ? [coreHobby.id] : []),
+    ...rollMany('hobby', ctx, Math.max(0, drawCount(counts.hobbies, 2) - (coreHobby ? 1 : 0)), { exclude: new Set(coreHobby ? [coreHobby.id] : []) }).map((a) => a.id),
+  ];
   const turn_offs = rollMany('turn_off', ctx, drawCount(counts.turn_offs, 2), { ignoreArchetype: true }).map((a) => a.id);
 
   // ---- 5. the intimate half, last, knowing everything above.
@@ -342,12 +385,17 @@ export function rollSeed(): RolledSeed {
       personaLean[p.id] = Math.exp(0.5 * domSubTaste * ((r[0] + r[1]) / 2));
     }
   }
-  const persona = roll('sexual_persona', ctx, { lean: personaLean })!;
+  const persona = coreChoice('sexual_persona') ?? roll('sexual_persona', ctx, { lean: personaLean })!;
+  const coreFetish = coreChoice('fetish');
   const pr = (persona.extra?.ranges ?? {}) as Record<string, number[]>;
-  const search_motive = roll('search_motive', ctx, { ignoreArchetype: true })!;
+  const search_motive = coreChoice('search_motive') ?? roll('search_motive', ctx, { ignoreArchetype: true })!;
   const libido = rollRange(pr.libido ?? ranges.libido, 1, 5);
   const sexual_confidence = rollRange(pr.sexual_confidence ?? ranges.sexual_confidence, 1, 5);
-  const dom_sub_leaning = rollRange(pr.dom_sub_leaning ?? ranges.dom_sub_leaning, -3, 3);
+  let dom_sub_leaning = rollRange(pr.dom_sub_leaning ?? ranges.dom_sub_leaning, -3, 3);
+  const coreDomSub = Number(coreFetish?.extra?.dom_sub ?? 0);
+  if (coreDomSub && Math.sign(dom_sub_leaning) !== Math.sign(coreDomSub)) {
+    dom_sub_leaning = Math.sign(coreDomSub) * Math.max(1, Math.abs(dom_sub_leaning));
+  }
   // Turn-ons come after the persona and follow it. Rolled back in stage 4, blind to her, 27% of
   // strong dommes came out turned on by "being pinned" and 19% of strong subs by "a man on his
   // knees". Now her persona's weights apply and rows coded dom or sub (extra.dom_sub) lean
@@ -365,30 +413,61 @@ export function rollSeed(): RolledSeed {
   const arousal_tell = one('arousal_tell')!;
   const domains = byCategory('kink_domain');
   const kink_map = rollKinkMap(freak, domains, (persona.extra?.kink_bias ?? {}) as Record<string, number>);
+  applyRequiredKinkDomains(persona, kink_map);
+  // A defining fetish establishes its domain rather than being rejected later by a random
+  // supporting stance. The Core is the premise; these are its structural consequences.
+  if (coreFetish) {
+    for (const domain of domains) {
+      if (((domain.extra?.fetishes as string[] | undefined) ?? []).includes(coreFetish.id) ||
+          kinkDomains(coreFetish, 'domains').includes(domain.id)) {
+        kink_map[domain.id] = 'into';
+      }
+    }
+  }
   // Which end of each two-ended domain she wants, before any fetish: "into feet" has to say
   // whether it is her feet or his before "worshipping his feet" can be drawn for her.
-  const kink_sides = rollKinkSides({ kink_map, dom_sub_leaning, side_bias: persona.extra?.side_bias as any });
+  const kink_sides = rollKinkSides({
+    kink_map, dom_sub_leaning,
+    fetishes: coreFetish ? [coreFetish.id] : [],
+    side_bias: persona.extra?.side_bias as any,
+  });
   const fetishRows = new Map(byCategory('fetish').map((f) => [f.id, f]));
 
   // Her named fetishes are drawn only from domains she is actually open to, and only from
   // the end of it she wants; the unmapped ones (kissing, massage, mornings - most of the
   // table) stay available to everyone. Being "into feet" now means the feet domain already
   // said yes, and which feet.
-  const openIds = new Set<string>();
-  for (const d of domains) {
-    const stance = kink_map[d.id];
-    if (stance === 'into' || stance === 'curious') {
-      for (const f of (d.extra?.fetishes as string[]) ?? []) if (fitsSide(fetishRows.get(f), kink_sides[d.id])) openIds.add(f);
-    }
+  const claims = new Map<string, Attribute[]>();
+  for (const domain of domains) for (const fetish of (domain.extra?.fetishes as string[] | undefined) ?? []) {
+    const owners = claims.get(fetish) ?? [];
+    owners.push(domain);
+    claims.set(fetish, owners);
   }
-  const claimed = new Set<string>(domains.flatMap((d) => (d.extra?.fetishes as string[]) ?? []));
+  // New/imported fetish rows can declare their own domain ownership immediately, without
+  // waiting for the reverse index in kink_domain to be hand-edited in lockstep.
+  for (const fetish of byCategory('fetish')) for (const domainId of kinkDomains(fetish, 'domains')) {
+    const domain = domains.find((row) => row.id === domainId);
+    if (!domain) continue;
+    const owners = claims.get(fetish.id) ?? [];
+    if (!owners.some((row) => row.id === domain.id)) owners.push(domain);
+    claims.set(fetish.id, owners);
+  }
   // A kink that needs a third person only if that person is someone he wants in the room:
   // a man who only wants other women joining in never meets a woman whose kink is two men.
   const joiners = joinersFor(getUserProfile());
   const allowedFetishes = new Set(
     byCategory('fetish')
-      .filter((f) => (openIds.has(f.id) || !claimed.has(f.id)) &&
-        fitsHer(f, { species: species.id, transgender: transgender?.id, ...layers }) && joinerFits(f.extra?.joiner, joiners))
+      .filter((f) => {
+        const owners = claims.get(f.id) ?? [];
+        // A fetish can live in several domains: ice play is both sensation and pain. It is
+        // allowed only when every meaning it carries is open, never by slipping through one
+        // permissive domain while another is her hard no.
+        return (!owners.length || owners.every((domain) =>
+          (kink_map[domain.id] === 'into' || kink_map[domain.id] === 'curious') &&
+          fitsSide(f, kink_sides[domain.id]))) &&
+          fitsHer(f, { species: species.id, transgender: transgender?.id, ...layers }) &&
+          joinerFits(f.extra?.joiner, joiners);
+      })
       .map((f) => f.id),
   );
   // Her first fetish always comes from a domain she is actually into, so every character has
@@ -404,7 +483,7 @@ export function rollSeed(): RolledSeed {
   // The power-exchange domains hold both sides ("giving commands", "being told what to do"),
   // so her fetishes follow her dom/sub leaning the same way her turn-ons do.
   const fetishLean = domSubLean(byCategory('fetish'), dom_sub_leaning);
-  const signatureKink = intoIds.size ? roll('fetish', ctx, { only: intoIds, lean: fetishLean }) : null;
+  const signatureKink = coreFetish ?? (intoIds.size ? roll('fetish', ctx, { only: intoIds, lean: fetishLean }) : null);
   const fetishes = [
     ...(signatureKink ? [signatureKink.id] : []),
     ...rollMany('fetish', ctx, Math.max(0, drawCount(counts.fetishes, 3) - (signatureKink ? 1 : 0)), {
@@ -438,13 +517,29 @@ export function rollSeed(): RolledSeed {
   const dirty_talk = one('dirty_talk')!;
   const sexual_experience = one('sexual_experience')!;
   if (tattoos.length >= 2) ctx.weights.her_tattoos = (ctx.weights.her_tattoos ?? 1) * 3;
-  if (height!.extra?.stature === 'tall' || /tall|statuesque|giant|amazon/.test(height!.id)) {
+  const shortStature = height!.extra?.stature === 'short' || ['very_short', 'short', 'just_under_average'].includes(height!.id);
+  const tallStature = height!.extra?.stature === 'tall' || ['tall', 'very_tall', 'just_over_average', 'statuesque', 'exceptionally_tall'].includes(height!.id);
+  if (tallStature) {
     ctx.weights.her_height = (ctx.weights.her_height ?? 1) * 3;
   }
-  if (height!.extra?.stature === 'short' || /petite|short|tiny|fairy|halfling|dwarf|kobold/.test(height!.id)) {
+  if (shortStature) {
     ctx.weights.being_petite = (ctx.weights.being_petite ?? 1) * 3;
   }
-  const body_pride = one('body_pride')!;
+  // Some pride rows assert a physical fact rather than merely a preference. Keep those
+  // facts canonical here instead of asking prose to explain why a 6'7" woman is "petite",
+  // or why someone with no piercings is proudest of showing off hidden ones.
+  const prideIds = new Set(byCategory('body_pride').filter((row) => {
+    if (row.id === 'being_petite') {
+      return shortStature;
+    }
+    if (row.id === 'her_height') {
+      return tallStature;
+    }
+    if (row.id === 'her_tattoos') return tattoos.length > 0;
+    if (row.id === 'her_piercings') return piercings.length > 0;
+    return true;
+  }).map((row) => row.id));
+  const body_pride = roll('body_pride', ctx, { only: prideIds })!;
   const signature = one('signature_move')!;
   // What she wears underneath, to bed, and how she keeps herself - leaned by her persona and
   // her style. For sexting and her own photo ideas, never in the fixed appearance prompt.
@@ -459,6 +554,10 @@ export function rollSeed(): RolledSeed {
   // - a fetish, an era layer, a double life, an exotic species - and not just her archetype.
   // See nudge.ts's openerNudge() for where this actually reaches her first message.
   const conversation_starter = one('conversation_starter')!;
+  // Presentation, not identity: it is deliberately absent from Core candidates. Rolling a
+  // required format prevents the profile-concept model from converging on a bedroom mirror
+  // selfie for every woman while keeping the exact scene hers to invent.
+  const profile_photo_format = one('profile_photo_format')!;
 
   const hints: Record<string, string> = {
     species: hintOf(species),
@@ -533,6 +632,7 @@ export function rollSeed(): RolledSeed {
     piercings,
     accessories,
     carries,
+    profile_photo_format: profile_photo_format.id,
 
     archetype: archetype.id,
     humor_type: humor_type!.id,
@@ -590,17 +690,9 @@ export function rollSeed(): RolledSeed {
     image_seed: randInt(1, 2_000_000_000),
   };
 
-  // Duo profiles (duo.ts), once her kinks and limits are known: a couple who share him needs
-  // both of them to be open to a third. The self-aware AI lives in a phone and has no one to
-  // share it with.
-  const duo = isAiCharacter(seed)
-    ? null
-    : roll('duo', ctx, { only: allowedDuos(seed, getUserProfile(), byCategory('duo')), ignoreArchetype: true });
-  seed.duo = duo?.id ?? 'none';
-  if (duo && duo.id !== 'none') {
-    seed.duo_partner = rollPartnerBase(seed, duo);
-    enforceDuoStatus(seed);
-  }
+  // Shared profiles asked one Actor to maintain two people and routinely collapsed their
+  // voices and continuity. Keep the schema/read path for old saves, but never create a new one.
+  seed.duo = 'none';
   // What she owns (wardrobe.ts), once her style, lingerie, job, body and kinks are all known -
   // each of them decides some of it.
   seed.wardrobe = rollWardrobe(seed);
@@ -609,10 +701,9 @@ export function rollSeed(): RolledSeed {
   seed.cosplays = rollMany('cosplay_character', ctx, cosplayCount(seed)).map((a) => a.id);
   seed.visual_core = buildVisualCore(seed);
   seed.appearance_prompt = buildAppearancePrompt(seed);
-  // The three things she is built around (profilecard.ts): picked once, here, so her card,
-  // her dossier and every prompt after it agree on who she is.
-  seed.core = pickCore(seed);
-  seed.core_v = 2;
+  // The 3-5 things she was built from: her card, dossier and every later prompt keep them.
+  seed.core = corePlan.entries;
+  seed.core_v = 3;
   seed.blueprint = buildCharacterBlueprint(seed);
   return { seed, ctx, archetype };
 }
@@ -773,20 +864,19 @@ function seedAttributeIds(seed: CharacterSeed): { category: string; id: string }
 export type RarityTier = 'common' | 'uncommon' | 'rare' | 'very_rare' | 'extremely_rare';
 
 export function rarityScore(seed: CharacterSeed): number {
-  const ids = seedAttributeIds(seed);
+  // Rarity describes the premise now, not the supporting detail it deliberately attracts.
+  // Use the rarest Core entry: adding four uncommon traits must not relabel an otherwise
+  // ordinary premise "extremely rare", while a fairy remains extremely rare on her own.
+  const ids = (seed.core ?? []).map(({ category, id }) => ({ category, id }));
   if (!ids.length) return 0;
-  const total = ids.reduce((sum, { category, id }) => {
+  return Math.max(...ids.map(({ category, id }) => {
     const weight = RARITY_WEIGHT[find(category, id)?.rarity ?? 'common'];
-    return sum - Math.log2(weight);
-  }, 0);
-  return total / ids.length;
+    return -Math.log2(weight);
+  }));
 }
 
 /**
- * Thresholds picked empirically (3000 rolled seeds, after the attribute database's rarity
- * tags were re-audited for the fifth tier) to land roughly 24% common / 42% uncommon /
- * 22% rare / 9% very rare / 3% extremely rare - a real, thin top tier, not something a third
- * of the stack claims.
+ * Thresholds are the information content of the five rarity weights.
  */
 const RARITY_LABEL: Record<RarityTier, string> = {
   common: 'Common',
@@ -799,10 +889,10 @@ const RARITY_LABEL: Record<RarityTier, string> = {
 export function rarityTier(seed: CharacterSeed): { tier: RarityTier; label: string } {
   const score = rarityScore(seed);
   const tier: RarityTier =
-    score >= 0.46 ? 'extremely_rare' :
-    score >= 0.40 ? 'very_rare' :
-    score >= 0.33 ? 'rare' :
-    score >= 0.24 ? 'uncommon' : 'common';
+    score >= -Math.log2(RARITY_WEIGHT.extremely_rare) ? 'extremely_rare' :
+    score >= -Math.log2(RARITY_WEIGHT.very_rare) ? 'very_rare' :
+    score >= -Math.log2(RARITY_WEIGHT.rare) ? 'rare' :
+    score >= -Math.log2(RARITY_WEIGHT.uncommon) ? 'uncommon' : 'common';
   return { tier, label: RARITY_LABEL[tier] };
 }
 
@@ -819,7 +909,7 @@ export function describeSeed(seed: CharacterSeed): string {
   const labels = (cat: string, ids: string[]) => ids.map((i) => label(cat, i)).join(', ') || 'none';
   const lines = [
     ...(seed.core?.length
-      ? [`CORE - the three things that define her; build her around these, everything else below is flavour: ${
+      ? [`CORE - the three to five things that define her; build her around these, everything else below supports them: ${
           seed.core.map((e) => `${e.caption}: ${label(e.category, e.id)}`).join('; ')}`]
       : []),
     `age: ${seed.age}`,
@@ -894,6 +984,82 @@ export function describeSeed(seed: CharacterSeed): string {
     `hard limits: ${labels('hard_limit', seed.hard_limits)}`,
   ];
   return lines.join('\n');
+}
+
+const CURATABLE_FIELDS = [
+  'clothing_style', 'humor_type', 'texting_persona', 'speech_style', 'occupation',
+  'living_situation', 'social_energy', 'big_secret', 'search_motive', 'dirty_talk',
+  'sexual_experience', 'signature_move',
+] as const;
+type CuratableField = (typeof CURATABLE_FIELDS)[number];
+
+/** A bounded Director judgment between dice and prose; Core and invented ids are impossible. */
+async function curateSupportingAttributes(seed: CharacterSeed, ctx: DiceContext): Promise<void> {
+  const settings = getSettings();
+  const coreCategories = new Set((seed.core ?? []).map((entry) => entry.category));
+  const candidates = new Map<CuratableField, Attribute[]>();
+  for (const field of CURATABLE_FIELDS) {
+    if (coreCategories.has(field)) continue;
+    const current = String((seed as any)[field] ?? '');
+    const alternatives: Attribute[] = [];
+    const excluded = new Set(current ? [current] : []);
+    for (let i = 0; i < 4; i++) {
+      const row = roll(field, ctx, { exclude: excluded, transient: true });
+      if (!row) break;
+      alternatives.push(row);
+      excluded.add(row.id);
+    }
+    if (alternatives.length) candidates.set(field, alternatives);
+  }
+  if (!candidates.size) return;
+
+  // JEV is built for small deterministic judgments. Let it cheaply accept coherent rolls;
+  // GLM remains the bounded editor only when a semantic problem may actually need a choice.
+  try {
+    if (!await characterNeedsCuration(describeSeed(seed))) return;
+  } catch (err) {
+    logger.warn('generator', 'character coherence triage unavailable; running Director curator', { error: String(err) });
+  }
+
+  const candidateBlock = [...candidates.entries()].map(([field, alternatives]) => {
+    const currentId = String((seed as any)[field] ?? '');
+    const current = find(field, currentId);
+    return [
+      `${field}:`,
+      `- KEEP (${currentId}): ${current?.label ?? currentId} — ${current?.prompt_hint ?? ''}`,
+      ...alternatives.map((row) => `- ${row.id}: ${row.label} — ${row.prompt_hint}`),
+    ].join('\n');
+  }).join('\n\n');
+
+  try {
+    const result = await completeJson<{ changes?: Array<{ field?: string; choice?: string; reason?: string }> }>({
+      scope: 'generator', label: 'curate_character', schema: CHARACTER_COHERENCE,
+      config: { ...settings.models.director, max_tokens: settings.token_limits.character_coherence },
+      reasoningEffort: 'minimal',
+      messages: [{ role: 'user', content: render('director_curate_character', {
+        rolled_block: describeSeed(seed), candidate_block: candidateBlock,
+      }) }],
+    });
+    const applied: Array<{ field: string; from: string; to: string; reason: string }> = [];
+    for (const change of result.changes ?? []) {
+      const field = change.field as CuratableField;
+      const allowed = candidates.get(field);
+      if (!allowed || change.choice === 'KEEP') continue;
+      const chosen = allowed.find((row) => row.id === change.choice);
+      if (!chosen) continue;
+      const from = String((seed as any)[field] ?? '');
+      (seed as any)[field] = chosen.id;
+      seed.hints[field] = chosen.prompt_hint || chosen.label;
+      applied.push({ field, from, to: chosen.id, reason: String(change.reason ?? '') });
+    }
+    if (applied.some((change) => change.field === 'clothing_style')) seed.wardrobe = rollWardrobe(seed);
+    if (applied.length) {
+      seed.blueprint = buildCharacterBlueprint(seed);
+      logger.info('generator', 'curated supporting attributes', { changes: applied });
+    }
+  } catch (err) {
+    logger.warn('generator', 'character coherence pass unavailable; keeping original roll', { error: String(err) });
+  }
 }
 
 const FALLBACK_NAMES = [
@@ -995,47 +1161,28 @@ export function nameFromDossier(dossier: string): string {
 }
 
 /** One cheap, targeted re-ask for a name that landed on one already in the cast. */
-async function rerollName(
-  seed: CharacterSeed,
-  rejected: string,
-  clash: string,
-  takenNames: string[],
-): Promise<string | null> {
+async function writeInitialName(seed: CharacterSeed, takenNames: string[]): Promise<string> {
+  const freshFallbacks = FALLBACK_NAMES.filter((name) => !nearestName(name, takenNames));
   try {
     const out = await completeJson<{ real_name?: string }>({
-      scope: 'generator',
-      label: 'reroll_name',
-      schema: REAL_NAME,
+      scope: 'generator', label: 'write_name', schema: REAL_NAME,
       config: { ...getSettings().models.actor, max_tokens: getSettings().token_limits.name_and_handle },
-      reasoningEffort: 'none',
-      totalTimeoutMs: 60_000,
-      require: ['real_name'],
-      messages: [
-        {
-          role: 'user',
-          content: [
-            `Pick a different first name for a ${seed.age} year old woman who speaks ${seed.languages.join(', ')}.`,
-            '',
-            `"${rejected}" is not usable: "${clash}" is already in the cast and they read as the same name.`,
-            'Names already used, none of which yours may repeat or closely resemble:',
-            takenNames.map((n) => `- ${n}`).join('\n') || '(none yet)',
-            '',
-            'Her languages are a soft hint at where she or her family are from, and her age says which',
-            'names were being given out when she was born. Lean on both, then go further afield than the',
-            'first name that comes to mind - that one is almost certainly already on the list above.',
-            '',
-            'Reply with exactly one JSON object and nothing else: { "real_name": "..." }',
-          ].join('\n'),
-        },
-      ],
+      reasoningEffort: 'none', totalTimeoutMs: 60_000, require: ['real_name'],
+      messages: [{ role: 'user', content: [
+        `Pick one plausible first name for this ${seed.age}-year-old woman before her dossier is written.`,
+        `Background: ${find('ethnicity', seed.ethnicity)?.label ?? seed.ethnicity}. Languages: ${seed.languages.join(', ')}.`,
+        'Background is a clue, not a stereotype: migration, mixed families and cross-cultural names are possible,',
+        'but a surprising name should still be plausible rather than an unexplained random culture switch.',
+        `Already used, including close spelling variants: ${takenNames.join(', ') || '(none)'}.`,
+        'Reply with exactly one JSON object: { "real_name": "..." }',
+      ].join('\n') }],
     });
-    const cleaned = (out.real_name ?? '').trim().split(/\s+/)[0] ?? '';
-    if (cleaned.length < 2) return null;
-    return nearestName(cleaned, takenNames) ? null : cleaned;
+    const name = String(out.real_name ?? '').trim().split(/\s+/)[0] ?? '';
+    if (name.length >= 2 && !nearestName(name, takenNames)) return name;
   } catch (err) {
-    logger.warn('generator', 'name reroll failed, keeping the original', { error: String(err) });
-    return null;
+    logger.warn('generator', 'name generation failed, using fallback', { error: String(err) });
   }
+  return pickOne(freshFallbacks.length ? freshFallbacks : FALLBACK_NAMES);
 }
 
 /**
@@ -1256,10 +1403,16 @@ async function writeUsername(
 }
 
 export async function generateCharacter(): Promise<Character> {
-  const { seed } = rollDiverseSeed();
+  // Each generation is independent. The attribute database owns rarity; earlier characters
+  // must not make common traits progressively uncommon through cast-aware selection.
+  const { seed, ctx } = rollSeed();
   const settings = getSettings();
+  await curateSupportingAttributes(seed, ctx);
   const takenHandles = existingUsernames();
   const takenNames = existingNames();
+  // The dossier used to invent one name in its opening and return another in `real_name`.
+  // Set identity first, then make the creative pass write about that exact woman.
+  const fixedRealName = await writeInitialName(seed, takenNames);
   const rolledBlock = describeSeed(seed);
   let pass: DirectorPass = {};
   const characterPassMessages = [
@@ -1279,6 +1432,7 @@ export async function generateCharacter(): Promise<Character> {
         is_big_secret: seed.big_secret && seed.big_secret !== 'none' ? '1' : '',
         closet: closetList(seed).replace(/\n/g, ' '),
         age: seed.age,
+        real_name: fixedRealName,
         avoid_names: takenNames.length ? takenNames.map((n) => `- ${n}`).join('\n') : '(none yet)',
         avoid_handles: takenHandles.length
           ? takenHandles.slice(0, HANDLES_SHOWN).map((u) => `- @${u}`).join('\n')
@@ -1314,7 +1468,7 @@ export async function generateCharacter(): Promise<Character> {
         // A dead or overloaded backend used to multiply this ten-minute call through the
         // client's retries and this outer quality retry. Bound the entire request instead.
         totalTimeoutMs: 420_000,
-        require: ['real_name', 'dossier'],
+        require: ['dossier'],
         // Seen: the whole character wrapped in {"character": {...}}, and "name" for "real_name".
         normalize: (v: any) => {
           const p = unwrap(v, ['real_name', 'dossier', 'name', 'character_name']);
@@ -1330,9 +1484,10 @@ export async function generateCharacter(): Promise<Character> {
       // Keep the valid draft before optional evaluation. If its one focused rewrite hits a
       // provider outage, generation falls back to this draft rather than to raw attributes.
       pass = candidate;
+      pass.real_name = fixedRealName;
       if (settings.models.evaluator.enabled && candidate.dossier?.trim()) {
         try {
-          const issues = await evaluateCharacterDraft(rolledBlock, candidate.dossier);
+          const issues = await evaluateCharacterDraft(rolledBlock, candidate.dossier, fixedRealName);
           if (issues.length && attempt === 0) {
             logger.warn('evaluator', 'character draft needs one focused rewrite', { issues });
             characterPassMessages.push({
@@ -1362,25 +1517,14 @@ export async function generateCharacter(): Promise<Character> {
 
   // The fallback pool is only reached when the API is down, but it can repeat just as
   // easily as the model can, so it gets the same avoid-list treatment.
-  const freshFallbacks = FALLBACK_NAMES.filter((n) => !nearestName(n, takenNames));
-  let realName =
-    (pass.real_name ?? '').trim().split(/\s+/)[0] ||
-    pickOne(freshFallbacks.length ? freshFallbacks : FALLBACK_NAMES);
-  const nameClash = nearestName(realName, takenNames);
-  if (nameClash) {
-    logger.warn('generator', 'name too close to one already in the cast, re-asking', { realName, nameClash });
-    const rejectedName = realName;
-    const fresh = await rerollName(seed, realName, nameClash, takenNames);
-    if (fresh) {
-      realName = fresh;
-      // The dossier and one_line were drafted by the same call that picked the name that
-      // just got rejected, so they still refer to her by it throughout - a reroll only ever
-      // touches the name field, never the prose already written around it. Without this,
-      // write_username() and writeBio() read a dossier that confidently describes "Layla"
-      // for a woman who, from here on, is actually named something else entirely.
-      pass.dossier = renameInProse(pass.dossier, rejectedName, realName);
-      pass.one_line = renameInProse(pass.one_line, rejectedName, realName);
-    }
+  const realName = fixedRealName;
+  // Treat a different opening name as output drift even when `real_name` itself followed the
+  // schema. This is deterministic because the dossier's first word is where this failure occurs.
+  const dossierName = nameFromDossier(pass.dossier ?? '');
+  if (dossierName && dossierName.toLowerCase() !== realName.toLowerCase()) {
+    logger.warn('generator', 'dossier used a different name; normalising to fixed identity', { dossierName, realName });
+    pass.dossier = renameInProse(pass.dossier, dossierName, realName);
+    pass.one_line = renameInProse(pass.one_line, dossierName, realName);
   }
 
   // Her partner's name and manner come from the pass; age and look stay as rolled. A name
@@ -1401,15 +1545,12 @@ export async function generateCharacter(): Promise<Character> {
 
   if (pass.one_line) seed.hints.one_line = pass.one_line;
 
-  // Everything written about her from here on is built from this, not from the raw tags -
-  // that is the entire point of asking for it. describeSeed() is still the fallback that
-  // keeps the rest of the app (the Actor's core "who is she" context, mainly) working when
-  // the character pass failed outright or came back without one despite `require` - but a
-  // dossier that degraded to it is exactly the flat "label - hint" dump that makes a bio or
-  // handle read like a spec sheet, which is why writeUsername/writeBio below are told
-  // whether this is the real thing rather than being handed it blind.
+  // Mark provenance at creation, never guess it from prose later. Only a real dossier
+  // becomes backstage roleplay texture; the raw roll remains an offline fallback and
+  // must not become a second spec-sheet block in every Actor/Director prompt.
   const dossierIsReal = !!(pass.dossier ?? '').trim();
   seed.hints.dossier = (pass.dossier ?? '').trim() || describeSeed(seed);
+  seed.hints.dossier_source = dossierIsReal ? 'generated' : 'fallback';
 
   // The handle is picked last, once she is a finished person, so it can actually be hers -
   // an inside joke, a mangled surname, or something completely opaque. The final collision
@@ -1436,8 +1577,7 @@ export async function generateCharacter(): Promise<Character> {
     matched_at: null,
   };
 
-  const draftedBio = dossierIsReal ? validateDraftedBio(pass.bio, seed, recentBios()) : null;
-  character.bio = draftedBio ?? await writeBio(character, dossierIsReal);
+  character.bio = await writeBio(character, dossierIsReal);
 
   insertCharacter(character);
   const rel = createRelationship(character.id, {
@@ -1662,33 +1802,6 @@ function validateDraftedUsername(
   }
   if (!reason) return username;
   logger.warn('generator', 'drafted handle rejected; using focused fallback', { username: username || null, reason });
-  return null;
-}
-
-function validateDraftedBio(raw: unknown, seed: CharacterSeed, existing: string[]): string | null {
-  const bio = String(raw ?? '').trim();
-  const words = bioWordCount(bio);
-  const clash = bio ? nearestBio(bio, existing) : null;
-  const lower = bio.toLowerCase();
-  const hiddenTerms = [
-    ...(speciesHidden(seed) ? [speciesRow(seed)?.label ?? ''] : []),
-    ...hiddenLayerLabels(seed),
-    ...(seed.big_secret && seed.big_secret !== 'none'
-      ? [find('big_secret', seed.big_secret)?.label ?? seed.big_secret]
-      : []),
-  ].flatMap((term) => [term.toLowerCase(), tellingWord(term)]).filter((term) => term.length >= 4);
-  const leak = hiddenTerms.find((term) => lower.includes(term));
-  if (bio && words >= BIO_MIN_WORDS && words <= BIO_MAX_WORDS && !clash && !leak) return bio.slice(0, 500);
-  logger.warn('generator', 'drafted bio rejected; using focused fallback', {
-    words,
-    reason: !bio
-      ? 'missing'
-      : clash
-        ? 'resembles an existing bio'
-        : leak
-          ? 'reveals hidden character material'
-          : 'outside the length range',
-  });
   return null;
 }
 

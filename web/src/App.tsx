@@ -155,6 +155,10 @@ export default function App() {
           if (event.character_id === openChatRef.current) setChatEventSeq((n) => n + 1);
           void refreshMatches();
           break;
+        case 'status_post':
+          if (event.character_id === openChatRef.current) setChatEventSeq((n) => n + 1);
+          void refreshMatches();
+          break;
         case 'match_removed':
           setOpenChat((id) => {
             // Closing for a reason that was not him pressing back - keep the back-stack in

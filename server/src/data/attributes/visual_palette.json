@@ -1,0 +1,3832 @@
+[
+  {
+    "id": "palette_all_black",
+    "category": "visual_palette",
+    "label": "All black",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward layered blacks with subtle changes in texture rather than colour.",
+    "image_prompt": "her styling tends toward layered blacks with subtle changes in texture rather than colour",
+    "affinities": [
+      "all_black",
+      "goth_girl",
+      "alt_goth"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "blackened silver",
+      "materials": [
+        "leather",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_apricot_lilac",
+    "category": "visual_palette",
+    "label": "Apricot and lilac",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward soft apricot, lilac and champagne gold.",
+    "image_prompt": "her styling tends toward soft apricot, lilac and champagne gold",
+    "affinities": [
+      "coquette",
+      "fairycore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "champagne gold",
+      "materials": [
+        "organza",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_aqua_coral",
+    "category": "visual_palette",
+    "label": "Aqua and coral",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward bright aqua, coral and sunlit gold.",
+    "image_prompt": "her styling tends toward bright aqua, coral and sunlit gold",
+    "affinities": [
+      "resort_wear",
+      "surfer_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "cotton",
+        "glossy accents"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_aqua_white",
+    "category": "visual_palette",
+    "label": "Aqua and white",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward clear aqua, white and sunlit silver.",
+    "image_prompt": "her styling tends toward clear aqua, white and sunlit silver",
+    "affinities": [
+      "resort_wear",
+      "surfer_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "linen",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_arcane_violet",
+    "category": "visual_palette",
+    "label": "Arcane violet",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward deep violet, black and glowing amethyst accents.",
+    "image_prompt": "her styling tends toward deep violet, black and glowing amethyst accents",
+    "affinities": [
+      "witchcore",
+      "fantasy_costume"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "velvet",
+        "sheer fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_avocado_brown",
+    "category": "visual_palette",
+    "label": "Avocado and brown",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward avocado green, chocolate brown and amber.",
+    "image_prompt": "her styling tends toward avocado green, chocolate brown and amber",
+    "affinities": [
+      "disco_seventies",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged brass",
+      "materials": [
+        "corduroy",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_baby_blue_silver",
+    "category": "visual_palette",
+    "label": "Baby blue and silver",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward baby blue, white and liquid silver.",
+    "image_prompt": "her styling tends toward baby blue, white and liquid silver",
+    "affinities": [
+      "y2k",
+      "kpop_idol",
+      "bratz_doll"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "satin",
+        "metallic fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_baby_pink_grey",
+    "category": "visual_palette",
+    "label": "Baby pink and grey",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward baby pink, dove grey and silver.",
+    "image_prompt": "her styling tends toward baby pink, dove grey and silver",
+    "affinities": [
+      "soft_girl",
+      "coquette"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "knit",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_burgundy",
+    "category": "visual_palette",
+    "label": "Black and burgundy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black, burgundy and dark silver.",
+    "image_prompt": "her styling tends toward black, burgundy and dark silver",
+    "affinities": [
+      "goth_girl",
+      "dark_academia",
+      "rockstar_gf"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "dark silver",
+      "materials": [
+        "leather",
+        "velvet"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_crimson",
+    "category": "visual_palette",
+    "label": "Black and crimson",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black, crimson red and dark gunmetal.",
+    "image_prompt": "her styling tends toward black, crimson red and dark gunmetal",
+    "affinities": [
+      "goth_girl",
+      "alt_goth",
+      "punk_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gunmetal",
+      "materials": [
+        "leather",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_emerald",
+    "category": "visual_palette",
+    "label": "Black and emerald",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward black, deep emerald and antique silver.",
+    "image_prompt": "her styling tends toward black, deep emerald and antique silver",
+    "affinities": [
+      "witchcore",
+      "goth_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique silver",
+      "materials": [
+        "velvet",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_gold",
+    "category": "visual_palette",
+    "label": "Black and gold",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black, rich gold and glossy lacquer accents.",
+    "image_prompt": "her styling tends toward black, rich gold and glossy lacquer accents",
+    "affinities": [
+      "mob_wife",
+      "old_hollywood",
+      "elegant"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "velvet",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_khaki",
+    "category": "visual_palette",
+    "label": "Black and khaki",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black, khaki and matte hardware.",
+    "image_prompt": "her styling tends toward black, khaki and matte hardware",
+    "affinities": [
+      "utilitarian",
+      "workwear_inspired",
+      "techwear"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gunmetal",
+      "materials": [
+        "canvas",
+        "technical fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_pink",
+    "category": "visual_palette",
+    "label": "Black and pink",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black, dusty pink and silver hardware.",
+    "image_prompt": "her styling tends toward black, dusty pink and silver hardware",
+    "affinities": [
+      "pastel_goth",
+      "e_girl",
+      "alt_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "lace",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_red_sport",
+    "category": "visual_palette",
+    "label": "Black and red sport",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black, athletic red and white accents.",
+    "image_prompt": "her styling tends toward black, athletic red and white accents",
+    "affinities": [
+      "sporty",
+      "gym_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "jersey",
+        "nylon"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_silver",
+    "category": "visual_palette",
+    "label": "Black and silver",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward true black, bright silver and chrome.",
+    "image_prompt": "her styling tends toward true black, bright silver and chrome",
+    "affinities": [
+      "fetishcore",
+      "all_black",
+      "cyberpunk"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "leather",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_violet",
+    "category": "visual_palette",
+    "label": "Black and violet",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black, deep violet and oxidised silver.",
+    "image_prompt": "her styling tends toward black, deep violet and oxidised silver",
+    "affinities": [
+      "goth_girl",
+      "witchcore",
+      "pastel_goth"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "oxidised silver",
+      "materials": [
+        "velvet",
+        "lace"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_white",
+    "category": "visual_palette",
+    "label": "Black and white",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward clean black and crisp white with sharp high-contrast styling.",
+    "image_prompt": "her styling tends toward clean black and crisp white with sharp high-contrast styling",
+    "affinities": [
+      "minimalist_neutral",
+      "business",
+      "all_black"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "cotton",
+        "wool"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_cream_cherry",
+    "category": "visual_palette",
+    "label": "Black, cream and cherry",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black, cream and cherry red with polished chrome.",
+    "image_prompt": "her styling tends toward black, cream and cherry red with polished chrome",
+    "affinities": [
+      "rockabilly",
+      "pin_up"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "cotton",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_black_white_red",
+    "category": "visual_palette",
+    "label": "Black, white and red",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward black and white broken by sharp red accents.",
+    "image_prompt": "her styling tends toward black and white broken by sharp red accents",
+    "affinities": [
+      "punk_style",
+      "rockabilly",
+      "emo_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "cotton",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_blush_ivory",
+    "category": "visual_palette",
+    "label": "Blush and ivory",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward blush pink, ivory and soft gold.",
+    "image_prompt": "her styling tends toward blush pink, ivory and soft gold",
+    "affinities": [
+      "coquette",
+      "romantic_florals",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "soft gold",
+      "materials": [
+        "lace",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_green_navy",
+    "category": "visual_palette",
+    "label": "Bottle green and navy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward bottle green, navy and restrained gold.",
+    "image_prompt": "her styling tends toward bottle green, navy and restrained gold",
+    "affinities": [
+      "preppy",
+      "equestrian_inspired"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "wool",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_bronze_black",
+    "category": "visual_palette",
+    "label": "Bronze and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward burnished bronze, black and smoky brown.",
+    "image_prompt": "her styling tends toward burnished bronze, black and smoky brown",
+    "affinities": [
+      "mob_wife",
+      "baddie"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "bronze",
+      "materials": [
+        "leather",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_brown_black",
+    "category": "visual_palette",
+    "label": "Brown and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward dark espresso brown, black and antique brass.",
+    "image_prompt": "her styling tends toward dark espresso brown, black and antique brass",
+    "affinities": [
+      "biker_chick",
+      "dark_academia"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique brass",
+      "materials": [
+        "leather",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_burgundy_camel",
+    "category": "visual_palette",
+    "label": "Burgundy and camel",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward deep burgundy, camel and aged gold.",
+    "image_prompt": "her styling tends toward deep burgundy, camel and aged gold",
+    "affinities": [
+      "dark_academia",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged gold",
+      "materials": [
+        "wool",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_burgundy_navy",
+    "category": "visual_palette",
+    "label": "Burgundy and navy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward burgundy, navy and antique brass.",
+    "image_prompt": "her styling tends toward burgundy, navy and antique brass",
+    "affinities": [
+      "preppy",
+      "dark_academia",
+      "business"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique brass",
+      "materials": [
+        "wool",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_burnt_orange_navy",
+    "category": "visual_palette",
+    "label": "Burnt orange and navy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward burnt orange, deep navy and warm brass.",
+    "image_prompt": "her styling tends toward burnt orange, deep navy and warm brass",
+    "affinities": [
+      "preppy",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brass",
+      "materials": [
+        "corduroy",
+        "denim"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_butter_sky",
+    "category": "visual_palette",
+    "label": "Butter yellow and sky blue",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward butter yellow, sky blue and pale gold.",
+    "image_prompt": "her styling tends toward butter yellow, sky blue and pale gold",
+    "affinities": [
+      "soft_girl",
+      "preppy",
+      "clean_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "pale gold",
+      "materials": [
+        "cotton",
+        "knit"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_camel_black",
+    "category": "visual_palette",
+    "label": "Camel and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward camel, black and restrained warm gold.",
+    "image_prompt": "her styling tends toward camel, black and restrained warm gold",
+    "affinities": [
+      "quiet_luxury",
+      "business",
+      "mob_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "wool",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_camel_burgundy",
+    "category": "visual_palette",
+    "label": "Camel and burgundy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward camel, burgundy and warm gold.",
+    "image_prompt": "her styling tends toward camel, burgundy and warm gold",
+    "affinities": [
+      "preppy",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "wool",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_candy_mix",
+    "category": "visual_palette",
+    "label": "Candy mix",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward bubblegum pink, lilac, mint and baby blue.",
+    "image_prompt": "her styling tends toward bubblegum pink, lilac, mint and baby blue",
+    "affinities": [
+      "soft_girl",
+      "barbiecore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "organza",
+        "glossy accents"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_celestial_blue_gold",
+    "category": "visual_palette",
+    "label": "Celestial blue and gold",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward midnight blue, starry gold and white highlights.",
+    "image_prompt": "her styling tends toward midnight blue, starry gold and white highlights",
+    "affinities": [
+      "fantasy_costume"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "silk",
+        "metallic embroidery"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_champagne_black",
+    "category": "visual_palette",
+    "label": "Champagne and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward champagne beige, black and luminous gold.",
+    "image_prompt": "her styling tends toward champagne beige, black and luminous gold",
+    "affinities": [
+      "old_hollywood",
+      "elegant",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "champagne gold",
+      "materials": [
+        "satin",
+        "silk"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_charcoal_bloodred",
+    "category": "visual_palette",
+    "label": "Charcoal and blood red",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward charcoal, dark red and blackened steel.",
+    "image_prompt": "her styling tends toward charcoal, dark red and blackened steel",
+    "affinities": [
+      "punk_style",
+      "alt_girl",
+      "rockstar_gf"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "blackened steel",
+      "materials": [
+        "leather",
+        "jersey"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_charcoal_stone",
+    "category": "visual_palette",
+    "label": "Charcoal and stone",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward charcoal grey, cool stone and matte silver.",
+    "image_prompt": "her styling tends toward charcoal grey, cool stone and matte silver",
+    "affinities": [
+      "minimalist_neutral",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brushed silver",
+      "materials": [
+        "wool",
+        "jersey"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cherry_charcoal",
+    "category": "visual_palette",
+    "label": "Cherry and charcoal",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "She repeats cherry red against charcoal and polished steel.",
+    "image_prompt": "her styling tends toward cherry red against charcoal with polished steel accents",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "steel",
+      "materials": [
+        "leather",
+        "jersey"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cherry_cream",
+    "category": "visual_palette",
+    "label": "Cherry and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward cherry red, cream and warm gold.",
+    "image_prompt": "her styling tends toward cherry red, cream and warm gold",
+    "affinities": [
+      "rockabilly",
+      "pin_up",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "cotton",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_chocolate_ivory",
+    "category": "visual_palette",
+    "label": "Chocolate and ivory",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward dark chocolate brown, ivory and antique gold.",
+    "image_prompt": "her styling tends toward dark chocolate brown, ivory and antique gold",
+    "affinities": [
+      "quiet_luxury",
+      "elegant"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique gold",
+      "materials": [
+        "silk",
+        "wool"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_chocolate_blue",
+    "category": "visual_palette",
+    "label": "Chocolate and powder blue",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward chocolate brown, powder blue and antique gold.",
+    "image_prompt": "her styling tends toward chocolate brown, powder blue and antique gold",
+    "affinities": [
+      "preppy",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique gold",
+      "materials": [
+        "wool",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_chrome_black",
+    "category": "visual_palette",
+    "label": "Chrome and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward mirror chrome, black and cool grey.",
+    "image_prompt": "her styling tends toward mirror chrome, black and cool grey",
+    "affinities": [
+      "cyberpunk",
+      "techwear",
+      "fetishcore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "vinyl",
+        "technical fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cinnamon_ivory",
+    "category": "visual_palette",
+    "label": "Cinnamon and ivory",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward cinnamon brown, ivory and warm gold.",
+    "image_prompt": "her styling tends toward cinnamon brown, ivory and warm gold",
+    "affinities": [
+      "romantic_florals",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "knit",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_citrus_teal",
+    "category": "visual_palette",
+    "label": "Citrus and teal",
+    "weight": 0.6,
+    "rarity": "uncommon",
+    "prompt_hint": "She likes teal, tangerine and bright playful contrasts.",
+    "image_prompt": "her styling tends toward teal and tangerine with bright playful contrasts",
+    "affinities": [
+      "maximalist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "mixed",
+      "materials": [
+        "printed cotton",
+        "glossy accents"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_clay_sage",
+    "category": "visual_palette",
+    "label": "Clay and sage",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward muted clay, sage green and weathered copper.",
+    "image_prompt": "her styling tends toward muted clay, sage green and weathered copper",
+    "affinities": [
+      "cottagecore_full",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "copper",
+      "materials": [
+        "linen",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cobalt_black",
+    "category": "visual_palette",
+    "label": "Cobalt and black",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "She uses saturated cobalt against black and clean chrome.",
+    "image_prompt": "her styling tends toward saturated cobalt against black with clean chrome",
+    "affinities": [
+      "streetwear",
+      "techwear"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "nylon",
+        "technical fabric"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cobalt_orange",
+    "category": "visual_palette",
+    "label": "Cobalt and orange",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward electric cobalt, saturated orange and chrome.",
+    "image_prompt": "her styling tends toward electric cobalt, saturated orange and chrome",
+    "affinities": [
+      "streetwear",
+      "colour_blocked",
+      "kpop_idol"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "nylon",
+        "jersey"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_coral_sand",
+    "category": "visual_palette",
+    "label": "Coral and sand",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward coral, warm sand and brushed gold.",
+    "image_prompt": "her styling tends toward coral, warm sand and brushed gold",
+    "affinities": [
+      "resort_wear",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brushed gold",
+      "materials": [
+        "linen",
+        "woven cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cream_gold",
+    "category": "visual_palette",
+    "label": "Cream and gold",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She favors cream, warm beige and muted gold, with soft knits and satin.",
+    "image_prompt": "her styling tends toward cream and warm beige with muted gold, knit or satin accents",
+    "affinities": [
+      "romantic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "knit",
+        "satin"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cream_navy",
+    "category": "visual_palette",
+    "label": "Cream and navy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward cream, navy and muted gold.",
+    "image_prompt": "her styling tends toward cream, navy and muted gold",
+    "affinities": [
+      "preppy",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "muted gold",
+      "materials": [
+        "cotton",
+        "wool"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cream_olive_rust",
+    "category": "visual_palette",
+    "label": "Cream, olive and rust",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward cream, olive and rust in muted retro tones.",
+    "image_prompt": "her styling tends toward cream, olive and rust in muted retro tones",
+    "affinities": [
+      "vintage",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brass",
+      "materials": [
+        "cotton",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_cyan_violet",
+    "category": "visual_palette",
+    "label": "Cyan and violet",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward electric cyan, ultraviolet and iridescent silver.",
+    "image_prompt": "her styling tends toward electric cyan, ultraviolet and iridescent silver",
+    "affinities": [
+      "rave_wear",
+      "cyberpunk",
+      "club_kid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "iridescent silver",
+      "materials": [
+        "mesh",
+        "holographic fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_denim_cream",
+    "category": "visual_palette",
+    "label": "Denim and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward washed denim, cream and tan leather.",
+    "image_prompt": "her styling tends toward washed denim, cream and tan leather",
+    "affinities": [
+      "classic_denim",
+      "westerncore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brass",
+      "materials": [
+        "denim",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_denim_rust",
+    "category": "visual_palette",
+    "label": "Denim and rust",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She comes back to washed denim, rust and tobacco brown.",
+    "image_prompt": "her styling tends toward washed denim, rust and tobacco brown",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged brass",
+      "materials": [
+        "denim",
+        "suede"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_dragon_ember",
+    "category": "visual_palette",
+    "label": "Dragon ember",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward blackened red, ember orange and burnished bronze.",
+    "image_prompt": "her styling tends toward blackened red, ember orange and burnished bronze",
+    "affinities": [
+      "fantasy_costume"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "bronze",
+      "materials": [
+        "leather",
+        "scaled texture"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_dusty_blue_rose",
+    "category": "visual_palette",
+    "label": "Dusty blue and rose",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward dusty blue, muted rose and soft pewter.",
+    "image_prompt": "her styling tends toward dusty blue, muted rose and soft pewter",
+    "affinities": [
+      "romantic_florals",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "pewter",
+      "materials": [
+        "linen",
+        "lace"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_dusty_rose_sand",
+    "category": "visual_palette",
+    "label": "Dusty rose and sand",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward dusty rose, sand and aged gold.",
+    "image_prompt": "her styling tends toward dusty rose, sand and aged gold",
+    "affinities": [
+      "festival_boho",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged gold",
+      "materials": [
+        "linen",
+        "lace"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_dusty_teal_rose",
+    "category": "visual_palette",
+    "label": "Dusty teal and rose",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward dusty teal, muted rose and antique brass.",
+    "image_prompt": "her styling tends toward dusty teal, muted rose and antique brass",
+    "affinities": [
+      "vintage",
+      "romantic_florals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique brass",
+      "materials": [
+        "velvet",
+        "lace"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_emerald_fuchsia",
+    "category": "visual_palette",
+    "label": "Emerald and fuchsia",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward emerald green, vivid fuchsia and gold.",
+    "image_prompt": "her styling tends toward emerald green, vivid fuchsia and gold",
+    "affinities": [
+      "maximalist",
+      "mob_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "velvet",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_emerald_gold",
+    "category": "visual_palette",
+    "label": "Emerald and gold",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward jewel-toned emerald with rich gold.",
+    "image_prompt": "her styling tends toward jewel-toned emerald with rich gold",
+    "affinities": [
+      "elegant",
+      "old_hollywood",
+      "mob_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "velvet",
+        "silk"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_espresso_cream",
+    "category": "visual_palette",
+    "label": "Espresso and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward deep espresso brown, cream and muted bronze.",
+    "image_prompt": "her styling tends toward deep espresso brown, cream and muted bronze",
+    "affinities": [
+      "quiet_luxury",
+      "clean_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "bronze",
+      "materials": [
+        "knit",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_fae_pastels",
+    "category": "visual_palette",
+    "label": "Fae pastels",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward soft mint, lavender, rose and pearly iridescence.",
+    "image_prompt": "her styling tends toward soft mint, lavender, rose and pearly iridescence",
+    "affinities": [
+      "fairycore",
+      "cottagecore_full"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "iridescent silver",
+      "materials": [
+        "organza",
+        "lace"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_forest_cream",
+    "category": "visual_palette",
+    "label": "Forest and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward deep forest green, cream and antique gold.",
+    "image_prompt": "her styling tends toward deep forest green, cream and antique gold",
+    "affinities": [
+      "dark_academia",
+      "equestrian_inspired"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique gold",
+      "materials": [
+        "wool",
+        "velvet"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_forest_gold",
+    "category": "visual_palette",
+    "label": "Forest and gold",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward deep forest green, moss and antique gold.",
+    "image_prompt": "her styling tends toward deep forest green, moss and antique gold",
+    "affinities": [
+      "fairycore",
+      "witchcore",
+      "goblincore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique gold",
+      "materials": [
+        "velvet",
+        "linen"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_fuchsia_orange",
+    "category": "visual_palette",
+    "label": "Fuchsia and orange",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward hot fuchsia, bright orange and glossy gold.",
+    "image_prompt": "her styling tends toward hot fuchsia, bright orange and glossy gold",
+    "affinities": [
+      "maximalist",
+      "barbiecore",
+      "club_kid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "satin",
+        "patent"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_green_blue_pop",
+    "category": "visual_palette",
+    "label": "Green and blue",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward bright grass green, electric blue and clean silver.",
+    "image_prompt": "her styling tends toward bright grass green, electric blue and clean silver",
+    "affinities": [
+      "streetwear",
+      "colour_blocked"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "nylon",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_greige_silver",
+    "category": "visual_palette",
+    "label": "Greige and silver",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward cool greige, soft grey and polished silver.",
+    "image_prompt": "her styling tends toward cool greige, soft grey and polished silver",
+    "affinities": [
+      "minimalist_neutral",
+      "office_siren"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "wool",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_grey_burgundy",
+    "category": "visual_palette",
+    "label": "Grey and burgundy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward charcoal grey, burgundy and silver.",
+    "image_prompt": "her styling tends toward charcoal grey, burgundy and silver",
+    "affinities": [
+      "business",
+      "dark_academia"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "wool",
+        "silk"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_grey_neon",
+    "category": "visual_palette",
+    "label": "Grey and neon",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward athletic grey, black and one neon accent.",
+    "image_prompt": "her styling tends toward athletic grey, black and one neon accent",
+    "affinities": [
+      "athleisure",
+      "gym_girl",
+      "sporty"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "technical fabric",
+        "jersey"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_gunmetal_plum",
+    "category": "visual_palette",
+    "label": "Gunmetal and plum",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward gunmetal grey, dark plum and black chrome.",
+    "image_prompt": "her styling tends toward gunmetal grey, dark plum and black chrome",
+    "affinities": [
+      "cyberpunk",
+      "goth_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "black chrome",
+      "materials": [
+        "technical fabric",
+        "velvet"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_holographic_pastels",
+    "category": "visual_palette",
+    "label": "Holographic pastels",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward holographic silver with pastel pink, blue and lilac shifts.",
+    "image_prompt": "her styling tends toward holographic silver with pastel pink, blue and lilac shifts",
+    "affinities": [
+      "y2k",
+      "rave_wear",
+      "kpop_idol"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "holographic fabric",
+        "PVC"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_hot_pink_black",
+    "category": "visual_palette",
+    "label": "Hot pink and black",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward hot pink against black with glossy chrome.",
+    "image_prompt": "her styling tends toward hot pink against black with glossy chrome",
+    "affinities": [
+      "e_girl",
+      "alt_girl",
+      "bratz_doll"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "vinyl",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_ice_silver",
+    "category": "visual_palette",
+    "label": "Ice and silver",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "her styling tends toward icy blue, silver and cool translucent textures",
+    "image_prompt": "her styling tends toward icy blue, silver and cool translucent textures",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2,
+      "metal": "mixed",
+      "materials": [
+        "cotton",
+        "silk"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_indigo_black",
+    "category": "visual_palette",
+    "label": "Indigo and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward deep indigo, black and steel blue accents.",
+    "image_prompt": "her styling tends toward deep indigo, black and steel blue accents",
+    "affinities": [
+      "soft_grunge",
+      "streetwear"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "steel",
+      "materials": [
+        "denim",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_indigo_tan",
+    "category": "visual_palette",
+    "label": "Indigo and tan",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward indigo denim, tan and aged brass.",
+    "image_prompt": "her styling tends toward indigo denim, tan and aged brass",
+    "affinities": [
+      "westerncore",
+      "workwear_inspired"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged brass",
+      "materials": [
+        "denim",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_infernal_black_red",
+    "category": "visual_palette",
+    "label": "Infernal black and red",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward black, infernal red and scorched gold.",
+    "image_prompt": "her styling tends toward black, infernal red and scorched gold",
+    "affinities": [
+      "fantasy_costume",
+      "devilcore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "dark gold",
+      "materials": [
+        "leather",
+        "velvet"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_ink_purple",
+    "category": "visual_palette",
+    "label": "Ink and purple",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward blue-black, dark purple and gunmetal.",
+    "image_prompt": "her styling tends toward blue-black, dark purple and gunmetal",
+    "affinities": [
+      "witchcore",
+      "emo_style"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gunmetal",
+      "materials": [
+        "velvet",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_ink_wine",
+    "category": "visual_palette",
+    "label": "Ink and wine",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She returns to black, oxblood and dark silver, with leather or velvet accents.",
+    "image_prompt": "her styling tends toward black and oxblood with dark silver, leather or velvet accents",
+    "affinities": [
+      "goth",
+      "dark_academia"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "dark silver",
+      "materials": [
+        "leather",
+        "velvet"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_ink_cream_gold",
+    "category": "visual_palette",
+    "label": "Ink, cream and gold",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward ink navy, cream and refined gold.",
+    "image_prompt": "her styling tends toward ink navy, cream and refined gold",
+    "affinities": [
+      "elegant",
+      "business",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "silk",
+        "wool"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_iridescent_black",
+    "category": "visual_palette",
+    "label": "Iridescent and black",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward black with shifting violet-blue iridescent accents.",
+    "image_prompt": "her styling tends toward black with shifting violet-blue iridescent accents",
+    "affinities": [
+      "rave_wear",
+      "cyberpunk",
+      "club_kid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "iridescent fabric",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_ivory_pearl",
+    "category": "visual_palette",
+    "label": "Ivory and pearl",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward ivory, pearl white and soft champagne accents.",
+    "image_prompt": "her styling tends toward ivory, pearl white and soft champagne accents",
+    "affinities": [
+      "elegant",
+      "quiet_luxury",
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "champagne gold",
+      "materials": [
+        "silk",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_khaki_black",
+    "category": "visual_palette",
+    "label": "Khaki and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward khaki, black and matte gunmetal.",
+    "image_prompt": "her styling tends toward khaki, black and matte gunmetal",
+    "affinities": [
+      "utilitarian",
+      "military_inspired",
+      "techwear"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gunmetal",
+      "materials": [
+        "canvas",
+        "technical fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_lavender_silver",
+    "category": "visual_palette",
+    "label": "Lavender and silver",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward cool lavender, pale grey and bright silver.",
+    "image_prompt": "her styling tends toward cool lavender, pale grey and bright silver",
+    "affinities": [
+      "soft_girl",
+      "kpop_idol"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "satin",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_lilac_cream",
+    "category": "visual_palette",
+    "label": "Lilac and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward soft lilac, cream and muted gold.",
+    "image_prompt": "her styling tends toward soft lilac, cream and muted gold",
+    "affinities": [
+      "coquette",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "muted gold",
+      "materials": [
+        "knit",
+        "lace"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_lilac_graphite",
+    "category": "visual_palette",
+    "label": "Lilac and graphite",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "She combines dusty lilac, graphite and cool iridescent accents.",
+    "image_prompt": "her styling tends toward dusty lilac and graphite with subtle iridescent accents",
+    "affinities": [
+      "e_girl",
+      "cyberpunk"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "mesh",
+        "technical fabric"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_lime_black",
+    "category": "visual_palette",
+    "label": "Lime and black",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward acid lime, black and chrome.",
+    "image_prompt": "her styling tends toward acid lime, black and chrome",
+    "affinities": [
+      "rave_wear",
+      "techwear",
+      "club_kid"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "mesh",
+        "technical fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_lime_silver",
+    "category": "visual_palette",
+    "label": "Lime and silver",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward acid lime, silver and matte black.",
+    "image_prompt": "her styling tends toward acid lime, silver and matte black",
+    "affinities": [
+      "techwear",
+      "rave_wear",
+      "cyberpunk"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "technical fabric",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_mahogany_cream",
+    "category": "visual_palette",
+    "label": "Mahogany and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward mahogany brown, cream and muted gold.",
+    "image_prompt": "her styling tends toward mahogany brown, cream and muted gold",
+    "affinities": [
+      "elegant",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "muted gold",
+      "materials": [
+        "velvet",
+        "silk"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_midnight_silver",
+    "category": "visual_palette",
+    "label": "Midnight and silver",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward midnight blue, black and cold silver.",
+    "image_prompt": "her styling tends toward midnight blue, black and cold silver",
+    "affinities": [
+      "elegant",
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "velvet",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_mint_lilac",
+    "category": "visual_palette",
+    "label": "Mint and lilac",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward pastel mint, lilac and iridescent silver.",
+    "image_prompt": "her styling tends toward pastel mint, lilac and iridescent silver",
+    "affinities": [
+      "pastel_goth",
+      "soft_girl",
+      "fairycore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "iridescent silver",
+      "materials": [
+        "mesh",
+        "organza"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_mint_red",
+    "category": "visual_palette",
+    "label": "Mint and red",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward mint green, cherry red and cream.",
+    "image_prompt": "her styling tends toward mint green, cherry red and cream",
+    "affinities": [
+      "rockabilly",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "cotton",
+        "patent"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_monochrome_beige",
+    "category": "visual_palette",
+    "label": "Monochrome beige",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward sand, oat, camel and cream in one warm tonal range.",
+    "image_prompt": "her styling tends toward sand, oat, camel and cream in one warm tonal range",
+    "affinities": [
+      "layered_neutrals",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "soft gold",
+      "materials": [
+        "linen",
+        "knit"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_monochrome_grey",
+    "category": "visual_palette",
+    "label": "Monochrome grey",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward charcoal, mid-grey and pale grey with tonal texture.",
+    "image_prompt": "her styling tends toward charcoal, mid-grey and pale grey with tonal texture",
+    "affinities": [
+      "minimalist_neutral",
+      "androgynous_tailoring"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "steel",
+      "materials": [
+        "wool",
+        "jersey"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_monochrome_navy",
+    "category": "visual_palette",
+    "label": "Monochrome navy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward ink navy through faded blue-black with restrained silver.",
+    "image_prompt": "her styling tends toward ink navy through faded blue-black with restrained silver",
+    "affinities": [
+      "business",
+      "preppy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "wool",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_moonlight_lilac",
+    "category": "visual_palette",
+    "label": "Moonlight and lilac",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward moonlit silver, pale lilac and cool blue-white.",
+    "image_prompt": "her styling tends toward moonlit silver, pale lilac and cool blue-white",
+    "affinities": [
+      "fairycore",
+      "witchcore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "silk",
+        "organza"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_moss_mushroom",
+    "category": "visual_palette",
+    "label": "Moss and mushroom",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward moss green, mushroom taupe and oxidised bronze.",
+    "image_prompt": "her styling tends toward moss green, mushroom taupe and oxidised bronze",
+    "affinities": [
+      "goblincore",
+      "cottagecore_full"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "bronze",
+      "materials": [
+        "wool",
+        "linen"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_mushroom_black",
+    "category": "visual_palette",
+    "label": "Mushroom and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward mushroom taupe, black and smoky gunmetal.",
+    "image_prompt": "her styling tends toward mushroom taupe, black and smoky gunmetal",
+    "affinities": [
+      "minimalist_neutral",
+      "all_black"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gunmetal",
+      "materials": [
+        "jersey",
+        "wool"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_mushroom_earth",
+    "category": "visual_palette",
+    "label": "Mushroom earth tones",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward mushroom beige, moss green, bark brown and muted rust.",
+    "image_prompt": "her styling tends toward mushroom beige, moss green, bark brown and muted rust",
+    "affinities": [
+      "goblincore",
+      "cottagecore_full"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged bronze",
+      "materials": [
+        "linen",
+        "woven cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_mustard_brown",
+    "category": "visual_palette",
+    "label": "Mustard and brown",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward mustard yellow, chestnut brown and antique brass.",
+    "image_prompt": "her styling tends toward mustard yellow, chestnut brown and antique brass",
+    "affinities": [
+      "vintage",
+      "dark_academia",
+      "thrift_eclectic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique brass",
+      "materials": [
+        "corduroy",
+        "wool"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_mustard_teal",
+    "category": "visual_palette",
+    "label": "Mustard and teal",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward mustard yellow, muted teal and warm brown.",
+    "image_prompt": "her styling tends toward mustard yellow, muted teal and warm brown",
+    "affinities": [
+      "vintage",
+      "disco_seventies"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged brass",
+      "materials": [
+        "corduroy",
+        "printed cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_navy_camel",
+    "category": "visual_palette",
+    "label": "Navy and camel",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward deep navy, camel and warm brass.",
+    "image_prompt": "her styling tends toward deep navy, camel and warm brass",
+    "affinities": [
+      "preppy",
+      "quiet_luxury",
+      "business"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brass",
+      "materials": [
+        "wool",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_navy_red_sport",
+    "category": "visual_palette",
+    "label": "Navy and red sport",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward navy, white and athletic red.",
+    "image_prompt": "her styling tends toward navy, white and athletic red",
+    "affinities": [
+      "sporty",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "jersey",
+        "nylon"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_navy_white",
+    "category": "visual_palette",
+    "label": "Navy and white",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She favors navy, crisp white and restrained silver.",
+    "image_prompt": "her styling tends toward navy and crisp white with restrained silver",
+    "affinities": [
+      "preppy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "cotton",
+        "wool"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_neon_rainbow",
+    "category": "visual_palette",
+    "label": "Neon rainbow",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward neon pink, lime, cyan and violet layered together.",
+    "image_prompt": "her styling tends toward neon pink, lime, cyan and violet layered together",
+    "affinities": [
+      "rave_wear",
+      "club_kid",
+      "maximalist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "mesh",
+        "PVC"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_oceanic_blue_pearl",
+    "category": "visual_palette",
+    "label": "Ocean blue and pearl",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward deep ocean blue, turquoise and pearl-white shimmer.",
+    "image_prompt": "her styling tends toward deep ocean blue, turquoise and pearl-white shimmer",
+    "affinities": [
+      "mermaidcore",
+      "fantasy_costume"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "pearl silver",
+      "materials": [
+        "silk",
+        "iridescent fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_ochre_denim",
+    "category": "visual_palette",
+    "label": "Ochre and denim",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward ochre yellow, washed blue denim and warm brass.",
+    "image_prompt": "her styling tends toward ochre yellow, washed blue denim and warm brass",
+    "affinities": [
+      "thrift_eclectic",
+      "classic_denim"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brass",
+      "materials": [
+        "denim",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_olive_bronze",
+    "category": "visual_palette",
+    "label": "Olive and bronze",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "her styling tends toward deep olive, warm bronze and soft leather accents",
+    "image_prompt": "her styling tends toward deep olive, warm bronze and soft leather accents",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2,
+      "metal": "mixed",
+      "materials": [
+        "cotton",
+        "silk"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_olive_cream",
+    "category": "visual_palette",
+    "label": "Olive and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward muted olive, cream and brass.",
+    "image_prompt": "her styling tends toward muted olive, cream and brass",
+    "affinities": [
+      "equestrian_inspired",
+      "preppy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brass",
+      "materials": [
+        "cotton",
+        "tweed"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_olive_orange",
+    "category": "visual_palette",
+    "label": "Olive and orange",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward olive drab, safety orange and gunmetal.",
+    "image_prompt": "her styling tends toward olive drab, safety orange and gunmetal",
+    "affinities": [
+      "utilitarian",
+      "gorpcore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gunmetal",
+      "materials": [
+        "canvas",
+        "nylon"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_orange_gunmetal",
+    "category": "visual_palette",
+    "label": "Orange and gunmetal",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward safety orange, gunmetal and black.",
+    "image_prompt": "her styling tends toward safety orange, gunmetal and black",
+    "affinities": [
+      "techwear",
+      "utilitarian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gunmetal",
+      "materials": [
+        "technical fabric",
+        "nylon"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_oxblood_black",
+    "category": "visual_palette",
+    "label": "Oxblood and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward oxblood red, black and antique gunmetal.",
+    "image_prompt": "her styling tends toward oxblood red, black and antique gunmetal",
+    "affinities": [
+      "biker_chick",
+      "rockstar_gf",
+      "goth_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gunmetal",
+      "materials": [
+        "leather",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_pale_green_ivory",
+    "category": "visual_palette",
+    "label": "Pale green and ivory",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward pale celadon green, ivory and antique gold.",
+    "image_prompt": "her styling tends toward pale celadon green, ivory and antique gold",
+    "affinities": [
+      "cottagecore_full",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique gold",
+      "materials": [
+        "silk",
+        "linen"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_peach_cream",
+    "category": "visual_palette",
+    "label": "Peach and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward soft peach, cream and rose gold.",
+    "image_prompt": "her styling tends toward soft peach, cream and rose gold",
+    "affinities": [
+      "romantic_florals",
+      "soft_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "rose gold",
+      "materials": [
+        "chiffon",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_peacock_gold",
+    "category": "visual_palette",
+    "label": "Peacock and gold",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward peacock teal, deep blue and antique gold.",
+    "image_prompt": "her styling tends toward peacock teal, deep blue and antique gold",
+    "affinities": [
+      "vintage",
+      "maximalist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "antique gold",
+      "materials": [
+        "velvet",
+        "silk"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_pearl_blush",
+    "category": "visual_palette",
+    "label": "Pearl and blush",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward pearl white, blush pink and luminous champagne accents.",
+    "image_prompt": "her styling tends toward pearl white, blush pink and luminous champagne accents",
+    "affinities": [
+      "old_hollywood",
+      "coquette",
+      "elegant"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "champagne gold",
+      "materials": [
+        "satin",
+        "organza"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_periwinkle_cream",
+    "category": "visual_palette",
+    "label": "Periwinkle and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward periwinkle blue, cream and silver-white accents.",
+    "image_prompt": "her styling tends toward periwinkle blue, cream and silver-white accents",
+    "affinities": [
+      "soft_girl",
+      "romantic_florals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "cotton",
+        "chiffon"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_petrol_black",
+    "category": "visual_palette",
+    "label": "Petrol and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward dark petrol blue-green, black and brushed steel.",
+    "image_prompt": "her styling tends toward dark petrol blue-green, black and brushed steel",
+    "affinities": [
+      "techwear",
+      "alt_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "steel",
+      "materials": [
+        "leather",
+        "technical fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_pine_rust",
+    "category": "visual_palette",
+    "label": "Pine and rust",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward pine green, rust and dark bronze.",
+    "image_prompt": "her styling tends toward pine green, rust and dark bronze",
+    "affinities": [
+      "gorpcore",
+      "workwear_inspired"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "bronze",
+      "materials": [
+        "wool",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_pink_chrome",
+    "category": "visual_palette",
+    "label": "Pink and chrome",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward cool pink, chrome and glossy white.",
+    "image_prompt": "her styling tends toward cool pink, chrome and glossy white",
+    "affinities": [
+      "y2k",
+      "barbiecore",
+      "kpop_idol"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "vinyl",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_pinstripe_charcoal",
+    "category": "visual_palette",
+    "label": "Pinstripe charcoal",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward charcoal, black and crisp white with polished silver.",
+    "image_prompt": "her styling tends toward charcoal, black and crisp white with polished silver",
+    "affinities": [
+      "office_siren",
+      "business",
+      "power_dressing"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "wool",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_pistachio_rose",
+    "category": "visual_palette",
+    "label": "Pistachio and rose",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward soft pistachio green, dusty rose and warm gold.",
+    "image_prompt": "her styling tends toward soft pistachio green, dusty rose and warm gold",
+    "affinities": [
+      "romantic_florals",
+      "cottagecore_full"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "silk",
+        "linen"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_platinum_white",
+    "category": "visual_palette",
+    "label": "Platinum and white",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward platinum silver, icy white and crystal-like accents.",
+    "image_prompt": "her styling tends toward platinum silver, icy white and crystal-like accents",
+    "affinities": [
+      "elegant",
+      "sleek_futurist"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "platinum",
+      "materials": [
+        "satin",
+        "metallic fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_plum_cream",
+    "category": "visual_palette",
+    "label": "Plum and cream",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "her styling tends toward deep plum, cream and antique gold accents",
+    "image_prompt": "her styling tends toward deep plum, cream and antique gold accents",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2,
+      "metal": "mixed",
+      "materials": [
+        "cotton",
+        "silk"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_plum_mustard",
+    "category": "visual_palette",
+    "label": "Plum and mustard",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward plum purple, mustard and brown.",
+    "image_prompt": "her styling tends toward plum purple, mustard and brown",
+    "affinities": [
+      "vintage",
+      "thrift_eclectic"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged brass",
+      "materials": [
+        "corduroy",
+        "wool"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_powder_blue_cream",
+    "category": "visual_palette",
+    "label": "Powder blue and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward powder blue, cream and pearly silver.",
+    "image_prompt": "her styling tends toward powder blue, cream and pearly silver",
+    "affinities": [
+      "soft_girl",
+      "coquette",
+      "clean_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "pearl silver",
+      "materials": [
+        "cotton",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_babyblue_red",
+    "category": "visual_palette",
+    "label": "Powder blue and red",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward powder blue, lipstick red and crisp white.",
+    "image_prompt": "her styling tends toward powder blue, lipstick red and crisp white",
+    "affinities": [
+      "rockabilly",
+      "pin_up"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "cotton",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_primary_pop",
+    "category": "visual_palette",
+    "label": "Primary colour pop",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward clear red, cobalt blue and bright yellow with white accents.",
+    "image_prompt": "her styling tends toward clear red, cobalt blue and bright yellow with white accents",
+    "affinities": [
+      "maximalist",
+      "clowncore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "cotton",
+        "patent"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_red_pink",
+    "category": "visual_palette",
+    "label": "Red and pink",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward scarlet red, hot pink and glossy gold.",
+    "image_prompt": "her styling tends toward scarlet red, hot pink and glossy gold",
+    "affinities": [
+      "barbiecore",
+      "maximalist",
+      "bratz_doll"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "satin",
+        "patent"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_rose_chocolate",
+    "category": "visual_palette",
+    "label": "Rose and chocolate",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "She returns to dusty rose, chocolate brown and soft gold.",
+    "image_prompt": "her styling tends toward dusty rose and chocolate brown with soft gold",
+    "affinities": [
+      "coquette",
+      "vintage"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "soft gold",
+      "materials": [
+        "lace",
+        "satin"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_rosewater_sage",
+    "category": "visual_palette",
+    "label": "Rosewater and sage",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward rosewater pink, sage and aged gold.",
+    "image_prompt": "her styling tends toward rosewater pink, sage and aged gold",
+    "affinities": [
+      "cottagecore_full",
+      "romantic_florals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged gold",
+      "materials": [
+        "linen",
+        "lace"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_ruby_gold",
+    "category": "visual_palette",
+    "label": "Ruby and gold",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward ruby red, black cherry and polished gold.",
+    "image_prompt": "her styling tends toward ruby red, black cherry and polished gold",
+    "affinities": [
+      "elegant",
+      "mob_wife"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "velvet",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_rust_olive",
+    "category": "visual_palette",
+    "label": "Rust and olive",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward burnt rust, olive green and aged brass.",
+    "image_prompt": "her styling tends toward burnt rust, olive green and aged brass",
+    "affinities": [
+      "workwear_inspired",
+      "westerncore",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged brass",
+      "materials": [
+        "canvas",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_sage_black",
+    "category": "visual_palette",
+    "label": "Sage and black",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward sage green, black and matte silver.",
+    "image_prompt": "her styling tends toward sage green, black and matte silver",
+    "affinities": [
+      "gorpcore",
+      "utilitarian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "matte silver",
+      "materials": [
+        "technical fabric",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_sage_copper",
+    "category": "visual_palette",
+    "label": "Sage and copper",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward sage, moss and warm copper with natural textures.",
+    "image_prompt": "her styling tends toward sage and moss with warm copper and natural textures",
+    "affinities": [
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "copper",
+      "materials": [
+        "linen",
+        "woven cotton"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_sand_copper",
+    "category": "visual_palette",
+    "label": "Sand and copper",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward sun-warmed sand, tan and bright copper.",
+    "image_prompt": "her styling tends toward sun-warmed sand, tan and bright copper",
+    "affinities": [
+      "bohemian",
+      "westerncore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "copper",
+      "materials": [
+        "linen",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_sapphire_silver",
+    "category": "visual_palette",
+    "label": "Sapphire and silver",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward deep sapphire blue and bright silver.",
+    "image_prompt": "her styling tends toward deep sapphire blue and bright silver",
+    "affinities": [
+      "elegant",
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "satin",
+        "velvet"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_seafoam_sand",
+    "category": "visual_palette",
+    "label": "Seafoam and sand",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward seafoam green, sand and shell-white accents.",
+    "image_prompt": "her styling tends toward seafoam green, sand and shell-white accents",
+    "affinities": [
+      "resort_wear",
+      "coastal_grandmother",
+      "surfer_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "soft gold",
+      "materials": [
+        "linen",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_shell_pink_tan",
+    "category": "visual_palette",
+    "label": "Shell pink and tan",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward shell pink, warm tan and muted gold.",
+    "image_prompt": "her styling tends toward shell pink, warm tan and muted gold",
+    "affinities": [
+      "resort_wear",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "muted gold",
+      "materials": [
+        "linen",
+        "suede"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_silver_white",
+    "category": "visual_palette",
+    "label": "Silver and white",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward bright silver, white and icy translucent accents.",
+    "image_prompt": "her styling tends toward bright silver, white and icy translucent accents",
+    "affinities": [
+      "sleek_futurist",
+      "cyberpunk",
+      "kpop_idol"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "metallic fabric",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_sky_denim",
+    "category": "visual_palette",
+    "label": "Sky blue and denim",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward sky blue, faded denim and white.",
+    "image_prompt": "her styling tends toward sky blue, faded denim and white",
+    "affinities": [
+      "coastal_grandmother",
+      "classic_denim"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "denim",
+        "cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_smoke_lilac",
+    "category": "visual_palette",
+    "label": "Smoke and lilac",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward smoky grey, muted lilac and dark silver.",
+    "image_prompt": "her styling tends toward smoky grey, muted lilac and dark silver",
+    "affinities": [
+      "soft_grunge",
+      "e_girl"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "dark silver",
+      "materials": [
+        "mesh",
+        "knit"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_soft_grey_white",
+    "category": "visual_palette",
+    "label": "Soft grey and white",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward soft dove grey, white and cool silver.",
+    "image_prompt": "her styling tends toward soft dove grey, white and cool silver",
+    "affinities": [
+      "clean_girl",
+      "minimalist_neutral"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "cotton",
+        "cashmere"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_stone_blue",
+    "category": "visual_palette",
+    "label": "Stone and blue",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward stone grey, slate blue and brushed silver.",
+    "image_prompt": "her styling tends toward stone grey, slate blue and brushed silver",
+    "affinities": [
+      "gorpcore",
+      "athleisure"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brushed silver",
+      "materials": [
+        "technical fabric",
+        "fleece"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_sunset_turquoise",
+    "category": "visual_palette",
+    "label": "Sunset and turquoise",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "her styling tends toward coral, turquoise and sun-faded textures",
+    "image_prompt": "her styling tends toward coral, turquoise and sun-faded textures",
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "visual_priority": 2,
+      "metal": "mixed",
+      "materials": [
+        "cotton",
+        "silk"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_tan_denim",
+    "category": "visual_palette",
+    "label": "Tan and denim",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward canvas tan, indigo denim and aged brass.",
+    "image_prompt": "her styling tends toward canvas tan, indigo denim and aged brass",
+    "affinities": [
+      "workwear_inspired",
+      "westerncore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged brass",
+      "materials": [
+        "canvas",
+        "denim"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_tangerine_pink",
+    "category": "visual_palette",
+    "label": "Tangerine and pink",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward tangerine orange, bubblegum pink and shiny gold.",
+    "image_prompt": "her styling tends toward tangerine orange, bubblegum pink and shiny gold",
+    "affinities": [
+      "barbiecore",
+      "bratz_doll",
+      "y2k"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "satin",
+        "jersey"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_taupe_burgundy",
+    "category": "visual_palette",
+    "label": "Taupe and burgundy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward taupe, deep burgundy and soft gold.",
+    "image_prompt": "her styling tends toward taupe, deep burgundy and soft gold",
+    "affinities": [
+      "office_siren",
+      "quiet_luxury"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "soft gold",
+      "materials": [
+        "cashmere",
+        "leather"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_taupe_cream",
+    "category": "visual_palette",
+    "label": "Taupe and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward soft taupe, cream and warm ivory.",
+    "image_prompt": "her styling tends toward soft taupe, cream and warm ivory",
+    "affinities": [
+      "quiet_luxury",
+      "clean_girl",
+      "layered_neutrals"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "soft gold",
+      "materials": [
+        "cashmere",
+        "linen"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_terracotta_cream",
+    "category": "visual_palette",
+    "label": "Terracotta and cream",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward terracotta, cream and warm brass with earthy textures.",
+    "image_prompt": "her styling tends toward terracotta, cream and warm brass with earthy textures",
+    "affinities": [
+      "bohemian",
+      "cottagecore_full"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "brass",
+      "materials": [
+        "linen",
+        "woven cotton"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_tobacco_teal",
+    "category": "visual_palette",
+    "label": "Tobacco and teal",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward tobacco brown, muted teal and old brass.",
+    "image_prompt": "her styling tends toward tobacco brown, muted teal and old brass",
+    "affinities": [
+      "vintage",
+      "westerncore"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "old brass",
+      "materials": [
+        "suede",
+        "denim"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_turquoise_brown",
+    "category": "visual_palette",
+    "label": "Turquoise and brown",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward turquoise, chestnut brown and aged silver.",
+    "image_prompt": "her styling tends toward turquoise, chestnut brown and aged silver",
+    "affinities": [
+      "westerncore",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged silver",
+      "materials": [
+        "suede",
+        "denim"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_turquoise_yellow",
+    "category": "visual_palette",
+    "label": "Turquoise and yellow",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward turquoise, sunny yellow and polished gold.",
+    "image_prompt": "her styling tends toward turquoise, sunny yellow and polished gold",
+    "affinities": [
+      "festival_style",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "cotton",
+        "woven fabric"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_violet_lime",
+    "category": "visual_palette",
+    "label": "Violet and lime",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward saturated violet, acid lime and iridescent chrome.",
+    "image_prompt": "her styling tends toward saturated violet, acid lime and iridescent chrome",
+    "affinities": [
+      "rave_wear",
+      "club_kid",
+      "cyberpunk"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "iridescent chrome",
+      "materials": [
+        "mesh",
+        "vinyl"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_angelic_white_gold",
+    "category": "visual_palette",
+    "label": "White and celestial gold",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward luminous white, pale gold and pearl accents.",
+    "image_prompt": "her styling tends toward luminous white, pale gold and pearl accents",
+    "affinities": [
+      "fantasy_costume"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "pale gold",
+      "materials": [
+        "silk",
+        "organza"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_white_navy_sport",
+    "category": "visual_palette",
+    "label": "White and navy sport",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward white, navy and cool grey.",
+    "image_prompt": "her styling tends toward white, navy and cool grey",
+    "affinities": [
+      "sporty",
+      "preppy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "technical fabric",
+        "jersey"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_white_neon_blue",
+    "category": "visual_palette",
+    "label": "White and neon blue",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "She gravitates toward clean white, neon blue and chrome.",
+    "image_prompt": "her styling tends toward clean white, neon blue and chrome",
+    "affinities": [
+      "sleek_futurist",
+      "cyberpunk"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "chrome",
+      "materials": [
+        "technical fabric",
+        "mesh"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_white_turquoise",
+    "category": "visual_palette",
+    "label": "White and turquoise",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward sun-bleached white, turquoise and silver.",
+    "image_prompt": "her styling tends toward sun-bleached white, turquoise and silver",
+    "affinities": [
+      "resort_wear",
+      "bohemian"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "silver",
+      "materials": [
+        "cotton",
+        "linen"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_wine_gold",
+    "category": "visual_palette",
+    "label": "Wine and gold",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward deep wine red and warm polished gold.",
+    "image_prompt": "her styling tends toward deep wine red and warm polished gold",
+    "affinities": [
+      "elegant",
+      "old_hollywood"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "velvet",
+        "silk"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_winter_white",
+    "category": "visual_palette",
+    "label": "Winter white",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward ivory, cream and soft white with pale gold accents.",
+    "image_prompt": "her styling tends toward ivory, cream and soft white with pale gold accents",
+    "affinities": [
+      "quiet_luxury",
+      "elegant"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "pale gold",
+      "materials": [
+        "cashmere",
+        "wool"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_workwear_indigo",
+    "category": "visual_palette",
+    "label": "Workwear indigo",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "She gravitates toward indigo denim, canvas tan and aged brass.",
+    "image_prompt": "her styling tends toward indigo denim, canvas tan and aged brass",
+    "affinities": [
+      "workwear_inspired",
+      "classic_denim"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "aged brass",
+      "materials": [
+        "denim",
+        "canvas"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "palette_yellow_purple",
+    "category": "visual_palette",
+    "label": "Yellow and purple",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "She gravitates toward bright yellow, royal purple and polished gold.",
+    "image_prompt": "her styling tends toward bright yellow, royal purple and polished gold",
+    "affinities": [
+      "maximalist",
+      "colour_blocked"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "metal": "gold",
+      "materials": [
+        "printed cotton",
+        "satin"
+      ],
+      "visual_priority": 2
+    },
+    "enabled": true
+  }
+]

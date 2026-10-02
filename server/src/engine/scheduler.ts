@@ -4,13 +4,19 @@ import { bus } from '../events.js';
 import { logger } from '../log.js';
 import {
   clearWakeup, dueWakeups, getCharacter, getWakeup,
-  characterIdsOnDate, lastMessage, listActiveMatches, pendingUserMessageCount, setWakeup,
+  characterIdsOnDate, getRelationship, lastMessage, listActiveMatches, pendingUserMessageCount,
+  saveRelationship, setWakeup,
 } from '../repo.js';
 import type { Character } from '../types.js';
 import { takeTurn } from './chat.js';
 import { randInt } from './dice.js';
 import { ensureStack } from './matching.js';
-import { refreshOneStatus } from './status.js';
+import { extendOneSchedule } from './schedule.js';
+import { maybeCreateScheduledStatus } from './status-posts.js';
+import { syncWorldEffects } from './world.js';
+import { syncScheduledDateReminders } from './scheduled-dates.js';
+import { gameClockMs } from './clock.js';
+import { CLOSED_REOPEN_REASON, cancelConversationReopen, conversationReopenAt } from './conversation-close.js';
 
 const TICK_MS = 60_000;
 
@@ -31,7 +37,7 @@ export function stopScheduler(): void {
 }
 
 /**
- * Everyone the scheduler (or "Pass time", engine/timepass.ts) is allowed to make text him. A
+ * Everyone the scheduler is allowed to make text him. A
  * character who is out on a date is not one of them - see engine/dates.ts - and leaving her in
  * the sweeps would have her double-texting him from across the table.
  */
@@ -48,7 +54,7 @@ const PENDING_REPLY_REASON = 'she has unread messages from him';
  * match, and answering something he actually wrote. Everything else is her texting first.
  */
 function isReplyWakeup(reason: string): boolean {
-  return reason === 'match_opener' || reason === PENDING_REPLY_REASON;
+  return reason === 'match_opener' || reason === PENDING_REPLY_REASON || reason === CLOSED_REOPEN_REASON;
 }
 
 function unpromptedAllowed(): boolean {
@@ -56,18 +62,16 @@ function unpromptedAllowed(): boolean {
 }
 
 /**
- * The one table the server polls, once a minute. It used to also be where the story's own
- * clock ticked - arousal fading, a status going stale, a milestone landing, an unprompted
- * text after enough real silence - all timed off the real wall clock. That meant either
- * nothing ever happened (he always replies quickly enough that no real gap ever opens) or,
- * the one time he genuinely stepped away, she could double-text him and reach out on her own
- * for having been "ignored" - exactly the nagging this app has never wanted. Real time now
- * drives none of that: see engine/clock.ts and engine/timepass.ts. This tick only does the
- * things that are genuinely about right now, in the real world: deliver a wakeup that was
- * already scheduled (a match's opener, a "Pass time" follow-up), pick up a message that
- * somehow never got answered, and give a freshly matched character her very first status.
+ * The once-a-minute maintenance pass. Fictional elapsed time comes from the shared persisted
+ * clock, not from counting ticks. Here we apply its elapsed effects, deliver due wakeups,
+ * repair a user message missed by a crash, roll private schedule horizons forward and
+ * consider one globally rate-limited Status story. A large clock jump still produces no
+ * image backlog because the Status scheduler resets its next due time from "now".
  */
 export async function tick(): Promise<void> {
+  syncWorldEffects();
+  syncScheduledDateReminders();
+  queueClosedConversationReopens();
   const onDate = characterIdsOnDate();
   for (const w of dueWakeups()) {
     const character = getCharacter(w.character_id);
@@ -75,8 +79,9 @@ export async function tick(): Promise<void> {
       clearWakeup(w.character_id);
       continue;
     }
-    // Scheduled before the setting was turned off (or by an older version): drop it.
-    if (!unpromptedAllowed() && !isReplyWakeup(w.reason)) {
+    // Old Director/silence/milestone wakeups are no longer valid. Apart from opening a new
+    // match or repairing an unanswered user message, she may initiate only after her own close.
+    if (!isReplyWakeup(w.reason) || (w.reason === CLOSED_REOPEN_REASON && !unpromptedAllowed())) {
       clearWakeup(character.id);
       continue;
     }
@@ -89,17 +94,36 @@ export async function tick(): Promise<void> {
     }
     logger.info('scheduler', `wakeup fired for ${character.username}`, { reason: w.reason });
     void takeTurn(character.id, {
-      trigger: w.reason === 'match_opener' ? 'match_opener' : 'wakeup',
+      trigger: w.reason === 'match_opener' ? 'match_opener' : w.reason === CLOSED_REOPEN_REASON ? 'initiative' : 'wakeup',
       reason: w.reason,
-      forceDirector: true,
+      forceDirector: w.reason !== 'match_opener',
     }).catch((err) => logger.error('scheduler', 'wakeup turn failed', { error: String(err) }));
   }
 
   answerPendingMessages();
-  // Not her texting him, and only ever gives a freshly matched character her first-ever
-  // status - see statusDue() in status.ts, which no longer goes stale on its own.
-  void refreshOneStatus().catch((err) => logger.error('scheduler', 'status refresh failed', { error: String(err) }));
+  void maybeCreateScheduledStatus().catch((err) => logger.error('scheduler', 'Status story failed', { error: String(err) }));
+  void extendOneSchedule().catch((err) => logger.error('scheduler', 'schedule extension failed', { error: String(err) }));
   void ensureStack();
+}
+
+/** Promote matured fictional-time close markers into one cancellable immediate wakeup. */
+export function queueClosedConversationReopens(): void {
+  if (!unpromptedAllowed()) return;
+  const now = gameClockMs();
+  for (const character of contactableMatches()) {
+    const rel = getRelationship(character.id);
+    if (!rel) continue;
+    const due = conversationReopenAt(rel);
+    if (due == null || due > now || getWakeup(character.id)) continue;
+    cancelConversationReopen(rel);
+    saveRelationship(rel);
+    setWakeup({
+      character_id: character.id,
+      scheduled_at: nowIso(),
+      reason: CLOSED_REOPEN_REASON,
+      cancel_if_user_writes: true,
+    });
+  }
 }
 
 /**
@@ -129,6 +153,9 @@ function answerPendingMessages(): void {
  * Runs on every server start: overdue wakeups get spread out instead of all firing at once.
  */
 export async function catchUp(): Promise<void> {
+  // World time may have crossed an appointment while the server was closed. Pause before
+  // doing slower startup maintenance so reopening Fauxr immediately surfaces the date.
+  syncScheduledDateReminders();
   const overdue = dueWakeups();
   logger.info('scheduler', `catch-up: ${overdue.length} overdue wakeup(s)`);
 

@@ -11,14 +11,60 @@ import { randInt } from './dice.js';
 import { coreTraits } from './profilecard.js';
 import { gameNowIso } from './clock.js';
 import { takeTurn } from './chat.js';
+import { getSettings } from '../config.js';
+import { ensureProfilePicture, profilePictureState } from './images.js';
+import { ensureSchedule } from './schedule.js';
 
 export const STACK_SIZE = 10;
 
 let queued = 0;
 let draining = false;
+const discoveryImageQueue: string[] = [];
+const discoveryImageAttempted = new Set<string>();
+let drainingDiscoveryImages = false;
 
 export function stack(): Character[] {
   return swipeStack(STACK_SIZE);
+}
+
+/** Queue pool portraits once, serially, so enabling Discover photos cannot unleash ten
+ * simultaneous image calls. Failed portraits are not automatically retried in a loop. */
+export function ensureDiscoveryProfilePictures(characters = stack()): void {
+  const settings = getSettings();
+  if (!settings.images_enabled || !settings.show_images_during_matching) return;
+  for (const character of characters) {
+    if (profilePictureState(character.id) === 'done' || discoveryImageAttempted.has(character.id)) continue;
+    discoveryImageAttempted.add(character.id);
+    discoveryImageQueue.push(character.id);
+  }
+  void drainDiscoveryImages();
+}
+
+async function drainDiscoveryImages(): Promise<void> {
+  if (drainingDiscoveryImages) return;
+  drainingDiscoveryImages = true;
+  try {
+    while (discoveryImageQueue.length) {
+      const settings = getSettings();
+      if (!settings.images_enabled || !settings.show_images_during_matching) {
+        for (const id of discoveryImageQueue.splice(0)) discoveryImageAttempted.delete(id);
+        break;
+      }
+      const characterId = discoveryImageQueue.shift()!;
+      try {
+        await ensureProfilePicture(characterId);
+      } catch (err) {
+        logger.error('image', 'discover profile picture failed', { character_id: characterId, error: String(err) });
+      }
+      bus.emitEvent({ type: 'stack', count: countPoolAvailable() });
+    }
+  } finally {
+    drainingDiscoveryImages = false;
+  }
+}
+
+export function discoveryImagesPending(): number {
+  return discoveryImageQueue.length + (drainingDiscoveryImages ? 1 : 0);
 }
 
 /**
@@ -40,7 +86,8 @@ async function drain(): Promise<void> {
   try {
     while (queued > 0) {
       try {
-        await generateCharacter();
+        const character = await generateCharacter();
+        ensureDiscoveryProfilePictures([character]);
         bus.emitEvent({ type: 'stack', count: countPoolAvailable() });
       } catch (err) {
         logger.error('generator', 'character generation failed', { error: String(err) });
@@ -88,9 +135,12 @@ export function swipeRight(characterId: string): MatchResult {
   const at = new Date(Date.now() + delayMinutes * 60_000);
 
   setCharacterState(characterId, 'matched', { matched_at: at.toISOString(), reappear_at: null });
+  // The first fortnight is background preparation; matching and her opener never wait on it.
+  void ensureSchedule(characterId).catch((err) =>
+    logger.warn('director', 'initial schedule failed', { character_id: characterId, error: String(err) }));
 
   if (instant) {
-    void takeTurn(characterId, { trigger: 'match_opener', forceDirector: true }).catch((err) =>
+    void takeTurn(characterId, { trigger: 'match_opener' }).catch((err) =>
       logger.error('actor', 'match opener turn failed', { error: String(err) }),
     );
   } else {

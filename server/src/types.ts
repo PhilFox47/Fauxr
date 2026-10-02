@@ -15,7 +15,7 @@ export type KinkSide = 'her' | 'his' | 'both';
 /**
  * One of the storylines running through her life (engine/life.ts): the colleague she is
  * feuding with, the tattoo she has booked, her sister's wedding. Written from her own seed,
- * moved on by her status refreshes, and there for her to bring up.
+ * available to the Director and Actor as durable texture for her to bring up.
  */
 export interface LifeThread {
   id: string;
@@ -54,7 +54,8 @@ export interface CharacterContrast {
  * here invents or replaces identity; it selects which rolled facts should drive play.
  */
 export interface CharacterBlueprint {
-  version: 1;
+  /** V2 keeps first-contact starters out of persistent initiative. */
+  version: 2;
   anchors: AttributeRef[];
   contrasts: CharacterContrast[];
   chat_voice: AttributeRef[];
@@ -100,6 +101,8 @@ export interface CharacterSeed {
   wardrobe?: Partial<Record<'top' | 'bottom' | 'dress' | 'outer' | 'legwear' | 'shoes' | 'extras' | 'jewellery' | 'bra' | 'panties' | 'lingerie' | 'swim' | 'work', string[]>>;
   /** carried_item ids: what she has on her (a sticker-covered phone case, keys on a carabiner). Flavour, not clothing. */
   carries?: string[];
+  /** Required lead-photo composition; presentation metadata and never eligible for Core. */
+  profile_photo_format?: string;
   /** The one piece with a story, written by the character pass ("her grandmother's cardigan"). */
   wardrobe_favourite?: string;
   /** cosplay_character ids she owns costumes for; empty unless something about her makes her a cosplayer. */
@@ -241,11 +244,11 @@ export interface CharacterSeed {
    */
   kink_sides?: Record<string, KinkSide>;
   /**
-   * The three things that define her (profilecard.ts): on her swipe card, and what every
+   * The three to five things that define her: on her swipe card, and what every
    * prompt builds her around. The rest of the seed is flavour.
    */
   core?: CoreEntry[];
-  /** 2 once her core is on the 3-5 scheme; a missing marker means an old three-trait core to extend. */
+  /** 3 for causal Core-first generation; older versions are preserved for save compatibility. */
   core_v?: number;
   /** Structured, attribute-backed identity used by prompts; prose is only a rendering of it. */
   blueprint?: CharacterBlueprint;
@@ -429,6 +432,8 @@ export interface ActorHidden {
   photo_options: string[] | null;
   /** True only while the two of them are actively sexting right now - drives the climax tracker. */
   in_the_act: boolean;
+  /** A natural resting point: suppresses any already-planned conversational follow-up. */
+  ending: 'soft_close' | null;
 }
 
 export interface ActorOutput {
@@ -565,16 +570,19 @@ export interface Location {
 
 /**
  * One live date or call with its own transcript, separate from the texting history.
- * Only the player starts one. While `status` is 'active' neither side can text.
+ * Only the player starts one. A scheduled date is an agreed future plan; only `active`
+ * freezes text chat and owns the live transcript.
  */
 export interface DateSession {
   id: string;
   character_id: string;
   /** Dates and voice calls share the live-session/transcript machinery, but not their Actor register. */
   kind: 'date' | 'call';
-  status: 'active' | 'ended';
-  /** When they are meeting, as he wrote it - "tonight, 8pm", not a parsed timestamp. */
+  status: 'scheduled' | 'active' | 'ended';
+  /** Human-readable plan text. Scheduled dates also carry the exact world-clock timestamp below. */
   when_at: string;
+  scheduled_at_ms: number | null;
+  reminder_sent: boolean;
   /** The location's name copied in at the time, so it survives a rename or a delete. */
   where_at: string;
   location_id: string | null;
@@ -591,6 +599,7 @@ export interface DateSession {
   /** Who else he asked to be there, as he wrote it on the invite. '' for just the two of them. */
   company: string;
   created_at: string;
+  started_at: string | null;
   ended_at: string | null;
 }
 

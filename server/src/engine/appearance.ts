@@ -15,6 +15,14 @@ function speciesPrompt(seed: CharacterSeed): string | undefined {
   return species?.image_prompt && speciesVisibility(seed) === 'profile' ? species.image_prompt : undefined;
 }
 
+/** A non-human body needs its own physically real surface, not the human-skin fallback. */
+export function speciesMaterialPrompt(seed: CharacterSeed): string | undefined {
+  const species = speciesRow(seed);
+  if (!species || speciesVisibility(seed) !== 'profile') return undefined;
+  const material = String(species.extra?.image_material ?? '').trim();
+  return material || undefined;
+}
+
 function join(label: string, values: Array<string | undefined>): string {
   const body = values.filter(Boolean).join(', ');
   return body ? `${label}: ${body}` : '';
@@ -22,9 +30,10 @@ function join(label: string, values: Array<string | undefined>): string {
 
 /** The compact, permanent face description that every face-visible shot repeats. */
 export function buildVisualIdentityPrompt(seed: CharacterSeed): string {
+  const replacesSkin = speciesRow(seed)?.extra?.image_replaces_skin === true;
   return join('Identity', [
     `${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`,
-    speciesPrompt(seed), img('skin_tone', seed.skin_tone), img('face_shape', seed.face_shape),
+    speciesPrompt(seed), replacesSkin ? undefined : img('skin_tone', seed.skin_tone), img('face_shape', seed.face_shape),
     img('facial_structure', seed.facial_structure), img('eye_shape', seed.eye_shape),
     img('eye_spacing', seed.eye_spacing), img('eye_color', seed.eye_color),
     img('nose_shape', seed.nose_shape), img('mouth_shape', seed.mouth_shape),
@@ -32,6 +41,31 @@ export function buildVisualIdentityPrompt(seed: CharacterSeed): string {
     img('hair_style', seed.hair_style), img('distinctive_feature', seed.distinctive_feature),
     img('facial_detail', seed.facial_detail),
   ]);
+}
+
+/**
+ * Compact textual likeness anchor for models without reference-image support.
+ *
+ * Calling her the "same recurring woman" gives a stateless image model a relationship it
+ * cannot resolve, while copying the entire attribute inventory crowds the actual photograph
+ * out of Z-Image's small prompt budget. Keep only the strongest visible anchors here; the
+ * full appearance block remains available to the assembler when it decides what the crop sees.
+ */
+export function buildFacePassport(seed: CharacterSeed): string {
+  const replacesSkin = speciesRow(seed)?.extra?.image_replaces_skin === true;
+  const subject = `${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`;
+  const traits = [
+    speciesPrompt(seed),
+    replacesSkin ? undefined : img('skin_tone', seed.skin_tone),
+    img('face_shape', seed.face_shape),
+    img('eye_shape', seed.eye_shape),
+    img('eye_color', seed.eye_color),
+    img('nose_shape', seed.nose_shape),
+    img('mouth_shape', seed.mouth_shape),
+    img('hair_color', seed.hair_color),
+    img('hair_style', seed.hair_style),
+  ].filter(Boolean);
+  return `The woman in this image is a ${subject}${traits.length ? ` with ${traits.join(', ')}` : ''}.`;
 }
 
 export function buildBodyPrompt(seed: CharacterSeed): string {
@@ -77,7 +111,7 @@ export function buildVisualCore(seed: CharacterSeed): NonNullable<CharacterSeed[
 export function appearanceForShot(seed: CharacterSeed, framing: AppearanceFraming): string {
   if (framing === 'face') return [buildVisualIdentityPrompt(seed), buildDefaultStylingPrompt(seed, true)].filter(Boolean).join('; ');
   if (framing === 'body') return [
-    join('Identity', [`${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`, speciesPrompt(seed), img('skin_tone', seed.skin_tone), img('hair_color', seed.hair_color)]),
+    join('Identity', [`${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`, speciesPrompt(seed), speciesRow(seed)?.extra?.image_replaces_skin === true ? undefined : img('skin_tone', seed.skin_tone), img('hair_color', seed.hair_color)]),
     buildBodyPrompt(seed), buildDefaultStylingPrompt(seed),
   ].filter(Boolean).join('; ');
   if (framing === 'upper') return [

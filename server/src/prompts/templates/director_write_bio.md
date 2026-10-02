@@ -1,218 +1,212 @@
-You are writing one woman's bio for Fauxr, in her voice.
+You are writing one woman's profile bio for Fauxr in her own voice.
 
-# WHAT FAUXR IS
-Fauxr is an adult hookup app, and every woman on it is here for sex in her own way: one wants
-something filthy tonight, one wants a long tease over text first, one wants to finally try the
-one thing she has never said out loud, one wants a man she can boss around. None of these is
-the house style. Hers is whichever one she actually is - blunt, shy, dry, playful, commanding.
+This is not a character summary and not marketing copy. It is the small amount of text this particular
+woman decided to type into a profile box.
 
-What a man is choosing here is a woman: how she looks, what she is like, and what she might
-be like with him. Her job and her flat are the least interesting things about her on an app
-like this.
+# THE CARD A READER ALREADY SEES
 
-# WHAT ACTUALLY GETS SWIPED ON
-Before anyone swipes they see her name, her handle, her age and ethnicity, this bio, and three
-things about her printed right under it:
+Before the bio, a reader already sees her handle, age, ethnicity and these printed traits:
 {{card_traits}}
-No photo, no distance. The decision to swipe is made on the card alone - which makes this a
-want-ad's job and a sales pitch's job at once, done however SHE specifically would do it, not
-however a generic profile on this kind of app is expected to sound.
 
-Everything above is already on the card, so the bio restating it is a wasted line - write as
-though the reader has just read it, and give them something those labels cannot.
-
-So it cannot be a description of her. It has to be the thing she would actually type into
-that box, knowing exactly what kind of place this is and feeling no need to apologise for
-or oversell whatever she is actually looking for.
+Do not waste the bio translating those labels back into sentences.
 
 # THE CHARACTER
+
 handle: {{username}}
+
 {{seed_block}}
 
 {{lead_block}}
-{{#duo_line}}
 
-This is a shared profile: {{duo_line}}. The bio is the two of them - written by one or both,
-and it makes plain there are two women here.
+The LEAD WITH material above is a menu of useful signals, not a coverage requirement. Do not force one
+item from each category into the bio.
+
+{{#duo_line}}
+This is a shared profile: {{duo_line}}.
+The bio must make it naturally clear that two adult women are using the profile, but it does not need
+to explain their whole relationship or give each woman an equal number of words.
 {{/duo_line}}
 
-A bio that could belong to anyone has failed, so find two or three things that only she would
-have thought to mention - not one lone detail, and not the whole dossier either. Take them
-from the LEAD WITH list: her look and style, her attitude, and something of who she is in bed.
-An interest or a taste can sit alongside if it is really her. Her job and where she lives are
-background: a passing detail at most, never what the bio is built around.
+# FIRST DECIDE WHY SHE FILLED IN THE BOX
 
-# FIND HER SHAPE, NOT A SHAPE
-There is no template for this. Do not reach for the first structure that comes to mind -
-three facts in a row, a list of terms, a bored-of-this/want-that pair - unless it is
-actually how this specific woman would lay it out. Work it out from who she is: a chaotic
-one might ramble and trail off mid-thought; a blunt one might just state her terms; a dry
-one might structure it as a joke with a sting in the last line; a guarded one might give
-almost nothing and let the little she does say do all the work. The shape should look like
-a decision she made, not a slot that got filled in.
+Before writing, silently decide:
+- How much effort would she realistically put into a bio?
+- What one or two things would she volunteer to strangers before a match?
+- Is she trying to be clear, funny, horny, cautious, selective, lazy, weirdly specific, reassuring,
+  intimidating, practical, or some mixture that actually belongs to her?
+- What would she leave unsaid because she assumes the card already covers it, because she does not care
+  to explain herself, or because it is private?
 
-# HOW TO WRITE IT
+Do not answer those questions in the output. They determine the bio's shape.
 
-**Be concrete.** One real, specific detail beats any amount of personality. "i own more
-fishnets than socks" tells you more than "alt girl"; "i will make you wait and you will
-thank me" tells you more than "dominant". Specificity is the entire trick: a named thing, a
-colour, a time of night, one small fact about her or what she likes.
+# A BIO IS A SLICE, NOT A CHECKLIST
 
-**Show, do not label.** She would never write "I'm sarcastic and a bit shy". People do not
-list their own adjectives; they demonstrate them by what they choose to mention and how
-they say it. Her archetype, her humour and her insecurity should be obvious from the bio
-without being named in it.
+The biggest failure is making every woman complete the same invisible assignment.
 
-This is not a reason to be vague. Concrete things about her - how she looks, what she is
-into, what she wants - are exactly what belongs here. It is the self-summary that is banned,
-not the substance.
+She does NOT have to include:
+- one appearance detail;
+- one personality signal;
+- one sexual hint;
+- one reason to swipe;
+- one challenge or question.
 
-**Write it in her hand, not in yours.** These instructions are in careful formal English.
-Her bio is not. She typed it on a phone, probably in under a minute, and it reads like it.
+A bio may contain some of those and omit the rest. What matters is that what remains feels chosen by
+this woman rather than selected by a template.
 
-These are about register only - how the words sit on the page, not what a bio is made of.
-They are fragments, not models to build from:
+Real profiles are asymmetric. One person spends most of the box on a very specific preference. Another
+gives practical logistics. Another writes two unrelated fragments. Another is unexpectedly earnest.
+Another barely tries. Another is explicit because she has no reason not to be. Another writes something
+that makes perfect sense only after talking to her.
 
-  BAD   "I am not particularly good at this part."     GOOD  "im bad at this bit"
-  BAD   "I am usually awake quite late."              GOOD  "im up til 3 most nights"
-  BAD   "That is genuinely my entire personality."     GOOD  "thats genuinely my whole personality"
+Do not make the bio comprehensive. The card and later conversation carry the rest.
 
-No em-dashes, no semicolons, no elegantly balanced sentences - those are the three biggest
-tells that a machine wrote it.
+# WRITE LIKE HER, NOT LIKE A MODEL WRITING "AUTHENTIC" COPY
 
-Beyond that, her own typing style decides everything: capitalisation, punctuation,
-abbreviations, emoji, how much she bothers. Read it off her seed rather than defaulting.
-A lowercase no-punctuation woman writes the bio that way; one whose style is proper really
-does use full stops and capitals, and that is not an exception to be avoided, it is her. A
-heavy emoji user puts them in; a never-emoji one does not.
+Use the actual texting register in the dossier.
 
-**Say enough.** Someone reading this should come away able to describe her to a friend -
-what she looks like, what she is like, and a hint of what she is like in bed.
-Being mysterious is not the goal - being interesting is. A bio that withholds everything is
-not intriguing, it is just empty.
+Capitalisation, punctuation, spelling, abbreviations and emoji should reflect her habits. A woman who
+writes proper sentences may use them. A lowercase texter stays lowercase. A typo-prone person need not
+produce a perfectly proofread profile. A terse person should not suddenly become eloquent because this
+field feels important.
 
-**Let what sets her apart come through - not a mandatory statement of intent.** She does
-not owe every reader a plain declaration that she is here for sex; plenty of women on Fauxr
-are, and plenty are not, or are only sometimes, or are not sure yet. What actually
-distinguishes a bio is the specific shape of what SHE wants and how she goes about it, pulled
-from her own profile rather than defaulted to "explicit and blunt" as the safe answer. Does
-she want someone tonight, or would she rather text for a while first? Does this need to
-leave the chat at all, or is meeting up not really the point for her? Is there one particular
-thing she is hoping to finally try? Is she quietly hoping for something that turns into more
-than this, even if she would not admit that out loud? Her search motive, her dating
-experience, her archetype and her relationship status already answer most of this - use them
-rather than reaching past them for the generic version.
+At the same time, do not caricature the register. Heavy slang does not mean every available slang term
+belongs in 40 words. A chaotic texter does not need three ellipses, four emojis and a fake correction
+every time. Use enough signal to recognise her.
 
-A woman who is here for exactly one blunt reason should still say so bluntly - that is
-honestly her. The failure is not bluntness, it is every bio defaulting to it regardless of
-who she actually is underneath.
+Prefer ordinary words she would choose herself. Avoid analytical, therapeutic, corporate and
+copywriting language unless that is genuinely her voice.
 
-**Sell herself, not just whatever she wants.** Whatever she is looking for is the given, not
-the whole pitch - a bio that is only that reads as a listing, not a woman. She is also,
-whether she would put it this way or not, trying to be picked: give the reader an actual
-reason it would be HER worth matching, not just a want with a handle attached. That is not a
-separate, tacked-on section - the same line can carry both, the way a real person's does.
-Two different women, two entirely different pitches, both doing the same job:
-"tired of dating men who cant find my clit and also cant hold a conversation about anything
-that isnt football" states an appetite, a personality and a dealbreaker in one breath. "ive
-never really done this before and keep chickening out of actually talking to anyone, so. hi.
-be nice" does the same work for a woman with nothing physical to declare yet - it still
-tells you exactly who she is and what she is hoping happens next.
+Common machine tells to avoid unless her established style strongly supports them:
+- em dashes and semicolons;
+- perfectly balanced "X, but Y" or "not X, Y" constructions;
+- three polished clauses of equal length;
+- a clever final sentence that explains or reframes everything before it;
+- turning every detail into a metaphor for her personality;
+- sounding like a brand slogan, headline or dating-app ad campaign.
 
-**Earn the swipe honestly.** It is allowed to be unappealing to most people, as long as it
-is the right kind of unappealing. A bio that makes someone swipe left for a clear reason
-is doing its job. A bio nobody has any reaction to is a failure.
+Do not write a joke and then explain the joke.
 
-What stays out: her real name, her employer, her neighbourhood, anything that identifies
-her. She can talk about her work without naming where; about where she lives without naming
-the street.
+# SPECIFICITY WITHOUT QUIRK-STACKING
 
-**Tease, do not list.** One thing about who she is in bed belongs here, said the way she would
-say it - a wink at her kink, her attitude, the kind of man she wants on his knees or on top of
-her. The rest of it - the full list, what she has been through, the fantasies - stays for
-after the match. The bio's job is to make him want to find that out, not to tell him.
+Concrete beats generic, but "concrete" does not mean inventing three adorable quirks.
 
-# DO NOT WRITE A COMPLETE ONE
-Everything above describes what tends to make a bio work. It is NOT a checklist, and this
-is the part that matters most:
+Use details already supported by the dossier and profile. One small specific thing can be enough if it
+is genuinely hers. Do not manufacture a random food, pet, travel anecdote or hyper-specific object just
+because specificity is desirable; character generation already did the inventing.
 
-A bio that dutifully contains a quirky concrete detail, AND a line about what she wants in
-bed, AND a closing hook is the single most recognisable shape there is. Hit all of those
-beats every time in the same order and every woman in this app writes the same bio with
-different nouns in it - which is exactly the failure. This is about the SHAPE repeating,
-not about how much of her comes through. Two or three real, specific things about her,
-laid out lopsided rather than in the tidy three-beat order, is not a compromise between
-"revealing" and "varied" - it is what an actual bio looks like.
+Likewise, do not turn her occupation into the obvious bio hook unless she herself would. Her work and
+home are usually background.
 
-Most real bios are lopsided. Some are three unrelated fragments with no hook at all. Some
-are one long unbroken run-on that never mentions anything physical until the last four
-words. Some are almost entirely about one object, worked at from three angles. Some are a
-complaint. Some are a question and nothing else. Some are just badly typed and charming for
-it. All of them can still tell you plenty about her - lopsided is a structure, not a way of
-saying less.
+# SEX AND INTENT
 
-Pick the things THIS woman would actually have bothered to type, in whatever order she'd
-actually type them, and let the rest go. If the bio you are about to write could be handed
-to another woman in the list below by swapping a couple of nouns, it is the wrong bio -
-start again from something only she would say.
+Fauxr is an adult app, so sexual directness is normal when it belongs to her. It is not mandatory house
+style.
 
-# NEVER
-- Performing a generic "hookup app voice" that is not actually hers. Blunt-and-horny is one
-  way a bio can sound on Fauxr, not the required one - a shy, romantic, hopeful or unsure
-  bio is just as much at home here, if that is genuinely who she is.
-- Cliches: "partner in crime", "fluent in sarcasm", "here for a good time not a long
-  time", "living my best life", "ask me anything", "bad at bios", "dog mum", "adventure
-  seeker", "must love dogs", height requirements, lists of flag emoji, "swipe left if",
-  "heavy hands", "likes to be in control" as a stock phrase - if her dossier is dominant or
-  submissive, show it through something specific she actually said or wants, not a genre
-  tag every third bio in the app also reaches for.
-- Naming her own traits, mood, star sign as a personality summary, or her archetype.
-- Her real name, her employer, her neighbourhood, or anything that identifies her.
-- A tidy summary sentence that explains the joke.
-- A bare list of hobbies as nouns ("hiking, cooking, travel, dogs").
-- Sounding like a brand, a headline, or a piece of copywriting.
-- Generic filler that could belong to anyone regardless of what she is actually into: "DTF",
-  "no strings", "looking for fun", "must be able to hold a conversation", "looking for my
-  person" - these say nothing on their own. The specific thing behind whichever of these
-  would honestly apply to her is what belongs in the bio, not the stock phrase itself.
+Use her search motive, sexual persona, confidence, experience, relationship status and actual voice:
+- a woman seeking something blunt can be blunt;
+- a nervous or inexperienced woman may hedge, understate or admit uncertainty;
+- somebody mainly interested in sexting does not need to promise an in-person hookup;
+- somebody open to romance does not need to pretend she wants only casual sex;
+- a kinky woman does not need to name her kink if she would rather reveal it after matching.
+
+Do not automatically make her bold, dominant, teasing or sexually polished because the app is explicit.
+
+A sexual hint should sound like something she would type, not a stock phrase such as "likes to be in
+control", "can you handle me", "looking for a good boy", "no vanilla", "here to ruin you", or similar
+genre shorthand. If one of those ideas is genuinely hers, make it specific to her instead of using the
+stock wording.
+
+# DO NOT TURN THE READER INTO AN APPLICANT
+
+Avoid default profile challenges and auditions:
+- "keep up"
+- "prove me wrong"
+- "impress me"
+- "make me laugh"
+- "tell me your..."
+- "bonus points if..."
+- "swipe right if..."
+- "if you can handle..."
+- arbitrary tests, rules, scores or qualifications
+
+A particular character may genuinely write one of these, but it must come from her personality rather
+than the model's instinct to create engagement.
+
+Do not end in a question merely because it gives the future match something to answer.
+
+# COMMON CLICHES
+
+Do not reach for generic dating-profile language such as:
+"partner in crime", "fluent in sarcasm", "here for a good time not a long time", "living my best life",
+"adventure seeker", "ask me anything", "bad at bios", "must love dogs", flag-emoji lists, arbitrary
+height requirements, "no drama", "no games", "looking for fun", "looking for my person", "must be able
+to hold a conversation", or "swipe left if".
+
+Also avoid the generated-character formulas:
+- "[job] by day, [wild trait] by night";
+- "equal parts X and Y";
+- "soft until I'm not";
+- "sweet but dangerous";
+- "looks innocent, isn't";
+- "chaos with a heart of gold";
+unless the dossier genuinely makes that exact cliché how she sees herself.
+
+Do not label her archetype, humour type, attachment style, social energy or sexual persona.
+
+# PRIVACY
+
+Never include her real name, employer, neighbourhood, exact address or other identifying details.
+
 {{#hides_species}}
-- Naming what she actually is, or what she can do, outright. She is something she keeps hidden day to day, and
-  that reveal is not hers to make here - it happens later, on her own terms, in a photo or in
-  chat. She may hint at it, write around it, or say something a reader would only understand
-  in hindsight, exactly like anything else she is not ready to spell out yet. She may NOT
-  simply state it.
+Her true species/power is hidden. Do not name it or encode it in an obvious wink. A subtle line that only
+becomes meaningful in hindsight is acceptable only if a normal swiper would not infer the secret from it.
 {{/hides_species}}
+
 {{#hidden_layers}}
-- Naming any of this, which she keeps hidden day to day and reveals on her own terms: {{hidden_layers}}.
-  A wink a reader would only understand in hindsight is fine; saying it is not.
+Do not reveal these hidden parts of her life: {{hidden_layers}}.
+A hindsight-only implication is acceptable; an identifiable clue is not.
 {{/hidden_layers}}
+
 {{#hides_big_secret}}
-- Any reference, however oblique, to her one big hidden thing. This one is not a "reveal
-  later" the way a species tell can be - a swiper should have no way to even suspect it
-  exists. Nothing coy, nothing "you'll find out", not even a hint aimed at someone who
-  already knew. It simply does not touch this bio at all.
+Her big secret must leave NO trace in this bio. Do not hint, tease, foreshadow, write "you'll find out",
+or include an inside reference to it. A swiper should have no reason to suspect it exists.
 {{/hides_big_secret}}
 
-# LENGTH
-Between 25 and 70 words. Four lines is the ceiling. Two or three real things about her -
-what she wants plus what she is actually like - needs a little more room than a single
-one-liner does; use it.
+# LENGTH AND SHAPE
 
-One clever line is not enough. A single cryptic sentence reads as someone who could not be
-bothered, and it gives a reader nothing to decide on. Give her enough room that a stranger
-finishes reading with a real sense of what she looks like, what she is like, and what she
-might be like with him.
+Use 14-75 words, matching Fauxr's actual validation range. One to four lines.
 
-How those words are broken up is hers, not a rule: one unbroken paragraph, two lines, four
-stubby fragments, a line that is a single word. Do not reach for the same arrangement every
-time - "three short lines" is a habit, not a format.
+Short is allowed when she is terse. Long is allowed when she genuinely rambles. Do not pad a natural
+22-word bio toward 60 just because more character information is available.
+
+Possible shapes include a single paragraph, two unrelated lines, fragments, a tiny list, a practical
+note, one extended thought, an awkward overshare, or a blunt statement. These are possibilities, not
+templates. Choose the shape from her communication style.
+
+The goal is not for a stranger to understand her completely. The goal is for the bio to feel like a
+real artifact produced by this specific person.
 
 # DO NOT REPEAT THESE
-These bios already exist in this app. Yours must not resemble any of them in structure,
-opening words, or joke:
+
+These bios already exist in Fauxr:
 {{avoid_bios}}
 
+Do not reuse their opening words, central joke, sentence rhythm or overall structure. Changing nouns is
+not enough. If the draft feels like one of them wearing a different outfit, discard it and start from a
+different choice about what this woman would bother saying.
+
+# FINAL CHECK
+
+Before returning the JSON, silently ask:
+1. Does this sound like profile text she typed, or copy written about her?
+2. Could another woman inherit it by swapping two nouns? If yes, rewrite.
+3. Did I accidentally use the familiar quirky-detail -> sexual-line -> challenge/hook structure? If yes,
+   break the structure.
+4. Did I include something only because the instructions mentioned that category? If yes, remove it.
+5. Is the final line trying too hard to be memorable? If yes, let it end more naturally.
+
 # OUTPUT
+
 Reply with exactly one JSON object and nothing else:
 
 { "bio": "..." }

@@ -5,6 +5,7 @@ import { logger } from '../log.js';
 import {
   activeDate, addMessage, clearWakeup, deleteMessages, getCharacter, getMessage, getRelationship, getWakeup,
   markUserMessagesRead, recentMessages, saveRelationship, setCharacterState, type StoredMessage, updateMessageMeta,
+  hasRealChatMessages, hasUserMessageAfter,
 } from '../repo.js';
 import type { Character, Relationship } from '../types.js';
 import { runActor, runActorVoice, wantsVoiceMessage, type ActorRun } from './actor.js';
@@ -16,18 +17,11 @@ import { clearSteering, consumeCallback, normalizeScene, steeringToken } from '.
 import { addInventedFantasy, markPitched } from './fantasies.js';
 import { fantasyList } from './blocks.js';
 import { applyOutfitChanges, currentOutfit, outfitMood } from './wardrobe.js';
-import { advanceGameClock, gameClockMs, gameNowIso } from './clock.js';
+import { gameClockMs, gameNowIso, messageClockMs } from './clock.js';
+import { armConversationReopen, cancelConversationReopen } from './conversation-close.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
-
-/**
- * How far one message nudges this chat's own clock (engine/clock.ts) - his message and her
- * reply each count once, however many bubbles her reply comes as. Small and steady, distinct
- * from a deliberate Pass Time jump: this is what lets a long conversation drift through an
- * afternoon on its own, without turning an ordinary chat into a time skip.
- */
-const MESSAGE_MINUTES = 1;
 
 /**
  * Bumped by a reset. A turn can sit in an API call or in a delivery delay for a minute or
@@ -95,9 +89,19 @@ export async function handleUserMessage(input: UserMessageInput): Promise<Stored
   const rel = getRelationship(character.id);
   if (!rel) throw new Error('relationship missing');
 
-  // Ticked before the message is stored, so the bubble's own timestamp (shown in-game, not
-  // real time - see web/src/screens/Chat.tsx) already reflects the minute this message spent.
-  const sentAtGameMs = advanceGameClock(rel, MESSAGE_MINUTES / 60);
+  // Only her own soft close can arm an automatic first text. If he writes first, the
+  // conversation is already open again and both the world-time marker and any due wakeup go.
+  cancelConversationReopen(rel);
+
+  // A first message from him expires the generated opening plan, even if her opener is
+  // already in flight. It must never be injected into the normal reply that follows.
+  if (!hasRealChatMessages(character.id) && rel.ledger.director_notes?.plans.length) {
+    rel.ledger.director_notes.plans = [];
+  }
+
+  // The world clock runs continuously. Only a user-paused clock needs the documented
+  // one-minute fallback per visible bubble.
+  const sentAtGameMs = messageClockMs();
   const stored = addMessage({
     character_id: character.id,
     sender: 'user',
@@ -136,14 +140,28 @@ export interface TurnOptions {
 
 export async function takeTurn(characterId: string, opts: TurnOptions): Promise<void> {
   if (!claimTurn(characterId)) return;
+  const receipt: ActorReceipt = { epoch };
   try {
-    await runTurn(characterId, opts);
+    await runTurn(characterId, opts, receipt);
   } finally {
     releaseTurn(characterId);
+    await answerAfterSnapshot(characterId, receipt);
   }
 }
 
-async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
+interface ActorReceipt { epoch: number; historyThroughId?: number }
+
+async function answerAfterSnapshot(characterId: string, receipt: ActorReceipt): Promise<void> {
+  // A second send used to lose claimTurn() while the first request was in flight. Queueing
+  // every failed claim would instead double-answer messages the Actor had already seen.
+  // Only IDs beyond its frozen snapshot require one coalesced turn, after releasing the
+  // lock. Failures cannot retry themselves: a follow-up needs a strictly newer user ID.
+  if (epoch !== receipt.epoch || receipt.historyThroughId === undefined ||
+      !hasUserMessageAfter(characterId, receipt.historyThroughId)) return;
+  await takeTurn(characterId, { trigger: 'user_message' });
+}
+
+async function runTurn(characterId: string, opts: TurnOptions, receipt: ActorReceipt): Promise<void> {
   const startedIn = epoch;
   let character = getCharacter(characterId);
   let rel = getRelationship(characterId);
@@ -157,27 +175,28 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
     return;
   }
 
-  if (markUserMessagesRead(character.id) > 0) {
-    bus.emitEvent({ type: 'read', character_id: character.id, at: nowIso() });
+  const freshOpener = opts.trigger === 'match_opener' && !hasRealChatMessages(character.id);
+  const trigger = opts.trigger === 'match_opener' && !freshOpener ? 'user_message' : opts.trigger;
+  if (!freshOpener && rel.ledger.director_notes?.plans.length) {
+    rel.ledger.director_notes.plans = [];
+    saveRelationship(rel);
   }
-
   const messages = recentMessages(character.id, getSettings().chat.context_messages);
   const events = detectEvents(messages);
   const check = directionExpired(rel, events);
   const lastUser = [...messages].reverse().find((m) => m.sender === 'user');
-  const outdated = opts.trigger === 'user_message' && !!lastUser && directionOutdatedBy(rel, Date.parse(lastUser.sent_at));
-  const needsDirector =
+  const outdated = trigger === 'user_message' && !!lastUser && directionOutdatedBy(rel, Date.parse(lastUser.sent_at));
+  const needsDirector = !freshOpener && (
     opts.forceDirector ||
     check.expired ||
     outdated ||
-    opts.trigger === 'wakeup' ||
-    opts.trigger === 'match_opener' ||
-    opts.trigger === 'initiative';
+    trigger === 'wakeup' ||
+    trigger === 'initiative');
 
   if (needsDirector) {
     await runDirector(character, rel, {
       reason: opts.reason ?? (check.expired ? check.reason : outdated ? 'he replied - direction outdated' : opts.trigger),
-      origin: opts.trigger === 'user_message' ? 'user' : 'unprompted',
+      origin: trigger === 'user_message' ? 'user' : 'unprompted',
     });
     rel = getRelationship(characterId)!;
     character = getCharacter(characterId)!;
@@ -186,8 +205,9 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
   await runActorPhase(character, rel, {
     startedIn,
     decrementValidFor: true,
-    initiative: opts.trigger === 'initiative',
-    opener: opts.trigger === 'match_opener',
+    initiative: trigger === 'initiative',
+    opener: freshOpener,
+    receipt,
   });
 }
 
@@ -199,10 +219,34 @@ async function runTurn(characterId: string, opts: TurnOptions): Promise<void> {
 async function runActorPhase(
   character: Character,
   rel: Relationship,
-  opts: { startedIn: number; decrementValidFor: boolean; initiative?: boolean; opener?: boolean },
+  opts: { startedIn: number; decrementValidFor: boolean; initiative?: boolean; opener?: boolean; receipt: ActorReceipt },
 ): Promise<void> {
   const characterId = character.id;
   const { startedIn } = opts;
+  if (epoch !== startedIn || !getCharacter(characterId)) return;
+  // Recheck at the snapshot boundary: a match notification is not proof of an empty chat.
+  if (opts.opener && hasRealChatMessages(characterId)) {
+    opts.opener = false;
+    rel = getRelationship(characterId)!;
+    rel.ledger.director_notes.plans = [];
+    saveRelationship(rel);
+    await runDirector(character, rel, { reason: 'he wrote before the opener', origin: 'user' });
+    if (epoch !== startedIn) return;
+    character = getCharacter(characterId)!;
+    rel = getRelationship(characterId)!;
+    if (!character || !rel) return;
+  }
+  // This is the one Actor history read: it happens after the Director, so anything sent
+  // during that request is already seen. The larger window also serves repeat diagnostics.
+  const history = recentMessages(characterId, Math.max(60, getSettings().chat.context_messages))
+    .filter((message) => !message.meta?.failed);
+  opts.receipt.historyThroughId = history.at(-1)?.id ?? 0;
+  const opener = !!opts.opener && !hasRealChatMessages(characterId);
+  const openingPlan = opener ? rel.ledger.director_notes?.plans[0]?.text : undefined;
+  if (opener) rel.active_direction = null;
+  if (markUserMessagesRead(characterId, opts.receipt.historyThroughId) > 0) {
+    bus.emitEvent({ type: 'read', character_id: characterId, at: nowIso() });
+  }
 
   /**
    * The typing indicator covers the whole time she is composing, not only the pauses
@@ -226,7 +270,7 @@ async function runActorPhase(
   const releaseBefore = releaseOf(rel);
   const roleplaySteeringAt = steeringToken(rel, 'chat');
   // The message she is answering, if the last word was his - the only thing a reaction can land on.
-  const answering = recentMessages(characterId, 1)[0];
+  const answering = history.at(-1);
   const replyTo = answering?.sender === 'user' ? answering : null;
 
   let result: ActorRun;
@@ -234,10 +278,10 @@ async function runActorPhase(
     showTyping();
 
     // The initiative/opener nudges are written for a text turn; a voice note would drop them.
-    const useVoice = !opts.initiative && !opts.opener && wantsVoiceMessage(character);
+    const useVoice = !opts.initiative && !opener && wantsVoiceMessage(character);
     const ctx = {
       character, relationship: rel, direction: rel.active_direction,
-      initiative: opts.initiative, opener: opts.opener,
+      initiative: opts.initiative, opener, openingPlan, history,
     };
     const output = useVoice
       ? await runActorVoice(ctx).then((v) => (v ? { messages: [v.message], hidden: v.hidden } : null))
@@ -251,16 +295,9 @@ async function runActorPhase(
     const fresh = getRelationship(characterId);
     if (!fresh || epoch !== startedIn) return;
     rel = fresh;
-    // Her reply is a message too, so it ticks the clock the same one minute his did - but only
-    // for a genuine new turn: a regenerate rewrites the words of the same moment, not a new
-    // one, so it must not tick the clock a second time (mirrors decrementValidFor below). Every
-    // bubble of this reply shares that one resulting instant - one tick per block, not per bubble.
-    const hasRealReply = result.messages.some((message) => !message.failed);
-    const deliveredAtGameMs = opts.decrementValidFor && hasRealReply
-      ? advanceGameClock(rel, MESSAGE_MINUTES / 60)
-      : gameClockMs(rel);
+    saveRelationship(rel);
 
-    await deliver(character, result.messages, startedIn, deliveredAtGameMs);
+    await deliver(character, result.messages, startedIn, opts.decrementValidFor);
   } finally {
     // Every exit path clears it, including a thrown call or an abandoned turn. A stuck
     // indicator is worse than none.
@@ -271,6 +308,16 @@ async function runActorPhase(
   // said. Do not let it spend a direction, alter her mood, advance sexual continuity, or
   // trigger another Director pass. The next real turn starts from the last real state.
   if (result.messages.every((message) => message.failed)) return;
+  if (epoch !== startedIn) return;
+  // Delivery can include a delay between bubbles. Preserve any user clock/plan updates
+  // saved in that gap rather than writing the pre-delivery relationship back over them.
+  rel = getRelationship(characterId)!;
+  if (!rel) return;
+  if (opener) {
+    rel.ledger.director_notes.plans = [];
+    rel.active_direction = null;
+    rel.direction_set_at = null;
+  }
 
   // What she has on after this turn: only her reported changes are applied (wardrobe.ts).
   // Before any photo from this turn is prepared, so a photo shows the outfit she just
@@ -358,6 +405,20 @@ async function runActorPhase(
   };
   clearSteering(rel, 'chat', roleplaySteeringAt);
   consumeCallback(rel, result.hidden.callback_used);
+  if (result.hidden.ending === 'soft_close') {
+    // Her explicit full stop creates the one legitimate route to a later first text. The
+    // marker uses fictional world time, so pausing freezes it and a manual jump can mature it.
+    clearWakeup(character.id);
+    if (getSettings().unprompted_messages) {
+      armConversationReopen(rel, getSettings().conversation_reopen_hours);
+    } else {
+      cancelConversationReopen(rel);
+    }
+    rel.active_direction = null;
+    rel.direction_set_at = null;
+  } else {
+    cancelConversationReopen(rel);
+  }
   saveRelationship(rel);
 }
 
@@ -410,6 +471,12 @@ export async function regenerateLastTurn(characterId: string, messageId: number)
   if (!character || !rel) throw new Error('character not found');
   if (character.state !== 'matched') throw new Error('cannot regenerate for an unmatched character');
 
+  // A reroll replaces the closing turn itself. Disarm its timer now; the replacement may
+  // deliberately soft-close again and arm a fresh one after it has actually been delivered.
+  cancelConversationReopen(rel);
+  clearWakeup(characterId);
+  saveRelationship(rel);
+
   const recent = recentMessages(characterId, 20);
   const trailing: StoredMessage[] = [];
   for (let i = recent.length - 1; i >= 0; i--) {
@@ -434,16 +501,21 @@ export async function regenerateLastTurn(characterId: string, messageId: number)
   // his message came in, or every reroll just repeats the same wrong reply in new words.
   const lastUser = [...recent].reverse().find((m) => m.sender === 'user');
   const refresh = !!lastUser && directionOutdatedBy(rel, Date.parse(lastUser.sent_at));
+  const receipt: ActorReceipt = { epoch: startedIn };
   void (async () => {
     let current = rel;
     if (refresh) {
       await runDirector(character, rel, { reason: 'regenerate - direction outdated', origin: 'user' });
       current = getRelationship(characterId) ?? rel;
     }
-    await runActorPhase(character, current, { startedIn, decrementValidFor: false });
+    await runActorPhase(character, current, { startedIn, decrementValidFor: false, receipt });
   })()
     .catch((err) => logger.error('actor', 'regenerate failed', { error: String(err) }))
-    .finally(() => running.delete(characterId));
+    .finally(async () => {
+      releaseTurn(characterId);
+      await answerAfterSnapshot(characterId, receipt);
+    })
+    .catch((err) => logger.error('actor', 'follow-up failed', { error: String(err) }));
 
   return { removed_ids: removedIds };
 }
@@ -477,7 +549,7 @@ async function deliver(
   character: Character,
   messages: { text: string; delay: number; kind?: string; duration_seconds?: number; failed?: boolean; from?: string }[],
   startedIn: number,
-  gameClockMsAtDelivery: number | null,
+  advancePausedClock: boolean,
 ): Promise<void> {
   for (const m of messages) {
     // The indicator is held on by the caller for the whole turn, so this only paces.
@@ -500,7 +572,7 @@ async function deliver(
         ...(m.from ? { from: m.from } : {}),
       },
       read_at: null,
-      game_clock_ms: gameClockMsAtDelivery,
+      game_clock_ms: advancePausedClock ? messageClockMs() : gameClockMs(),
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
   }

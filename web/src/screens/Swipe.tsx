@@ -8,16 +8,20 @@ const COMMIT_PX = 90;
 export default function Swipe({ onMatched }: { onMatched: () => void }) {
   const [profiles, setProfiles] = useState<SwipeProfile[]>([]);
   const [generating, setGenerating] = useState(0);
+  const [preparingImages, setPreparingImages] = useState(0);
+  const [showImages, setShowImages] = useState(false);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
   const [drag, setDrag] = useState(0);
-  const startX = useRef<number | null>(null);
+  const gesture = useRef<{ x: number; y: number; axis: 'x' | 'y' | null; dx: number } | null>(null);
 
   const load = useCallback(async () => {
     try {
       const res = await api.stack();
       setProfiles(res.profiles);
       setGenerating(res.generating);
+      setPreparingImages(res.preparing_images);
+      setShowImages(res.show_images);
     } catch {
       /* offline - keep what we have */
     } finally {
@@ -27,7 +31,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
 
   useEffect(() => {
     void load();
-    const id = setInterval(load, 15_000);
+    const id = setInterval(load, 8_000);
     return () => clearInterval(id);
   }, [load]);
 
@@ -59,18 +63,43 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
     void load();
   };
 
+  const skip = async () => {
+    if (!current) return;
+    const skipped = current;
+    setProfiles((profiles) => [...profiles.slice(1), skipped]);
+    setDrag(0);
+    try {
+      await api.skipProfile(skipped.id);
+    } catch {
+      setToast('Could not skip that profile.');
+      void load();
+      setTimeout(() => setToast(null), 3500);
+    }
+  };
+
   const onTouchStart = (e: React.TouchEvent) => {
-    startX.current = e.touches[0].clientX;
+    if (e.touches.length !== 1) return;
+    gesture.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, axis: null, dx: 0 };
   };
   const onTouchMove = (e: React.TouchEvent) => {
-    if (startX.current === null) return;
-    setDrag(e.touches[0].clientX - startX.current);
+    const g = gesture.current;
+    if (!g || e.touches.length !== 1) return;
+    const dx = e.touches[0].clientX - g.x;
+    const dy = e.touches[0].clientY - g.y;
+    // Scrolling a long profile must never wobble the card or accidentally reject it.
+    if (!g.axis && Math.max(Math.abs(dx), Math.abs(dy)) > 12) {
+      g.axis = Math.abs(dx) > Math.abs(dy) * 1.4 ? 'x' : 'y';
+    }
+    if (g.axis === 'x') { g.dx = dx; setDrag(dx); }
   };
   const onTouchEnd = () => {
-    if (Math.abs(drag) > COMMIT_PX) void decide(drag > 0 ? 'right' : 'left');
-    else setDrag(0);
-    startX.current = null;
+    const g = gesture.current;
+    gesture.current = null;
+    setDrag(0);
+    if (g?.axis === 'x' && Math.abs(g.dx) > COMMIT_PX) void decide(g.dx > 0 ? 'right' : 'left');
   };
+
+  useEffect(() => { gesture.current = null; setDrag(0); }, [current?.id]);
 
   // Arrow keys on desktop, where there is nothing to swipe with.
   useEffect(() => {
@@ -84,17 +113,18 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
   });
 
   return (
-    <>
+    <section className="discover-screen" aria-label="Discover profiles">
       <div className="topbar">
         <h1>Discover</h1>
         <div className="spacer" />
         <span className="usage-pill">
           {profiles.length} profile{profiles.length === 1 ? '' : 's'} ready
           {generating > 0 ? ' · finding more' : ''}
+          {preparingImages > 0 ? ` · developing ${preparingImages}` : ''}
         </span>
       </div>
 
-      {toast && <div className="banner">{toast}</div>}
+      {toast && <div className="banner discover-toast" role="status">{toast}</div>}
 
       <div className="swipe-area">
         {loading && (
@@ -114,9 +144,11 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
 
         {!loading && !current && (
           <div className="empty">
-            <strong>{generating > 0 ? 'Finding more people' : 'That is everyone'}</strong>
-            {generating > 0
-              ? 'New profiles are being written right now.'
+            <strong>{generating > 0 || preparingImages > 0 ? 'Finding more people' : 'That is everyone'}</strong>
+            {preparingImages > 0
+              ? 'Their profile pictures are being developed now. They will appear here when ready.'
+              : generating > 0
+                ? 'New profiles are being written right now.'
               : 'Nobody left in the stack. Check back in a bit.'}
           </div>
         )}
@@ -125,7 +157,8 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
           <>
             <div className={`swipe-deck${profiles.length > 1 ? ' stacked' : ''}`}>
               <div
-                className={`swipe-card${drag !== 0 ? ' dragging' : ''}`}
+                key={current.id}
+                className={`swipe-card${current.profile_picture ? ' has-photo' : ''}${drag !== 0 ? ' dragging' : ''}`}
                 style={{
                   transform: `translateX(${drag}px) rotate(${drag / 26}deg)`,
                   opacity: 1 - Math.min(Math.abs(drag) / 340, 0.55),
@@ -133,6 +166,7 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
+                onTouchCancel={() => { gesture.current = null; setDrag(0); }}
               >
                 {/* Half a swipe should already tell you which way it is going to land. */}
                 <div className="verdict like" style={{ opacity: Math.max(0, Math.min(drag / COMMIT_PX, 1)) }}>
@@ -142,45 +176,54 @@ export default function Swipe({ onMatched }: { onMatched: () => void }) {
                   Nope
                 </div>
 
-                <div className="swipe-intro">
-                  <div className="swipe-emoji" aria-hidden="true">{current.avatar_emoji}</div>
-                  <div className="swipe-names">
-                    <div className="real-name">{current.real_name}<span className="swipe-age">, {current.age}</span></div>
-                    <div className="handle">{current.username}</div>
-                  </div>
-                </div>
-                <div className="swipe-meta">
-                  {current.ethnicity && <span>{current.ethnicity}</span>}
-                </div>
-                <div className="bio">{current.bio}</div>
-                {current.traits?.length > 0 && (
-                  <div className="swipe-signals">
-                    <span className="swipe-signals-title">A few things about her</span>
-                    <ul className="swipe-traits" aria-label="What defines her">
-                    {current.traits.map((t) => (
-                      <li key={t.caption + t.label}>
-                        <span className="caption">{t.caption}</span>
-                        <span className="value">{t.label}</span>
-                      </li>
-                    ))}
-                    </ul>
-                  </div>
+                {current.profile_picture && (
+                  <div className="swipe-photo"><img src={current.profile_picture} alt={`${current.real_name}'s profile`} /></div>
                 )}
+                <div className="swipe-copy" tabIndex={0} aria-label="Profile details">
+                  <div className="swipe-intro">
+                    {!current.profile_picture && <div className="swipe-emoji" aria-hidden="true">{current.avatar_emoji}</div>}
+                    <div className="swipe-names">
+                      <div className="real-name">{current.real_name}<span className="swipe-age">, {current.age}</span></div>
+                      <div className="handle">{current.username}</div>
+                    </div>
+                  </div>
+                  <div className="swipe-meta">
+                    {current.ethnicity && <span>{current.ethnicity}</span>}
+                  </div>
+                  <div className="bio">{current.bio}</div>
+                  {current.traits?.length > 0 && (
+                    <div className="swipe-signals">
+                      <span className="swipe-signals-title">A few things about her</span>
+                      <ul className="swipe-traits" aria-label="What defines her">
+                      {current.traits.map((t) => (
+                        <li key={t.caption + t.label}>
+                          <span className="caption">{t.caption}</span>
+                          <span className="value">{t.label}</span>
+                        </li>
+                      ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
             <div className="swipe-actions">
               <button className="nope" onClick={() => void decide('left')} aria-label="Pass">
-                <Icon name="cross" size={26} />
+                <Icon name="cross" size={22} /><span>Pass</span>
+              </button>
+              <button className="skip" onClick={() => void skip()} aria-label="Skip for now" title="Skip for now">
+                <Icon name="refresh" size={22} />
+                <span>Skip</span>
               </button>
               <button className="like" onClick={() => void decide('right')} aria-label="Like">
-                <Icon name="heart" size={28} />
+                <Icon name="heart" size={22} /><span>Like</span>
               </button>
             </div>
           </>
         )}
-        <div className="stack-count">Swipe or use the arrow keys</div>
+        <div className="stack-count">{showImages ? 'Profiles appear once their picture is ready · ' : ''}Swipe or use the arrow keys</div>
       </div>
-    </>
+    </section>
   );
 }

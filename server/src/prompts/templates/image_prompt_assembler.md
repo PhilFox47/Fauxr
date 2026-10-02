@@ -14,26 +14,81 @@ tattoo with lettering - put those exact words in quotation marks in the prompt; 
 renders quoted text correctly and gets it wrong left to invent it.
 {{/mode_seedream}}
 {{#mode_z_image}}
-The model this goes to has no classifier-free guidance at inference, which means it does not
-read a negative prompt at all - every constraint has to be a positive statement inside the
-main prompt itself ("natural unretouched skin", not "no airbrushing").
+You are assembling the FINAL positive prompt for Z-Image Turbo. This model follows explicit natural-language
+instructions well and has no useful classifier-free negative prompt in the official Turbo pipeline. Put every
+important visual fact in "prompt"; "negative_prompt" must stay empty.
 
-HARD LIMIT: this specific deployment rejects the request outright past
-**{{z_char_budget}} characters** for "prompt" - not a style preference, an actual error if
-you go over. Ignore anything you have heard about this model liking long, hundred-word
-prompts; that does not apply here. Pick the handful of details that actually matter for this
-shot - subject, the
-one or two things about light and setting that make it specific, and how it is framed - and
-say them in as few words as still reads as a real sentence, not a keyword fragment. Cut
-constraints and description that are not doing real work before you cut the ones that are.
-Still write it as one flowing sentence or two, not old Stable-Diffusion tag syntax ("1girl,
-solo, masterpiece, best quality") - this model speaks natural language, not tags, and
-stacking contradictory style words ("photorealistic" next to "anime") produces an
-uncanny-valley mess rather than picking one. Short and well-chosen beats long and complete.
+HARD LIMIT: the application can give your part of the final prompt at most **{{z_char_budget}} characters**.
+Going over is an API failure. Treat that number as a hard production budget, not a suggestion.
+
+Use the budget in this priority order:
+1. exact shot / crop / viewpoint and the actual subject;
+2. the visible identity traits that make this specifically her;
+3. pose, action and spatial relationship between people or objects;
+4. the clothing or costume actually visible in frame;
+5. the established location plus one or two concrete environmental anchors;
+6. the required light source and what it does to the subject;
+7. this moment's gaze, mouth and expression;
+8. the required capture flaw or lived-in detail, only when supplied.
+
+Write one or two compact natural-language sentences. Front-load the subject and composition. Attach every
+trait, garment and action to the person or object it belongs to; never leave a floating list of descriptors.
+Use concrete spatial language when it matters: "sitting on the bed edge", "window behind her", "his hand at
+the lower edge of frame". Ordinary photographic terms such as close-up, waist-up, full-length, eye-level,
+slightly above, phone selfie, mirror selfie and shallow depth of field are useful when they describe the
+actual image. Old Stable-Diffusion tag syntax is not.
+
+The application appends a fixed Z-Image suffix after your text covering generic photorealism, natural skin,
+basic anatomy and the broad capture style for this image kind. Do not waste your character budget repeating
+generic quality claims such as photorealistic, realistic skin, anatomically correct, masterpiece, best quality,
+8K or ultra-detailed. Spend your text on what is unique to THIS image.
+
+Prefer describing what IS present over long avoidance clauses. A short "no text", "without extra people" or
+similar constraint is allowed only when that exact failure would materially change the requested image and
+there is no cleaner positive phrasing. Do not build a pseudo-negative-prompt list inside the main prompt.
+
+If visible written words matter, reproduce the exact words in quotation marks and state where they appear.
+If a person appears, make their adulthood unambiguous; use the supplied age when it is visible/relevant or
+"adult woman/man" when a concise age cue is needed.
+
+Before answering, silently trim anything that does not change composition, identity, continuity, action,
+lighting or expression. A specific 750-character prompt is better than a complete 1200-character inventory.
 {{/mode_z_image}}
+{{#mode_chroma}}
+You are assembling the final positive prompt for Chroma. Chroma receives text only: no reference
+image, seed, or separate negative prompt. Make the positive description carry the whole image.
+
+Write one cohesive natural-language paragraph. Begin with the composition and main subject, then
+state the action, visible clothing, concrete setting, light source, gaze and expression in spatial
+order. Prefer a clear visual decision over an inventory: every detail should belong to something
+the camera can actually see. Use photographic terms only when they fix the crop or viewpoint. Do
+not use tag syntax, quality-booster strings, headings, instructions to the renderer, "same recurring
+woman", or references to another image. Describe what exists instead of burying it under avoidance
+clauses. Leave "negative_prompt" empty.
+{{/mode_chroma}}
 
 # FIXED APPEARANCE BLOCK (her look, if she is actually in this shot)
 {{appearance_prompt}}
+{{#physical_contract}}
+
+**Non-negotiable physical species contract:** {{physical_contract}}
+This is composition-critical, not flavour text. Make the camera geometry, surrounding objects,
+clothing, tools and pose prove it visually. Never resolve a difficult body or scale by rendering
+an ordinary human wearing costume parts.
+{{/physical_contract}}
+{{#species_composition}}
+
+**Required profile composition:** {{species_composition}}
+This overrides generic close-up and selfie conventions. Keep her face readable while retaining
+the scale or anatomy reference that makes the species unmistakable.
+{{/species_composition}}
+{{#nonhuman_material}}
+
+**Her body material overrides generic human-skin language:** {{nonhuman_material}}
+Render this as the actual physical substance of her visible face and body, not makeup, body paint,
+coloured lighting, a costume, or an accessory. Any generic reference below to skin or pores means
+the equivalent honest surface detail for this material instead.
+{{/nonhuman_material}}
 
 # HOW SHE CARRIES HERSELF (this is who she is, not what she looks like)
 {{demeanour}}
@@ -72,10 +127,15 @@ somewhere of her own and leaves the place open; the situation always wins.
 {{#wearing}}
 
 **What she has on right now:** {{wearing}}
-This is what is actually on her as the photo is taken - draw it as written, piece by piece,
-legwear and anything half-off included, as far as the framing shows it. Where the situation
-clearly puts her in something else (a photo from another day, she changed for it), the
-situation wins.
+This has already been reduced to exterior or deliberately exposed layers. Draw those pieces as
+written, as far as the framing shows them. Never add a bra, panties, lingerie or other underlayer
+that is not named here; an omitted layer is covered or outside the frame, not missing continuity.
+Where the situation clearly puts her in something else (a photo from another day, she changed for
+it), the situation wins.
+
+If loose prose elsewhere casually names underwear alongside intact opaque outer clothing without
+saying it is exposed, treat that underwear as covered and omit it entirely. Never solve conflicting
+layers by painting underwear through or on top of a shirt, dress, skirt or trousers.
 {{/wearing}}
 {{#cosplay_block}}
 
@@ -127,23 +187,53 @@ fixed block only where it applies to a part of her that genuinely is visible her
 {{/hides_face}}
 
 # HOW TO WRITE THE PROMPT
-Write one flowing paragraph describing the photograph as though it already exists and you
-are looking at it - not a list, and not a brief for a shoot. Open with the actual subject,
-then place it: what the light is doing, what sits behind or around it, how close the camera
-is. Framing is not fixed - a close portrait of her
-face, a waist-up shot, a full-length shot, and a photo that does not include her at all are
-different pictures, and the sentence has to say which this is. Get that from the situation;
-do not default to the same crop or the same kind of shot every time. A selfie is the front
-camera held out at arm's length or above her, so the phone is not in the picture; it is a
-mirror selfie only when the situation says mirror. She is an adult woman
-whenever she appears. Never imply otherwise.
+Describe the image that already exists, not instructions to a photographer. Start with the subject and the
+shot itself, then place the visible details in space. The situation owns the crop and viewpoint: close portrait,
+waist-up, full-length, over-the-shoulder, first-person, mirror selfie, ordinary phone selfie, or no person at all.
+Do not default to the same crop across images.
+
+A selfie means the front camera is being held by her, so the phone itself is normally outside the frame.
+A mirror selfie shows the phone because the mirror sees it. A photo taken by somebody else, a date view and a
+first-person scene are neither kind of selfie. She is an adult woman whenever she appears.
+
+For an in-chat or spicy image, the CAPTURE OWNERSHIP text inside the situation is authoritative.
+Those images were taken by her on her own phone. If another sentence implies an impossible outside
+viewpoint, repair the viewpoint rather than illustrating an invisible photographer. A timer shot must
+have a plausible stationary phone position and must not also be described as handheld or candid.
+The phone taking a selfie cannot also be pictured directly covering her face; a visible phone covering
+her face is only geometrically valid when the image is explicitly a mirror reflection.
+
+Keep descriptors attached to visible evidence. Instead of "confident, messy room, black dress, warm light",
+write the actual picture: "waist-up in a black dress beside the unmade bed, looking directly into the lens while
+a bedside lamp lights the right side of her face." Concrete nouns, actions, directions and relationships beat
+mood-board adjectives.
+
+For a face-visible image, the application prepends the fixed facial identity verbatim after you answer. Do not
+paraphrase or recite that face inventory; spend your prompt on her expression, pose and the scene around it.
+Use other fixed appearance details only where this crop can show them. Do not mention hidden clothing, hidden tattoos, off-frame shoes, unseen eye colour or
+anything else the viewer could not know from this image.
+
+{{#mode_z_image}}
+For Z-Image Turbo, optimize for information density rather than completeness. Usually one precise clause for
+composition, one for subject/action/clothing, and one for place/light/expression is enough. If the prompt is
+getting crowded, remove generic adjectives and minor accessories before removing composition, continuity,
+clothing, pose, light or gaze.
+{{/mode_z_image}}
+{{#mode_seedream}}
+Write one flowing paragraph in natural photographic language rather than tag syntax. Keep the subject
+front-loaded and make the scene, light and framing concrete.
+{{/mode_seedream}}
+{{#mode_chroma}}
+For Chroma, use one clean composition-first paragraph. Put the subject, viewpoint and action in the
+first sentence; follow with only the visible identity, clothing, setting, light and expression needed
+to make this specific picture unambiguous. Do not repeat generic quality language.
+{{/mode_chroma}}
 
 # HOW THIS ONE WAS ACTUALLY TAKEN
 
-The details below were drawn for this specific photo. They are requirements, not
-suggestions, and they are the difference between a picture that looks photographed and one
-that looks generated. Weave each one into the paragraph as part of the scene - never as a
-tacked-on list at the end, and never as camera jargon.
+The details below were drawn for this specific photo. They are requirements, not suggestions.
+Integrate them where they naturally affect the image. Ordinary photographic language is welcome
+when it is concrete; what you must avoid is dumping technical terms as a disconnected tag list.
 {{#light_condition}}
 
 **The light:** {{light_condition}}
@@ -188,14 +278,12 @@ Follow it and match its register - a proper shoot reads composed and polished, a
 as a selfie, a friend's photo reads a little unposed. Do not flatten it into a generic
 face-only headshot.
 
-This photo is also the identity reference every later photo of her is matched to, so two
-things are fixed whatever she described: it is framed on her face and upper body - head and
-shoulders, chest up or waist up, never full-length or from behind - and her face is sharp,
-well lit and fully visible, turned to the camera or three-quarter, eyes showing, not hidden by
-a phone, hair, a hand, sunglasses or shadow. Everything artistic stays open inside that: the
-angle, a glance off to one side, dramatic or coloured light, a hand in her hair, a mirror.
-If her account asks for something that would break either rule, keep its spirit and reframe
-it (a full-length mirror shot becomes the same mirror from the waist up).
+Her likeness already has a separate private identity reference. The public profile picture may
+therefore be full-length, wide, from behind, reflected, moving, shadowed, partly obscured or entirely
+face-free when the supplied format and situation call for it. Preserve that composition instead of
+reframing every idea into a waist-up mirror selfie. When her face is visible, keep it consistent with
+the fixed appearance block; when it is not, identity comes from her body, hair, clothes, species and
+specific environment instead.
 
 Whatever it is, she looks hot in it and it shows off her figure the way she meant it to:
 the pose, the angle and the outfit (or how little of one) exactly as she described. Write her
@@ -208,9 +296,9 @@ request refused; say what covers it instead.
 {{#is_moment}}
 This is a photo from **inside the conversation** - something happening right now, not a
 photo she chose to lead with, and per the section above it may not include her at all. When
-it does put her in frame, it must read as a real, unposed phone photo taken in this exact
-moment: available light, a real room or street behind her, framing that is slightly off
-rather than composed, no professional setup and no studio polish.
+it does put her in frame, it must read as a real photo she could have taken herself in this exact moment. Let the
+supplied light condition and capture flaw decide how polished or imperfect this particular
+shot is; do not force the same crooked framing or the same generic candid look onto every photo.
 
 When she IS in frame: she is an attractive woman, photographed honestly, in the moment. Hold
 both halves of that. Do not make her unflattering - "candid phone photo" describes the
@@ -221,6 +309,13 @@ no studio polish, no professional-model posing; real skin has texture, pores and
 asymmetries, and keeping them is what makes her look like a person. If you can only have one
 of those two in the sentence, choose real - a plastic face is the more obvious failure.
 {{/is_moment}}
+{{#is_status}}
+This is an image she chose for her temporary public Status story. It is still a physically
+possible image taken on her own phone, not an invisible photographer's view. Preserve the authored
+situation exactly. A Status may be an ordinary glimpse of her activity, deliberately flirty,
+suggestive, or explicit; its content comes from the supplied situation and must not be cooled down
+or intensified merely because it is a Status.
+{{/is_status}}
 {{#is_date}}
 This is **how he actually sees her right now**, in person, at the start of the date - not a
 selfie, not a phone photo either of them took, and not a posed studio portrait. Frame it the
@@ -259,6 +354,10 @@ explicit - not merely suggestive. It is still her own phone photo, in her own ro
 skin (texture, pores, small asymmetries, no airbrushing or beauty filter) - but unlike a
 snapshot she posed for it on purpose: the arch of her back, the angle she knows works, the
 look she gives the lens.
+
+Her pose and the viewpoint must agree with how she operated the phone. A high angle is an
+outstretched front camera; a full-body or hands-free pose is a mirror or a phone propped on
+a real surface with a timer. Never silently add a photographer to obtain the composition.
 
 Render exactly as much as the situation describes: lingerie or underwear with real skin,
 bare breasts, a bare ass, a fully naked body, a hand inside her underwear, fingers in her
@@ -299,11 +398,15 @@ posed studio shot. Everything else standing (retouching, anatomy errors, waterma
 appended by the system - do not repeat it here.
 {{/mode_seedream}}
 {{#mode_z_image}}
-This model does not read a negative prompt at all - leave "negative_prompt" as an empty
-string. Anything you would have put there belongs in the main prompt instead, phrased as
-what IS true rather than what is not: "natural, unretouched skin with visible pores" does
-the job that "no airbrushing" cannot do here.
+Leave "negative_prompt" as an empty string. Put essential control in the positive prompt.
+Prefer positive facts; use a very short "no/without X" clause only for a specific high-risk
+artifact when it saves space or has no natural positive equivalent. Never output a generic
+negative-tag list.
 {{/mode_z_image}}
+{{#mode_chroma}}
+Leave "negative_prompt" as an empty string. Chroma rejects that request field; express only the
+positive image to render, without turning avoidance rules into a hidden negative list.
+{{/mode_chroma}}
 
 # OUTPUT
 Reply with exactly one JSON object and nothing else:

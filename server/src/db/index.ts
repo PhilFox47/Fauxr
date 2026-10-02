@@ -30,6 +30,7 @@ db.pragma('foreign_keys = ON');
  * upgraded install keeps running on the old shape.
  */
 const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
+  { table: 'characters', column: 'discover_order', definition: 'INTEGER NOT NULL DEFAULT 0' },
   { table: 'relationships', column: 'arousal', definition: "INTEGER NOT NULL DEFAULT 0" },
   { table: 'relationships', column: 'discovered', definition: "TEXT NOT NULL DEFAULT '{}'" },
   { table: 'attribute_db', column: 'rarity', definition: "TEXT NOT NULL DEFAULT 'common'" },
@@ -48,6 +49,9 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'dates', column: 'outfit_state', definition: 'TEXT' },
   { table: 'dates', column: 'kind', definition: "TEXT NOT NULL DEFAULT 'date'" },
   { table: 'dates', column: 'duration_minutes', definition: 'INTEGER' },
+  { table: 'dates', column: 'scheduled_at_ms', definition: 'INTEGER' },
+  { table: 'dates', column: 'reminder_sent', definition: 'INTEGER NOT NULL DEFAULT 0' },
+  { table: 'dates', column: 'started_at', definition: 'TEXT' },
   { table: 'relationships', column: 'circle', definition: "TEXT NOT NULL DEFAULT '[]'" },
   { table: 'relationships', column: 'life', definition: "TEXT NOT NULL DEFAULT '[]'" },
   { table: 'user_profile', column: 'avatar_emoji', definition: "TEXT NOT NULL DEFAULT ''" },
@@ -68,9 +72,12 @@ const ADDED_COLUMNS: { table: string; column: string; definition: string }[] = [
   { table: 'images', column: 'caption', definition: 'TEXT' },
   // What she had on when the photo was prepared (wardrobe.ts), kept so "same idea" redraws it.
   { table: 'images', column: 'outfit', definition: 'TEXT' },
-  // This chat's own clock (engine/clock.ts) when the message was sent - see repo.ts's addMessage.
+  // Shared world-clock time (engine/clock.ts) when the message was sent.
   { table: 'messages', column: 'game_clock_ms', definition: 'INTEGER' },
   { table: 'locations', column: 'affordances', definition: `TEXT NOT NULL DEFAULT '{"sensory":[],"private_spaces":[],"background_people":[],"social_openings":[],"interruptions":[],"transitions":[],"constraints":[]}'` },
+  // A Status remains available after it has been watched, but its avatar ring becomes muted
+  // until another story is published. Stored server-side so refreshes and devices agree.
+  { table: 'status_posts', column: 'viewed_at_ms', definition: 'INTEGER' },
 ];
 
 function addMissingColumns(): void {
@@ -143,6 +150,7 @@ export function migrate(): void {
   // and the column does not exist until addMissingColumns() runs above - so the index has to
   // be created down here, after that, not up in the schema script.
   db.exec('CREATE INDEX IF NOT EXISTS idx_messages_date ON messages(date_id, id)');
+  db.exec('CREATE INDEX IF NOT EXISTS idx_dates_scheduled ON dates(status, scheduled_at_ms)');
   // She can no longer block or ghost him. Anyone who did under the old rules comes back.
   // Idempotent: a no-op once nobody is left in either state.
   db.exec(`UPDATE characters SET state = 'matched' WHERE state = 'blocked_by_char'`);

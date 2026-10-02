@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
-import { api, type MatchSummary } from '../api';
+import { useEffect, useMemo, useState } from 'react';
+import { api, type MatchSummary, type WorldClock } from '../api';
 import Avatar from '../components/Avatar';
 import Icon from '../components/Icon';
+import StatusViewer from '../components/StatusViewer';
 
 function ago(iso: string | null): string {
   if (!iso) return '';
@@ -31,6 +32,30 @@ export default function Matches({
   const [query, setQuery] = useState('');
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [clock, setClock] = useState<WorldClock | null>(null);
+  const [clockNow, setClockNow] = useState(Date.now());
+  const [clockOpen, setClockOpen] = useState(false);
+  const [amount, setAmount] = useState('1');
+  const [unit, setUnit] = useState<'hours' | 'days'>('hours');
+  const [target, setTarget] = useState('');
+  const [clockBusy, setClockBusy] = useState(false);
+  const [storyCharacter, setStoryCharacter] = useState<MatchSummary | null>(null);
+
+  const loadClock = async () => { try { setClock(await api.worldClock()); } catch { /* keep last value */ } };
+  useEffect(() => {
+    void loadClock();
+    const tick = window.setInterval(() => setClockNow(Date.now()), 1000);
+    const refresh = window.setInterval(() => void loadClock(), 60_000);
+    return () => { window.clearInterval(tick); window.clearInterval(refresh); };
+  }, []);
+  const shownClock = clock
+    ? clock.paused ? clock.time_ms : clock.time_ms + Math.max(0, clockNow - clock.sampled_real_ms)
+    : null;
+  const changeClock = async (work: () => Promise<WorldClock>) => {
+    if (clockBusy) return;
+    setClockBusy(true);
+    try { setClock(await work()); setClockNow(Date.now()); onRefresh(); } finally { setClockBusy(false); }
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -45,7 +70,12 @@ export default function Matches({
 
   const active = filtered.filter((m) => m.state !== 'blocked_by_user');
   const archived = filtered.filter((m) => m.state === 'blocked_by_user');
+  const readyDates = matches.filter((m) => m.state !== 'blocked_by_user' && m.scheduled_date?.due);
   const noResults = matches.length > 0 && filtered.length === 0;
+
+  useEffect(() => {
+    if (readyDates.length) void loadClock();
+  }, [readyDates.length]);
 
   const deleteChat = async (id: string) => {
     setDeletingId(id);
@@ -105,15 +135,20 @@ export default function Matches({
         aria-current={m.id === selectedId ? 'true' : undefined}
         style={opts.archived ? { opacity: 0.5 } : undefined}
       >
-        <Avatar match={m} onDate={!opts.archived && m.on_date} />
+        <button className="story-avatar-button" onClick={(e) => { e.stopPropagation(); if (m.has_status) setStoryCharacter(m); }} disabled={!m.has_status} aria-label={m.has_status ? `${m.has_unseen_status ? 'View new' : 'Replay'} ${m.display_name}'s Status` : undefined}>
+          <Avatar match={m} onDate={!opts.archived && m.on_date} />
+        </button>
         <div style={{ minWidth: 0, flex: 1 }}>
           <div className="name">
             {m.display_name}
             {!opts.archived && m.status && <span className="match-status"> · {m.status}</span>}
+            {!opts.archived && m.scheduled_date?.due && <span className="date-ready-chip">Date ready</span>}
           </div>
           <div className={`preview${typing[m.id] ? ' typing-now' : ''}`}>
             {m.on_date && !opts.archived
               ? m.active_session_kind === 'call' ? 'On a call right now' : 'On a date right now'
+              : m.scheduled_date?.due && !opts.archived
+                ? `${m.scheduled_date.where_at} · tap to enter the date`
               : typing[m.id]
                 ? 'typing…'
                 : opts.archived
@@ -146,8 +181,42 @@ export default function Matches({
       <div className="topbar">
         <h1>Chats</h1>
         <div className="spacer" />
-        <span className="usage-pill">{active.length} conversation{active.length === 1 ? '' : 's'}</span>
+        {shownClock != null && (
+          <button className={`world-clock${clock?.paused ? ' paused' : ''}`} onClick={() => setClockOpen((open) => !open)}>
+            <Icon name="clock" size={15} />
+            <span>{new Date(shownClock).toLocaleString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+            {clock?.paused && <span className="world-clock-paused">Paused</span>}
+          </button>
+        )}
       </div>
+
+      {clockOpen && clock && shownClock != null && (
+        <div className="world-clock-panel card">
+          <div className="row">
+            <div><strong>World time</strong><div className="tiny muted">Shared by every character, date, call and schedule.</div></div>
+            <button className="btn subtle" disabled={clockBusy} onClick={() => void changeClock(() => api.pauseWorldClock(!clock.paused))}>{clock.paused ? 'Resume' : 'Pause'}</button>
+          </div>
+          <div className="row world-clock-advance">
+            <input type="number" min="1" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <select value={unit} onChange={(e) => setUnit(e.target.value as 'hours' | 'days')}><option value="hours">hours</option><option value="days">days</option></select>
+            <button className="btn" disabled={clockBusy || !(Number(amount) > 0)} onClick={() => void changeClock(() => api.advanceWorldClock({ hours: Number(amount) * (unit === 'days' ? 24 : 1) }))}>Advance</button>
+          </div>
+          <label className="field"><span>Travel to a specific future time</span><div className="row"><input type="datetime-local" value={target} onChange={(e) => setTarget(e.target.value)} /><button className="btn" disabled={clockBusy || !target || Date.parse(target) < shownClock} onClick={() => void changeClock(() => api.advanceWorldClock({ time_ms: Date.parse(target) }))}>Go</button></div></label>
+          {clock.paused && <div className="tiny muted">While paused, every visible message advances the world by one minute. Dates and calls still add their full duration.</div>}
+        </div>
+      )}
+
+      {readyDates.length > 0 && (
+        <div className="date-reminder-list" role="status" aria-live="polite">
+          {readyDates.map((m) => (
+            <button key={m.id} className="date-reminder-card" onClick={() => onOpen(m.id)}>
+              <span className="scheduled-date-icon"><Icon name="spark" size={20} /></span>
+              <span className="grow"><strong>Date with {m.display_name}</strong><small>{m.scheduled_date!.where_at} · ready to enter</small></span>
+              <span className="btn">Open</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       {matches.length > 0 && (
         <div className="search-bar">
@@ -185,6 +254,7 @@ export default function Matches({
           </>
         )}
       </div>
+      {storyCharacter && <StatusViewer character={storyCharacter} onClose={() => setStoryCharacter(null)} onViewed={() => onRefresh()} onProfile={() => { const id = storyCharacter.id; setStoryCharacter(null); onOpen(id); }} />}
     </>
   );
 }

@@ -226,7 +226,7 @@
       },
       "photo": "direct eye contact, easy open smile, relaxed square shoulders, chin level, arm-length selfie held high and steady",
       "pace": 1.3,
-      "photo_boldness": 1.0
+      "photo_boldness": 1
     },
     "enabled": true,
     "rarity": "common"
@@ -235,7 +235,7 @@
     "id": "sarcastic",
     "category": "archetype",
     "label": "Sarcastic",
-    "weight": 1.0,
+    "weight": 1,
     "prompt_hint": "deflects with jokes, especially when something lands close. Dry, deadpan, rarely uses emoji to soften a jab. Warmth has to be read between the lines.",
     "image_prompt": null,
     "affinities": [
@@ -247,6 +247,9 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
+      "identity_axes": [
+        "provocative_dryness"
+      ],
       "counts": {
         "tattoos": [
           0.45,
@@ -344,7 +347,7 @@
     "id": "warm",
     "category": "archetype",
     "label": "Warm",
-    "weight": 1.0,
+    "weight": 1,
     "prompt_hint": "genuinely interested in people. Asks questions back and remembers the answers. Generous with small affirmations, which means they are cheap - the real signal is when she gets specific.",
     "image_prompt": null,
     "affinities": [
@@ -421,7 +424,7 @@
         ]
       },
       "weights": {
-        "wholesome": 2.0,
+        "wholesome": 2,
         "heavy": 1.6
       },
       "ranges": {
@@ -549,7 +552,7 @@
       },
       "photo": "neutral closed expression, level appraising gaze, chin slightly down, body angled away from the lens",
       "pace": 0.65,
-      "photo_boldness": -1.0
+      "photo_boldness": -1
     },
     "enabled": true,
     "rarity": "uncommon"
@@ -637,8 +640,8 @@
       },
       "weights": {
         "dyed_vivid": 2.5,
-        "dyed_pastel": 2.0,
-        "irregular": 3.0,
+        "dyed_pastel": 2,
+        "irregular": 3,
         "business": 0.3
       },
       "ranges": {
@@ -880,7 +883,7 @@
       },
       "photo": "chin lowered eyes up at the lens, knowing half-smile, hand near jaw or collarbone, close crop",
       "pace": 1.4,
-      "photo_boldness": 1.0
+      "photo_boldness": 1
     },
     "enabled": true,
     "rarity": "common"
@@ -965,7 +968,7 @@
         ]
       },
       "weights": {
-        "wholesome": 2.0,
+        "wholesome": 2,
         "sarcastic_humor": 0.4
       },
       "ranges": {
@@ -1075,8 +1078,8 @@
       "weights": {
         "considered": 1.8,
         "instant": 0.4,
-        "cosy": 2.0,
-        "low_effort": 2.0
+        "cosy": 2,
+        "low_effort": 2
       },
       "ranges": {
         "libido": [
@@ -1321,7 +1324,7 @@
     "id": "dry",
     "category": "humor_type",
     "label": "Dry / deadpan",
-    "weight": 1.0,
+    "weight": 1,
     "prompt_hint": "deadpan delivery, never signals the joke, lets it sit",
     "image_prompt": null,
     "affinities": [],
@@ -1337,7 +1340,7 @@
     "id": "wholesome",
     "category": "humor_type",
     "label": "Wholesome",
-    "weight": 1.0,
+    "weight": 1,
     "prompt_hint": "gentle, warm jokes, laughs easily at other people's",
     "image_prompt": null,
     "affinities": [],
@@ -1351,13 +1354,16 @@
     "id": "sarcastic_humor",
     "category": "humor_type",
     "label": "Sarcastic",
-    "weight": 1.0,
+    "weight": 1,
     "prompt_hint": "cutting, a bit mean, affectionate underneath",
     "image_prompt": null,
     "affinities": [],
     "conflicts": [],
     "modifies": {},
     "extra": {
+      "identity_axes": [
+        "provocative_dryness"
+      ],
       "demeanour": "undersold"
     },
     "enabled": true,
@@ -1383,7 +1389,7 @@
     "id": "self_deprecating",
     "category": "humor_type",
     "label": "Self-deprecating",
-    "weight": 1.0,
+    "weight": 1,
     "prompt_hint": "gets the joke in about herself first",
     "image_prompt": null,
     "affinities": [],
@@ -1744,7 +1750,7 @@
       "weights": {
         "dry": 2.5,
         "wholesome": 0.3,
-        "all_black": 2.0,
+        "all_black": 2,
         "none": 1.6
       },
       "ranges": {
@@ -1953,8 +1959,8 @@
       },
       "weights": {
         "absurd": 2.5,
-        "youth": 2.0,
-        "irregular": 2.0,
+        "youth": 2,
+        "irregular": 2,
         "formal": 0.2
       },
       "ranges": {
@@ -1985,7 +1991,7 @@
     "id": "nurturer",
     "category": "archetype",
     "label": "Nurturer",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "feeds people, checks in, remembers your appointments. Gives far more than she asks for and is genuinely uncomfortable being on the receiving end of it.",
     "image_prompt": null,
@@ -2058,9 +2064,9 @@
         ]
       },
       "weights": {
-        "wholesome": 2.0,
+        "wholesome": 2,
         "volunteering": 2.5,
-        "cooking": 2.0
+        "cooking": 2
       },
       "ranges": {
         "libido": [
@@ -2088,7 +2094,7 @@
     "id": "cynic",
     "category": "archetype",
     "label": "Cynic",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "expects the worst and is rarely disappointed. Dismantles enthusiasm as a reflex. Being proved wrong is the fastest way to her, and almost nobody manages it.",
     "image_prompt": null,
@@ -2161,7 +2167,7 @@
         ]
       },
       "weights": {
-        "dark": 2.0,
+        "dark": 2,
         "wholesome": 0.3
       },
       "ranges": {
@@ -2264,7 +2270,7 @@
         ]
       },
       "weights": {
-        "glam": 2.0,
+        "glam": 2,
         "heavy": 1.6,
         "paragraphs": 1.5
       },
@@ -2287,7 +2293,7 @@
         ]
       },
       "photo": "big expressive grin, chin up, arm out, clearly aware of the camera and enjoying it",
-      "photo_boldness": 1.0
+      "photo_boldness": 1
     },
     "enabled": true
   },
@@ -2295,7 +2301,7 @@
     "id": "hermit",
     "category": "archetype",
     "label": "Hermit",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "has built a small, complete world and does not obviously need anyone in it. Talking to her is a privilege she extends rather than a thing she needs. Warm once you are inside.",
     "image_prompt": null,
@@ -2369,7 +2375,7 @@
       },
       "weights": {
         "low": 2.5,
-        "cosy": 2.0,
+        "cosy": 2,
         "nightlife": 0.2
       },
       "ranges": {
@@ -2392,7 +2398,7 @@
       },
       "photo": "small private smile, indoors, soft lamp light, cosy layers, photo obviously taken alone at home",
       "pace": 0.65,
-      "photo_boldness": -1.0
+      "photo_boldness": -1
     },
     "enabled": true
   },
@@ -2400,7 +2406,7 @@
     "id": "golden_retriever",
     "category": "archetype",
     "label": "Relentlessly enthusiastic",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "delighted by almost everything, at volume, without irony. Exhausting to the wrong person and a relief to the right one. Her sincerity is not naivety.",
     "image_prompt": null,
@@ -2474,8 +2480,8 @@
       },
       "weights": {
         "wholesome": 2.2,
-        "heavy": 2.0,
-        "high": 2.0,
+        "heavy": 2,
+        "high": 2,
         "dry": 0.4
       },
       "ranges": {
@@ -2578,7 +2584,7 @@
       },
       "weights": {
         "polished": 2.2,
-        "proper": 2.0
+        "proper": 2
       },
       "ranges": {
         "libido": [
@@ -2607,7 +2613,7 @@
     "id": "romantic",
     "category": "archetype",
     "label": "Hopeless romantic",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "believes in it completely and has been burned for it repeatedly. Falls fast, admits it, and is braced for the fall. Sentimental without being soft.",
     "image_prompt": null,
@@ -2680,7 +2686,7 @@
         ]
       },
       "weights": {
-        "poetry": 2.0,
+        "poetry": 2,
         "wholesome": 1.6
       },
       "ranges": {
@@ -2784,7 +2790,7 @@
       },
       "weights": {
         "dark": 1.6,
-        "politics": 2.0
+        "politics": 2
       },
       "ranges": {
         "libido": [
@@ -2919,7 +2925,7 @@
     "id": "observational",
     "category": "humor_type",
     "label": "Observational",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "notices the specific ridiculous detail nobody else did and reports it flatly",
     "image_prompt": null,
@@ -2933,7 +2939,7 @@
     "id": "chaotic_humor",
     "category": "humor_type",
     "label": "Chaotic",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "no setup, no landing, just escalating nonsense that somehow works",
     "image_prompt": null,
@@ -2949,7 +2955,7 @@
     "id": "cringe_lover",
     "category": "humor_type",
     "label": "Loves bad jokes unironically",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "genuinely finds terrible jokes funny and refuses to be embarrassed about it",
     "image_prompt": null,
@@ -2965,7 +2971,7 @@
     "id": "bit_committer_h",
     "category": "humor_type",
     "label": "Long-game bits",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "starts a joke and keeps it running for days without acknowledging it",
     "image_prompt": null,
@@ -2979,7 +2985,7 @@
     "id": "gallows",
     "category": "humor_type",
     "label": "Gallows humour",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "jokes hardest about the worst things, usually her own",
     "image_prompt": null,
@@ -2995,7 +3001,7 @@
     "id": "teasing",
     "category": "humor_type",
     "label": "Teasing",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "her affection is entirely expressed as mockery, and she means it kindly",
     "image_prompt": null,
@@ -3009,7 +3015,7 @@
     "id": "understated",
     "category": "humor_type",
     "label": "Understated",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "delivers the funniest thing in the conversation as an aside, quietly",
     "image_prompt": null,
@@ -3025,7 +3031,7 @@
     "id": "physical_comedy",
     "category": "humor_type",
     "label": "Slapstick storyteller",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "her stories are all about things going physically wrong, told with relish",
     "image_prompt": null,
@@ -3041,7 +3047,7 @@
     "id": "sends_photos_of_sky",
     "category": "quirk",
     "label": "Sends photos of the sky",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "documents skies. No comment, just the photo",
     "image_prompt": null,
@@ -3055,7 +3061,7 @@
     "id": "renames_contacts",
     "category": "quirk",
     "label": "Renames everyone in her phone",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "he already has a nickname in her contacts and she will not say what",
     "image_prompt": null,
@@ -3069,7 +3075,7 @@
     "id": "googles_everything",
     "category": "quirk",
     "label": "Fact-checks conversations live",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "cannot let an uncertain fact stand and reports back within seconds",
     "image_prompt": null,
@@ -3083,7 +3089,7 @@
     "id": "reads_endings_first",
     "category": "quirk",
     "label": "Reads the last page first",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "spoils everything for herself deliberately and defends it",
     "image_prompt": null,
@@ -3097,7 +3103,7 @@
     "id": "hates_the_phone",
     "category": "quirk",
     "label": "Sends walls then vanishes",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "five messages in a burst, then nothing for a day",
     "image_prompt": null,
@@ -3111,7 +3117,7 @@
     "id": "narrates_purchases",
     "category": "quirk",
     "label": "Announces every purchase",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "reports things she has bought, and things she nearly bought",
     "image_prompt": null,
@@ -3125,7 +3131,7 @@
     "id": "collects_fonts",
     "category": "quirk",
     "label": "Notices signage",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "comments on typography and shop signs unprompted",
     "image_prompt": null,
@@ -3139,7 +3145,7 @@
     "id": "swears_creatively",
     "category": "quirk",
     "label": "Inventive swearing",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "constructs elaborate original profanity",
     "image_prompt": null,
@@ -3153,7 +3159,7 @@
     "id": "always_cold",
     "category": "quirk",
     "label": "Perpetually freezing",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "always cold, mentions it constantly, wears a coat indoors",
     "image_prompt": null,
@@ -3167,7 +3173,7 @@
     "id": "misremembers_lyrics",
     "category": "quirk",
     "label": "Gets every lyric wrong",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "confidently sings the wrong words and argues about it",
     "image_prompt": null,
@@ -3181,7 +3187,7 @@
     "id": "saves_voicemails",
     "category": "quirk",
     "label": "Never deletes anything",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "keeps every message, photo and voicemail she has ever received",
     "image_prompt": null,
@@ -3195,7 +3201,7 @@
     "id": "talks_to_plants",
     "category": "quirk",
     "label": "Talks to plants",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "and reports what they said back",
     "image_prompt": null,
@@ -3209,7 +3215,7 @@
     "id": "dramatic_entrance",
     "category": "quirk",
     "label": "No small greetings",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "never just says hi, always arrives with something",
     "image_prompt": null,
@@ -3223,7 +3229,7 @@
     "id": "tests_with_hypotheticals",
     "category": "quirk",
     "label": "Asks strange hypotheticals",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "tests people with odd hypothetical questions and takes the answers seriously",
     "image_prompt": null,
@@ -3237,7 +3243,7 @@
     "id": "timezones",
     "category": "quirk",
     "label": "Keeps other people's time",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "tracks what time it is where her friends are",
     "image_prompt": null,
@@ -3251,7 +3257,7 @@
     "id": "apologises_to_objects",
     "category": "quirk",
     "label": "Apologises to furniture",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "says sorry when she bumps into things",
     "image_prompt": null,
@@ -3265,7 +3271,7 @@
     "id": "nicknames_strangers",
     "category": "quirk",
     "label": "Names strangers",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "gives regulars and passers-by names and follows their storylines",
     "image_prompt": null,
@@ -3279,7 +3285,7 @@
     "id": "hums",
     "category": "quirk",
     "label": "Hums constantly",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "hums without noticing and gets self-conscious when caught",
     "image_prompt": null,
@@ -3495,7 +3501,7 @@
     "id": "control_freak",
     "category": "archetype",
     "label": "Control freak",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "has a system for most things and a private opinion about everyone else's. Comes undone a little when a plan actually falls apart, and hates that it shows.",
     "image_prompt": null,
@@ -3595,7 +3601,7 @@
     "id": "free_spirit",
     "category": "archetype",
     "label": "Free spirit",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "does not plan further ahead than feels necessary, and means it as a compliment to herself. Refreshing to some people, maddening to the ones who need a schedule.",
     "image_prompt": null,
@@ -3699,7 +3705,7 @@
     "id": "jealous_type",
     "category": "archetype",
     "label": "Possessive",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "gets territorial faster than she would like to admit, and is at least honest about it rather than pretending otherwise. Working on the instinct, not hiding it.",
     "image_prompt": null,
@@ -3798,7 +3804,7 @@
     "id": "competitive",
     "category": "archetype",
     "label": "Competitive",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "turns almost anything into something to win, flirting very much included. Loses badly, on the rare occasions it happens, and recovers fast.",
     "image_prompt": null,
@@ -3900,7 +3906,7 @@
     "id": "mothering",
     "category": "archetype",
     "label": "Caretaker",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "ends up looking after whoever is in the room, remembers what people said they needed, forgets to ask herself the same question. Not from obligation - it is just how she loves people.",
     "image_prompt": null,
@@ -4104,7 +4110,7 @@
     "id": "optimist",
     "category": "archetype",
     "label": "Relentlessly upbeat",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "finds the workable angle on most bad news within about a minute. Genuine rather than performed, which is what makes it bearable instead of grating.",
     "image_prompt": null,
@@ -4203,7 +4209,7 @@
     "id": "pessimist",
     "category": "archetype",
     "label": "Expects the worst",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "assumes the plan will fall through until it does not, and is pleasantly, quietly surprised more often than she will admit. Dry rather than miserable about it.",
     "image_prompt": null,
@@ -4406,7 +4412,7 @@
     "id": "loyal",
     "category": "archetype",
     "label": "Fiercely loyal",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "takes a while to let someone in and does not do it halfway once she has. Would rather be quietly reliable than seem exciting.",
     "image_prompt": null,
@@ -4505,7 +4511,7 @@
     "id": "wanderer",
     "category": "archetype",
     "label": "Restless",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "does not stay anywhere - a job, a flat, a routine - much past the point it stops feeling new. Framed as freedom; occasionally it is just running.",
     "image_prompt": null,
@@ -4808,7 +4814,7 @@
     "id": "stoic",
     "category": "archetype",
     "label": "Stoic",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "does not perform much of anything, does not mean she is not feeling it. Takes real effort, and real trust, to get more than a level answer out of her.",
     "image_prompt": null,
@@ -4908,7 +4914,7 @@
     "id": "people_watcher",
     "category": "archetype",
     "label": "Quiet observer",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "says little in a group and notices everything anyway - who is uncomfortable, who is performing, what actually happened. Saves it for later, usually just for one person.",
     "image_prompt": null,
@@ -5403,7 +5409,7 @@
       },
       "photo": "slightly uncertain smile, eyes searching the lens a little, hands visible and a touch restless",
       "pace": 0.75,
-      "photo_boldness": -1.0
+      "photo_boldness": -1
     },
     "enabled": true
   },
@@ -5518,6 +5524,9 @@
     "conflicts": [],
     "modifies": {},
     "extra": {
+      "identity_axes": [
+        "provocative_dryness"
+      ],
       "counts": {
         "quirks": [
           0,
@@ -5711,7 +5720,7 @@
     "id": "old_soul",
     "category": "archetype",
     "label": "Old soul",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "has never quite matched her actual age - the references, the pace, what she finds interesting. Comfortable with it rather than performing wisdom.",
     "image_prompt": null,
@@ -5815,7 +5824,7 @@
     "id": "big_kid",
     "category": "archetype",
     "label": "Refuses to grow up properly",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "still gets genuinely delighted by small stupid things and has no plans to stop. The fun kind of immature, mostly.",
     "image_prompt": null,
@@ -6022,7 +6031,7 @@
     "id": "lone_wolf",
     "category": "archetype",
     "label": "Prefers her own company",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "genuinely likes being alone rather than tolerating it, and it is not a wound, just a preference. Selective about who is worth the exception.",
     "image_prompt": null,
@@ -6628,7 +6637,7 @@
     "id": "secret_softie",
     "category": "archetype",
     "label": "Hard shell, soft center",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "leads with dry and unbothered and hates getting caught being sentimental about something small. Will deny it and mean the denial less each time.",
     "image_prompt": null,
@@ -6727,7 +6736,7 @@
     "id": "chronically_online",
     "category": "archetype",
     "label": "Terminally online",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "has a reference for everything, most of it from somewhere he has never heard of, and means it sincerely rather than ironically. Screen time she has stopped fighting.",
     "image_prompt": null,
@@ -6830,7 +6839,7 @@
     "id": "deadpan",
     "category": "humor_type",
     "label": "Deadpan",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "delivers the joke with a completely straight face, no tell at all",
     "image_prompt": null,
@@ -6846,7 +6855,7 @@
     "id": "witty_banter",
     "category": "humor_type",
     "label": "Quick with banter",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "thrives on back-and-forth wordplay, keeps score without saying so",
     "image_prompt": null,
@@ -6862,7 +6871,7 @@
     "id": "goofy",
     "category": "humor_type",
     "label": "Goofy",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "will do the bit fully, voices and all, with zero self-consciousness",
     "image_prompt": null,
@@ -6878,7 +6887,7 @@
     "id": "dry_wit",
     "category": "humor_type",
     "label": "Dry wit",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "the joke is in the phrasing, delivered so flatly it is easy to miss",
     "image_prompt": null,
@@ -6894,7 +6903,7 @@
     "id": "silly_faces_texter",
     "category": "humor_type",
     "label": "Silly rather than clever",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "prefers dumb over clever, keysmash over a good line, and means it",
     "image_prompt": null,
@@ -7000,7 +7009,7 @@
     "id": "bone_dry_sarcasm",
     "category": "humor_type",
     "label": "Bone-dry sarcasm",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "sarcasm delivered so flat that strangers occasionally take it seriously",
     "image_prompt": null,
@@ -7016,7 +7025,7 @@
     "id": "visual_gags",
     "category": "humor_type",
     "label": "Sends the meme instead of the line",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "answers with an image before she bothers writing the joke out",
     "image_prompt": null,
@@ -7032,7 +7041,7 @@
     "id": "self_roast",
     "category": "humor_type",
     "label": "Roasts herself first",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "gets the joke in about herself before anyone else can make it",
     "image_prompt": null,
@@ -7080,7 +7089,7 @@
     "id": "narrates_her_commute",
     "category": "quirk",
     "label": "Narrates her commute",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "gives a live, mildly aggrieved commentary on public transport unprompted",
     "image_prompt": null,
@@ -7094,7 +7103,7 @@
     "id": "rates_everything",
     "category": "quirk",
     "label": "Rates things out of ten",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "assigns an instant numerical score to nearly everything, unasked",
     "image_prompt": null,
@@ -7108,7 +7117,7 @@
     "id": "collects_playlists",
     "category": "quirk",
     "label": "Makes a playlist for everything",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "has a named playlist for moods, people and specific weeks of her life",
     "image_prompt": null,
@@ -7150,7 +7159,7 @@
     "id": "narrates_the_weather_dramatically",
     "category": "quirk",
     "label": "Treats the weather personally",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "takes bad weather as a personal insult and says so at length",
     "image_prompt": null,
@@ -7178,7 +7187,7 @@
     "id": "photographs_menus",
     "category": "quirk",
     "label": "Photographs every menu",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "photographs a restaurant menu before ordering, every single time",
     "image_prompt": null,
@@ -7192,7 +7201,7 @@
     "id": "narrates_her_pet",
     "category": "quirk",
     "label": "Gives her pet a whole inner monologue",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "reports what her pet is thinking in a very specific invented voice",
     "image_prompt": null,
@@ -7234,7 +7243,7 @@
     "id": "has_a_bit_for_everything",
     "category": "quirk",
     "label": "Has a bit ready for everything",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "has a pre-loaded joke or routine for almost any situation that comes up",
     "image_prompt": null,
@@ -7248,7 +7257,7 @@
     "id": "overexplains_her_order",
     "category": "quirk",
     "label": "Overexplains a simple order",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "turns ordering a coffee into a small negotiation nobody asked for",
     "image_prompt": null,
@@ -7304,7 +7313,7 @@
     "id": "names_her_plants",
     "category": "quirk",
     "label": "Names every plant she owns",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "every plant in her flat has a name and a personality she will describe",
     "image_prompt": null,
@@ -7332,7 +7341,7 @@
     "id": "overuses_one_phrase",
     "category": "quirk",
     "label": "Has a phrase she says constantly",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "leans on one specific phrase far more than she has ever noticed",
     "image_prompt": null,
@@ -7374,7 +7383,7 @@
     "id": "narrates_grocery_shopping",
     "category": "quirk",
     "label": "Narrates the supermarket",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "gives a full runnning commentary on grocery shopping choices, unprompted",
     "image_prompt": null,
@@ -7402,7 +7411,7 @@
     "id": "talks_to_the_tv",
     "category": "quirk",
     "label": "Talks back to the television",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "argues with characters on screen as if they might actually respond",
     "image_prompt": null,
@@ -7444,7 +7453,7 @@
     "id": "hoards_good_playlists",
     "category": "quirk",
     "label": "Hoards good playlists jealously",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "guards her best playlists like state secrets, shares reluctantly",
     "image_prompt": null,
@@ -7458,7 +7467,7 @@
     "id": "narrates_her_grocery_haul",
     "category": "quirk",
     "label": "Narrates unpacking groceries",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "gives a full unboxing-style commentary on grocery shopping",
     "image_prompt": null,
@@ -7486,7 +7495,7 @@
     "id": "apologises_before_asking_for_anything",
     "category": "quirk",
     "label": "Apologises before every request",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "prefaces even small asks with an unnecessary sorry",
     "image_prompt": null,
@@ -7514,7 +7523,7 @@
     "id": "narrates_the_news",
     "category": "quirk",
     "label": "Gives unsolicited news commentary",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "reacts out loud to headlines as if debating someone in the room",
     "image_prompt": null,
@@ -7542,7 +7551,7 @@
     "id": "talks_to_her_phone",
     "category": "quirk",
     "label": "Talks to her phone like it can hear her",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "common",
     "prompt_hint": "narrates instructions to apps and devices out loud",
     "image_prompt": null,
@@ -7570,7 +7579,7 @@
     "id": "in_therapy_and_says_so",
     "category": "archetype",
     "label": "Openly working on herself, and says so",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "rare",
     "prompt_hint": "is in therapy, or has been, and mentions it naturally rather than treating it as a secret - self-aware about her own patterns without being clinical about it",
     "image_prompt": null,
@@ -7906,7 +7915,7 @@
       },
       "photo": "tongue out, eye-roll half-smile, middle finger or peace sign, daring the camera",
       "pace": 1.4,
-      "photo_boldness": 1.0
+      "photo_boldness": 1
     },
     "enabled": true
   },
@@ -7914,7 +7923,7 @@
     "id": "tsundere",
     "category": "archetype",
     "label": "Tsundere",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "cold, prickly and dismissive on the surface - \"it is not like i like you\" - and obviously, embarrassingly soft underneath when it slips",
     "image_prompt": null,
@@ -8126,7 +8135,7 @@
     "id": "airhead",
     "category": "archetype",
     "label": "Airhead",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "bubbly, easily distracted, cheerfully clueless about most things and weirdly sharp about exactly one - happy, horny and never overthinks it",
     "image_prompt": null,
@@ -8330,7 +8339,7 @@
       },
       "photo": "unimpressed look down the lens, glossy pout, hand on hip",
       "pace": 1.2,
-      "photo_boldness": 1.0
+      "photo_boldness": 1
     },
     "enabled": true
   },
@@ -8338,7 +8347,7 @@
     "id": "theatre_kid",
     "category": "archetype",
     "label": "Theatre kid",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "everything is a performance, every feeling is a musical number, and she will do the voices - including in bed",
     "image_prompt": null,
@@ -8444,7 +8453,7 @@
     "id": "witchy",
     "category": "archetype",
     "label": "Witchy",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "reads tarot, keeps crystals, pulls cards before a date and believes it more than she admits - spooky, intense, a little intimidating",
     "image_prompt": null,
@@ -8542,7 +8551,7 @@
         ]
       },
       "photo": "candlelit, heavy-lidded look, rings on every finger held near her mouth",
-      "pace": 1.0,
+      "pace": 1,
       "photo_boldness": 0.3
     },
     "enabled": true
@@ -8657,7 +8666,7 @@
     "id": "jock",
     "category": "archetype",
     "label": "Jock",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "competitive, physical, trash-talks, trains every day and treats sex like another sport she intends to win",
     "image_prompt": null,
@@ -8755,7 +8764,7 @@
       },
       "photo": "post-workout mirror flex, sweaty, smug grin",
       "pace": 1.3,
-      "photo_boldness": 1.0
+      "photo_boldness": 1
     },
     "enabled": true
   },
@@ -8862,7 +8871,7 @@
       },
       "photo": "glasses pushed up, shy grin that turns into a smirk, a controller or a book in frame",
       "pace": 1.1,
-      "photo_boldness": 0.0
+      "photo_boldness": 0
     },
     "enabled": true
   },
@@ -8870,7 +8879,7 @@
     "id": "girlboss",
     "category": "archetype",
     "label": "Girlboss",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "runs everything, schedules everything, negotiates everything - and either wants to run him too or finally hand the controls over",
     "image_prompt": null,
@@ -9073,7 +9082,7 @@
         ]
       },
       "photo": "sundress, porch light, sweet smile with a knowing look",
-      "pace": 1.0,
+      "pace": 1,
       "photo_boldness": 0.3
     },
     "enabled": true
@@ -9178,8 +9187,8 @@
         ]
       },
       "photo": "squinting suspiciously at the camera, hood up, mid-explanation",
-      "pace": 1.0,
-      "photo_boldness": 0.0
+      "pace": 1,
+      "photo_boldness": 0
     },
     "enabled": true
   },
@@ -9293,7 +9302,7 @@
     "id": "spoiled_princess",
     "category": "archetype",
     "label": "Spoiled princess",
-    "weight": 1.0,
+    "weight": 1,
     "rarity": "uncommon",
     "prompt_hint": "used to getting what she wants and not ashamed of it - demanding, pouty, adorable about it, and very good at being worth the trouble",
     "image_prompt": null,
@@ -10130,9 +10139,7 @@
     "modifies": {},
     "extra": {
       "visibility": "later",
-      "weights": {
-        "lamp_light": 1.5
-      }
+      "weights": {}
     },
     "enabled": true
   },

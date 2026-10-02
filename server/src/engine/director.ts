@@ -2,7 +2,7 @@ import { getSettings } from '../config.js';
 import { nowIso } from '../db/index.js';
 import { completeJson } from '../llm/client.js';
 import { logger } from '../log.js';
-import { getUserProfile, listDates, recentMessages, saveRelationship, setWakeup, clearWakeup, type StoredMessage } from '../repo.js';
+import { getUserProfile, listDates, recentMessages, saveRelationship, type StoredMessage } from '../repo.js';
 import { render } from '../prompts/render.js';
 import type { Character, Direction, Relationship } from '../types.js';
 import {
@@ -54,12 +54,13 @@ export function coerceDirectorReply(value: any): { update: any; direction: any; 
 import { describeFetishProgress, describeHim, describeKinkHits, detectKinkHits, undiscoveredKeys } from './discovery.js';
 import { userCardFullBlock } from './usercard.js';
 import { applyUpdate, type DirectorUpdate } from './state.js';
-import { randInt } from './dice.js';
 import { ensureFantasies } from './generator.js';
 import { fantasyLog } from './fantasies.js';
 import { canSendPhotos } from './images.js';
 import { DIRECTOR } from '../llm/schemas.js';
 import { gameClockMs, gameNow } from './clock.js';
+import { scheduleContext } from './schedule.js';
+import { recentStatusContext } from './status-posts.js';
 
 export interface DirectorResult {
   direction: Direction;
@@ -151,18 +152,22 @@ export async function runDirector(
     seed_block: seedBlock(character),
     core_block: coreBlock(character),
     life_block: lifeBlockForDirector(character.id),
+    schedule_block: scheduleContext(character.id, true),
     last_contact: rel.last_contact_at ?? 'never',
-    // This chat's own clock (engine/clock.ts), not the real one.
+    // The shared fictional clock (engine/clock.ts), not wall-clock bookkeeping time.
     now: gameNow(rel).toLocaleString('en-GB'),
     spice_directive: spiceDirective(settings.spice),
-    unprompted: settings.unprompted_messages ? '1' : '',
-    replies_only: settings.unprompted_messages ? '' : '1',
+    // A later first text is now armed only by the Actor's explicit soft close. The Director
+    // always plans the present turn as replies-only and cannot manufacture another wakeup.
+    unprompted: '',
+    replies_only: '1',
     ledger_block: ledgerBlock(rel.ledger, gameClockMs(rel), { full: true }) || '(empty)',
     previous_direction: rel.active_direction ? directionBlock(rel.active_direction) : '(none yet)',
     actor_report: opts.event ?? `(triggered by: ${opts.reason})`,
     history_block: historyBlock(history, character, user),
     date_history: dateHistoryFact(listDates(character.id)),
     recent_photos: recentPhotosFact(character.id, 'she') || 'none in the last day',
+    recent_statuses: recentStatusContext(character.id) || 'none',
   });
 
   let parsed: { update?: DirectorUpdate; direction?: any; wakeup?: any };
@@ -233,30 +238,11 @@ export async function runDirector(
  * text at once. She is always reachable, so there is no online window to push it into.
  */
 export function scheduleWakeup(character: Character, raw: any): void {
-  // With unprompted messages off she only ever answers him, so the Director's wakeup is moot.
-  if (!getSettings().unprompted_messages) return;
-  if (!raw || typeof raw !== 'object') return;
-  const minutes = Number(raw.in_minutes);
-  if (!Number.isFinite(minutes) || minutes <= 0) {
-    clearWakeup(character.id);
-    return;
-  }
-
-  const settings = getSettings();
-  // The activity slider stretches or compresses how soon she reaches out.
-  const activity = Math.max(0.05, settings.activity);
-  const scaled = Math.max(10, Math.min(60 * 24 * 5, minutes / activity));
-  const at = new Date(Date.now() + (scaled + randInt(-5, 20)) * 60_000);
-
-  setWakeup({
-    character_id: character.id,
-    scheduled_at: at.toISOString(),
-    reason: String(raw.reason ?? 'she wants to get in touch'),
-    cancel_if_user_writes: raw.cancel_if_user_writes !== false,
-  });
-  logger.debug('scheduler', `wakeup for ${character.username} at ${at.toISOString()}`, {
-    reason: raw.reason,
-  });
+  // The Director may still return this compatibility field, including from a customized
+  // runtime prompt, but it no longer gets to invent generic check-ins. A character can text
+  // first only through chat.ts's explicit soft-close timer.
+  void character;
+  void raw;
 }
 
 /**

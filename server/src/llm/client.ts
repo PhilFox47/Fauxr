@@ -245,7 +245,7 @@ const REASONING_REQUIRED = /"code"\s*:\s*"reasoning_required"|always thinks|does
  * logs showed "minimal" calls still spending thousands of reasoning tokens.
  */
 function providerReasoning(model: string, requested: ReasoningEffort): ReasoningEffort {
-  if (!/(?:^|\/)glm-5\.3(?:-|$)/i.test(model)) return requested;
+  if (!/(?:^|\/)glm-5\.3(?:-|:|$)/i.test(model)) return requested;
   if (requested === 'xhigh' || requested === 'max') return 'max';
   if (requested === 'medium' || requested === 'high') return 'high';
   return 'low';
@@ -711,6 +711,18 @@ export interface ImageRequest {
 /** Image providers can be slower than chat models, but a job must never stay running forever. */
 const IMAGE_TIMEOUT_MS = 10 * 60_000;
 
+function isChromaModel(model: string, promptStyle: string): boolean {
+  const id = model.trim().toLowerCase();
+  return promptStyle === 'chroma' || id === 'chroma' || id.endsWith('/chroma');
+}
+
+function safeChromaSize(size: string): string {
+  const match = /^(\d+)x(\d+)$/i.exec(size);
+  if (!match) return '1024x1024';
+  // Larger configured sizes invoke provider-side upscaling, which Chroma rejects.
+  return Number(match[1]) <= 1536 && Number(match[2]) <= 1536 ? size : '1024x1024';
+}
+
 /** Image generation. Returns base64 image data. */
 export async function generateImage(req: ImageRequest): Promise<string> {
   const releaseBudget = reserveBudget();
@@ -718,16 +730,20 @@ export async function generateImage(req: ImageRequest): Promise<string> {
     const settings = getSettings();
     const base = settings.api.image_base_url || settings.api.base_url;
     const key = settings.api.image_api_key || settings.api.api_key;
+    const chroma = isChromaModel(settings.models.image.model, settings.models.image.prompt_style);
+    const requestedSize = req.size || settings.models.image.size;
     const body: Record<string, unknown> = {
       model: settings.models.image.model,
       prompt: req.prompt,
-      size: req.size || settings.models.image.size,
+      size: chroma ? safeChromaSize(requestedSize) : requestedSize,
       response_format: 'b64_json',
       n: 1,
     };
-    if (req.negativePrompt) body.negative_prompt = req.negativePrompt;
-    if (req.seed !== undefined) body.seed = req.seed;
-    if (settings.models.image.send_reference_image && req.refImage) body.image = req.refImage;
+    // Chroma rejects these keys outright, even when they are empty. Check the model id as
+    // well as the preset so a manually edited or partly migrated setting remains safe.
+    if (!chroma && req.negativePrompt) body.negative_prompt = req.negativePrompt;
+    if (!chroma && req.seed !== undefined) body.seed = req.seed;
+    if (!chroma && settings.models.image.send_reference_image && req.refImage) body.image = req.refImage;
     if (settings.models.image.provider) body.provider = settings.models.image.provider;
 
     const started = Date.now();
@@ -767,7 +783,7 @@ export async function generateImage(req: ImageRequest): Promise<string> {
     logger.info('image', 'image generated', {
       duration_ms: Date.now() - started,
       prompt: req.prompt,
-      seed: req.seed ?? null,
+      seed: chroma ? null : req.seed ?? null,
     });
     const b64 = parsed?.data?.[0]?.b64_json;
     if (!b64) throw new LlmError('image response contained no b64_json');

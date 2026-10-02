@@ -43,6 +43,24 @@ export function speciesVisibility(seed: CharacterSeed): Visibility | null {
   return own ?? 'profile';
 }
 
+/**
+ * Image-critical anatomy and scale live on the species row rather than in a model's prose.
+ * They are injected separately from the face passport so prompt trimming cannot turn a
+ * miniature woman, giant or non-human body back into an ordinary human in costume.
+ */
+export function speciesPhysicalContract(seed: CharacterSeed): string {
+  const row = speciesRow(seed);
+  if (!row || speciesVisibility(seed) !== 'profile') return '';
+  return String(row.extra?.image_physical_contract ?? '').trim();
+}
+
+/** A species may need a different photograph geometry to make its defining body readable. */
+export function speciesProfileComposition(seed: CharacterSeed): string {
+  const row = speciesRow(seed);
+  if (!row || speciesVisibility(seed) !== 'profile') return '';
+  return String(row.extra?.profile_composition ?? '').trim();
+}
+
 /** Hidden day to day: hers to reveal, so nothing he sees before then may name it. */
 export function speciesHidden(seed: CharacterSeed): boolean {
   const vis = speciesVisibility(seed);

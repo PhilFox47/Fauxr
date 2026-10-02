@@ -3,7 +3,7 @@ import { find } from '../db/attributes.js';
 import { complete, extractJson } from '../llm/client.js';
 import { isObj, pick } from '../llm/shape.js';
 import { logger } from '../log.js';
-import { getUserProfile, listLocations, recentMessages, saveRelationship } from '../repo.js';
+import { getUserProfile, listLocations, saveRelationship, type StoredMessage } from '../repo.js';
 import { render } from '../prompts/render.js';
 import type { ActorHidden, ActorMessage, ActorOutput, Character, Direction, Relationship } from '../types.js';
 import {
@@ -84,6 +84,7 @@ function fallbackOutput(): ActorOutput {
       react: null,
       photo_options: null,
       in_the_act: false,
+      ending: null,
     },
   };
 }
@@ -151,6 +152,7 @@ function normalizeHidden(raw: any): ActorHidden {
       ? raw.photo_options.map((o: unknown) => String(o ?? '').trim().slice(0, 300)).filter(Boolean).slice(0, 2)
       : null,
     in_the_act: raw?.in_the_act === true,
+    ending: raw?.ending === 'soft_close' ? 'soft_close' : null,
   };
 }
 
@@ -232,6 +234,9 @@ export interface ActorContext {
   character: Character;
   relationship: Relationship;
   direction: Direction | null;
+  /** Frozen once for this turn; voice fallback and diagnostics use the same history. */
+  history: StoredMessage[];
+  openingPlan?: string;
   /** She is texting first, on her own impulse ("your move") - not answering anything. */
   initiative?: boolean;
   /** Her very first message ever, right after matching - see CharacterSeed.conversation_starter. */
@@ -252,7 +257,7 @@ function buildPrompt(
   const seed = character.seed;
   const flags = relationship.flags;
 
-  const messages = recentMessages(character.id, settings.chat.context_messages).filter((message) => !message.meta?.failed);
+  const messages = ctx.history.slice(-settings.chat.context_messages);
   // Her first outfit, for anyone without one yet, is stored right away: the turn that reads it
   // back to apply her changes has to see the same pieces this prompt showed her.
   if (!isOutfit(relationship.mood?.outfit_state)) {
@@ -380,16 +385,17 @@ function isHardVoiceFailure(what: string): boolean {
 
 export async function runActor(ctx: ActorContext): Promise<ActorRun> {
   const settings = getSettings();
-  const recent = recentMessages(ctx.character.id, 12).filter((message) => !message.meta?.failed);
+  const recent = ctx.history.slice(-12);
   const lastUserMessage = [...recent].reverse().find((m) => m.sender === 'user')?.text ?? '';
   const recentOwnMessages = recent.filter((m) => m.sender === 'character').map((m) => m.text);
   // A wider window for exact repeats only: a catchphrase can come back every few turns.
-  const longOwnHistory = recentMessages(ctx.character.id, 60)
+  const longOwnHistory = ctx.history.slice(-60)
     .filter((m) => m.sender === 'character' && !m.meta?.failed)
     .map((m) => m.text);
 
   // Only a turn she starts herself gets framing; what she says on any turn is hers.
-  const nudge = ctx.initiative ? initiativeNudge() : ctx.opener ? openerNudge(ctx.character.seed) : null;
+  const nudge = ctx.initiative ? initiativeNudge() : ctx.opener && !ctx.history.some((m) => m.sender === 'user')
+    ? openerNudge(ctx.character.seed, ctx.openingPlan) : null;
   const prompt = buildPrompt(ctx, 'actor_chat', nudge?.text ?? '');
   const base = [{ role: 'user' as const, content: prompt }];
 

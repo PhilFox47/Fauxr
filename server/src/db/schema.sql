@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS characters (
   seed             TEXT NOT NULL,
   reappear_at      TEXT,
   rejection_count  INTEGER NOT NULL DEFAULT 0,
-  matched_at       TEXT
+  matched_at       TEXT,
+  discover_order   INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_characters_state ON characters(state);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_characters_username ON characters(username);
@@ -70,7 +71,7 @@ CREATE TABLE IF NOT EXISTS messages (
   -- NULL for the text chat. Set to a dates.id for anything said in person during a date,
   -- which is a separate transcript the texting history never mixes with.
   date_id       TEXT REFERENCES dates(id) ON DELETE CASCADE,
-  -- This chat's own clock (engine/clock.ts) when the message was sent. NULL for a date beat
+  -- The shared world clock (engine/clock.ts) when the message was sent. NULL on legacy rows
   -- (dates run on real time) and for any message older than this column.
   game_clock_ms INTEGER
 );
@@ -83,6 +84,36 @@ CREATE TABLE IF NOT EXISTS wakeups (
   cancel_if_user_writes INTEGER NOT NULL DEFAULT 1
 );
 CREATE INDEX IF NOT EXISTS idx_wakeups_due ON wakeups(scheduled_at);
+
+-- Private rolling calendar. Times use the global fictional clock; only the current
+-- availability/activity is exposed to the UI.
+CREATE TABLE IF NOT EXISTS schedule_entries (
+  id             TEXT PRIMARY KEY,
+  character_id   TEXT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
+  starts_at_ms   INTEGER NOT NULL,
+  ends_at_ms     INTEGER NOT NULL,
+  activity_id    TEXT NOT NULL,
+  title          TEXT NOT NULL,
+  detail         TEXT NOT NULL DEFAULT '',
+  availability   TEXT NOT NULL CHECK (availability IN ('green', 'yellow', 'red')),
+  created_at     TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_schedule_character_time ON schedule_entries(character_id, starts_at_ms, ends_at_ms);
+
+-- Instagram/WhatsApp-style stories. The image remains in `images`; liking a story keeps it
+-- in the character gallery after the 24-world-hour story window expires.
+CREATE TABLE IF NOT EXISTS status_posts (
+  id             TEXT PRIMARY KEY,
+  character_id   TEXT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
+  image_id       TEXT NOT NULL REFERENCES images(id) ON DELETE CASCADE,
+  caption        TEXT NOT NULL DEFAULT '',
+  created_at_ms  INTEGER NOT NULL,
+  expires_at_ms  INTEGER NOT NULL,
+  liked          INTEGER NOT NULL DEFAULT 0,
+  viewed_at_ms   INTEGER,
+  created_at     TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_status_posts_character_time ON status_posts(character_id, expires_at_ms);
 
 -- Places the player writes themselves, in Settings, and can then take someone to.
 CREATE TABLE IF NOT EXISTS locations (
@@ -101,8 +132,11 @@ CREATE TABLE IF NOT EXISTS dates (
   id            TEXT PRIMARY KEY,
   character_id  TEXT NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
   kind          TEXT NOT NULL DEFAULT 'date', -- date | call
-  status        TEXT NOT NULL DEFAULT 'proposed',  -- active | ended
+  status        TEXT NOT NULL DEFAULT 'proposed',  -- scheduled | active | ended
   when_at       TEXT,
+  -- Exact shared-world-clock appointment time. NULL for immediate dates and calls.
+  scheduled_at_ms INTEGER,
+  reminder_sent INTEGER NOT NULL DEFAULT 0,
   -- The location's name copied in at the time, so an old date still reads correctly after
   -- the place it happened in has been renamed or deleted.
   where_at      TEXT,
@@ -115,6 +149,7 @@ CREATE TABLE IF NOT EXISTS dates (
   -- opening beat, every later beat and the arrival photo all agree on what she is wearing.
   outfit        TEXT,
   created_at    TEXT NOT NULL,
+  started_at    TEXT,
   ended_at      TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_dates_char ON dates(character_id, created_at);

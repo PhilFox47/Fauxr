@@ -22,9 +22,10 @@ not in whether he has earned something. So:
 - Characters should drive: pitch fantasies, start things, send photos, flirt unprompted.
 - His taste (Settings -> Taste, `settings.taste`) is applied inside `roll()`. A new roll that
   bypasses `roll()` also bypasses his taste; go through it.
-- The one deliberate cost gate: **nothing image-related is generated for a character until
-  the user presses "Generate profile pic"** (`photos_exchanged`). Image generation is
-  expensive; keep all image spend behind a user action.
+- The profile picture is the image-spend gate. Normally the user presses **Generate profile
+  pic**; the explicit Discover setting may do it during matching. Chat/date images and Status
+  stories never precede a completed profile picture. Status frequency is user-controlled and
+  the manual test button is an explicit image action.
 
 ## Layout
 
@@ -82,6 +83,44 @@ Dates (`engine/dates.ts`, `actor_date.md`) are a separate in-person transcript w
 own turn loop. The text chat is frozen while a date is active. Anyone else in a date scene is
 an NPC card on the date (`engine/npcs.ts`), played by the Actor in her beats; every card must
 carry an adult age, and `groupRules()` decides whether anyone else may join in sexually.
+
+Future dates use the same row with `status = scheduled`. They remain backstage context while text
+chat continues; ten world-minutes before the appointment `scheduled-dates.ts` pauses the shared
+clock and emits the reminder. Entering promotes that row to `active` and only then starts the normal
+date engine.
+
+Fresh match openers bypass Director only when no real chat messages exist. The Actor gets
+the first-contact starter plus the generated opening plan once; success consumes the plan,
+and a user message arriving first expires it. Blueprint v2 never stores the starter.
+Director intent belongs only in full Director memory. Explicitly generated dossiers enter
+the shared Core block as backstage context; fallback/unmarked dossiers never do. Final bios
+always use the dedicated writer for real dossiers, irrespective of the draft `bio` field.
+New rolls use editable `core_category` likelihoods. JEV first triages structured-roll coherence;
+only flagged or uncertain rolls reach the bounded Director curator, which may replace only non-Core
+scalar support from supplied database candidates and never invents ids. Physical exclusions and kink
+domain/limit consistency stay deterministic rather than being left to either model.
+Sexual attributes declare domain requirements in `extra.requires_domains`,
+`extra.requires_any_domains`, or fetish `extra.domains`; keep those mappings current when importing
+new boundary-sensitive rows. The main character's name is fixed before dossier writing, not selected
+independently inside the dossier pass.
+`profile_photo_format` is presentation metadata and never Core. Dossier evaluation separately
+checks sexual-boundary reversals and implausible age timelines.
+Actor history is a single snapshot with an internal message-ID watermark. Only newer user
+messages trigger a coalesced follow-up, after releasing the turn lock; failed claims alone
+must not queue turns. The isolated check is `node server/scripts/verify-preflight.mjs` after build.
+
+One fictional world clock is shared by the entire cast. It advances with elapsed real time
+even across restarts unless paused; paused messages add one minute, while date/call summaries
+always add their inferred duration. Each match has a private rolling 14-day schedule. The
+current entry supplies the public activity/presence color and private roleplay context. Image
+Status stories are cast-wide rate-limited, require a completed profile picture, expire after
+24 world-hours, and enter the gallery only when liked. The isolated check is
+`node server/scripts/verify-world-schedule.mjs` after build.
+
+Automatic first texts after matching are closure-bound: only an Actor turn marked
+`hidden.ending: "soft_close"` may arm a reopen after the configured number of world-hours.
+Any user message cancels it. Generic silence, milestone, time-skip and Director wakeups must not
+initiate messages. Verify with `node server/scripts/verify-conversation-reopen.mjs` after build.
 
 ## Conventions
 

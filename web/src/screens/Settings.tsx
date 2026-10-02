@@ -200,8 +200,14 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
       patch(['models', 'image', 'size'], model.sizes[0]);
     }
     patch(['models', 'image', 'send_reference_image'], model.supports_reference === true);
-    if (model.suggested_prompt_chars) patch(['models', 'image', 'max_prompt_chars'], model.suggested_prompt_chars);
-    patch(['models', 'image', 'prompt_style'], modelId.startsWith('z-image') ? 'z_image_turbo' : 'seedream');
+    patch(['models', 'image', 'max_prompt_chars'], model.suggested_prompt_chars || 0);
+    const normalizedId = modelId.toLowerCase();
+    patch(['models', 'image', 'prompt_style'],
+      normalizedId === 'chroma' || normalizedId.endsWith('/chroma')
+        ? 'chroma'
+        : normalizedId.startsWith('z-image') || normalizedId.includes('/z-image')
+          ? 'z_image_turbo'
+          : 'seedream');
   };
 
   const patchImageSize = (index: number, key: 'profile' | 'chat' | 'date', value: boolean) => {
@@ -218,12 +224,15 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
   const roles: ('actor' | 'director')[] = ['actor', 'director'];
   const tokenLimits: { key: keyof SettingsData['token_limits']; label: string; detail: string }[] = [
     { key: 'status', label: 'Status message', detail: 'Status, location, activity, outfit and optional life update' },
+    { key: 'schedule', label: 'Schedule generation', detail: 'Initial 14-day calendar and rolling daily extensions' },
+    { key: 'status_post', label: 'Status post idea', detail: 'Image concept and caption for a scheduled Status story' },
     { key: 'life_threads', label: 'New life threads', detail: 'Background storylines created when a character runs low' },
     { key: 'date_cast', label: 'Date guest cards', detail: 'NPCs requested when a date starts' },
     { key: 'date_scene', label: 'Date scene image brief', detail: 'Description used by Show current scene' },
     { key: 'date_outfit', label: 'Date outfit', detail: 'Slot-by-slot outfit selected when a date begins' },
     { key: 'character', label: 'Character generation', detail: 'Full dossier and public profile fields' },
     { key: 'name_and_handle', label: 'Name and handle repairs', detail: 'Fallback calls for clashes or invalid handles' },
+    { key: 'character_coherence', label: 'Character coherence', detail: 'Bounded pre-dossier check of supporting attributes' },
     { key: 'bio', label: 'Profile bio', detail: 'Focused bio writer and repair attempts' },
     { key: 'profile_picture_brief', label: 'Profile-picture concept', detail: 'Her description of the profile picture she wants' },
     { key: 'chat_photo_idea', label: 'New chat-photo idea', detail: 'Fresh concept when regenerating with a new idea' },
@@ -434,12 +443,13 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
           >
             <option value="seedream">Seedream 5.0 Lite</option>
             <option value="z_image_turbo">Z Image Turbo</option>
+            <option value="chroma">Chroma</option>
           </select>
           <span className="tiny muted">
-            These two want different prompts, not just a different model name - Seedream
-            reads a concise brief with a short negative prompt; Z Image Turbo ignores
-            negative prompts entirely and wants a longer, more detailed positive one instead.
-            Switch this when you switch "Model" below to match.
+            Seedream reads a concise brief plus a short negative prompt; Z Image Turbo wants
+            a dense positive prompt; Chroma wants one clean, composition-first positive
+            description and accepts no negative prompt, seed, or reference image. Choosing a
+            listed model below selects its matching preset automatically.
           </span>
         </label>
         <label className="field">
@@ -461,7 +471,7 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
           <span>Maximum prompt length</span>
           <input type="number" min={0} max={100000} value={settings.models.image.max_prompt_chars}
             onChange={(e) => patch(['models', 'image', 'max_prompt_chars'], Number(e.target.value))} />
-          <span className="tiny muted">Characters, including reference instructions, in the final prompt. 0 means unlimited. Z-Image Turbo is preset to 1,200.</span>
+          <span className="tiny muted">Characters, including reference instructions, in the final prompt. 0 means unlimited. Z-Image Turbo is preset to 1,200; Chroma has no Fauxr-side cap.</span>
         </label>
         <label className="switch-row">
           <span className="switch">
@@ -511,6 +521,19 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
 function BehaviourPane({
   settings, patch, save, saved, saving, usage,
 }: SettingsPaneProps & { usage: UsageSummary | null }) {
+  const [statusBusy, setStatusBusy] = useState(false);
+  const [statusResult, setStatusResult] = useState<string | null>(null);
+  const createStatus = async () => {
+    if (statusBusy) return;
+    setStatusBusy(true);
+    setStatusResult(null);
+    try {
+      await api.createStatusPost();
+      setStatusResult('Status created.');
+    } catch (err) {
+      setStatusResult(String(err instanceof Error ? err.message : err));
+    } finally { setStatusBusy(false); }
+  };
   return (
     <>
       <div className="card">
@@ -524,15 +547,51 @@ function BehaviourPane({
             <span className="track" />
           </span>
           <span className="small">
-            Characters can text first
+            Characters can reopen conversations
             <br />
             <span className="tiny muted">
-              Follow-ups after a silence, check-ins and anniversaries. Off, a character only
-              replies to you - apart from her first message after you match. Each of these costs
-              tokens.
+              Only after she naturally closes a chat. Writing to her first cancels the timer.
+              Match openers and replies to your messages are unaffected.
             </span>
           </span>
         </label>
+        {settings.unprompted_messages && (
+          <label className="field">
+            <span className="label">Reopen after</span>
+            <div className="inline-fields">
+              <input
+                type="number"
+                min={1}
+                max={168}
+                step={1}
+                value={settings.conversation_reopen_hours}
+                onChange={(e) => patch(['conversation_reopen_hours'], Number(e.target.value))}
+              />
+              <span className="small muted">world-hours</span>
+            </div>
+          </label>
+        )}
+      </div>
+
+      <div className="card">
+        <label className="field">
+          <div className="slider-head">
+            <span className="label">Status stories per hour</span>
+            <span className="value">{settings.status_posts_per_hour.toFixed(1)}</span>
+          </div>
+          <input
+            type="range" min={0} max={4} step={0.1}
+            value={settings.status_posts_per_hour}
+            onChange={(e) => patch(['status_posts_per_hour'], Number(e.target.value))}
+          />
+          <span className="tiny muted">
+            Cast-wide average per world-hour. Active schedules are weighted more heavily; skipped time never creates a backlog.
+          </span>
+        </label>
+        <button className="btn subtle" disabled={statusBusy || !settings.images_enabled} onClick={() => void createStatus()}>
+          {statusBusy ? 'Creating Status…' : 'Create Status now'}
+        </button>
+        {statusResult && <p className="tiny muted">{statusResult}</p>}
       </div>
 
       <div className="card">
@@ -672,7 +731,25 @@ function BehaviourPane({
             <br />
             <span className="tiny muted">
               Nothing is generated for a character until you press "Generate profile pic" (the
-              camera button in her chat). Her profile picture, and her photos, start then.
+              camera button in her chat), unless Discover pictures below are enabled.
+            </span>
+          </span>
+        </label>
+        <label className="switch-row" style={{ alignItems: 'center', marginTop: 14 }}>
+          <span className="switch">
+            <input
+              type="checkbox"
+              checked={settings.show_images_during_matching}
+              onChange={(e) => patch(['show_images_during_matching'], e.target.checked)}
+            />
+            <span className="track" />
+          </span>
+          <span className="small">
+            Show images during matching
+            <br />
+            <span className="tiny muted">
+              Generates profile pictures for new and waiting Discover profiles, then only shows
+              each card once its picture is ready. Requires Image generation above.
             </span>
           </span>
         </label>

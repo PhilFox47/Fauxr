@@ -43,17 +43,18 @@ export function initiativeNudge(): Nudge {
  * whatever the model reaches for by default, which is what made everyone's first message read
  * as the same "hey :)" regardless of who she was.
  */
-export function openerNudge(seed: { conversation_starter: string }): Nudge {
+export function openerNudge(seed: { conversation_starter: string }, openingPlan?: string): Nudge {
   const starter = find('conversation_starter', seed.conversation_starter);
   const hint = starter?.prompt_hint || 'opens however feels most like her - no script for this one.';
   return {
     id: 'opener',
     text:
-      'This is the very first message you have ever sent him - there is no history, and he has not ' +
-      `written anything yet. You reach out entirely on your own. How you tend to break the ice: ${hint} ` +
-      'Make it land like this is genuinely how you open, in your own words and your own voice, not a ' +
-      'line recited from a script - one beat is enough, you do not owe him your whole personality in ' +
-      'message one. Everything else about you (how you write, your pace, your hard limits) still ' +
-      'governs it; this only decides where you start.',
+      'This is the first message you have ever sent him. There is zero prior conversation. ' +
+      'Make the first turn self-contained. Give him enough context to understand why this message exists ' +
+      'before any joke, scenario or tangent. One clear opening move is enough; it may take more than one ' +
+      'sentence when context is necessary.\n' +
+      `Conversation starter — your general first-contact shape: ${hint}\n` +
+      (openingPlan?.trim() ? `Private opening plan — this character\'s specific realization of that shape: ${openingPlan.trim()}\n` : '') +
+      'Neither is a script to quote verbatim. Use your own voice, pace and limits.',
   };
 }

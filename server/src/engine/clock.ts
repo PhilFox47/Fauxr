@@ -1,56 +1,78 @@
+import { db } from '../db/index.js';
 import type { Relationship } from '../types.js';
 
-/**
- * Her own clock - what day and time it is for THIS chat, entirely separate from the real one
- * and from every other chat's. Two matches have no bearing on each other, so each gets her own
- * clock rather than one shared for the whole cast: skipping ahead with one woman says nothing
- * about what has happened with anyone else.
- *
- * It never advances just because real time passes - the app sitting idle, or him taking hours
- * to reply, moves it not at all. It only moves two ways: a small, steady tick of one minute for
- * every message in the conversation (his or hers - see engine/chat.ts), so a long back-and-forth
- * visibly drifts through an afternoon and she can sensibly reference what time it is or where
- * she should be; and a deliberate, much bigger jump when he explicitly passes time in THIS chat
- * (engine/timepass.ts, the "Pass time" control in the chat menu). Reply five seconds after her
- * last message or come back five real days later without passing time and, as far as she is
- * concerned, only however many messages were exchanged happened in between - which is the point:
- * nobody gets pinged for going quiet, and nothing ages just because he stepped away.
- *
- * Stored on the relationship itself (mood.game_clock_ms, an epoch-ms number), seeded to the real
- * time the first time a chat's relationship row is ever read (repo.ts's backfillGameClock) and
- * from then on moved only by advanceGameClock(). Anything that describes *when something is
- * happening in this chat's story* reads this instead of the real clock: her sense of the current
- * day and time (moment.ts), her status's set_at/until (status.ts), the Director's "time now" and
- * "last contact" lines, last_contact_at, and how long an open thread has sat unaddressed before
- * it is dropped (state.ts). It is also shown to him directly - the weekday and time next to her
- * name in the chat (e.g. "Mo - 13:12"), so he can follow her routine and time dates sensibly.
- * Real wall-clock time (Date.now()/nowIso()) stays in charge of everything actually about the
- * real world: message timestamps, image and log bookkeeping, typing-delay pacing, and per-day
- * cost budgets - none of that should freeze or tick along with the story.
- */
+/** One fictional clock for the whole cast, anchored to elapsed real time rather than its date. */
+export interface WorldClockState { base_ms: number; anchored_real_ms: number; paused: boolean }
+const KEY = 'world_clock';
 
-type ClockBearer = Pick<Relationship, 'mood'>;
-
-/** Assumes repo.ts's backfillGameClock has already run; Date.now() only covers a relationship this session created and has not yet reloaded. */
-export function gameClockMs(rel: ClockBearer): number {
-  const v = Number((rel.mood as any)?.game_clock_ms);
-  return Number.isFinite(v) ? v : Date.now();
+function write(state: WorldClockState): void {
+  db.prepare(`INSERT INTO settings (key, value) VALUES (?, ?)
+    ON CONFLICT(key) DO UPDATE SET value = excluded.value`).run(KEY, JSON.stringify(state));
 }
 
-export function gameNow(rel: ClockBearer): Date {
-  return new Date(gameClockMs(rel));
+function legacyClockSeed(): number {
+  let latest = 0;
+  for (const row of db.prepare('SELECT mood FROM relationships').all() as { mood: string }[]) {
+    try {
+      const value = Number(JSON.parse(row.mood)?.game_clock_ms);
+      if (Number.isFinite(value)) latest = Math.max(latest, value);
+    } catch { /* normal relationship hydration owns malformed mood repair */ }
+  }
+  return latest || Date.now();
 }
 
-export function gameNowIso(rel: ClockBearer): string {
-  return gameNow(rel).toISOString();
+function read(): WorldClockState {
+  const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(KEY) as { value: string } | undefined;
+  if (row) {
+    try {
+      const value = JSON.parse(row.value) as Partial<WorldClockState>;
+      if (Number.isFinite(value.base_ms) && Number.isFinite(value.anchored_real_ms)) {
+        return { base_ms: Number(value.base_ms), anchored_real_ms: Number(value.anchored_real_ms), paused: !!value.paused };
+      }
+    } catch { /* repaired below from the newest legacy clock */ }
+  }
+  const state = { base_ms: legacyClockSeed(), anchored_real_ms: Date.now(), paused: false };
+  write(state);
+  return state;
 }
 
-/**
- * Moves this chat's clock forward. Mutates rel.mood in place and returns the new value; saving
- * rel is the caller's job, same as every other mood change in engine/timepass.ts.
- */
-export function advanceGameClock(rel: ClockBearer, hours: number): number {
-  const next = gameClockMs(rel) + Math.round(hours * 3_600_000);
-  rel.mood = { ...rel.mood, game_clock_ms: next };
+export function worldClockState(): WorldClockState & { time_ms: number; sampled_real_ms: number } {
+  const state = read();
+  const sampled_real_ms = Date.now();
+  const time_ms = state.paused ? state.base_ms : state.base_ms + Math.max(0, sampled_real_ms - state.anchored_real_ms);
+  return { ...state, time_ms, sampled_real_ms };
+}
+
+/** Optional bearer parameters keep existing save-compatible call sites simple. */
+export function gameClockMs(_rel?: Pick<Relationship, 'mood'>): number { return worldClockState().time_ms; }
+export function gameNow(_rel?: Pick<Relationship, 'mood'>): Date { return new Date(gameClockMs()); }
+export function gameNowIso(_rel?: Pick<Relationship, 'mood'>): string { return gameNow().toISOString(); }
+
+export function setWorldClockPaused(paused: boolean): WorldClockState & { time_ms: number; sampled_real_ms: number } {
+  const current = worldClockState();
+  const state = { base_ms: current.time_ms, anchored_real_ms: Date.now(), paused };
+  write(state);
+  return worldClockState();
+}
+
+export function setWorldClock(targetMs: number): WorldClockState & { time_ms: number; sampled_real_ms: number } {
+  const current = worldClockState();
+  if (!Number.isFinite(targetMs) || targetMs < current.time_ms) throw new Error('world time can only move forward');
+  const state = { base_ms: Math.round(targetMs), anchored_real_ms: Date.now(), paused: current.paused };
+  write(state);
+  return worldClockState();
+}
+
+/** The relationship argument remains for callers; time itself is global now. */
+export function advanceGameClock(_rel: Pick<Relationship, 'mood'> | null, hours: number): number {
+  const current = worldClockState();
+  const next = current.time_ms + Math.round(hours * 3_600_000);
+  write({ base_ms: next, anchored_real_ms: Date.now(), paused: current.paused });
   return next;
+}
+
+/** Running time needs no artificial tick; paused ordinary chat gets one minute per bubble. */
+export function messageClockMs(): number {
+  const current = worldClockState();
+  return current.paused ? advanceGameClock(null, 1 / 60) : current.time_ms;
 }

@@ -17,31 +17,33 @@ import {
   activeDate, activeSessionKinds, addMessage, characterIdsOnDate, dateMessages, deleteCharacter, deleteLocation, getCharacter, getCircle, getDate,
   getLocation, getRelationship, getUserProfile, getWakeup, lastMessage, listLocations,
   markCharacterMessagesRead, profilePicturePath, queryLogs, recentMessages, saveLocation, saveRelationship,
-  saveUserProfile, unreadCount,
+  saveUserProfile, scheduledDate, unreadCount, moveToEndOfSwipeStack,
 } from '../repo.js';
 import { bus } from '../events.js';
 import { blockCharacterByUser, deleteMessage, handleUserMessage, isRunning, regenerateLastTurn, takeTurn } from '../engine/chat.js';
-import { ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
+import { discoveryImagesPending, ensureDiscoveryProfilePictures, ensureStack, generatingCount, stack, swipeLeft, swipeRight, visibleMatches } from '../engine/matching.js';
 import {
   characterGallery, ensureProfilePicture, evaluateUserImage, hasSwapped, profilePictureState, listImageJobs, regenerateImage, retryImageJob, showPhoto,
 } from '../engine/images.js';
 import { rollSeed, describeSeed, avatarEmojiFor, sanitizeEmoji, rarityTier } from '../engine/generator.js';
 import { CARD_SECTIONS, sanitizeCard } from '../engine/usercard.js';
 import { catchUp } from '../engine/scheduler.js';
-import { passTime } from '../engine/timepass.js';
 import { resetParts } from '../engine/reset.js';
 import { profileView } from '../engine/discovery.js';
 import { expandLocationDraft, generateLocationImage } from '../engine/locations.js';
 import {
-  dateHistory, deleteDateMessage, dismissNpc, endDate, handleUserDateMessage, regenerateLastDateBeat, showCurrentScene, startDate,
-  startCall,
+  cancelPlannedDate, dateHistory, deleteDateMessage, dismissNpc, endDate, enterScheduledDate, handleUserDateMessage,
+  regenerateLastDateBeat, scheduleDate, showCurrentScene, startDate, startCall,
 } from '../engine/dates.js';
 import { fantasyView } from '../engine/fantasies.js';
 import { promptLibrary, resetPromptOverride, savePromptOverride } from '../prompts/render.js';
 import { domainSides, TASTE_SECTIONS } from '../engine/kinks.js';
 import { coreTraits } from '../engine/profilecard.js';
-import { statusOf } from '../engine/status.js';
-import { gameClockMs } from '../engine/clock.js';
+import { advanceGameClock, gameClockMs, setWorldClock, setWorldClockPaused, worldClockState } from '../engine/clock.js';
+import { syncWorldEffects } from '../engine/world.js';
+import { syncScheduledDateReminders } from '../engine/scheduled-dates.js';
+import { scheduleAt } from '../engine/schedule.js';
+import { activeStatusPosts, createStatusPost, hasActiveStatus, hasUnseenActiveStatus, likeStatusPost, publishRetriedStatusImage, viewStatusPost } from '../engine/status-posts.js';
 import type { Character, KinkSide, KinkStance, Location } from '../types.js';
 import { setSteering } from '../engine/roleplay.js';
 
@@ -130,6 +132,8 @@ async function readUploadedImage(
 function publicCharacter(c: Character) {
   const rel = getRelationship(c.id);
   const picture = profilePicturePath(c.id);
+  const currentSchedule = c.state === 'matched' ? scheduleAt(c.id) : null;
+  const planned = c.state === 'matched' ? scheduledDate(c.id) : null;
   return {
     id: c.id,
     username: c.username,
@@ -143,16 +147,79 @@ function publicCharacter(c: Character) {
     photos_exchanged: hasSwapped(rel),
     // 'failed' brings the camera button back as a retry (see profilePictureState).
     profile_picture_state: profilePictureState(c.id),
-    // Her WhatsApp-style status line, only while she is an active match (see engine/status.ts).
-    status: c.state === 'matched' ? statusOf(rel)?.text ?? null : null,
-    // This chat's own clock (engine/clock.ts) - shown next to her name so he can follow her
-    // routine and time dates sensibly. Never the real clock: hers alone, ticking with messages
-    // and with Pass Time.
+    // Schedule-derived presence replaced the unrelated generated text status. It affects how
+    // she writes, never whether she is allowed to answer.
+    status: c.state === 'matched' ? currentSchedule?.title ?? 'Free time' : null,
+    availability: c.state === 'matched' ? currentSchedule?.availability ?? 'green' : null,
+    has_status: c.state === 'matched' && hasActiveStatus(c.id),
+    has_unseen_status: c.state === 'matched' && hasUnseenActiveStatus(c.id),
+    scheduled_date: planned?.scheduled_at_ms ? {
+      id: planned.id,
+      scheduled_at_ms: planned.scheduled_at_ms,
+      where_at: planned.where_at,
+      company: planned.company,
+      due: planned.reminder_sent || gameClockMs() >= planned.scheduled_at_ms - 10 * 60_000,
+    } : null,
+    // One global fictional clock shared by the entire cast.
     game_clock_ms: rel ? gameClockMs(rel) : null,
   };
 }
 
 export async function registerApi(app: FastifyInstance): Promise<void> {
+  app.get('/api/world-clock', async () => {
+    syncScheduledDateReminders();
+    return worldClockState();
+  });
+  app.post<{ Body: { paused?: boolean } }>('/api/world-clock/pause', async (req) =>
+    setWorldClockPaused(req.body?.paused !== false));
+  app.post<{ Body: { hours?: number; time_ms?: number } }>('/api/world-clock/advance', async (req, reply) => {
+    try {
+      if (Number.isFinite(Number(req.body?.time_ms))) setWorldClock(Number(req.body.time_ms));
+      else {
+        const hours = Number(req.body?.hours);
+        if (!Number.isFinite(hours) || hours <= 0) return reply.code(400).send({ error: 'hours must be positive' });
+        advanceGameClock(null, hours);
+      }
+      syncWorldEffects();
+      syncScheduledDateReminders();
+      return worldClockState();
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
+  app.get<{ Params: { id: string } }>('/api/status-posts/:id', async (req, reply) => {
+    const character = getCharacter(req.params.id);
+    if (!character || character.state !== 'matched') return reply.code(404).send({ error: 'not found' });
+    return activeStatusPosts(character.id).map((post) => ({
+      id: post.id,
+      character_id: post.character_id,
+      image_id: post.image_id,
+      caption: post.caption,
+      created_at_ms: post.created_at_ms,
+      expires_at_ms: post.expires_at_ms,
+      liked: !!post.liked,
+      viewed: post.viewed_at_ms != null,
+      aspect: post.aspect,
+      image_url: `/media/${post.image_path}?v=${encodeURIComponent(post.image_updated_at)}`,
+    }));
+  });
+  app.post('/api/status-posts/create', async (_req, reply) => {
+    try {
+      const post = await createStatusPost();
+      if (!post) return reply.code(409).send({ error: 'No eligible character can post a Status right now.' });
+      return { character_id: post.character_id, status_id: post.id };
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
+  app.post<{ Params: { id: string } }>('/api/status-posts/:id/like', async (req, reply) => {
+    const post = likeStatusPost(req.params.id);
+    return post ? { ok: true, liked: true } : reply.code(404).send({ error: 'Status not found' });
+  });
+  app.post<{ Params: { id: string } }>('/api/status-posts/:id/view', async (req, reply) => {
+    const post = viewStatusPost(req.params.id);
+    return post ? { ok: true, viewed: true } : reply.code(404).send({ error: 'Status not found' });
+  });
   // ------------------------------------------------------------- auth
   const loginFailures = new Map<string, { count: number; resetAt: number }>();
   app.post<{ Body: { password?: string; remember?: boolean } }>('/api/login', async (req, reply) => {
@@ -254,13 +321,28 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   // ------------------------------------------------------------- swipe stack
   app.get('/api/stack', async () => {
     void ensureStack();
+    const candidates = stack();
+    const showImages = getSettings().images_enabled && getSettings().show_images_during_matching;
+    if (showImages) ensureDiscoveryProfilePictures(candidates);
+    const candidatesWithPictures = candidates.map((character) => ({
+      character,
+      picture: showImages ? profilePicturePath(character.id) : null,
+    }));
+    // Keep the deck stable while portraits finish. Filtering every missing card independently
+    // could show card #2 and then suddenly put card #1 in front of it halfway through a read.
+    const firstMissingPicture = candidatesWithPictures.findIndex((entry) => !entry.picture);
+    const visibleCandidates = showImages
+      ? candidatesWithPictures.slice(0, firstMissingPicture < 0 ? candidatesWithPictures.length : firstMissingPicture)
+      : candidatesWithPictures;
     return {
       generating: generatingCount(),
+      preparing_images: showImages ? discoveryImagesPending() : 0,
+      show_images: showImages,
       // Her name, handle, age, ethnicity, bio, the emoji she picked for herself and the three
       // traits that define her (profilecard.ts). The card used to be handle, age, languages
-      // and bio, which made choosing whom to talk to a guess. Still no photo: that stays
-      // behind "Generate profile pic", where the image spend is.
-      profiles: stack().map((c) => ({
+      // and bio, which made choosing whom to talk to a guess. A photo is included only under
+      // the explicit Discover-image setting; otherwise spend stays behind the chat button.
+      profiles: visibleCandidates.map(({ character: c, picture }) => ({
         id: c.id,
         real_name: c.real_name,
         username: c.username,
@@ -268,6 +350,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         traits: coreTraits(c.seed, c.id).map(({ caption, label }) => ({ caption, label })),
         bio: c.bio,
         avatar_emoji: avatarEmojiFor(c),
+        profile_picture: picture ? `/media/${picture}` : null,
         age: c.seed.age,
         // English is not listed: everyone speaks it, so it says nothing about her. It is
         // also the one language with no row in the table, hence the capitalising fallback.
@@ -359,8 +442,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       display_name: character.real_name,
       bio: character.bio,
       core: coreTraits(character.seed, character.id).map(({ caption, label }) => ({ caption, label })),
-      // In full here: the chat header and the chat list truncate it to one line.
-      status: character.state === 'matched' ? statusOf(rel) : null,
+      status: character.state === 'matched' && scheduleAt(character.id)
+        ? { text: scheduleAt(character.id)!.title, set_at: new Date(scheduleAt(character.id)!.starts_at_ms).toISOString() }
+        : null,
       ...profileView(character, rel),
     };
   });
@@ -527,6 +611,11 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     }));
   });
 
+  app.post<{ Params: { id: string } }>('/api/swipe/:id/skip', async (req, reply) => {
+    if (!moveToEndOfSwipeStack(req.params.id)) return reply.code(404).send({ error: 'not found in Discover' });
+    return { ok: true };
+  });
+
   /** Private tone guidance for the next Actor reply. It is never inserted into the transcript. */
   app.post<{ Params: { id: string }; Body: { direction?: string } }>('/api/chats/:id/steer', async (req, reply) => {
     try {
@@ -596,8 +685,10 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   app.get<{ Params: { id: string } }>('/api/chats/:id/dates', async (req, reply) => {
     const character = getCharacter(req.params.id);
     if (!character) return reply.code(404).send({ error: 'not found' });
+    syncScheduledDateReminders();
     return {
       ...dateHistory(character.id),
+      world_time_ms: gameClockMs(),
       locations: listLocations().map(publicLocation),
       // People from her life he has met on earlier dates, offered as quick picks on the invite.
       circle: getCircle(character.id).map((c) => ({ id: c.id, name: c.name, who: c.who })),
@@ -663,6 +754,41 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       }
     },
   );
+
+  app.post<{ Params: { id: string }; Body: { location_id?: string; scheduled_at_ms?: number; company?: string } }>(
+    '/api/chats/:id/dates/schedule',
+    async (req, reply) => {
+      try {
+        const date = scheduleDate({
+          characterId: req.params.id,
+          locationId: String(req.body?.location_id ?? ''),
+          scheduledAtMs: Number(req.body?.scheduled_at_ms),
+          company: String(req.body?.company ?? '').slice(0, 300),
+        });
+        syncScheduledDateReminders();
+        return date;
+      } catch (err) {
+        return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+      }
+    },
+  );
+
+  app.post<{ Params: { dateId: string } }>('/api/dates/:dateId/enter', async (req, reply) => {
+    try {
+      return await enterScheduledDate(req.params.dateId);
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
+
+  app.delete<{ Params: { dateId: string } }>('/api/dates/:dateId/schedule', async (req, reply) => {
+    try {
+      cancelPlannedDate(req.params.dateId);
+      return { ok: true };
+    } catch (err) {
+      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
+    }
+  });
 
   app.post<{ Params: { id: string } }>('/api/chats/:id/calls', async (req, reply) => {
     try {
@@ -755,20 +881,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     return { ok: true };
   });
 
-  /**
-   * "Pass time": the deliberate way the story's clock moves (engine/clock.ts, timepass.ts).
-   * Nothing here happens on its own - see the module doc for why.
-   */
-  app.post<{ Params: { id: string }; Body: { hours?: number } }>('/api/chats/:id/pass-time', async (req, reply) => {
-    const hours = Number(req.body?.hours);
-    if (!Number.isFinite(hours) || hours <= 0) return reply.code(400).send({ error: 'hours must be a positive number' });
-    try {
-      return await passTime(req.params.id, hours);
-    } catch (err) {
-      return reply.code(400).send({ error: String(err instanceof Error ? err.message : err) });
-    }
-  });
-
   // "Show photo" on a photo she sent: renders the prompt prepared when she sent it. Returns as
   // soon as the bubble is marked as developing; the image arrives as a message_updated event.
   app.post<{ Params: { id: string } }>('/api/images/:id/show', async (req, reply) => {
@@ -783,6 +895,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   app.post<{ Params: { id: string } }>('/api/images/:id/retry', async (req, reply) => {
     try {
       await retryImageJob(req.params.id);
+      publishRetriedStatusImage(req.params.id);
       return { ok: true };
     } catch (err) {
       return reply.code(400).send({ error: String(err) });
@@ -847,6 +960,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
 
   app.put<{ Body: unknown }>('/api/settings', async (req) => {
     const next = saveSettings(req.body);
+    if (next.images_enabled && next.show_images_during_matching) ensureDiscoveryProfilePictures();
     logger.info('app', 'settings updated');
     return next;
   });

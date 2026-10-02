@@ -7,9 +7,9 @@ import { complete, completeJson, extractJson } from '../llm/client.js';
 import { logger } from '../log.js';
 import { render } from '../prompts/render.js';
 import {
-  activeDate, addMessage, clearWakeup, createDate, dateMessages, deleteMessages, finishDate,
+  activateScheduledDate, activeDate, addMessage, cancelScheduledDate, clearWakeup, createDate, dateMessages, deleteMessages, finishDate,
   getCharacter, getDate, getLocation, getMessage, getRelationship, getUserProfile, listDates,
-  getCircle, recentMessages, saveRelationship, setDateNpcs, setDateOutfit, type StoredMessage,
+  getCircle, recentMessages, saveRelationship, scheduledDate, setDateNpcs, setDateOutfit, type StoredMessage,
 } from '../repo.js';
 import type { Character, CharacterSeed, DateSession, Location, Relationship } from '../types.js';
 import {
@@ -190,7 +190,7 @@ export function directionBlock(direction: string): string {
 
 export interface DateTurnResult {
   text: string;
-  hidden: { thoughts: string; mood: string; wants: string; scene: ReturnType<typeof normalizeScene>; callback_used: string | null; in_the_act?: boolean; joined?: unknown; left?: unknown; outfit_changes?: OutfitChange[] };
+  hidden: { thoughts: string; mood: string; wants: string; scene: ReturnType<typeof normalizeScene>; callback_used: string | null; in_the_act?: boolean; joined?: unknown; left?: unknown; outfit_changes?: OutfitChange[]; ending: 'end_session' | null };
 }
 
 // ------------------------------------------------------------------ prompt blocks
@@ -317,7 +317,7 @@ function buildDatePrompt(
     ledger_block: ledgerBlock(rel.ledger, gameClockMs(rel)),
     mood_block: moodBlock(rel.arousal, seed.hints.arousal_tell, 'in_person'),
     release_block: releaseBlock(character, rel, 'in_person'),
-    moment_block: describeHerMoment(character, rel),
+    moment_block: describeHerMoment(character, rel, undefined, 'date'),
     date_continuity_block: previousMood || previousWant
       ? [
           previousMood ? `At the end of her last beat she felt: ${previousMood}` : '',
@@ -555,12 +555,15 @@ async function runDateActor(
         joined: hiddenRaw.joined,
         left: hiddenRaw.left,
         outfit_changes: normalizeOutfitChanges(pick(hiddenRaw, ['outfit_changes', 'clothes', 'outfit_change'])),
+        ending: hiddenRaw.ending === 'end_session' && transcript.some((message) => message.sender === 'user')
+          ? 'end_session'
+          : null,
       },
     };
   }
 
   logger.error('actor', `${isCall ? 'call' : 'date'} actor failed twice for ${character.username}, using fallback`);
-  return { text: isCall ? FALLBACK_CALL : FALLBACK_BEAT, hidden: { thoughts: 'fallback beat, the model failed', mood: '', wants: '', scene: { ...EMPTY_SCENE }, callback_used: null } };
+  return { text: isCall ? FALLBACK_CALL : FALLBACK_BEAT, hidden: { thoughts: 'fallback beat, the model failed', mood: '', wants: '', scene: { ...EMPTY_SCENE }, callback_used: null, ending: null } };
 }
 
 /**
@@ -579,6 +582,7 @@ async function takeDateTurn(dateId: string): Promise<void> {
   const startedIn = currentEpoch();
   const releaseBefore = releaseOf(rel);
   const roleplaySteeringAt = steeringToken(rel, 'date');
+  let shouldEndSession = false;
   bus.emitEvent({ type: 'typing', character_id: character.id, on: true });
   try {
     const result = await runDateActor(character, rel, date);
@@ -601,6 +605,9 @@ async function takeDateTurn(dateId: string): Promise<void> {
         ...(!isCall ? { scene: result.hidden.scene } : {}),
       },
       read_at: null,
+      // The session's inferred duration is applied once when it ends. Per-beat ticks here
+      // would make a five-hour date end at 18:10 instead of 18:00 after ten exchanges.
+      game_clock_ms: gameClockMs(rel),
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
     // Like a failed chat bubble, this is UI recovery rather than part of the fiction. It is
@@ -625,10 +632,12 @@ async function takeDateTurn(dateId: string): Promise<void> {
       fresh.last_contact_at = nowIso();
       saveRelationship(fresh);
     }
+    shouldEndSession = result.hidden.ending === 'end_session';
   } finally {
     bus.emitEvent({ type: 'typing', character_id: character.id, on: false });
     releaseTurn(character.id);
   }
+  if (shouldEndSession && getDate(dateId)?.status === 'active') await endDate(dateId);
 }
 
 /**
@@ -867,9 +876,8 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
   const character = getCharacter(input.characterId);
   if (!character) throw new Error('character not found');
   if (character.state !== 'matched') throw new Error('you are not matched with her');
-  const rel = getRelationship(character.id);
-  if (!rel) throw new Error('relationship missing');
   if (activeDate(character.id)) throw new Error('you already have a live date or call with her');
+  if (scheduledDate(character.id)) throw new Error('you already have a date scheduled with her');
 
   const location = getLocation(input.locationId);
   if (!location) throw new Error('location not found');
@@ -883,6 +891,87 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
     location_id: location.id,
     company: (input.company ?? '').trim().slice(0, 300),
   });
+
+  return beginDate(character, date, location);
+}
+
+/** Store an agreed future date without opening its live transcript or freezing text chat. */
+export function scheduleDate(input: ScheduleDateInput): DateSession {
+  const character = getCharacter(input.characterId);
+  if (!character) throw new Error('character not found');
+  if (character.state !== 'matched') throw new Error('you are not matched with her');
+  if (activeDate(character.id)) throw new Error('finish the current date or call first');
+  if (scheduledDate(character.id)) throw new Error('you already have a date scheduled with her');
+  const location = getLocation(input.locationId);
+  if (!location) throw new Error('location not found');
+  const at = Math.round(Number(input.scheduledAtMs));
+  if (!Number.isFinite(at) || at <= gameClockMs()) throw new Error('the scheduled time must be in the future');
+
+  const date = createDate({
+    id: randomUUID(),
+    character_id: character.id,
+    kind: 'date',
+    status: 'scheduled',
+    scheduled_at_ms: at,
+    when_at: new Date(at).toLocaleString('en-GB', {
+      weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit',
+    }),
+    where_at: location.name,
+    location_id: location.id,
+    company: (input.company ?? '').trim().slice(0, 300),
+  });
+  const marker = addMessage({
+    character_id: character.id,
+    sender: 'system',
+    text: `You scheduled a date with ${character.real_name} at ${location.name} for ${date.when_at}.`,
+    meta: { type: 'date_scheduled', date_id: date.id, scheduled_at_ms: at },
+    game_clock_ms: gameClockMs(),
+  });
+  bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
+  bus.emitEvent({ type: 'date', character_id: character.id, date });
+  logger.info('actor', `date scheduled with ${character.username}`, { where: location.name, scheduled_at_ms: at });
+  return date;
+}
+
+/** Enter the already-agreed date once its ten-minute reminder window has begun. */
+export async function enterScheduledDate(dateId: string): Promise<DateSession> {
+  const planned = getDate(dateId);
+  if (!planned || planned.kind !== 'date' || planned.status !== 'scheduled') throw new Error('scheduled date not found');
+  if (planned.scheduled_at_ms == null || gameClockMs() < planned.scheduled_at_ms - 10 * 60_000) {
+    throw new Error('that date is not ready yet');
+  }
+  const character = getCharacter(planned.character_id);
+  if (!character || character.state !== 'matched') throw new Error('character not found');
+  if (activeDate(character.id)) throw new Error('finish the current date or call first');
+  const location = planned.location_id ? getLocation(planned.location_id) : null;
+  if (!location) throw new Error('the scheduled location no longer exists');
+  const date = activateScheduledDate(planned.id);
+  if (!date || date.status !== 'active') throw new Error('could not start the scheduled date');
+  return beginDate(character, date, location);
+}
+
+export function cancelPlannedDate(dateId: string): void {
+  const date = getDate(dateId);
+  if (!date || date.status !== 'scheduled') throw new Error('scheduled date not found');
+  const character = getCharacter(date.character_id);
+  if (!cancelScheduledDate(date.id)) throw new Error('could not cancel the scheduled date');
+  if (character) {
+    const marker = addMessage({
+      character_id: character.id,
+      sender: 'system',
+      text: `The scheduled date at ${date.where_at || 'the planned location'} was cancelled.`,
+      meta: { type: 'date_cancelled', date_id: date.id },
+      game_clock_ms: gameClockMs(),
+    });
+    bus.emitEvent({ type: 'message', character_id: character.id, message: marker });
+    bus.emitEvent({ type: 'date', character_id: character.id, date: { ...date, status: 'ended' } });
+  }
+}
+
+/** Everything shared by an immediate invitation and entering a scheduled date. */
+async function beginDate(character: Character, date: DateSession, location: Location): Promise<DateSession> {
+  const rel = getRelationship(character.id);
+  if (!rel) throw new Error('relationship missing');
 
   // Date embodiment is local to one evening. Never carry a sofa position or physical contact
   // from the last date into a new arrival; aftermath and durable memories remain separate.
@@ -910,6 +999,10 @@ export async function startDate(input: StartDateInput): Promise<DateSession> {
     logger.error('actor', 'opening date beat failed', { error: String(err) }),
   );
   return date;
+}
+
+export interface ScheduleDateInput extends Omit<StartDateInput, 'when'> {
+  scheduledAtMs: number;
 }
 
 /**
@@ -964,6 +1057,8 @@ export async function handleUserDateMessage(input: { dateId: string; text: strin
     sender: 'user',
     text: input.text,
     date_id: date.id,
+    // Dates/calls advance by their inferred duration at completion, not once per beat too.
+    game_clock_ms: gameClockMs(),
   });
   bus.emitEvent({ type: 'message', character_id: date.character_id, message: stored });
 
@@ -1213,7 +1308,7 @@ function buildCallPrompt(character: Character, rel: Relationship, transcript: St
     language_block: seed.languages.length > 1 ? languageBlock(seed) : '',
     user_block: [userBlock(user), user ? userCardBlock(user) : '', describeHim(rel)].filter(Boolean).join('\n\n'),
     ledger_block: ledgerBlock(rel.ledger, gameClockMs(rel)),
-    moment_block: describeHerMoment(character, rel),
+    moment_block: describeHerMoment(character, rel, undefined, 'call'),
     call_continuity_block: previousMood || previousWant
       ? [
           previousMood ? `At the end of her last turn she felt: ${previousMood}` : '',
@@ -1231,10 +1326,11 @@ function buildCallPrompt(character: Character, rel: Relationship, transcript: St
 }
 
 /** Everything the chat screen needs to render the invite menu and the past-dates list. */
-export function dateHistory(characterId: string): { active: DateSession | null; past: DateSession[] } {
+export function dateHistory(characterId: string): { active: DateSession | null; scheduled: DateSession | null; past: DateSession[] } {
   const all = listDates(characterId);
   return {
     active: all.find((d) => d.status === 'active') ?? null,
+    scheduled: all.filter((d) => d.status === 'scheduled').sort((a, b) => (a.scheduled_at_ms ?? 0) - (b.scheduled_at_ms ?? 0))[0] ?? null,
     past: all.filter((d) => d.status === 'ended'),
   };
 }

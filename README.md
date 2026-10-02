@@ -4,6 +4,25 @@ A self-hosted, single-user adult fantasy playground dressed as a hookup app. You
 match and chat with generated women who are into you, and explore sexual fantasies with
 them - theirs as much as yours.
 
+Profile pictures remain opt-in by default. The Experience setting **Show images during
+matching** is the explicit exception: when both it and image generation are enabled, new and
+already-waiting Discover characters queue profile generation serially. A card stays out of
+the swipe deck until its image succeeds, then uses that picture as its large dating-app-style
+hero. With the setting off, Discover retains the emoji card and profile generation begins
+manually from the chat as before.
+
+Discover portraits are rendered in a square container, matching the generated profile image
+without a widescreen crop. The middle Skip action is deliberately not a rejection: it only
+moves that character to the end of the persistent Discover order, so she comes back after the
+other currently available profiles have been considered.
+
+Discover now fits the available viewport with equal-sized, labelled Pass / Skip / Like
+controls that stay visible. Wider cards place the square portrait beside the profile rather
+than above it; phones use a height-limited square portrait. Only overflowing profile details
+scroll on small screens or with long bios, not the entire deck. Touch gestures lock to an
+axis after a small movement threshold, so reading vertically cannot wobble or dismiss the
+card; interrupted gestures reset safely. Notifications no longer shift the card layout.
+
 There is nothing to win. Nobody has to be won over, tested or unlocked. Every character
 matched with you because she wants you; what differs is how she goes about it. Some are all
 in from the first message, some love a slow, teasing build. They drive as much as you do:
@@ -15,8 +34,34 @@ hard limits and a handful of concrete fantasies she wants to play out. Finding o
 is into - and her finding out what you are into - is the one thing that is actually
 discovered over time.
 
+The shipped library is periodically synchronized from the production WebUI exports with
+`server/scripts/import-shipped-exports.mjs`. Attribute exports are complete per-category
+snapshots: the importer removes that category from older aggregate files, writes one canonical
+category file, and removes cross-table affinities or weights that point at IDs deleted by the
+new snapshot. Prompt exports replace their matching shipped template; Actor prompts retain the
+natural-ending JSON contract introduced by the engine even when an older export omits it.
+
 Everyone in it is an adult (`age` has a hard minimum of 18, validated at generation). Each
 character's hard limits are real and hold whatever the mood; everything else is on the table.
+
+Image prompts for text-only renderers describe the woman directly; they never claim she is the
+"same recurring woman" when no reference image accompanies the request. The compact identity
+sentence and the concrete shot description are separated grammatically so camera language cannot
+become part of a haircut or facial trait after prompt-budget trimming. Status stories are selected
+posts rather than accidental discarded frames: their authored concept owns the composition and
+available light instead of drawing from the deliberately harsh chat-snapshot lighting pool.
+
+The shared Actor system prompt frames Fauxr as consensual adult dating and erotic fiction. A model
+must not import generic modesty or assistant-style restraint once a character and scene genuinely
+call for explicitness. This is permission to write frankly, not an instruction to sexualize every
+turn, and it never overrides a character's own hard limits or immediate wants.
+
+Characters may start a later conversation only after they themselves returned
+`hidden.ending: "soft_close"` and the configured number of fictional world-hours has elapsed.
+That timer follows the shared clock: pausing freezes it and manually advancing time can mature it.
+Any user message cancels it immediately. Generic silence checks, Director-authored wakeups,
+anniversary pings and time-skip reach-outs cannot initiate messages; match openers and recovery of
+an actually unanswered user message remain separate reliability paths.
 
 The UI and all model prompts are in English.
 
@@ -68,10 +113,10 @@ Nothing else on disk is state. See **Starting over** below.
 ### Always reachable
 
 Characters answer whenever you write, at any hour. There are no online windows, no "I'm
-heading off" absences and no server uptime window any more. On every start a catch-up job
-spreads out overdue wakeups and refills the swipe stack. Story time and arousal do not move
-merely because the server was off; only conversation and the explicit **Pass time** control
-move a chat's own clock.
+heading off" lockouts and no server uptime window. Their schedules can make them groggy,
+brief, busy or ready to wind down, but never suppress a reply. On every start a catch-up job
+spreads out overdue wakeups and refills the swipe stack. The shared fictional clock catches up
+the real elapsed duration unless the user explicitly paused it.
 
 ### A password, optionally
 
@@ -341,9 +386,10 @@ What was added:
   (`ensureFantasies()`). The Director, the Actor and dates all see them, and she brings one up
   when the conversation gets near it (a `pitch_fantasy` nudge used to push it; see "She decides
   where it goes" below).
-- **Photos start with "Generate profile pic".** Image generation is expensive, so nothing is
-  generated for a character until you press the camera button in her chat. Until then she is
-  an emoji to you and she cannot send photos. (This was a "swap" at first: your pictures were
+- **Photos start with a profile picture.** By default nothing is generated until you press
+  the camera button in her chat; the explicit **Show image during matching** setting may opt
+  into doing this for Discover instead. Until a profile picture exists she is an emoji to you,
+  cannot send photos and cannot post image Status stories. (This was a "swap" at first: your pictures were
   hidden from her until then and she reacted to it. See "Generate profile pic, not a swap"
   below.) From then on, when she decides to send a photo it is generated straight away with no
   consent card, using her private identity portrait (or an older character's profile picture)
@@ -1080,110 +1126,73 @@ What changed:
 Existing characters keep their fantasies; the new wording has them play those out in the chat
 too, and new ones she invents follow the same rule.
 
-## Time only passes when he says so, and only in that one chat
+## One shared fictional clock and private schedules
 
-Everything used to run off the real clock: her arousal cooled over real hours, her status
-changed every real 4-12 hours, and if he genuinely stepped away for a while she could
-double-text him or reach out on her own for having gone quiet. In practice this meant one of
-two things - either he always replied quickly enough that none of it ever visibly did
-anything, or the one time he actually left it a few days, he came back to a character who had
-half-decided he was ignoring her. Both are wrong for an app built on there being nothing to
-win or lose. The fix: nothing ages here just from real time passing any more. Instead each
-chat has its own small, visible clock, shown as the weekday and time next to her name (e.g.
-"Mo - 13:12", no date - keeping it simple) so he can actually follow her routine and time a
-date sensibly. It moves two ways: a steady one-minute tick for every message either of you
-sends, so an ordinary conversation visibly drifts through an afternoon on its own; and a
-**Pass time** control (the clock icon in a chat's own topbar) for a much bigger, deliberate
-jump - by however many hours or days he actually chooses. Reply five seconds after her last
-message or come back five real days later without sending anything and, as far as she is
-concerned, nothing happened in between beyond whatever was actually said.
+Fauxr now has one world clock for the whole cast (`engine/clock.ts`). Its fictional date is
+not synchronized to the real calendar, but while running it advances at real speed, including
+while the browser or server is closed. The persisted anchor in the `settings` table makes the
+elapsed wall time catch up on the next read. The Chats overview shows weekday and time and is
+the only place with controls to pause/resume it, advance hours or days, or travel to a chosen
+future time.
 
-The clock is per chat, not global. Two matches have no bearing on each other, so skipping
-ahead - or just chatting for a while - with one woman says nothing about what happened with
-anyone else. Each relationship lives on its own independent clock, moved only by messages
-sent in that one chat or by Pass Time pressed from that one chat.
+When paused, every visible user or character message in ordinary text chat advances the shared
+clock by one minute. Regenerating a reply does not advance it again. A date or call is one timed
+event instead: its beats do not also tick the clock, and completion adds the duration inferred
+by its summary even while paused. A five-hour date begun Monday at 13:00 therefore ends at
+18:00 exactly. Message stamps store `messages.game_clock_ms` and day separators are relative to
+the current world time.
 
-- **`engine/clock.ts`** is a chat's own clock: stored as `mood.game_clock_ms` on that
-  relationship, seeded to the real time the first time the relationship is ever read
-  (`repo.ts`'s `backfillGameClock`) and from then on moved only by `advanceGameClock(rel,
-  hours)` for that one relationship. It never drifts with the real one, however long the app
-  sits idle, and it never moves because *another* chat's clock moved. Everything that
-  describes *when something is happening in this chat's fiction* now reads this instead: her
-  sense of the current day and time (`moment.ts`'s "right now it is..."), her status's
-  `set_at`/`until` (`status.ts`), the Director's "time now" and "last contact" lines,
-  `last_contact_at`, and how long an open thread has been sitting unaddressed before it is
-  dropped (`state.ts`). Real wall-clock time (`Date.now()`/`nowIso()`) still runs everything
-  actually about the real world: message timestamps, image and log bookkeeping, typing-delay
-  pacing, and per-day cost budgets - none of that should freeze or tick along with the story.
-- **`engine/chat.ts`** ticks the clock by exactly one minute (`MESSAGE_MINUTES`) for his
-  message the moment it is stored, and by another minute for her reply once it actually lands
-  - one tick per reply *block*, however many bubbles the Actor split it into, not one per
-  bubble. A regenerate does not tick a second time: it rewrites the words of a moment that
-  already happened, not a new one (the same guard, `decrementValidFor`, that already protects
-  the climax tracker and her direction's remaining uses from a reroll). The chat screen shows
-  the running total next to her name, so a long back-and-forth naturally carries the two of you
-  from lunch into evening without either of you doing anything deliberate.
-- **`engine/timepass.ts`**'s `passTime(characterId, hours)` is what a press of the button
-  actually does, for that one match only:
-  - her arousal fades by exactly that many hours (`decayArousal`, unchanged - it just no
-    longer runs on a real timer);
-  - the Director's current plan for her is torn up, so the next actual message gets a fresh
-    one built for the new moment instead of finishing out one written hours or days earlier;
-  - her status, mood, location, outfit and one of her storylines move on, but only once the
-    virtual 4-12 hour window she was already given has actually elapsed (`statusDue()` in
-    status.ts - now anchored to that chat's own clock, so a five-minute skip does not force a
-    new status any more than it used to force one every tick);
-  - a match-anniversary or first-date milestone (one week, one month, ...) can land, counted
-    in a `days_since_match` figure on the relationship that is lazily seeded from how old the
-    match really is the first time this ever runs (so an existing conversation is not reset
-    to "just matched") and from then on only moves by what he passes in that chat;
-  - a plain marker - "6 hours passed.", "3 days passed." - lands in her chat like the
-    existing "you took her to..." date marker, so both he and the model reading history back
-    can see the gap;
-  - if **Settings -> unprompted messages** is on (off by default), she may reach out about
-    the gap on her own, queued as an ordinary wakeup a few minutes out for natural pacing -
-    scaled by how much time passed (a short skip rarely produces anything, a multi-day one
-    almost always does) and by how much of a texter she is. A milestone message takes
-    priority over a generic "time passed" one if both would fire. With the setting off,
-    nothing texts him first; only the marker and her updated situation show the gap.
-- **Removed, not repurposed:** the real-time double-text-after-30-minutes and
-  proactive-message-after-real-silence mechanics, and the periodic tick's own arousal decay
-  and milestone sweep. The scheduler's once-a-minute tick now only does things that are
-  genuinely about the real world regardless of story time: deliver a wakeup already
-  scheduled, pick up a message that somehow never got answered (a crash-recovery safety net,
-  unrelated to story time), and give a freshly matched character her very first status.
-- The picker (in a chat's own menu, next to Block) offers 1 hour, 4 hours, "Tonight" (8h),
-  1 day, 3 days and 1 week, plus a custom hours/days field. It is disabled while she is out
-  with him on a date. Photos taken during a date, and the date's own "how she remembers it"
-  summary, are unaffected - a date is something happening live, in one sitting.
-- **Message timestamps show this in-game time, not the real one.** Once a chat has its own
-  clock, showing "9:41 PM" under a bubble while the header two lines up says "Mo - 13:12"
-  would read as two different chats. Every message stores the sender's game-clock reading at
-  the moment it was sent (`messages.game_clock_ms`), and the chat screen's stamp and day
-  separators ("Today", "Yesterday", a weekday) read that instead of `sent_at`. "Today" and
-  "Yesterday" are relative to the chat's own current moment, not the device's calendar, so a
-  chat that has skipped weeks ahead does not keep calling last week's messages "today" just
-  because the phone agrees. A date beat keeps its real timestamp - a date happens live, in
-  one sitting, on the real clock, same as its own screen always has - but the "you took her
-  to..." and "the date is over..." markers posted into the *text* chat pick up the game clock
-  like anything else there. Real time (`sent_at`) is still stored on every message and still
-  runs everything that must never freeze (log and image bookkeeping, typing-delay pacing,
-  per-day cost budgets); only what a message displays as changed. A message from before this
-  field existed has no `game_clock_ms` and falls back to showing its real time - the one
-  place old and new messages can read on two different clocks in the same scrollback, and
-  only ever right at that boundary.
-- **Bug, found from a real log:** `historyBlock()` (`engine/blocks.ts`), the conversation
-  history the Actor and Director actually read, was still stamping every past message with
-  its real `sent_at` time - missed when the message-tick feature above shipped, since only the
-  chat screen's own display was updated at the time. The result: the "right now it is ..."
-  line (moment.ts, on the game clock) and the history a few paragraphs below it (still on
-  real time) disagreed inside the same prompt. A real conversation showed it exactly: "Right
-  now it is Sunday, 10:36" next to a history whose last line read "[Sun 00:44] Phil: Morning
-  Kaoru" - a ten-hour gap that never happened in the story - and the Director duly reasoned
-  about him texting "at 00:44" and "just now surfacing", which had nothing to do with when he
-  actually sent it. Fixed the same way the display was: each line now reads
-  `message.game_clock_ms`, falling back to `sent_at` only for a message from before the field
-  existed.
+Every match gets a private 14-day calendar (`engine/schedule.ts`) generated in one background
+Director call. `schedule_activity.json` contains 235 activities spanning ordinary domestic
+life, varied occupations and studies, social and creative pursuits, sports, travel, private
+adult time, and setting-specific fantasy, historical, superhero, science-fiction and anime
+routines. Each row owns its green/yellow/red availability and Status-post weight. Specialized
+entries are used only when the character supports them rather than as random novelty. As the
+horizon rolls, one new day is generated using the recent calendar for continuity: routines can
+recur without becoming a fixed template. A jump beyond the whole old horizon creates a fresh
+coherent fortnight.
+
+Status stories pair the generated image with a caption written in the character's own texting
+voice. Depending on her personality and what she is doing, a post can be an ordinary life update,
+flirty, suggestive or explicit; it is allowed to invite a response without making every story
+thirst bait. While a story is recent, the Actor and Director receive a compact account of her latest
+posts, including both her caption and the underlying activity. She can therefore answer questions
+about what she posted without promoting temporary stories into permanent relationship memory or
+bringing them up merely to prove continuity.
+
+Image prompts receive only clothing that can actually be visible. The tracked outfit still keeps
+covered underwear for continuity, but the image-facing serializer removes a bra beneath an opaque
+top or dress and panties beneath an opaque bottom or dress. It restores those layers when the
+outer garment is sheer, open or deliberately moved aside, and close upper-body shots omit
+lower-body garments and shoes entirely. This prevents an image model from painting underwear
+through—or on top of—otherwise intact clothing.
+
+### Dates can be planned without starting immediately
+
+**Schedule a date** sits directly beneath the existing immediate invitation. It stores the place,
+optional company and an exact shared-world-clock start time while leaving text chat fully active.
+The pending plan enters both Actor and Director context as agreed calendar reality, so she can talk
+about what is coming up without repeatedly proposing, arranging or confirming another date.
+
+Ten world-minutes before the appointment, the scheduler pauses the global clock and emits a
+one-shot reminder. A prominent card appears on the Chats overview and a persistent banner appears
+inside her conversation. **Enter date** promotes the existing scheduled row to a live date and then
+uses the unchanged date room, outfit, transcript and summary flow. Several characters may have
+plans on the shared clock; reminders remain visible until each date is entered or cancelled, and a
+large manual time jump cannot silently skip them.
+
+The Actor sees the current entry and a compact near-future calendar; the Director sees the
+full horizon. Green means open, yellow busy and red occupied/asleep. This changes brevity,
+tone and whether she naturally tries to wind down, but never blocks a reply. The schedule is
+private; the UI exposes only the activity label and colored presence dot. It also lets the
+Director make date plans against actual upcoming commitments rather than inventing availability.
+
+World-time maintenance (`engine/world.ts`) handles elapsed arousal decay and stale direction
+cleanup. Large manual jumps do not synthesize a backlog of events. The old per-chat Pass Time
+control and model-written text status are no longer on the active path. Real `sent_at` values
+still drive operational concerns such as typing delays and budgets; prompts and visible
+conversation chronology use `message.game_clock_ms`, falling back to real time only for old
+messages created before that field existed.
 
 ## The Actor narrating a photo instead of sending one
 
@@ -1512,14 +1521,22 @@ guard against starting a second topic while something is running.
 
 ## Making the chat feel alive
 
-**Her status.** Every active match has a WhatsApp-style status - "gym then pizza, dont judge 🍕" -
-shown under her name in the chat and next to it in the chat list (`engine/status.ts`). It lasts
-4 to 12 hours, drawn per status, then a new one replaces it. It is cheap on purpose: one small
-call per match per status (a few hundred tokens of task on the Director model), at most one
-refresh per scheduler tick so a long list never fires a burst, and only for matched characters -
-blocked and deleted ones never get one. It runs whether or not unprompted messages are on,
-since it is not her texting him. The status also becomes her real situation (location, activity,
-outfit in `rel.mood`), and her prompt knows he can see it, so her replies and her status agree.
+**Presence and Status stories.** The line under her name and the green/yellow/red avatar dot
+come directly from her current private schedule entry, so visible presence and roleplay share
+one source of truth. Separately, `engine/status-posts.ts` can create Instagram/WhatsApp-style
+image stories. The setting is a cast-wide average per world-hour, not per character; selection
+is random but weighted toward activities worth sharing and away from sleep, with a recency
+penalty to stop one lively character owning the feed. A manual **Create Status now** button is
+available for testing. Only active matches with a completed profile picture are eligible.
+
+Stories last 24 world-hours and time jumps never generate a backlog: at most the single event
+currently due is considered. An avatar ring opens all active stories as a slideshow. It is
+accented while any active slide is unseen, turns grey after all active slides have been viewed,
+and colours up again when a new story appears. Liking a story marks its image permanent and
+makes it appear in that character's ordinary gallery even
+after the story expires. Story ideas are Actor-authored from the current schedule and use the
+same physically possible self-taken-photo contract as chat images; rendering stays in the
+existing image pipeline and never inserts a chat bubble.
 
 **Reactions.** She can tap one emoji on his message (`hidden.react`), shown as a badge on his
 bubble. No reaction is the default: she is told to react only when a message really landed,
@@ -3092,11 +3109,10 @@ sister's wedding and the lilac dress. They are written by the model from her dos
 mostly out of her core, with at most one about work and only when work is core. Nothing is
 picked from a topic list, so a goth girl's week is not a nurse's.
 
-Her status refresh (every 4-12 hours, already a call) carries them. It sees the list, picks
-the one that moved on, says in a sentence what just happened, and flags it if the storyline is
-over. That costs a few output tokens, not a new call. When fewer than three are still running,
-one small call writes new ones, told which she already has. Finished ones are kept for a while
-so she can say how they ended.
+They remain durable private texture for Director and Actor context. When fewer than three are
+still running, one small call can write new ones, told which she already has. Finished ones are
+kept for a while so she can say how they ended. The old model-written text-status refresh no
+longer advances these as a side effect; schedule presence and image Status stories are separate.
 
 The Director sees all of them, freshest first, as material for when the chat needs something
 new. She sees the two freshest in her moment block, as something true of her week that she can
@@ -3865,10 +3881,11 @@ classifier-free guidance at inference at all, so it never reads a negative promp
 constraint has to be a positive statement inside the main prompt ("natural, unretouched
 skin", not "no airbrushing").
 
-`settings.models.image.prompt_style` (`'seedream'` | `'z_image_turbo'`, a new dropdown in
-Settings → Images) picks between them. `image_prompt_assembler.md` branches its own
-instructions on `mode_seedream`/`mode_z_image`, including telling the model to leave
-`negative_prompt` empty in Z Image Turbo mode rather than writing one nobody will read.
+`settings.models.image.prompt_style` (`'seedream'` | `'z_image_turbo'` | `'chroma'`, a dropdown
+in Settings → Images) picks between them. `image_prompt_assembler.md` branches its own
+instructions on `mode_seedream`/`mode_z_image`/`mode_chroma`. Chroma gets one clean,
+composition-first positive paragraph; its request deliberately omits seed, negative prompt and
+reference image fields, and sizes above 1536px fall back instead of invoking unsupported upscaling.
 `images.ts`'s `BASE_SUFFIX`/`CANDID_SUFFIX` became per-mode records - Z Image Turbo's variant
 folds what Seedream would have put in the negative prompt into the positive suffix instead -
 and `runImageJob` skips sending `negativePrompt` to the image call entirely when the mode is
@@ -4902,6 +4919,15 @@ to follow explicit times, travel, meals, sleep, mornings and changes of day rath
 conventional evening. That duration is stored on the session and advances this relationship's game
 clock before the summary card is posted. A turn-count fallback still moves time if summary
 generation fails.
+
+Actors can now mark genuine stopping points without another model call. Chat returns
+`hidden.ending: "soft_close"` after a complete final message; Fauxr clears any follow-up the
+Director scheduled for that turn, but a later user message simply starts a new exchange. Calls
+and dates return `"end_session"` only after their audible/visible goodbye is complete. Fauxr
+delivers that last beat and then runs the existing summary and duration pipeline automatically.
+Opening session beats cannot close themselves before the user has spoken. Older customized
+Actor prompts are given a compact ending contract at render time when they do not yet mention
+`hidden.ending`; new exports expose the field directly.
 
 ### A date can genuinely go badly
 
@@ -6103,6 +6129,59 @@ the first date auto-pins a milestone and a second date to the same place does no
 The full existing regression suite still passes. `npx tsc --noEmit` and a full build both
 clean.
 
+### Character generation is Core-first
+
+New characters no longer roll a complete spec sheet and retrospectively label several random
+facts as important. Generation first rolls a 3-5 trait Core across public nature, temperament,
+life, pastime, expression/voice and intimacy. Those draws use the attribute tables' normal
+rarity, weight and Taste settings, enter one shared influence context, and are then reused in
+their ordinary seed fields. Every remaining supporting attribute keeps its base weight, Taste,
+affinities, requirements and conflicts but does not pay the rarity-tier penalty again. A rare
+defining premise can therefore receive the rare clothes, hobbies or kinks that best realize it
+instead of repeatedly falling back toward common human defaults.
+
+Core-category likelihoods are editable attribute data (`core_category`). Personality is always
+present and style, occupation, pastime, voice and intimate categories compete at different rates;
+a quirk can occasionally become defining, while presentation-only metadata such as
+`profile_photo_format` has weight zero and can never enter Core. Different database categories may
+also share `extra.identity_axes`, preventing two labels for the same behavioural beat from consuming
+separate Core slots.
+
+After the complete roll and before dossier writing, JEV performs three atomic checks for a direct
+contradiction, impossible timeline or isolated loud non sequitur. A high-confidence clean roll skips
+the slower curator. A flagged or uncertain roll receives one bounded Director pass over database-
+rolled alternatives for selected supporting scalar fields; it can neither invent ids nor alter Core.
+Replacements still use normal Taste and conflict filtering. If JEV is unavailable, the Director runs;
+if the Director is unavailable, generation keeps the original roll.
+
+A Core fetish establishes its kink domain, side and compatible dom/sub direction before limits
+and secondary fetishes are selected. Species scale and other existing structural constraints
+remain authoritative. Generation is independent of the existing cast: earlier characters no
+longer alter later attribute probabilities. New shared-profile duos are disabled because one
+Actor could not maintain two reliable voices; old duo saves and their schema remain readable,
+while partners, group fantasies and date NPCs continue to work normally.
+
+Physical facts and kink-domain membership remain deterministic rather than being delegated to either
+model, and attribute conflicts are enforced in both directions even when only one row declares the
+exclusion. A fetish governed by several domains now requires every one of those domains to be open;
+one permissive domain can no longer bypass another domain's hard no. Body-pride candidates likewise
+respect stature and the actual presence of tattoos or piercings. The post-dossier JEV evaluation still
+checks sexual boundaries, age timelines and whether the writer reduced Core to cosmetic labels. JEV
+never chooses or rerolls attributes, so its preferences cannot replace database rarity or Taste.
+
+Sexual-persona rows may declare `extra.requires_domains` or `extra.requires_any_domains`; those
+promises establish compatible kink stances before fetishes and limits are drawn. Fetish rows may own
+their domains directly through `extra.domains`, which lets newly imported rows participate in boundary
+logic without relying solely on the reverse list in `kink_domain`. Attribute validation rejects unknown
+domain references and conspicuously boundary-sensitive fetish rows with no domain ownership. JEV's
+triage and dossier review also ask separate questions about persona/domain, signature/limit and physical
+pride conflicts instead of relying only on one broad contradiction score.
+
+The character's first name is now selected in a small dedicated call before dossier writing and passed
+to the creative writer as immutable identity. A dossier that nevertheless opens with another name is
+normalised deterministically before becoming backstage memory. This prevents a public Amira from being
+called Nadia by the Actor because the generation response disagreed with itself.
+
 ### A visual identity is now a schema, not just a profile-picture accident
 
 New characters roll stable facial geometry alongside the older hair, eyes and body fields:
@@ -6121,10 +6200,32 @@ dossiers and roleplay prompts.
 Pressing **Generate profile pic** now makes a neutral head-and-shoulders identity portrait first,
 then uses it as the face reference for the expressive public profile picture and every later
 face-visible image. The neutral portrait is hidden from the gallery and chat. This does mean one
-additional image generation at the moment the user explicitly opts in, but nothing image-related
-is generated before that action; if the private reference fails, the public profile picture still
+additional image generation when the user opts in manually or through **Show image during
+matching**. No chat/date/Status image precedes the profile-picture gate; if the private reference fails, the public profile picture still
 generates and becomes the fallback anchor. Existing characters keep their established faces: the
 backfill records only attributes they already had and never rolls new facial geometry for them.
+
+Every character also rolls one of 24 editable `profile_photo_format` entries. Alongside ordinary
+selfies, friend/timer portraits and hobby/work photographs, the library includes silhouettes,
+motion candids, layered and fragmented reflections, instant film, photo booths, environmental wide
+shots, patterned shadows, waterline portraits, face-hidden props, identity-through-detail crops and
+the occasional plausible security-camera still. It is mandatory presentation guidance rather than
+identity and therefore never enters Core. Species geometry and exceptional human height override it
+when a scale reference is required.
+
+The private identity portrait—not the public profile picture—is the likeness reference for later
+images. A format may therefore declare `extra.shows_face: false`; the public image can be wide, from
+behind, strongly shadowed, deliberately obscured or face-free without the face passport and generic
+close-portrait suffix fighting it. Face-visible formats retain the normal identity anchors.
+
+Text-only models such as Z-Image cannot use that portrait reference, so face-visible prompts now
+receive an engine-owned, verbatim **face passport** assembled from the same rolled geometry. The
+assembler cannot paraphrase it away, and Z-Image uses the character's stable latent seed for new
+shots instead of inventing both new noise and new prose each time; explicit redraws advance to a
+nearby seed so they still produce a variant. Fantasy species also carry stronger anatomical image
+contracts. Species whose bodies are slime, stone, porcelain, fungus or weather replace the generic
+human skin-and-pores suffix with their own physical material, preventing a nonhuman character from
+collapsing into a human under coloured lighting or wearing costume ears.
 
 ### Reasoning is now a task control, not an accidental latency tax
 
@@ -6142,12 +6243,49 @@ discarded after one. A new message that makes the situation stale, an explicit e
 an unprompted direction followed by a user reply still triggers a fresh Director pass. This keeps
 memory and dramatic judgment in the Director without paying for it before every line of chat.
 
-Character generation's visible critical path is one creative pass in the common case: that pass
-writes the dossier, name, handle and bio together. The existing focused handle and bio writers
-remain as fallbacks when validation catches a malformed, revealing or repetitive field. Fantasy
+Character generation establishes the dossier, name and handle first. The response retains a
+`bio` field for compatibility with prompt overrides, but that draft is discarded: every real
+dossier goes through the independent `director_write_bio` call. The focused handle writer
+remains a fallback when validation catches a malformed or revealing handle. Fantasy
 scenarios begin after the character and relationship have been stored, so the new card can appear
 while that optional material finishes in the background. Transport retries share a total deadline,
 and the large character call is not restarted by an outer retry after a timeout or upstream error.
+
+The roleplay preflight keeps the Director/Actor split and structured attributes intact:
+
+- Blueprint v2 removes the first-contact `conversation_starter` from persistent initiative.
+  Existing v1 blueprints rebuild from the same seed without rerolling attributes.
+- A genuinely empty match chat goes straight to the Actor (including delayed match wakeups).
+  System bookkeeping and failed recovery bubbles do not count as conversation. Its private
+  first-turn framing combines the starter's general shape with the stored opening plan,
+  asks for a self-contained opening, and consumes the plan on success. A user message first
+  expires the plan and uses normal reply direction instead. The next user reply after a fresh
+  opener requests a Director pass because no direction has been established yet.
+- Generated `director_notes.intent` is Director-only context, framed as a revisable starting
+  hypothesis, never an arc to fulfil. Opening plans are not durable Actor memory.
+- Newly created dossiers carry `seed.hints.dossier_source`. Only `generated` dossiers enter
+  the shared Core block as backstage texture; structured facts remain authoritative. Raw
+  fallback dossiers and unmarked legacy dossiers stay out; existing prose is not guessed at.
+- One frozen Actor history snapshot drives prompt history and diagnostics. A user message
+  beyond its internal ID watermark schedules one coalesced reply after the current lock is
+  released. Messages received during Director work are already seen and are not answered twice.
+  Failed generation alone cannot schedule itself again.
+- The existing bounded draft evaluation also checks attribute inventories and over-theming.
+  The first two hobbies and interests compete for one shared pastime Core slot; established
+  cores are preserved. GLM 5.3 colon variants use the same native low/high/max mapping.
+
+Runtime database prompt overrides are untouched and still take precedence. No template syntax
+changes are required. Custom templates must retain their existing Core, ledger and nudge blocks
+to receive this context. Run `node server/scripts/verify-preflight.mjs` after building the server
+for isolated mock-provider checks; it always creates its own temporary data directory.
+
+In-chat and spicy images have an engine-owned capture contract: they are photographs she took
+herself on her own phone. When she appears, the assembler must use a physically plausible front-
+camera, mirror, or propped-phone timer setup; when she does not, the image is her rear-camera
+view. Conflicting Actor camera language is repaired at assembly time, so an overhead or external
+third-person angle cannot imply an invisible photographer. The clean situation stored in chat
+history is unchanged. Date arrival and date-scene images retain their separate observer and
+first-person viewpoints.
 
 Interactive Actor and Director requests also take priority over *new* background stages. Work
 already in flight is never cancelled, but another status, image brief or fantasy pass will wait
@@ -6311,3 +6449,14 @@ reveals the current version's checked-in prompt again. Each prompt has its own v
 import/export file for experiments and backups. Import requires the file's prompt name to match the
 selected prompt, preventing an Actor template from accidentally replacing a Director or system
 template. Resetting **API keys and settings** also clears all prompt overrides.
+A Core's category diversity is supplemented by optional `extra.identity_axes`: two rows from
+different tables that express the same identity beat cannot consume two scarce Core slots. Strong
+cross-theme combinations remain valid; the dossier evaluator treats motifs and intersections among
+the selected Core as synthesis, and only flags over-theming when one trait erases the rest or invades
+unsupported domains.
+
+Visible fantasy species can also carry an engine-protected physical image contract and profile
+composition. These survive prompt trimming and override ordinary close-crop/selfie conventions when
+scale or anatomy needs a reference object. A palm-sized fairy, for example, must be framed beside a
+familiar human-scale object and cannot casually hold a normal phone; living wings are described as
+anatomically rooted rather than as costume accessories.

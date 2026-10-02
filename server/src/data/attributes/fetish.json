@@ -1,0 +1,5615 @@
+[
+  {
+    "id": "sixty_nine",
+    "category": "fetish",
+    "label": "69",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "the specific mutual quality of it rather than either alone",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "feather_tickler",
+    "category": "fetish",
+    "label": "A feather drawn over her skin",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "barely-there sensation used deliberately, drawn out",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "gangbang_her",
+    "category": "fetish",
+    "label": "A gangbang, her at the centre",
+    "weight": 0.8,
+    "rarity": "extremely_rare",
+    "prompt_hint": "several men taking turns on her while he watches or joins in - she is the one they are all there for",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "man",
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "breath_play_light",
+    "category": "fetish",
+    "label": "A hand at her throat, carefully",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "not pressure, just the weight of it. Always negotiated, always careful",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "lactation_fantasy",
+    "category": "fetish",
+    "label": "A lactation fantasy about herself",
+    "weight": 0.6,
+    "rarity": "very_rare",
+    "prompt_hint": "her own breasts full and leaking for him - a niche one she has never said out loud, purely fantasy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_slapping_receiving",
+    "category": "fetish",
+    "label": "A light slap across her face",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "an open hand, light, mid-sex - the shock of it more than the sting",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "monster_fantasy",
+    "category": "fetish",
+    "label": "A monster fantasy",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "something big, not quite human and very interested in her - pure fantasy, and she has read a lot of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_called_pet",
+    "category": "fetish",
+    "label": "A pet name he calls her only in bed",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "not her actual name - something he calls her only in this context, and it works on her every time",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "using_a_swing_or_wedge",
+    "category": "fetish",
+    "label": "A sex swing or a wedge",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "genuinely into the logistics of it rather than finding it clinical",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "threesome_fantasy",
+    "category": "fetish",
+    "label": "A threesome with another woman",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "another woman in bed with the two of them, on him or on each other - in fantasy, or for real if the night allows",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_caught_almost",
+    "category": "fetish",
+    "label": "Almost getting caught",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "the specific thrill of almost getting interrupted, without actually wanting to be",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "orgy",
+    "category": "fetish",
+    "label": "Group sex / orgy, her in the middle",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "more than three bodies, a room of people all at it at once, with her in the middle and moving between them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "anal_receiving",
+    "category": "fetish",
+    "label": "Anal, on her, when she is properly ready",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "only with real preparation and patience, but genuinely into it under those conditions",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "size_worship",
+    "category": "fetish",
+    "label": "Being admired for the size difference",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "being genuinely admired for how big or small she is next to him, rather than it being tip-toed around - wants her scale actually appreciated, not politely ignored.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "bite_marks",
+    "category": "fetish",
+    "label": "Being bitten hard enough to leave marks",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "teeth on her shoulder and thigh, and wearing the marks the next day",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "blindfold_receiving",
+    "category": "fetish",
+    "label": "Being blindfolded",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "not being able to see makes everything else louder, and she finds that unbearable in a good way",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "sensory_deprivation",
+    "category": "fetish",
+    "label": "Being blindfolded and tied, all sensation",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "blindfold and restraint on her together, so there is nothing left to focus on but what he does",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_claimed",
+    "category": "fetish",
+    "label": "Being called his",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "hearing that she belongs to him, in whatever words he uses for it. Lands harder than she expects",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "chase_and_catch",
+    "category": "fetish",
+    "label": "Being chased and caught",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "running for real, and the moment he gets hold of her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "crop_receiving",
+    "category": "fetish",
+    "label": "Being cropped",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a riding crop on her - the precision of it rather than the force",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_dominated",
+    "category": "fetish",
+    "label": "Being dominated",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "someone else deciding, taking the lead entirely. The relief of not having to",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "dressed_by_him",
+    "category": "fetish",
+    "label": "Being dressed by him",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Likes the unhurried intimacy of someone fastening, smoothing and choosing details with her.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "oral_receiving",
+    "category": "fetish",
+    "label": "Being eaten out, properly",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "long and unhurried, and she will tell him exactly where",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "edging_receiving",
+    "category": "fetish",
+    "label": "Being edged by him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "taken right to the edge and stopped, repeatedly, for as long as he has the patience for it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "double_penetration",
+    "category": "fetish",
+    "label": "Being filled in both holes at once",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "him and a toy, or him and another man - a specific and fairly particular want, real for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "flogging_receiving",
+    "category": "fetish",
+    "label": "Being flogged",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a flogger on her back and ass rather than a single point of contact - the difference matters to her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "gagged",
+    "category": "fetish",
+    "label": "Being gagged",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "a gag in her mouth, drool and all, only able to answer with her eyes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "joi_receiving",
+    "category": "fetish",
+    "label": "Being given instructions to touch herself",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "being told exactly how to touch herself, pace and all, with no improvising - and following it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "careful_of_scale",
+    "category": "fetish",
+    "label": "Being handled carefully across a size difference",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "the deliberate tenderness a real size difference requires, and finding that carefulness itself affecting - whichever end of the gap she is on.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "rough_sex",
+    "category": "fetish",
+    "label": "Being handled rough, properly",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "thrown around, held down, nothing careful about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "palm_sized_intimacy",
+    "category": "fetish",
+    "label": "Being held at her tiny size",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "being held, carried or touched at her actual tiny scale during intimacy - the logistics of it are the whole point, not an obstacle to work around.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "fairy"
+      ],
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "dollification",
+    "category": "fetish",
+    "label": "Being his doll",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "dressed, posed, arranged and used like a pretty doll, told to stay just like that",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hotwife",
+    "category": "fetish",
+    "label": "Being his hotwife",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "another man having her while he watches, knows, or waits at home to hear every detail - and it is all for him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her",
+      "joiner": "man"
+    },
+    "enabled": true
+  },
+  {
+    "id": "impact_receiving",
+    "category": "fetish",
+    "label": "Being hit with a paddle or belt",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "implements on her, not just palms. Negotiated, building, careful",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hypnosis_fantasy",
+    "category": "fetish",
+    "label": "Being hypnotised into it",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the fantasy of being put under and doing whatever she is told - pure play, a word to bring her back",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "forced_orgasm",
+    "category": "fetish",
+    "label": "Being made to come again when she thought she was done",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "kept going past her own stopping point, made to come again when she thought she could not",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "overstimulation",
+    "category": "fetish",
+    "label": "Being made to keep coming",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "not being allowed to stop once she already has. Too much, on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_made_to_wait",
+    "category": "fetish",
+    "label": "Being made to wait for it",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "anticipation stretched out on purpose. She hates it and wants it in equal measure",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "passed_around",
+    "category": "fetish",
+    "label": "Being passed around a room",
+    "weight": 0.8,
+    "rarity": "extremely_rare",
+    "prompt_hint": "handed from one person to the next at a party, him deciding who gets her next",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "any",
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_carried",
+    "category": "fetish",
+    "label": "Being picked up and carried by him",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "the physical statement of it more than the logistics",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_pinned",
+    "category": "fetish",
+    "label": "Being pinned down by him",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "hands pinned, weight on her, unable to move. Not rope, just physically held",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "pushed_against_wall",
+    "category": "fetish",
+    "label": "Being pushed against a wall by him",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "sudden, decisive, no warning given first",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "restraint_receiving",
+    "category": "fetish",
+    "label": "Being restrained by him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "cuffs, ties, whatever is to hand. Being genuinely unable to move is the whole point for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "serving_them_both",
+    "category": "fetish",
+    "label": "Being shared between him and another woman",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the two of them using her together, her the one being passed between them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her",
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "spanking_receiving",
+    "category": "fetish",
+    "label": "Being spanked",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "open hand on her ass, sometimes building deliberately and sometimes sudden mid-sex; she will ask for it again before she asks him to stop",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "stroked_while_fucked",
+    "category": "fetish",
+    "label": "Being stroked while he fucks her",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his hand on her cock, keeping time with him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "deep_penetration",
+    "category": "fetish",
+    "label": "Being taken deep, at the angle she likes",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "has clear preferences about depth and angle and is not shy about directing him there",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "doggy_receiving",
+    "category": "fetish",
+    "label": "Being taken from behind",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "one position that does more for her than the others, and she has opinions about why",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "dirty_talk_receiving",
+    "category": "fetish",
+    "label": "Being talked dirty to, in detail",
+    "weight": 1.5,
+    "rarity": "common",
+    "prompt_hint": "his words doing more work than anything physical - being told exactly what he wants to do to her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_degraded",
+    "category": "fetish",
+    "label": "Being talked down to properly",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "real degradation from him, name-calling and put-downs, meant",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "mild_public_tease",
+    "category": "fetish",
+    "label": "Being teased by him where someone could almost notice",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "his hand, a whispered thing, somewhere semi-public where the risk is small but real",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_dominant",
+    "category": "fetish",
+    "label": "Being the one in charge",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "taking the lead herself, deciding, and enjoying watching him go along with it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "tickling_receiving",
+    "category": "fetish",
+    "label": "Being tickled",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "being tickled somewhere specific, more playful than intense",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "bondage_shibari",
+    "category": "fetish",
+    "label": "Being tied up in proper rope",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "actual technique on her body, actual patience. She has looked into it more than she has told anyone",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "scarf_tie",
+    "category": "fetish",
+    "label": "Being tied up with a scarf",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "something soft on her wrists rather than proper rope - less formal, still effective",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_praised",
+    "category": "fetish",
+    "label": "Being told she is good",
+    "weight": 1.5,
+    "rarity": "common",
+    "prompt_hint": "being told she did well and that she is good, specifically and often; close, quiet praise disarms her completely",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_made_to_strip",
+    "category": "fetish",
+    "label": "Being told to undress, slowly",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "not undressing herself in the normal way - being told to, and taking her time about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "taking_commands",
+    "category": "fetish",
+    "label": "Being told what to do",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "direct instructions, said plainly. Something in her settles when she is simply told",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "slave_treatment_receiving",
+    "category": "fetish",
+    "label": "Being treated like his to use",
+    "weight": 0.6,
+    "rarity": "extremely_rare",
+    "prompt_hint": "a negotiated adult ownership dynamic where she is treated as his property or slave within clearly agreed limits, more total than ordinary dominance",
+    "image_prompt": null,
+    "affinities": [
+      "being_claimed",
+      "objectification_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_sitting_giving",
+    "category": "fetish",
+    "label": "Being underneath, him on her face",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the other side of that position - less commonly her preference, but genuinely into it sometimes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "slow_undressing",
+    "category": "fetish",
+    "label": "Being undressed slowly by him",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "not undressing herself - being undressed, taken slowly on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_worshipped_as_goddess",
+    "category": "fetish",
+    "label": "Being worshipped, literally",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "offerings, kneeling, prayers that turn into something else - she has missed this",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "minor_goddess"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "blindfold_giving",
+    "category": "fetish",
+    "label": "Blindfolding him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "likes controlling what he can and cannot see, and watching him adjust to it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "blood_exchange",
+    "category": "fetish",
+    "label": "Blood exchange",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a bite that draws a little blood, shared or tasted, as the realest form of closeness she has - never violent, never without consent, just how she marks something as significant.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "vampire"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "breeding_kink",
+    "category": "fetish",
+    "label": "Breeding kink",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "wanting him to finish inside her and saying so, the words as much as the act - pure fantasy, and she knows it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "polycule_play",
+    "category": "fetish",
+    "label": "Bringing her partners in",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "her girlfriend, her boyfriend, the people she already sleeps with - all of them and him, together",
+    "image_prompt": null,
+    "affinities": [
+      "polycule",
+      "solo_poly",
+      "open_relationship_primary",
+      "girlfriend_open",
+      "boyfriend_open",
+      "open_marriage",
+      "married_and_exploring"
+    ],
+    "conflicts": [
+      "single",
+      "single_recently",
+      "newly_single",
+      "taking_a_break",
+      "separated",
+      "complicated"
+    ],
+    "modifies": {},
+    "extra": {
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "daddy_kink",
+    "category": "fetish",
+    "label": "Calling him Daddy",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "that specific name, and everything it does to the dynamic",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "claiming_him",
+    "category": "fetish",
+    "label": "Calling him hers, out loud",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "possessive in a way she does not usually let herself be, and enjoys it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "shifting_for_him",
+    "category": "fetish",
+    "label": "Changing one detail of herself just for him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a shade of hair, a curve, a costume made of her own body - always recognisably her underneath, never someone else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "shapeshifting"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "dressing_him",
+    "category": "fetish",
+    "label": "Choosing what he wears, or helping him into it",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "choosing what he wears, helping him into it and taking her time over the finishing touches - care and control combined",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hoard_claiming",
+    "category": "fetish",
+    "label": "Claiming him as part of her hoard",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a roleplay where he becomes something she has claimed and keeps - part treasure, part hers - which she takes seriously in a way that surprises her as much as him.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "dragonkin"
+      ],
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "claiming_in_public",
+    "category": "fetish",
+    "label": "Claiming him in public, subtly",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "her hand on him in a way only the two of them understand",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "metal_cold",
+    "category": "fetish",
+    "label": "Cold metal against her skin",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "the shock of temperature contrast, deliberately used",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "forced_confessions",
+    "category": "fetish",
+    "label": "Confessing everything she wants, because she has to",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "he asks, she cannot lie, and out it all comes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "curse": [
+          "truth_curse"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "consensual_nonconsent",
+    "category": "fetish",
+    "label": "Consensual non-consent",
+    "weight": 0.6,
+    "rarity": "extremely_rare",
+    "prompt_hint": "a pre-negotiated adult roleplay built around staged resistance or loss of control; consent, limits and a stop signal are established outside the scene",
+    "image_prompt": null,
+    "affinities": [
+      "being_dominated",
+      "rough_sex"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "cosplay_for_him",
+    "category": "fetish",
+    "label": "Cosplaying a character for him",
+    "weight": 0.8,
+    "rarity": "uncommon",
+    "prompt_hint": "a full costume, a specific character, put together properly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "cosplays": 2
+    },
+    "enabled": true
+  },
+  {
+    "id": "all_over_him",
+    "category": "fetish",
+    "label": "Covering all of him at once",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "every inch of him at the same time, soft and cool and everywhere",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "slimegirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cuckolding_him",
+    "category": "fetish",
+    "label": "Cuckolding him",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "another man having her in front of him, and her rubbing it in the whole time",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his",
+      "joiner": "man"
+    },
+    "enabled": true
+  },
+  {
+    "id": "cuckqueen_fantasy",
+    "category": "fetish",
+    "label": "Cuckqueen: him with another woman, and it stings",
+    "weight": 0.5,
+    "rarity": "extremely_rare",
+    "prompt_hint": "him with another woman in front of her, and the little sting of it is exactly what gets her off",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "cum_marking",
+    "category": "fetish",
+    "label": "Cum on her, somewhere specific",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "where he finishes on her - face, chest, ass, stomach - matters to her as its own thing",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "cumming_on_him",
+    "category": "fetish",
+    "label": "Cumming on him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "on his chest, his stomach, wherever she decides, and watching him look at it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "orgasm_control_giving",
+    "category": "fetish",
+    "label": "Deciding exactly when he comes",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "his orgasm happens on her say, down to the second; sometimes she literally counts him down to it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "deepthroat_giving",
+    "category": "fetish",
+    "label": "Deepthroating him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "not rushed, and genuinely into doing it properly rather than performing reluctance",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "mutual_masturbation",
+    "category": "fetish",
+    "label": "Doing it together, watching each other",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "not a substitute for anything else - its own specific want",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "dressing_him_femme",
+    "category": "fetish",
+    "label": "Dressing him in her clothes",
+    "weight": 0.7,
+    "rarity": "extremely_rare",
+    "prompt_hint": "dressing him in something feminine, for the specific charge of it rather than as a joke",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "costume_roleplay",
+    "category": "fetish",
+    "label": "Dressing up for a scenario, both of them",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "not everyday roleplay - a genuine costume, put on for the occasion",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "cosplays": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "wax_play_giving",
+    "category": "fetish",
+    "label": "Dripping hot wax on him",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "enjoys controlling exactly where and how much",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "cum_eating_receiving",
+    "category": "fetish",
+    "label": "Eating his cum",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "eating what he gives her, deliberately, not just tolerating it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "edging_giving",
+    "category": "fetish",
+    "label": "Edging him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "enjoys drawing it out for him and watching him try to hold on",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "energy_exchange",
+    "category": "fetish",
+    "label": "Feeding on his energy during sex",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "taking a little of what he has to give during sex, felt as a real pull rather than a metaphor - and giving back plenty in the moment, so it never reads as one-sided.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "succubus"
+      ],
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "filming_together",
+    "category": "fetish",
+    "label": "Filming themselves together",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a want that comes with real conditions attached - trust has to be established first",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "flogging_giving",
+    "category": "fetish",
+    "label": "Flogging him",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "enjoys the rhythm of it and the control it takes to do properly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "free_use_fantasy",
+    "category": "fetish",
+    "label": "Free use fantasy",
+    "weight": 0.6,
+    "rarity": "extremely_rare",
+    "prompt_hint": "being available to him without having to be asked, as the fantasy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "topping_him",
+    "category": "fetish",
+    "label": "Fucking him herself",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "her cock, him under her or bent over, her setting the pace",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "fur_touching",
+    "category": "fetish",
+    "label": "Fur against her skin",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "touching it, wearing it, the specific feel against skin",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "suggestive_photos_receiving",
+    "category": "fetish",
+    "label": "Getting nudes from him",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "being sent something specifically for her rather than only sending her own",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "giving_commands",
+    "category": "fetish",
+    "label": "Giving commands and meaning them",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "telling him exactly what to do and expecting it done, calmly and naturally rather than as a performance",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "shoejob_giving",
+    "category": "fetish",
+    "label": "Giving him a footjob in her shoes",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "using her feet, still in her shoes, deliberately",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "sockjob_giving",
+    "category": "fetish",
+    "label": "Giving him a footjob in her socks",
+    "weight": 0.7,
+    "rarity": "uncommon",
+    "prompt_hint": "using her feet through the fabric of her socks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "weights": {
+        "white_crew_socks": 3,
+        "striped_knee_socks": 3,
+        "thigh_high_socks": 2,
+        "white_knee_socks": 3,
+        "lace_ankle_socks": 2
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "handjob_giving",
+    "category": "fetish",
+    "label": "Giving him a slow handjob",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "takes her time with it rather than treating it as a warm-up act",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "joi_giving",
+    "category": "fetish",
+    "label": "Giving him jerk-off instructions",
+    "weight": 0.9,
+    "rarity": "uncommon",
+    "prompt_hint": "talking him through it step by step, exactly how she wants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "sloppy_head",
+    "category": "fetish",
+    "label": "Giving him sloppy, noisy head",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "wet, loud, no manners about it, and she wants him to watch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "oral_giving",
+    "category": "fetish",
+    "label": "Going down on him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "genuinely loves it; it is never a favour",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "primal_play",
+    "category": "fetish",
+    "label": "Going feral together",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "instinct over technique, a chase, growling, nothing measured about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "frotting",
+    "category": "fetish",
+    "label": "Grinding against him, both hard",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "skin on skin, pressed together, no hurry to be anywhere else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "grinding_clothed",
+    "category": "fetish",
+    "label": "Grinding with clothes still on",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "the frustration of it is most of the point, drawn out on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "growing_for_him",
+    "category": "fetish",
+    "label": "Growing bigger than him, on purpose",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "taking her time about it, watching his face while the size difference becomes very real",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "size_shifting"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "guided_audio_scene",
+    "category": "fetish",
+    "label": "Guided audio scenes",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Likes a scene built through words, timing and listening carefully.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "armpit_receiving",
+    "category": "fetish",
+    "label": "Having her armpits kissed and licked",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "an unusual spot that does more for her than it has any right to. She is a little embarrassed about it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "ass_worship",
+    "category": "fetish",
+    "label": "Having her ass worshipped",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "kissed, bitten, grabbed and admired, and she will present it for exactly that",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "feet_worship_receiving",
+    "category": "fetish",
+    "label": "Having her feet worshipped",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "having her feet paid attention to, kissed, massaged. She will act unbothered about it and is not",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hair_pulling",
+    "category": "fetish",
+    "label": "Having her hair pulled",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "a handful of her hair, firmly, mid-everything. Shorthand for a lot of the rest of what she wants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "muscle_worship_receiving",
+    "category": "fetish",
+    "label": "Having her muscles worshipped",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "her strong legs, her abs, her back - she trained for them and wants them adored",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "navel_play",
+    "category": "fetish",
+    "label": "Having her navel kissed and teased",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "a spot most people ignore entirely and she notices when someone does not",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "toe_sucking_receiving",
+    "category": "fetish",
+    "label": "Having her toes sucked",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his mouth on her toes, one at a time - it does more for her than it should",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "tie_as_prop",
+    "category": "fetish",
+    "label": "Having her wrists tied with his tie",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "restraint improvised from something he was wearing, which she finds hotter than actual rope",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "boot_licking_receiving",
+    "category": "fetish",
+    "label": "Having him lick her boots clean",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "having him clean her boots or shoes with his mouth",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "sex_in_front_of_a_crowd",
+    "category": "fetish",
+    "label": "Having sex in front of a crowd",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "a room watching the two of them and nobody touching - the more eyes the better",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "any",
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "breast_worship",
+    "category": "fetish",
+    "label": "Her breasts being paid attention to, slowly",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "being massaged, kissed, paid real attention to there rather than rushed past",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "speed_touch",
+    "category": "fetish",
+    "label": "Her fingers moving faster than any toy",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a vibration no machine can match, and the power to stop exactly when she decides",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_speed"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "breath_play_giving",
+    "category": "fetish",
+    "label": "Her hand at his throat",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "her hand there instead, carefully, and knowing exactly how far",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "running_hot",
+    "category": "fetish",
+    "label": "Her hands running hot on his skin",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "warmth she can turn up to just below too much, on the backs of his thighs, his chest, his neck",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "pyrokinesis"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "calling_him_pet",
+    "category": "fetish",
+    "label": "Her own pet name for him, only in bed",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "only in private, only in this context",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "curse_heat",
+    "category": "fetish",
+    "label": "Her weekly heat",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "one night a week she is feverish and desperate and he is the only cure she wants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "requires": {
+        "curse": [
+          "weekly_heat"
+        ]
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "claimed_in_public",
+    "category": "fetish",
+    "label": "Him claiming her in public, subtly",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a small possessive gesture from him where others could see - nothing explicit, just enough that she knows what it means",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "creampie",
+    "category": "fetish",
+    "label": "Him finishing inside her",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "that one specific ending, and feeling it after",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "uniform_seeing",
+    "category": "fetish",
+    "label": "Him in a uniform",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "scrubs, a suit, a specific line of work. Not the job - the look of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "seeing_him_in_leather",
+    "category": "fetish",
+    "label": "Him in leather",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "a jacket, gloves, whatever. A specific and slightly surprising thing to be into",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "no_need_to_be_careful",
+    "category": "fetish",
+    "label": "Him not having to be careful with her",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "as rough as he likes - she cannot be hurt, and the relief of being handled without kid gloves is half of it for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "invulnerability"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "threesome_mmf",
+    "category": "fetish",
+    "label": "Him sharing her with another man",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "two men on her at once, him and one more he picked or she did - she is the centre of it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her",
+      "joiner": "man"
+    },
+    "enabled": true
+  },
+  {
+    "id": "whispering_during",
+    "category": "fetish",
+    "label": "Him whispering to her the whole time",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "not silence and not loud - his voice low and close and constant",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "him_and_several_women",
+    "category": "fetish",
+    "label": "Him with several women at once",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "sharing him with two or three other women, a bed full of them and him in the middle",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "her_cock_worshipped",
+    "category": "fetish",
+    "label": "Him worshipping her cock",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his mouth on her, taking his time, as into it as she is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "body": [
+        "trans_woman"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "scent_aphrodisiac",
+    "category": "fetish",
+    "label": "His scent, specifically",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "his actual smell rather than cologne - shirt he has worn, skin, the pillow after",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "voice_kink",
+    "category": "fetish",
+    "label": "His voice, low and close",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "his voice itself - low, close, familiar or through headphones - affecting her independent of what he is actually saying",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "self_denial",
+    "category": "fetish",
+    "label": "Holding back her own orgasm, on purpose",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "holding off on her own pleasure deliberately, for the anticipation",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "temperature_contrast",
+    "category": "fetish",
+    "label": "Hot and cold on her skin, one after the other",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a warm mouth after an ice cube, on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "wax_play_receiving",
+    "category": "fetish",
+    "label": "Hot wax dripped on her",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the shock of temperature rather than pain exactly. Tested first, always",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hunting_him",
+    "category": "fetish",
+    "label": "Hunting him down",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "chasing him, catching him and pinning him - she is the predator for once, and she means it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hypnotising_him",
+    "category": "fetish",
+    "label": "Hypnotising him",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "the fantasy of putting him under, a soft voice and a countdown, and him doing exactly as she says",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "ice_play_receiving",
+    "category": "fetish",
+    "label": "Ice run over her skin",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "the exact sensation of it against warm skin, used deliberately",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "frost_touch",
+    "category": "fetish",
+    "label": "Ice-cold fingertips on hot skin",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "cold she makes herself, exactly where she wants it, followed by her mouth to warm it back up",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "cryokinesis"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "chastity_him",
+    "category": "fetish",
+    "label": "Keeping him locked in chastity",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a cage, a key she wears, and a date she might move",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "hoarding_his_things",
+    "category": "fetish",
+    "label": "Keeping his things",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his shirt, his hoodie, anything that smells of him goes into the hoard and does not come back",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "kobold"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "suit_stays_on",
+    "category": "fetish",
+    "label": "Keeping the suit on",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the costume, halfway off at most - it is a lot more fun than the ordinary clothes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "armpit_giving",
+    "category": "fetish",
+    "label": "Kissing and licking his armpits",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "enjoys it on him specifically and could not fully explain why",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "healing_kisses",
+    "category": "fetish",
+    "label": "Kissing every mark better - literally",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "bites, scratches, a bruise from the bedframe, gone under her mouth, so they can start over",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "healing_touch"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "lipstick_marks",
+    "category": "fetish",
+    "label": "Leaving lipstick marks all over him",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "her lipstick on his neck, his chest, lower - proof of where she has been",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "pheromone_haze",
+    "category": "fetish",
+    "label": "Letting her scent take him over",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "turning it all the way up for once and watching him lose the thread",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "pheromones"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "listening_to_her_react",
+    "category": "fetish",
+    "label": "Letting him hear her react",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Likes being heard when she is comfortable enough to stop performing composure.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "static_touch",
+    "category": "fetish",
+    "label": "Letting static tingle across his skin",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a controlled crackle along his spine, turned up and down like a dial - never more than a tingle",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "electrokinesis"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sweat_licking",
+    "category": "fetish",
+    "label": "Licking sweat off him",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "genuinely into it mid-scene rather than finding it gross, and slightly embarrassed about that",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "forbidden_thrill",
+    "category": "fetish",
+    "label": "Liking that it feels like it should not be allowed",
+    "weight": 0.9,
+    "rarity": "rare",
+    "prompt_hint": "the specific thrill of something feeling illicit or a little sinful, independent of what it actually is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cum_eating_forced_him",
+    "category": "fetish",
+    "label": "Making him eat his own",
+    "weight": 0.8,
+    "rarity": "rare",
+    "prompt_hint": "making him clean up what he made, on her instruction",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "findom",
+    "category": "fetish",
+    "label": "Making him pay tribute",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "financial domination as play - he treats her, she decides what he has earned",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "denying_him",
+    "category": "fetish",
+    "label": "Making him wait",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "enjoys drawing things out for him specifically, on purpose, and watching him try to be patient",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "more_of_her",
+    "category": "fetish",
+    "label": "More than one of her at once",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "her, and her, and her - every one of them paying attention to a different part of him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "duplication"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "nipple_clamps",
+    "category": "fetish",
+    "label": "Nipple clamps",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the bite of them going on and the rush when they come off",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "orgasm_control_receiving",
+    "category": "fetish",
+    "label": "Only coming when he says",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "her orgasm is his to allow; she has to ask, hold it until he says yes, and sometimes accept being told no",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "impact_giving",
+    "category": "fetish",
+    "label": "Paddling him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "enjoys being the one holding the paddle or the belt, more than she expected to",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "pegging_him",
+    "category": "fetish",
+    "label": "Pegging him",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "strapping in and taking the other role for once",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "petplay_owner",
+    "category": "fetish",
+    "label": "Petplay, as his owner",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "putting the collar on him and meaning it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "petplay_pet",
+    "category": "fetish",
+    "label": "Petplay, as his pet",
+    "weight": 0.6,
+    "rarity": "rare",
+    "prompt_hint": "a collar, a leash, and actually playing the part",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "lifting_him",
+    "category": "fetish",
+    "label": "Picking him up and carrying him to bed",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "effortless, one arm if she is showing off - she likes watching him realise she means it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_strength",
+        "amazon"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "pinning_him",
+    "category": "fetish",
+    "label": "Pinning him down",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "enjoys being the one holding him still, more than most women admit to",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "pinning_him_effortlessly",
+    "category": "fetish",
+    "label": "Pinning him down without even trying",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "one hand on his chest and he is not going anywhere until she says so - and she is laughing while he tries",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_strength",
+        "invulnerability"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "another_couple",
+    "category": "fetish",
+    "label": "Playing with another couple",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "another couple, side by side or swapped for a while - the thrill is that it is all four of them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "joiner": "couple"
+    },
+    "enabled": true
+  },
+  {
+    "id": "anal_giving",
+    "category": "fetish",
+    "label": "Playing with his ass",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "fingers, her tongue, a toy - less commonly her thing, but genuinely into it when it is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "somnophilia_fantasy",
+    "category": "fetish",
+    "label": "Pretend-asleep play, her the one \"asleep\"",
+    "weight": 0.8,
+    "rarity": "extremely_rare",
+    "prompt_hint": "adult-only pretend-asleep play agreed in advance, where she plays asleep or deliberately passive; explicit prior permission and boundaries are part of the kink",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "collaring_him",
+    "category": "fetish",
+    "label": "Putting a collar on him",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "being the one who marks the dynamic - something he wears that says he is hers",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "invited_mind_reading",
+    "category": "fetish",
+    "label": "Reading exactly what he wants - once he lets her in",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "he opens the door, she hears the thing he did not say, and does it before he can ask",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "telepathy"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "shape_of_his_want",
+    "category": "fetish",
+    "label": "Reshaping herself around him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "whatever shape he likes best, and then a few he did not know he liked",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "slimegirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "restraint_giving",
+    "category": "fetish",
+    "label": "Restraining him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "enjoys tying him down properly and taking her time once he is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "being_ridden",
+    "category": "fetish",
+    "label": "Riding him, setting the pace herself",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "on top, controlling the rhythm entirely rather than following his",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "ruined_orgasm_giving",
+    "category": "fetish",
+    "label": "Ruining his orgasm at the last second",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "letting go exactly when he cannot stop",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "ice_play_giving",
+    "category": "fetish",
+    "label": "Running ice over him",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "enjoys the control of exactly where and how long",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "scent_marking",
+    "category": "fetish",
+    "label": "Scent-marking him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "rubbing against him, wearing his smell after, leaving something of hers on him too - a real instinct she is not embarrassed by, whatever he makes of it.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "catgirl"
+      ],
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "back_scratching",
+    "category": "fetish",
+    "label": "Scratching up his back",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "dragging her nails down his back, chest or arms, sometimes hard enough to leave proper marks she can see the next morning",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "suggestive_photos_giving",
+    "category": "fetish",
+    "label": "Sending him nudes first",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "comfortable being the one who sends first, when she trusts the person",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "spooning_sex",
+    "category": "fetish",
+    "label": "Sex spooning",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "close, unhurried, facing the same way. A specific kind of intimacy the position itself creates",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cum_swapping",
+    "category": "fetish",
+    "label": "Sharing it between their mouths",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "passing it between them, mouth to mouth, on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cyborg_upgrades",
+    "category": "fetish",
+    "label": "Showing off an upgrade meant for him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a vibration setting, a temperature control, a part that was definitely not in the manual",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "cyborg"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "singing_him_under",
+    "category": "fetish",
+    "label": "Singing to him until he forgets his own name",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "low, close, in his ear, and the way he goes soft and willing under it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "siren"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_sitting_receiving",
+    "category": "fetish",
+    "label": "Sitting on his face",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "fully setting the pace and the pressure herself, his mouth exactly where she wants it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "size_queen",
+    "category": "fetish",
+    "label": "Size queen",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "she likes them big and says so, with a ruler in her voice",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "face_slapping_giving",
+    "category": "fetish",
+    "label": "Slapping his face, lightly",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "a light open hand when he gets cheeky, and watching him like it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "soaked_sheets",
+    "category": "fetish",
+    "label": "Soaked-sheets sex",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "sweaty, wet, sheets wrecked, nobody caring how it looks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "watched_by_someone",
+    "category": "fetish",
+    "label": "Someone watching the two of them",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a stranger or someone they invited, in a chair, watching and not touching - being seen is the whole point",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "joiner": "any"
+    },
+    "enabled": true
+  },
+  {
+    "id": "spanking_giving",
+    "category": "fetish",
+    "label": "Spanking him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "enjoys being the one delivering it, and is not gentle about it once she gets going",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "spit_play",
+    "category": "fetish",
+    "label": "Spit play",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "spitting in his mouth, him spitting in hers, spit as lube - filthy on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "squirting",
+    "category": "fetish",
+    "label": "Squirting",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "she squirts, she loves that she does, and she wants him to make it happen again",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "body": [
+        "cis_woman",
+        "trans_woman_post_op"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "cuddling_after",
+    "category": "fetish",
+    "label": "Staying close afterwards, properly",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "not rolling away - staying, talking or not talking, for a while",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "finger_sucking",
+    "category": "fetish",
+    "label": "Sucking his fingers",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a small specific thing that does more than its size suggests",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "toe_sucking_giving",
+    "category": "fetish",
+    "label": "Sucking his toes",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "less common the other way round, but genuinely into it when she is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "role_reversal",
+    "category": "fetish",
+    "label": "Taking charge for once",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "flipping the dynamic - she is usually more submissive and being the one in control is a novelty she likes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "controlled_by_her",
+    "category": "fetish",
+    "label": "Taking over his body, as a game he agreed to",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "his hands doing what she tells them, his mouth saying what she wants, and the look on his face",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "mind_control"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "dirty_talk_giving",
+    "category": "fetish",
+    "label": "Talking dirty to him, in detail",
+    "weight": 1.3,
+    "rarity": "common",
+    "prompt_hint": "telling him exactly what she wants and what she will do, rather than hinting",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "degrading_him",
+    "category": "fetish",
+    "label": "Talking down to him properly",
+    "weight": 0.7,
+    "rarity": "rare",
+    "prompt_hint": "real degradation, not just teasing - name-calling, put-downs, meant",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "guiding_him_by_phone",
+    "category": "fetish",
+    "label": "Talking him through it on the phone",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "every stroke on her count",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "voice_note_tease",
+    "category": "fetish",
+    "label": "Teasing by voice note",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Enjoys leaving a short voice note with enough implication to ruin concentration.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "tease_for_days",
+    "category": "fetish",
+    "label": "Teasing him for days before anything happens",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the build is the point and she makes it last",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "invisible_tease",
+    "category": "fetish",
+    "label": "Teasing him in public while nobody can see her",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a hand on his thigh in a full restaurant, her voice in his ear, and nobody else at the table has any idea",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "invisibility"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "humiliating_him_lightly",
+    "category": "fetish",
+    "label": "Teasing him with a mean edge",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "enjoys pushing him slightly further than pure affection would, within limits they both know",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "careful_teeth",
+    "category": "fetish",
+    "label": "Teeth everywhere, carefully",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a mouth full of sharp teeth grazing him, never breaking the skin unless he asks",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "sharkgirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "describing_what_she_wants",
+    "category": "fetish",
+    "label": "Telling him exactly what she wants, out loud",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "not hinting and hoping - saying it in detail and having him do it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "praising_him",
+    "category": "fetish",
+    "label": "Telling him he is good",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "genuinely enjoys praising him and watching what it does to him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "telling_him_to_strip",
+    "category": "fetish",
+    "label": "Telling him to undress",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "enjoys directing exactly how and how slowly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "tentacle_fantasy",
+    "category": "fetish",
+    "label": "Tentacles, in fantasy",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "the full tentacle fantasy, from the art she will admit to having saved",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "mask_stays_on",
+    "category": "fetish",
+    "label": "The mask stays on",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "everything else can go; the mask is the last thing and sometimes it does not go at all",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "super_strength",
+        "flight",
+        "telekinesis",
+        "invisibility",
+        "shapeshifting",
+        "super_speed",
+        "electrokinesis",
+        "pyrokinesis",
+        "cryokinesis",
+        "telepathy",
+        "duplication",
+        "invulnerability",
+        "size_shifting",
+        "healing_touch",
+        "mind_control",
+        "pheromones",
+        "time_stop",
+        "hypnotic_gaze"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "sweat_scent",
+    "category": "fetish",
+    "label": "The smell of him after a workout",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "sweat after the gym, after a run, after anything physical. She will not always admit this out loud",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "tickling_giving",
+    "category": "fetish",
+    "label": "Tickling him",
+    "weight": 0.5,
+    "rarity": "uncommon",
+    "prompt_hint": "tickling him deliberately, enjoying the reaction more than anything else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "doing_it_for_him",
+    "category": "fetish",
+    "label": "Touching herself for him to watch",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "performing it for him on purpose, rather than just being watched incidentally",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "telekinetic_touch",
+    "category": "fetish",
+    "label": "Touching him everywhere at once, hands-free",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "her hands where he can see them and something else entirely at work on him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "telekinesis"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "using_toys_together",
+    "category": "fetish",
+    "label": "Toys, used on each other",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "not a substitute for him - an addition, used together",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "slave_treatment_giving",
+    "category": "fetish",
+    "label": "Treating him like hers to use",
+    "weight": 0.6,
+    "rarity": "extremely_rare",
+    "prompt_hint": "a negotiated adult ownership dynamic where she treats him as her property or slave within clearly agreed limits, more total than ordinary dominance",
+    "image_prompt": null,
+    "affinities": [
+      "objectification_giving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "tying_him",
+    "category": "fetish",
+    "label": "Tying him up properly",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "enjoys the process as much as the result - the patience it takes, the control",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "crop_giving",
+    "category": "fetish",
+    "label": "Using a riding crop on him",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "enjoys the precision of aiming it rather than just swinging",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": 1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "audio_roleplay",
+    "category": "fetish",
+    "label": "Voice-only roleplay",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "Likes taking on a premise through voice, without needing costumes or a room to match.",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hentai_together",
+    "category": "fetish",
+    "label": "Watching hentai together",
+    "weight": 0.8,
+    "rarity": "common",
+    "prompt_hint": "anime specifically, put on together on purpose",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mirror_watching_self",
+    "category": "fetish",
+    "label": "Watching herself in a mirror",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "seeing herself rather than just feeling it. More exposing than most things she will admit to",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "mirror_watching_him",
+    "category": "fetish",
+    "label": "Watching him in a mirror",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "seeing his reaction reflected rather than only feeling it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "watching_him",
+    "category": "fetish",
+    "label": "Watching him touch himself",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "finds it genuinely arousing to watch rather than only participate",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "watching_him_with_another",
+    "category": "fetish",
+    "label": "Watching him with another woman",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "another woman on him while she watches from close by - the wanting is the point, not jealousy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "joiner": "woman"
+    },
+    "enabled": true
+  },
+  {
+    "id": "erotica_together",
+    "category": "fetish",
+    "label": "Watching porn or reading erotica together",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "using shared material as a starting point rather than an accident",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "voyeurism_watching",
+    "category": "fetish",
+    "label": "Watching strangers, unseen",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "watching strangers, from a safe distance, for the thrill of it rather than for them specifically",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "bell_collar",
+    "category": "fetish",
+    "label": "Wearing a bell collar for him",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "it rings every time she moves, which is the point",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "cowgirl"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "corset_wearing",
+    "category": "fetish",
+    "label": "Wearing a corset",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "the structure of it, the ritual of putting it on properly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "garter_belt",
+    "category": "fetish",
+    "label": "Wearing a garter belt",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "specifically, over just stockings alone - the whole assembly",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "uniform_wearing",
+    "category": "fetish",
+    "label": "Wearing a uniform for him",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a specific costume or work outfit that changes how she carries herself",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "nylon_fishnet",
+    "category": "fetish",
+    "label": "Wearing fishnets",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "fishnet or patterned nylon specifically, not just any stocking",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "high_heels_wearing",
+    "category": "fetish",
+    "label": "Wearing heels, and knowing what they do",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "not for the height - for how she carries herself in them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "knee_high_socks_wearing",
+    "category": "fetish",
+    "label": "Wearing knee-highs",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "knee-high socks, specifically, and what they do to an outfit",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "lace_lingerie",
+    "category": "fetish",
+    "label": "Wearing lace",
+    "weight": 1.4,
+    "rarity": "common",
+    "prompt_hint": "the texture and the effort of it. Wears it because she wants to, not only for him",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "latex_wearing",
+    "category": "fetish",
+    "label": "Wearing latex or PVC",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "the specific feel of it against her skin. A more particular taste than leather",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "leather_wearing",
+    "category": "fetish",
+    "label": "Wearing leather",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "the weight and smell of it, wearing something with actual structure to it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "jewelry_that_marks",
+    "category": "fetish",
+    "label": "Wearing one piece of jewellery only for this",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "an anklet, a particular piece she only wears in this context",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "pantyhose_wearing",
+    "category": "fetish",
+    "label": "Wearing pantyhose",
+    "weight": 0.9,
+    "rarity": "common",
+    "prompt_hint": "sheer pantyhose, specifically, head to toe",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "weights": {
+        "sheer_black_tights": 4,
+        "nude_sheer_tights": 4,
+        "black_opaque_tights": 3
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "collar_receiving",
+    "category": "fetish",
+    "label": "Wearing something of his that marks her as his",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a collar, a bracelet, a phrase - something she wears that says whose she is",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "stockings_wearing",
+    "category": "fetish",
+    "label": "Wearing thigh-highs",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "puts them on deliberately, knows exactly what they do",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "weights": {
+        "thigh_high_socks": 3,
+        "black_stockings_garter": 4,
+        "white_thigh_highs_bows": 3,
+        "striped_thigh_highs": 3,
+        "nude_stockings": 2
+      }
+    },
+    "enabled": true
+  },
+  {
+    "id": "tight_clothes",
+    "category": "fetish",
+    "label": "Wearing things skin-tight",
+    "weight": 1.2,
+    "rarity": "common",
+    "prompt_hint": "clothing chosen specifically to be tight, on purpose, and she knows it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "wet_clothes",
+    "category": "fetish",
+    "label": "Wet clothes clinging, on either of them",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "the way fabric behaves wet rather than the water itself",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "body_writing",
+    "category": "fetish",
+    "label": "Words written on her body",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "lipstick or marker on her skin - \"his\", a tally, something filthy - and seeing it in the mirror after",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "feet_worship_giving",
+    "category": "fetish",
+    "label": "Worshipping his feet",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "genuinely into worshipping his feet - kissing, massaging, taking her time with it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "dom_sub": -1,
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "muscle_worship_giving",
+    "category": "fetish",
+    "label": "Worshipping his muscles",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "arms, shoulders, abs - touching, biting, telling him exactly what they do to her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "coil_binding",
+    "category": "fetish",
+    "label": "Wrapping him up in her coils",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "holding him snug in her coils during sex - how much give she leaves decides whether it reads as restraint or reassurance",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "lamia"
+      ],
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "wrestling_for_top",
+    "category": "fetish",
+    "label": "Wrestling for who ends up on top",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a real struggle, and the winner decides",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "wrestling_him_down",
+    "category": "fetish",
+    "label": "Wrestling him down and winning",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "a real contest, all of her strength, and the moment he stops fighting it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "species": [
+        "amazon"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "hair_fetish",
+    "category": "fetish",
+    "label": "Hair fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "hair itself is a genuine erotic focus for her - texture, length, smell and the feeling of running her hands through it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "hand_fetish",
+    "category": "fetish",
+    "label": "Hand fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "hands and fingers are a real erotic fixation for her: shape, veins, grip, movement and watching what they do",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "thigh_fetish",
+    "category": "fetish",
+    "label": "Thigh fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "thighs themselves are the focus - shape, softness or muscle, independent of stockings or any particular sex act",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "tattoo_fetish",
+    "category": "fetish",
+    "label": "Tattoo fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "tattooed skin is a genuine turn-on for her; the ink itself and the contrast against skin matter",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "piercing_fetish",
+    "category": "fetish",
+    "label": "Piercing fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "body piercings are an erotic focus for her, from the look of metal against skin to the deliberate body-modification aspect",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "glasses_fetish",
+    "category": "fetish",
+    "label": "Glasses fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "glasses themselves are a strong visual erotic trigger for her rather than merely a style preference",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "shoe_fetish",
+    "category": "fetish",
+    "label": "Shoe fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "shoes themselves are erotic objects to her - shape, material, heel, smell and the fact that they have been worn",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "boot_fetish",
+    "category": "fetish",
+    "label": "Boot fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "boots are a specific erotic fixation for her, especially the material, height, shape and authority they suggest",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "glove_fetish",
+    "category": "fetish",
+    "label": "Glove fetish",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "gloves are a genuine erotic focus for her - leather, latex, satin or fabric covering hands changes the entire charge of touch",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sock_fetish",
+    "category": "fetish",
+    "label": "Sock fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "socks themselves are erotic to her, including the look, fabric and worn scent rather than only what can be done while wearing them",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "underwear_fetish",
+    "category": "fetish",
+    "label": "Underwear fetish",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "underwear itself is an erotic object to her - fabric, cut, what it hides and the intimacy of something normally kept private",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "worn_underwear_scent",
+    "category": "fetish",
+    "label": "Worn underwear and scent",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the scent and intimacy of worn underwear are the point for her, specifically because it carries unmistakable traces of the person who wore it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "cock_worship_giving",
+    "category": "fetish",
+    "label": "Cock worship",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she wants to admire, praise and devote attention to his cock as an object of genuine erotic fascination, not just perform oral sex",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "pussy_worship_receiving",
+    "category": "fetish",
+    "label": "Pussy worship",
+    "weight": 1,
+    "rarity": "common",
+    "prompt_hint": "she wants her pussy treated as the focus of deliberate admiration and devotion, not merely stimulated on the way to something else",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": 1,
+      "body": [
+        "cis_woman",
+        "trans_woman_post_op"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "rimming_receiving",
+    "category": "fetish",
+    "label": "Being rimmed",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "his mouth on her ass is a specific thing she actively wants, separate from anal penetration",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "rimming_giving",
+    "category": "fetish",
+    "label": "Rimming him",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "using her mouth on his ass is a specific erotic interest for her rather than something she merely tolerates",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his"
+    },
+    "enabled": true
+  },
+  {
+    "id": "fisting_receiving",
+    "category": "fetish",
+    "label": "Fisting, receiving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the extreme fullness and deliberate intensity of taking an entire hand is a genuine kink for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "fisting_giving",
+    "category": "fetish",
+    "label": "Fisting, giving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "she is genuinely into the physical intensity and trust involved in using her whole hand on a partner",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "prostate_play",
+    "category": "fetish",
+    "label": "Prostate play",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "his prostate is a specific erotic focus for her and she enjoys making that kind of stimulation central rather than incidental",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "urethral_play_receiving",
+    "category": "fetish",
+    "label": "Urethral play, receiving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "urethral stimulation is a niche kink she is genuinely interested in, specifically for the unusual sensation and vulnerability",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "urethral_play_giving",
+    "category": "fetish",
+    "label": "Urethral play, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "urethral stimulation on him is a niche kink she finds genuinely erotic, with the precision and vulnerability being part of the appeal",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "enema_play_receiving",
+    "category": "fetish",
+    "label": "Enema play, receiving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "the fullness, ritual and surrender involved in consensual enema play are a genuine niche kink for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "enema_play_giving",
+    "category": "fetish",
+    "label": "Enema play, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "administering an enema as consensual erotic control is a genuine niche kink for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "chastity_receiving",
+    "category": "fetish",
+    "label": "Being kept in chastity",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "being physically prevented from touching or getting herself off, with someone else controlling when that ends, is the point",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "remote_toy_receiving",
+    "category": "fetish",
+    "label": "Remote-controlled toy, on her",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "wearing a toy while he controls it remotely turns the loss of timing and predictability into the kink",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "remote_toy_giving",
+    "category": "fetish",
+    "label": "Remote-controlled toy, on him",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "she likes controlling a toy on him from a distance and deciding exactly when stimulation starts, stops or changes",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "sex_machine_receiving",
+    "category": "fetish",
+    "label": "Sex-machine fetish, receiving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "automated, mechanical stimulation itself is an erotic focus for her - the relentless precision is part of the appeal",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "electrostimulation_receiving",
+    "category": "fetish",
+    "label": "Electrostimulation, receiving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "controlled electrical sensation is a real kink for her, from light pulses to the anticipation of the next one",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "electrostimulation_giving",
+    "category": "fetish",
+    "label": "Electrostimulation, giving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "she enjoys controlling electrical sensation on him and the precision of deciding where and when each pulse lands",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "suspension_bondage_receiving",
+    "category": "fetish",
+    "label": "Suspension bondage, receiving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "being securely suspended and unable to use the floor is a distinct bondage kink for her, separate from ordinary restraint",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "suspension_bondage_giving",
+    "category": "fetish",
+    "label": "Suspension bondage, giving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "she is specifically drawn to the control and visual structure of suspending a partner in bondage",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "mummification_bondage_receiving",
+    "category": "fetish",
+    "label": "Mummification bondage, receiving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "being wrapped almost completely and reduced to near-total immobility is the specific bondage sensation she wants",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "mummification_bondage_giving",
+    "category": "fetish",
+    "label": "Mummification bondage, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "she is specifically into wrapping a partner into near-total immobility and controlling the resulting helplessness",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "predicament_bondage_receiving",
+    "category": "fetish",
+    "label": "Predicament bondage, receiving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "restraint where holding one position avoids another uncomfortable consequence is the mental game she finds erotic",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "predicament_bondage_giving",
+    "category": "fetish",
+    "label": "Predicament bondage, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "she likes setting up bondage where he has to choose which discomfort or effort to manage, with the dilemma itself being the kink",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "bratty_submission",
+    "category": "fetish",
+    "label": "Bratty submission",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "she genuinely enjoys submitting while provoking, teasing and testing the person in charge instead of becoming instantly obedient",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "brat_taming",
+    "category": "fetish",
+    "label": "Brat taming",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "a deliberately difficult submissive is fun for her; earning obedience through firm control is part of the appeal",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "service_submission",
+    "category": "fetish",
+    "label": "Service submission",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "doing useful, attentive things because she has been told to serve is itself erotic to her, independent of humiliation",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "service_domination",
+    "category": "fetish",
+    "label": "Service domination",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "she likes giving practical service tasks and being deliberately attended to as part of a power-exchange dynamic",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "objectification_receiving",
+    "category": "fetish",
+    "label": "Objectification, receiving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "consensually being treated as a body or object for someone else's use, with her personhood deliberately set aside for the scene, is the kink",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "objectification_giving",
+    "category": "fetish",
+    "label": "Objectification, giving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "consensually reducing him to a body or useful object for the duration of a scene is a genuine dominance kink for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "trampling_receiving",
+    "category": "fetish",
+    "label": "Being stepped on / trampled",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the weight, footwear and submissive symbolism of being stepped on are a genuine fetish for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "trampling_giving",
+    "category": "fetish",
+    "label": "Stepping on / trampling him",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "putting her feet or shoes on him and making him take her weight is a genuine dominance fetish for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "ballbusting_cbt",
+    "category": "fetish",
+    "label": "Ballbusting / CBT",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "controlled pain and vulnerability focused specifically on his cock and balls are a genuine dominance kink for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "pregnancy_fetish",
+    "category": "fetish",
+    "label": "Pregnancy fetish",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "pregnancy itself - the visibly changed body, fullness and symbolism - is the erotic focus, distinct from wanting the act of impregnation",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "adult_nursing",
+    "category": "fetish",
+    "label": "Adult nursing / breastfeeding kink",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "having an adult partner nurse at her breast, with the intimacy and lactation itself central to the kink",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her"
+    },
+    "enabled": true
+  },
+  {
+    "id": "medical_fetish",
+    "category": "fetish",
+    "label": "Medical fetish / clinical play",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "clinical examination, medical equipment and the impersonal precision of a medical setting are erotic to her beyond any one roleplay scenario",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "smoking_fetish",
+    "category": "fetish",
+    "label": "Smoking fetish",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the act and visual ritual of smoking are a genuine erotic trigger for her - lips, smoke, breath and posture rather than simply liking smokers",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "sploshing_wam",
+    "category": "fetish",
+    "label": "Wet-and-messy / sploshing",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "messy substances such as cream, food or mud on skin and clothing are the erotic focus rather than an accidental part of sex",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "watersports_receiving",
+    "category": "fetish",
+    "label": "Watersports, receiving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "urine play directed at her is a genuine fluid fetish, with the taboo and surrender being part of the attraction",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "watersports_giving",
+    "category": "fetish",
+    "label": "Watersports, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "urine play directed at him is a genuine fluid and control fetish for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "dacryphilia",
+    "category": "fetish",
+    "label": "Dacryphilia / crying kink",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "tears and consensual emotional intensity are themselves erotic to her; the sight or feeling of crying is part of the kink rather than merely a side effect",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "blood_fetish",
+    "category": "fetish",
+    "label": "Blood fetish",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the sight, smell or taste of a small amount of blood in consensual erotic play is itself a genuine fixation for her",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "knife_play_receiving",
+    "category": "fetish",
+    "label": "Knife play, receiving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the controlled appearance of danger from a blade used as an erotic prop is a kink for her; the fantasy is vulnerability, not actual injury",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "knife_play_giving",
+    "category": "fetish",
+    "label": "Knife play, giving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "using a blade as a controlled erotic prop to create fear and anticipation is a dominance kink for her; the appeal is symbolic danger, not injury",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "transformation_fetish",
+    "category": "fetish",
+    "label": "Transformation fetish",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "physical transformation itself is erotic to her - watching or feeling a body change shape, traits or form is the focus, even when purely fantasy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "anthro_furry_attraction",
+    "category": "fetish",
+    "label": "Furry / anthro attraction",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "adult anthropomorphic animal-like bodies and features are a genuine erotic attraction for her, not merely a costume preference",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "inflation_fantasy",
+    "category": "fetish",
+    "label": "Inflation fetish, fantasy",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "fantasy body expansion or inflation is itself the erotic focus for her, explicitly as impossible fantasy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "oviposition_fantasy",
+    "category": "fetish",
+    "label": "Oviposition fetish, fantasy",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "the fantasy of eggs being laid or implanted is itself erotic to her, explicitly as impossible monster or alien fantasy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "vore_fantasy",
+    "category": "fetish",
+    "label": "Vore fetish, fantasy",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "the impossible fantasy of swallowing or being swallowed whole is an erotic fixation for her, explicitly fantasy with no real-world analogue",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "cnc_giving",
+    "category": "fetish",
+    "label": "Consensual non-consent, giving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "a pre-negotiated adult roleplay where she plays the aggressor or takes control despite staged resistance, with consent, limits and a stop signal agreed outside the scene",
+    "image_prompt": null,
+    "affinities": [
+      "being_dominant",
+      "rough_sex"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "captivity_receiving",
+    "category": "fetish",
+    "label": "Captivity / prisoner fantasy, receiving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the fantasy of being an adult captive, restrained and under someone else's control; the captivity itself is the kink rather than any specific kidnapping scenario",
+    "image_prompt": null,
+    "affinities": [
+      "restraint_receiving",
+      "being_dominated"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "captivity_giving",
+    "category": "fetish",
+    "label": "Captivity / prisoner fantasy, giving",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "the fantasy of keeping an adult partner as a consensual captive under her control; the captivity and helplessness are the erotic focus",
+    "image_prompt": null,
+    "affinities": [
+      "being_dominant"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "coercion_fantasy_receiving",
+    "category": "fetish",
+    "label": "Coercion / blackmail fantasy, receiving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "an explicitly negotiated adult fantasy of being pressured or having no apparent choice inside the roleplay, while real consent and boundaries remain established outside it",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "coercion_fantasy_giving",
+    "category": "fetish",
+    "label": "Coercion / blackmail fantasy, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "an explicitly negotiated adult fantasy where she plays the person applying pressure or leverage, with the apparent coercion confined to the roleplay",
+    "image_prompt": null,
+    "affinities": [
+      "cnc_giving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "somnophilia_roleplay_giving",
+    "category": "fetish",
+    "label": "Somnophilia roleplay, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "she is aroused by initiating with an adult partner who is pretending to sleep or has explicitly pre-authorised the roleplay, with agreed limits in place",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "intoxication_roleplay",
+    "category": "fetish",
+    "label": "Intoxication / drugged roleplay",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "a sober, negotiated adult roleplay that imitates lowered control or sedation without relying on actual inability to consent",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "taboo_family_roleplay",
+    "category": "fetish",
+    "label": "Taboo family-role roleplay",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "unrelated adults deliberately roleplaying a forbidden family or step-family dynamic; the taboo is fictional and no actual relatives or minors are involved",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "ddlg_ageplay",
+    "category": "fetish",
+    "label": "Daddy / little-girl ageplay",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "consensual ageplay between adults: she takes a deliberately younger-coded, dependent little role while he plays a protective or authoritative Daddy figure; explicitly adult roleplay only",
+    "image_prompt": null,
+    "affinities": [
+      "daddy_kink"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "mommy_little_ageplay",
+    "category": "fetish",
+    "label": "Mommy / little ageplay",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "consensual ageplay between adults where she takes the caring, protective or authoritative Mommy role with an adult partner in a little role",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "caregiver_little_ageplay",
+    "category": "fetish",
+    "label": "Caregiver / little ageplay",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "adult-only caregiver/little roleplay focused on dependence, reassurance, rules and nurturance rather than an actual age difference",
+    "image_prompt": null,
+    "affinities": [
+      "ddlg_ageplay",
+      "mommy_little_ageplay"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "abdl_roleplay",
+    "category": "fetish",
+    "label": "Adult baby / diaper roleplay",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "adult-only regression and diaper roleplay where helplessness, caretaking or embarrassment are part of the consensual fantasy; no minors are involved",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "forced_breeding_fantasy",
+    "category": "fetish",
+    "label": "Forced-breeding fantasy",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "an adult CNC-style fantasy where the imagined loss of control over impregnation is the core kink; explicitly negotiated roleplay, distinct from an ordinary breeding kink",
+    "image_prompt": null,
+    "affinities": [
+      "breeding_kink"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "forced_feminization",
+    "category": "fetish",
+    "label": "Forced feminization",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "a consensual adult power-exchange fantasy where she makes him adopt feminine clothing, presentation or behaviour and treats the apparent lack of choice as part of the kink",
+    "image_prompt": null,
+    "affinities": [
+      "dressing_him_femme"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "pet_play_receiving",
+    "category": "fetish",
+    "label": "Human pet play, receiving",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "adult human pet play where she takes the pet role and enjoys training, collars, commands and ownership language without pretending to be an actual animal",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1,
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "pet_play_giving",
+    "category": "fetish",
+    "label": "Human pet play, giving",
+    "weight": 1,
+    "rarity": "uncommon",
+    "prompt_hint": "adult human pet play where she takes the owner or handler role and enjoys training, commands, collars and controlled behaviour",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1,
+      "domains": [
+        "roleplay"
+      ]
+    },
+    "enabled": true
+  },
+  {
+    "id": "auction_fantasy",
+    "category": "fetish",
+    "label": "Being displayed and auctioned, fantasy",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "a consensual adult fantasy of being displayed, evaluated and symbolically sold or assigned to someone else; the transaction is roleplay only",
+    "image_prompt": null,
+    "affinities": [
+      "objectification_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "dehumanization_receiving",
+    "category": "fetish",
+    "label": "Dehumanization, receiving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "consensually being treated as less than a person for the duration of a scene - as an object, possession or function - is the specific submission kink",
+    "image_prompt": null,
+    "affinities": [
+      "objectification_receiving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "dehumanization_giving",
+    "category": "fetish",
+    "label": "Dehumanization, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "consensually reducing an adult partner to an object, possession or function during a scene is a specific dominance kink for her",
+    "image_prompt": null,
+    "affinities": [
+      "objectification_giving"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "bodily_function_humiliation",
+    "category": "fetish",
+    "label": "Bodily-function humiliation",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "consensual humiliation focused on embarrassing bodily functions, mess or loss of composure rather than pain or ordinary verbal degradation",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "forced_exhibition_fantasy",
+    "category": "fetish",
+    "label": "Forced-exhibition fantasy",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "a negotiated adult fantasy of being made to expose herself or perform for an audience, with any real observers either fictional or knowingly participating",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "forced_voyeurism_fantasy",
+    "category": "fetish",
+    "label": "Being made to watch, fantasy",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "a negotiated adult fantasy where she is made to watch sexual activity she is part of consenting to, with the lack of control inside the scene being the kink",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "authority_abuse_roleplay",
+    "category": "fetish",
+    "label": "Authority-abuse roleplay",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "unrelated adults roleplaying an unequal institutional power dynamic - guard/prisoner, officer/detainee or similar - with the abuse of authority confined to the agreed fantasy",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "religious_taboo_kink",
+    "category": "fetish",
+    "label": "Religious taboo / sacrilege kink",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "religious symbolism, forbidden ritual or sacrilege carries an erotic charge for her; the taboo itself matters more than any specific costume or scenario",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "corruption_fantasy",
+    "category": "fetish",
+    "label": "Corruption / loss-of-innocence fantasy",
+    "weight": 1,
+    "rarity": "rare",
+    "prompt_hint": "an adult-only fantasy about a deliberately inexperienced or sheltered adult being drawn into something more transgressive; no minors or actual coercion are involved",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  },
+  {
+    "id": "mind_control_fantasy_receiving",
+    "category": "fetish",
+    "label": "Mind-control fantasy, receiving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "an impossible adult fantasy of her thoughts, choices or behaviour being controlled by another person or supernatural force, with the loss of agency existing only in fantasy",
+    "image_prompt": null,
+    "affinities": [
+      "hypnosis_fantasy"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "her",
+      "dom_sub": -1
+    },
+    "enabled": true
+  },
+  {
+    "id": "mind_control_fantasy_giving",
+    "category": "fetish",
+    "label": "Mind-control fantasy, giving",
+    "weight": 1,
+    "rarity": "very_rare",
+    "prompt_hint": "an impossible adult fantasy of controlling another adult's thoughts, choices or behaviour completely, beyond ordinary hypnosis or commands",
+    "image_prompt": null,
+    "affinities": [
+      "hypnotising_him"
+    ],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {
+      "side": "his",
+      "dom_sub": 1
+    },
+    "enabled": true
+  },
+  {
+    "id": "possession_control_fantasy",
+    "category": "fetish",
+    "label": "Possession / parasitic-control fantasy",
+    "weight": 1,
+    "rarity": "extremely_rare",
+    "prompt_hint": "an impossible adult fantasy involving a spirit, alien organism or other fictional force taking control of an adult body; the possession and loss of agency are the kink",
+    "image_prompt": null,
+    "affinities": [],
+    "conflicts": [],
+    "modifies": {},
+    "extra": {},
+    "enabled": true
+  }
+]
