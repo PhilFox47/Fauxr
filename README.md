@@ -6535,3 +6535,40 @@ explicit signal from the writer.
 The emoji shortcode table that the composer section above relies on had never reached the
 repository: `.gitignore`'s blanket `**/data/` rule swallowed `web/src/data/emoji.ts`, so a fresh
 checkout failed to typecheck. The folder is now un-ignored and the table is checked in.
+
+### Step two: a Writer that never sees JSON (Settings → Models & API → Text chat pipeline)
+
+The Writer card holds the switch. **Classic** is what ran before and stays the default. In
+**Split**, a text-chat reply is two calls: the **Writer** (`engine/writer.ts`, `writer_chat.md`)
+writes only her messages, as plain text with a blank line between them, on whichever model writes
+her best, and the **Reconciler** from the step above then reads what those messages changed and
+that is applied exactly as the Actor's hidden report used to be. Dates, calls and voice notes still
+run on the Actor, so its model must still be one that writes JSON.
+
+The Writer gets the conversation the way roleplay models are trained on it: her card and the
+current situation in the system message, his messages as user turns, hers as assistant turns.
+Anything that is neither of them typing (a photo arriving, time passing, a date marker, a gap of
+more than an hour and a half) becomes a bracketed app note inside a user turn, so her own turns
+only ever contain text she typed and nothing teaches her to write a `[photo]` tag. Her prompt keeps
+every brief the Actor has, minus each instruction about a JSON field; `continuityBlock` and the
+photo availability line have a plain variant for this.
+
+Parsing removes what roleplay models add around a message: a name label (`Mia:` or `**Mia:**`),
+quotes around the whole bubble, a reasoning block, a bracketed aside. Lines without blank lines
+between them become separate texts when they are all short. Every check on her words is shared
+with the Actor (`reviewMessages`): repeats, quizzing him, deferring to a date, narration, system
+language, flooding, the uwu cap. A rejected draft stays in the transcript as her turn, followed by
+an app note naming the problem, because a chat model revises its own last turn far more reliably
+than it follows a restated request. The budget and the canned fallback are the Actor's.
+
+The Reconciler runs after her messages are delivered, so she is never slower for it, but inside
+the turn lock, so the next turn starts from the updated state. If it fails, nothing about her
+changes that turn (an empty report means "unchanged" everywhere). A photo she sends goes out as
+before. A photo she only offers is kept as `mood.photo_offered` for four turns: the Writer is
+reminded of it while photos are available, and the Reconciler resolves "here it is" against its
+description. Emoji reactions on his messages and her private `thoughts` are not produced in Split.
+
+Regenerate now restores her state from before the turn (both pipelines). Each turn saves where she
+was, what she had on, the scene, her mood, a pending offer and her callbacks as `mood.pre_turn`;
+rerolling that turn puts them back before writing the moment again. Before, rerolling a reply in
+which she took her top off left it off in a version where she never did.

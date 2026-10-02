@@ -33,9 +33,10 @@ Fields:
 - mood: her mood as her messages show it, a few words.
 - photo: status as above. kind is "spicy" for anything sexual, revealing or underwear, else
   "chat". situation is what the picture shows, from her words, as a short concrete
-  description; null unless sent_now or offered. aspect is square, portrait or landscape, or
-  null when nothing says. shows_face is false only when she says or clearly implies her face
-  is out of frame; otherwise null. options holds exactly two descriptions only when she
+  description; null unless sent_now or offered. When she now sends a photo she offered earlier
+  ("here it is", "as promised"), it is sent_now and the earlier description is what it shows.
+  aspect is square, portrait or landscape, or null when nothing says. shows_face is false only
+  when she says or clearly implies her face is out of frame; otherwise null. options holds exactly two descriptions only when she
   explicitly lets him choose between two pictures; otherwise null.
 - fantasy_pitched: the number of one of her listed fantasies only if she actually put that
   scenario to him this turn. new_fantasy: a one-line summary only if she pitched a concrete
@@ -73,6 +74,9 @@ What she had on:
 {{outfit}}
 {{scene}}
 Photos: {{photo_status}}
+{{#pending_offer}}
+A photo she offered earlier and has not sent yet: {{pending_offer}}
+{{/pending_offer}}
 
 # HER FANTASY LIST
 

@@ -36,12 +36,14 @@ import { locationMapBlock } from './locations.js';
 export { detectRoleplay };
 
 /** The retry names the exact tic, which works far better than asking for "something better". */
-function retryHint(problem: string, fix: string): string {
+export function retryHint(problem: string, fix: string, format: 'json' | 'text' = 'json'): string {
   return `Your last answer will not do: ${problem}.
 
 ${fix}
 
-Write it again from scratch - do not patch the old version, it is the wrong shape. Same JSON structure, nothing else.`;
+Write it again from scratch - do not patch the old version, it is the wrong shape. ${format === 'json'
+    ? 'Same JSON structure, nothing else.'
+    : 'Only her messages, a blank line between them, nothing else.'}`;
 }
 
 /**
@@ -57,7 +59,7 @@ const FALLBACK_LINES = [
   'ugh my signal is awful rn',
 ];
 
-function fallbackOutput(): ActorOutput {
+export function fallbackOutput(): ActorOutput {
   return {
     messages: [{
       text: FALLBACK_LINES[Math.floor(Math.random() * FALLBACK_LINES.length)],
@@ -211,7 +213,7 @@ export function collectMessages(parsed: any): unknown[] {
   return Array.isArray(raw) ? raw : [];
 }
 
-function normalizeMessages(raw: any, partner: string | null = null): ActorMessage[] {
+export function normalizeMessages(raw: any, partner: string | null = null): ActorMessage[] {
   const { max_messages_per_turn, max_delay_seconds } = getSettings().chat;
   const list = Array.isArray(raw) ? raw : [];
   const out: ActorMessage[] = [];
@@ -251,6 +253,14 @@ function buildPrompt(
   nudge: string,
   somethingLive = false,
 ): string {
+  return render(template, promptVars(ctx, nudge, somethingLive));
+}
+
+/**
+ * Everything her chat prompt is built from, shared by the Actor and the Writer (writer.ts).
+ * `plain` is the Writer's variant: no instruction may mention a JSON field it has no way to set.
+ */
+export function promptVars(ctx: ActorContext, nudge: string, somethingLive = false, opts: { plain?: boolean; photoNote?: string } = {}): Record<string, string | number> {
   const { character, relationship, direction } = ctx;
   const settings = getSettings();
   const user = getUserProfile();
@@ -265,7 +275,7 @@ function buildPrompt(
     saveRelationship(relationship);
   }
 
-  return render(template, {
+  return {
     char_display_name: character.real_name,
     user_name: user?.display_name ?? 'him',
     user_block: [
@@ -275,10 +285,16 @@ function buildPrompt(
     ].filter(Boolean).join('\n\n'),
     // Not a fiction she lives in: her picture simply has not been generated, which is his call
     // and costs money. She is not told why, so there is nothing for her to comment on.
-    photo_status: canSendPhotos(relationship)
-      ? recentPhotosFact(character.id)
-      : 'You cannot send photos in this chat for now: leave "photo_offer" null. If he asks for ' +
-        'one, put it off in your own way or describe it in words instead. Do not make a thing of it.',
+    photo_status: [
+      canSendPhotos(relationship)
+        ? recentPhotosFact(character.id)
+        : opts.plain
+          ? 'You cannot send photos in this chat for now. If he asks for one, put it off in your own ' +
+            'way or describe it in words instead. Do not make a thing of it.'
+          : 'You cannot send photos in this chat for now: leave "photo_offer" null. If he asks for ' +
+            'one, put it off in your own way or describe it in words instead. Do not make a thing of it.',
+      opts.photoNote ?? '',
+    ].filter(Boolean).join('\n'),
     identity_block: identityBlock(character, flags),
     core_block: coreBlock(character),
     communication_block: communicationBlock(seed),
@@ -299,7 +315,7 @@ function buildPrompt(
     mood_block: moodBlock(relationship.arousal, seed.hints.arousal_tell),
     release_block: releaseBlock(character, relationship),
     moment_block: describeHerMoment(character, relationship),
-    continuity_block: continuityBlock(relationship.mood, currentOutfit(relationship, seed)),
+    continuity_block: continuityBlock(relationship.mood, currentOutfit(relationship, seed), { plain: opts.plain }),
     scene_block: sceneBlock((relationship.mood as any)?.scene),
     date_map_block: locationMapBlock(listLocations()),
     call_block: callBlock(character),
@@ -310,7 +326,7 @@ function buildPrompt(
     max_messages: settings.chat.max_messages_per_turn,
     voice_target: messageBucket(seed.message_length) === 'long' ? '40 to 90 seconds of speech' : '12 to 40 seconds of speech',
     text_target: textTarget(seed.message_length),
-  });
+  };
 }
 
 /**
@@ -383,8 +399,17 @@ function isHardVoiceFailure(what: string): boolean {
   ].some((prefix) => what.startsWith(prefix));
 }
 
-export async function runActor(ctx: ActorContext): Promise<ActorRun> {
-  const settings = getSettings();
+export type Review =
+  | { ok: true; messages: ActorMessage[] }
+  | { ok: false; problem: string; fix: string; extraAttempt?: boolean };
+
+/**
+ * Every check on her visible messages, shared by the Actor and the Writer (writer.ts). Most
+ * rewrites are only asked for on the first attempt; on the last one a usable reply beats a
+ * canned fallback line.
+ */
+export function reviewMessages(ctx: ActorContext, input: ActorMessage[], attempt: number): Review {
+  let messages = input;
   const recent = ctx.history.slice(-12);
   const lastUserMessage = [...recent].reverse().find((m) => m.sender === 'user')?.text ?? '';
   const recentOwnMessages = recent.filter((m) => m.sender === 'character').map((m) => m.text);
@@ -392,6 +417,119 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
   const longOwnHistory = ctx.history.slice(-60)
     .filter((m) => m.sender === 'character' && !m.meta?.failed)
     .map((m) => m.text);
+  const texts = () => messages.map((m) => m.text);
+
+  if (messages.length === 0) {
+    logger.warn('actor', 'actor produced no usable messages');
+    return { ok: false, problem: 'it contained no usable message', fix: 'Send at least one actual message.' };
+  }
+
+  // Word-for-word repeats of her own lines. First time round she rewrites; after that the
+  // repeated lines are simply dropped rather than spending the last attempt on a fallback.
+  const repeats = verbatimRepeats(texts(), longOwnHistory);
+  if (repeats.length) {
+    if (attempt === 0) {
+      logger.warn('actor', 'rejected: repeated her own lines word for word', {
+        character: ctx.character.username,
+        messages: texts(),
+      });
+      return {
+        ok: false,
+        problem: 'you repeated your own earlier lines word for word',
+        fix: `These are lines you already sent: ${repeats.map((i) => `"${messages[i].text}"`).join(', ')}. ` +
+          'Never reuse a line. Say something new, in your own voice, that moves this forward.',
+      };
+    }
+    const kept = messages.filter((_, i) => !repeats.includes(i));
+    if (kept.length) messages = kept.map((m, i) => (i === 0 ? { ...m, delay: 0 } : m));
+  }
+
+  // Machine-writing tells are useful diagnostics, but not worth throwing away an otherwise
+  // coherent, in-character reply. The old retry policy routinely replaced the better draft
+  // with a fallback or a more confused second attempt.
+  const reframe = messages.map((m) => detectReframe(m.text)).find(Boolean);
+  if (reframe) {
+    logger.debug('actor', 'style diagnostic: "not X, that\'s Y" reframe', { character: ctx.character.username, matched: reframe });
+  }
+
+  // Handing him the work instead of bringing her own - see detectQuizzingHim.
+  const quiz = attempt === 0 ? detectQuizzingHim(texts()) : null;
+  if (quiz) {
+    logger.warn('actor', `rejected: quizzing him (${quiz})`, { character: ctx.character.username, messages: texts() });
+    return {
+      ok: false,
+      problem: `you handed the work to him (${quiz})`,
+      fix: 'He is here to hear your fantasies and your side of things, not to guess at you or write the ' +
+        'scene himself. Say it yourself instead: what you are doing, what you have on, what you want, ' +
+        'what happened - specific and yours. It is fine to end on a statement.',
+    };
+  }
+
+  // Sex postponed to a meeting - see detectMeetupDeferral. The chat is its own thing.
+  const deferral = attempt === 0 ? detectMeetupDeferral(texts(), lastUserMessage) : null;
+  if (deferral) {
+    logger.warn('actor', `rejected: deferring to a meeting ("${deferral}")`, { character: ctx.character.username, messages: texts() });
+    return {
+      ok: false,
+      problem: `you pushed it to when you meet ("${deferral}")`,
+      fix: 'This chat is its own thing, not the run-up to a date. Keep it here and now: what you are doing ' +
+        'this minute, what you have on, what you want from him tonight over the phone, a photo, a dare, ' +
+        'a game. Same heat, present tense.',
+    };
+  }
+
+  const problem = messages
+    .map((m, i) =>
+      findVoiceProblem({
+        text: m.text,
+        isFirst: i === 0,
+        lastUserMessage,
+        writesFormally: writesFormally(ctx.character),
+        recentOwnMessages,
+        aiCharacter: isAiCharacter(ctx.character.seed),
+        // Last attempt: two independently generated replies both reading as repetitive is
+        // more likely a narrow-themed exchange than a model that is actually stuck, and
+        // rejecting this one too would only spend the last retry on a fallback line.
+        skipRepeatCheck: attempt > 0,
+      }),
+    )
+    .find(Boolean);
+
+  if (problem && isHardVoiceFailure(problem.what)) {
+    logger.warn('actor', `rejected: ${problem.what}`, { character: ctx.character.username, attempt, messages: texts() });
+    return { ok: false, problem: problem.what, fix: problem.fix, extraAttempt: problem.what.startsWith('broke character') };
+  }
+
+  if (attempt === 0 && messages.length > 3) {
+    return {
+      ok: false,
+      problem: `you split one reply into ${messages.length} messages`,
+      fix: 'Keep the same substance in one or two messages, three only if the timing genuinely matters. Let one good line land instead of flooding the chat.',
+    };
+  }
+
+  if (attempt === 0 && ctx.character.seed.texting_persona === 'uwu_texting') {
+    const body = texts().join(' ');
+    const touches = body.match(/\b(?:uwu|owo|hewwo|hai|phiw|wittle|weal(?:ly)?|wight|wook(?:s|ing)?|fiwst|wawk\w*|wepway\w*|pwemium|contwact\w*|cwause\w*|cowou?r\w*|wuwes?)\b|[>(][^\s]{0,8}w[^\s]{0,8}[<)]/gi) ?? [];
+    if (touches.length > messages.length * 2) {
+      return {
+        ok: false,
+        problem: `the uwu accent took over (${touches.length} altered words/markers)`,
+        fix: 'Her accent is a light touch: at most one or two altered words, uwu/owo, or kaomoji per message. Keep every other word ordinary and readable so her actual feeling leads.',
+      };
+    }
+  }
+  if (problem) {
+    logger.debug('actor', `style diagnostic: ${problem.what}`, { character: ctx.character.username, messages: texts() });
+  }
+  if (isRelentlesslyWitty(texts())) {
+    logger.debug('actor', 'style diagnostic: every message is a one-line quip', { character: ctx.character.username, messages: texts() });
+  }
+  return { ok: true, messages };
+}
+
+export async function runActor(ctx: ActorContext): Promise<ActorRun> {
+  const settings = getSettings();
 
   // Only a turn she starts herself gets framing; what she says on any turn is hers.
   const nudge = ctx.initiative ? initiativeNudge() : ctx.opener && !ctx.history.some((m) => m.sender === 'user')
@@ -445,127 +583,14 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
       messages: normalizeMessages(collectMessages(parsed), duoPartner(ctx.character.seed)?.name ?? null),
       hidden: normalizeHidden(collectHidden(parsed)),
     };
-    if (out.messages.length === 0) {
-      logger.warn('actor', 'actor produced no usable messages');
-      correction = retryHint('it contained no usable message', 'Send at least one actual message.');
-      continue;
-    }
-
-    // Word-for-word repeats of her own lines. First time round she rewrites; after that the
-    // repeated lines are simply dropped rather than spending the last attempt on a fallback.
-    const repeats = verbatimRepeats(out.messages.map((m) => m.text), longOwnHistory);
-    if (repeats.length) {
-      if (attempt === 0) {
-        logger.warn('actor', 'rejected: repeated her own lines word for word', {
-          character: ctx.character.username,
-          messages: out.messages.map((m) => m.text),
-        });
-        correction = retryHint(
-          'you repeated your own earlier lines word for word',
-          `These are lines you already sent: ${repeats.map((i) => `"${out.messages[i].text}"`).join(', ')}. ` +
-            'Never reuse a line. Say something new, in your own voice, that moves this forward.',
-        );
-        continue;
-      }
-      const kept = out.messages.filter((_, i) => !repeats.includes(i));
-      if (kept.length) out.messages = kept.map((m, i) => (i === 0 ? { ...m, delay: 0 } : m));
-    }
-
-    // Machine-writing tells are useful diagnostics, but not worth throwing away an otherwise
-    // coherent, in-character reply. The old retry policy routinely replaced the better draft
-    // with a fallback or a more confused second attempt.
-    const reframe = out.messages.map((m) => detectReframe(m.text)).find(Boolean);
-    if (reframe) {
-      logger.debug('actor', 'style diagnostic: "not X, that\'s Y" reframe', { character: ctx.character.username, matched: reframe });
-    }
-
-    // Handing him the work instead of bringing her own - see detectQuizzingHim.
-    const quiz = attempt === 0 ? detectQuizzingHim(out.messages.map((m) => m.text)) : null;
-    if (quiz) {
-      logger.warn('actor', `rejected: quizzing him (${quiz})`, {
-        character: ctx.character.username,
-        messages: out.messages.map((m) => m.text),
-      });
-      correction = retryHint(
-        `you handed the work to him (${quiz})`,
-        'He is here to hear your fantasies and your side of things, not to guess at you or write the ' +
-          'scene himself. Say it yourself instead: what you are doing, what you have on, what you want, ' +
-          'what happened - specific and yours. It is fine to end on a statement.',
-      );
-      continue;
-    }
-
-    // Sex postponed to a meeting - see detectMeetupDeferral. The chat is its own thing.
-    const hisLast = [...recent].reverse().find((m) => m.sender === 'user')?.text ?? '';
-    const deferral = attempt === 0 ? detectMeetupDeferral(out.messages.map((m) => m.text), hisLast) : null;
-    if (deferral) {
-      logger.warn('actor', `rejected: deferring to a meeting ("${deferral}")`, {
-        character: ctx.character.username,
-        messages: out.messages.map((m) => m.text),
-      });
-      correction = retryHint(
-        `you pushed it to when you meet ("${deferral}")`,
-        'This chat is its own thing, not the run-up to a date. Keep it here and now: what you are doing ' +
-          'this minute, what you have on, what you want from him tonight over the phone, a photo, a dare, ' +
-          'a game. Same heat, present tense.',
-      );
-      continue;
-    }
-
-    const problem = out.messages
-      .map((m, i) =>
-        findVoiceProblem({
-          text: m.text,
-          isFirst: i === 0,
-          lastUserMessage,
-          writesFormally: writesFormally(ctx.character),
-          recentOwnMessages,
-          aiCharacter: isAiCharacter(ctx.character.seed),
-          // Last attempt: two independently generated replies both reading as repetitive is
-          // more likely a narrow-themed exchange than a model that is actually stuck, and
-          // rejecting this one too would only spend the last retry on a fallback line.
-          skipRepeatCheck: attempt > 0,
-        }),
-      )
-      .find(Boolean);
-
-    if (problem && isHardVoiceFailure(problem.what)) {
-      logger.warn('actor', `rejected: ${problem.what}`, {
-        character: ctx.character.username,
-        attempt,
-        messages: out.messages.map((m) => m.text),
-      });
+    const review = reviewMessages(ctx, out.messages, attempt);
+    if (!review.ok) {
       // See the budget note above the loop: only a break in frame earns the extra attempt.
-      if (problem.what.startsWith('broke character')) budget = Math.min(3, budget + 1);
-      correction = retryHint(problem.what, problem.fix);
+      if (review.extraAttempt) budget = Math.min(3, budget + 1);
+      correction = retryHint(review.problem, review.fix);
       continue;
     }
-
-    if (attempt === 0 && out.messages.length > 3) {
-      correction = retryHint(
-        `you split one reply into ${out.messages.length} messages`,
-        'Keep the same substance in one or two messages, three only if the timing genuinely matters. Let one good line land instead of flooding the chat.',
-      );
-      continue;
-    }
-
-    if (attempt === 0 && ctx.character.seed.texting_persona === 'uwu_texting') {
-      const body = out.messages.map((message) => message.text).join(' ');
-      const touches = body.match(/\b(?:uwu|owo|hewwo|hai|phiw|wittle|weal(?:ly)?|wight|wook(?:s|ing)?|fiwst|wawk\w*|wepway\w*|pwemium|contwact\w*|cwause\w*|cowou?r\w*|wuwes?)\b|[>(][^\s]{0,8}w[^\s]{0,8}[<)]/gi) ?? [];
-      if (touches.length > out.messages.length * 2) {
-        correction = retryHint(
-          `the uwu accent took over (${touches.length} altered words/markers)`,
-          'Her accent is a light touch: at most one or two altered words, uwu/owo, or kaomoji per message. Keep every other word ordinary and readable so her actual feeling leads.',
-        );
-        continue;
-      }
-    }
-    if (problem) {
-      logger.debug('actor', `style diagnostic: ${problem.what}`, {
-        character: ctx.character.username,
-        messages: out.messages.map((m) => m.text),
-      });
-    }
+    out.messages = review.messages;
 
     // Sending IS the move - her messages this turn already say a photo is coming. Before the
     // swap, or with images off, it would silently never arrive, so that becomes a normal
@@ -584,13 +609,6 @@ export async function runActor(ctx: ActorContext): Promise<ActorRun> {
           'messages promising a photo that never arrives. Write this turn again without offering one.',
       );
       continue;
-    }
-
-    if (isRelentlesslyWitty(out.messages.map((m) => m.text))) {
-      logger.debug('actor', 'style diagnostic: every message is a one-line quip', {
-        character: ctx.character.username,
-        messages: out.messages.map((m) => m.text),
-      });
     }
 
     return out;

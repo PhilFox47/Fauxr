@@ -19,7 +19,11 @@ import { fantasyList } from './blocks.js';
 import { applyOutfitChanges, currentOutfit, outfitMood } from './wardrobe.js';
 import { gameClockMs, gameNowIso, messageClockMs } from './clock.js';
 import { armConversationReopen, cancelConversationReopen } from './conversation-close.js';
-import { shadowReconcile, snapshotState, type PreTurnState } from './reconciler.js';
+import {
+  normalizeTurnRecord, pendingOffer, reconcileTurn, shadowReconcile, snapshotState, splitTurn, toActorHidden,
+  type PreTurnState, type TurnRecord,
+} from './reconciler.js';
+import { runWriter } from './writer.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -275,9 +279,15 @@ async function runActorPhase(
   const replyTo = answering?.sender === 'user' ? answering : null;
 
   let result: ActorRun;
-  // The Reconciler shadow test reads her reply against the state she wrote it from.
-  let shadowBefore: PreTurnState | null = null;
+  // "split": the Writer writes plain text and the Reconciler reads it afterwards (writer.ts).
+  const split = getSettings().chat_pipeline === 'split';
+  let written = false;
+  // Her state as this turn was written from it: what the Reconciler reads her words against,
+  // and what a regenerate restores before writing the moment again.
+  let before: PreTurnState | null = null;
+  let beforeMood: Record<string, unknown> = {};
   let photosAvailable = false;
+  let deliveredIds: number[] = [];
   try {
     showTyping();
 
@@ -290,7 +300,20 @@ async function runActorPhase(
     const output = useVoice
       ? await runActorVoice(ctx).then((v) => (v ? { messages: [v.message], hidden: v.hidden } : null))
       : null;
-    result = output ?? (await runActor(ctx));
+    if (output) {
+      result = output;
+    } else if (split) {
+      const offer = canSendPhotos(rel) ? pendingOffer(rel) : null;
+      const photoNote = offer
+        ? `Earlier you offered him a ${offer.kind === 'spicy' ? 'spicy ' : ''}photo${offer.situation ? ` (${offer.situation})` : ''} and have not sent it yet. If he wants it, you can send it now.`
+        : '';
+      // Nothing about her state is known until the Reconciler has read the words: an empty
+      // report means "unchanged" everywhere below, which is also what a failed read falls back to.
+      result = { messages: await runWriter(ctx, { photoNote }), hidden: toActorHidden(normalizeTurnRecord({})) };
+      written = true;
+    } else {
+      result = await runActor(ctx);
+    }
     if (epoch !== startedIn) return;
 
     // Refetched before her reply is stored, not after: the actor call can take a while, and a
@@ -300,12 +323,11 @@ async function runActorPhase(
     if (!fresh || epoch !== startedIn) return;
     rel = fresh;
     saveRelationship(rel);
-    if (getSettings().reconciler_shadow) {
-      shadowBefore = snapshotState(rel, character);
-      photosAvailable = canSendPhotos(rel);
-    }
+    before = snapshotState(rel, character);
+    beforeMood = Object.fromEntries(TURN_MOOD_KEYS.map((key) => [key, (rel.mood as any)?.[key]]));
+    photosAvailable = canSendPhotos(rel);
 
-    await deliver(character, result.messages, startedIn, opts.decrementValidFor);
+    deliveredIds = await deliver(character, result.messages, startedIn, opts.decrementValidFor);
   } finally {
     // Every exit path clears it, including a thrown call or an abandoned turn. A stuck
     // indicator is worse than none.
@@ -317,6 +339,31 @@ async function runActorPhase(
   // trigger another Director pass. The next real turn starts from the last real state.
   if (result.messages.every((message) => message.failed)) return;
   if (epoch !== startedIn) return;
+
+  // Split pipeline: what her words changed, read after delivery so the reply is never waiting
+  // on it, but still inside the turn lock so the next turn starts from the updated state.
+  let record: TurnRecord | null = null;
+  if (written && before) {
+    const { context, his } = splitTurn(history);
+    try {
+      record = await reconcileTurn({
+        character,
+        before,
+        photosAvailable,
+        context,
+        his: opener || opts.initiative ? [] : his,
+        hers: result.messages.map((m) => ({ text: m.text, ...(m.from ? { from: m.from } : {}) })),
+        turnNote: opener
+          ? 'She is texting first: this is her very first message to him since they matched.'
+          : opts.initiative ? 'She is texting first, on her own impulse.' : undefined,
+        timeoutMs: 120_000,
+      });
+      result.hidden = toActorHidden(record);
+    } catch (err) {
+      logger.warn('actor', `reconciler failed for ${character.username}; her state stays as it was`, { error: String(err) });
+    }
+    if (epoch !== startedIn) return;
+  }
   // Delivery can include a delay between bubbles. Preserve any user clock/plan updates
   // saved in that gap rather than writing the pre-delivery relationship back over them.
   rel = getRelationship(characterId)!;
@@ -365,6 +412,24 @@ async function runActorPhase(
     logger.debug('actor', `${character.username} pitched a fantasy`, { fantasy: pitched, firstTime });
   }
 
+  // An offered photo is continuity: the Writer is reminded of it and the Reconciler can resolve
+  // "here it is" against it. It lapses after a few turns rather than haunting the chat.
+  if (record) {
+    const offer = before?.offered ?? null;
+    let next: unknown = null;
+    if (record.photo.status === 'offered') {
+      next = { kind: record.photo.kind ?? 'chat', situation: record.photo.situation, turns_left: 4 };
+    } else if (record.photo.status === 'sent_now') {
+      if (!result.hidden.photo_situation && offer?.situation) result.hidden.photo_situation = offer.situation;
+    } else if (offer && offer.turns_left > 1) {
+      next = { ...offer, turns_left: offer.turns_left - 1 };
+    }
+    rel.mood = { ...rel.mood, photo_offered: next };
+    if (record.photo.status === 'sent_now' && !photosAvailable) {
+      logger.warn('actor', `${character.username} said she was sending a photo, but photos are not available yet`);
+    }
+  }
+
   // She decided to send a photo, so it is sent: prepared in the background (her idea, the
   // prompt, a caption) and posted as a placeholder he can choose to open - see sendPhoto.
   const photoKind = result.hidden.photo_offer;
@@ -396,7 +461,8 @@ async function runActorPhase(
 
   rel.mood = {
     ...rel.mood,
-    actor_mood: result.hidden.mood,
+    // An empty mood is "unchanged" (a split turn whose read failed), never a blank mood.
+    actor_mood: result.hidden.mood || (rel.mood as any)?.actor_mood,
     thoughts: result.hidden.thoughts,
     // Old saves may contain this field. Null it rather than letting a model-authored
     // "unfinished" label turn a passing bit into a mandatory loop on every later turn.
@@ -427,14 +493,18 @@ async function runActorPhase(
   } else {
     cancelConversationReopen(rel);
   }
+  if (deliveredIds.length && before) {
+    rel.mood = { ...rel.mood, pre_turn: { first_id: deliveredIds[0], mood: beforeMood, callbacks: before.callbacks } };
+  }
   saveRelationship(rel);
 
   // Measurement only, after everything above is applied and saved: it never delays her reply
-  // or changes what happened. A voice note's hidden half is too thin to compare against.
-  if (shadowBefore && result.messages.every((m) => m.kind !== 'voice')) {
+  // or changes what happened. A voice note's hidden half is too thin to compare against, and a
+  // split turn has no Actor report to compare with.
+  if (getSettings().reconciler_shadow && !written && before && result.messages.every((m) => m.kind !== 'voice')) {
     void shadowReconcile({
       character,
-      before: shadowBefore,
+      before,
       photosAvailable,
       history,
       actor: result.hidden,
@@ -443,6 +513,22 @@ async function runActorPhase(
       initiative: opts.initiative,
     }).catch((err) => logger.warn('director', 'reconciler shadow failed', { error: String(err) }));
   }
+}
+
+/**
+ * The parts of rel.mood one turn writes. Saved before the turn (as mood.pre_turn) so a
+ * regenerate writes the same moment from the same state: rerolling a reply in which she took
+ * her top off used to leave it off in a reroll where she never did.
+ */
+const TURN_MOOD_KEYS = ['location', 'activity', 'scene', 'outfit_state', 'outfit', 'actor_mood', 'thoughts', 'photo_offered'];
+
+function restoreTurnState(rel: Relationship, firstRemovedId: number): boolean {
+  const snap = (rel.mood as any)?.pre_turn;
+  if (!snap || snap.first_id !== firstRemovedId) return false;
+  const { pre_turn: _used, ...mood } = rel.mood as any;
+  rel.mood = { ...mood, ...snap.mood };
+  rel.ledger.callbacks = Array.isArray(snap.callbacks) ? snap.callbacks : rel.ledger.callbacks;
+  return true;
 }
 
 /**
@@ -514,6 +600,7 @@ export async function regenerateLastTurn(characterId: string, messageId: number)
   }
 
   const removedIds = trailing.map((m) => m.id);
+  if (restoreTurnState(rel, trailing[0].id)) saveRelationship(rel);
   deleteMessages(removedIds);
   bus.emitEvent({ type: 'messages_removed', character_id: characterId, message_ids: removedIds });
   logger.info('actor', `regenerating last turn for ${character.username}`, { removed: removedIds });
@@ -573,12 +660,13 @@ async function deliver(
   messages: { text: string; delay: number; kind?: string; duration_seconds?: number; failed?: boolean; from?: string }[],
   startedIn: number,
   advancePausedClock: boolean,
-): Promise<void> {
+): Promise<number[]> {
+  const ids: number[] = [];
   for (const m of messages) {
     // The indicator is held on by the caller for the whole turn, so this only paces.
     if (m.delay > 0) {
       await sleep(m.delay * 1000);
-      if (epoch !== startedIn) return;
+      if (epoch !== startedIn) return ids;
     }
 
     const stored = addMessage({
@@ -598,7 +686,9 @@ async function deliver(
       game_clock_ms: advancePausedClock ? messageClockMs() : gameClockMs(),
     });
     bus.emitEvent({ type: 'message', character_id: character.id, message: stored });
+    ids.push(stored.id);
   }
+  return ids;
 }
 
 export async function blockCharacterByUser(characterId: string): Promise<void> {

@@ -18,7 +18,7 @@ export const TEMPLATE_NAMES = [
   'actor_photo_idea', 'director_direction', 'director_generate_character',
   'director_write_bio', 'director_evaluate_image', 'director_date_summary',
   'director_call_summary', 'image_prompt_assembler', 'system_actor', 'system_director',
-  'director_schedule', 'actor_status_post', 'director_curate_character', 'reconciler_turn',
+  'director_schedule', 'actor_status_post', 'director_curate_character', 'reconciler_turn', 'writer_chat',
 ] as const;
 
 export type TemplateName =
@@ -44,7 +44,8 @@ export type TemplateName =
   | 'system_director'
   | 'director_schedule'
   | 'actor_status_post'
-  | 'reconciler_turn';
+  | 'reconciler_turn'
+  | 'writer_chat';
 
 function isTemplateName(value: string): value is TemplateName {
   return (TEMPLATE_NAMES as readonly string[]).includes(value);

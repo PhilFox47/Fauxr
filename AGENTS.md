@@ -79,6 +79,13 @@ Two model roles:
   JSON, `{ messages, hidden }`. `hidden` reports mood, situation, a photo she is sending, a
   fantasy she pitched, etc. It never sees numbers.
 
+Text chat has a second pipeline, `settings.chat_pipeline = 'split'`: the **Writer**
+(`engine/writer.ts`, `writer_chat.md`) writes her messages as plain text in chat-turn format, and
+the **Reconciler** (`engine/reconciler.ts`) reads what they changed after delivery and returns the
+same shape as the Actor's `hidden` (`toActorHidden`). Both pipelines share `promptVars` and
+`reviewMessages` in `actor.ts`; a new check on her words belongs there so it covers both. Never
+add a JSON field instruction to `writer_chat.md`.
+
 Dates (`engine/dates.ts`, `actor_date.md`) are a separate in-person transcript with their
 own turn loop. The text chat is frozen while a date is active. Anyone else in a date scene is
 an NPC card on the date (`engine/npcs.ts`), played by the Actor in her beats; every card must

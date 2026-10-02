@@ -63,6 +63,11 @@ export interface Settings {
   };
   models: {
     actor: ModelConfig;
+    /**
+     * Writes her text-chat messages as plain text when `chat_pipeline` is "split". Any model
+     * that writes her well: it is never asked for JSON, so a pure roleplay model works.
+     */
+    writer: ModelConfig;
     director: ModelConfig;
     /**
      * Reads her finished reply and records what it made true (engine/reconciler.ts). A
@@ -134,6 +139,12 @@ export interface Settings {
    */
   reconciler_shadow: boolean;
   /**
+   * How a text-chat reply is produced. "classic": the Actor writes her messages and her hidden
+   * report as one JSON object. "split": the Writer writes only her messages, as plain text, and
+   * the Reconciler reads what they changed (engine/writer.ts, engine/reconciler.ts).
+   */
+  chat_pipeline: 'classic' | 'split';
+  /**
    * His taste, from Settings -> Taste: "category/id" -> multiplier on how often that attribute
    * is rolled for a new character (0 never, 1 or absent normal). Two keys are not attribute
    * rows: "lean/dom_sub" (-1..1) leans the persona roll towards submissive or dominant, and
@@ -161,6 +172,7 @@ export const DEFAULT_SETTINGS: Settings = {
     // why the ceiling matters more than it looks like it should for a reasoning model.
     actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 7200, reasoning_effort: 'none' },
     director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 10400, reasoning_effort: 'low' },
+    writer: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.9, top_p: 0.95, max_tokens: 4000, reasoning_effort: 'none' },
     reconciler: { model: 'google/gemma-4-31b-it', temperature: 0.2, top_p: 0.9, max_tokens: 6000, reasoning_effort: 'low' },
     evaluator: { enabled: true, model: 'typesafe/jev-latest', confidence_threshold: 0.65 },
     image: {
@@ -203,6 +215,7 @@ export const DEFAULT_SETTINGS: Settings = {
   conversation_reopen_hours: 8,
   status_posts_per_hour: 1,
   reconciler_shadow: false,
+  chat_pipeline: 'classic',
   taste: {},
 };
 
@@ -301,6 +314,7 @@ export function normalizeSettings(value: unknown): Settings {
     },
     models: {
       actor: modelConfig(models.actor, DEFAULT_SETTINGS.models.actor),
+      writer: modelConfig(models.writer, DEFAULT_SETTINGS.models.writer),
       director: modelConfig(models.director, DEFAULT_SETTINGS.models.director),
       reconciler: modelConfig(models.reconciler, DEFAULT_SETTINGS.models.reconciler),
       evaluator: {
@@ -361,6 +375,7 @@ export function normalizeSettings(value: unknown): Settings {
       : DEFAULT_SETTINGS.unprompted_messages,
     conversation_reopen_hours: numberValue(v.conversation_reopen_hours, DEFAULT_SETTINGS.conversation_reopen_hours, 1, 168),
     status_posts_per_hour: numberValue(v.status_posts_per_hour, DEFAULT_SETTINGS.status_posts_per_hour, 0, 12),
+    chat_pipeline: v.chat_pipeline === 'split' ? 'split' : 'classic',
     reconciler_shadow: typeof v.reconciler_shadow === 'boolean' ? v.reconciler_shadow : DEFAULT_SETTINGS.reconciler_shadow,
     taste,
   };

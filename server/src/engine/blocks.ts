@@ -414,7 +414,11 @@ export function moodBlock(arousal: number, tell?: string, medium: 'text' | 'in_p
  * for exactly this reason: a field she is instructed to keep private is one she can act from
  * without narrating, the same relationship "hidden.thoughts" already has to what she says.
  */
-export function continuityBlock(mood: Record<string, unknown>, outfit?: Outfit): string {
+/**
+ * `plain` is for the Writer (engine/writer.ts), which has no hidden report to update: the
+ * Reconciler reads changes from her words, so the lines telling her to report them are dropped.
+ */
+export function continuityBlock(mood: Record<string, unknown>, outfit?: Outfit, opts: { plain?: boolean } = {}): string {
   const location = String(mood?.location ?? '').trim();
   const activity = String(mood?.activity ?? '').trim();
   const status = String((mood as any)?.status?.text ?? '').trim();
@@ -425,8 +429,8 @@ export function continuityBlock(mood: Record<string, unknown>, outfit?: Outfit):
   if (!location && !activity) {
     return [
       'You have not settled where you physically are or what you are doing right now. Pick ' +
-        'something concrete and ordinary for the moment - not a blank backdrop - and report it ' +
-        'in "hidden" so it holds for next time.',
+        'something concrete and ordinary for the moment - not a blank backdrop' +
+        (opts.plain ? '.' : ' - and report it in "hidden" so it holds for next time.'),
       ...(wearing.length ? ['What you have on right now:', ...wearing] : []),
     ].join('\n');
   }
@@ -441,9 +445,12 @@ export function continuityBlock(mood: Record<string, unknown>, outfit?: Outfit):
     'This is background, not a line to deliver - do not announce it or work it into every ' +
       'reply, and never list what you are wearing. It only surfaces when it is genuinely the ' +
       'reason for something: a slow reply, a short one, him asking what you are up to or what ' +
-      'you have on, a piece coming off. Keep it consistent turn to turn and update "hidden" only ' +
-      'when something real actually changed it - time passing, you saying you are heading ' +
-      'somewhere, getting changed, getting undressed.',
+      (opts.plain
+        ? 'you have on, a piece coming off. Keep it consistent turn to turn; it changes only when ' +
+          'something real changes it - time passing, you heading somewhere, getting changed, getting undressed.'
+        : 'you have on, a piece coming off. Keep it consistent turn to turn and update "hidden" only ' +
+          'when something real actually changed it - time passing, you saying you are heading ' +
+          'somewhere, getting changed, getting undressed.'),
   ].filter(Boolean).join('\n');
 }
 

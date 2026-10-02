@@ -221,7 +221,7 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
     patch(['models', 'image', 'sizes'], [...settings.models.image.sizes, { size, profile: false, chat: true, date: false }]);
     setCustomSize('');
   };
-  const roles: ('actor' | 'director' | 'reconciler')[] = ['actor', 'director', 'reconciler'];
+  const roles: ('actor' | 'writer' | 'director' | 'reconciler')[] = ['actor', 'writer', 'director', 'reconciler'];
   const tokenLimits: { key: keyof SettingsData['token_limits']; label: string; detail: string }[] = [
     { key: 'status', label: 'Status message', detail: 'Status, location, activity, outfit and optional life update' },
     { key: 'schedule', label: 'Schedule generation', detail: 'Initial 14-day calendar and rolling daily extensions' },
@@ -294,11 +294,30 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
         <div className="card" key={role}>
           <div className="section-title" style={{ padding: '0 0 10px' }}>
             {role === 'actor'
-              ? 'Actor — writes her messages'
-              : role === 'director'
+              ? 'Actor — writes her messages and reports what changed (JSON)'
+              : role === 'writer'
+                ? 'Writer — writes her chat messages as plain text'
+                : role === 'director'
                 ? 'Director — keeps memory and context'
                 : 'Reconciler — records what her reply changed'}
           </div>
+          {role === 'writer' && (
+            <label className="field">
+              <span>Text chat pipeline</span>
+              <select
+                value={settings.chat_pipeline}
+                onChange={(e) => patch(['chat_pipeline'], e.target.value)}
+              >
+                <option value="classic">Classic — the Actor writes her reply as JSON</option>
+                <option value="split">Split — the Writer writes, the Reconciler records</option>
+              </select>
+              <span className="tiny muted">
+                Split lets any roleplay model write her texts: it is never asked for JSON. The
+                Reconciler then reads what her messages changed (where she is, what she has on, a
+                photo she sends). Dates, calls and voice notes still use the Actor.
+              </span>
+            </label>
+          )}
           {role === 'reconciler' && (
             <label className="switch-row">
               <span className="switch">
@@ -1495,7 +1514,7 @@ const PROMPT_LABELS: Record<string, string> = {
   director_write_bio: 'Profile bio', director_evaluate_image: 'Image evaluation', director_date_summary: 'Date summary',
   director_call_summary: 'Call summary', director_date_cast: 'Date guests', director_life_threads: 'Life threads',
   image_prompt_assembler: 'Image prompt assembler', system_actor: 'Actor system prompt', system_director: 'Director system prompt',
-  reconciler_turn: 'Reconciler turn',
+  reconciler_turn: 'Reconciler turn', writer_chat: 'Chat reply (Writer, plain text)',
 };
 
 function PromptsPane() {

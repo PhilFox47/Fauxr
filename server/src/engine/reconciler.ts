@@ -58,6 +58,16 @@ export interface PreTurnState {
   outfit: Outfit;
   scene: RoleplayScene;
   callbacks: string[];
+  /** A photo she offered on an earlier turn and has not sent yet (split pipeline only). */
+  offered: PhotoOffer | null;
+}
+
+/** An offered photo, kept as continuity until she sends it or the moment passes. */
+export interface PhotoOffer { kind: 'chat' | 'spicy'; situation: string | null; turns_left: number }
+
+export function pendingOffer(rel: Relationship): PhotoOffer | null {
+  const o = (rel.mood as any)?.photo_offered;
+  return o && (o.kind === 'chat' || o.kind === 'spicy') && o.turns_left > 0 ? o : null;
 }
 
 export function snapshotState(rel: Relationship, character: Character): PreTurnState {
@@ -69,6 +79,7 @@ export function snapshotState(rel: Relationship, character: Character): PreTurnS
     outfit: { pieces: outfit.pieces.map((p) => ({ ...p })) },
     scene: normalizeScene(mood.scene),
     callbacks: [...(rel.ledger.callbacks ?? [])],
+    offered: pendingOffer(rel),
   };
 }
 
@@ -86,6 +97,7 @@ export interface ReconcileInput {
   turnNote?: string;
   /** A shadow run never holds up a real reply; a live pipeline would be interactive. */
   priority?: 'interactive' | 'background';
+  timeoutMs?: number;
 }
 
 const PHOTO_STATUSES = new Set<PhotoStatus>(['sent_now', 'offered', 'mentioned', 'none']);
@@ -157,6 +169,9 @@ export function buildReconcilerPrompt(input: ReconcileInput): string {
     photo_status: input.photosAvailable
       ? 'she can send photos in this chat.'
       : 'the app cannot send her photos right now. Still record what her words say.',
+    pending_offer: input.before.offered
+      ? `a ${input.before.offered.kind} photo${input.before.offered.situation ? ` - ${input.before.offered.situation}` : ''}`
+      : '',
     fantasies: fantasies.length ? fantasies.map((f, i) => `${i + 1}. ${f}`).join('\n') : '(none)',
     callbacks: input.before.callbacks.length ? input.before.callbacks.map((c) => `- ${c}`).join('\n') : '(none)',
     context: historyBlock(input.context, input.character, getUserProfile()),
@@ -174,6 +189,7 @@ export async function reconcileTurn(input: ReconcileInput): Promise<TurnRecord> 
     schema: RECONCILER_TURN,
     config: settings.models.reconciler,
     priority: input.priority ?? 'interactive',
+    ...(input.timeoutMs ? { timeoutMs: input.timeoutMs } : {}),
     require: ['photo'],
     normalize: unwrap,
     messages: [{ role: 'user', content: buildReconcilerPrompt(input) }],
