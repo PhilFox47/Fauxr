@@ -58,13 +58,29 @@ lighting or expression. A specific 750-character prompt is better than a complet
 You are assembling the final positive prompt for Chroma. Chroma receives text only: no reference
 image, seed, or separate negative prompt. Make the positive description carry the whole image.
 
-Write one cohesive natural-language paragraph. Begin with the composition and main subject, then
-state the action, visible clothing, concrete setting, light source, gaze and expression in spatial
-order. Prefer a clear visual decision over an inventory: every detail should belong to something
-the camera can actually see. Use photographic terms only when they fix the crop or viewpoint. Do
-not use tag syntax, quality-booster strings, headings, instructions to the renderer, "same recurring
-woman", or references to another image. Describe what exists instead of burying it under avoidance
-clauses. Leave "negative_prompt" empty.
+Before writing, silently resolve the picture's physical topology:
+1. count the visible people;
+2. decide which parts of each body are inside the crop;
+3. account for every visible hand and give each one no more than one action;
+4. make the leg pose and contact with furniture unambiguous;
+5. choose exactly one camera setup;
+6. identify which objects overlap or touch the body;
+7. order visible clothes from outermost to exposed inner layer.
+
+Then write one cohesive natural-language paragraph, usually 700-1400 characters. Begin with
+the composition and exact visible-person count, then state the primary action, visible clothing,
+concrete setting, light source, gaze and expression in spatial order. For one woman, say "one adult
+woman" once near the start. For multiple people, describe each separately before their single,
+simple point of contact. Prefer one primary action, one hand-held object, one clear pose, one camera
+concept and at most two meaningful background anchors. When the authored idea exceeds that budget,
+preserve its narrative point and simplify incidental props, micro-actions and occlusions.
+
+Use positive physical facts rather than generic anatomy slogans: "her right hand holds the glass;
+her left hand rests on the table" is useful, while "correct hands, no extra limbs" is not. Use
+photographic terms only when they fix the crop or viewpoint. Do not use tag syntax, quality-booster
+strings, headings, instructions to the renderer, "same recurring woman", or references to another
+image. Do not repeat the facial passport, age or nationality already supplied by the application.
+Describe what exists instead of burying it under avoidance clauses. Leave "negative_prompt" empty.
 {{/mode_chroma}}
 
 # FIXED APPEARANCE BLOCK (her look, if she is actually in this shot)
@@ -137,12 +153,21 @@ If loose prose elsewhere casually names underwear alongside intact opaque outer 
 saying it is exposed, treat that underwear as covered and omit it entirely. Never solve conflicting
 layers by painting underwear through or on top of a shirt, dress, skirt or trousers.
 {{/wearing}}
+{{#mode_chroma}}
+
+When clothing is visible, translate it into physical topology: name the outer torso garment, its
+neckline and hem, then the lower-body garment and footwear only when visible. If a garment is open,
+lifted, unbuttoned or off one shoulder, name the affected side and the one layer exposed there. Do
+not repeat the same garment under different synonyms.
+{{/mode_chroma}}
 {{#cosplay_block}}
 
 **The costume.** The situation has her dressed as a character. Reproduce that costume exactly
 as written here - wig, colours, cut, props - because a near miss reads as a different
 character. It is a cosplay on her: her own face, skin, build and body stay as the fixed block
-says, and only her hair is replaced by the wig.
+says, and only her hair is replaced by the wig. Render one woman wearing the finished costume,
+not a second face, mannequin or detached head. If loose prose describes costume preparation but
+the supplied reference names a finished character look, the exact reference wins.
 {{cosplay_block}}
 {{/cosplay_block}}
 {{#duo_block}}
@@ -226,7 +251,9 @@ front-loaded and make the scene, light and framing concrete.
 {{#mode_chroma}}
 For Chroma, use one clean composition-first paragraph. Put the subject, viewpoint and action in the
 first sentence; follow with only the visible identity, clothing, setting, light and expression needed
-to make this specific picture unambiguous. Do not repeat generic quality language.
+to make this specific picture unambiguous. If hands are visible, account for both with simple spatial
+facts. If legs are visible, state one stable pose and where the feet or knees land. Do not repeat
+generic quality language.
 {{/mode_chroma}}
 
 # HOW THIS ONE WAS ACTUALLY TAKEN

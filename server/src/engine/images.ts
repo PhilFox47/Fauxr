@@ -24,7 +24,7 @@ export { profileHeat, profileLevel, chatPhotoLevel, photoManner } from './photol
 import type { Character, CharacterSeed, Relationship } from '../types.js';
 import { IMAGE_PROMPT, IMAGE_REVIEW, PHOTO_IDEA, PROFILE_PIC } from '../llm/schemas.js';
 import { speciesRow, speciesVisibility } from './species.js';
-import { cosplayImageBlock } from './cosplay.js';
+import { cosplayBlock, cosplayImageBlock, cosplayReplacesHair } from './cosplay.js';
 import { duoImageBlock } from './duo.js';
 import { closetBlock, currentOutfit, outfitForImage } from './wardrobe.js';
 import { gameClockMs } from './clock.js';
@@ -85,6 +85,11 @@ export function profilePictureState(characterId: string): 'none' | 'working' | '
   return failed ? 'failed' : 'none';
 }
 
+// A queued/running row survives a server restart, but the Promise that owned it does not.
+// Track jobs owned by this process so ensureProfilePicture can distinguish a real concurrent
+// render from an orphan instead of waiting ten minutes for work that can never finish.
+const activeImageJobs = new Set<string>();
+
 /**
  * The shared world clock for a message posted into text chat.
  */
@@ -122,6 +127,12 @@ export async function ensureProfilePicture(characterId: string): Promise<void> {
   let existing = db
     .prepare("SELECT id, status FROM images WHERE character_id = ? AND kind = 'profile' AND status != 'failed' ORDER BY rowid ASC LIMIT 1")
     .get(characterId) as { id: string; status: string } | undefined;
+  if (existing && existing.status !== 'done' && !activeImageJobs.has(existing.id)) {
+    // This row was left behind by a stopped/restarted process. No worker scans persisted image
+    // jobs, so treating it as live permanently blocks this portrait and, historically, Discover.
+    setStatus(existing.id, 'failed', { error: 'image generation was interrupted before completion' });
+    existing = undefined;
+  }
   if (!existing) {
     // The paid click creates a neutral, private identity plate first. It is never exposed in
     // the gallery; its only job is to keep her face stable while her public profile photo can
@@ -370,7 +381,7 @@ const CANDID_SUFFIX: Record<PromptStyle, string> = {
     'A physically possible self-taken phone photo: front camera, mirror, propped timer, or her ' +
     'rear-camera view as appropriate. Natural available light and mild phone-camera imperfection, not a studio shoot.',
   chroma:
-    'A physically plausible self-taken phone image using a front camera, mirror, propped timer, or her rear-camera view as appropriate, with natural available light and ordinary phone-camera texture.',
+    'A physically plausible self-taken phone image using exactly the single camera setup stated above, with natural available light and ordinary phone-camera texture.',
 };
 
 /**
@@ -447,6 +458,46 @@ function selfTakenCaptureContract(): string {
     'If she is not visible, this is her rear-camera point of view.',
     'Never use an unseen photographer, overhead observer, floating camera, drone view, or external third-person angle. Repair an impossible viewpoint while preserving the intended pose, clothes, action and mood.',
   ].join(' ');
+}
+
+/**
+ * Cheap topology lint for Chroma. It does not rewrite the authored idea or spend another
+ * model call; it points the existing assembler at combinations that commonly become extra
+ * limbs, duplicate people or impossible cameras. The assembler still decides the smallest
+ * repair that preserves the actual moment.
+ */
+function chromaCompositionRisks(situation: string, wearing: string, hasDuo: boolean): string {
+  const text = situation.toLowerCase();
+  const risks: string[] = [];
+  const captureModes = [
+    /front[- ]camera|arm(?:'s)? length|held (?:the )?phone/,
+    /mirror selfie|in (?:the )?mirror|reflection/,
+    /timer|propped|stationary phone/,
+    /friend (?:takes|took|shoots|photographs)|taken by (?:a|her|his|the) /,
+  ].filter((re) => re.test(text)).length;
+  if (captureModes > 1) {
+    risks.push('Several capture methods are named. Choose exactly one physically possible camera setup and remove the others.');
+  }
+  if (/(?:hold|lift|raise|beside|next to|against).{0,50}(?:wig|mask|mannequin|doll head)|(?:wig|mask|mannequin|doll head).{0,50}(?:face|head)/i.test(situation)) {
+    risks.push('A head-shaped prop is close to her face. Put the wearable item on her, lay it flat, or crop to the object alone; never present it as a second head.');
+  }
+  if (/(cross[- ]legged|legs? crossed|kneel|straddl|crouch)/.test(text) && /(table|desk|counter|chair|sofa|bed edge)/.test(text)) {
+    risks.push('Furniture occludes a complicated leg pose. Simplify the legs and state one visible foot/knee relationship clearly.');
+  }
+  const handMentions = text.match(/\b(?:hand|hands|finger|fingers|arm|arms)\b/g)?.length ?? 0;
+  if (handMentions >= 3 || (/one hand/.test(text) && /other hand/.test(text))) {
+    risks.push('Both hands have competing business. Keep one meaningful hand action and make the other hand rest plainly on one named surface or body area.');
+  }
+  if (hasDuo) {
+    risks.push('More than one person is present. Account for each person separately and avoid crossed or overlapping limbs unless the interaction requires one simple point of contact.');
+  }
+  if (wearing && /\b(over|under|beneath|layered|open|unbuttoned|slipping|off one shoulder)\b/i.test(`${situation} ${wearing}`)) {
+    risks.push('Layered or displaced clothing is visible. State the single outer layer first, then only exposed inner layers, with the hem, opening and affected side explicit.');
+  }
+  if (situation.length > 900 || situation.split(/[,;]/).length > 14) {
+    risks.push('The scene is overloaded. Preserve the subject, one action, one pose, clothing, light and at most two background anchors; discard incidental props and micro-actions.');
+  }
+  return risks.map((risk) => `- ${risk}`).join('\n');
 }
 
 /**
@@ -754,6 +805,33 @@ function promptWithTail(body: string, tail: string, max: number): string {
   return `${truncateAtWord(body.trim(), max - cleanTail.length - 1)} ${cleanTail}`.trim();
 }
 
+/** The assembler may shorten "cyan ponytail wig" to merely "wig". Preserve its visual identity. */
+function cosplayHairCue(block: string): string {
+  if (!block) return '';
+  const clauses = block
+    .split(/[,;]/)
+    .map((part) => part.trim())
+    .filter((part) => /\b(?:wig|hair|ponytail|braid|bob|bun|pigtail)\b/i.test(part));
+  return clauses.length ? truncateAtWord(clauses.join(', '), 260) : '';
+}
+
+/** Remove permanent hair facts if a costume says they are physically covered by a wig. */
+function withoutNaturalHair(text: string, seed: CharacterSeed): string {
+  let cleaned = text;
+  for (const row of [find('hair_color', seed.hair_color), find('hair_style', seed.hair_style)]) {
+    const phrase = String(row?.image_prompt ?? '').trim();
+    if (!phrase) continue;
+    cleaned = cleaned.replace(new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '');
+  }
+  return cleaned
+    .replace(/\b(?:over|on top of) her (?:own|natural) hair\b/gi, '')
+    .replace(/\bher (?:own|natural) hair (?:showing|visible|underneath|beneath)\b/gi, '')
+    .replace(/\s+([,.;])/g, '$1')
+    .replace(/,{2,}/g, ',')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
 /**
  * How she holds herself in a photo, from who she is rather than what she looks like.
  *
@@ -975,6 +1053,10 @@ export function photoSelfBlock(seed: CharacterSeed, opts: { profile?: boolean; c
     metal.length ? `Piercings: ${metal.join('; ')}` : '',
     `In bed: ${label('sexual_persona', seed.sexual_persona)}`,
     `How you come across in photos: ${photoManner(seed)}`,
+    // A photo planner needs the canonical costume itself, not merely a dossier hint that she
+    // cosplays. Otherwise "Ember" decays into an invented two-tone wig before the image
+    // assembler ever gets a character name it can resolve against the reference table.
+    opts.closet ? cosplayBlock(seed) : '',
     // So the photo she describes is in her own clothes, named closely enough to be matched.
     opts.closet ? closetBlock(seed) : '',
     // Her chat level only - her profile picture has its own, tamer one (profileHeat).
@@ -1093,8 +1175,10 @@ function loadJob(id: string): { job: ImageJob; character: Character } | null {
 
 /** Assemble and render in one go: her profile picture, a date's arrival photo, retries and regenerations. */
 export async function runImageJob(id: string, situation: string, postToChat = true): Promise<void> {
+  if (activeImageJobs.has(id)) return;
   const loaded = loadJob(id);
   if (!loaded) return;
+  activeImageJobs.add(id);
   setStatus(id, 'running');
   try {
     const shot = await assembleImageJob(loaded.job, loaded.character, situation);
@@ -1111,6 +1195,8 @@ export async function runImageJob(id: string, situation: string, postToChat = tr
         loaded.job.kind === 'date' ? 'Her photo as you arrive' : loaded.job.kind === 'scene' ? 'The scene right now' : cleanCaption('', situation),
       );
     }
+  } finally {
+    activeImageJobs.delete(id);
   }
 }
 
@@ -1167,9 +1253,28 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   const compositionAwareSituation = isProfile && speciesComposition
     ? `${speciesComposition}\n\nChosen profile-photo idea: ${situation}`
     : situation;
-  const assemblerSituation = selfTaken
+  const captureAwareSituation = selfTaken
     ? `${compositionAwareSituation}\n\n${selfTakenCaptureContract()}`
     : compositionAwareSituation;
+  const cosplayImage = cosplayImageBlock(situation, character.seed);
+  const duoImage = duoImageBlock(character.seed, situation, isSpicy);
+  const wearsWig = cosplayReplacesHair(situation, character.seed) || /\bwig\b/i.test(`${situation} ${cosplayImage}`);
+  const wigContract = wearsWig
+    ? 'WIG REPLACEMENT CONTRACT (authoritative): the wig is fully worn and seated continuously on her scalp as her only visible hair. Her natural hair is completely covered and must not appear beside, beneath or through it. A raised hand may touch or gather the ponytail hair, but it does not lift, remove or hold a separate wig cap.'
+    : '';
+  const protectedWig = wearsWig
+    ? `Canonical visible wig: ${cosplayHairCue(cosplayImage) || 'the exact wig colour, length and style stated in the authored situation'}. This replaces her natural hair completely.`
+    : '';
+  const compositionRisks = promptStyle === 'chroma'
+    ? chromaCompositionRisks(situation, wearing, !!duoImage)
+    : '';
+  // Put this through the long-standing situation variable rather than relying only on a new
+  // template placeholder. A user's saved pre-Chroma prompt override still receives the repair.
+  const assemblerSituation = [
+    captureAwareSituation,
+    wigContract,
+    compositionRisks ? `CHROMA COMPOSITION PREFLIGHT (repair these ambiguities; do not quote this note):\n${compositionRisks}` : '',
+  ].filter(Boolean).join('\n\n');
 
   // This is an image-model reference asset, not a character-authored photo. A deterministic
   // neutral brief makes it a better likeness anchor and avoids spending a Director call on it.
@@ -1217,10 +1322,10 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   const maxPromptChars = promptLimit();
   // Runtime prompt overrides may paraphrase or omit appearance. Reserve and inject this exact
   // passport in code, because it is the only likeness anchor for text-only image models.
-  const facePassport = facesCamera ? truncateAtWord(buildFacePassport(character.seed), 340) : '';
+  const facePassport = facesCamera ? truncateAtWord(buildFacePassport(character.seed, !wearsWig), 340) : '';
   const protectedPhysical = physicalContract ? `Physical species contract: ${physicalContract}` : '';
   const assemblerCharBudget = maxPromptChars
-    ? Math.max(80, maxPromptChars - styleSuffix.length - facePassport.length - protectedPhysical.length - 3)
+    ? Math.max(80, maxPromptChars - styleSuffix.length - facePassport.length - protectedPhysical.length - protectedWig.length - 4)
     : 4000;
 
   const assembled = await completeJson<{ prompt: string; negative_prompt?: string; caption?: string }>({
@@ -1233,7 +1338,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
       {
         role: 'user',
         content: render('image_prompt_assembler', {
-          appearance_prompt: appearanceForShot(character.seed, framingFor(job, facesCamera)),
+          appearance_prompt: appearanceForShot(character.seed, framingFor(job, facesCamera), !wearsWig),
           nonhuman_material: speciesMaterialPrompt(character.seed) ?? '',
           physical_contract: physicalContract,
           species_composition: isProfile ? speciesComposition : '',
@@ -1270,9 +1375,9 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
           // A character named in the idea ("as Tifa") gets the costume from the reference
           // table rather than the assembler's memory of it.
           wearing,
-          cosplay_block: cosplayImageBlock(situation),
+          cosplay_block: cosplayImage,
           // Her duo partner, when the idea puts her in the photo (duo.ts).
-          duo_block: duoImageBlock(character.seed, situation, isSpicy),
+          duo_block: duoImage,
           photo_scene: isDate || isScene ? '' : String(find('clothing_style', character.seed.clothing_style)?.extra?.photo_scene ?? ''),
           mode_seedream: promptStyle === 'seedream' ? '1' : '',
           mode_z_image: promptStyle === 'z_image_turbo' ? '1' : '',
@@ -1293,7 +1398,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // assembler's own text, never styleSuffix: styleSuffix is short and carries standing
   // quality/style instructions that matter on every single shot, where the assembler's
   // prose is the one part that is safe to lose the tail end of.
-  let assembledPrompt = assembled.prompt;
+  let assembledPrompt = wearsWig ? withoutNaturalHair(assembled.prompt, character.seed) : assembled.prompt;
   if (maxPromptChars && assembledPrompt.length > assemblerCharBudget) {
     logger.warn('image', 'image prompt over the configured character budget, trimming', {
       character: character.username,
@@ -1306,7 +1411,7 @@ async function assembleImageJob(job: ImageJob, character: Character, situation: 
   // "a very short bob timer shot" after the passport, making the camera setup look like part
   // of her hairstyle. Complete sentence boundaries give a text-only renderer one clear
   // subject followed by one clear photograph.
-  const promptBody = [facePassport, protectedPhysical, assembledPrompt]
+  const promptBody = [facePassport, protectedPhysical, protectedWig, assembledPrompt]
     .filter(Boolean)
     .map((part) => /[.!?]$/.test(part.trim()) ? part.trim() : `${part.trim()}.`)
     .join(' ');

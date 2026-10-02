@@ -70,8 +70,41 @@ export function cosplayMentions(text: string): Attribute[] {
 }
 
 /** For the image assembler: the costume exactly, on her own face and body. */
-export function cosplayImageBlock(situation: string): string {
-  const rows = cosplayMentions(situation);
+function resolvedCosplays(situation: string, seed?: Partial<CharacterSeed>): Attribute[] {
+  let rows = cosplayMentions(situation);
+  // Older/custom photo planners sometimes describe "the blue wig" without preserving the
+  // character name. If she owns exactly one costume and the idea is explicitly costume work,
+  // there is only one honest referent; recover its curated visual row instead of letting the
+  // image assembler invent a generic wig.
+  if (!rows.length && seed && /\b(?:cosplay|costume|wig)\b/i.test(situation)) {
+    const owned = herCosplays(seed);
+    if (owned.length === 1) rows = owned;
+    else if (owned.length > 1) {
+      // "cyan ponytail wig" is enough to identify Ember among several owned costumes even
+      // when an older/custom planner lost her name. Compare distinctive visual words rather
+      // than choosing the first costume and silently changing who she meant.
+      const stop = new Set(['adult', 'woman', 'cosplay', 'costume', 'wearing', 'with', 'from', 'long', 'short', 'black', 'white', 'hair', 'wig']);
+      const words = new Set((situation.toLowerCase().match(/[a-z][a-z-]{3,}/g) ?? []).filter((word) => !stop.has(word)));
+      const scored = owned.map((row) => ({
+        row,
+        score: (String(row.image_prompt ?? '').toLowerCase().match(/[a-z][a-z-]{3,}/g) ?? [])
+          .filter((word) => !stop.has(word) && words.has(word)).length,
+      })).sort((a, b) => b.score - a.score);
+      if (scored[0]?.score > 0 && scored[0].score > (scored[1]?.score ?? 0)) rows = [scored[0].row];
+    }
+  }
+  return rows;
+}
+
+/** True when the selected costume replaces, rather than decorates, her natural hair. */
+export function cosplayReplacesHair(situation: string, seed?: Partial<CharacterSeed>): boolean {
+  return resolvedCosplays(situation, seed).some((row) =>
+    row.extra?.replaces_hair === true || /\bwig\b/i.test(String(row.image_prompt ?? '')),
+  );
+}
+
+export function cosplayImageBlock(situation: string, seed?: Partial<CharacterSeed>): string {
+  const rows = resolvedCosplays(situation, seed);
   if (!rows.length) return '';
   return rows
     .map((r) => `${r.label}: ${r.image_prompt}.`)

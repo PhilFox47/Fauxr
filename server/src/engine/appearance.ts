@@ -29,7 +29,7 @@ function join(label: string, values: Array<string | undefined>): string {
 }
 
 /** The compact, permanent face description that every face-visible shot repeats. */
-export function buildVisualIdentityPrompt(seed: CharacterSeed): string {
+export function buildVisualIdentityPrompt(seed: CharacterSeed, includeHair = true): string {
   const replacesSkin = speciesRow(seed)?.extra?.image_replaces_skin === true;
   return join('Identity', [
     `${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`,
@@ -37,8 +37,8 @@ export function buildVisualIdentityPrompt(seed: CharacterSeed): string {
     img('facial_structure', seed.facial_structure), img('eye_shape', seed.eye_shape),
     img('eye_spacing', seed.eye_spacing), img('eye_color', seed.eye_color),
     img('nose_shape', seed.nose_shape), img('mouth_shape', seed.mouth_shape),
-    img('brow_shape', seed.brow_shape), img('hair_color', seed.hair_color),
-    img('hair_style', seed.hair_style), img('distinctive_feature', seed.distinctive_feature),
+    img('brow_shape', seed.brow_shape), includeHair ? img('hair_color', seed.hair_color) : undefined,
+    includeHair ? img('hair_style', seed.hair_style) : undefined, img('distinctive_feature', seed.distinctive_feature),
     img('facial_detail', seed.facial_detail),
   ]);
 }
@@ -51,7 +51,7 @@ export function buildVisualIdentityPrompt(seed: CharacterSeed): string {
  * out of Z-Image's small prompt budget. Keep only the strongest visible anchors here; the
  * full appearance block remains available to the assembler when it decides what the crop sees.
  */
-export function buildFacePassport(seed: CharacterSeed): string {
+export function buildFacePassport(seed: CharacterSeed, includeHair = true): string {
   const replacesSkin = speciesRow(seed)?.extra?.image_replaces_skin === true;
   const subject = `${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`;
   const traits = [
@@ -62,8 +62,8 @@ export function buildFacePassport(seed: CharacterSeed): string {
     img('eye_color', seed.eye_color),
     img('nose_shape', seed.nose_shape),
     img('mouth_shape', seed.mouth_shape),
-    img('hair_color', seed.hair_color),
-    img('hair_style', seed.hair_style),
+    includeHair ? img('hair_color', seed.hair_color) : undefined,
+    includeHair ? img('hair_style', seed.hair_style) : undefined,
   ].filter(Boolean);
   return `The woman in this image is a ${subject}${traits.length ? ` with ${traits.join(', ')}` : ''}.`;
 }
@@ -108,18 +108,18 @@ export function buildVisualCore(seed: CharacterSeed): NonNullable<CharacterSeed[
 }
 
 /** Only send the image model details the camera can plausibly see. */
-export function appearanceForShot(seed: CharacterSeed, framing: AppearanceFraming): string {
-  if (framing === 'face') return [buildVisualIdentityPrompt(seed), buildDefaultStylingPrompt(seed, true)].filter(Boolean).join('; ');
+export function appearanceForShot(seed: CharacterSeed, framing: AppearanceFraming, includeHair = true): string {
+  if (framing === 'face') return [buildVisualIdentityPrompt(seed, includeHair), buildDefaultStylingPrompt(seed, true)].filter(Boolean).join('; ');
   if (framing === 'body') return [
-    join('Identity', [`${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`, speciesPrompt(seed), speciesRow(seed)?.extra?.image_replaces_skin === true ? undefined : img('skin_tone', seed.skin_tone), img('hair_color', seed.hair_color)]),
+    join('Identity', [`${seed.age} year old ${img('ethnicity', seed.ethnicity) ?? 'woman'}`, speciesPrompt(seed), speciesRow(seed)?.extra?.image_replaces_skin === true ? undefined : img('skin_tone', seed.skin_tone), includeHair ? img('hair_color', seed.hair_color) : undefined]),
     buildBodyPrompt(seed), buildDefaultStylingPrompt(seed),
   ].filter(Boolean).join('; ');
   if (framing === 'upper') return [
-    buildVisualIdentityPrompt(seed),
+    buildVisualIdentityPrompt(seed, includeHair),
     join('Build', [img('body_type', seed.body_type), img('breast_size', seed.breast_size)]),
     buildDefaultStylingPrompt(seed),
   ].filter(Boolean).join('; ');
-  return [buildVisualIdentityPrompt(seed), buildBodyPrompt(seed), buildDefaultStylingPrompt(seed)].filter(Boolean).join('; ');
+  return [buildVisualIdentityPrompt(seed, includeHair), buildBodyPrompt(seed), buildDefaultStylingPrompt(seed)].filter(Boolean).join('; ');
 }
 
 /** Full compatibility form used by dossiers and non-image prompts. */

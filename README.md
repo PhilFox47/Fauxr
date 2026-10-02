@@ -8,7 +8,9 @@ Profile pictures remain opt-in by default. The Experience setting **Show images 
 matching** is the explicit exception: when both it and image generation are enabled, new and
 already-waiting Discover characters queue profile generation serially. A card stays out of
 the swipe deck until its image succeeds, then uses that picture as its large dating-app-style
-hero. With the setting off, Discover retains the emoji card and profile generation begins
+hero. A failed portrait does not hide later ready cards, and a queued/running job orphaned by
+a server restart is recovered once when the portrait queue reaches it. With the setting off,
+Discover retains the emoji card and profile generation begins
 manually from the chat as before.
 
 Discover portraits are rendered in a square container, matching the generated profile image
@@ -3892,6 +3894,35 @@ and `runImageJob` skips sending `negativePrompt` to the image call entirely when
 Z Image Turbo, whatever the assembler returned. Switching modes is meant to travel with
 switching "Model" below it; the two are independent settings because nothing stops testing
 one against a Seedream-shaped model name by mistake, but they are meant to move together.
+
+Status-photo planning receives the same curated cosplay reference table as chat and date roleplay.
+When it uses a costume it must retain the exact character name and depict the completed look; loose
+wigs or mannequin heads beside her face are avoided because text-to-image models routinely turn
+them into an unintended second person. The assembler then resolves that name back to the canonical
+costume description instead of trusting an improvised shorthand.
+
+Chroma prompts also receive a zero-cost composition preflight. Regex-based checks flag conflicting
+camera methods, head-shaped props beside faces, furniture-obscured leg poses, overloaded hand actions,
+multi-person overlap, displaced clothing layers and generally overstuffed scenes. The existing prompt
+assembler repairs those risks in its one normal call: it counts visible people, accounts for hands and
+legs, chooses one camera setup, describes garments by physical layer and drops incidental clutter.
+This deliberately replaces vague "correct anatomy" boilerplate with positive spatial facts.
+
+Wigs are treated as replacement geometry rather than accessories. When a shot uses one, Fauxr
+removes the character's natural hair colour/style from both the fixed appearance block and the
+text-only face passport, states that the wig is fully seated as her only visible hair, and turns a
+hand action into touching the ponytail rather than lifting a detachable hairpiece. If an older
+photo prompt loses the costume name but mentions a wig/costume and she owns exactly one curated
+cosplay, that costume is recovered deterministically before assembly.
+If she owns several costumes, distinctive visual words in the authored idea (for example "cyan
+ponytail") select a unique matching costume when possible. The resolved wig colour and style are
+then injected into the final image prompt after assembly, so the prompt writer cannot accidentally
+collapse "cyan flame ponytail" back into a generic dark ponytail. Chroma's standing phone-photo
+suffix also refers only to the already-selected camera setup instead of listing four alternatives.
+Costumes whose hairstyle does not literally contain the word "wig" declare
+`extra.replaces_hair: true`; older rows that do say "wig" are recognized automatically. Once that
+mode is active, the final assembly pass also removes the character's exact natural hair colour and
+style phrases, plus wording such as "over her own hair", if a prompt writer reintroduces them.
 
 **The first version of this got the length wrong, and it was not a style nitpick - it
 produced real request errors.** Z Image Turbo's own published guidance says it prefers long,

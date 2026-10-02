@@ -8,9 +8,13 @@ import { join } from 'node:path';
 process.env.FAUXR_DATA_DIR = mkdtempSync(join(tmpdir(), 'fauxr-chroma-'));
 const { migrate, db } = await import('../dist/db/index.js');
 migrate();
+const { seedAttributes } = await import('../dist/db/attributes.js');
+seedAttributes();
 const { saveSettings } = await import('../dist/config.js');
 const { generateImage } = await import('../dist/llm/client.js');
 const { render } = await import('../dist/prompts/render.js');
+const { buildFacePassport } = await import('../dist/engine/appearance.js');
+const { cosplayImageBlock, cosplayReplacesHair } = await import('../dist/engine/cosplay.js');
 
 let received;
 const server = createServer(async (req, res) => {
@@ -40,10 +44,29 @@ try {
   assert.ok(!('negative_prompt' in received));
   assert.ok(!('image' in received));
 
-  const prompt = render('image_prompt_assembler', { mode_chroma: '1' });
+  const prompt = render('image_prompt_assembler', {
+    mode_chroma: '1',
+    situation: 'CHROMA COMPOSITION PREFLIGHT: Several capture methods are named. Choose one.',
+    wearing: 'an open denim jacket over a black camisole',
+  });
   assert.match(prompt, /final positive prompt for Chroma/);
+  assert.match(prompt, /CHROMA COMPOSITION PREFLIGHT/);
+  assert.match(prompt, /outer torso garment/);
   assert.match(prompt, /Leave "negative_prompt" as an empty string/);
   assert.ok(!prompt.includes('{{'));
+
+  const costume = cosplayImageBlock('adjusting her blue wig', { cosplays: ['adult_ember_mclain'] });
+  assert.match(costume, /Ember McLain/);
+  assert.match(costume, /cyan-blue flame-shaped high ponytail/);
+  assert.equal(cosplayReplacesHair('Ember McLain cosplay', { cosplays: ['adult_ember_mclain'] }), true);
+  const selectedCostume = cosplayImageBlock('adjusting her cyan ponytail wig', {
+    cosplays: ['emilia_rezero', 'adult_ember_mclain'],
+  });
+  assert.match(selectedCostume, /Ember McLain/);
+  assert.doesNotMatch(selectedCostume, /Emilia/);
+  const seed = { age: 20, ethnicity: 'portuguese_descent', hair_color: 'black', hair_style: 'very_short' };
+  assert.match(buildFacePassport(seed), /black hair/);
+  assert.doesNotMatch(buildFacePassport(seed, false), /black hair/);
   console.log('Chroma preset verification passed.');
 } finally {
   await new Promise(resolve => server.close(resolve));

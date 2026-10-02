@@ -2605,7 +2605,7 @@
     "weight": 1,
     "rarity": "common",
     "prompt_hint": "rock-star arrogant, teasing and hungry for attention, treats every room like an audience that has not realised it yet",
-    "image_prompt": "an adult version of Ember McLain cosplay from Danny Phantom: an adult woman with very long flame-shaped blue hair, pale blue skin makeup, a black cropped stage top with silver straps, black fitted trousers, platform boots and a blue electric guitar prop",
+    "image_prompt": "an adult Ember McLain cosplay from Danny Phantom, worn by one adult woman: pale icy-blue skin makeup, vivid lime-green eyes with heavy black liner, an enormous cyan-blue flame-shaped high ponytail and cyan face-framing bob, a black cropped rock-star top with angular white shoulder panels, black fitted trousers, tall metallic silver skull-motif boots, purple lipstick, and Ember's large magenta-and-cyan flame-shaped electric guitar",
     "affinities": [],
     "conflicts": [],
     "modifies": {},
@@ -2613,6 +2613,7 @@
       "name": "Ember McLain",
       "source": "Danny Phantom",
       "medium": "cartoon",
+      "replaces_hair": true,
       "aliases": [
         "adult ember mclain",
         "ember danny phantom"

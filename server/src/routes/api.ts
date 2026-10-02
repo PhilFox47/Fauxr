@@ -328,11 +328,10 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       character,
       picture: showImages ? profilePicturePath(character.id) : null,
     }));
-    // Keep the deck stable while portraits finish. Filtering every missing card independently
-    // could show card #2 and then suddenly put card #1 in front of it halfway through a read.
-    const firstMissingPicture = candidatesWithPictures.findIndex((entry) => !entry.picture);
+    // A failed or interrupted portrait must not hold the entire ordered deck hostage. Ready
+    // cards retain their relative order; a newly finished earlier card joins on the next fetch.
     const visibleCandidates = showImages
-      ? candidatesWithPictures.slice(0, firstMissingPicture < 0 ? candidatesWithPictures.length : firstMissingPicture)
+      ? candidatesWithPictures.filter((entry) => !!entry.picture)
       : candidatesWithPictures;
     return {
       generating: generatingCount(),
