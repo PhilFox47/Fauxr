@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, type AttributeExport, type CardSpec, type EditableAttribute, type EditablePrompt, type ImageJob, type ImageModelCapability, type KinkDomain, type KinkSide, type KinkStance, type Location, type LogEntry, type PromptExport, type ResetParts, type SettingsData, type TasteSection, type UsageSummary, type UserProfile } from '../api';
+import { api, type AttributeExport, type CardSpec, type EditableAttribute, type EditablePrompt, type ImageJob, type ImageModelCapability, type KinkDomain, type KinkSide, type KinkStance, type Location, type LogEntry, type PromptExport, type ReconcilerReport, type ResetParts, type SettingsData, type TasteSection, type UsageSummary, type UserProfile } from '../api';
 import SettingsNav, { type SettingsNavGroup } from '../components/SettingsNav';
 
 type Pane = 'models' | 'prompts' | 'behaviour' | 'taste' | 'attributes' | 'profile' | 'locations' | 'logs' | 'images' | 'reset';
@@ -221,7 +221,7 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
     patch(['models', 'image', 'sizes'], [...settings.models.image.sizes, { size, profile: false, chat: true, date: false }]);
     setCustomSize('');
   };
-  const roles: ('actor' | 'director')[] = ['actor', 'director'];
+  const roles: ('actor' | 'director' | 'reconciler')[] = ['actor', 'director', 'reconciler'];
   const tokenLimits: { key: keyof SettingsData['token_limits']; label: string; detail: string }[] = [
     { key: 'status', label: 'Status message', detail: 'Status, location, activity, outfit and optional life update' },
     { key: 'schedule', label: 'Schedule generation', detail: 'Initial 14-day calendar and rolling daily extensions' },
@@ -293,8 +293,33 @@ function ModelsPane({ settings, patch, save, saved, saving }: SettingsPaneProps)
       {roles.map((role) => (
         <div className="card" key={role}>
           <div className="section-title" style={{ padding: '0 0 10px' }}>
-            {role === 'actor' ? 'Actor — writes her messages' : 'Director — keeps memory and context'}
+            {role === 'actor'
+              ? 'Actor — writes her messages'
+              : role === 'director'
+                ? 'Director — keeps memory and context'
+                : 'Reconciler — records what her reply changed'}
           </div>
+          {role === 'reconciler' && (
+            <label className="switch-row">
+              <span className="switch">
+                <input
+                  type="checkbox"
+                  checked={settings.reconciler_shadow}
+                  onChange={(e) => patch(['reconciler_shadow'], e.target.checked)}
+                />
+                <span className="track" />
+              </span>
+              <span className="small">
+                Shadow test
+                <br />
+                <span className="tiny muted">
+                  After every text reply, this model reads what she wrote and records where she is,
+                  what she has on and whether a photo went out. Nothing it says is applied: it is
+                  compared with the Actor's own report under Diagnostics. One extra call per reply.
+                </span>
+              </span>
+            </label>
+          )}
           <label className="field">
             <span>Model</span>
             <input
@@ -1241,6 +1266,91 @@ const sizeOf = (text: string) => {
   return kb >= 1024 ? `${(kb / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(kb))} KB`;
 };
 
+const RECONCILER_FIELD_LABELS: Record<string, string> = {
+  photo_sent: 'Photo sent this turn', photo_kind: 'Photo kind', photo_choice: 'Two-photo choice',
+  outfit: 'Outfit after the turn', location: 'Location', activity: 'Activity', fantasy: 'Fantasy pitched',
+  callback: 'Callback used', in_the_act: 'Sexting in progress', ending: 'Soft close',
+};
+
+const showValue = (value: unknown) => (typeof value === 'string' ? value : JSON.stringify(value));
+
+/** The Reconciler shadow test (server/src/engine/reconciler.ts): agreement with the Actor. */
+function ReconcilerReportCard() {
+  const [report, setReport] = useState<ReconcilerReport | null>(null);
+  const [open, setOpen] = useState<number | null>(null);
+  const load = useCallback(async () => {
+    try { setReport(await api.reconcilerReport()); } catch { /* the logs below still work */ }
+  }, []);
+  useEffect(() => { void load(); }, [load]);
+  if (!report || (!report.enabled && report.turns === 0)) return null;
+  const p = report.photo;
+  return (
+    <div className="card">
+      <div className="section-title" style={{ padding: '0 0 6px' }}>Reconciler shadow test</div>
+      <p className="small muted" style={{ marginTop: 0 }}>
+        {report.turns} turn{report.turns === 1 ? '' : 's'} compared with {report.model}
+        {report.errors ? ` · ${report.errors} failed` : ''}
+        {report.turns ? ` · ${(report.avg_latency_ms / 1000).toFixed(1)}s average` : ''}
+        {report.enabled ? '' : ' · paused (turn it on under Models & API)'}
+      </p>
+      {report.fields.map((f) => (
+        <div className="row" key={f.field} style={{ justifyContent: 'space-between' }}>
+          <span className="small">{RECONCILER_FIELD_LABELS[f.field] ?? f.field}</span>
+          <span className="small muted">
+            {f.compared ? `${Math.round((f.agreed / f.compared) * 100)}% of ${f.compared}` : 'no cases yet'}
+          </span>
+        </div>
+      ))}
+      <p className="tiny muted">
+        Photos: both sent {p.both_sent} · only the Actor {p.actor_only} · only the Reconciler {p.reconciler_only} · neither {p.neither}.
+        The Reconciler also read {p.reconciler_offered} photo{p.reconciler_offered === 1 ? '' : 's'} as offered for later
+        and {p.reconciler_mentioned} as only talked about. Location and activity are matched by shared words, so
+        read their disagreements before trusting the number.
+      </p>
+      {report.recent_disagreements.length > 0 && (
+        <>
+          <div className="section-title" style={{ padding: '6px 0' }}>Recent disagreements</div>
+          {report.recent_disagreements.map((d) => (
+            <div key={d.id} className="log-entry" onClick={() => setOpen(open === d.id ? null : d.id)}>
+              <div className="head">
+                <span className="tiny muted">{new Date(d.created_at).toLocaleString()}</span>
+                <span className="scope">{d.character}</span>
+                <span>{d.fields.map((f) => RECONCILER_FIELD_LABELS[f] ?? f).join(', ')}</span>
+              </div>
+              {open === d.id && (
+                <div className="small" style={{ paddingTop: 8 }}>
+                  {d.his.map((t, i) => <div key={`h${i}`} className="muted">He: {t}</div>)}
+                  {d.hers.map((t, i) => <div key={`s${i}`}>She: {t}</div>)}
+                  {Object.entries(d.detail).map(([field, r]) => (
+                    <div key={field} className="tiny" style={{ paddingTop: 6 }}>
+                      <strong>{RECONCILER_FIELD_LABELS[field] ?? field}</strong>
+                      <br />Actor: {showValue(r.actor)}
+                      <br />Reconciler: {showValue(r.reconciler)}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </>
+      )}
+      <div className="row" style={{ paddingTop: 8 }}>
+        <button className="btn ghost grow" onClick={() => void load()}>Refresh</button>
+        <button
+          className="btn ghost grow"
+          onClick={async () => {
+            if (!confirm('Delete every shadow-test record?')) return;
+            await api.clearReconcilerReport();
+            void load();
+          }}
+        >
+          Clear results
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function LogsPane() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [scope, setScope] = useState('');
@@ -1291,6 +1401,7 @@ function LogsPane() {
 
   return (
     <>
+      <ReconcilerReportCard />
       <div className="chips">
         {SCOPES.map((s) => (
           <button key={s || 'all'} className="chip" data-active={scope === s} onClick={() => setScope(s)}>
@@ -1384,6 +1495,7 @@ const PROMPT_LABELS: Record<string, string> = {
   director_write_bio: 'Profile bio', director_evaluate_image: 'Image evaluation', director_date_summary: 'Date summary',
   director_call_summary: 'Call summary', director_date_cast: 'Date guests', director_life_threads: 'Life threads',
   image_prompt_assembler: 'Image prompt assembler', system_actor: 'Actor system prompt', system_director: 'Director system prompt',
+  reconciler_turn: 'Reconciler turn',
 };
 
 function PromptsPane() {

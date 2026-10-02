@@ -46,6 +46,7 @@ import { scheduleAt } from '../engine/schedule.js';
 import { activeStatusPosts, createStatusPost, hasActiveStatus, hasUnseenActiveStatus, likeStatusPost, publishRetriedStatusImage, viewStatusPost } from '../engine/status-posts.js';
 import type { Character, KinkSide, KinkStance, Location } from '../types.js';
 import { setSteering } from '../engine/roleplay.js';
+import { clearShadowRecords, shadowReport } from '../engine/reconciler.js';
 
 /**
  * The backdrop is cache-busted on updated_at: regenerating writes a new file, but an edit
@@ -1001,6 +1002,13 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
   });
 
   app.get('/api/usage', async () => usageToday());
+
+  /** The Reconciler shadow test: how often it agrees with the Actor's own report, and where not. */
+  app.get('/api/diagnostics/reconciler', async () => shadowReport());
+  app.delete('/api/diagnostics/reconciler', async () => {
+    clearShadowRecords();
+    return { ok: true };
+  });
 
   /**
    * The card's shape and every option in it, so the editor is rendered from the same spec

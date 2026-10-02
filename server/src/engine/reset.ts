@@ -12,7 +12,7 @@ import { ensureStack, resetGenerationQueue } from './matching.js';
 import { startScheduler, stopScheduler } from './scheduler.js';
 
 /** The cast and everything that happened with them. */
-const WORLD_TABLES = ['messages', 'wakeups', 'dates', 'images', 'relationships', 'characters'];
+const WORLD_TABLES = ['messages', 'wakeups', 'dates', 'images', 'relationships', 'characters', 'reconciler_shadow'];
 
 /**
  * Which parts of the install to wipe, chosen independently. Nothing is reset unless it is

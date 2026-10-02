@@ -6491,3 +6491,47 @@ composition. These survive prompt trimming and override ordinary close-crop/self
 scale or anatomy needs a reference object. A palm-sized fairy, for example, must be framed beside a
 familiar human-scale object and cannot casually hold a normal phone; living wings are described as
 anatomically rooted rather than as costume accessories.
+
+### Splitting writing from bookkeeping, step one: the Reconciler, in shadow
+
+Every Actor reply is a single JSON object: her messages plus a `hidden` half that reports where she
+is, what she has on, whether a photo goes out, a fantasy she pitched, a soft close. That is why the
+Actor has to be a model that writes clean JSON, and a model in "structured output" mode writes her
+noticeably flatter than a pure roleplay model does. The plan is to let a creative model write only
+her words and have a manager model work out what those words changed. Before anything depends on
+that, it has to be shown that the manager model can read it reliably, so this first step only
+measures.
+
+`engine/reconciler.ts` reads her finished reply - with her state before the turn, her numbered
+fantasies, her callbacks and the last few messages for "this one" and "the one you asked for" - and
+returns a turn record (`reconciler_turn.md`, schema `RECONCILER_TURN`). Photos are classified more
+finely than the Actor's yes/no: `sent_now` (going out in this turn), `offered` (proposed or promised
+for later), `mentioned` (a joke, a refusal, a hypothetical) and `none`. Only `sent_now` would ever
+become an actual photo; `offered` is what a later step would keep as continuity. `react` and her
+private `thoughts` are deliberately not its job: a tapback never appears in her words, and her
+thoughts belong to whatever plans the turn, not to whatever reads it afterwards.
+
+**Settings → Models & API → Reconciler** has its own model (default the Director's model at
+temperature 0.2) and a **Shadow test** switch, off by default because it adds one call per text
+reply to the daily budget. With it on, every delivered text turn is re-read after it has been
+applied and saved, at background priority, so it never delays her reply. Nothing it returns is
+applied; it is stored in `reconciler_shadow` next to the Actor's own report, field by field:
+photo sent, photo kind, two-photo choice, the outfit after applying each side's changes to the same
+starting outfit, location, activity, fantasy, callback, sexting in progress, soft close. Mood and
+scene are stored for reading but not scored. Voice notes, failed fallback turns and dates are
+skipped. A Reconciler failure becomes a row with an error, never an error in the turn.
+
+**Settings → Diagnostics** shows the agreement rate per field, a photo crosstab (both sent, only
+one side, how many the Reconciler read as offered or only mentioned), and the recent disagreements
+with the exact messages, so each one can be judged by reading the turn. Location and activity are
+matched by shared (crudely stemmed) words, and both models restate the current place in fresh
+wording, so treat those two numbers as a pointer to read the disagreements rather than as a verdict.
+The records go with a world reset or the **Clear results** button.
+
+`reconcileTurn` and `toActorHidden` are the pieces a split pipeline will call for real; the numbers
+from this test decide whether the photo decision can be read from her words alone or needs an
+explicit signal from the writer.
+
+The emoji shortcode table that the composer section above relies on had never reached the
+repository: `.gitignore`'s blanket `**/data/` rule swallowed `web/src/data/emoji.ts`, so a fresh
+checkout failed to typecheck. The folder is now un-ignored and the table is checked in.

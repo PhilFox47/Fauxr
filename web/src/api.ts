@@ -268,6 +268,22 @@ export interface FantasyList {
   hidden: number;
 }
 
+/** Mirrors ShadowReport in server/src/engine/reconciler.ts. */
+export interface ReconcilerField { agree: boolean | null; actor: unknown; reconciler: unknown }
+export interface ReconcilerReport {
+  enabled: boolean;
+  model: string;
+  turns: number;
+  errors: number;
+  avg_latency_ms: number;
+  fields: { field: string; compared: number; agreed: number }[];
+  photo: { both_sent: number; actor_only: number; reconciler_only: number; neither: number; reconciler_offered: number; reconciler_mentioned: number };
+  recent_disagreements: {
+    id: number; created_at: string; character: string; fields: string[];
+    his: string[]; hers: string[]; detail: Record<string, ReconcilerField>;
+  }[];
+}
+
 export interface LogEntry {
   id: number;
   ts: string;
@@ -446,6 +462,8 @@ export const api = {
     if (!res.ok) throw new Error((await res.text()) || `${res.status} ${res.statusText}`);
     return res.text();
   },
+  reconcilerReport: () => request<ReconcilerReport>('/api/diagnostics/reconciler'),
+  clearReconcilerReport: () => request<{ ok: true }>('/api/diagnostics/reconciler', { method: 'DELETE' }),
   images: () => request<ImageJob[]>('/api/images'),
   retryImage: (id: string) => request<any>(`/api/images/${id}/retry`, { method: 'POST' }),
   yourMove: (characterId: string) => request<{ ok: true }>(`/api/chats/${characterId}/your-move`, { method: 'POST' }),

@@ -19,6 +19,7 @@ import { fantasyList } from './blocks.js';
 import { applyOutfitChanges, currentOutfit, outfitMood } from './wardrobe.js';
 import { gameClockMs, gameNowIso, messageClockMs } from './clock.js';
 import { armConversationReopen, cancelConversationReopen } from './conversation-close.js';
+import { shadowReconcile, snapshotState, type PreTurnState } from './reconciler.js';
 
 /** One turn at a time per character, so a wakeup and a user message cannot interleave. */
 const running = new Set<string>();
@@ -274,6 +275,9 @@ async function runActorPhase(
   const replyTo = answering?.sender === 'user' ? answering : null;
 
   let result: ActorRun;
+  // The Reconciler shadow test reads her reply against the state she wrote it from.
+  let shadowBefore: PreTurnState | null = null;
+  let photosAvailable = false;
   try {
     showTyping();
 
@@ -296,6 +300,10 @@ async function runActorPhase(
     if (!fresh || epoch !== startedIn) return;
     rel = fresh;
     saveRelationship(rel);
+    if (getSettings().reconciler_shadow) {
+      shadowBefore = snapshotState(rel, character);
+      photosAvailable = canSendPhotos(rel);
+    }
 
     await deliver(character, result.messages, startedIn, opts.decrementValidFor);
   } finally {
@@ -420,6 +428,21 @@ async function runActorPhase(
     cancelConversationReopen(rel);
   }
   saveRelationship(rel);
+
+  // Measurement only, after everything above is applied and saved: it never delays her reply
+  // or changes what happened. A voice note's hidden half is too thin to compare against.
+  if (shadowBefore && result.messages.every((m) => m.kind !== 'voice')) {
+    void shadowReconcile({
+      character,
+      before: shadowBefore,
+      photosAvailable,
+      history,
+      actor: result.hidden,
+      messages: result.messages.map((m) => ({ text: m.text, ...(m.from ? { from: m.from } : {}) })),
+      opener,
+      initiative: opts.initiative,
+    }).catch((err) => logger.warn('director', 'reconciler shadow failed', { error: String(err) }));
+  }
 }
 
 /**

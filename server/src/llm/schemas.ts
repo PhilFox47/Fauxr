@@ -74,6 +74,28 @@ export const ACTOR_CHAT = spec('her_reply', obj({
   }),
 }));
 
+/** What her finished reply made true - engine/reconciler.ts, read after the words exist. */
+export const RECONCILER_TURN = spec('turn_record', obj({
+  mood: str,
+  location: str,
+  activity: str,
+  outfit_changes: outfitChanges,
+  scene: roleplayScene,
+  photo: obj({
+    status: { type: 'string', enum: ['sent_now', 'offered', 'mentioned', 'none'] },
+    kind: { type: ['string', 'null'], enum: ['chat', 'spicy', null] },
+    situation: nstr,
+    aspect: { type: ['string', 'null'], enum: ['square', 'portrait', 'landscape', null] },
+    shows_face: nbool,
+    options: nullable(arr(str)),
+  }),
+  fantasy_pitched: nint,
+  new_fantasy: nstr,
+  callback_used: nstr,
+  in_the_act: bool,
+  ending: { type: ['string', 'null'], enum: ['soft_close', null] },
+}));
+
 export const VOICE_NOTE = spec('voice_note', obj({
   message: obj({ text: str, duration_seconds: int }),
   hidden: obj({ thoughts: str, mood: str }),

@@ -64,6 +64,11 @@ export interface Settings {
   models: {
     actor: ModelConfig;
     director: ModelConfig;
+    /**
+     * Reads her finished reply and records what it made true (engine/reconciler.ts). A
+     * manager-model job: extraction, not writing, so it wants a low temperature.
+     */
+    reconciler: ModelConfig;
     evaluator: EvaluatorConfig;
     image: {
       model: string;
@@ -123,6 +128,12 @@ export interface Settings {
   /** Average image Status stories generated per fictional world-hour across the whole cast. */
   status_posts_per_hour: number;
   /**
+   * Run the Reconciler next to every text turn and compare it with the Actor's own hidden
+   * report. Measurement only: nothing it says is applied. Off by default because it adds one
+   * call per turn to the daily budget.
+   */
+  reconciler_shadow: boolean;
+  /**
    * His taste, from Settings -> Taste: "category/id" -> multiplier on how often that attribute
    * is rolled for a new character (0 never, 1 or absent normal). Two keys are not attribute
    * rows: "lean/dom_sub" (-1..1) leans the persona roll towards submissive or dominant, and
@@ -150,6 +161,7 @@ export const DEFAULT_SETTINGS: Settings = {
     // why the ceiling matters more than it looks like it should for a reasoning model.
     actor: { model: 'z-ai/glm-5.3-flash-uncensored', temperature: 0.95, top_p: 0.95, max_tokens: 7200, reasoning_effort: 'none' },
     director: { model: 'google/gemma-4-31b-it', temperature: 0.4, top_p: 0.9, max_tokens: 10400, reasoning_effort: 'low' },
+    reconciler: { model: 'google/gemma-4-31b-it', temperature: 0.2, top_p: 0.9, max_tokens: 6000, reasoning_effort: 'low' },
     evaluator: { enabled: true, model: 'typesafe/jev-latest', confidence_threshold: 0.65 },
     image: {
       model: 'seedream-v4',
@@ -190,6 +202,7 @@ export const DEFAULT_SETTINGS: Settings = {
   unprompted_messages: false,
   conversation_reopen_hours: 8,
   status_posts_per_hour: 1,
+  reconciler_shadow: false,
   taste: {},
 };
 
@@ -289,6 +302,7 @@ export function normalizeSettings(value: unknown): Settings {
     models: {
       actor: modelConfig(models.actor, DEFAULT_SETTINGS.models.actor),
       director: modelConfig(models.director, DEFAULT_SETTINGS.models.director),
+      reconciler: modelConfig(models.reconciler, DEFAULT_SETTINGS.models.reconciler),
       evaluator: {
         enabled: isPlainObject(models.evaluator) && typeof models.evaluator.enabled === 'boolean'
           ? models.evaluator.enabled
@@ -347,6 +361,7 @@ export function normalizeSettings(value: unknown): Settings {
       : DEFAULT_SETTINGS.unprompted_messages,
     conversation_reopen_hours: numberValue(v.conversation_reopen_hours, DEFAULT_SETTINGS.conversation_reopen_hours, 1, 168),
     status_posts_per_hour: numberValue(v.status_posts_per_hour, DEFAULT_SETTINGS.status_posts_per_hour, 0, 12),
+    reconciler_shadow: typeof v.reconciler_shadow === 'boolean' ? v.reconciler_shadow : DEFAULT_SETTINGS.reconciler_shadow,
     taste,
   };
 }

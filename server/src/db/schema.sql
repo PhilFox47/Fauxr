@@ -219,3 +219,22 @@ CREATE TABLE IF NOT EXISTS usage_daily (
   tokens_out INTEGER NOT NULL DEFAULT 0,
   cost       REAL NOT NULL DEFAULT 0
 );
+
+-- Shadow test of the Reconciler (engine/reconciler.ts): what the Actor reported about its own
+-- turn next to what the Reconciler read from the finished words. Diagnostics only; nothing in
+-- here is ever applied to the game.
+CREATE TABLE IF NOT EXISTS reconciler_shadow (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  character_id TEXT NOT NULL,
+  created_at   TEXT NOT NULL,
+  model        TEXT NOT NULL DEFAULT '',
+  latency_ms   INTEGER NOT NULL DEFAULT 0,
+  -- '' on success, otherwise why the Reconciler produced nothing usable.
+  error        TEXT NOT NULL DEFAULT '',
+  -- JSON: her messages and his, so a disagreement can be judged by reading the turn.
+  turn         TEXT NOT NULL DEFAULT '{}',
+  actor        TEXT NOT NULL DEFAULT '{}',
+  reconciler   TEXT NOT NULL DEFAULT '{}',
+  comparison   TEXT NOT NULL DEFAULT '{}'
+);
+CREATE INDEX IF NOT EXISTS idx_reconciler_shadow ON reconciler_shadow(id DESC);
